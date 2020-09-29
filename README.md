@@ -15,6 +15,17 @@
 
 ****
 
+## 如何安装/使用脚本？
+
+要安装使用该脚本，需要浏览器安装一个用于管理 用户脚本 的扩展：  
+- **Chrome：** *[https://www.lanzous.com/b073l8d1e](https://www.lanzous.com/b073l8d1e)*  
+- **Firefox  ：** *[Tampermonkey](https://addons.mozilla.org/firefox/addon/tampermonkey/)、[Violentmonkey](https://addons.mozilla.org/firefox/addon/violentmonkey/)*  
+- **其他浏览器：** *[https://greasyfork.org/zh-CN/help/installing-user-scripts](https://greasyfork.org/zh-CN/help/installing-user-scripts#home-step-1)*  
+
+> 另外，其他基于 Chromium 内核的浏览器（如国内各大浏览器）都可以使用 Chrome 的扩展。  
+
+****
+
 ## 许可证
 
 The GPL-3.0 License.
