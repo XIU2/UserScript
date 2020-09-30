@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name         知乎增强 - 默认显示高清原图
 // @version      1.0.0
-// @description  回答和文章默认显示高清原图
 // @author       X.I.U
+// @description  回答和文章默认显示高清原图
 // @match        *://www.zhihu.com/*
 // @match        https://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/static/favicon.ico
 // @require      https://cdn.bootcdn.net/ajax/libs/jquery/3.1.1/jquery.min.js
 // @connect      zhihu.com
+// @license      GPL-3.0 License
 // @run-at       document-end
 // @namespace    https://greasyfork.org/scripts/412217
 // ==/UserScript==

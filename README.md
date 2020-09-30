@@ -13,6 +13,8 @@
 * [知乎增强 - 默认显示高清原图](https://greasyfork.org/scripts/412217)
 * [知乎增强 - 置顶显示发布/编辑时间](https://greasyfork.org/scripts/412216)
 
+* [Github 增强 - 高速下载](https://greasyfork.org/scripts/412245)
+
 ****
 
 ## 如何安装/使用脚本？

@@ -1,14 +1,15 @@
 // ==UserScript==
 // @name         知乎增强 - 置顶显示发布/编辑时间
 // @version      1.0.1
-// @description  回答和文章置顶显示发布时间、编辑时间
 // @author       X.I.U
+// @description  回答和文章置顶显示发布时间、编辑时间
 // @match        *://www.zhihu.com/*
 // @match        https://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/static/favicon.ico
 // @require      https://cdn.bootcdn.net/ajax/libs/jquery/3.1.1/jquery.min.js
 // @connect      zhihu.com
 // @grant        unsafeWindow
+// @license      GPL-3.0 License
 // @run-at       document-end
 // @namespace    https://greasyfork.org/scripts/412216
 // ==/UserScript==
