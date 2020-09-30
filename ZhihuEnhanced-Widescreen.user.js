@@ -15,6 +15,15 @@
 
 (function() {
     var style_Add = document.createElement('style');
-    style_Add.innerHTML = '.GlobalSideBar,.Question-sideColumn,.ContentLayout-sideColumn,.SearchSideBar{display:none;}.Topstory-mainColumn,.Question-mainColumn,.ContentLayout-mainColumn,.SearchMain{width: 1000px;}.ImageMessage-ImageView{z-index:999 !important;}';
+    style_Add.innerHTML = `
+.GlobalSideBar,.Question-sideColumn,.ContentLayout-sideColumn,.SearchSideBar {
+	display: none;
+}
+.Topstory-mainColumn,.Question-mainColumn,.ContentLayout-mainColumn,.SearchMain {
+	width: 1000px;
+}
+.ImageMessage-ImageView {
+	z-index: 999 !important;
+}`;
     document.head.appendChild(style_Add);
 })();

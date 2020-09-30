@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强 - 置顶显示发布/编辑时间
-// @version      1.0.0
+// @version      1.0.1
 // @description  回答和文章置顶显示发布时间、编辑时间
 // @author       X.I.U
 // @match        *://www.zhihu.com/*
@@ -202,7 +202,7 @@ function people()
             $(".QuestionInvitation-content").addClass("hide");
             $(".QuestionInvitation-content").hide();
 
-            $(".QuestionInvitation-title").html($(".QuestionInvitation-title").text()+'<span style="color:#8590A6;">(点击此处展开/折叠)</span>')
+            $(".QuestionInvitation-title").html($(".QuestionInvitation-title").text()+'<span style="color: #8590a6;font-size: 14px;"> 展开/折叠</span>')
 
             $(".Topbar").click(function(){
 
