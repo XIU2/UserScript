@@ -2,12 +2,13 @@
 // @name                 知乎增强 - 一键收起回答
 // @name:zh-CN           知乎增强 - 一键收起回答
 // @name:zh-TW           知乎增強 - 壹鍵收起回答
-// @version              1.0.0
+// @version              1.0.1
 // @author               X.I.U
 // @description          在知乎右下角添加「一键收起回答」按钮，点击后可以收起所有长篇回答。
 // @description:zh-CN    在知乎右下角添加「一键收起回答」按钮，点击后可以收起所有长篇回答。
 // @description:zh-TW    在知乎右下角添加「壹鍵收起回答」按鈕，點擊後可以收起所有長篇回答。
 // @include              *://www.zhihu.com/question/*
+// @include              https://www.zhihu.com/
 // @icon                 https://static.zhihu.com/static/favicon.ico
 // @require              https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
 // @license              GPL-3.0 License
