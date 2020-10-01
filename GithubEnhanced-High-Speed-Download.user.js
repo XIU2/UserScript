@@ -30,6 +30,7 @@
             var url4 = download_url4 + '/github.com' + href;
             var url5 = download_url5 + '/github.com' + href;
             var div1 = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">
+            使用加速源下载：
 <div><a style="${download_releases_style}" class="btn" href="${url1}" rel="nofollow">日本东京</a></div>
 <div><a style="${download_releases_style}" class="btn" href="${url2}" rel="nofollow">美国1</a></div>
 <div><a style="${download_releases_style}" class="btn" href="${url3}" rel="nofollow">美国2</a></div>
