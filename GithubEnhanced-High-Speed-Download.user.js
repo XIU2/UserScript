@@ -30,11 +30,11 @@
             var url4 = download_url4 + '/github.com' + href;
             var url5 = download_url5 + '/github.com' + href;
             var div1 = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">
-<div><a style="${download_releases_style}" class="btn" href="${url1}" rel="nofollow">下载 01 日本东京</a></div>
-<div><a style="${download_releases_style}" class="btn" href="${url2}" rel="nofollow">下载 02 美国·Cloudflare1</a></div>
-<div><a style="${download_releases_style}" class="btn" href="${url3}" rel="nofollow">下载 03 美国·Cloudflare2</a></div>
-<div><a style="${download_releases_style}" class="btn" href="${url4}" rel="nofollow">下载 04 中国香港·腾讯</a></div>
-<div><a style="${download_releases_style}" class="btn" href="${url5}" rel="nofollow">下载 05 美国洛杉矶·搬瓦工</a></div>
+<div><a style="${download_releases_style}" class="btn" href="${url1}" rel="nofollow">日本东京</a></div>
+<div><a style="${download_releases_style}" class="btn" href="${url2}" rel="nofollow">美国1</a></div>
+<div><a style="${download_releases_style}" class="btn" href="${url3}" rel="nofollow">美国2</a></div>
+<div><a style="${download_releases_style}" class="btn" href="${url4}" rel="nofollow">中国香港</a></div>
+<div><a style="${download_releases_style}" class="btn" href="${url5}" rel="nofollow">美国洛杉矶</a></div>
 </div>`
 
             $(this).after(div1);
