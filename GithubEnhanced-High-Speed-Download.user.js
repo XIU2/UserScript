@@ -30,11 +30,11 @@
             var url4 = download_url4 + '/github.com' + href;
             var url5 = download_url5 + '/github.com' + href;
             var div1 = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">
-<div><a style="${download_releases_style}" class="btn" href="${url1}" rel="nofollow">下载 01</a></div>
-<div><a style="${download_releases_style}" class="btn" href="${url2}" rel="nofollow">下载 02</a></div>
-<div><a style="${download_releases_style}" class="btn" href="${url3}" rel="nofollow">下载 03</a></div>
-<div><a style="${download_releases_style}" class="btn" href="${url4}" rel="nofollow">下载 04</a></div>
-<div><a style="${download_releases_style}" class="btn" href="${url5}" rel="nofollow">下载 05</a></div>
+<div><a style="${download_releases_style}" class="btn" href="${url1}" rel="nofollow">下载 01 日本东京</a></div>
+<div><a style="${download_releases_style}" class="btn" href="${url2}" rel="nofollow">下载 02 美国·Cloudflare1</a></div>
+<div><a style="${download_releases_style}" class="btn" href="${url3}" rel="nofollow">下载 03 美国·Cloudflare2</a></div>
+<div><a style="${download_releases_style}" class="btn" href="${url4}" rel="nofollow">下载 04 中国香港·腾讯</a></div>
+<div><a style="${download_releases_style}" class="btn" href="${url5}" rel="nofollow">下载 05 美国洛杉矶·搬瓦工</a></div>
 </div>`
 
             $(this).after(div1);
@@ -49,11 +49,11 @@
                 var url4 = download_url4 + '/github.com' + href;
                 var url5 = download_url5 + '/github.com' + href;
                 var div1 = `<div style="display: flex;">
-<div><a style="${download_releases_style}" class="btn user-btn-link" href="${url1}" rel="nofollow">下载 01</a></div>
-<div><a style="${download_releases_style}" class="btn user-btn-link" href="${url2}" rel="nofollow">下载 02</a></div>
-<div><a style="${download_releases_style}" class="btn user-btn-link" href="${url3}" rel="nofollow">下载 03</a></div>
-<div><a style="${download_releases_style}" class="btn user-btn-link" href="${url4}" rel="nofollow">下载 04</a></div>
-<div><a style="${download_releases_style}" class="btn user-btn-link" href="${url5}" rel="nofollow">下载 05</a></div>
+<div><a style="${download_releases_style}" class="btn user-btn-link" href="${url1}" rel="nofollow">下载 01 日本东京</a></div>
+<div><a style="${download_releases_style}" class="btn user-btn-link" href="${url2}" rel="nofollow">下载 02 美国·Cloudflare1</a></div>
+<div><a style="${download_releases_style}" class="btn user-btn-link" href="${url3}" rel="nofollow">下载 03 美国·Cloudflare2</a></div>
+<div><a style="${download_releases_style}" class="btn user-btn-link" href="${url4}" rel="nofollow">下载 04 中国香港·腾讯</a></div>
+<div><a style="${download_releases_style}" class="btn user-btn-link" href="${url5}" rel="nofollow">下载 05 美国洛杉矶·搬瓦工</a></div>
 </div>`
                 $(this).after(div1);
             });
@@ -67,11 +67,11 @@
         var url3 = download_url3 +"/github.com/"+href_split[3]+"/"+href_split[4]+ "/archive/master.zip";
         var url4 = download_url4 +"/github.com/"+href_split[3]+"/"+href_split[4]+ "/archive/master.zip";
         var url5 = download_url5 +"/github.com/"+href_split[3]+"/"+href_split[4]+ "/archive/master.zip";
-        var span1 = `<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url1}">${download_zip_svg}Download ZIP 01</a></li>
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url2}">${download_zip_svg}Download ZIP 02</a></li>
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url3}">${download_zip_svg}Download ZIP 03</a></li>
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url4}">${download_zip_svg}Download ZIP 04</a></li>
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url5}">${download_zip_svg}Download ZIP 05</a></li>
+        var span1 = `<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url1}">${download_zip_svg}Download ZIP 01 日本东京</a></li>
+<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url2}">${download_zip_svg}Download ZIP 02 美国·Cloudflare1</a></li>
+<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url3}">${download_zip_svg}Download ZIP 03 美国·Cloudflare2</a></li>
+<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url4}">${download_zip_svg}Download ZIP 04 中国香港·腾讯</a></li>
+<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url5}">${download_zip_svg}Download ZIP 05 美国洛杉矶·搬瓦工</a></li>
 `;
         $(this).after(span1);
     });
