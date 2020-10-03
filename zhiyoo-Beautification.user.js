@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         智友邦论坛 - 美化
+// @name         智友邦论坛美化 - 精简多余内容、宽屏显示
 // @version      1.0.0
 // @author       X.I.U
 // @description  精简多余内容、宽屏显示

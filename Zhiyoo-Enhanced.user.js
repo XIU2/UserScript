@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         智友邦论坛 - 增强
+// @name         智友邦论坛增强 - 自动签到、回复、清理置顶帖子
 // @version      1.0.0
 // @author       X.I.U
 // @description  智友邦论坛自动签到、自动回复、自动清理置顶帖子
