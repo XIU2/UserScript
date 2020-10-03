@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         智友邦论坛增强 - 自动签到、回复、清理置顶帖子
-// @version      1.0.0
+// @version      1.0.1
 // @author       X.I.U
 // @description  智友邦论坛自动签到、自动回复、自动清理置顶帖子
 // @icon         http://bbs.zhiyoo.net/favicon.ico
@@ -19,7 +19,7 @@
                 document.querySelector('#yl').click();
                 document.querySelector('.tr3.tac div a').click();
             }
-            setTimeout("location.href=qiandao_Redirect_URL", 2000); // 跳转到指定URL
+            setTimeout(location.href=qiandao_Redirect_URL, 2000); // 跳转到指定URL
         }
     }
     else if(location.pathname === '/forum.php'){
