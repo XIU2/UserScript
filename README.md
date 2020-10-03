@@ -14,6 +14,9 @@
 * [知乎增强 - 置顶显示发布/编辑时间](https://greasyfork.org/scripts/412216)  
 ****
 * [Github 增强 - 高速下载](https://greasyfork.org/scripts/412245)  
+****
+* [智友邦论坛 - 增强](https://greasyfork.org/scripts/412362)  
+* [智友邦论坛 - 美化](https://greasyfork.org/scripts/412361)  
 
 ****
 
