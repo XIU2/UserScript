@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.0.3
+// @version      1.0.4
 // @author       X.I.U
 // @description  为 Github 的 Releases、Code(ZIP) 添加高速下载
 // @match        https://github.com/*/*
@@ -14,7 +14,7 @@
 // ==/UserScript==
 
 (function() {
-    var source_code = false; // Source code 加速，false=关闭，true=开启
+    var source_code = true; // Source code 加速，false=关闭，true=开启
     var download_url1 = "https://download.fastgit.org";
     var download_url1_name = "日本东京";
     var download_url2 = "https://github.wuyanzheshui.workers.dev";
@@ -47,7 +47,7 @@
 
             $(this).after(div1);
         });
-        // Source code 加速，默认关闭
+        // Source code 加速，默认开启
         if (source_code){
             $(this).find(".d-block.Box-body>a").each(function () {
                 var href = $(this).attr("href");
@@ -56,15 +56,18 @@
                 var url3 = download_url3 + '/github.com' + href;
                 var url4 = download_url4 + '/github.com' + href;
                 var url5 = download_url5 + '/github.com' + href;
-                var div1 = `<div style="display: flex;">
-<div><a style="${download_releases_style}" class="btn user-btn-link" href="${url1}" rel="nofollow">${download_url1_name}</a></div>
-<div><a style="${download_releases_style}" class="btn user-btn-link" href="${url2}" rel="nofollow">${download_url2_name}</a></div>
-<div><a style="${download_releases_style}" class="btn user-btn-link" href="${url3}" rel="nofollow">${download_url3_name}</a></div>
-<div><a style="${download_releases_style}" class="btn user-btn-link" href="${url4}" rel="nofollow">${download_url4_name}</a></div>
-<div><a style="${download_releases_style}" class="btn user-btn-link" href="${url5}" rel="nofollow">${download_url5_name}</a></div>
+                var div1 = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">
+<div><span style="font-size: 12px;color: #586069;line-height: 23px;">高速下载：</span></div>
+<div><a style="${download_releases_style}" class="btn" href="${url1}" rel="nofollow">${download_url1_name}</a></div>
+<div><a style="${download_releases_style}" class="btn" href="${url2}" rel="nofollow">${download_url2_name}</a></div>
+<div><a style="${download_releases_style}" class="btn" href="${url3}" rel="nofollow">${download_url3_name}</a></div>
+<div><a style="${download_releases_style}" class="btn" href="${url4}" rel="nofollow">${download_url4_name}</a></div>
+<div><a style="${download_releases_style}" class="btn" href="${url5}" rel="nofollow">${download_url5_name}</a></div>
 </div>`
                 $(this).after(div1);
             });
+            // 修改 Source code 样式，使其和加速按钮并列一排
+            document.querySelectorAll('.d-block.py-1.py-md-2.Box-body.px-2').forEach(el=>el.className='d-flex py-1 py-md-2 Box-body px-2');
         }
     });
     // Download ZIP 加速
