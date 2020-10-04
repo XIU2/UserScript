@@ -13,7 +13,7 @@
 * [知乎增强 - 默认显示高清原图](https://greasyfork.org/scripts/412217)  
 * [知乎增强 - 置顶显示发布/编辑时间](https://greasyfork.org/scripts/412216)  
 ****
-* [Github 增强 - 高速下载 \[Release、Code(ZIP)\]](https://greasyfork.org/scripts/412245)  
+* [Github 增强 - 高速下载 \[Clone、Release、Code(ZIP)\]](https://greasyfork.org/scripts/412245)  
 ****
 * [智友邦论坛增强 - 自动签到、回复、清理置顶帖子](https://greasyfork.org/scripts/412362)  
 * [智友邦论坛美化 - 精简多余内容、宽屏显示](https://greasyfork.org/scripts/412361)  
