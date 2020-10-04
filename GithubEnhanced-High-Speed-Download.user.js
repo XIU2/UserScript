@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.0.4
+// @version      1.0.5
 // @author       X.I.U
 // @description  为 Github 的 Releases、Code(ZIP) 添加高速下载
 // @match        https://github.com/*/*
@@ -17,7 +17,7 @@
     var source_code = true; // Source code 加速，false=关闭，true=开启
     var download_url1 = "https://download.fastgit.org";
     var download_url1_name = "日本东京";
-    var download_url2 = "https://github.wuyanzheshui.workers.dev";
+    var download_url2 = "https://gh.con.sh";
     var download_url2_name = "美国 01";
     var download_url3 = "https://gh.api.99988866.xyz";
     var download_url3_name = "美国 02";
@@ -32,7 +32,7 @@
         $(this).find(".d-flex.Box-body>a").each(function () {
             var href = $(this).attr("href");
             var url1 = download_url1 + href;
-            var url2 = download_url2 + href;
+            var url2 = download_url2 + '/github.com' + href;
             var url3 = download_url3 + '/github.com' + href;
             var url4 = download_url4 + '/github.com' + href;
             var url5 = download_url5 + '/github.com' + href;
@@ -52,7 +52,7 @@
             $(this).find(".d-block.Box-body>a").each(function () {
                 var href = $(this).attr("href");
                 var url1 = download_url1 + href;
-                var url2 = download_url2 + href;
+                var url2 = download_url2 + '/github.com' + href;
                 var url3 = download_url3 + '/github.com' + href;
                 var url4 = download_url4 + '/github.com' + href;
                 var url5 = download_url5 + '/github.com' + href;
@@ -74,7 +74,7 @@
     $(".dropdown-menu.dropdown-menu-sw.p-0 ul li:last-child").each(function () {
         var href_split = location.href.split("/");
         var url1 = download_url1 +"/"+href_split[3]+"/"+href_split[4]+ "/archive/master.zip";
-        var url2 = download_url2 +"/"+href_split[3]+"/"+href_split[4]+ "/archive/master.zip";
+        var url2 = download_url2 +"/github.com/"+href_split[3]+"/"+href_split[4]+ "/archive/master.zip";
         var url3 = download_url3 +"/github.com/"+href_split[3]+"/"+href_split[4]+ "/archive/master.zip";
         var url4 = download_url4 +"/github.com/"+href_split[3]+"/"+href_split[4]+ "/archive/master.zip";
         var url5 = download_url5 +"/github.com/"+href_split[3]+"/"+href_split[4]+ "/archive/master.zip";
