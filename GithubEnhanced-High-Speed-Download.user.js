@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.0.6
+// @version      1.0.7
 // @author       X.I.U
 // @description  为 Github 的 Clone、Release、Code(ZIP) 添加高速下载
 // @match        https://github.com/*/*
@@ -76,12 +76,12 @@
     });
     // Download ZIP 加速
     $(".dropdown-menu.dropdown-menu-sw.p-0 ul li:last-child").each(function () {
-        var href_split = location.href.split("/");
-        var url1 = download_url1 +"/"+href_split[3]+"/"+href_split[4]+ "/archive/master.zip";
-        var url2 = download_url2 +"/github.com/"+href_split[3]+"/"+href_split[4]+ "/archive/master.zip";
-        var url3 = download_url3 +"/github.com/"+href_split[3]+"/"+href_split[4]+ "/archive/master.zip";
-        var url4 = download_url4 +"/github.com/"+href_split[3]+"/"+href_split[4]+ "/archive/master.zip";
-        var url5 = download_url5 +"/github.com/"+href_split[3]+"/"+href_split[4]+ "/archive/master.zip";
+        var href = $(this).children("a").attr("href");
+        var url1 = download_url1 + href;
+        var url2 = download_url2 + "/github.com" + href;
+        var url3 = download_url3 + "/github.com" + href;
+        var url4 = download_url4 + "/github.com" + href;
+        var url5 = download_url5 + "/github.com" + href;
         var html1 = `<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url1}">${download_zip_svg}Download ZIP ${download_url1_name}</a></li>
 <li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url2}">${download_zip_svg}Download ZIP ${download_url2_name}</a></li>
 <li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url3}">${download_zip_svg}Download ZIP ${download_url3_name}</a></li>
@@ -94,8 +94,8 @@
     if (git_clone){
         $("[role='tabpanel'] div.input-group").first().each(function () {
             var href_split = location.href.split("/");
-            var url1 = clone_url1 +"/"+href_split[3]+"/"+href_split[4]+ ".git";
-            var url2 = clone_url2 +"/"+href_split[3]+"/"+href_split[4]+ ".git";
+            var url1 = clone_url1 + "/" + href_split[3] + "/" + href_split[4] + ".git";
+            var url2 = clone_url2 + "/" + href_split[3] + "/" + href_split[4] + ".git";
             var html1 = `<div class="input-group" style="margin-top: 4px;"><input value="${url1}" aria-label="${url1}" type="text" class="form-control input-monospace input-sm bg-gray-light" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url1}" aria-label="Copy to clipboard" class="btn btn-sm" tabindex="0" role="button">${download_clone_svg}</clipboard-copy></div></div>
 <div class="input-group" style="margin-top: 4px;"><input value="${url2}" aria-label="${url2}" type="text" class="form-control input-monospace input-sm bg-gray-light" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url2}" aria-label="Copy to clipboard" class="btn btn-sm" tabindex="0" role="button">${download_clone_svg}</clipboard-copy></div></div>`;
             $(this).after(html1);
