@@ -179,7 +179,7 @@
             }else{
                 href = raw_url0 + href.replace('/blob/','/');
             }
-            var html1 = ` <a href="${href}" download="${Name}" target="_blank" class="fileDownLink" style="visibility: hidden;" title="[Alt + 左键点击] 或 [右键 - 另存为...] 下载文件。&#10;&#10;提示：修改脚本头部的 raw_fast 变量可以切换为 Github Raw 原生下载链接。">${raw_svg}</a>`;
+            var html1 = ` <a href="${href}" download="${Name}" target="_blank" class="fileDownLink" style="visibility: hidden;" title="[Alt + 左键点击] 或 [右键 - 另存为...] 下载文件。&#10;&#10;已知：在当前分支名为版本号时(如 v1.2.3)，高速下载链接因格式限制会找不到文件，请切换为原生下载链接。&#10;提示：修改脚本头部的 raw_fast 变量可以切换为 Github Raw 原生下载链接。">${raw_svg}</a>`;
             $(cntElm).after(html1);
             // 绑定鼠标事件
             trElm.onmouseover=mouseOverHandler;
