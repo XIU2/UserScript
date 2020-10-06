@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.1.0
+// @version      1.1.1
 // @author       X.I.U
 // @description  为 Github 的 Clone、Release、Raw、Code(ZIP) 添加高速下载
 // @match        https://github.com/*/*
@@ -23,15 +23,20 @@
     var download_url4 = "https://g.ioiox.com";
     var download_url4_name = "中国香港";
     var download_url5 = "https://git.yumenaka.net";
-    var download_url5_name = "美国洛杉矶";
+    var download_url5_name = "美国洛杉矶"; // 支持 Raw 加速
 
     var clone_url1 = "https://hub.fastgit.org"; // 中国香港
     var clone_url2 = "https://gitclone.com"; // 中国浙江杭州
     var clone_url3 = "https://github.com.cnpmjs.org"; // 新加坡
 
-    var raw_fast = true; // true 下载链接为高速下载链接（默认），false 下载链接为 Github 原生下载链接
-    var raw_url0 = "https://raw.githubusercontent.com"; // Github 原生链接
-    var raw_url1 = "https://cdn.jsdelivr.net"; // 中国国内CDN
+    var raw_fast = "中国国内"; // 指定各个文件名后的云朵使用的高速下载链接，选择范围：[Github、中国国内、中国香港、美国洛杉矶]，各加速源注意事项看下面注释
+
+    var raw_url0 = "https://raw.githubusercontent.com";
+    var raw_url0_name = "Github"; // 原生链接
+    var raw_url1 = "https://cdn.jsdelivr.net";
+    var raw_url1_name = "中国国内"; // 注意：当该项目当前分支总文件大小超过 50MB 时，高速下载链接不可用。注意：当前分支名为版本号格式时(如 v1.2.3)，高速下载链接因格式限制不可用。
+    var raw_url2 = "https://raw.fastgit.org";
+    var raw_url2_name = "中国香港"; // 注意：单个文件太大时可能会提示超时，可以重试。
 
     var download_zip_svg = `<svg class="octicon octicon-file-zip mr-3" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M3.5 1.75a.25.25 0 01.25-.25h3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h2.086a.25.25 0 01.177.073l2.914 2.914a.25.25 0 01.073.177v8.586a.25.25 0 01-.25.25h-.5a.75.75 0 000 1.5h.5A1.75 1.75 0 0014 13.25V4.664c0-.464-.184-.909-.513-1.237L10.573.513A1.75 1.75 0 009.336 0H3.75A1.75 1.75 0 002 1.75v11.5c0 .649.353 1.214.874 1.515a.75.75 0 10.752-1.298.25.25 0 01-.126-.217V1.75zM8.75 3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM6 5.25a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5A.75.75 0 016 5.25zm2 1.5A.75.75 0 018.75 6h.5a.75.75 0 010 1.5h-.5A.75.75 0 018 6.75zm-1.25.75a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM8 9.75A.75.75 0 018.75 9h.5a.75.75 0 010 1.5h-.5A.75.75 0 018 9.75zm-.75.75a1.75 1.75 0 00-1.75 1.75v3c0 .414.336.75.75.75h2.5a.75.75 0 00.75-.75v-3a1.75 1.75 0 00-1.75-1.75h-.5zM7 12.25a.25.25 0 01.25-.25h.5a.25.25 0 01.25.25v2.25H7v-2.25z"></path></svg>`;
     var download_clone_svg = `<svg class="octicon octicon-clippy" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M5.75 1a.75.75 0 00-.75.75v3c0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75v-3a.75.75 0 00-.75-.75h-4.5zm.75 3V2.5h3V4h-3zm-2.874-.467a.75.75 0 00-.752-1.298A1.75 1.75 0 002 3.75v9.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0014 13.25v-9.5a1.75 1.75 0 00-.874-1.515.75.75 0 10-.752 1.298.25.25 0 01.126.217v9.5a.25.25 0 01-.25.25h-8.5a.25.25 0 01-.25-.25v-9.5a.25.25 0 01.126-.217z"></path></svg>`
@@ -137,9 +142,16 @@
     // Raw 加速
     function addRawFile(){
         $("#raw-url").each(function () {
-            var href = location.href.replace('https://github.com','').replace('/blob/','@');
-            var url1 = raw_url1 + "/gh" + href;
-            var html1 = `<a href="${url1}" role="button" class="btn btn-sm BtnGroup-item">高速下载</a>`;
+            var href = location.href.replace('https://github.com','');
+            var href2 = href.replace('/blob/','/');
+            var url1 = raw_url1 + "/gh" + href.replace('/blob/','@');
+            var url2 = raw_url2 + href2;
+            var url3 = download_url5 + "/" + raw_url0 + href2;
+            var html1 = `
+<a href="${url1}" title="注意：当该项目当前分支总文件大小超过 50MB 时，该高速下载链接不可用！" role="button" class="btn btn-sm BtnGroup-item">${raw_url1_name}</a>
+<a href="${url2}" title="注意：单个文件太大时可能会提示超时，可以重试！" role="button" class="btn btn-sm BtnGroup-item">${raw_url2_name}</a>
+<a href="${url3}" role="button" class="btn btn-sm BtnGroup-item">${download_url5_name}</a>
+`;
             $(this).after(html1);
         });
     }
@@ -156,15 +168,15 @@
         // 鼠标指向则显示
         var mouseOverHandler = function(evt){
         var elem = evt.currentTarget,
-            aElm = elem.querySelector('.fileDownLink');
-        aElm.style.visibility = 'visible';
+            aElm = elem.querySelectorAll('.fileDownLink');
+        aElm.forEach(el=>el.style.visibility = 'visible');
         };
 
         // 鼠标离开则隐藏
         var mouseOutHandler = function(evt){
             var elem = evt.currentTarget,
-                aElm = elem.querySelector('.fileDownLink');
-            aElm.style.visibility = 'hidden';
+                aElm = elem.querySelectorAll('.fileDownLink');
+            aElm.forEach(el=>el.style.visibility = 'hidden');
         };
 
         // 循环添加
@@ -174,12 +186,29 @@
                 Name = cntElm.innerText,
                 href = cntElm.attributes["href"].nodeValue.replace('https://github.com','');
             // 如果 raw_fast 为 true 则下载链接为高速下载链接，反之为 Github 原生下载链接
-            if (raw_fast){
-                href = raw_url1 + "/gh" + href.replace('/blob/','@');
-            }else{
-                href = raw_url0 + href.replace('/blob/','/');
+            var href2 = href.replace('/blob/','/');
+            var url;
+            var url_name;
+            switch(raw_fast)
+            {
+                case raw_url0_name:
+                    url = raw_url0 + href2;
+                    url_name = raw_url0_name;
+                    break;
+                case raw_url1_name:
+                    url = raw_url1 + "/gh" + href.replace('/blob/','@');
+                    url_name = raw_url1_name;
+                    break;
+                case raw_url2_name:
+                    url = raw_url2 + href2;
+                    url_name = raw_url2_name;
+                    break;
+                case download_url5_name:
+                    url = download_url5 + "/" + raw_url0 + href2;
+                    url_name = download_url5_name;
+                    break;
             }
-            var html1 = ` <a href="${href}" download="${Name}" target="_blank" class="fileDownLink" style="visibility: hidden;" title="[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：是鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;已知：当该项目当前分支总文件大小超过 50MB 时，高速下载链接不可用，请切换为原生下载链接。&#10;已知：当前分支名为版本号格式时(如 v1.2.3)，高速下载链接因格式限制不可用，请切换为原生下载链接。&#10;提示：修改脚本头部的 raw_fast 变量可以切换为 Github Raw 原生下载链接。">${raw_svg}</a>`;
+            var html1 = ` <a href="${url}" download="${Name}" target="_blank" class="fileDownLink" style="visibility: hidden;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;提示：修改脚本头部 raw_fast 变量可切换其他加速源。">${raw_svg}</a>`;
             $(cntElm).after(html1);
             // 绑定鼠标事件
             trElm.onmouseover=mouseOverHandler;
