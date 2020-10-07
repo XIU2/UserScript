@@ -8,7 +8,7 @@
 
 ## 使用说明
 
-> 点击 **「安装」** 是 Github 的链接，点击 **脚本名称** 查看详细介绍。
+> 点击 **「安装」** 是备用的 Github 链接，点击 **脚本名称** 查看详细介绍。
 
 *  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/SteamWorkshopImageRepair.user.js)** [Steam 创意工坊大图修复](https://greasyfork.org/scripts/397666)  
 ****
