@@ -14,12 +14,12 @@
 // ==/UserScript==
 
 (function() {
-    var download_url1 = "https://download.fastgit.org";
-    var download_url1_name = "日本东京";
-    var download_url2 = "https://gh.con.sh";
-    var download_url2_name = "美国 01";
-    var download_url3 = "https://gh.api.99988866.xyz";
-    var download_url3_name = "美国 02";
+    var download_url1 = "https://gh.con.sh";
+    var download_url1_name = "美国 01";
+    var download_url2 = "https://gh.api.99988866.xyz";
+    var download_url2_name = "美国 02";
+    var download_url3 = "https://download.fastgit.org";
+    var download_url3_name = "日本东京";
     var download_url4 = "https://g.ioiox.com";
     var download_url4_name = "中国香港";
     var download_url5 = "https://git.yumenaka.net";
@@ -64,9 +64,9 @@
         $(".Box.Box--condensed").each(function () {
             $(this).find(".d-flex.Box-body>a").each(function () {
                 var href = $(this).attr("href");
-                var url1 = download_url1 + href;
+                var url1 = download_url1 + '/github.com' + href;
                 var url2 = download_url2 + '/github.com' + href;
-                var url3 = download_url3 + '/github.com' + href;
+                var url3 = download_url3 + href;
                 var url4 = download_url4 + '/github.com' + href;
                 var url5 = download_url5 + '/github.com' + href;
                 var html1 = `<div style="display: flex;justify-content: flex-end;">
@@ -85,9 +85,9 @@
             // Source Code 加速
             $(this).find(".d-block.Box-body>a").each(function () {
                 var href = $(this).attr("href");
-                var url1 = download_url1 + href;
+                var url1 = download_url1 + '/github.com' + href;
                 var url2 = download_url2 + '/github.com' + href;
-                var url3 = download_url3 + '/github.com' + href;
+                var url3 = download_url3 + href;
                 var url4 = download_url4 + '/github.com' + href;
                 var url5 = download_url5 + '/github.com' + href;
                 var html1 = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">
@@ -109,9 +109,9 @@
     function addDownloadZIP(){
         $(".dropdown-menu.dropdown-menu-sw.p-0 ul li:last-child").each(function () {
             var href = $(this).children("a").attr("href");
-            var url1 = download_url1 + href;
+            var url1 = download_url1 + "/github.com" + href;
             var url2 = download_url2 + "/github.com" + href;
-            var url3 = download_url3 + "/github.com" + href;
+            var url3 = download_url3 + href;
             var url4 = download_url4 + "/github.com" + href;
             var url5 = download_url5 + "/github.com" + href;
             var html1 = `
