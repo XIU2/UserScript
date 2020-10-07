@@ -8,26 +8,27 @@
 
 ## 使用说明
 
-* [知乎增强 - 宽屏显示](https://greasyfork.org/scripts/412212)  
-* [知乎增强 - 一键收起长篇回答](https://greasyfork.org/scripts/412205)  
-* [知乎增强 - 默认显示高清原图](https://greasyfork.org/scripts/412217)  
-* [知乎增强 - 置顶显示发布/编辑时间](https://greasyfork.org/scripts/412216)  
+> 点击 **「安装」** 是 Github 的链接，点击 **脚本名称** 查看详细介绍。
+
+*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/SteamWorkshopImageRepair.user.js)** [Steam 创意工坊大图修复](https://greasyfork.org/scripts/397666)  
 ****
-* [智友邦论坛美化 - 精简多余内容、宽屏显示](https://greasyfork.org/scripts/412361)  
-* [智友邦论坛增强 - 自动签到、回复、清理置顶帖子](https://greasyfork.org/scripts/412362)  
+* **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-Widescreen.user.js)** [知乎增强 - 宽屏显示](https://greasyfork.org/scripts/412212)  
+*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-CollapsedAnswer.user.js)** [知乎增强 - 一键收起长篇回答](https://greasyfork.org/scripts/412205)  
+*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-HD-Pictures.user.js)** [知乎增强 - 默认显示高清原图](https://greasyfork.org/scripts/412217)  
+*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-Time.user.js)** [知乎增强 - 置顶显示发布/编辑时间](https://greasyfork.org/scripts/412216)  
 ****
-* [Github 增强 - 高速下载 \[Clone、Release、Raw、Code(ZIP)\]](https://greasyfork.org/scripts/412245)  
+*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Beautification.user.js)** [智友邦论坛美化 - 精简多余内容、宽屏显示](https://greasyfork.org/scripts/412361)  
+*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Enhanced.user.js)** [智友邦论坛增强 - 自动签到、回复、清理置顶帖子](https://greasyfork.org/scripts/412362)  
+****
+*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GithubEnhanced-High-Speed-Download.user.js)** [Github 增强 - 高速下载 \[Clone、Release、Raw、Code(ZIP)\]](https://greasyfork.org/scripts/412245)  
 
 ****
 
 ## 如何安装/使用脚本？
 
-要安装使用该脚本，需要浏览器安装一个用于管理 用户脚本 的扩展：  
-- **Chrome：** *[https://www.lanzous.com/b073l8d1e](https://www.lanzous.com/b073l8d1e)*  
-- **Firefox  ：** *[Tampermonkey](https://addons.mozilla.org/firefox/addon/tampermonkey/)、[Violentmonkey](https://addons.mozilla.org/firefox/addon/violentmonkey/)*  
-- **其他浏览器：** *[https://greasyfork.org/zh-CN/help/installing-user-scripts](https://greasyfork.org/zh-CN/help/installing-user-scripts#home-step-1)*  
-
-> 另外，其他基于 Chromium 内核的浏览器（如国内各大浏览器）都可以使用 Chrome 的扩展。  
+要使用该脚本，需要浏览器安装一个脚本管理扩展（**[Chrome](https://www.lanzous.com/b073l8d1e)/[Firefox](https://addons.mozilla.org/firefox/addon/tampermonkey/)**）。  
+ 
+> 其他基于 Chromium 内核的浏览器（如国内各大浏览器）都可以使用 Chrome 的扩展。  
 
 ****
 
