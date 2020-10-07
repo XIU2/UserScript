@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.1.2
+// @version      1.1.3
 // @author       X.I.U
 // @description  为 Github 的 Clone、Release、Raw、Code(ZIP) 添加高速下载
 // @match        https://github.com/*/*
@@ -29,9 +29,9 @@
     var clone_url2 = "https://gitclone.com"; // 中国浙江杭州
     var clone_url3 = "https://github.com.cnpmjs.org"; // 新加坡
 
-    // 这里这里
-    var raw_fast = "中国国内"; // 指定各个文件名后的云朵使用的高速下载链接，选择范围：[Github、中国国内、中国香港、美国洛杉矶]，各加速源注意事项看下面，自行选择
-    // 这里这里
+    // 这里这里~~
+    var raw_fast = "中国国内"; // 指定各个文件名后的云朵使用的高速下载链接，选择范围：[Github、中国国内、中国香港、美国洛杉矶]，各加速源注意事项看下面，自行选择~~
+    // 这里这里~~
 
     var raw_url0 = "https://raw.githubusercontent.com";
     var raw_url0_name = "Github"; // 原生链接
@@ -69,16 +69,17 @@
                 var url3 = download_url3 + '/github.com' + href;
                 var url4 = download_url4 + '/github.com' + href;
                 var url5 = download_url5 + '/github.com' + href;
-                var html1 = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">
-<div><span style="font-size: 12px;color: #586069;line-height: 23px;">高速下载：</span></div>
+                var html1 = `<div style="display: flex;justify-content: flex-end;">
 <div><a style="${download_release_style}" class="btn" href="${url1}" rel="nofollow">${download_url1_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url2}" rel="nofollow">${download_url2_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url3}" rel="nofollow">${download_url3_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url4}" rel="nofollow">${download_url4_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url5}" rel="nofollow">${download_url5_name}</a></div>
 </div>`;
-                $(this).after(html1);
+                $(this).next().after(html1);
             });
+            // 修改[文件大小]元素样式
+            document.querySelectorAll('small.pl-2.text-gray.flex-shrink-0').forEach(el=>el.style.cssText='display: flex; justify-content: flex-end; flex-grow: 1; margin-right: 8px;');
 
 
             // Source Code 加速
@@ -90,7 +91,6 @@
                 var url4 = download_url4 + '/github.com' + href;
                 var url5 = download_url5 + '/github.com' + href;
                 var html1 = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">
-<div><span style="font-size: 12px;color: #586069;line-height: 23px;">高速下载：</span></div>
 <div><a style="${download_release_style}" class="btn" href="${url1}" rel="nofollow">${download_url1_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url2}" rel="nofollow">${download_url2_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url3}" rel="nofollow">${download_url3_name}</a></div>
@@ -100,7 +100,7 @@
                 $(this).after(html1);
             });
             // 修改 Source code 样式，使其和加速按钮并列一排
-            document.querySelectorAll('.d-block.py-1.py-md-2.Box-body.px-2').forEach(el=>el.className='d-flex py-1 py-md-2 Box-body px-2');
+            document.querySelectorAll('div.d-block.py-1.py-md-2.Box-body.px-2').forEach(el=>el.className='d-flex py-1 py-md-2 Box-body px-2');
         });
     }
 
