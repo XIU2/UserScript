@@ -7,7 +7,7 @@
 // @icon         https://www.52pojie.cn/favicon.ico
 // @license      GPL-3.0 License
 // @run-at       document-start
-// @namespace    https://github.com/XIU2/UserScript/blob/master/52pojie-Beautification.user.js
+// @namespace    https://greasyfork.org/scripts/412681
 // ==/UserScript==
 
 (function() {

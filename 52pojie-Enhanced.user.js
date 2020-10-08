@@ -8,7 +8,7 @@
 // @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
 // @license      GPL-3.0 License
 // @run-at       document-end
-// @namespace    https://github.com/XIU2/UserScript/blob/master/52pojie-Enhanced.user.js
+// @namespace    https://greasyfork.org/scripts/412680
 // ==/UserScript==
 
 (function() {
