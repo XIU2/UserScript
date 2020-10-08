@@ -20,6 +20,9 @@
 *  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Beautification.user.js)** [智友邦论坛美化 - 精简多余内容、宽屏显示](https://greasyfork.org/scripts/412361)  
 *  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Enhanced.user.js)** [智友邦论坛增强 - 自动签到、回复、清理置顶帖子](https://greasyfork.org/scripts/412362)  
 ****
+*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Beautification.user.js)** [吾爱破解论坛美化 - 精简多余内容](https://greasyfork.org/scripts/412681)  
+*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Enhanced.user.js)** [吾爱破解论坛增强 - 自动签到、翻页](https://greasyfork.org/scripts/412680)  
+****
 *  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GithubEnhanced-High-Speed-Download.user.js)** [Github 增强 - 高速下载 \[Clone、Release、Raw、Code(ZIP)\]](https://greasyfork.org/scripts/412245)  
 
 ****
