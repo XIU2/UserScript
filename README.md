@@ -29,7 +29,7 @@
 
 ## 如何安装/使用脚本？
 
-要使用该脚本，需要浏览器安装一个脚本管理扩展（**[Chrome](https://www.lanzous.com/b073l8d1e)/[Firefox](https://addons.mozilla.org/firefox/addon/tampermonkey/)**）。  
+要使用该脚本，需要浏览器安装 **Tampermonkey 扩展（[Chrome](https://www.lanzous.com/b073l8d1e)/[Firefox](https://addons.mozilla.org/firefox/addon/tampermonkey/)）。**  
  
 > 其他基于 Chromium 内核的浏览器（如国内各大浏览器）都可以使用 Chrome 的扩展。  
 
