@@ -18,7 +18,7 @@
     // 自动签到
     function qianDao() {
         var qiandao = document.querySelector('#um p:last-child a:first-child');
-        if (!qiandao){
+        if (qiandao){
             if(qiandao.href === "https://www.52pojie.cn/home.php?mod=task&do=apply&id=2")
             {
                 qiandao.click();
@@ -29,7 +29,7 @@
     // 签到后立即返回
     function qianDaoBack() {
         var qiandaoback = document.querySelector('#messagetext p.alert_btnleft a');
-        if (!qiandaoback){
+        if (qiandaoback){
             if(location.href === "https://www.52pojie.cn/home.php?mod=task&do=draw&id=2")
             {
                 qiandaoback.click();
