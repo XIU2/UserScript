@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛美化 - 精简多余内容
-// @version      1.0.0
+// @version      1.0.1
 // @author       X.I.U
 // @description  精简多余内容
 // @match        *://www.52pojie.cn/*
@@ -13,7 +13,7 @@
 (function() {
     var style_Add = document.createElement('style');
     style_Add.innerHTML = `
-a[href="connect.php?mod=config"], #toptb, #navmenu, #nv_ph, #nv, #pt .y, #chart, #online, #ft, .bm.lk, .dnch_eo_pt, .dnch_eo_pr, .dnch_eo_f, .bml, ul.xl.xl2.o.cl, dl.pil.cl, td.plc.plm .sign, .dnch_eo_pb, .dnch_eo_pt, .pls .side-star, .pls .side-group, .res-footer-note, .comiis_nav, .scbar_hot_td, .bm_h.cl, .md_ctrl, .pls.favatar .xg1 {
+a[href="connect.php?mod=config"], #toptb, #navmenu, #nv_ph, #nv, #pt .y, #chart, #online, #ft, .bm.lk, .dnch_eo_pt, .dnch_eo_pr, .dnch_eo_f, .bml, ul.xl.xl2.o.cl, dl.pil.cl, td.plc.plm .sign, .dnch_eo_pb, .dnch_eo_pt, .pls .side-star, .pls .side-group, .res-footer-note, .comiis_nav, .scbar_hot_td, .md_ctrl, .pls.favatar .xg1 {
 	display:none !important;
 }
 /*.wp {
