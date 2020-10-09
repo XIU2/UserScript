@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.0.4
+// @version      1.0.5
 // @author       X.I.U
 // @description  吾爱破解论坛自动签到、自动翻页
 // @match        *://www.52pojie.cn/*
@@ -18,7 +18,7 @@
     // 自动签到
     function qianDao() {
         var qiandao = document.querySelector('#um p:last-child a:first-child');
-        if (qiandao != null){
+        if (!qiandao){
             if(qiandao.href === "https://www.52pojie.cn/home.php?mod=task&do=apply&id=2")
             {
                 qiandao.click();
@@ -26,11 +26,14 @@
         }
     }
 
-    // 签到后返回
+    // 签到后立即返回
     function qianDaoBack() {
-        var qiandaoback = document.querySelector('#messagetext.alert_btnleft');
-        if (qiandaoback != null){
-            qiandaoback.click();
+        var qiandaoback = document.querySelector('#messagetext p.alert_btnleft a');
+        if (!qiandaoback){
+            if(location.href === "https://www.52pojie.cn/home.php?mod=task&do=draw&id=2")
+            {
+                qiandaoback.click();
+            }
         }
     }
 
