@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         吾爱破解论坛美化 - 精简多余内容
+// @name         吾爱破解论坛美化
 // @version      1.0.1
 // @author       X.I.U
 // @description  精简多余内容
