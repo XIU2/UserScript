@@ -160,7 +160,7 @@
             if (curSite.pager) {
                 let curPageEle = getElementByXpath(curSite.pager.nextLink);
                 var url = this.getFullHref(curPageEle);
-                console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
+                //console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
                 if(url === '') return;
                 if(curSite.pageUrl === url) return;// 不会重复加载相同的页面
                 curSite.pageUrl = url;
