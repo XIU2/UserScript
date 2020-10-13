@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         智友邦论坛增强
-// @version      1.0.2
+// @version      1.0.3
 // @author       X.I.U
-// @description  自动签到、自动回复、自动无缝翻页、自动清理置顶帖子
+// @description  自动签到、自动回复、自动无缝翻页、自动清理置顶帖子等
 // @icon         http://bbs.zhiyoo.net/favicon.ico
 // @match        *://bbs.zhiyoo.net/*
 // @grant        GM_xmlhttpRequest
@@ -33,14 +33,23 @@
 
     // 用于脚本内部判断当前 URL 类型
     let SiteType = {
-        FORUMDISPLAY: DBSite.forumdisplay.SiteTypeID
+        FORUMDISPLAY: DBSite.forumdisplay.SiteTypeID  // 各板块帖子列表
     };
 
 
     if (location.pathname === '/plugin.php'){
-        if (location.href === 'http://bbs.zhiyoo.net/plugin.php?id=dsu_paulsign:sign'){ // 如果被重定向到签到页面
-            qiandao(); // 自动签到
+        switch(getQueryVariable("id"))
+        {
+            case 'dsu_paulsign:sign':    // 被重定向到签到页面
+                qiandao();               // 自动签到
+                break;
+            case 'piaobo_attachment':    // 兑换附件后的提示页面
+                attachmentBack();        // 立即返回帖子
+                break;
         }
+        /*if (location.href === 'http://bbs.zhiyoo.net/plugin.php?id=dsu_paulsign:sign'){
+            qiandao(); // 自动签到
+        }*/
     }
     else if(location.pathname === '/forum.php'){
         switch(getQueryVariable("mod"))
@@ -88,9 +97,19 @@
     function autoReply(){
         if (document.getElementsByClassName("locked").length > 0){
             document.querySelector('#saya_fastreply_div div').click();
-            setTimeout("document.getElementById('fastpostsubmit').click()", 200);
+            setTimeout(`document.getElementById('fastpostsubmit').click()`, 200);
         }
-        setTimeout("location.hash='#footer'", 300);
+        setTimeout(`window.scrollTo(0,99999999)`, 1000);
+        //setTimeout(`location.hash='#footer'`, 1000);
+    }
+
+
+    // 兑换附件后立即返回
+    function attachmentBack() {
+        var attachmentback = document.querySelector('#messagetext p.alert_btnleft a');
+        if (attachmentback){
+            attachmentback.click();
+        }
     }
 
 
@@ -160,7 +179,7 @@
             if (curSite.pager) {
                 let curPageEle = getElementByXpath(curSite.pager.nextLink);
                 var url = this.getFullHref(curPageEle);
-                //console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
+                //console.log(`${url} ${curSite.pageUrl}`);
                 if(url === '') return;
                 if(curSite.pageUrl === url) return;// 不会重复加载相同的页面
                 curSite.pageUrl = url;
