@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         智友邦论坛增强
-// @version      1.0.3
+// @version      1.0.4
 // @author       X.I.U
 // @description  自动签到、自动回复、自动无缝翻页、自动清理置顶帖子等
 // @icon         http://bbs.zhiyoo.net/favicon.ico
@@ -36,6 +36,7 @@
         FORUMDISPLAY: DBSite.forumdisplay.SiteTypeID  // 各板块帖子列表
     };
 
+    var patt_thread = /\/thread-\d+-\d+\-\d+.html/; // 匹配 /thread-XXX-X-X.html 帖子正则表达式
 
     if (location.pathname === '/plugin.php'){
         switch(getQueryVariable("id"))
@@ -47,15 +48,13 @@
                 attachmentBack();        // 立即返回帖子
                 break;
         }
-        /*if (location.href === 'http://bbs.zhiyoo.net/plugin.php?id=dsu_paulsign:sign'){
-            qiandao(); // 自动签到
-        }*/
     }
     else if(location.pathname === '/forum.php'){
         switch(getQueryVariable("mod"))
         {
             case 'viewthread':         // 浏览帖子内容
-                autoReply();           // 自动回复，回复过就定位到底部（隐藏内容区域）
+                showHide();            // 先看看是否有隐藏内容，如果已显示则定位到隐藏内容区域，如果没有隐藏内容，则啥都不干
+                autoReply();           // 自动回复（有隐藏内容才会回复），回复过就定位到底部（隐藏内容区域）
                 break;
             case 'forumdisplay':       // 浏览帖子列表
                 curSite = DBSite.forumdisplay;
@@ -65,6 +64,11 @@
                 break;
         }
     }
+    else if (patt_thread.test(location.pathname)){ // 对于 /thread-XXX-X-X.html 这种帖子页面也和上面一样
+        showHide();
+        autoReply();
+    }
+
 
     // 自动翻页
     function pageLoading() {
@@ -95,12 +99,23 @@
 
     // 自动回复
     function autoReply(){
+        // 存在隐藏内容，自动回复
         if (document.getElementsByClassName("locked").length > 0){
             document.querySelector('#saya_fastreply_div div').click();
             setTimeout(`document.getElementById('fastpostsubmit').click()`, 200);
+            setTimeout(`window.scrollTo(0,99999999)`, 1000);
         }
-        setTimeout(`window.scrollTo(0,99999999)`, 1000);
-        //setTimeout(`location.hash='#footer'`, 1000);
+    }
+
+
+    // 定位到隐藏内容区域
+    function showHide(){
+        // 如果已显示隐藏内容，则定位到隐藏内容区域
+        // 如果没有发现已显示隐藏内容，就不定位了
+        if (document.getElementsByClassName("showhide").length > 0){
+            setTimeout(`window.scrollTo(0,99999999)`, 1000);
+            //setTimeout(`location.hash='#footer'`, 1000);
+        }
     }
 
 
