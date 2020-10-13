@@ -6,7 +6,7 @@
 
 🔨 自用的一些乱七八糟油猴脚本，有什么问题请发 [Issues](https://github.com/XIU2/UserScript/issues/new/choose)，觉得好用请点个⭐~
 
-## 使用说明
+## 脚本列表
 
 > 更多详细脚本介绍/截图，请点击第三列的 **「安装」** 前往 GreasyFork 查看。
 
