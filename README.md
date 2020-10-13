@@ -8,7 +8,9 @@
 
 ## 使用说明
 
-| 脚本名称 | 脚本功能 | 安装 | 备用安装 |
+> 更多详细脚本介绍/截图，请点击第三列的 **「安装」** 前往 GreasyFork 查看。
+
+| 脚本名称 | 脚本功能 | 安装 | 备用 |
 | :---- | :---- | :----: | :----: |
 | **知乎增强** | 宽屏显示 | **[「安装」](https://greasyfork.org/scripts/412212)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-Widescreen.user.js)** |
 | **知乎增强** | 一键收起长篇回答 | **[「安装」](https://greasyfork.org/scripts/412205)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-CollapsedAnswer.user.js)** |
