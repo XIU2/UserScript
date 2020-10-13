@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         3DM论坛增强
-// @version      1.0.0
+// @version      1.0.1
 // @author       X.I.U
-// @description  自动无缝翻页
+// @description  自动回复、自动无缝翻页、清理置顶帖子
 // @match        *://bbs.3dmgame.com/*
 // @icon         https://bbs.3dmgame.com/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -12,6 +12,20 @@
 // ==/UserScript==
 
 (function() {
+    // 随机回复帖子的内容
+    var replyList = [
+        "感谢楼主分享！",
+        "感谢分享，给你点赞！",
+        "感谢分享，论坛因你更精彩！",
+        "看看隐藏内容是什么！",
+        "下载看看好不好用！",
+        "好人一生平安！"
+    ];
+
+    // 检查是否登陆
+    var loginStatus = false;
+    checkLogin();
+
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
 
@@ -47,25 +61,50 @@
         GUIDE: DBSite.guide.SiteTypeID    // 导读帖子列表
     };
 
+    // 下一页URL
+    curSite.pageUrl = "";
+
     // URL 匹配正则表达式
-    var patt_forum = /\/forum-\d+-\d+\.html/,
-        patt_forum_2 = /mod\=forumdisplay/,
-        patt_thread = /\/thread-\d+-\d+\-\d+.html/,
+    var patt_thread = /\/thread-\d+-\d+\-\d+.html/,
         patt_thread_2 = /mod\=viewthread/,
-        patt_guide = /mod\=guide\&view\=(hot|digest)/
+        patt_forum = /\/forum-\d+-\d+\.html/,
+        patt_forum_2 = /mod\=forumdisplay/,
+        patt_guide = /mod\=guide\&view\=(hot|digest)/,
+        patt_reply = /mod\=post&action\=reply/
 
     // URL 判断
     if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)){
+        // 帖子内
         curSite = DBSite.thread;
+        backReply();                    // 先判断是否刚刚在回复帖子，如果是则返回第一页
+        autoReply();                    // 如果有隐藏内容，则自动点击回复
+        pageLoading();                  // 自动翻页
     }else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)){
+        // 各板块帖子列表
         curSite = DBSite.forum;
+        cleanTop();                     // 清理置顶帖子
+        pageLoading();                  // 自动翻页
     }else if (patt_guide.test(location.search)){
+        // 导读帖子列表
         curSite = DBSite.guide;
+        pageLoading();                  // 自动翻页
+    }else if (patt_reply.test(location.search)){
+        // 帖子回复页面
+        writeReply();                   // 写入自动回复内容
     }
-    curSite.pageUrl = ""; // 下一页URL
 
 
-    pageLoading();        // 自动翻页
+    // 判断是否登陆
+    function checkLogin(){
+        var checklogin = document.querySelectorAll('.wp.h_menu p a');
+        if (checklogin){
+            for (var value of checklogin) {
+                if (value.innerHTML == "退出"){
+                    loginStatus = true;
+                }
+            }
+        }
+    }
 
 
     // 自动翻页
@@ -87,6 +126,61 @@
                     }
                 }
             });
+        }
+    }
+
+
+    // 自动点击回复
+    function autoReply(){
+        if (loginStatus == true){
+            // 存在隐藏内容，则点击回复按钮
+            var autoreply = document.querySelector('.locked a');
+            if (autoreply){
+                autoreply.click();
+            }
+        }
+
+    }
+
+
+    // 写入回复内容
+    function writeReply(){
+        if (loginStatus == true){
+            document.getElementById('e_iframe').contentWindow.document.querySelector('body').innerHTML = replyList[Math.floor((Math.random()*replyList.length))];
+            document.getElementById('postsubmit').click();
+        }
+
+    }
+
+
+    // 回复后返回帖子第一页
+    function backReply(){
+        if (loginStatus == true){
+            // 判断前一个页面是否是回复帖子页面
+            if (document.referrer){
+                if (patt_reply.test(document.referrer)){
+                    // 判断上一页按钮是否存在，如果存在则代表不是帖子第一页
+                    if (document.querySelector('.prev')){
+                        // 寻找第一页按钮并点击
+                        var firstPage = document.querySelector('.pg a');
+                        if (firstPage.innerHTML == "1 ..."){
+                            firstPage.click();
+                        }
+                    }else{
+                        // 如果不存在，说明是帖子第一页，则返回顶部
+                        window.scrollTo('0','0');
+                    }
+                }
+            }
+        }
+    }
+
+
+    // 清理置顶帖子
+    function cleanTop(){
+        var showhide = document.querySelectorAll("a.showhide.y");
+        if (showhide.length > 0){
+            showhide.forEach(el=>el.click());
         }
     }
 

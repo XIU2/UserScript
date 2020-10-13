@@ -8,24 +8,19 @@
 
 ## 使用说明
 
-> 点击 **「安装」** 是备用的 Github 链接，点击 **脚本名称** 前往 _GreasyFork_ 查看详细介绍。
-
-*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/SteamWorkshopImageRepair.user.js)** [Steam 创意工坊大图修复](https://greasyfork.org/scripts/397666)  
-****
-* **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-Widescreen.user.js)** [知乎增强 - 宽屏显示](https://greasyfork.org/scripts/412212)  
-*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-CollapsedAnswer.user.js)** [知乎增强 - 一键收起长篇回答](https://greasyfork.org/scripts/412205)  
-*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-HD-Pictures.user.js)** [知乎增强 - 默认显示高清原图](https://greasyfork.org/scripts/412217)  
-*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-Time.user.js)** [知乎增强 - 置顶显示发布/编辑时间](https://greasyfork.org/scripts/412216)  
-****
-*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Enhanced.user.js)** [3DM论坛增强 - 自动无缝翻页](https://greasyfork.org/scripts/412890)  
-****
-*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Beautification.user.js)** [吾爱破解论坛美化 - 精简多余内容](https://greasyfork.org/scripts/412681)  
-*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Enhanced.user.js)** [吾爱破解论坛增强 - 自动签到、自动无缝翻页](https://greasyfork.org/scripts/412680)  
-****
-*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Beautification.user.js)** [智友邦论坛美化 - 精简多余内容、宽屏显示](https://greasyfork.org/scripts/412361)  
-*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Enhanced.user.js)** [智友邦论坛增强 - 自动签到、自动回复、自动无缝翻页、清理置顶帖子](https://greasyfork.org/scripts/412362)  
-****
-*  **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GithubEnhanced-High-Speed-Download.user.js)** [Github 增强 - 高速下载 \[Clone、Release、Raw、Code(ZIP)\]](https://greasyfork.org/scripts/412245)  
+| 脚本名称 | 脚本功能 | 安装 | 备用安装 |
+| :---- | :---- | :----: | :----: |
+| **知乎增强** | 宽屏显示 | **[「安装」](https://greasyfork.org/scripts/412212)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-Widescreen.user.js)** |
+| **知乎增强** | 一键收起长篇回答 | **[「安装」](https://greasyfork.org/scripts/412205)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-CollapsedAnswer.user.js)** |
+| **知乎增强** | 默认显示高清原图 | **[「安装」](https://greasyfork.org/scripts/412217)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-HD-Pictures.user.js)** |
+| **知乎增强** | 置顶显示发布/编辑时间 | **[「安装」](https://greasyfork.org/scripts/412216)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-Time.user.js)** |
+|  **Github 增强** | 高速下载 \[Clone、Release、Raw、Code(ZIP)\] | **[「安装」](https://greasyfork.org/scripts/412245)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GithubEnhanced-High-Speed-Download.user.js)** |
+| **3DM论坛增强** | 自动回复、自动无缝翻页、清理置顶帖子 | **[「安装」](https://greasyfork.org/scripts/412890)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Enhanced.user.js)** |
+| **智友邦论坛美化** | 精简多余内容、宽屏显示 | **[「安装」](https://greasyfork.org/scripts/412361)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Beautification.user.js)** |
+| **智友邦论坛增强** | 自动签到、自动回复、自动无缝翻页、清理置顶帖子 | **[「安装」](https://greasyfork.org/scripts/412362)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Enhanced.user.js)** |
+| **吾爱破解论坛美化** | 精简多余内容 | **[「安装」](https://greasyfork.org/scripts/412681)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Beautification.user.js)** |
+| **吾爱破解论坛增强** | 自动签到、自动无缝翻页 | **[「安装」](https://greasyfork.org/scripts/412680)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Enhanced.user.js)** |
+| **Steam 创意工坊大图修复** | 修复 Steam 创意工坊预览大图无法显示的问题 | **[「安装」](https://greasyfork.org/scripts/397666)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/SteamWorkshopImageRepair.user.js)** |
 
 ****
 

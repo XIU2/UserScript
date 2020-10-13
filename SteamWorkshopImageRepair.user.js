@@ -5,8 +5,8 @@
 // @version              1.0.0
 // @author               X.I.U
 // @description          Fixed Steam Workshop image not showing
-// @description:zh-CN    修复 Steam 创意工坊预览大图无法显示的问题。
-// @description:zh-TW    修復 Steam 創意工坊預覽大圖無法顯示的問題。
+// @description:zh-CN    修复 Steam 创意工坊预览大图无法显示的问题
+// @description:zh-TW    修復 Steam 創意工坊預覽大圖無法顯示的問題
 // @include              *://steamcommunity.com/sharedfiles/filedetails/*
 // @include              *://steamcommunity.com/workshop/filedetails/*
 // @icon                 https://store.steampowered.com/favicon.ico

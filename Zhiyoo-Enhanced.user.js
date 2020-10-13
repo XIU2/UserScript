@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         智友邦论坛增强
-// @version      1.0.4
+// @version      1.0.5
 // @author       X.I.U
-// @description  自动签到、自动回复、自动无缝翻页、自动清理置顶帖子等
+// @description  自动签到、自动回复、自动无缝翻页、清理置顶帖子
 // @icon         http://bbs.zhiyoo.net/favicon.ico
 // @match        *://bbs.zhiyoo.net/*
 // @grant        GM_xmlhttpRequest
@@ -14,6 +14,10 @@
 (function() {
     // 签到后跳转的URL
     var qiandao_Redirect_URL = `http://bbs.zhiyoo.net/forum.php?mod=forumdisplay&fid=42&filter=author&orderby=dateline`;
+
+    // 检查是否登陆
+    var loginStatus = false;
+    checkLogin();
 
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
@@ -70,6 +74,15 @@
     }
 
 
+    // 判断是否登陆
+    function checkLogin(){
+        var checklogin = document.querySelector('.Quater_user.logined');
+        if (checklogin){
+            loginStatus = true;
+        }
+    }
+
+
     // 自动翻页
     function pageLoading() {
         if (curSite.SiteTypeID > 0){
@@ -88,33 +101,39 @@
 
     // 自动签到
     function qiandao(){
-        if(document.getElementById("yl"))
-        {
-            document.querySelector('#yl').click();
-            document.querySelector('.tr3.tac div a').click();
+        if (loginStatus == true){
+            if(document.getElementById("yl"))
+            {
+                document.querySelector('#yl').click();
+                document.querySelector('.tr3.tac div a').click();
+            }
+            setTimeout(location.href=qiandao_Redirect_URL, 2000); // 跳转到指定URL
         }
-        setTimeout(location.href=qiandao_Redirect_URL, 2000); // 跳转到指定URL
     }
 
 
     // 自动回复
     function autoReply(){
-        // 存在隐藏内容，自动回复
-        if (document.getElementsByClassName("locked").length > 0){
-            document.querySelector('#saya_fastreply_div div').click();
-            setTimeout(`document.getElementById('fastpostsubmit').click()`, 200);
-            setTimeout(`window.scrollTo(0,99999999)`, 1000);
+        if (loginStatus == true){
+            // 存在隐藏内容，自动回复
+            if (document.getElementsByClassName("locked").length > 0){
+                document.querySelector('#saya_fastreply_div div').click();
+                setTimeout(`document.getElementById('fastpostsubmit').click()`, 200);
+                setTimeout(`window.scrollTo(0,99999999)`, 1000);
+            }
         }
     }
 
 
     // 定位到隐藏内容区域
     function showHide(){
-        // 如果已显示隐藏内容，则定位到隐藏内容区域
-        // 如果没有发现已显示隐藏内容，就不定位了
-        if (document.getElementsByClassName("showhide").length > 0){
-            setTimeout(`window.scrollTo(0,99999999)`, 1000);
-            //setTimeout(`location.hash='#footer'`, 1000);
+        if (loginStatus == true){
+            // 如果已显示隐藏内容，则定位到隐藏内容区域
+            // 如果没有发现已显示隐藏内容，就不定位了
+            if (document.getElementsByClassName("showhide").length > 0){
+                setTimeout(`window.scrollTo(0,99999999)`, 1000);
+                //setTimeout(`location.hash='#footer'`, 1000);
+            }
         }
     }
 
