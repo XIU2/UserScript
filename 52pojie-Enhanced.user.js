@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.0.6
+// @version      1.0.7
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页
 // @match        *://www.52pojie.cn/*
@@ -12,6 +12,9 @@
 // ==/UserScript==
 
 (function() {
+    // 是否开启帖子内自动翻页功能，true 为开启，false 为关闭。
+    var thread_pageLoading = true;
+
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
 
@@ -42,24 +45,27 @@
 
     // 用于脚本内部判断当前 URL 类型
     let SiteType = {
-        FORUM: DBSite.forum.SiteTypeID,
-        THREAD: DBSite.thread.SiteTypeID,
-        GUIDE: DBSite.guide.SiteTypeID
+        FORUM: DBSite.forum.SiteTypeID,   // 各板块帖子列表
+        THREAD: DBSite.thread.SiteTypeID, // 帖子内
+        GUIDE: DBSite.guide.SiteTypeID    // 导读帖子列表
     };
 
     // URL 匹配正则表达式
-    var patt_forum = /\/forum-\d+-\d+\.html/,
-        patt_forum_2 = /mod\=forumdisplay/,
-        patt_thread = /\/thread-\d+-\d+\-\d+.html/,
+    var patt_thread = /\/thread-\d+-\d+\-\d+.html/,
         patt_thread_2 = /mod\=viewthread/,
+        patt_forum = /\/forum-\d+-\d+\.html/,
+        patt_forum_2 = /mod\=forumdisplay/,
         patt_guide = /mod\=guide\&view\=(hot|digest)/
 
     // URL 判断
     if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)){
-        curSite = DBSite.thread;
+        // 帖子内
+        if(thread_pageLoading)curSite = DBSite.thread;
     }else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)){
+        // 各板块帖子列表
         curSite = DBSite.forum;
     }else if (patt_guide.test(location.search)){
+        // 导读帖子列表
         curSite = DBSite.guide;
     }
     curSite.pageUrl = ""; // 下一页URL
