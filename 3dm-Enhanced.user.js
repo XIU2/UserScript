@@ -2,7 +2,7 @@
 // @name         3DM论坛增强
 // @version      1.0.2
 // @author       X.I.U
-// @description  自动回复、自动无缝翻页、自动清理置顶帖子等
+// @description  自动回复、自动无缝翻页、清理置顶帖子
 // @match        *://bbs.3dmgame.com/*
 // @icon         https://bbs.3dmgame.com/favicon.ico
 // @grant        GM_xmlhttpRequest
