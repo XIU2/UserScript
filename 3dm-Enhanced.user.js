@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         3DM论坛增强
-// @version      1.0.1
+// @version      1.0.2
 // @author       X.I.U
-// @description  自动回复、自动无缝翻页、清理置顶帖子
+// @description  自动回复、自动无缝翻页、自动清理置顶帖子等
 // @match        *://bbs.3dmgame.com/*
 // @icon         https://bbs.3dmgame.com/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -12,6 +12,9 @@
 // ==/UserScript==
 
 (function() {
+    // 是否开启帖子内自动翻页功能，true 为开启，false 为关闭。
+    var thread_pageLoading = false;
+
     // 随机回复帖子的内容
     var replyList = [
         "感谢楼主分享！",
@@ -70,14 +73,14 @@
         patt_forum = /\/forum-\d+-\d+\.html/,
         patt_forum_2 = /mod\=forumdisplay/,
         patt_guide = /mod\=guide\&view\=(hot|digest)/,
-        patt_reply = /mod\=post&action\=reply/
+        patt_reply = /mod\=post&action\=reply/,
+        patt_reply_2 = /extra\=page\%3D1&page\=/
 
     // URL 判断
     if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)){
         // 帖子内
-        curSite = DBSite.thread;
-        backReply();                    // 先判断是否刚刚在回复帖子，如果是则返回第一页
-        autoReply();                    // 如果有隐藏内容，则自动点击回复
+        if(thread_pageLoading)curSite = DBSite.thread;
+        autoReply();                    // 如果有隐藏内容，则自动回复
         pageLoading();                  // 自动翻页
     }else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)){
         // 各板块帖子列表
@@ -88,9 +91,6 @@
         // 导读帖子列表
         curSite = DBSite.guide;
         pageLoading();                  // 自动翻页
-    }else if (patt_reply.test(location.search)){
-        // 帖子回复页面
-        writeReply();                   // 写入自动回复内容
     }
 
 
@@ -130,47 +130,28 @@
     }
 
 
-    // 自动点击回复
+    // 自动回复
     function autoReply(){
         if (loginStatus == true){
-            // 存在隐藏内容，则点击回复按钮
+            // 存在隐藏内容，则自动回复
             var autoreply = document.querySelector('.locked a');
             if (autoreply){
-                autoreply.click();
+                writeReply();
+                setTimeout(`window.scrollTo(0,0)`, 1000);
             }
         }
 
     }
 
 
-    // 写入回复内容
+    // 写入自动回复内容
     function writeReply(){
-        if (loginStatus == true){
-            document.getElementById('e_iframe').contentWindow.document.querySelector('body').innerHTML = replyList[Math.floor((Math.random()*replyList.length))];
-            document.getElementById('postsubmit').click();
-        }
-
-    }
-
-
-    // 回复后返回帖子第一页
-    function backReply(){
-        if (loginStatus == true){
-            // 判断前一个页面是否是回复帖子页面
-            if (document.referrer){
-                if (patt_reply.test(document.referrer)){
-                    // 判断上一页按钮是否存在，如果存在则代表不是帖子第一页
-                    if (document.querySelector('.prev')){
-                        // 寻找第一页按钮并点击
-                        var firstPage = document.querySelector('.pg a');
-                        if (firstPage.innerHTML == "1 ..."){
-                            firstPage.click();
-                        }
-                    }else{
-                        // 如果不存在，说明是帖子第一页，则返回顶部
-                        window.scrollTo('0','0');
-                    }
-                }
+        var textarea = document.getElementById("fastpostmessage");
+        if (textarea){
+            textarea.value = textarea.value + replyList[Math.floor((Math.random()*replyList.length))];
+            var fastpostsubmit = document.getElementById("fastpostsubmit");
+            if (fastpostsubmit){
+                fastpostsubmit.click();
             }
         }
     }
