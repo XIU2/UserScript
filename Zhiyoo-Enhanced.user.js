@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         智友邦论坛增强
-// @version      1.0.5
+// @version      1.0.6
 // @author       X.I.U
-// @description  自动签到、自动回复、自动无缝翻页、清理置顶帖子
+// @description  自动签到、自动回复、自动无缝翻页、清理置顶帖子、清理帖子标题〖XXX〗【XXX】文字
 // @icon         http://bbs.zhiyoo.net/favicon.ico
 // @match        *://bbs.zhiyoo.net/*
 // @grant        GM_xmlhttpRequest
@@ -14,6 +14,11 @@
 (function() {
     // 签到后跳转的URL
     var qiandao_Redirect_URL = `http://bbs.zhiyoo.net/forum.php?mod=forumdisplay&fid=42&filter=author&orderby=dateline`;
+
+    // 是否开启「清理帖子列表中帖子标题开头的〖XXX〗【XXX】文字」功能，标题中的 APP 名称完全对齐，看起来更舒服！true 为开启，false 为关闭，默认开启。
+    var cleanText = true;
+    // 帖子数量，避免重复清理帖子列表中帖子标题开头的〖XXX〗【XXX】文字，用于提高效率
+    var postNum = 0;
 
     // 检查是否登陆
     var loginStatus = false;
@@ -40,7 +45,8 @@
         FORUMDISPLAY: DBSite.forumdisplay.SiteTypeID  // 各板块帖子列表
     };
 
-    var patt_thread = /\/thread-\d+-\d+\-\d+.html/; // 匹配 /thread-XXX-X-X.html 帖子正则表达式
+    var patt_thread = /\/thread-\d+-\d+\-\d+.html/, // 匹配 /thread-XXX-X-X.html 帖子正则表达式
+        patt_posttitle = /〖.+〗：|【.+】：/; // 匹配帖子标题中的〖XXX〗【XXX】正则表达式
 
     if (location.pathname === '/plugin.php'){
         switch(getQueryVariable("id"))
@@ -64,6 +70,7 @@
                 curSite = DBSite.forumdisplay;
                 curSite.pageUrl = "";  // 下一页URL
                 cleanTop();            // 清理置顶帖子
+                cleanPostTitle();      // 清理帖子列表中帖子标题开头的〖XXX〗【XXX】文字
                 pageLoading();         // 自动翻页
                 break;
         }
@@ -101,7 +108,7 @@
 
     // 自动签到
     function qiandao(){
-        if (loginStatus == true){
+        if (loginStatus){
             if(document.getElementById("yl"))
             {
                 document.querySelector('#yl').click();
@@ -114,7 +121,7 @@
 
     // 自动回复
     function autoReply(){
-        if (loginStatus == true){
+        if (loginStatus){
             // 存在隐藏内容，自动回复
             if (document.getElementsByClassName("locked").length > 0){
                 document.querySelector('#saya_fastreply_div div').click();
@@ -127,7 +134,7 @@
 
     // 定位到隐藏内容区域
     function showHide(){
-        if (loginStatus == true){
+        if (loginStatus){
             // 如果已显示隐藏内容，则定位到隐藏内容区域
             // 如果没有发现已显示隐藏内容，就不定位了
             if (document.getElementsByClassName("showhide").length > 0){
@@ -152,6 +159,23 @@
         var showhide = document.querySelectorAll("a.showhide.y");
         if (showhide.length > 0){
             showhide.forEach(el=>el.click());
+        }
+    }
+
+
+    // 清理帖子列表中帖子标题开头的〖XXX〗【XXX】文字
+    function cleanPostTitle(){
+        if (cleanText){
+            var cleanposttitle = document.querySelectorAll("a.s.xst");
+            if (cleanposttitle.length > 0){
+                for(var num = postNum;num<cleanposttitle.length;num++){
+                    cleanposttitle[num].innerText = cleanposttitle[num].innerText.replace(patt_posttitle, ``);
+                    postNum += 1;
+                }
+                /*cleanposttitle.forEach(function(el){
+                    el.innerText = el.innerText.replace(patt_posttitle, ``);
+            });*/
+            }
         }
     }
 
@@ -235,6 +259,8 @@
                                 pageElems.forEach(function (one) {
                                     toElement.insertAdjacentElement(addTo, one);
                                 });
+                                // 清理帖子列表中帖子标题开头的〖XXX〗【XXX】文字
+                                cleanPostTitle();
                                 // 替换待替换元素
                                 try {
                                     let oriE = getAllElements(curSite.pager.replaceE);

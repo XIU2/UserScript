@@ -132,7 +132,7 @@
 
     // 自动回复
     function autoReply(){
-        if (loginStatus == true){
+        if (loginStatus){
             // 存在隐藏内容，则自动回复
             var autoreply = document.querySelector('.locked a');
             if (autoreply){
