@@ -19,6 +19,7 @@
 | **知乎增强** | 默认显示高清原图 | **[「安装」](https://greasyfork.org/scripts/412217)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-HD-Pictures.user.js)** |
 | **知乎增强** | 置顶显示发布时间/编辑时间 | **[「安装」](https://greasyfork.org/scripts/412216)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-Time.user.js)** |
 |  **Github 增强** | 高速下载 \[Clone、Release、Raw、Code(ZIP)\] | **[「安装」](https://greasyfork.org/scripts/412245)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GithubEnhanced-High-Speed-Download.user.js)** |
+| **3DM论坛美化** | 精简多余内容 | **[「安装」](https://greasyfork.org/scripts/413593)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Beautification.user.js)** |
 | **3DM论坛增强** | 自动回复、自动无缝翻页、清理置顶帖子 | **[「安装」](https://greasyfork.org/scripts/412890)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Enhanced.user.js)** |
 | **智友邦论坛美化** | 精简多余内容、宽屏显示 | **[「安装」](https://greasyfork.org/scripts/412361)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Beautification.user.js)** |
 | **智友邦论坛增强** | 自动签到、自动回复、自动无缝翻页、清理置顶帖子等 | **[「安装」](https://greasyfork.org/scripts/412362)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Enhanced.user.js)** |
