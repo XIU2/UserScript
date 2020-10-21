@@ -148,15 +148,6 @@ function search()
         }
 
     })
-
-    //隐藏相关推荐的卡片，仅保留问题卡片
-    $(".RelevantQuery").closest(".Card.SearchResult-Card").hide();
-    $(".KfeCollection-PcCollegeCard-wrapper").closest(".Card.SearchResult-Card").hide();
-    if(getQueryVariable("type")=="content")
-    {
-        $('.Card.SearchResult-Card[data-za-detail-view-path-module="UserItem"]').hide();
-    }
-
 }
 
 //用户主页
