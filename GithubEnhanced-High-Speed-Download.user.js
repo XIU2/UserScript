@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.1.3
+// @version      1.1.4
 // @author       X.I.U
-// @description  高速下载 Clone、Release、Raw、Code(ZIP)
+// @description  为 Github 的 Clone、Release、Raw、Code(ZIP) 添加高速下载
 // @match        https://github.com/*/*
 // @match        https://github.com/*/*/releases
 // @match        https://github.com/*/*/releases/*
@@ -54,6 +54,9 @@
     setTimeout(addDownLink, 2000); // 添加 Raw 下载链接（添加到项目页文件名称后面），延迟 2 秒执行，避免被 pjax 刷掉
 
     $(document).on('pjax:success',function(evt){
+        addRelease(); // Release 加速
+        addDownloadZIP(); // Source Code 加速
+        addGitClone(); // Download ZIP/Code(ZIP) 加速
         addRawFile(); // pjax 事件发生后，添加 Raw 加速按钮 及 Raw 下载链接
         setTimeout(addDownLink, 2000); // 延迟 2 秒执行，避免被 pjax 刷掉
     });
