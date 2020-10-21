@@ -26,6 +26,7 @@
 |  **Google 翻译美化** | 精简多余内容、修复翻译结果溢出屏幕问题 | **[「安装」](https://greasyfork.org/scripts/413721)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GoogleTranslate-Beautification.user.js)** |
 | **吾爱破解论坛美化** | 精简多余内容 | **[「安装」](https://greasyfork.org/scripts/412681)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Beautification.user.js)** |
 | **吾爱破解论坛增强** | 自动签到、自动无缝翻页 | **[「安装」](https://greasyfork.org/scripts/412680)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Enhanced.user.js)** |
+| **全球主机交流论坛增强** | 自动无缝翻页 | **[「安装」](https://greasyfork.org/scripts/414005)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Hostloc-Enhanced.user.js)** |
 | **Steam 创意工坊大图修复** | 修复 Steam 创意工坊预览大图无法显示的问题 | **[「安装」](https://greasyfork.org/scripts/397666)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/SteamWorkshopImageRepair.user.js)** |
 
 ****
