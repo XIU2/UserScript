@@ -15,6 +15,7 @@
 | 脚本名称 | 脚本功能 | 安装 | 备用 |
 | :---- | :---- | :----: | :----: |
 | **知乎增强** | 宽屏显示 | **[「安装」](https://greasyfork.org/scripts/412212)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-Widescreen.user.js)** |
+| **知乎增强** | 区分问题和文章 | **[「安装」](https://greasyfork.org/scripts/414027)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-TypeTip.user.js)** |
 | **知乎增强** | 一键收起长篇回答 | **[「安装」](https://greasyfork.org/scripts/412205)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-CollapsedAnswer.user.js)** |
 | **知乎增强** | 默认显示高清原图 | **[「安装」](https://greasyfork.org/scripts/412217)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-HD-Pictures.user.js)** |
 | **知乎增强** | 置顶显示发布时间/编辑时间 | **[「安装」](https://greasyfork.org/scripts/412216)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/ZhihuEnhanced-Time.user.js)** |
