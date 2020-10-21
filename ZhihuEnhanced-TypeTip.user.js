@@ -14,10 +14,9 @@
 (function() {
     var postNum;
 
-    setInterval(aaaaa, 1000);
-    //setTimeout(aaaaa, 1000);
+    setInterval(addTips, 1000);
 
-    function aaaaa() {
+    function addTips() {
         // URL 匹配正则表达式
         var patt_zhuanlan = /zhuanlan.zhihu.com/,
             patt_question = /question\/\d+/,
