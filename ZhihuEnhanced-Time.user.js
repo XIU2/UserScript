@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强 - 置顶显示发布/编辑时间
-// @version      1.0.1
+// @version      1.0.2
 // @author       X.I.U
 // @description  回答和文章置顶显示发布时间、编辑时间
 // @match        *://www.zhihu.com/*
@@ -118,7 +118,7 @@ function zhuanlan()
 function search()
 {
     $(".ContentItem.AnswerItem, .ContentItem.ArticleItem").each(function(){
-        console.log($(this).find(".ContentItem-time"))
+        //console.log($(this).find(".ContentItem-time"))
         if( !($(this).find(".ContentItem-time").hasClass("full")) && $(this).find(".ContentItem-time").length>0 && $(this).find(".ContentItem-time").find("span").text() != null)
         {
             if($(this).find(".ContentItem-time").text().indexOf("发布于")==-1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") > -1)  //只有"编辑于"时，增加具体发布时间data-tooltip
