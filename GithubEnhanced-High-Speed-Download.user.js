@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.1.4
+// @version      1.1.5
 // @author       X.I.U
 // @description  为 Github 的 Clone、Release、Raw、Code(ZIP) 添加高速下载
 // @match        https://github.com/*/*
@@ -8,6 +8,8 @@
 // @match        https://github.com/*/*/releases/*
 // @icon         https://github.githubassets.com/favicon.ico
 // @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
+// @grant        GM_registerMenuCommand
+// @grant        GM_openInTab
 // @license      GPL-3.0 License
 // @run-at       document-end
 // @namespace    https://greasyfork.org/scripts/412245
@@ -47,13 +49,15 @@
     var raw_svg = `<svg class="octicon octicon-cloud-download" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M9 12h2l-3 3-3-3h2V7h2v5zm3-8c0-.44-.91-3-4.5-3C5.08 1 3 2.92 3 5 1.02 5 0 6.52 0 8c0 1.53 1 3 3 3h3V9.7H3C1.38 9.7 1.3 8.28 1.3 8c0-.17.05-1.7 1.7-1.7h1.3V5c0-1.39 1.56-2.7 3.2-2.7 2.55 0 3.13 1.55 3.2 1.8v1.2H12c.81 0 2.7.22 2.7 2.2 0 2.09-2.25 2.2-2.7 2.2h-2V11h2c2.08 0 4-1.16 4-3.5C16 5.06 14.08 4 12 4z"></path></svg>`
     var download_release_style = `padding:0 4px;margin-right: -1px;border-radius: 2px;background-color: #ffffff;border-color: rgba(27, 31, 35, 0.1);font-size: 12px;`
 
+    GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+
     addRelease(); // Release 加速
     addDownloadZIP(); // Source Code 加速
     addGitClone(); // Download ZIP/Code(ZIP) 加速
     addRawFile(); // Raw 加速
     setTimeout(addDownLink, 2000); // 添加 Raw 下载链接（添加到项目页文件名称后面），延迟 2 秒执行，避免被 pjax 刷掉
 
-    $(document).on('pjax:success',function(evt){
+    document.addEventListener('pjax:success',function(){
         addRelease(); // Release 加速
         addDownloadZIP(); // Source Code 加速
         addGitClone(); // Download ZIP/Code(ZIP) 加速
