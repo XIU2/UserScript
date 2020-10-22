@@ -1,19 +1,40 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.0.7
+// @version      1.0.8
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页
 // @match        *://www.52pojie.cn/*
 // @icon         https://www.52pojie.cn/favicon.ico
 // @grant        GM_xmlhttpRequest
+// @grant        GM_registerMenuCommand
+// @grant        GM_openInTab
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @grant        GM_notification
 // @license      GPL-3.0 License
 // @run-at       document-end
 // @namespace    https://greasyfork.org/scripts/412680
 // ==/UserScript==
 
 (function() {
-    // 是否开启帖子内自动翻页功能，true 为开启，false 为关闭。
-    var thread_pageLoading = true;
+    // 开关帖子内自动翻页功能，true 为开启，false 为关闭，默认开启。
+    var thread_pageLoading = GM_getValue('xiu2_thread_pageLoading');
+    if (thread_pageLoading == null){
+        thread_pageLoading = true;
+        GM_setValue('xiu2_thread_pageLoading', true);
+    }
+    // 注册脚本菜单
+    GM_registerMenuCommand('开关 [帖子内自动翻页] 功能', function () {
+        if (thread_pageLoading){
+            thread_pageLoading = false;
+            GM_notification(`已关闭 [帖子内自动翻页] 功能\n（刷新网页后生效）`);
+        }else{
+            thread_pageLoading = true;
+            GM_notification(`已开启 [帖子内自动翻页] 功能\n（刷新网页后生效）`);
+        }
+        GM_setValue('xiu2_thread_pageLoading', thread_pageLoading);
+    });
+    GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
 
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
