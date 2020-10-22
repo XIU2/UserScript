@@ -1,6 +1,6 @@
-// ==UserScript==
+ // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.1.5
+// @version      1.1.6
 // @author       X.I.U
 // @description  为 Github 的 Clone、Release、Raw、Code(ZIP) 添加高速下载
 // @match        https://github.com/*/*
@@ -10,6 +10,9 @@
 // @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
 // @grant        GM_registerMenuCommand
 // @grant        GM_openInTab
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @grant        GM_notification
 // @license      GPL-3.0 License
 // @run-at       document-end
 // @namespace    https://greasyfork.org/scripts/412245
@@ -31,24 +34,43 @@
     var clone_url2 = "https://gitclone.com"; // 中国浙江杭州
     var clone_url3 = "https://github.com.cnpmjs.org"; // 新加坡
 
-    // 这里这里~~
-    var raw_fast = "中国国内"; // 指定各个文件名后的云朵使用的高速下载链接，选择范围：[Github、中国国内、中国香港、美国洛杉矶]，各加速源注意事项看下面，自行选择~~
-    // 这里这里~~
+    var raw_fast_arr = ['Github 原生','中国国内','中国香港','美国洛杉矶']; // Raw ☁ 加速源数组
+    var raw_fast = GM_getValue('xiu2_raw_fast'); // 先获取加速源，如果没有就指定为 [中国国内]
+    if (!raw_fast){
+        raw_fast = "中国国内";
+        GM_setValue('xiu2_raw_fast', raw_fast_arr[1]);
+    }
 
     var raw_url0 = "https://raw.githubusercontent.com";
-    var raw_url0_name = "Github"; // 原生链接
+    var raw_url0_name = "Github 原生";
     var raw_url1 = "https://cdn.jsdelivr.net";
     var raw_url1_name = "中国国内";
-    var raw_url1_tip = "注意：该项目当前分支总文件大小超过 50MB 时，此高速下载链接不可用。&#10;注意：当前分支名为版本号格式时(如 v1.2.3)，此高速下载链接因格式限制不可用。&#10;&#10;";
+    var raw_url1_tip = "注意：当前分支总文件大小超过 50MB 时，该高速下载链接不可用。&#10;注意：当前分支名为版本号格式时(如 v1.2.3)，该高速下载链接因格式限制不可用。&#10;&#10;";
     var raw_url2 = "https://raw.fastgit.org";
     var raw_url2_name = "中国香港";
-    var raw_url2_tip = "注意：单个文件太大时可能会提示超时，可以重试。&#10;&#10;";
+    var raw_url2_tip = "注意：单个文件太大时可能会提示超时，请重试。&#10;&#10;";
 
     var download_zip_svg = `<svg class="octicon octicon-file-zip mr-3" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M3.5 1.75a.25.25 0 01.25-.25h3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h2.086a.25.25 0 01.177.073l2.914 2.914a.25.25 0 01.073.177v8.586a.25.25 0 01-.25.25h-.5a.75.75 0 000 1.5h.5A1.75 1.75 0 0014 13.25V4.664c0-.464-.184-.909-.513-1.237L10.573.513A1.75 1.75 0 009.336 0H3.75A1.75 1.75 0 002 1.75v11.5c0 .649.353 1.214.874 1.515a.75.75 0 10.752-1.298.25.25 0 01-.126-.217V1.75zM8.75 3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM6 5.25a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5A.75.75 0 016 5.25zm2 1.5A.75.75 0 018.75 6h.5a.75.75 0 010 1.5h-.5A.75.75 0 018 6.75zm-1.25.75a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM8 9.75A.75.75 0 018.75 9h.5a.75.75 0 010 1.5h-.5A.75.75 0 018 9.75zm-.75.75a1.75 1.75 0 00-1.75 1.75v3c0 .414.336.75.75.75h2.5a.75.75 0 00.75-.75v-3a1.75 1.75 0 00-1.75-1.75h-.5zM7 12.25a.25.25 0 01.25-.25h.5a.25.25 0 01.25.25v2.25H7v-2.25z"></path></svg>`;
     var download_clone_svg = `<svg class="octicon octicon-clippy" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M5.75 1a.75.75 0 00-.75.75v3c0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75v-3a.75.75 0 00-.75-.75h-4.5zm.75 3V2.5h3V4h-3zm-2.874-.467a.75.75 0 00-.752-1.298A1.75 1.75 0 002 3.75v9.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0014 13.25v-9.5a1.75 1.75 0 00-.874-1.515.75.75 0 10-.752 1.298.25.25 0 01.126.217v9.5a.25.25 0 01-.25.25h-8.5a.25.25 0 01-.25-.25v-9.5a.25.25 0 01.126-.217z"></path></svg>`
     var raw_svg = `<svg class="octicon octicon-cloud-download" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M9 12h2l-3 3-3-3h2V7h2v5zm3-8c0-.44-.91-3-4.5-3C5.08 1 3 2.92 3 5 1.02 5 0 6.52 0 8c0 1.53 1 3 3 3h3V9.7H3C1.38 9.7 1.3 8.28 1.3 8c0-.17.05-1.7 1.7-1.7h1.3V5c0-1.39 1.56-2.7 3.2-2.7 2.55 0 3.13 1.55 3.2 1.8v1.2H12c.81 0 2.7.22 2.7 2.2 0 2.09-2.25 2.2-2.7 2.2h-2V11h2c2.08 0 4-1.16 4-3.5C16 5.06 14.08 4 12 4z"></path></svg>`
     var download_release_style = `padding:0 4px;margin-right: -1px;border-radius: 2px;background-color: #ffffff;border-color: rgba(27, 31, 35, 0.1);font-size: 12px;`
 
+    // 注册脚本菜单
+    GM_registerMenuCommand('切换加速源 (☁)', function () {
+        var raw_fast_now_index = raw_fast_arr.indexOf(raw_fast); // 获取当前加速源位置
+        var raw_fast_new_index;
+        if (raw_fast_now_index >= raw_fast_arr.length - 1){ // 如果当前加速源位置大于等于加速源总数，则改为第一个加速源，反之递增下一个加速源
+            raw_fast_new_index = 0;
+        }else{
+            raw_fast_new_index = raw_fast_now_index + 1;
+        }
+        raw_fast = raw_fast_arr[raw_fast_new_index];
+        GM_setValue('xiu2_raw_fast', raw_fast_arr[raw_fast_new_index]);
+
+        delDownLink(); // 删除旧加速源
+        addDownLink(); // 添加新加速源
+        GM_notification(`已切换加速源为：${raw_fast_arr[raw_fast_new_index]}`); // 提示消息
+    });
     GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
 
     addRelease(); // Release 加速
@@ -168,7 +190,7 @@
     }
 
 
-    // 添加 Raw 下载链接（添加到项目页文件名称后面）
+    // 添加 Raw 下载链接（云朵图标，添加到项目页文件名称后面）
     function addDownLink(){
         // 如果不是项目文件页面，就返回
         var files = $('.octicon.octicon-file');
@@ -197,10 +219,7 @@
                 Name = cntElm.innerText,
                 href = cntElm.attributes["href"].nodeValue.replace('https://github.com','');
             // 如果 raw_fast 为 true 则下载链接为高速下载链接，反之为 Github 原生下载链接
-            var href2 = href.replace('/blob/','/'),
-            url,
-            url_name,
-            url_tip = "";
+            var href2 = href.replace('/blob/','/'), url, url_name, url_tip = "";
             switch(raw_fast)
             {
                 case raw_url0_name:
@@ -222,11 +241,20 @@
                     url_name = download_url5_name;
                     break;
             }
-            var html1 = ` <a href="${url}" download="${Name}" target="_blank" class="fileDownLink" style="visibility: hidden;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：修改脚本头部 [raw_fast] 变量可切换其他加速源。">${raw_svg}</a>`;
+            var html1 = ` <a href="${url}" download="${Name}" target="_blank" class="fileDownLink" style="visibility: hidden;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [切换加速源 (☁)]。">${raw_svg}</a>`;
             $(cntElm).after(html1);
             // 绑定鼠标事件
             trElm.onmouseover=mouseOverHandler;
             trElm.onmouseout=mouseOutHandler;
         });
+    }
+
+
+    // 删除 Raw 下载链接（云朵图标）
+    function delDownLink(){
+        var aElm = document.querySelectorAll('.fileDownLink');
+        for(var num = 0;num<aElm.length;num++){
+            aElm[num].remove();
+        };
     }
 })();
