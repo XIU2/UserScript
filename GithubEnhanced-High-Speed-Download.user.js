@@ -1,6 +1,6 @@
  // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.1.6
+// @version      1.1.7
 // @author       X.I.U
 // @description  为 Github 的 Clone、Release、Raw、Code(ZIP) 添加高速下载
 // @match        https://github.com/*/*
@@ -9,6 +9,7 @@
 // @icon         https://github.githubassets.com/favicon.ico
 // @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
 // @grant        GM_registerMenuCommand
+// @grant        GM_unregisterMenuCommand
 // @grant        GM_openInTab
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -34,13 +35,6 @@
     var clone_url2 = "https://gitclone.com"; // 中国浙江杭州
     var clone_url3 = "https://github.com.cnpmjs.org"; // 新加坡
 
-    var raw_fast_arr = ['Github 原生','中国国内','中国香港','美国洛杉矶']; // Raw ☁ 加速源数组
-    var raw_fast = GM_getValue('xiu2_raw_fast'); // 先获取加速源，如果没有就指定为 [中国国内]
-    if (!raw_fast){
-        raw_fast = "中国国内";
-        GM_setValue('xiu2_raw_fast', raw_fast_arr[1]);
-    }
-
     var raw_url0 = "https://raw.githubusercontent.com";
     var raw_url0_name = "Github 原生";
     var raw_url1 = "https://cdn.jsdelivr.net";
@@ -55,23 +49,39 @@
     var raw_svg = `<svg class="octicon octicon-cloud-download" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M9 12h2l-3 3-3-3h2V7h2v5zm3-8c0-.44-.91-3-4.5-3C5.08 1 3 2.92 3 5 1.02 5 0 6.52 0 8c0 1.53 1 3 3 3h3V9.7H3C1.38 9.7 1.3 8.28 1.3 8c0-.17.05-1.7 1.7-1.7h1.3V5c0-1.39 1.56-2.7 3.2-2.7 2.55 0 3.13 1.55 3.2 1.8v1.2H12c.81 0 2.7.22 2.7 2.2 0 2.09-2.25 2.2-2.7 2.2h-2V11h2c2.08 0 4-1.16 4-3.5C16 5.06 14.08 4 12 4z"></path></svg>`
     var download_release_style = `padding:0 4px;margin-right: -1px;border-radius: 2px;background-color: #ffffff;border-color: rgba(27, 31, 35, 0.1);font-size: 12px;`
 
+    var menu_raw_fast_arr = ['Github 原生','中国国内','中国香港','美国洛杉矶']; // Raw ☁ 加速源数组
+    var menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'); // 先获取加速源，如果没有就指定为 [中国国内]
+    var menu_menu_raw_fast_ID, menu_feedBack_ID;
+    if (menu_raw_fast == null){menu_raw_fast = menu_raw_fast_arr[1]; GM_setValue('xiu2_menu_raw_fast', menu_raw_fast_arr[1])};
+
+    registerMenuCommand();
     // 注册脚本菜单
-    GM_registerMenuCommand('切换加速源 (☁)', function () {
-        var raw_fast_now_index = raw_fast_arr.indexOf(raw_fast); // 获取当前加速源位置
-        var raw_fast_new_index;
-        if (raw_fast_now_index >= raw_fast_arr.length - 1){ // 如果当前加速源位置大于等于加速源总数，则改为第一个加速源，反之递增下一个加速源
+    function registerMenuCommand() {
+        if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
+            GM_unregisterMenuCommand(menu_menu_raw_fast_ID);
+            GM_unregisterMenuCommand(menu_feedBack_ID);
+            menu_raw_fast = GM_getValue('xiu2_menu_raw_fast');
+        }
+        menu_menu_raw_fast_ID = GM_registerMenuCommand(`[ ${menu_raw_fast} ] 加速源 (☁) - 点击切换`, menu_toggle_raw_fast);
+        menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+    }
+
+    // 切换加速源
+    function menu_toggle_raw_fast() {
+        var raw_fast_now_index = menu_raw_fast_arr.indexOf(menu_raw_fast),
+            raw_fast_new_index;
+        if (raw_fast_now_index >= menu_raw_fast_arr.length - 1){ // 如果当前加速源位置大于等于加速源总数，则改为第一个加速源，反之递增下一个加速源
             raw_fast_new_index = 0;
         }else{
             raw_fast_new_index = raw_fast_now_index + 1;
         }
-        raw_fast = raw_fast_arr[raw_fast_new_index];
-        GM_setValue('xiu2_raw_fast', raw_fast_arr[raw_fast_new_index]);
-
+        menu_raw_fast = menu_raw_fast_arr[raw_fast_new_index];
+        GM_setValue('xiu2_menu_raw_fast', menu_raw_fast_arr[raw_fast_new_index]);
         delDownLink(); // 删除旧加速源
         addDownLink(); // 添加新加速源
-        GM_notification(`已切换加速源为：${raw_fast_arr[raw_fast_new_index]}`); // 提示消息
-    });
-    GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+        GM_notification(`已切换加速源为：${menu_raw_fast_arr[raw_fast_new_index]}`); // 提示消息
+        registerMenuCommand(); // 重新注册脚本菜单
+    };
 
     addRelease(); // Release 加速
     addDownloadZIP(); // Source Code 加速
@@ -217,10 +227,9 @@
             var trElm = fileElm.parentNode.parentNode,
                 cntElm = trElm.querySelector('.css-truncate.css-truncate-target.d-block.width-fit a'),
                 Name = cntElm.innerText,
-                href = cntElm.attributes["href"].nodeValue.replace('https://github.com','');
-            // 如果 raw_fast 为 true 则下载链接为高速下载链接，反之为 Github 原生下载链接
+                href = cntElm.attributes['href'].nodeValue.replace('https://github.com','');
             var href2 = href.replace('/blob/','/'), url, url_name, url_tip = "";
-            switch(raw_fast)
+            switch(menu_raw_fast)
             {
                 case raw_url0_name:
                     url = raw_url0 + href2;
@@ -241,7 +250,7 @@
                     url_name = download_url5_name;
                     break;
             }
-            var html1 = ` <a href="${url}" download="${Name}" target="_blank" class="fileDownLink" style="visibility: hidden;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [切换加速源 (☁)]。">${raw_svg}</a>`;
+            var html1 = ` <a href="${url}" download="${Name}" target="_blank" class="fileDownLink" style="visibility: hidden;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${menu_raw_fast} ] 加速源 (☁) - 点击切换。">${raw_svg}</a>`;
             $(cntElm).after(html1);
             // 绑定鼠标事件
             trElm.onmouseover=mouseOverHandler;
