@@ -35,11 +35,7 @@
             menu_cleanPostTitle = GM_getValue('xiu2_menu_cleanPostTitle');
         }
 
-        if (menu_cleanPostTitle){
-            menu_cleanPostTitle_ = "√";
-        }else{
-            menu_cleanPostTitle_ = "×";
-        }
+        if (menu_cleanPostTitle){menu_cleanPostTitle_ = "√";}else{menu_cleanPostTitle_ = "×";}
 
         menu_cleanPostTitle_ID = GM_registerMenuCommand(`[ ${menu_cleanPostTitle_} ] 清理帖子标题开头〖〗【】文字`, function(){menu_switch(menu_cleanPostTitle,'xiu2_menu_cleanPostTitle','[清理帖子标题开头〖〗【】文字] 功能（刷新网页后生效）')});
         menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});

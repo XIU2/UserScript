@@ -40,21 +40,9 @@
             menu_cleanTopPost = GM_getValue('xiu2_menu_cleanTopPost');
         }
 
-        if (menu_thread_pageLoading){
-            menu_thread_pageLoading_ = "√";
-        }else{
-            menu_thread_pageLoading_ = "×";
-        }
-        if (menu_autoReply){
-            menu_autoReply_ = "√";
-        }else{
-            menu_autoReply_ = "×";
-        }
-        if (menu_cleanTopPost){
-            menu_cleanTopPost_ = "√";
-        }else{
-            menu_cleanTopPost_ = "×";
-        }
+        if (menu_thread_pageLoading){menu_thread_pageLoading_ = "√";}else{menu_thread_pageLoading_ = "×";}
+        if (menu_autoReply){menu_autoReply_ = "√";}else{menu_autoReply_ = "×";}
+        if (menu_cleanTopPost){menu_cleanTopPost_ = "√";}else{menu_cleanTopPost_ = "×";}
 
         menu_autoReply_ID = GM_registerMenuCommand(`[ ${menu_autoReply_} ] 自动回复`, function(){menu_switch(menu_autoReply,'xiu2_menu_autoReply','自动回复')});
         menu_cleanTopPost_ID = GM_registerMenuCommand(`[ ${menu_cleanTopPost_} ] 清理置顶帖子`, function(){menu_switch(menu_cleanTopPost,'xiu2_menu_cleanTopPost','清理置顶帖子')});

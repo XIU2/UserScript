@@ -32,11 +32,7 @@
             menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading');
         }
 
-        if (menu_thread_pageLoading){
-            menu_thread_pageLoading_ = "√";
-        }else{
-            menu_thread_pageLoading_ = "×";
-        }
+        if (menu_thread_pageLoading){menu_thread_pageLoading_ = "√";}else{menu_thread_pageLoading_ = "×";}
 
         menu_thread_pageLoading_ID = GM_registerMenuCommand(`[ ${menu_thread_pageLoading_} ] 帖子内自动翻页`, function(){menu_switch(menu_thread_pageLoading,'xiu2_menu_thread_pageLoading','帖子内自动翻页')});
         menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
