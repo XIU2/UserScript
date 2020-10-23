@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.0.1
+// @version      1.0.2
 // @author       X.I.U
 // @description  宽屏显示
 // @include      *://www.zhihu.com/*
@@ -16,6 +16,11 @@
 .GlobalSideBar,.Question-sideColumn,.ContentLayout-sideColumn,.SearchSideBar,.RichContent img.ArticleItem-image {
 	display: none !important;
 }
+/* 屏蔽在各列表中查看文章时开头显示的大图，不影响文章/专栏页面
+.RichContent img.ArticleItem-image {
+	display: none !important;
+}
+*/
 .Topstory-mainColumn,.Question-mainColumn,.ContentLayout-mainColumn,.SearchMain,.QuestionWaiting-mainColumn {
 	width: 1000px !important;
 }
