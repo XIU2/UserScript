@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         智友邦论坛增强
-// @version      1.0.8
+// @version      1.0.9
 // @author       X.I.U
 // @description  自动签到、自动回复、自动无缝翻页、清理置顶帖子、清理帖子标题〖XXX〗【XXX】文字
 // @icon         http://bbs.zhiyoo.net/favicon.ico
 // @match        *://bbs.zhiyoo.net/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
+// @grant        GM_unregisterMenuCommand
 // @grant        GM_openInTab
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -20,24 +21,41 @@
     // 签到后跳转的URL
     var qiandao_Redirect_URL = `http://bbs.zhiyoo.net/forum.php?mod=forumdisplay&fid=42&filter=author&orderby=dateline`;
 
-    // 开关「清理帖子列表中帖子标题开头的〖XXX〗【XXX】文字」功能，标题中的 APP 名称完全对齐，看起来更舒服！true 为开启，false 为关闭，默认开启。
-    var cleanText = GM_getValue('xiu2_cleanText');
-    if (cleanText == null){
-        cleanText = true;
-        GM_setValue('xiu2_cleanText', true);
-    }
+    var menu_cleanPostTitle = GM_getValue('xiu2_menu_cleanPostTitle');
+    var menu_cleanPostTitle_ID, menu_feedBack_ID;
+    if (menu_cleanPostTitle == null){menu_cleanPostTitle = true; GM_setValue('xiu2_menu_cleanPostTitle', menu_cleanPostTitle)};
+    registerMenuCommand();
+
     // 注册脚本菜单
-    GM_registerMenuCommand('开关 [清理帖子标题开头〖〗【】文字] 功能', function () {
-        if (cleanText){
-            cleanText = false;
-            GM_notification(`已关闭 [清理帖子标题开头〖〗【】文字] 功能（刷新网页后生效）`);
-        }else{
-            cleanText = true;
-            GM_notification(`已开启 [清理帖子标题开头〖〗【】文字] 功能（刷新网页后生效）`);
+    function registerMenuCommand() {
+        var menu_cleanPostTitle_;
+        if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
+            GM_unregisterMenuCommand(menu_cleanPostTitle_ID);
+            GM_unregisterMenuCommand(menu_feedBack_ID);
+            menu_cleanPostTitle = GM_getValue('xiu2_menu_cleanPostTitle');
         }
-        GM_setValue('xiu2_cleanText', cleanText);
-    });
-    GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+
+        if (menu_cleanPostTitle){
+            menu_cleanPostTitle_ = "√";
+        }else{
+            menu_cleanPostTitle_ = "×";
+        }
+
+        menu_cleanPostTitle_ID = GM_registerMenuCommand(`[ ${menu_cleanPostTitle_} ] 清理帖子标题开头〖〗【】文字`, function(){menu_switch(menu_cleanPostTitle,'xiu2_menu_cleanPostTitle','[清理帖子标题开头〖〗【】文字] 功能（刷新网页后生效）')});
+        menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+    }
+
+    // 菜单开关
+    function menu_switch(menu_status, Name, Tips) {
+        if (menu_status){
+            GM_setValue(`${Name}`, false);
+            GM_notification(`已关闭 ${Tips}`);
+        }else{
+            GM_setValue(`${Name}`, true);
+            GM_notification(`已开启 ${Tips}`);
+        }
+        registerMenuCommand(); // 重新注册脚本菜单
+    };
 
     // 帖子数量，避免重复清理帖子列表中帖子标题开头的〖XXX〗【XXX】文字，用于提高效率
     var postNum = 0;
@@ -188,16 +206,13 @@
 
     // 清理帖子列表中帖子标题开头的〖XXX〗【XXX】文字
     function cleanPostTitle(){
-        if (cleanText){
+        if (menu_cleanPostTitle){
             var cleanposttitle = document.querySelectorAll("a.s.xst");
             if (cleanposttitle.length > 0){
                 for(var num = postNum;num<cleanposttitle.length;num++){
                     cleanposttitle[num].innerText = cleanposttitle[num].innerText.replace(patt_posttitle, ``);
                     postNum += 1;
                 }
-                /*cleanposttitle.forEach(function(el){
-                    el.innerText = el.innerText.replace(patt_posttitle, ``);
-            });*/
             }
         }
     }

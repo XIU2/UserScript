@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         3DM论坛增强
-// @version      1.0.3
+// @version      1.0.4
 // @author       X.I.U
 // @description  自动回复、自动无缝翻页、清理置顶帖子
 // @match        *://bbs.3dmgame.com/*
 // @icon         https://bbs.3dmgame.com/favicon.ico
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
+// @grant        GM_unregisterMenuCommand
 // @grant        GM_openInTab
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -17,24 +18,61 @@
 // ==/UserScript==
 
 (function() {
-    // 开关帖子内自动翻页功能，true 为开启，false 为关闭，默认关闭。
-    var thread_pageLoading = GM_getValue('xiu2_thread_pageLoading');
-    if (thread_pageLoading == null){
-        thread_pageLoading = false;
-        GM_setValue('xiu2_thread_pageLoading', false);
-    }
+    var menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading'),
+        menu_autoReply = GM_getValue('xiu2_menu_autoReply'),
+        menu_cleanTopPost = GM_getValue('xiu2_menu_cleanTopPost');
+    var menu_thread_pageLoading_ID, menu_autoReply_ID, menu_cleanTopPost_ID, menu_feedBack_ID;
+    if (menu_thread_pageLoading == null){menu_thread_pageLoading = false; GM_setValue('xiu2_menu_thread_pageLoading', menu_thread_pageLoading)};
+    if (menu_autoReply == null){menu_autoReply = true; GM_setValue('xiu2_menu_autoReply', menu_autoReply)};
+    if (menu_cleanTopPost == null){menu_cleanTopPost = true; GM_setValue('xiu2_menu_cleanTopPost', menu_cleanTopPost)};
+    registerMenuCommand();
+
     // 注册脚本菜单
-    GM_registerMenuCommand('开关 [帖子内自动翻页] 功能', function () {
-        if (thread_pageLoading){
-            thread_pageLoading = false;
-            GM_notification(`已关闭 [帖子内自动翻页] 功能\n（刷新网页后生效）`);
-        }else{
-            thread_pageLoading = true;
-            GM_notification(`已开启 [帖子内自动翻页] 功能\n（刷新网页后生效）`);
+    function registerMenuCommand() {
+        var menu_thread_pageLoading_, menu_autoReply_, menu_cleanTopPost_;
+        if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
+            GM_unregisterMenuCommand(menu_thread_pageLoading_ID);
+            GM_unregisterMenuCommand(menu_autoReply_ID);
+            GM_unregisterMenuCommand(menu_cleanTopPost_ID);
+            GM_unregisterMenuCommand(menu_feedBack_ID);
+            menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading');
+            menu_autoReply = GM_getValue('xiu2_menu_autoReply');
+            menu_cleanTopPost = GM_getValue('xiu2_menu_cleanTopPost');
         }
-        GM_setValue('xiu2_thread_pageLoading', thread_pageLoading);
-    });
-    GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+
+        if (menu_thread_pageLoading){
+            menu_thread_pageLoading_ = "√";
+        }else{
+            menu_thread_pageLoading_ = "×";
+        }
+        if (menu_autoReply){
+            menu_autoReply_ = "√";
+        }else{
+            menu_autoReply_ = "×";
+        }
+        if (menu_cleanTopPost){
+            menu_cleanTopPost_ = "√";
+        }else{
+            menu_cleanTopPost_ = "×";
+        }
+
+        menu_autoReply_ID = GM_registerMenuCommand(`[ ${menu_autoReply_} ] 自动回复`, function(){menu_switch(menu_autoReply,'xiu2_menu_autoReply','自动回复')});
+        menu_cleanTopPost_ID = GM_registerMenuCommand(`[ ${menu_cleanTopPost_} ] 清理置顶帖子`, function(){menu_switch(menu_cleanTopPost,'xiu2_menu_cleanTopPost','清理置顶帖子')});
+        menu_thread_pageLoading_ID = GM_registerMenuCommand(`[ ${menu_thread_pageLoading_} ] 帖子内自动翻页`, function(){menu_switch(menu_thread_pageLoading,'xiu2_menu_thread_pageLoading','帖子内自动翻页')});
+        menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+    }
+
+    // 菜单开关
+    function menu_switch(menu_status, Name, Tips) {
+        if (menu_status){
+            GM_setValue(`${Name}`, false);
+            GM_notification(`已关闭 [${Tips}] 功能\n（刷新网页后生效）`);
+        }else{
+            GM_setValue(`${Name}`, true);
+            GM_notification(`已开启 [${Tips}] 功能\n（刷新网页后生效）`);
+        }
+        registerMenuCommand(); // 重新注册脚本菜单
+    };
 
     // 随机回复帖子的内容
     var replyList = [
@@ -100,18 +138,18 @@
     // URL 判断
     if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)){
         // 帖子内
-        if(thread_pageLoading)curSite = DBSite.thread;
-        autoReply();                    // 如果有隐藏内容，则自动回复
-        pageLoading();                  // 自动翻页
+        if(menu_thread_pageLoading)curSite = DBSite.thread;
+        if(menu_autoReply)autoReply();        // 如果有隐藏内容，则自动回复
+        pageLoading();                        // 自动翻页
     }else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)){
         // 各板块帖子列表
         curSite = DBSite.forum;
-        cleanTop();                     // 清理置顶帖子
-        pageLoading();                  // 自动翻页
+        if(menu_cleanTopPost)cleanTopPost();  // 清理置顶帖子
+        pageLoading();                        // 自动翻页
     }else if (patt_guide.test(location.search)){
         // 导读帖子列表
         curSite = DBSite.guide;
-        pageLoading();                  // 自动翻页
+        pageLoading();                        // 自动翻页
     }
 
 
@@ -179,7 +217,7 @@
 
 
     // 清理置顶帖子
-    function cleanTop(){
+    function cleanTopPost(){
         var showhide = document.querySelectorAll("a.showhide.y");
         if (showhide.length > 0){
             showhide.forEach(el=>el.click());
