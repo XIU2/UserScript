@@ -1,6 +1,6 @@
  // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.1.7
+// @version      1.1.8
 // @author       X.I.U
 // @description  为 Github 的 Clone、Release、Raw、Code(ZIP) 添加高速下载
 // @match        https://github.com/*/*
@@ -210,24 +210,29 @@
 
         // 鼠标指向则显示
         var mouseOverHandler = function(evt){
-        var elem = evt.currentTarget,
-            aElm = elem.querySelectorAll('.fileDownLink');
-        aElm.forEach(el=>el.style.visibility = 'visible');
+            var elem = evt.currentTarget,
+                aElm_new = elem.querySelectorAll('.fileDownLink'),
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.text-gray-light');
+            aElm_new.forEach(el=>el.style.cssText = 'display: inline');
+            aElm_now.forEach(el=>el.style.cssText = 'display: none');
         };
 
         // 鼠标离开则隐藏
         var mouseOutHandler = function(evt){
             var elem = evt.currentTarget,
-                aElm = elem.querySelectorAll('.fileDownLink');
-            aElm.forEach(el=>el.style.visibility = 'hidden');
+                aElm_new = elem.querySelectorAll('.fileDownLink'),
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.text-gray-light');
+            aElm_new.forEach(el=>el.style.cssText = 'display: none');
+            aElm_now.forEach(el=>el.style.cssText = 'display: inline');
         };
 
         // 循环添加
         files.each(function(i,fileElm){
             var trElm = fileElm.parentNode.parentNode,
-                cntElm = trElm.querySelector('.css-truncate.css-truncate-target.d-block.width-fit a'),
-                Name = cntElm.innerText,
-                href = cntElm.attributes['href'].nodeValue.replace('https://github.com','');
+                cntElm_a = trElm.querySelector('.css-truncate.css-truncate-target.d-block.width-fit a'),
+                cntElm_svg = trElm.querySelector('.mr-3.flex-shrink-0 svg.octicon.octicon-file.text-gray-light'),
+                Name = cntElm_a.innerText,
+                href = cntElm_a.attributes['href'].nodeValue.replace('https://github.com','');
             var href2 = href.replace('/blob/','/'), url, url_name, url_tip = "";
             switch(menu_raw_fast)
             {
@@ -250,8 +255,8 @@
                     url_name = download_url5_name;
                     break;
             }
-            var html1 = ` <a href="${url}" download="${Name}" target="_blank" class="fileDownLink" style="visibility: hidden;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${menu_raw_fast} ] 加速源 (☁) - 点击切换。">${raw_svg}</a>`;
-            $(cntElm).after(html1);
+            var html1 = ` <a href="${url}" download="${Name}" target="_blank" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${menu_raw_fast} ] 加速源 (☁) - 点击切换。">${raw_svg}</a>`;
+            $(cntElm_svg).after(html1);
             // 绑定鼠标事件
             trElm.onmouseover=mouseOverHandler;
             trElm.onmouseout=mouseOutHandler;
