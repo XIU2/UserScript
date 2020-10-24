@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.0.9
+// @version      1.1.0
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页
 // @match        *://www.52pojie.cn/*
@@ -152,7 +152,7 @@
         if (qiandaoback){
             if(location.href === "https://www.52pojie.cn/home.php?mod=task&do=draw&id=2")
             {
-                qiandaoback.click();
+                setTimeout(`qiandaoback.click()`, 1000);
             }
         }
     }
