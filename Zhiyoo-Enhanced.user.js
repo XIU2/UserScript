@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         智友邦论坛增强
-// @version      1.0.9
+// @version      1.1.0
 // @author       X.I.U
 // @description  自动签到、自动回复、自动无缝翻页、清理置顶帖子、清理帖子标题〖XXX〗【XXX】文字
 // @icon         http://bbs.zhiyoo.net/favicon.ico
@@ -18,12 +18,11 @@
 // ==/UserScript==
 
 (function() {
-    // 签到后跳转的URL
-    var qiandao_Redirect_URL = `http://bbs.zhiyoo.net/forum.php?mod=forumdisplay&fid=42&filter=author&orderby=dateline`;
-
-    var menu_cleanPostTitle = GM_getValue('xiu2_menu_cleanPostTitle');
-    var menu_cleanPostTitle_ID, menu_feedBack_ID;
+    var menu_cleanPostTitle = GM_getValue('xiu2_menu_cleanPostTitle'),
+        menu_qianDaoRedirectURL = GM_getValue('xiu2_menu_qianDaoRedirectURL');
+    var menu_cleanPostTitle_ID, menu_qianDaoRedirectURL_ID, menu_feedBack_ID;
     if (menu_cleanPostTitle == null){menu_cleanPostTitle = true; GM_setValue('xiu2_menu_cleanPostTitle', menu_cleanPostTitle)};
+    if (menu_qianDaoRedirectURL == null){menu_qianDaoRedirectURL = `http://bbs.zhiyoo.net/forum.php?mod=forumdisplay&fid=42&filter=author&orderby=dateline`; GM_setValue('xiu2_menu_qianDaoRedirectURL', menu_qianDaoRedirectURL)};
     registerMenuCommand();
 
     // 注册脚本菜单
@@ -31,13 +30,16 @@
         var menu_cleanPostTitle_;
         if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
             GM_unregisterMenuCommand(menu_cleanPostTitle_ID);
+            GM_unregisterMenuCommand(menu_qianDaoRedirectURL_ID);
             GM_unregisterMenuCommand(menu_feedBack_ID);
             menu_cleanPostTitle = GM_getValue('xiu2_menu_cleanPostTitle');
+            menu_qianDaoRedirectURL = GM_getValue('xiu2_menu_qianDaoRedirectURL');
         }
 
         if (menu_cleanPostTitle){menu_cleanPostTitle_ = "√";}else{menu_cleanPostTitle_ = "×";}
 
         menu_cleanPostTitle_ID = GM_registerMenuCommand(`[ ${menu_cleanPostTitle_} ] 清理帖子标题开头〖〗【】文字`, function(){menu_switch(menu_cleanPostTitle,'xiu2_menu_cleanPostTitle','[清理帖子标题开头〖〗【】文字] 功能（刷新网页后生效）')});
+        menu_qianDaoRedirectURL_ID = GM_registerMenuCommand(`当前页面设为签到后重定向地址`, function(){GM_setValue('xiu2_menu_qianDaoRedirectURL', location.href);GM_notification(`已设置当前页面为签到后重定向地址`);})
         menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
@@ -150,7 +152,7 @@
                 document.querySelector('#yl').click();
                 document.querySelector('.tr3.tac div a').click();
             }
-            setTimeout(location.href=qiandao_Redirect_URL, 2000); // 跳转到指定URL
+            setTimeout(location.href=menu_qianDaoRedirectURL, 2000); // 跳转到指定URL
         }
     }
 
