@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.1.2
+// @version      1.1.3
 // @author       X.I.U
 // @description  一键收起回答、置顶显示时间、区分问题文章
 // @include      *://www.zhihu.com/*
@@ -333,7 +333,10 @@ function addTypeTips() {
         collapsedAnswer();                                      // 一键收起回答
         setInterval(topTime_search, 300);                       // 置顶显示时间
         setInterval(addTypeTips, 1000);                         // 区分问题文章
-    }else if(window.location.href.indexOf("zhuanlan") > -1){                   // 专栏/文章 //
+    }else if(window.location.href.indexOf("zhuanlan") > -1){                   // 文章 //
+        setInterval(topTime_zhuanlan, 300);                     // 置顶显示时间
+    }else if(window.location.href.indexOf("column") > -1){                     // 专栏 //
+        collapsedAnswer();                                      // 一键收起回答
         setInterval(topTime_zhuanlan, 300);                     // 置顶显示时间
     }else if(window.location.href.indexOf("people") > -1 || window.location.href.indexOf("org") > -1){ // 用户主页 //
         collapsedAnswer();                                      // 一键收起回答
