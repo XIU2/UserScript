@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.1.0
+// @version      1.1.1
 // @author       X.I.U
 // @description  一键收起回答、置顶显示时间、区分问题文章
 // @include      *://www.zhihu.com/*
@@ -319,7 +319,9 @@ function addTypeTips() {
 
     //每个页面对应的功能函数
     if(window.location.href.indexOf("question") > -1){ // 回答页
-        collapsedAnswer(); // 一键收起回答
+        if(window.location.href.indexOf("waiting") == -1){
+            collapsedAnswer(); // 一键收起回答
+        }
         setInterval(topTime_question, 300); // 置顶显示时间
     }else if(window.location.href.indexOf("search") > -1){ // 搜索结果页
         collapsedAnswer(); // 一键收起回答
