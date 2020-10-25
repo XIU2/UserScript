@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.1.1
+// @version      1.1.2
 // @author       X.I.U
 // @description  一键收起回答、置顶显示时间、区分问题文章
 // @include      *://www.zhihu.com/*
@@ -268,17 +268,19 @@ function addTypeTips() {
         // URL 匹配正则表达式
         var patt_zhuanlan = /zhuanlan.zhihu.com/,
             patt_question = /question\/\d+/,
+            patt_video = /\/zvideo\//,
             patt_tip = /zhihu_e_tips/
-        var postList = document.querySelectorAll('a[data-za-detail-view-id]');
+        var postList = document.querySelectorAll('h2.ContentItem-title a');
         postNum = document.querySelectorAll('small.zhihu_e_tips');
-        //console.log(`${postList.length} ${postNum.length}`);
         if (postList.length > postNum.length){
             for(var num = postNum.length;num<postList.length;num++){
-                if (!patt_tip.test(postList[num].innerHTML)){              // 判断是否已添加
+                if (!patt_tip.test(postList[num].innerHTML)){             // 判断是否已添加
                     if (patt_zhuanlan.test(postList[num].href)){          // 如果是文章
-                        postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #0084ff;display: inline-block;height: 18px;">文章</small> ` + postList[num].innerHTML
+                        postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #2196F3;display: inline-block;height: 18px;">文章</small> ` + postList[num].innerHTML
                     }else if (patt_question.test(postList[num].href)){    // 如果是问题
-                        postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #fd7672;display: inline-block;height: 18px;">问题</small> ` + postList[num].innerHTML
+                        postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #f68b83;display: inline-block;height: 18px;">问题</small> ` + postList[num].innerHTML
+                    }else if (patt_video.test(postList[num].href)){       // 如果是视频
+                        postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #00BCD4;display: inline-block;height: 18px;">视频</small> ` + postList[num].innerHTML
                     }
                     //postNum += 1;
                 }
@@ -318,22 +320,27 @@ function addTypeTips() {
     setInterval(originalPic,100)
 
     //每个页面对应的功能函数
-    if(window.location.href.indexOf("question") > -1){ // 回答页
+    if(window.location.href.indexOf("question") > -1){                         // 回答页 //
         if(window.location.href.indexOf("waiting") == -1){
-            collapsedAnswer(); // 一键收起回答
+            collapsedAnswer();                                  // 一键收起回答
         }
-        setInterval(topTime_question, 300); // 置顶显示时间
-    }else if(window.location.href.indexOf("search") > -1){ // 搜索结果页
-        collapsedAnswer(); // 一键收起回答
-        setInterval(topTime_search, 300); // 置顶显示时间
-    }else if(window.location.href.indexOf("zhuanlan") > -1){ // 专栏/文章
-        setInterval(topTime_zhuanlan, 300); // 置顶显示时间
-    }else if(window.location.href.indexOf("people") > -1 || window.location.href.indexOf("org") > -1){ // 用户主页
-        collapsedAnswer(); // 一键收起回答
-        setInterval(topTime_people, 300); // 置顶显示时间
-    }else{ // 首页
-        collapsedAnswer(); // 一键收起回答
-        setInterval(topTime_index, 300); // 置顶显示时间
-        setInterval(addTypeTips, 1000); // 区分问题文章
+        setInterval(topTime_question, 300);                     // 置顶显示时间
+    }else if(window.location.href.indexOf("search") > -1){                     // 搜索结果页 //
+        collapsedAnswer();                                      // 一键收起回答
+        setInterval(topTime_search, 300);                       // 置顶显示时间
+        setInterval(addTypeTips, 1000);                         // 区分问题文章
+    }else if(window.location.href.indexOf("topic") > -1){                      // 话题页 //
+        collapsedAnswer();                                      // 一键收起回答
+        setInterval(topTime_search, 300);                       // 置顶显示时间
+        setInterval(addTypeTips, 1000);                         // 区分问题文章
+    }else if(window.location.href.indexOf("zhuanlan") > -1){                   // 专栏/文章 //
+        setInterval(topTime_zhuanlan, 300);                     // 置顶显示时间
+    }else if(window.location.href.indexOf("people") > -1 || window.location.href.indexOf("org") > -1){ // 用户主页 //
+        collapsedAnswer();                                      // 一键收起回答
+        setInterval(topTime_people, 300);                       // 置顶显示时间
+    }else{                                                                     // 首页 //
+        collapsedAnswer();                                      // 一键收起回答
+        setInterval(topTime_index, 300);                        // 置顶显示时间
+        setInterval(addTypeTips, 1000);                         // 区分问题文章
     }
 })();
