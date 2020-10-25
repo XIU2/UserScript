@@ -2,7 +2,7 @@
 // @name         Github 增强 - 高速下载
 // @version      1.1.8
 // @author       X.I.U
-// @description  为 Github 的 Clone、Release、Raw、Code(ZIP) 添加高速下载
+// @description  高速下载 [Clone、Release、Raw、Code(ZIP)]、项目列表单文件快捷下载 (☁)
 // @match        https://github.com/*/*
 // @match        https://github.com/*/*/releases
 // @match        https://github.com/*/*/releases/*
