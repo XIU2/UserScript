@@ -4,13 +4,12 @@
 [![GitHub Star](https://img.shields.io/github/stars/XIU2/UserScript.svg?style=flat-square&label=Star&color=4285dd)](https://github.com/XIU2/UserScript/stargazers)
 [![GitHub Fork](https://img.shields.io/github/forks/XIU2/UserScript.svg?style=flat-square&label=Fork&color=4285dd)](https://github.com/XIU2/UserScript/network/members)
 
-🔨 自用的一些乱七八糟油猴脚本，有什么问题/需求请提 [Issues](https://github.com/XIU2/UserScript/issues/new/choose)，觉得好用请点个⭐~
-
->有想要一些网站支持 **自动无缝翻页** 的，尽管提！当然其他功能也行，但我不一定会...  
+🔨 自用的一些乱七八糟油猴脚本，**有什么需求、建议、问题直接提 [Issues](https://github.com/XIU2/UserScript/issues/new/choose)**，觉得好用请点个⭐~
 
 ## 脚本列表
 
 > 更多详细脚本介绍/截图，请点击第三列的 **「安装」** 前往 GreasyFork 查看。  
+> 备用安装由 **`jsdelivr CDN`** 提供，优点是速度快（国内CDN），缺点是有24小时缓存。   
 
 | 脚本名称 | 脚本功能 | 安装 | 备用 |
 | :---- | :---- | :----: | :----: |
