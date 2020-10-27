@@ -3,7 +3,7 @@
 // @version      1.1.3
 // @author       X.I.U
 // @description  一键收起回答、置顶显示时间、区分问题文章
-// @include      *://www.zhihu.com/*
+// @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/static/favicon.ico
 // @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
@@ -330,9 +330,11 @@ function addTypeTips() {
         setInterval(topTime_search, 300);                       // 置顶显示时间
         setInterval(addTypeTips, 1000);                         // 区分问题文章
     }else if(window.location.href.indexOf("topic") > -1){                      // 话题页 //
-        collapsedAnswer();                                      // 一键收起回答
-        setInterval(topTime_search, 300);                       // 置顶显示时间
-        setInterval(addTypeTips, 1000);                         // 区分问题文章
+        if(window.location.href.indexOf("unanswered") == -1){
+            collapsedAnswer();                                  // 一键收起回答
+            setInterval(topTime_search, 300);                   // 置顶显示时间
+            setInterval(addTypeTips, 1000);                     // 区分问题文章
+        }
     }else if(window.location.href.indexOf("zhuanlan") > -1){                   // 文章 //
         setInterval(topTime_zhuanlan, 300);                     // 置顶显示时间
     }else if(window.location.href.indexOf("column") > -1){                     // 专栏 //
