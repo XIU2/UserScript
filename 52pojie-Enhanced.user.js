@@ -107,7 +107,7 @@
 
 
     qianDaoBack();        // 先看看是不是签到跳转页面，如果是则返回
-    //qianDao();            // 看看有没有签到
+    qianDao();            // 看看有没有签到
     pageLoading();        // 自动翻页
 
 
@@ -187,7 +187,7 @@
             if(this._onreadystatechange) {
                 if (this.readyState==4 && this.status==200)
                 {
-                    console.log('111111111111111111111111111111111111111')
+                    console.log('xxx')
                 }
             }
             return this._onreadystatechange.apply(this, arguments);
