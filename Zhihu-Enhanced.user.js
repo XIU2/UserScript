@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.1.3
+// @version      1.1.4
 // @author       X.I.U
 // @description  一键收起回答、置顶显示时间、区分问题文章
 // @match        *://www.zhihu.com/*
@@ -272,6 +272,7 @@ function addTypeTips() {
             patt_tip = /zhihu_e_tips/
         var postList = document.querySelectorAll('h2.ContentItem-title a');
         postNum = document.querySelectorAll('small.zhihu_e_tips');
+        console.log(`${postList.length} ${postNum.length}`)
         if (postList.length > postNum.length){
             for(var num = postNum.length;num<postList.length;num++){
                 if (!patt_tip.test(postList[num].innerHTML)){             // 判断是否已添加
@@ -288,6 +289,17 @@ function addTypeTips() {
         }
     }
 }
+
+// 监听 XMLHttpRequest 事件
+function EventXMLHttpRequest() {
+    var _send = window.XMLHttpRequest.prototype.send
+    function sendReplacement(data) {
+        addTypeTips();
+        return _send.apply(this, arguments);
+    }
+    window.XMLHttpRequest.prototype.send = sendReplacement;
+}
+
 
 (function() {
     //折叠谢邀
@@ -328,12 +340,12 @@ function addTypeTips() {
     }else if(window.location.href.indexOf("search") > -1){                     // 搜索结果页 //
         collapsedAnswer();                                      // 一键收起回答
         setInterval(topTime_search, 300);                       // 置顶显示时间
-        setInterval(addTypeTips, 1000);                         // 区分问题文章
+        EventXMLHttpRequest();                                  // 区分问题文章
     }else if(window.location.href.indexOf("topic") > -1){                      // 话题页 //
         if(window.location.href.indexOf("unanswered") == -1){
             collapsedAnswer();                                  // 一键收起回答
             setInterval(topTime_search, 300);                   // 置顶显示时间
-            setInterval(addTypeTips, 1000);                     // 区分问题文章
+            EventXMLHttpRequest();                              // 区分问题文章
         }
     }else if(window.location.href.indexOf("zhuanlan") > -1){                   // 文章 //
         setInterval(topTime_zhuanlan, 300);                     // 置顶显示时间
@@ -346,6 +358,6 @@ function addTypeTips() {
     }else{                                                                     // 首页 //
         collapsedAnswer();                                      // 一键收起回答
         setInterval(topTime_index, 300);                        // 置顶显示时间
-        setInterval(addTypeTips, 1000);                         // 区分问题文章
+        EventXMLHttpRequest();                                  // 区分问题文章
     }
 })();

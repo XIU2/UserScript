@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.1.1
+// @version      1.1.2
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页
 // @match        *://www.52pojie.cn/*
@@ -107,7 +107,7 @@
 
 
     qianDaoBack();        // 先看看是不是签到跳转页面，如果是则返回
-    qianDao();            // 看看有没有签到
+    //qianDao();            // 看看有没有签到
     pageLoading();        // 自动翻页
 
 
@@ -148,11 +148,10 @@
 
     // 签到后立即返回
     function qianDaoBack() {
-        var qiandaoback = document.querySelector('#messagetext p.alert_btnleft a');
-        if (qiandaoback){
-            if(location.href === "https://www.52pojie.cn/home.php?mod=task&do=draw&id=2")
-            {
-                setTimeout(`qiandaoback.click()`, 300);
+        if(location.href === "https://www.52pojie.cn/home.php?mod=task&do=draw&id=2"){
+            var qiandaoback = document.querySelector('#messagetext p.alert_btnleft a');
+            if (qiandaoback){
+                setTimeout(function(){qiandaoback.click()}, 500);
             }
         }
     }
@@ -171,6 +170,29 @@
                 beforeScrollTop = afterScrollTop;
             }, false);
         }, 1000)
+    }
+
+
+    // 监听 XMLHttpRequest 事件
+    function EventXMLHttpRequest() {
+        var _send = window.XMLHttpRequest.prototype.send
+        function sendReplacement(data) {
+            if(this.onreadystatechange) {
+                this._onreadystatechange = this.onreadystatechange;
+            }
+            this.onreadystatechange = onReadyStateChangeReplacement;
+            return _send.apply(this, arguments);
+        }
+        function onReadyStateChangeReplacement() {
+            if(this._onreadystatechange) {
+                if (this.readyState==4 && this.status==200)
+                {
+                    console.log('111111111111111111111111111111111111111')
+                }
+            }
+            return this._onreadystatechange.apply(this, arguments);
+        }
+        window.XMLHttpRequest.prototype.send = sendReplacement;
     }
 
 
