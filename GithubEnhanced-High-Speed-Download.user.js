@@ -1,6 +1,6 @@
  // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.1.8
+// @version      1.1.9
 // @author       X.I.U
 // @description  高速下载 [Clone、Release、Raw、Code(ZIP)]、项目列表单文件快捷下载 (☁)
 // @match        https://github.com/*/*
@@ -21,11 +21,13 @@
 
 (function() {
     var download_url1 = "https://gh.con.sh";
-    var download_url1_name = "美国 01";
+    var download_url1_name = "美国";
     var download_url2 = "https://gh.api.99988866.xyz";
-    var download_url2_name = "美国 02";
+    var download_url2_name = "美国";
     var download_url3 = "https://download.fastgit.org";
     var download_url3_name = "日本东京";
+    var download_url6 = "https://pd.zwc365.com/seturl";
+    var download_url6_name = "中国香港";
     var download_url4 = "https://g.ioiox.com";
     var download_url4_name = "中国香港";
     var download_url5 = "https://git.yumenaka.net";
@@ -47,7 +49,7 @@
     var download_zip_svg = `<svg class="octicon octicon-file-zip mr-3" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M3.5 1.75a.25.25 0 01.25-.25h3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h2.086a.25.25 0 01.177.073l2.914 2.914a.25.25 0 01.073.177v8.586a.25.25 0 01-.25.25h-.5a.75.75 0 000 1.5h.5A1.75 1.75 0 0014 13.25V4.664c0-.464-.184-.909-.513-1.237L10.573.513A1.75 1.75 0 009.336 0H3.75A1.75 1.75 0 002 1.75v11.5c0 .649.353 1.214.874 1.515a.75.75 0 10.752-1.298.25.25 0 01-.126-.217V1.75zM8.75 3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM6 5.25a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5A.75.75 0 016 5.25zm2 1.5A.75.75 0 018.75 6h.5a.75.75 0 010 1.5h-.5A.75.75 0 018 6.75zm-1.25.75a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM8 9.75A.75.75 0 018.75 9h.5a.75.75 0 010 1.5h-.5A.75.75 0 018 9.75zm-.75.75a1.75 1.75 0 00-1.75 1.75v3c0 .414.336.75.75.75h2.5a.75.75 0 00.75-.75v-3a1.75 1.75 0 00-1.75-1.75h-.5zM7 12.25a.25.25 0 01.25-.25h.5a.25.25 0 01.25.25v2.25H7v-2.25z"></path></svg>`;
     var download_clone_svg = `<svg class="octicon octicon-clippy" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M5.75 1a.75.75 0 00-.75.75v3c0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75v-3a.75.75 0 00-.75-.75h-4.5zm.75 3V2.5h3V4h-3zm-2.874-.467a.75.75 0 00-.752-1.298A1.75 1.75 0 002 3.75v9.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0014 13.25v-9.5a1.75 1.75 0 00-.874-1.515.75.75 0 10-.752 1.298.25.25 0 01.126.217v9.5a.25.25 0 01-.25.25h-8.5a.25.25 0 01-.25-.25v-9.5a.25.25 0 01.126-.217z"></path></svg>`
     var raw_svg = `<svg class="octicon octicon-cloud-download" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M9 12h2l-3 3-3-3h2V7h2v5zm3-8c0-.44-.91-3-4.5-3C5.08 1 3 2.92 3 5 1.02 5 0 6.52 0 8c0 1.53 1 3 3 3h3V9.7H3C1.38 9.7 1.3 8.28 1.3 8c0-.17.05-1.7 1.7-1.7h1.3V5c0-1.39 1.56-2.7 3.2-2.7 2.55 0 3.13 1.55 3.2 1.8v1.2H12c.81 0 2.7.22 2.7 2.2 0 2.09-2.25 2.2-2.7 2.2h-2V11h2c2.08 0 4-1.16 4-3.5C16 5.06 14.08 4 12 4z"></path></svg>`
-    var download_release_style = `padding:0 4px;margin-right: -1px;border-radius: 2px;background-color: #ffffff;border-color: rgba(27, 31, 35, 0.1);font-size: 12px;`
+    var download_release_style = `padding:0 6px;margin-right: -1px;border-radius: 2px;background-color: #ffffff;border-color: rgba(27, 31, 35, 0.1);font-size: 11px;color: #888888;`
 
     var menu_raw_fast_arr = ['Github 原生','中国国内','中国香港','美国洛杉矶']; // Raw ☁ 加速源数组
     var menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'); // 先获取加速源，如果没有就指定为 [中国国内]
@@ -87,14 +89,14 @@
     addDownloadZIP(); // Source Code 加速
     addGitClone(); // Download ZIP/Code(ZIP) 加速
     addRawFile(); // Raw 加速
-    setTimeout(addDownLink, 2000); // 添加 Raw 下载链接（添加到项目页文件名称后面），延迟 2 秒执行，避免被 pjax 刷掉
+    setTimeout(addDownLink, 2000); // 添加 Raw 下载链接（☁），延迟 2 秒执行，避免被 pjax 刷掉
 
-    document.addEventListener('pjax:success',function(){
+    document.addEventListener('pjax:success',function(){ // pjax 事件发生后
         addRelease(); // Release 加速
         addDownloadZIP(); // Source Code 加速
         addGitClone(); // Download ZIP/Code(ZIP) 加速
-        addRawFile(); // pjax 事件发生后，添加 Raw 加速按钮 及 Raw 下载链接
-        setTimeout(addDownLink, 2000); // 延迟 2 秒执行，避免被 pjax 刷掉
+        addRawFile(); // 添加 Raw 加速按钮
+        setTimeout(addDownLink, 2000); // 添加 Raw 下载链接（☁），延迟 2 秒执行，避免被 pjax 刷掉
     });
 
 
@@ -108,10 +110,12 @@
                 var url3 = download_url3 + href;
                 var url4 = download_url4 + '/github.com' + href;
                 var url5 = download_url5 + '/github.com' + href;
+                var url6 = download_url6 + '/github.com' + href;
                 var html1 = `<div style="display: flex;justify-content: flex-end;">
 <div><a style="${download_release_style}" class="btn" href="${url1}" rel="nofollow">${download_url1_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url2}" rel="nofollow">${download_url2_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url3}" rel="nofollow">${download_url3_name}</a></div>
+<div><a style="${download_release_style}" class="btn" href="${url6}" rel="nofollow">${download_url6_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url4}" rel="nofollow">${download_url4_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url5}" rel="nofollow">${download_url5_name}</a></div>
 </div>`;
@@ -129,10 +133,12 @@
                 var url3 = download_url3 + href;
                 var url4 = download_url4 + '/github.com' + href;
                 var url5 = download_url5 + '/github.com' + href;
+                var url6 = download_url6 + '/github.com' + href;
                 var html1 = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">
 <div><a style="${download_release_style}" class="btn" href="${url1}" rel="nofollow">${download_url1_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url2}" rel="nofollow">${download_url2_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url3}" rel="nofollow">${download_url3_name}</a></div>
+<div><a style="${download_release_style}" class="btn" href="${url6}" rel="nofollow">${download_url6_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url4}" rel="nofollow">${download_url4_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url5}" rel="nofollow">${download_url5_name}</a></div>
 </div>`;
@@ -153,10 +159,12 @@
             var url3 = download_url3 + href;
             var url4 = download_url4 + "/github.com" + href;
             var url5 = download_url5 + "/github.com" + href;
+            var url6 = download_url6 + '/github.com' + href;
             var html1 = `
 <li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url1}">${download_zip_svg}Download ZIP ${download_url1_name}</a></li>
 <li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url2}">${download_zip_svg}Download ZIP ${download_url2_name}</a></li>
 <li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url3}">${download_zip_svg}Download ZIP ${download_url3_name}</a></li>
+<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url6}">${download_zip_svg}Download ZIP ${download_url6_name}</a></li>
 <li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url4}">${download_zip_svg}Download ZIP ${download_url4_name}</a></li>
 <li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url5}">${download_zip_svg}Download ZIP ${download_url5_name}</a></li>
 `;
@@ -200,7 +208,7 @@
     }
 
 
-    // 添加 Raw 下载链接（云朵图标，添加到项目页文件名称后面）
+    // 添加 Raw 下载链接（☁）
     function addDownLink(){
         // 如果不是项目文件页面，就返回
         var files = $('.octicon.octicon-file');
@@ -264,7 +272,7 @@
     }
 
 
-    // 删除 Raw 下载链接（云朵图标）
+    // 删除 Raw 下载链接（☁）
     function delDownLink(){
         var aElm = document.querySelectorAll('.fileDownLink');
         for(var num = 0;num<aElm.length;num++){
