@@ -1,19 +1,60 @@
 // ==UserScript==
 // @name         吾爱破解论坛美化
-// @version      1.0.2
+// @version      1.0.3
 // @author       X.I.U
 // @description  精简多余内容
 // @match        *://www.52pojie.cn/*
 // @icon         https://www.52pojie.cn/favicon.ico
+// @grant        GM_registerMenuCommand
+// @grant        GM_unregisterMenuCommand
+// @grant        GM_openInTab
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @grant        GM_notification
 // @license      GPL-3.0 License
 // @run-at       document-start
 // @namespace    https://greasyfork.org/scripts/412681
 // ==/UserScript==
 
 (function() {
-    var style_Add = document.createElement('style');
-    style_Add.innerHTML = `
-a[href="connect.php?mod=config"], #toptb, #navmenu, #nv_ph, #nv, #pt .y, #chart, #online, #ft, .bm.lk, .dnch_eo_pt, .dnch_eo_pr, .dnch_eo_f, ul.xl.xl2.o.cl, dl.pil.cl, td.plc.plm .sign, .dnch_eo_pb, .dnch_eo_pt, .pls .side-star, .pls .side-group, .res-footer-note, .comiis_nav, .scbar_hot_td, .md_ctrl, .pls.favatar .xg1 {
+    var menu_rule = GM_getValue('xiu2_menu_rule');
+    var menu_rule_ID, menu_feedBack_ID;
+    if (menu_rule == null){menu_rule = false; GM_setValue('xiu2_menu_rule', menu_rule)};
+    registerMenuCommand();
+    addStyle();
+
+    // 注册脚本菜单
+    function registerMenuCommand() {
+        var menu_rule_;
+        if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
+            GM_unregisterMenuCommand(menu_rule_ID);
+            GM_unregisterMenuCommand(menu_feedBack_ID);
+            menu_rule = GM_getValue('xiu2_menu_rule');
+        }
+
+        if (menu_rule){menu_rule_ = "√";}else{menu_rule_ = "×";}
+
+        menu_rule_ID = GM_registerMenuCommand(`[ ${menu_rule_} ] 隐藏版规`, function(){menu_switch(menu_rule,'xiu2_menu_rule','隐藏版规')});
+        menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+    }
+
+    // 菜单开关
+    function menu_switch(menu_status, Name, Tips) {
+        if (menu_status){
+            GM_setValue(`${Name}`, false);
+            GM_notification(`已关闭 [${Tips}] 功能\n（刷新网页后生效）`);
+        }else{
+            GM_setValue(`${Name}`, true);
+            GM_notification(`已开启 [${Tips}] 功能\n（刷新网页后生效）`);
+        }
+        registerMenuCommand(); // 重新注册脚本菜单
+    };
+
+    function addStyle() {
+        var style,
+            style_1 = `.bml {display:none !important;}`,
+            style_2 = `
+a[href="connect.php?mod=config"], #toptb, #navmenu, #nv_ph, #nv, #pt .y, #chart, #ft, #custominfo_pmenu, .bm.lk, .dnch_eo_pt, .dnch_eo_pr, .dnch_eo_f, ul.xl.xl2.o.cl, dl.pil.cl, td.plc.plm .sign, .dnch_eo_pb, .dnch_eo_pt, .pls .side-star, .pls .side-group, .res-footer-note, .comiis_nav, .scbar_hot_td, .md_ctrl, .pls.favatar .xg1 {
 	display:none !important;
 }
 
@@ -84,6 +125,14 @@ textarea#fastpostmessage {
 	border-top:0;
 	border-bottom:0;
 	background:0;
-}`;
-    document.head.appendChild(style_Add);
+}`,
+            style_Add = document.createElement('style');
+        if (menu_rule) {
+            style = style_1 + style_2;
+        }else{
+            style = style_2;
+        }
+        style_Add.innerHTML = style;
+        document.head.appendChild(style_Add);
+    }
 })();
