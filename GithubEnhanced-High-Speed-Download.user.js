@@ -110,7 +110,7 @@
                 var url3 = download_url3 + href;
                 var url4 = download_url4 + '/github.com' + href;
                 var url5 = download_url5 + '/github.com' + href;
-                var url6 = download_url6 + '/github.com' + href;
+                var url6 = download_url6 + '/https://github.com' + href;
                 var html1 = `<div style="display: flex;justify-content: flex-end;">
 <div><a style="${download_release_style}" class="btn" href="${url1}" rel="nofollow">${download_url1_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url2}" rel="nofollow">${download_url2_name}</a></div>
@@ -133,7 +133,7 @@
                 var url3 = download_url3 + href;
                 var url4 = download_url4 + '/github.com' + href;
                 var url5 = download_url5 + '/github.com' + href;
-                var url6 = download_url6 + '/github.com' + href;
+                var url6 = download_url6 + 'https:///github.com' + href;
                 var html1 = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">
 <div><a style="${download_release_style}" class="btn" href="${url1}" rel="nofollow">${download_url1_name}</a></div>
 <div><a style="${download_release_style}" class="btn" href="${url2}" rel="nofollow">${download_url2_name}</a></div>
@@ -159,7 +159,7 @@
             var url3 = download_url3 + href;
             var url4 = download_url4 + "/github.com" + href;
             var url5 = download_url5 + "/github.com" + href;
-            var url6 = download_url6 + '/github.com' + href;
+            var url6 = download_url6 + 'https:///github.com' + href;
             var html1 = `
 <li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url1}">${download_zip_svg}Download ZIP ${download_url1_name}</a></li>
 <li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url2}">${download_zip_svg}Download ZIP ${download_url2_name}</a></li>
