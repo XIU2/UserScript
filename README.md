@@ -32,7 +32,9 @@
 
 要使用该脚本，需要浏览器安装一个 **Tampermonkey  扩展（[Chrome](https://xiu.lanzoux.com/b073l8d1e) / [Firefox](https://addons.mozilla.org/firefox/addon/tampermonkey/) / [Edge](https://microsoftedge.microsoft.com/addons/detail/tampermonkey/iikmkjmpaadaobahmlepeloendndfphd?hl=zh-CN)）。**  
  
-> 其他基于 Chromium 内核的浏览器（如国内各大浏览器）都可以使用 Chrome 的扩展。  
+> 其他基于 **Chromium** 内核的浏览器（如国内套皮浏览器）都可以使用 Chrome 的扩展。  
+
+> 请确保使用 **Tampermonkey** 扩展，其他的用户脚本管理器可能**无法正常使用**我的脚本。
 
 ****
 
