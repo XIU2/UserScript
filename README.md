@@ -4,7 +4,9 @@
 [![GitHub Star](https://img.shields.io/github/stars/XIU2/UserScript.svg?style=flat-square&label=Star&color=4285dd)](https://github.com/XIU2/UserScript/stargazers)
 [![GitHub Fork](https://img.shields.io/github/forks/XIU2/UserScript.svg?style=flat-square&label=Fork&color=4285dd)](https://github.com/XIU2/UserScript/network/members)
 
-🔨 自用的一些乱七八糟油猴脚本，**有什么需求、建议、问题直接提 [Issues](https://github.com/XIU2/UserScript/issues/new/choose)**，觉得好用请点个⭐~
+🔨 自用的一些乱七八糟油猴脚本，**有什么需求、建议、问题直接提 [Issues](https://github.com/XIU2/UserScript/issues/new/choose)**，觉得好用请点个⭐~  
+
+> 如果你只有 GreasyFork 账号，也可以前往 GreasyFork 脚本页面向我反馈！  
 
 ## 脚本列表
 
