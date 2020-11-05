@@ -1,8 +1,8 @@
  // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.2.1
+// @version      1.2.2
 // @author       X.I.U
-// @description  有效提高 Clone、Release、Raw、Code(ZIP) 文件下载速度、项目列表单文件快捷下载 (☁)
+// @description  高速下载 Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        https://github.com/*/*
 // @match        https://github.com/*/*/releases
 // @match        https://github.com/*/*/releases/*
@@ -21,37 +21,37 @@
 
 (function() {
     var download_url = [
-        'https://gh.con.sh',
-        'https://gh.api.99988866.xyz',
-        'https://download.fastgit.org',
-        'https://pd.zwc365.com/seturl',
-        'https://g.ioiox.com',
-        'https://git.yumenaka.net'
-    ],
+            'https://gh.con.sh',
+            'https://gh.api.99988866.xyz',
+            'https://download.fastgit.org',
+            'https://pd.zwc365.com/seturl',
+            'https://g.ioiox.com',
+            'https://git.yumenaka.net'
+        ],
         download_url_name = ['美国','美国','日本东京','中国香港','中国香港','美国洛杉矶'],
         clone_url = [
-            "https://hub.fastgit.org",
-            "https://gitclone.com",
-            "https://github.com.cnpmjs.org"
+            'https://hub.fastgit.org',
+            'https://gitclone.com',
+            'https://github.com.cnpmjs.org'
         ],
         raw_url = [
-            "https://raw.githubusercontent.com",
-            "https://cdn.jsdelivr.net",
-            "https://raw.fastgit.org"
+            'https://raw.githubusercontent.com',
+            'https://cdn.jsdelivr.net',
+            'https://raw.fastgit.org'
         ],
         raw_url_name = ['Github 原生','中国国内','中国香港','美国洛杉矶'],
         raw_url_tip = [
             '',
-            "注意：该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10;注意：当前分支所有文件总文件大小超过 50MB 时，该加速源不可用。&#10;注意：当前分支名为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。&#10;&#10;",
-            "注意：单个文件太大时可能会提示超时（实时获取中），请重试。&#10;&#10;",
+            '注意：该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10;注意：当前分支所有文件总文件大小超过 50MB 时，该加速源不可用。&#10;注意：当前分支名为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。&#10;&#10;',
+            '注意：单个文件太大时可能会提示超时（实时获取中），请重试。&#10;&#10;',
             '注意：经过测试，该加速源存在文件格式限制，如果无法下载说明不支持该文件格式。&#10;&#10;'
         ],
         svg = [
-            `<svg class="octicon octicon-file-zip mr-3" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M3.5 1.75a.25.25 0 01.25-.25h3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h2.086a.25.25 0 01.177.073l2.914 2.914a.25.25 0 01.073.177v8.586a.25.25 0 01-.25.25h-.5a.75.75 0 000 1.5h.5A1.75 1.75 0 0014 13.25V4.664c0-.464-.184-.909-.513-1.237L10.573.513A1.75 1.75 0 009.336 0H3.75A1.75 1.75 0 002 1.75v11.5c0 .649.353 1.214.874 1.515a.75.75 0 10.752-1.298.25.25 0 01-.126-.217V1.75zM8.75 3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM6 5.25a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5A.75.75 0 016 5.25zm2 1.5A.75.75 0 018.75 6h.5a.75.75 0 010 1.5h-.5A.75.75 0 018 6.75zm-1.25.75a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM8 9.75A.75.75 0 018.75 9h.5a.75.75 0 010 1.5h-.5A.75.75 0 018 9.75zm-.75.75a1.75 1.75 0 00-1.75 1.75v3c0 .414.336.75.75.75h2.5a.75.75 0 00.75-.75v-3a1.75 1.75 0 00-1.75-1.75h-.5zM7 12.25a.25.25 0 01.25-.25h.5a.25.25 0 01.25.25v2.25H7v-2.25z"></path></svg>`,
-            `<svg class="octicon octicon-clippy" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M5.75 1a.75.75 0 00-.75.75v3c0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75v-3a.75.75 0 00-.75-.75h-4.5zm.75 3V2.5h3V4h-3zm-2.874-.467a.75.75 0 00-.752-1.298A1.75 1.75 0 002 3.75v9.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0014 13.25v-9.5a1.75 1.75 0 00-.874-1.515.75.75 0 10-.752 1.298.25.25 0 01.126.217v9.5a.25.25 0 01-.25.25h-8.5a.25.25 0 01-.25-.25v-9.5a.25.25 0 01.126-.217z"></path></svg>`,
-            `<svg class="octicon octicon-cloud-download" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M9 12h2l-3 3-3-3h2V7h2v5zm3-8c0-.44-.91-3-4.5-3C5.08 1 3 2.92 3 5 1.02 5 0 6.52 0 8c0 1.53 1 3 3 3h3V9.7H3C1.38 9.7 1.3 8.28 1.3 8c0-.17.05-1.7 1.7-1.7h1.3V5c0-1.39 1.56-2.7 3.2-2.7 2.55 0 3.13 1.55 3.2 1.8v1.2H12c.81 0 2.7.22 2.7 2.2 0 2.09-2.25 2.2-2.7 2.2h-2V11h2c2.08 0 4-1.16 4-3.5C16 5.06 14.08 4 12 4z"></path></svg>`
+            '<svg class="octicon octicon-file-zip mr-3" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M3.5 1.75a.25.25 0 01.25-.25h3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h2.086a.25.25 0 01.177.073l2.914 2.914a.25.25 0 01.073.177v8.586a.25.25 0 01-.25.25h-.5a.75.75 0 000 1.5h.5A1.75 1.75 0 0014 13.25V4.664c0-.464-.184-.909-.513-1.237L10.573.513A1.75 1.75 0 009.336 0H3.75A1.75 1.75 0 002 1.75v11.5c0 .649.353 1.214.874 1.515a.75.75 0 10.752-1.298.25.25 0 01-.126-.217V1.75zM8.75 3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM6 5.25a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5A.75.75 0 016 5.25zm2 1.5A.75.75 0 018.75 6h.5a.75.75 0 010 1.5h-.5A.75.75 0 018 6.75zm-1.25.75a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM8 9.75A.75.75 0 018.75 9h.5a.75.75 0 010 1.5h-.5A.75.75 0 018 9.75zm-.75.75a1.75 1.75 0 00-1.75 1.75v3c0 .414.336.75.75.75h2.5a.75.75 0 00.75-.75v-3a1.75 1.75 0 00-1.75-1.75h-.5zM7 12.25a.25.25 0 01.25-.25h.5a.25.25 0 01.25.25v2.25H7v-2.25z"></path></svg>',
+            '<svg class="octicon octicon-clippy" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M5.75 1a.75.75 0 00-.75.75v3c0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75v-3a.75.75 0 00-.75-.75h-4.5zm.75 3V2.5h3V4h-3zm-2.874-.467a.75.75 0 00-.752-1.298A1.75 1.75 0 002 3.75v9.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0014 13.25v-9.5a1.75 1.75 0 00-.874-1.515.75.75 0 10-.752 1.298.25.25 0 01.126.217v9.5a.25.25 0 01-.25.25h-8.5a.25.25 0 01-.25-.25v-9.5a.25.25 0 01.126-.217z"></path></svg>',
+            '<svg class="octicon octicon-cloud-download" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M9 12h2l-3 3-3-3h2V7h2v5zm3-8c0-.44-.91-3-4.5-3C5.08 1 3 2.92 3 5 1.02 5 0 6.52 0 8c0 1.53 1 3 3 3h3V9.7H3C1.38 9.7 1.3 8.28 1.3 8c0-.17.05-1.7 1.7-1.7h1.3V5c0-1.39 1.56-2.7 3.2-2.7 2.55 0 3.13 1.55 3.2 1.8v1.2H12c.81 0 2.7.22 2.7 2.2 0 2.09-2.25 2.2-2.7 2.2h-2V11h2c2.08 0 4-1.16 4-3.5C16 5.06 14.08 4 12 4z"></path></svg>'
         ],
-        style = [`padding:0 6px;margin-right: -1px;border-radius: 2px;background-color: #ffffff;border-color: rgba(27, 31, 35, 0.1);font-size: 11px;color: #888888;`],
+        style = ['padding:0 6px;margin-right: -1px;border-radius: 2px;background-color: #ffffff;border-color: rgba(27, 31, 35, 0.1);font-size: 11px;color: #888888;'],
 
         menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'),
         menu_menu_raw_fast_ID, menu_feedBack_ID;
@@ -98,7 +98,7 @@
     });
 
 
-    // Release 加速
+    // Release
     function addRelease(){
         $(".Box.Box--condensed").each(function () {
             $(this).find(".d-flex.Box-body>a").each(function () {
@@ -125,7 +125,7 @@
             document.querySelectorAll('small.pl-2.text-gray.flex-shrink-0').forEach(el=>el.style.cssText='display: flex; justify-content: flex-end; flex-grow: 1; margin-right: 8px;');
 
 
-            // Source Code 加速
+            // Source Code
             $(this).find(".d-block.Box-body>a").each(function () {
                 var href = $(this).attr("href"),
                     url = [
@@ -152,7 +152,7 @@
     }
 
 
-    // Download ZIP 加速
+    // Download ZIP
     function addDownloadZIP(){
         $(".dropdown-menu.dropdown-menu-sw.p-0 ul li:last-child").each(function () {
             var href = $(this).children("a").attr("href"),
@@ -177,7 +177,7 @@
     }
 
 
-    // Git Clone 加速
+    // Git Clone
     function addGitClone(){
         $("[role='tabpanel'] div.input-group").first().each(function () {
             var href_split = location.href.split("/"),
@@ -196,7 +196,7 @@
     }
 
 
-    // Raw 加速
+    // Raw
     function addRawFile(){
         $("#raw-url").each(function () {
             var href = location.href.replace('https://github.com',''),
@@ -249,7 +249,7 @@
                 cntElm_svg = trElm.querySelector('.mr-3.flex-shrink-0 svg.octicon.octicon-file.text-gray-light'),
                 Name = cntElm_a.innerText,
                 href = cntElm_a.attributes['href'].nodeValue.replace('https://github.com','');
-            var href2 = href.replace('/blob/','/'), url, url_name, url_tip = "";
+            var href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
             switch(menu_raw_fast)
             {
                 case 0:
@@ -258,7 +258,7 @@
                     url_tip = raw_url_tip[0];
                     break;
                 case 1:
-                    url = raw_url[1] + "/gh" + href.replace('/blob/','@');
+                    url = raw_url[1] + '/gh' + href.replace('/blob/','@');
                     url_name = raw_url_name[1];
                     url_tip = raw_url_tip[1];
                     break;
@@ -268,7 +268,7 @@
                     url_tip = raw_url_tip[2];
                     break;
                 case 3:
-                    url = download_url[5] + "/" + raw_url[0] + href2;
+                    url = download_url[5] + '/' + raw_url[0] + href2;
                     url_name = download_url_name[5];
                     url_tip = raw_url_tip[3];
                     break;
@@ -282,7 +282,7 @@
     }
 
 
-    // 删除 Raw 下载链接（☁）
+    // 删除 Raw 快捷下载（☁）
     function delDownLink(){
         var aElm = document.querySelectorAll('.fileDownLink');
         for(var num = 0;num<aElm.length;num++){
