@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.0.3
+// @version      1.0.4
 // @author       X.I.U
-// @description  宽屏显示、屏蔽文章开头大图、文章编辑页面与实际文章宽度一致
+// @description  宽屏显示、隐藏文章开头大图、文章编辑页面与实际文章宽度一致
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/p/*/edit
 // @icon         https://static.zhihu.com/static/favicon.ico
@@ -35,7 +35,7 @@
 
         if (menu_postimg){menu_postimg_ = "√";}else{menu_postimg_ = "×";}
 
-        menu_postimg_ID = GM_registerMenuCommand(`[ ${menu_postimg_} ] 屏蔽文章开头大图`, function(){menu_switch(menu_postimg,'xiu2_menu_postimg','屏蔽文章开头大图')});
+        menu_postimg_ID = GM_registerMenuCommand(`[ ${menu_postimg_} ] 隐藏文章开头大图`, function(){menu_switch(menu_postimg,'xiu2_menu_postimg','隐藏文章开头大图')});
         menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
@@ -70,7 +70,7 @@
 }
 `,
             style_2 = `
-/* 屏蔽在各列表中查看文章时开头显示的大图，不影响文章/专栏页面 */
+/* 隐藏在各列表中查看文章时开头显示的大图，不影响文章、专栏页面 */
 .RichContent img.ArticleItem-image {
 	display: none !important;
 }
@@ -79,6 +79,11 @@
 /* 调整文章编辑页面与实际文章宽度一致 */
 .PostEditor .RichText {
 	min-width: 690px !important;
+}
+/* 及标题输入框内的文字大小 */
+.WriteIndex-titleInput .Input {
+	min-width: 690px !important;
+	font-size: 24px;
 }
 `
         var style_Add = document.createElement('style');
