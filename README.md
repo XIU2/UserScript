@@ -38,7 +38,7 @@
 
 > 请确保使用 **Tampermonkey** 扩展，其他的用户脚本管理器可能导致**无法正常使用**脚本。
 
-> **不会离线安装 .crx 扩展文件？** 请重新开启 _**[Chrome 隐藏的 [拖入安装 .crx 扩展] 功能！](https://zhuanlan.zhihu.com/p/276027099)**_  
+> **不会离线安装 .crx 扩展？** 请重新开启 **[Chrome、Edge 隐藏 [拖入安装 .crx 扩展] 功能！](https://zhuanlan.zhihu.com/p/276027099)**  
 
 ****
 
