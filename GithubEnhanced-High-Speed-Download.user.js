@@ -1,6 +1,6 @@
  // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.2.2
+// @version      1.2.3
 // @author       X.I.U
 // @description  高速下载 Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        https://github.com/*/*
@@ -112,12 +112,12 @@
                         download_url[5] + '/https://github.com' + href
                     ],
                     html = `<div style="display: flex;justify-content: flex-end;">
-<div><a style="${style[0]}" class="btn" href="${url[0]}" rel="nofollow">${download_url_name[0]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[1]}" rel="nofollow">${download_url_name[1]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[2]}" rel="nofollow">${download_url_name[2]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[3]}" rel="nofollow">${download_url_name[3]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[4]}" rel="nofollow">${download_url_name[4]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[5]}" rel="nofollow">${download_url_name[5]}</a></div>
+<div><a style="${style[0]}" class="btn" href="${url[0]}" rel="noreferrer noopener nofollow">${download_url_name[0]}</a></div>
+<div><a style="${style[0]}" class="btn" href="${url[1]}" rel="noreferrer noopener nofollow">${download_url_name[1]}</a></div>
+<div><a style="${style[0]}" class="btn" href="${url[2]}" rel="noreferrer noopener nofollow">${download_url_name[2]}</a></div>
+<div><a style="${style[0]}" class="btn" href="${url[3]}" rel="noreferrer noopener nofollow">${download_url_name[3]}</a></div>
+<div><a style="${style[0]}" class="btn" href="${url[4]}" rel="noreferrer noopener nofollow">${download_url_name[4]}</a></div>
+<div><a style="${style[0]}" class="btn" href="${url[5]}" rel="noreferrer noopener nofollow">${download_url_name[5]}</a></div>
 </div>`;
                 $(this).next().after(html);
             });
@@ -137,12 +137,12 @@
                         download_url[5] + '/https://github.com' + href
                     ],
                     html = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">
-<div><a style="${style[0]}" class="btn" href="${url[0]}" rel="nofollow">${download_url_name[0]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[1]}" rel="nofollow">${download_url_name[1]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[2]}" rel="nofollow">${download_url_name[2]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[3]}" rel="nofollow">${download_url_name[3]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[4]}" rel="nofollow">${download_url_name[4]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[5]}" rel="nofollow">${download_url_name[5]}</a></div>
+<div><a style="${style[0]}" class="btn" href="${url[0]}" rel="noreferrer noopener nofollow">${download_url_name[0]}</a></div>
+<div><a style="${style[0]}" class="btn" href="${url[1]}" rel="noreferrer noopener nofollow">${download_url_name[1]}</a></div>
+<div><a style="${style[0]}" class="btn" href="${url[2]}" rel="noreferrer noopener nofollow">${download_url_name[2]}</a></div>
+<div><a style="${style[0]}" class="btn" href="${url[3]}" rel="noreferrer noopener nofollow">${download_url_name[3]}</a></div>
+<div><a style="${style[0]}" class="btn" href="${url[4]}" rel="noreferrer noopener nofollow">${download_url_name[4]}</a></div>
+<div><a style="${style[0]}" class="btn" href="${url[5]}" rel="noreferrer noopener nofollow">${download_url_name[5]}</a></div>
 </div>`;
                 $(this).after(html);
             });
@@ -165,12 +165,12 @@
                     download_url[5] + '/https://github.com' + href
                 ],
                 html = `
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url[0]}">${svg[0]}Download ZIP ${download_url_name[0]}</a></li>
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url[1]}">${svg[0]}Download ZIP ${download_url_name[1]}</a></li>
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url[2]}">${svg[0]}Download ZIP ${download_url_name[2]}</a></li>
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url[3]}">${svg[0]}Download ZIP ${download_url_name[3]}</a></li>
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url[4]}">${svg[0]}Download ZIP ${download_url_name[4]}</a></li>
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="nofollow" href="${url[5]}">${svg[0]}Download ZIP ${download_url_name[5]}</a></li>
+<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[0]}">${svg[0]}Download ZIP ${download_url_name[0]}</a></li>
+<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[1]}">${svg[0]}Download ZIP ${download_url_name[1]}</a></li>
+<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[2]}">${svg[0]}Download ZIP ${download_url_name[2]}</a></li>
+<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[3]}">${svg[0]}Download ZIP ${download_url_name[3]}</a></li>
+<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[4]}">${svg[0]}Download ZIP ${download_url_name[4]}</a></li>
+<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[5]}">${svg[0]}Download ZIP ${download_url_name[5]}</a></li>
 `;
             $(this).after(html);
         });
@@ -207,9 +207,9 @@
                     download_url[5] + "/" + raw_url[0] + href2
                 ],
                 html = `
-<a href="${url[0]}" title="${raw_url_tip[1]}" role="button" class="btn btn-sm BtnGroup-item">${raw_url_name[1]}</a>
-<a href="${url[1]}" title="${raw_url_tip[2]}" role="button" class="btn btn-sm BtnGroup-item">${raw_url_name[2]}</a>
-<a href="${url[2]}" title="${raw_url_tip[3]}" role="button" class="btn btn-sm BtnGroup-item">${raw_url_name[3]}</a>
+<a href="${url[0]}" title="${raw_url_tip[1]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url_name[1]}</a>
+<a href="${url[1]}" title="${raw_url_tip[2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url_name[2]}</a>
+<a href="${url[2]}" title="${raw_url_tip[3]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url_name[3]}</a>
 `;
             $(this).after(html);
         });
@@ -273,7 +273,7 @@
                     url_tip = raw_url_tip[3];
                     break;
             }
-            var html = ` <a href="${url}" download="${Name}" target="_blank" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url_name[menu_raw_fast]} ] 加速源 (☁) 即可切换。">${svg[2]}</a>`;
+            var html = ` <a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url_name[menu_raw_fast]} ] 加速源 (☁) 即可切换。">${svg[2]}</a>`;
             $(cntElm_svg).after(html);
             // 绑定鼠标事件
             trElm.onmouseover=mouseOverHandler;
