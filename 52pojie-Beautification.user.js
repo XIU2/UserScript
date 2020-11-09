@@ -2,7 +2,7 @@
 // @name         吾爱破解论坛美化
 // @version      1.0.3
 // @author       X.I.U
-// @description  精简多余内容
+// @description  精简多余内容 
 // @match        *://www.52pojie.cn/*
 // @icon         https://www.52pojie.cn/favicon.ico
 // @grant        GM_registerMenuCommand

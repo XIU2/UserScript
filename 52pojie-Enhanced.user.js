@@ -2,7 +2,7 @@
 // @name         吾爱破解论坛增强 - 自动签到、翻页
 // @version      1.1.2
 // @author       X.I.U
-// @description  自动签到、自动无缝翻页
+// @description  自动签到、自动无缝翻页 
 // @match        *://www.52pojie.cn/*
 // @icon         https://www.52pojie.cn/favicon.ico
 // @grant        GM_xmlhttpRequest
