@@ -4,7 +4,7 @@
 [![GitHub Star](https://img.shields.io/github/stars/XIU2/UserScript.svg?style=flat-square&label=Star&color=4285dd)](https://github.com/XIU2/UserScript/stargazers)
 [![GitHub Fork](https://img.shields.io/github/forks/XIU2/UserScript.svg?style=flat-square&label=Fork&color=4285dd)](https://github.com/XIU2/UserScript/network/members)
 
-🔨 自用的一些乱七八糟油猴脚本，**有什么需求、建议、问题直接提 [Issues](https://github.com/XIU2/UserScript/issues/new/choose)**，觉得好用请点个⭐~  
+🔨 自用的一些乱七八糟油猴脚本，**有什么需求、建议、问题直接提 [Issues](https://github.com/XIU2/UserScript/issues/new/choose)**，觉得好用请**点个⭐~**  
 
 > 如果你只有 GreasyFork 账号，也可以前往 GreasyFork 脚本页面向我反馈！  
 
@@ -15,7 +15,7 @@
 
 | 脚本名称 | 脚本功能 | 安装 | 备用 |
 | :---- | :---- | :----: | :----: |
-| **知乎 美化** | 宽屏显示 | **[「安装」](https://greasyfork.org/scripts/412212)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Beautification.user.js)** |
+| **知乎 美化** | 宽屏显示、隐藏文章开头大图、文章编辑页面宽度统一 | **[「安装」](https://greasyfork.org/scripts/412212)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Beautification.user.js)** |
 | **知乎 增强** | 一键收起回答、置顶显示时间、区分问题文章 | **[「安装」](https://greasyfork.org/scripts/412205)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Enhanced.user.js)** |
 |  **Github 增强** | 高速下载 Clone、Release、Raw、Code(ZIP) 等文件 | **[「安装」](https://greasyfork.org/scripts/412245)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GithubEnhanced-High-Speed-Download.user.js)** |
 | **3DM论坛 美化** | 精简多余内容 | **[「安装」](https://greasyfork.org/scripts/413593)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Beautification.user.js)** |
