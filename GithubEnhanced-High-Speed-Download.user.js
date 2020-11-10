@@ -1,6 +1,6 @@
  // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.2.3
+// @version      1.2.4
 // @author       X.I.U
 // @description  高速下载 Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        https://github.com/*/*
@@ -77,8 +77,11 @@
             menu_raw_fast += 1;
         }
         GM_setValue('xiu2_menu_raw_fast', menu_raw_fast);
+        console.log(11111)
         delDownLink(); // 删除旧加速源
+        console.log(22222)
         addDownLink(); // 添加新加速源
+        console.log(33333)
         GM_notification(`已切换加速源为：${raw_url_name[menu_raw_fast]}`); // 提示消息
         registerMenuCommand(); // 重新注册脚本菜单
     };
@@ -219,9 +222,9 @@
     // 添加 Raw 下载链接（☁）
     function addDownLink(){
         // 如果不是项目文件页面，就返回
-        var files = $('.octicon.octicon-file');
+        var files = $('div.Box-row svg.octicon.octicon-file');
         if(files.length === 0) return;
-        var files1 = $('.fileDownLink');
+        var files1 = $('a.fileDownLink');
         if(files1.length > 0) return;
 
         // 鼠标指向则显示
