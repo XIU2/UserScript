@@ -65,8 +65,8 @@
             GM_unregisterMenuCommand(menu_feedBack_ID);
             menu_raw_fast = GM_getValue('xiu2_menu_raw_fast');
         }
-        menu_menu_raw_fast_ID = GM_registerMenuCommand(`[ ${raw_url_name[menu_raw_fast]} ] 加速源 (☁) - 点击切换`, menu_toggle_raw_fast);
-        menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+        menu_menu_raw_fast_ID = GM_registerMenuCommand(`🔄 [ ${raw_url_name[menu_raw_fast]} ] 加速源 (☁) - 点击切换`, menu_toggle_raw_fast);
+        menu_feedBack_ID = GM_registerMenuCommand('💬 反馈 & 建议 [Github]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript', {active: true,insert: true,setParent: true});});
     }
 
     // 切换加速源
