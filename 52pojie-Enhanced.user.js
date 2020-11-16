@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.1.2
+// @version      1.1.3
 // @author       X.I.U
-// @description  自动签到、自动无缝翻页 
+// @description  自动签到、自动无缝翻页
 // @match        *://www.52pojie.cn/*
 // @icon         https://www.52pojie.cn/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -90,7 +90,7 @@
         patt_thread_2 = /mod\=viewthread/,
         patt_forum = /\/forum-\d+-\d+\.html/,
         patt_forum_2 = /mod\=forumdisplay/,
-        patt_guide = /mod\=guide\&view\=(hot|digest)/
+        patt_guide = /mod\=guide\&view\=(hot|digest|new|newthread|my|tech|help)/
 
     // URL 判断
     if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)){
