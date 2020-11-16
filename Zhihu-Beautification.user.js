@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.0.4
+// @version      1.0.5
 // @author       X.I.U
 // @description  宽屏显示、隐藏文章开头大图、文章编辑页面与实际文章宽度一致
 // @match        *://www.zhihu.com/*
-// @match        *://zhuanlan.zhihu.com/p/*/edit
+// @match        *://zhuanlan.zhihu.com/p/*
 // @icon         https://static.zhihu.com/static/favicon.ico
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
@@ -93,7 +93,9 @@
             style = style_1;
         }
         if(window.location.href.indexOf("zhuanlan") > -1){
-            style += style_3;
+            if(window.location.href.indexOf("/edit") > -1){
+                style += style_3;
+            }
         }
         style_Add.innerHTML = style;
         document.head.appendChild(style_Add);
