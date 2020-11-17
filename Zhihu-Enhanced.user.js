@@ -2,7 +2,7 @@
 // @name         知乎增强
 // @version      1.1.4
 // @author       X.I.U
-// @description  一键收起回答、置顶显示时间、区分问题文章 
+// @description  一键收起回答、置顶显示时间、区分问题文章
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/static/favicon.ico
@@ -231,7 +231,6 @@ function topTime_people()
     })
 }
 
-//图片调整到最高清晰度
 function originalPic(){
     $("img").each(function(){
         if($(this).attr("data-original")!=undefined && !$(this).hasClass("comment_sticker"))
@@ -302,7 +301,6 @@ function EventXMLHttpRequest() {
 
 
 (function() {
-    //折叠谢邀
     let timer=setInterval(function(){
         if($(".QuestionInvitation-content").text().indexOf("更多推荐结果") > -1)
         {
@@ -328,7 +326,6 @@ function EventXMLHttpRequest() {
         }
     })
 
-    //图片调整到最高清晰度
     setInterval(originalPic,100)
 
     //每个页面对应的功能函数
