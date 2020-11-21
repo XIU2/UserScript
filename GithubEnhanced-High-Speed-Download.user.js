@@ -1,11 +1,9 @@
  // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.2.5
+// @version      1.2.6
 // @author       X.I.U
 // @description  高速下载 Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
-// @match        https://github.com/*/*
-// @match        https://github.com/*/*/releases
-// @match        https://github.com/*/*/releases/*
+// @match        *://github.com/*
 // @icon         https://github.githubassets.com/favicon.ico
 // @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
 // @grant        GM_registerMenuCommand
@@ -70,8 +68,8 @@
             menu_raw_fast += 1;
         }
         GM_setValue('xiu2_menu_raw_fast', menu_raw_fast);
-        delDownLink(); // 删除旧加速源
-        addDownLink(); // 添加新加速源
+        delRawDownLink(); // 删除旧加速源
+        addRawDownLink(); // 添加新加速源
         GM_notification(`已切换加速源为：${raw_url[menu_raw_fast][1]}`); // 提示消息
         registerMenuCommand(); // 重新注册脚本菜单
     };
@@ -80,14 +78,14 @@
     addDownloadZIP(); // Source Code 加速
     addGitClone(); // Download ZIP/Code(ZIP) 加速
     addRawFile(); // Raw 加速
-    setTimeout(addDownLink, 2000); // 添加 Raw 下载链接（☁），延迟 2 秒执行，避免被 pjax 刷掉
+    setTimeout(addRawDownLink, 2000); // 添加 Raw 下载链接（☁），延迟 2 秒执行，避免被 pjax 刷掉
 
     document.addEventListener('pjax:success',function(){ // pjax 事件发生后
         addRelease(); // Release 加速
         addDownloadZIP(); // Source Code 加速
         addGitClone(); // Download ZIP/Code(ZIP) 加速
         addRawFile(); // 添加 Raw 加速按钮
-        setTimeout(addDownLink, 2000); // 添加 Raw 下载链接（☁），延迟 2 秒执行，避免被 pjax 刷掉
+        setTimeout(addRawDownLink, 2000); // 添加 Raw 下载链接（☁），延迟 2 秒执行，避免被 pjax 刷掉
     });
 
 
@@ -210,7 +208,7 @@
 
 
     // 添加 Raw 下载链接（☁）
-    function addDownLink(){
+    function addRawDownLink(){
         // 如果不是项目文件页面，就返回
         var files = $('div.Box-row svg.octicon.octicon-file');
         if(files.length === 0) return;
@@ -276,8 +274,9 @@
 
 
     // 删除 Raw 快捷下载（☁）
-    function delDownLink(){
+    function delRawDownLink(){
         var aElm = document.querySelectorAll('.fileDownLink');
+        if(aElm.length === 0) return;
         for(var num = 0;num<aElm.length;num++){
             aElm[num].remove();
         };
