@@ -29,18 +29,21 @@
 | **Steam 创意工坊大图 修复** | 修复 Steam 创意工坊预览大图无法显示的问题 | **[「安装」](https://greasyfork.org/scripts/397666)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/SteamWorkshopImageRepair.user.js)** |
 
 > 脚本名称末尾 **`*`** 代表该脚本为**网友主动提出需求**而写的。如果你也有需求，可以[告诉我](https://github.com/XIU2/UserScript/issues/new/choose)！  
+> 所有脚本均在 _**Chrome、Firefox(国际版)、Edge(新版) + Tampermonkey**_ 环境下测试通过！
 
 ****
 
 ## 如何安装/使用脚本？
 
 要使用该脚本，需要浏览器安装一个 **Tampermonkey  脚本管理器扩展（[Chrome](https://xiu.lanzoux.com/b073l8d1e) / [Firefox](https://addons.mozilla.org/firefox/addon/tampermonkey/) / [Edge](https://microsoftedge.microsoft.com/addons/detail/tampermonkey/iikmkjmpaadaobahmlepeloendndfphd?hl=zh-CN)）。**  
- 
+
+安装扩展后，点击上面第三列 **「安装」**，再点击 **\[安装脚本\]** 后扩展会弹出提示，再点击 **\[安装\]** 即可。
+
 > 其他基于 **Chromium** 内核的浏览器（如国内套皮浏览器）都可以使用 Chrome 的扩展。  
 
-> 请确保使用 **Tampermonkey** 扩展，其他的用户脚本管理器可能导致**无法正常使用**脚本。
+> 请确保使用 **Tampermonkey** 扩展，其他的用户脚本管理器可能导致**无法正常使用**脚本。  
 
-> **不会离线安装 .crx 扩展？[Chrome、Edge 重新开启隐藏的 [拖入安装 .crx 扩展] 功能！](https://zhuanlan.zhihu.com/p/276027099)**  
+> _**不会离线安装 .crx 扩展？[Chrome、Edge 重新开启隐藏的 [拖入安装 .crx 扩展] 功能！](https://zhuanlan.zhihu.com/p/276027099)**_  
 
 ****
 
