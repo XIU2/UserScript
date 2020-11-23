@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.1.3
+// @version      1.1.4
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页
 // @match        *://www.52pojie.cn/*
@@ -65,6 +65,7 @@
                 pageElement: 'css;div#postlist > div[id^="post_"]',
                 HT_insert: ['css;div#postlist', 2],
                 replaceE: '//div[@class="pg"] | //div[@class="pgbtn"]',
+                scrollDelta: 666
             }
         },
         guide: {
@@ -74,15 +75,27 @@
                 pageElement: 'css;div#threadlist div.bm_c table > tbody[id^="normalthread_"]',
                 HT_insert: ['css;div#threadlist div.bm_c table', 2],
                 replaceE: 'css;div.pg',
+                scrollDelta: 666
+            }
+        },
+        collection: {
+            SiteTypeID: 4,
+            pager: {
+                nextLink: '//div[@class="pg"]//a[contains(text(),"下一页")][@href]',
+                pageElement: 'css;div#ct div.bm_c table > tbody',
+                HT_insert: ['css;div#ct div.bm_c table', 2],
+                replaceE: 'css;div.pg',
+                scrollDelta: 899
             }
         }
     };
 
     // 用于脚本内部判断当前 URL 类型
     let SiteType = {
-        FORUM: DBSite.forum.SiteTypeID,   // 各板块帖子列表
-        THREAD: DBSite.thread.SiteTypeID, // 帖子内
-        GUIDE: DBSite.guide.SiteTypeID    // 导读帖子列表
+        FORUM: DBSite.forum.SiteTypeID,        // 各板块帖子列表
+        THREAD: DBSite.thread.SiteTypeID,      // 帖子内
+        GUIDE: DBSite.guide.SiteTypeID,        // 导读帖子列表
+        COLLECTION: DBSite.collection.SiteTypeID    // 淘贴列表
     };
 
     // URL 匹配正则表达式
@@ -90,7 +103,8 @@
         patt_thread_2 = /mod\=viewthread/,
         patt_forum = /\/forum-\d+-\d+\.html/,
         patt_forum_2 = /mod\=forumdisplay/,
-        patt_guide = /mod\=guide\&view\=(hot|digest|new|newthread|my|tech|help)/
+        patt_guide = /mod\=guide\&view\=(hot|digest|new|newthread|my|tech|help)/,
+        patt_collection = /mod\=collection/
 
     // URL 判断
     if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)){
@@ -102,6 +116,9 @@
     }else if (patt_guide.test(location.search)){
         // 导读帖子列表
         curSite = DBSite.guide;
+    }else if (patt_collection.test(location.search)){
+        // 淘贴列表
+        curSite = DBSite.collection;
     }
     curSite.pageUrl = ""; // 下一页URL
 
@@ -117,7 +134,7 @@
             windowScroll(function (direction, e) {
                 if (direction === "down") { // 下滑才准备翻页
                     var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-                    let scrollDelta = 666;
+                    let scrollDelta = curSite.pager.scrollDelta;
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
                         if (curSite.SiteTypeID === SiteType.FORUM) { // 如果是原创、精品等版块则直接点下一页就行了
                             var autopbn = document.querySelector('#autopbn');
