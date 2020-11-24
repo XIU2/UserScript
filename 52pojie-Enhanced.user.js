@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.1.5
+// @version      1.1.6
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页
 // @match        *://www.52pojie.cn/*
@@ -56,7 +56,10 @@
     // 自动翻页规则
     let DBSite = {
         forum: {
-            SiteTypeID: 1
+            SiteTypeID: 1,
+            pager: {
+                scrollDelta: 666
+            }
         },
         thread: {
             SiteTypeID: 2,
