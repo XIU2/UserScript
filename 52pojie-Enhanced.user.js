@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.1.4
+// @version      1.1.5
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页
 // @match        *://www.52pojie.cn/*
@@ -20,7 +20,7 @@
 (function() {
     var menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading');
     var menu_thread_pageLoading_ID, menu_feedBack_ID;
-    if (menu_thread_pageLoading == null){menu_thread_pageLoading = true; GM_setValue('xiu2_menu_thread_pageLoading', menu_thread_pageLoading)};
+    if (menu_thread_pageLoading == null){menu_thread_pageLoading = false; GM_setValue('xiu2_menu_thread_pageLoading', menu_thread_pageLoading)};
     registerMenuCommand();
 
     // 注册脚本菜单
