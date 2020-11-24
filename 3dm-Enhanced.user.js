@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         3DM论坛增强
-// @version      1.0.4
+// @version      1.0.5
 // @author       X.I.U
-// @description  自动回复、自动无缝翻页、清理置顶帖子 
+// @description  自动回复、自动无缝翻页、清理置顶帖子
 // @match        *://bbs.3dmgame.com/*
 // @icon         https://bbs.3dmgame.com/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -64,12 +64,24 @@
 
     // 随机回复帖子的内容
     var replyList = [
-        "感谢楼主分享！",
-        "感谢分享，给你点赞！",
-        "感谢分享，论坛因你更精彩！",
-        "看看隐藏内容是什么！",
-        "下载看看好不好用！",
-        "好人一生平安！"
+        "感谢楼主分享的内容！",
+        "感谢分享！给你点赞！",
+        "感谢分享！论坛因你更精彩！",
+        "看看隐藏内容是什么！谢谢！",
+        "先下载看看好不好用！",
+        "楼主一生平安！好人一生平安！",
+        "你说的观点我也很支持！",
+        "楼主太棒了！我先下为敬！",
+        "给楼主点赞，希望继续分享！",
+        "感谢论坛，感谢LZ热心分享！",
+        "感谢楼主分享优质内容，希望继续努力！",
+        "下载试用一下，如果用着不错就给楼主顶贴！",
+        "这么好的东西！感谢楼主分享！感谢论坛！",
+        "希望楼主继续分享更多好用的东西！谢谢！",
+        "看到楼主这么努力分享，我只能顶个贴感谢一下了！",
+        "好东西，拿走了，临走顶个贴感谢一下楼主！",
+        "这就非常给力了！感谢分享！",
+        "厉害了！先收藏，再回复！谢谢！"
     ];
 
     // 检查是否登陆
@@ -195,7 +207,7 @@
     function writeReply(){
         var textarea = document.getElementById("fastpostmessage");
         if (textarea){
-            textarea.value = textarea.value + replyList[Math.floor((Math.random()*replyList.length))];
+            textarea.value = textarea.value + replyList[Math.floor((Math.random()*replyList.length))] + replyList[Math.floor((Math.random()*replyList.length))];
             var fastpostsubmit = document.getElementById("fastpostsubmit");
             if (fastpostsubmit){
                 fastpostsubmit.click();

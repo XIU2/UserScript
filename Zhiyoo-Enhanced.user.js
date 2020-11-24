@@ -190,10 +190,8 @@
                 writeReply();
                 // 如果使用了我的智友帮美化脚本，则定位至底部，反之定位至顶部
                 if (document.getElementById("fastpostmessage").offsetParent == null){
-                    console.log('111111')
                     setTimeout(`window.scrollTo(0,99999999)`, 1000);
                 }else{
-                    console.log('222222')
                     setTimeout(`window.scrollTo(0,0)`, 1000);
                 }
             }
@@ -207,7 +205,7 @@
         if (textarea){
             // 随机写入回复内容
             textarea.value = textarea.value + replyList[Math.floor((Math.random()*replyList.length))] + replyList[Math.floor((Math.random()*replyList.length))];
-            console.log(`${textarea.value}`)
+            //console.log(`${textarea.value}`)
             var fastpostsubmit = document.getElementById("fastpostsubmit");
             if (fastpostsubmit){
                 setTimeout(`fastpostsubmit.click()`, 200);
