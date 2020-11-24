@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         智友邦论坛增强
-// @version      1.1.0
+// @version      1.1.1
 // @author       X.I.U
-// @description  自动签到、自动回复、自动无缝翻页、清理置顶帖子、清理帖子标题〖XXX〗【XXX】文字 
+// @description  自动签到、自动回复、自动无缝翻页、清理置顶帖子、清理帖子标题〖XXX〗【XXX】文字
 // @icon         http://bbs.zhiyoo.net/favicon.ico
 // @match        *://bbs.zhiyoo.net/*
 // @grant        GM_xmlhttpRequest
@@ -54,6 +54,31 @@
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
+
+
+    // 随机回复帖子的内容
+    var replyList = [
+        "感谢楼主分享的内容！",
+        "感谢分享！给你点赞！",
+        "感谢分享！论坛因你更精彩！",
+        "看看隐藏内容是什么！谢谢！",
+        "先下载看看好不好用！",
+        "楼主一生平安！好人一生平安！",
+        "搞机上智友提问下资源！",
+        "马克！智友邦你搞机！",
+        "你说的观点我也很支持！",
+        "楼主太棒了！我先下为敬！",
+        "给楼主点赞，希望继续分享！",
+        "感谢智友帮论坛，感谢LZ热心分享！",
+        "感谢楼主分享优质内容，希望继续努力！",
+        "下载试用一下，如果用着不错就给楼主顶贴！",
+        "这么好的东西！感谢楼主分享！感谢智友帮论坛！",
+        "希望楼主继续分享更多好用的东西！谢谢！",
+        "看到楼主这么努力分享，我只能顶个贴感谢一下了！",
+        "好东西，拿走了，临走顶个贴感谢一下楼主！",
+        "这就非常给力了！感谢分享！",
+        "厉害了！先收藏，再回复！谢谢！"
+    ];
 
     // 帖子数量，避免重复清理帖子列表中帖子标题开头的〖XXX〗【XXX】文字，用于提高效率
     var postNum = 0;
@@ -161,10 +186,31 @@
     function autoReply(){
         if (loginStatus){
             // 存在隐藏内容，自动回复
-            if (document.getElementsByClassName("locked").length > 0){
-                document.querySelector('#saya_fastreply_div div').click();
-                setTimeout(`document.getElementById('fastpostsubmit').click()`, 200);
-                setTimeout(`window.scrollTo(0,99999999)`, 1000);
+            if (document.getElementsByClassName("showhide").length == 0){
+                writeReply();
+                // 如果使用了我的智友帮美化脚本，则定位至底部，反之定位至顶部
+                if (document.getElementById("fastpostmessage").offsetParent == null){
+                    console.log('111111')
+                    setTimeout(`window.scrollTo(0,99999999)`, 1000);
+                }else{
+                    console.log('222222')
+                    setTimeout(`window.scrollTo(0,0)`, 1000);
+                }
+            }
+        }
+    }
+
+
+    // 写入自动回复内容
+    function writeReply(){
+        var textarea = document.getElementById("fastpostmessage");
+        if (textarea){
+            // 随机写入回复内容
+            textarea.value = textarea.value + replyList[Math.floor((Math.random()*replyList.length))] + replyList[Math.floor((Math.random()*replyList.length))];
+            console.log(`${textarea.value}`)
+            var fastpostsubmit = document.getElementById("fastpostsubmit");
+            if (fastpostsubmit){
+                setTimeout(`fastpostsubmit.click()`, 200);
             }
         }
     }
@@ -176,9 +222,12 @@
             // 如果已显示隐藏内容，则定位到隐藏内容区域
             // 如果没有发现已显示隐藏内容，就不定位了
             if (document.getElementsByClassName("showhide").length > 0){
-                setTimeout(`window.scrollTo(0,99999999)`, 1000);
+                // 如果使用了我的智友帮美化脚本，则定位至底部，反之定位至顶部
+                if (document.getElementById("fastpostmessage").offsetParent == null){
+                    setTimeout(`window.scrollTo(0,99999999)`, 1000);
+                }
                 //setTimeout(`location.hash='#footer'`, 1000);
-                console.log(`${$(".showhide").scrollTop()}`);
+                //console.log(`${$(".showhide").scrollTop()}`);
             }
         }
     }
