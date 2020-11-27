@@ -15,13 +15,13 @@
 
 | 脚本名称 | 脚本功能 | 安装 | 备用 |
 | :---- | :---- | :----: | :----: |
-| **知乎 美化** | 宽屏显示、隐藏文章开头大图、文章编辑页宽度统一 | **[「安装」](https://greasyfork.org/scripts/412212)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Beautification.user.js)** |
-| **知乎 增强** | 一键收起回答、置顶显示时间、区分问题文章 | **[「安装」](https://greasyfork.org/scripts/412205)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Enhanced.user.js)** |
-|  **Github 增强** | 高速下载 Clone、Release、Raw、Code(ZIP) 文件 | **[「安装」](https://greasyfork.org/scripts/412245)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GithubEnhanced-High-Speed-Download.user.js)** |
+| **知乎 美化** | 宽屏显示、隐藏文章开头大图、文章编辑页宽度统一... | **[「安装」](https://greasyfork.org/scripts/412212)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Beautification.user.js)** |
+| **知乎 增强** | 一键收起回答、置顶显示时间、区分问题文章... | **[「安装」](https://greasyfork.org/scripts/412205)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Enhanced.user.js)** |
+|  **Github 增强** | 高速下载 Clone、Release、Raw、Code(ZIP) 文件... | **[「安装」](https://greasyfork.org/scripts/412245)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GithubEnhanced-High-Speed-Download.user.js)** |
 | **3DM论坛 美化** | 精简多余内容 | **[「安装」](https://greasyfork.org/scripts/413593)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Beautification.user.js)** |
 | **3DM论坛 增强** | 自动回复、自动无缝翻页、清理置顶帖子 | **[「安装」](https://greasyfork.org/scripts/412890)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Enhanced.user.js)** |
 | **智友邦论坛 美化** | 精简多余内容、宽屏显示 | **[「安装」](https://greasyfork.org/scripts/412361)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Beautification.user.js)** |
-| **智友邦论坛 增强** | 自动签到、自动回复、自动无缝翻页、清理置顶帖子等 | **[「安装」](https://greasyfork.org/scripts/412362)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Enhanced.user.js)** |
+| **智友邦论坛 增强** | 自动签到、自动回复、自动无缝翻页、清理置顶帖子... | **[「安装」](https://greasyfork.org/scripts/412362)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Enhanced.user.js)** |
 |  ~~_**Google 翻译 美化**_~~ | ~~_精简多余内容、修复翻译结果溢出屏幕问题_~~ | ~~_**[「安装」](https://greasyfork.org/scripts/413721)**_~~ | ~~_**[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GoogleTranslate-Beautification.user.js)**_~~ |
 | **吾爱破解论坛 美化** | 精简多余内容 | **[「安装」](https://greasyfork.org/scripts/412681)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Beautification.user.js)** |
 | **吾爱破解论坛 增强** | 自动签到、自动无缝翻页 | **[「安装」](https://greasyfork.org/scripts/412680)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Enhanced.user.js)** |

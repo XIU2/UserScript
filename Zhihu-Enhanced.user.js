@@ -2,7 +2,7 @@
 // @name         知乎增强
 // @version      1.1.4
 // @author       X.I.U
-// @description  一键收起回答、置顶显示时间、区分问题文章
+// @description  一键收起回答、置顶显示时间、区分问题文章、默认高清原图、默认折叠邀请
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/static/favicon.ico
