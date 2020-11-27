@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         智友邦论坛增强
-// @version      1.1.1
+// @version      1.1.2
 // @author       X.I.U
 // @description  自动签到、自动回复、自动无缝翻页、清理置顶帖子、清理帖子标题〖XXX〗【XXX】文字
 // @icon         http://bbs.zhiyoo.net/favicon.ico
@@ -109,7 +109,7 @@
     };
 
     var patt_thread = /\/thread-\d+-\d+\-\d+.html/, // 匹配 /thread-XXX-X-X.html 帖子正则表达式
-        patt_posttitle = /^〖.+〗：|^【.+】：/; // 匹配帖子标题中的〖XXX〗【XXX】正则表达式
+        patt_posttitle = /^〖.+〗(：)?|^【.+】(：)?/; // 匹配帖子标题中的〖XXX〗【XXX】正则表达式
 
     if (location.pathname === '/plugin.php'){
         switch(getQueryVariable("id"))
