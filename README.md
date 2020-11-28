@@ -4,14 +4,14 @@
 [![GitHub Star](https://img.shields.io/github/stars/XIU2/UserScript.svg?style=flat-square&label=Star&color=4285dd)](https://github.com/XIU2/UserScript/stargazers)
 [![GitHub Fork](https://img.shields.io/github/forks/XIU2/UserScript.svg?style=flat-square&label=Fork&color=4285dd)](https://github.com/XIU2/UserScript/network/members)
 
-🔨 自用的一些乱七八糟油猴脚本，**有什么需求、建议、问题直接提 [Issues](https://github.com/XIU2/UserScript/issues/new/choose)**，觉得好用请**点个⭐鼓励一下下~**  
+🔨 自用的一些乱七八糟油猴脚本，**有什么需求、建议、问题直接提 [Issues](https://github.com/XIU2/UserScript/issues/new/choose)**，觉得**好用请点个⭐鼓励一下下~**  
 
 > 如果你只有 GreasyFork 账号，也可以前往 GreasyFork 脚本页面向我反馈！  
 
 ## 脚本列表
 
-> 更多详细脚本介绍/截图，请点击第三列的 **「安装」** 前往 GreasyFork 查看。  
-> 备用安装由 **`jsdelivr CDN`** 提供，优点是速度快（国内CDN），缺点是有24小时缓存。   
+> 详细的脚本介绍、使用说明、截图，请点击第三列的 **「安装」** 前往 GreasyFork 查看。  
+> 备用安装由 **`jsDelivr CDN`** 提供，优点是速度快（国内CDN），缺点是有 24小时缓存。   
 
 | 脚本名称 | 脚本功能 | 安装 | 备用 |
 | :---- | :---- | :----: | :----: |
@@ -35,9 +35,9 @@
 
 ## 如何安装/使用脚本？
 
-要使用该脚本，需要浏览器安装一个 **Tampermonkey  脚本管理器扩展（[Chrome](https://xiu.lanzoux.com/b073l8d1e) / [Firefox](https://addons.mozilla.org/firefox/addon/tampermonkey/) / [Edge](https://microsoftedge.microsoft.com/addons/detail/tampermonkey/iikmkjmpaadaobahmlepeloendndfphd?hl=zh-CN)）。**  
+要使用该脚本，需要浏览器安装 **Tampermonkey  脚本管理器扩展（[Chrome](https://xiu.lanzoux.com/b073l8d1e) / [Firefox](https://addons.mozilla.org/firefox/addon/tampermonkey/) / [Edge](https://microsoftedge.microsoft.com/addons/detail/tampermonkey/iikmkjmpaadaobahmlepeloendndfphd?hl=zh-CN)）。**  
 
-安装扩展后，点击上面第三列 **「安装」**，再点击 **\[安装脚本\]** 后扩展会弹出提示，再点击 **\[安装\]** 即可。
+安装扩展后，点击上面第三列 **「安装」**，再点击 **\[安装脚本\]** 后扩展会弹出提示，点击 **\[安装\]** 即可。
 
 > 其他基于 **Chromium** 内核的浏览器（如国内套皮浏览器）都可以使用 Chrome 的扩展。  
 
@@ -51,6 +51,6 @@
 
 The GPL-3.0 License.
 
-本软件仅供学习交流，请勿用于商用。  
+所有脚本仅供学习交流，请勿用于商用等其他用途。  
 
 软件所有权归 X.I.U(XIU2) 所有。  
