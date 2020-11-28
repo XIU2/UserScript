@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.1.4
+// @version      1.1.5
 // @author       X.I.U
 // @description  一键收起回答、置顶显示时间、区分问题文章、默认高清原图、默认折叠邀请
 // @match        *://www.zhihu.com/*
@@ -20,16 +20,18 @@
 
 var menu_collapsedAnswer = GM_getValue('xiu2_menu_collapsedAnswer');
 var menu_publishTop = GM_getValue('xiu2_menu_publishTop');
+var menu_allTime = GM_getValue('xiu2_menu_allTime');
 var menu_typeTips = GM_getValue('xiu2_menu_typeTips');
-var menu_collapsedAnswer_ID, menu_publishTop_ID, menu_typeTips_ID, menu_feedBack_ID;
+var menu_collapsedAnswer_ID, menu_publishTop_ID, menu_typeTips_ID, menu_allTime_ID, menu_feedBack_ID;
 if (menu_collapsedAnswer == null){menu_collapsedAnswer = true; GM_setValue('xiu2_menu_collapsedAnswer', menu_collapsedAnswer)};
 if (menu_publishTop == null){menu_publishTop = true; GM_setValue('xiu2_menu_publishTop', menu_publishTop)};
 if (menu_typeTips == null){menu_typeTips = true; GM_setValue('xiu2_menu_typeTips', menu_typeTips)};
+if (menu_allTime == null){menu_allTime = true; GM_setValue('xiu2_menu_allTime', menu_allTime)};
 registerMenuCommand();
 
 // 注册脚本菜单
 function registerMenuCommand() {
-    var menu_collapsedAnswer_, menu_publishTop_, menu_typeTips_;
+    var menu_collapsedAnswer_, menu_publishTop_, menu_typeTips_, menu_allTime_;
     if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
         GM_unregisterMenuCommand(menu_collapsedAnswer_ID);
         GM_unregisterMenuCommand(menu_publishTop_ID);
@@ -37,15 +39,18 @@ function registerMenuCommand() {
         GM_unregisterMenuCommand(menu_feedBack_ID);
         menu_collapsedAnswer = GM_getValue('xiu2_menu_collapsedAnswer');
         menu_publishTop = GM_getValue('xiu2_menu_publishTop');
+        menu_allTime = GM_getValue('xiu2_menu_allTime');
         menu_typeTips = GM_getValue('xiu2_menu_typeTips');
     }
 
     if (menu_collapsedAnswer){menu_collapsedAnswer_ = "√";}else{menu_collapsedAnswer_ = "×";}
     if (menu_publishTop){menu_publishTop_ = "√";}else{menu_publishTop_ = "×";}
     if (menu_typeTips){menu_typeTips_ = "√";}else{menu_typeTips_ = "×";}
+    if (menu_allTime){menu_allTime_ = "√";}else{menu_allTime_ = "×";}
 
     menu_collapsedAnswer_ID = GM_registerMenuCommand(`[ ${menu_collapsedAnswer_} ] 一键收起回答`, function(){menu_switch(menu_collapsedAnswer,'xiu2_menu_collapsedAnswer','一键收起回答')});
     menu_publishTop_ID = GM_registerMenuCommand(`[ ${menu_publishTop_} ] 置顶显示时间`, function(){menu_switch(menu_publishTop,'xiu2_menu_publishTop','置顶显示时间')});
+    menu_publishTop_ID = GM_registerMenuCommand(`[ ${menu_allTime_} ] 完整显示时间`, function(){menu_switch(menu_allTime,'xiu2_menu_allTime','完整显示时间')});
     menu_typeTips_ID = GM_registerMenuCommand(`[ ${menu_typeTips_} ] 区分问题文章`, function(){menu_switch(menu_typeTips,'xiu2_menu_typeTips','区分问题文章')});
     menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
 }
@@ -68,18 +73,22 @@ function topTime_index()
     $(".TopstoryItem").each(function(){
         if( !($(this).find(".ContentItem-time").hasClass("full")) && $(this).find(".ContentItem-time").length>0 && $(this).find(".ContentItem-time").find("span").text() != null)
         {
-            if($(this).find(".ContentItem-time").text().indexOf("发布于")==-1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") > -1) //只有"编辑于"时增加具体发布时间data-tooltip
+            // 完整显示时间
+            if(menu_allTime)
             {
-                let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
-                var oldtext =$(this).find(".ContentItem-time").find("span").text();
-                $(this).find(".ContentItem-time").find("span").text(data_tooltip+"，"+oldtext);
-                $(this).find(".ContentItem-time").addClass("full");
-            }
-            else if($(this).find(".ContentItem-time").text().indexOf("发布于") > -1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") == -1) //只有"发布于"时替换为具体发布时间data-tooltip
-            {
-                let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
-                $(this).find(".ContentItem-time").find("span").text(data_tooltip);
-                $(this).find(".ContentItem-time").addClass("full");
+                if($(this).find(".ContentItem-time").text().indexOf("发布于")==-1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") > -1) //只有"编辑于"时增加具体发布时间data-tooltip
+                {
+                    let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
+                    var oldtext =$(this).find(".ContentItem-time").find("span").text();
+                    $(this).find(".ContentItem-time").find("span").text(data_tooltip+"，"+oldtext);
+                    $(this).find(".ContentItem-time").addClass("full");
+                }
+                else if($(this).find(".ContentItem-time").text().indexOf("发布于") > -1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") == -1) //只有"发布于"时替换为具体发布时间data-tooltip
+                {
+                    let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
+                    $(this).find(".ContentItem-time").find("span").text(data_tooltip);
+                    $(this).find(".ContentItem-time").addClass("full");
+                }
             }
 
             //发布时间置顶
@@ -105,18 +114,22 @@ function topTime_question()
     $(".ContentItem.AnswerItem").each(function(){
         if( !($(this).find(".ContentItem-time").hasClass("full")) && $(this).find(".ContentItem-time").length>0 && $(this).find(".ContentItem-time").find("span").text() != null)
         {
-            if($(this).find(".ContentItem-time").text().indexOf("发布于")==-1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") > -1) //只有"编辑于"时增加具体发布时间data-tooltip
+            // 完整显示时间
+            if(menu_allTime)
             {
-                let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
-                var oldtext =$(this).find(".ContentItem-time").find("span").text();
-                $(this).find(".ContentItem-time").find("span").text(data_tooltip+"，"+oldtext);
-                $(this).find(".ContentItem-time").addClass("full");
-            }
-            else if($(this).find(".ContentItem-time").text().indexOf("发布于") > -1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") == -1) //只有"发布于"时替换为具体发布时间data-tooltip
-            {
-                let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
-                $(this).find(".ContentItem-time").find("span").text(data_tooltip);
-                $(this).find(".ContentItem-time").addClass("full");
+                if($(this).find(".ContentItem-time").text().indexOf("发布于")==-1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") > -1) //只有"编辑于"时增加具体发布时间data-tooltip
+                {
+                    let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
+                    var oldtext =$(this).find(".ContentItem-time").find("span").text();
+                    $(this).find(".ContentItem-time").find("span").text(data_tooltip+"，"+oldtext);
+                    $(this).find(".ContentItem-time").addClass("full");
+                }
+                else if($(this).find(".ContentItem-time").text().indexOf("发布于") > -1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") == -1) //只有"发布于"时替换为具体发布时间data-tooltip
+                {
+                    let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
+                    $(this).find(".ContentItem-time").find("span").text(data_tooltip);
+                    $(this).find(".ContentItem-time").addClass("full");
+                }
             }
 
             //发布时间置顶
@@ -142,14 +155,16 @@ function topTime_zhuanlan()
     //隐藏推荐文章
     $(".Recommendations-Main").hide();
 
-
-    //有"编辑于"时，增加发布时间
-    if( $(".ContentItem-time").text().indexOf("编辑于")>-1 && !$(".ContentItem-time").hasClass("done"))
+    // 完整显示时间
+    if(menu_allTime)
     {
-        let bianjiyu = $(".ContentItem-time").text();
-        $(".ContentItem-time").click();
-        $(".ContentItem-time").text($(".ContentItem-time").text()+"，"+bianjiyu)
-        $(".ContentItem-time").addClass("done");
+        if( $(".ContentItem-time").text().indexOf("编辑于")>-1 && !$(".ContentItem-time").hasClass("done"))
+        {
+            let bianjiyu = $(".ContentItem-time").text();
+            $(".ContentItem-time").click();
+            $(".ContentItem-time").text($(".ContentItem-time").text()+"，"+bianjiyu)
+            $(".ContentItem-time").addClass("done");
+        }
     }
 
     //发布时间置顶
@@ -164,21 +179,24 @@ function topTime_zhuanlan()
 function topTime_search()
 {
     $(".ContentItem.AnswerItem, .ContentItem.ArticleItem").each(function(){
-        //console.log($(this).find(".ContentItem-time"))
         if( !($(this).find(".ContentItem-time").hasClass("full")) && $(this).find(".ContentItem-time").length>0 && $(this).find(".ContentItem-time").find("span").text() != null)
         {
-            if($(this).find(".ContentItem-time").text().indexOf("发布于")==-1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") > -1)  //只有"编辑于"时，增加具体发布时间data-tooltip
+            // 完整显示时间
+            if(menu_allTime)
             {
-                let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
-                var oldtext =$(this).find(".ContentItem-time").find("span").text();
-                $(this).find(".ContentItem-time").find("span").text(data_tooltip+"，"+oldtext);
-                $(this).find(".ContentItem-time").addClass("full");
-            }
-            else if($(this).find(".ContentItem-time").text().indexOf("发布于") > -1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") == -1) //只有"发布于"时替换为具体发布时间data-tooltip
-            {
-                let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
-                $(this).find(".ContentItem-time").find("span").text(data_tooltip);
-                $(this).find(".ContentItem-time").addClass("full");
+                if($(this).find(".ContentItem-time").text().indexOf("发布于")==-1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") > -1)  //只有"编辑于"时，增加具体发布时间data-tooltip
+                {
+                    let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
+                    var oldtext =$(this).find(".ContentItem-time").find("span").text();
+                    $(this).find(".ContentItem-time").find("span").text(data_tooltip+"，"+oldtext);
+                    $(this).find(".ContentItem-time").addClass("full");
+                }
+                else if($(this).find(".ContentItem-time").text().indexOf("发布于") > -1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") == -1) //只有"发布于"时替换为具体发布时间data-tooltip
+                {
+                    let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
+                    $(this).find(".ContentItem-time").find("span").text(data_tooltip);
+                    $(this).find(".ContentItem-time").addClass("full");
+                }
             }
 
             //发布时间置顶
@@ -202,18 +220,22 @@ function topTime_people()
     $(".ContentItem.AnswerItem").each(function(){
         if( !($(this).find(".ContentItem-time").hasClass("full")) && $(this).find(".ContentItem-time").length>0 && $(this).find(".ContentItem-time").find("span").text() != null)
         {
-            if($(this).find(".ContentItem-time").text().indexOf("发布于")==-1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") > -1) //只有"编辑于"时增加具体发布时间data-tooltip
+            // 完整显示时间
+            if(menu_allTime)
             {
-                let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
-                var oldtext =$(this).find(".ContentItem-time").find("span").text();
-                $(this).find(".ContentItem-time").find("span").text(data_tooltip+"，"+oldtext);
-                $(this).find(".ContentItem-time").addClass("full");
-            }
-            else if($(this).find(".ContentItem-time").text().indexOf("发布于") > -1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") == -1) //只有"发布于"时替换为具体发布时间data-tooltip
-            {
-                let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
-                $(this).find(".ContentItem-time").find("span").text(data_tooltip);
-                $(this).find(".ContentItem-time").addClass("full");
+                if($(this).find(".ContentItem-time").text().indexOf("发布于")==-1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") > -1) //只有"编辑于"时增加具体发布时间data-tooltip
+                {
+                    let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
+                    var oldtext =$(this).find(".ContentItem-time").find("span").text();
+                    $(this).find(".ContentItem-time").find("span").text(data_tooltip+"，"+oldtext);
+                    $(this).find(".ContentItem-time").addClass("full");
+                }
+                else if($(this).find(".ContentItem-time").text().indexOf("发布于") > -1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") == -1) //只有"发布于"时替换为具体发布时间data-tooltip
+                {
+                    let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
+                    $(this).find(".ContentItem-time").find("span").text(data_tooltip);
+                    $(this).find(".ContentItem-time").addClass("full");
+                }
             }
 
             //发布时间置顶
@@ -231,6 +253,7 @@ function topTime_people()
     })
 }
 
+// 默认高清原图
 function originalPic(){
     $("img").each(function(){
         if($(this).attr("data-original")!=undefined && !$(this).hasClass("comment_sticker"))
@@ -301,6 +324,7 @@ function EventXMLHttpRequest() {
 
 
 (function() {
+    // 默认折叠邀请
     let timer=setInterval(function(){
         if($(".QuestionInvitation-content").text().indexOf("更多推荐结果") > -1)
         {
