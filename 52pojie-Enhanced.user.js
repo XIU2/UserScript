@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.1.6
+// @version      1.1.7
 // @author       X.I.U
-// @description  自动签到、自动无缝翻页
+// @description  自动签到、自动无缝翻页（全站）
 // @match        *://www.52pojie.cn/*
 // @icon         https://www.52pojie.cn/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -53,12 +53,12 @@
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
 
-    // 自动翻页规则
+    // 自动翻页规则，scrollDelta 数值越大，滚动条触发点越高
     let DBSite = {
         forum: {
             SiteTypeID: 1,
             pager: {
-                scrollDelta: 666
+                scrollDelta: 766
             }
         },
         thread: {
@@ -68,7 +68,7 @@
                 pageElement: 'css;div#postlist > div[id^="post_"]',
                 HT_insert: ['css;div#postlist', 2],
                 replaceE: '//div[@class="pg"] | //div[@class="pgbtn"]',
-                scrollDelta: 666
+                scrollDelta: 766
             }
         },
         guide: {
@@ -78,7 +78,7 @@
                 pageElement: 'css;div#threadlist div.bm_c table > tbody[id^="normalthread_"]',
                 HT_insert: ['css;div#threadlist div.bm_c table', 2],
                 replaceE: 'css;div.pg',
-                scrollDelta: 666
+                scrollDelta: 766
             }
         },
         collection: {
@@ -90,6 +90,16 @@
                 replaceE: 'css;div.pg',
                 scrollDelta: 899
             }
+        },
+        search: {
+            SiteTypeID: 5,
+            pager: {
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;div#threadlist > ul',
+                HT_insert: ['css;div#threadlist', 2],
+                replaceE: 'css;div.pg',
+                scrollDelta: 766
+            }
         }
     };
 
@@ -98,7 +108,8 @@
         FORUM: DBSite.forum.SiteTypeID,        // 各板块帖子列表
         THREAD: DBSite.thread.SiteTypeID,      // 帖子内
         GUIDE: DBSite.guide.SiteTypeID,        // 导读帖子列表
-        COLLECTION: DBSite.collection.SiteTypeID    // 淘贴列表
+        COLLECTION: DBSite.collection.SiteTypeID,    // 淘贴列表
+        SEARCH: DBSite.search.SiteTypeID  // 搜索结果列表
     };
 
     // URL 匹配正则表达式
@@ -122,6 +133,9 @@
     }else if (patt_collection.test(location.search)){
         // 淘贴列表
         curSite = DBSite.collection;
+    }else if(location.pathname === '/search.php'){
+        // 搜索结果列表
+        curSite = DBSite.search;
     }
     curSite.pageUrl = ""; // 下一页URL
 

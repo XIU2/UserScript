@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.0.2
+// @version      1.0.3
 // @author       X.I.U
 // @description  自动无缝翻页
 // @match        *://www.hostloc.com/*
@@ -75,6 +75,15 @@
                 HT_insert: ['css;div#threadlist div.bm_c table', 2],
                 replaceE: 'css;div.pg',
             }
+        },
+        search: {
+            SiteTypeID: 4,
+            pager: {
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;div#threadlist > ul',
+                HT_insert: ['css;div#threadlist', 2],
+                replaceE: 'css;div.pg'
+            }
         }
     };
 
@@ -82,7 +91,8 @@
     let SiteType = {
         FORUM: DBSite.forum.SiteTypeID,   // 各板块帖子列表
         THREAD: DBSite.thread.SiteTypeID, // 帖子内
-        GUIDE: DBSite.guide.SiteTypeID    // 导读帖子列表
+        GUIDE: DBSite.guide.SiteTypeID,    // 导读帖子列表
+        SEARCH: DBSite.search.SiteTypeID  // 搜索结果列表
     };
 
     // URL 匹配正则表达式
@@ -104,10 +114,12 @@
     }else if (patt_guide.test(location.search)){
         // 导读帖子列表
         curSite = DBSite.guide;
+    }else if(location.pathname === '/search.php'){
+        // 搜索结果列表
+        curSite = DBSite.search;
     }
+
     curSite.pageUrl = ""; // 下一页URL
-
-
     pageLoading();        // 自动翻页
 
 
@@ -117,7 +129,7 @@
             windowScroll(function (direction, e) {
                 if (direction === "down") { // 下滑才准备翻页
                     var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-                    let scrollDelta = 666;
+                    let scrollDelta = 766;
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
                         if (curSite.SiteTypeID === SiteType.FORUM) { // 如果是各版块帖子列表则直接点下一页就行了
                             var autopbn = document.querySelector('#autopbn');

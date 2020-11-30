@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         智友邦论坛增强
-// @version      1.1.2
+// @version      1.1.3
 // @author       X.I.U
 // @description  自动签到、自动回复、自动无缝翻页、清理置顶帖子、清理帖子标题〖XXX〗【XXX】文字
 // @icon         http://bbs.zhiyoo.net/favicon.ico
 // @match        *://bbs.zhiyoo.net/*
+// @match        *://www.zhiyoo.net/search.php*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
@@ -98,17 +99,30 @@
                 nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;table#threadlisttableid > tbody[id^="normalthread_"]',
                 HT_insert: ['css;table#threadlisttableid', 2],
-                replaceE: 'css;div.pg',
+                replaceE: 'css;div.pg'
+            }
+        },
+        search: {
+            SiteTypeID: 2,
+            pager: {
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;div#threadlist > ul',
+                HT_insert: ['css;div#threadlist', 2],
+                replaceE: 'css;div.pg'
             }
         }
     };
 
     // 用于脚本内部判断当前 URL 类型
     let SiteType = {
-        FORUMDISPLAY: DBSite.forumdisplay.SiteTypeID  // 各板块帖子列表
+        FORUMDISPLAY: DBSite.forumdisplay.SiteTypeID,  // 各板块帖子列表
+        SEARCH: DBSite.search.SiteTypeID  // 搜索结果列表
     };
 
+    curSite.pageUrl = "";  // 下一页URL
+
     var patt_thread = /\/thread-\d+-\d+\-\d+.html/, // 匹配 /thread-XXX-X-X.html 帖子正则表达式
+        patt_search = /\/thread-\d+-\d+\-\d+.html/, // 匹配搜索结果列表正则表达式
         patt_posttitle = /^〖.+〗(：)?|^【.+】(：)?/; // 匹配帖子标题中的〖XXX〗【XXX】正则表达式
 
     if (location.pathname === '/plugin.php'){
@@ -121,8 +135,7 @@
                 attachmentBack();        // 立即返回帖子
                 break;
         }
-    }
-    else if(location.pathname === '/forum.php'){
+    }else if(location.pathname === '/forum.php'){
         switch(getQueryVariable("mod"))
         {
             case 'viewthread':         // 浏览帖子内容
@@ -130,15 +143,16 @@
                 autoReply();           // 自动回复（有隐藏内容才会回复），回复过就定位到底部（隐藏内容区域）
                 break;
             case 'forumdisplay':       // 浏览帖子列表
-                curSite = DBSite.forumdisplay;
-                curSite.pageUrl = "";  // 下一页URL
+                curSite = DBSite.forumdisplay;  // 帖子列表页
                 cleanTop();            // 清理置顶帖子
                 cleanPostTitle();      // 清理帖子列表中帖子标题开头的〖XXX〗【XXX】文字
-                pageLoading();         // 自动翻页
+                pageLoading();         // 自动无缝翻页
                 break;
         }
-    }
-    else if (patt_thread.test(location.pathname)){ // 对于 /thread-XXX-X-X.html 这种帖子页面也和上面一样
+    }else if(location.pathname === '/search.php'){
+        curSite = DBSite.search;     // 搜索结果列表页
+        pageLoading();               // 自动无缝翻页
+    }else if (patt_thread.test(location.pathname)){ // 对于 /thread-XXX-X-X.html 这种帖子页面也和上面一样
         showHide();
         autoReply();
     }
