@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.1.5
+// @version      1.1.6
 // @author       X.I.U
 // @description  一键收起回答、置顶显示时间、区分问题文章、默认高清原图、默认折叠邀请
 // @match        *://www.zhihu.com/*
@@ -217,7 +217,7 @@ function topTime_search()
 // 置顶显示时间 - 用户主页
 function topTime_people()
 {
-    $(".ContentItem.AnswerItem").each(function(){
+    $(".ContentItem.AnswerItem, .ContentItem.ArticleItem").each(function(){
         if( !($(this).find(".ContentItem-time").hasClass("full")) && $(this).find(".ContentItem-time").length>0 && $(this).find(".ContentItem-time").find("span").text() != null)
         {
             // 完整显示时间
