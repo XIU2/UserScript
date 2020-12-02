@@ -16,7 +16,7 @@
 | 脚本名称 | 脚本功能 | 安装 | 备用 |
 | :---- | :---- | :----: | :----: |
 | **知乎 美化** | 宽屏显示、隐藏文章开头大图、文章编辑页宽度统一... | **[「安装」](https://greasyfork.org/scripts/412212)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Beautification.user.js)** |
-| **知乎 增强** | 一键收起回答、置顶显示时间、区分问题文章... | **[「安装」](https://greasyfork.org/scripts/412205)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Enhanced.user.js)** |
+| **知乎 增强** | 移除登录弹窗、一键收起回答、置顶显示时间、区分问题... | **[「安装」](https://greasyfork.org/scripts/412205)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Enhanced.user.js)** |
 |  **Github 增强** | 高速下载 Clone、Release、Raw、Code(ZIP) 文件... | **[「安装」](https://greasyfork.org/scripts/412245)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GithubEnhanced-High-Speed-Download.user.js)** |
 | **3DM论坛 美化** | 精简多余内容 | **[「安装」](https://greasyfork.org/scripts/413593)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Beautification.user.js)** |
 | **3DM论坛 增强** | 自动回复、自动无缝翻页、清理置顶帖子 | **[「安装」](https://greasyfork.org/scripts/412890)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Enhanced.user.js)** |
