@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.1.7
+// @version      1.1.8
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、置顶显示时间、区分问题文章、默认高清原图、默认折叠邀请
 // @match        *://www.zhihu.com/*
@@ -294,7 +294,7 @@ function addTypeTips() {
             patt_tip = /zhihu_e_tips/
         var postList = document.querySelectorAll('h2.ContentItem-title a');
         postNum = document.querySelectorAll('small.zhihu_e_tips');
-        console.log(`${postList.length} ${postNum.length}`)
+        //console.log(`${postList.length} ${postNum.length}`)
         if (postList.length > postNum.length){
             for(var num = postNum.length;num<postList.length;num++){
                 if (!patt_tip.test(postList[num].innerHTML)){             // 判断是否已添加
@@ -312,6 +312,17 @@ function addTypeTips() {
     }
 }
 
+// 知乎免登录，来自：https://greasyfork.org/zh-CN/scripts/417126
+function removeLogin() {
+    let removeLoginModal = e => {
+        if (e.target.getElementsByClassName('Modal-wrapper').length > 0) {
+            e.target.getElementsByClassName('Modal-wrapper')[0].remove();
+            setTimeout(() => {document.documentElement.style.overflowY = 'scroll';}, 0);
+        }
+    }
+    document.addEventListener('DOMNodeInserted', removeLoginModal);
+}
+
 
 // 监听 XMLHttpRequest 事件
 function EventXMLHttpRequest() {
@@ -323,16 +334,12 @@ function EventXMLHttpRequest() {
     window.XMLHttpRequest.prototype.send = sendReplacement;
 }
 
-
 (function() {
-    // 知乎免登录，来自：https://greasyfork.org/zh-CN/scripts/417126
-    let removeLoginModal = e => {
-        if (e.target.getElementsByClassName('Modal-wrapper').length > 0) {
-            e.target.getElementsByClassName('Modal-wrapper')[0].remove();
-            setTimeout(() => {document.documentElement.style.overflowY = 'scroll';}, 0);
-        }
+    if (document.querySelector('button.AppHeader-login')){ // 未登录时才会监听并移除登录弹窗
+        removeLogin();
+        document.querySelector('button.AppHeader-login').onclick=function(){location.href='https://www.zhihu.com/signin';} // [登录]按钮跳转至登录页面
+        document.querySelector('.AppHeader-profile button.Button--primary').onclick=function(){location.href='https://www.zhihu.com/signin';} // [加入知乎]按钮跳转至注册页面（实际上是同一个页面）
     }
-    document.addEventListener('DOMNodeInserted', removeLoginModal);
 
 
     // 默认折叠邀请
