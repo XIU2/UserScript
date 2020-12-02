@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.1.6
+// @version      1.1.7
 // @author       X.I.U
-// @description  一键收起回答、置顶显示时间、区分问题文章、默认高清原图、默认折叠邀请
+// @description  移除登录弹窗、一键收起回答、置顶显示时间、区分问题文章、默认高清原图、默认折叠邀请
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/static/favicon.ico
@@ -312,6 +312,7 @@ function addTypeTips() {
     }
 }
 
+
 // 监听 XMLHttpRequest 事件
 function EventXMLHttpRequest() {
     var _send = window.XMLHttpRequest.prototype.send
@@ -324,6 +325,16 @@ function EventXMLHttpRequest() {
 
 
 (function() {
+    // 知乎免登录，来自：https://greasyfork.org/zh-CN/scripts/417126
+    let removeLoginModal = e => {
+        if (e.target.getElementsByClassName('Modal-wrapper').length > 0) {
+            e.target.getElementsByClassName('Modal-wrapper')[0].remove();
+            setTimeout(() => {document.documentElement.style.overflowY = 'scroll';}, 0);
+        }
+    }
+    document.addEventListener('DOMNodeInserted', removeLoginModal);
+
+
     // 默认折叠邀请
     let timer=setInterval(function(){
         if($(".QuestionInvitation-content").text().indexOf("更多推荐结果") > -1)
