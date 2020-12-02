@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         智友邦论坛增强
-// @version      1.1.3
+// @version      1.1.4
 // @author       X.I.U
-// @description  自动签到、自动回复、自动无缝翻页、清理置顶帖子、清理帖子标题〖XXX〗【XXX】文字
+// @description  自动签到、自动回复、自动无缝翻页、清理置顶帖子、简化兑换附件/附件下载、清理帖子标题〖XXX〗【XXX】文字
 // @icon         http://bbs.zhiyoo.net/favicon.ico
 // @match        *://bbs.zhiyoo.net/*
 // @match        *://www.zhiyoo.net/search.php*
@@ -119,20 +119,25 @@
         SEARCH: DBSite.search.SiteTypeID  // 搜索结果列表
     };
 
+    var attachmentHrefTime = 0;
     curSite.pageUrl = "";  // 下一页URL
 
     var patt_thread = /\/thread-\d+-\d+\-\d+.html/, // 匹配 /thread-XXX-X-X.html 帖子正则表达式
         patt_search = /\/thread-\d+-\d+\-\d+.html/, // 匹配搜索结果列表正则表达式
-        patt_posttitle = /^〖.+〗(：)?|^【.+】(：)?/; // 匹配帖子标题中的〖XXX〗【XXX】正则表达式
+        patt_posttitle = /^〖.+〗(：)?|^【.+】(：)?/, // 匹配帖子标题中的〖XXX〗【XXX】正则表达式
+        patt_attachment_href = /(?<=\\').+(?=\\')/
 
     if (location.pathname === '/plugin.php'){
         switch(getQueryVariable("id"))
         {
-            case 'dsu_paulsign:sign':    // 被重定向到签到页面
-                qiandao();               // 自动签到
+            case 'dsu_paulsign:sign':      // 被重定向到签到页面
+                qiandao();                 // 自动签到
                 break;
-            case 'piaobo_attachment':    // 兑换附件后的提示页面
-                attachmentBack();        // 立即返回帖子
+            case 'piaobo_attachment':      // 兑换附件后的提示页面
+                attachmentBack();          // 立即返回帖子
+                break;
+            case 'threed_attach:downld':   // 附件下载页面
+                goPan();                   // 跳转至网盘页
                 break;
         }
     }else if(location.pathname === '/forum.php'){
@@ -141,17 +146,18 @@
             case 'viewthread':         // 浏览帖子内容
                 showHide();            // 先看看是否有隐藏内容，如果已显示则定位到隐藏内容区域，如果没有隐藏内容，则啥都不干
                 autoReply();           // 自动回复（有隐藏内容才会回复），回复过就定位到底部（隐藏内容区域）
+                var attachmentHref_Interval = setInterval(attachmentHref,100); // 兑换附件按钮改为直链（不再弹出确认提示框）
                 break;
             case 'forumdisplay':       // 浏览帖子列表
-                curSite = DBSite.forumdisplay;  // 帖子列表页
+                curSite = DBSite.forumdisplay;  // 帖子列表页（自动翻页）
                 cleanTop();            // 清理置顶帖子
                 cleanPostTitle();      // 清理帖子列表中帖子标题开头的〖XXX〗【XXX】文字
                 pageLoading();         // 自动无缝翻页
                 break;
         }
     }else if(location.pathname === '/search.php'){
-        curSite = DBSite.search;     // 搜索结果列表页
-        pageLoading();               // 自动无缝翻页
+        curSite = DBSite.search;      // 搜索结果列表页（自动翻页）
+        pageLoading();                // 自动无缝翻页
     }else if (patt_thread.test(location.pathname)){ // 对于 /thread-XXX-X-X.html 这种帖子页面也和上面一样
         showHide();
         autoReply();
@@ -250,6 +256,30 @@
         var attachmentback = document.querySelector('#messagetext p.alert_btnleft a');
         if (attachmentback){
             attachmentback.click();
+        }
+    }
+
+
+    // 附件下载页直接跳转至网盘
+    function goPan() {
+        var gopan = document.querySelector('.threed_panbox .panframe .pan_left p a');
+        if (gopan){
+            location.href=gopan.href;
+        }
+    }
+
+
+    // 兑换附件按钮改为直链（不再弹出确认提示框）
+    function attachmentHref() {
+        attachmentHrefTime += 1; // 计算该函数执行次数
+        var attachmenthref = document.querySelector('.tab_button .button a');
+        if (attachmenthref && attachmenthref.href == "javascript:;"){
+            var attachmenthref_href = attachmenthref.onclick.toString();
+            attachmenthref.href = attachmenthref_href.match(patt_attachment_href)[0];
+            attachmenthref.onclick = null;
+        }
+        if (attachmentHrefTime == 50 || document.getElementsByClassName("showhide").length > 0){ // 当该函数执行超过50次（5秒），或没有隐藏内容时停止定时执行
+            clearInterval(attachmentHref_Interval)
         }
     }
 
