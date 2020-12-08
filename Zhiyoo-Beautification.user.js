@@ -2,7 +2,7 @@
 // @name         智友邦论坛美化
 // @version      1.0.1
 // @author       X.I.U
-// @description  精简多余内容、宽屏显示 
+// @description  精简多余内容、宽屏显示
 // @icon         http://bbs.zhiyoo.net/favicon.ico
 // @match        *://bbs.zhiyoo.net/*
 // @license      GPL-3.0 License

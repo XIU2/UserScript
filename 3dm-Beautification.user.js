@@ -2,7 +2,7 @@
 // @name         3DM论坛美化
 // @version      1.0.0
 // @author       X.I.U
-// @description  精简多余内容 
+// @description  精简多余内容
 // @icon         https://bbs.3dmgame.com/favicon.ico
 // @match        *://bbs.3dmgame.com/*
 // @license      GPL-3.0 License
