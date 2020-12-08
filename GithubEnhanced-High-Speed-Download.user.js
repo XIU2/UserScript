@@ -2,7 +2,7 @@
 // @name         Github 增强 - 高速下载
 // @version      1.2.6
 // @author       X.I.U
-// @description  高速下载 Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
+// @description  高速下载 Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁) 
 // @match        *://github.com/*
 // @icon         https://github.githubassets.com/favicon.ico
 // @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
