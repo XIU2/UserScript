@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.1.8
+// @version      1.1.9
 // @author       X.I.U
-// @description  移除登录弹窗、一键收起回答、置顶显示时间、区分问题文章、默认高清原图、默认折叠邀请
+// @description  移除登录弹窗、一键收起回答、置顶显示时间、区分问题文章、默认高清原图、默认站外直链、默认折叠邀请
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/static/favicon.ico
@@ -253,6 +253,68 @@ function topTime_people()
     })
 }
 
+// 默认站外直链，来自：https://greasyfork.org/scripts/402808
+function directLink () {
+    var equal, colon, external_href, protocol, path, new_href;
+    //文字链接
+    $("a[class*=\'external\']").each(function () {
+        if ($(this).find("span").length > 0) {
+            new_href = $(this).text();
+            $(this).attr("href", new_href);
+        }
+        else if ($(this).attr("href").indexOf("link.zhihu.com/?target=") > -1) {
+            external_href = $(this).attr("href");
+            new_href = external_href.substring(external_href = $(this).attr("href").indexOf("link.zhihu.com/?target=") + "link.zhihu.com/?target=".length);
+            $(this).attr("href", decodeURIComponent(new_href));
+        }
+        else {
+            external_href = $(this).attr("href");
+            if (external_href.lastIndexOf("https%3A"))
+                new_href = $(this).attr("href").substring($(this).attr("href").lastIndexOf("https%3A"));
+            else if (external_href.lastIndexOf("http%3A%2F%2F"))
+                new_href = $(this).attr("href").substring($(this).attr("href").lastIndexOf("http%3A"));
+            $(this).attr("href", decodeURIComponent(new_href));
+        }
+    });
+
+    //卡片链接
+    $("a[class*=\'LinkCard\']:not([class*=\'MCNLinkCard\']):not([class*=\'ZVideoLinkCard\'])").each(function () {
+        if ($(this).find("LinkCard-title").length > 0 && $(this).find("LinkCard-title").indexOf("http") > -1) {
+            new_href = $(this).find("LinkCard-title").text();
+            $(this).attr("href", new_href);
+        }
+        else if ($(this).attr("href").indexOf("link.zhihu.com/?target=") > -1) {
+            external_href = $(this).attr("href");
+            new_href = external_href.substring(external_href = $(this).attr("href").indexOf("link.zhihu.com/?target=") + "link.zhihu.com/?target=".length);
+            $(this).attr("href", decodeURIComponent(new_href));
+        }
+        else {
+            external_href = $(this).attr("href");
+            if (external_href.lastIndexOf("https%3A"))
+                new_href = $(this).attr("href").substring($(this).attr("href").lastIndexOf("https%3A"));
+            else if (external_href.lastIndexOf("http%3A%2F%2F"))
+                new_href = $(this).attr("href").substring($(this).attr("href").lastIndexOf("http%3A"));
+            $(this).attr("href", decodeURIComponent(new_href));
+        }
+    });
+
+    //旧版视频卡片链接
+    $("a.VideoCard-link").each(function () {
+        if ($(this).attr("href").indexOf("link.zhihu.com/?target=") > -1) {
+            external_href = $(this).attr("href");
+            equal = external_href.lastIndexOf("http");
+            colon = external_href.lastIndexOf("%3A");
+            protocol = external_href.substring(equal, colon);
+            path = external_href.substring(colon + 5, external_href.length);
+            new_href = protocol + "://" + path;
+            $(this).attr("href", decodeURIComponent(new_href));
+        }
+    });
+
+    //隐藏首页广告卡片
+    $(".TopstoryItem--advertCard").hide();
+}
+
 // 默认高清原图
 function originalPic(){
     $("img").each(function(){
@@ -368,7 +430,8 @@ function EventXMLHttpRequest() {
         }
     })
 
-    setInterval(originalPic,100)
+    setInterval(originalPic,100); // 默认高清原图
+    setInterval(directLink, 100); // 默认站外直链
 
     //每个页面对应的功能函数
     if(window.location.href.indexOf("question") > -1){                         // 回答页 //
