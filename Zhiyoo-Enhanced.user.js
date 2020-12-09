@@ -2,7 +2,7 @@
 // @name         智友邦论坛增强
 // @version      1.1.4
 // @author       X.I.U
-// @description  自动签到、自动回复、自动无缝翻页、清理置顶帖子、简化兑换附件/附件下载、清理帖子标题〖XXX〗【XXX】文字
+// @description  自动签到、自动回复、自动无缝翻页、清理置顶帖子、简化附件兑换/下载、清理帖子标题〖XXX〗【XXX】文字
 // @icon         http://bbs.zhiyoo.net/favicon.ico
 // @match        *://bbs.zhiyoo.net/*
 // @match        *://www.zhiyoo.net/search.php*
