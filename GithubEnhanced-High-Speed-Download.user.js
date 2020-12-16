@@ -1,6 +1,6 @@
- // ==UserScript==
+// ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.2.6
+// @version      1.2.7
 // @author       X.I.U
 // @description  高速下载 Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁) 
 // @match        *://github.com/*
