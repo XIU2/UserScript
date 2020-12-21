@@ -67,7 +67,7 @@ function menu_switch(menu_status, Name, Tips) {
     registerMenuCommand(); // 重新注册脚本菜单
 };
 
-// 置顶显示时间 - 首页
+// 置顶显示时间 - 首页，来自：https://greasyfork.org/scripts/402808
 function topTime_index()
 {
     $(".TopstoryItem").each(function(){
@@ -107,7 +107,7 @@ function topTime_index()
     })
 }
 
-// 置顶显示时间 - 回答页
+// 置顶显示时间 - 回答页，来自：https://greasyfork.org/scripts/402808
 function topTime_question()
 {
     //回答的发布时间
@@ -149,7 +149,7 @@ function topTime_question()
     $(".Pc-card.Card").attr("style","display:none")
 }
 
-// 置顶显示时间 - 专栏/文章
+// 置顶显示时间 - 专栏/文章，来自：https://greasyfork.org/scripts/402808
 function topTime_zhuanlan()
 {
     //隐藏推荐文章
@@ -175,7 +175,7 @@ function topTime_zhuanlan()
     }
 }
 
-// 置顶显示时间 - 搜索结果页
+// 置顶显示时间 - 搜索结果页，来自：https://greasyfork.org/scripts/402808
 function topTime_search()
 {
     $(".ContentItem.AnswerItem, .ContentItem.ArticleItem").each(function(){
@@ -214,7 +214,7 @@ function topTime_search()
     })
 }
 
-// 置顶显示时间 - 用户主页
+// 置顶显示时间 - 用户主页，来自：https://greasyfork.org/scripts/402808
 function topTime_people()
 {
     $(".ContentItem.AnswerItem, .ContentItem.ArticleItem").each(function(){
@@ -315,7 +315,7 @@ function directLink () {
     $(".TopstoryItem--advertCard").hide();
 }
 
-// 默认高清原图
+// 默认高清原图，来自：https://greasyfork.org/scripts/402808
 function originalPic(){
     $("img").each(function(){
         if($(this).attr("data-original")!=undefined && !$(this).hasClass("comment_sticker"))
@@ -392,11 +392,21 @@ function removeLogin() {
 function EventXMLHttpRequest() {
     var _send = window.XMLHttpRequest.prototype.send
     function sendReplacement(data) {
+        console.log(`111111`);
         addTypeTips();
         return _send.apply(this, arguments);
     }
     window.XMLHttpRequest.prototype.send = sendReplacement;
 }
+
+(function (open) {
+    XMLHttpRequest.prototype.open = function () {
+        this.addEventListener("readystatechange", function () {
+                console.log(this.responseURL);
+        }, false);
+        open.apply(this, arguments);
+    };
+})(XMLHttpRequest.prototype.open);
 
 (function() {
     if (document.querySelector('button.AppHeader-login')){ // 未登录时才会监听并移除登录弹窗
@@ -406,7 +416,7 @@ function EventXMLHttpRequest() {
     }
 
 
-    // 默认折叠邀请
+    // 默认折叠邀请，来自：https://greasyfork.org/scripts/402808
     let timer=setInterval(function(){
         if($(".QuestionInvitation-content").text().indexOf("更多推荐结果") > -1)
         {
