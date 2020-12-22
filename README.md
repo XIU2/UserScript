@@ -29,7 +29,7 @@
 | **Steam 创意工坊大图 修复** | 修复 Steam 创意工坊预览大图无法显示的问题 | **[「安装」](https://greasyfork.org/scripts/397666)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/SteamWorkshopImageRepair.user.js)** |
 
 > 脚本名称末尾 **`*`** 代表该脚本为**网友主动提出需求**而写的。如果你也有需求，可以[告诉我](https://github.com/XIU2/UserScript/issues/new/choose)！  
-> 所有脚本均在 _**Chrome、Firefox(国际版)、Edge(新版) + Tampermonkey**_ 环境下测试通过！
+> 所有脚本均在 **Chrome、Firefox、Edge 浏览器 + Tampermonkey 扩展** 环境下测试通过！
 
 ****
 
