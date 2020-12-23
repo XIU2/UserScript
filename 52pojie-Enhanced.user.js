@@ -23,6 +23,28 @@
     if (menu_thread_pageLoading == null){menu_thread_pageLoading = false; GM_setValue('xiu2_menu_thread_pageLoading', menu_thread_pageLoading)};
     registerMenuCommand();
 
+    //屏蔽悬赏贴
+    function delateReward(){
+        // delateSwitch: 是否开启新帖区屏蔽悬赏帖，true或者false
+        var delateSwitch = true;
+        if(location.href === "https://www.52pojie.cn/forum.php?mod=guide&view=newthread" && delateSwitch){
+            var table = document.querySelector("#threadlist > div.bm_c > table");
+            var tbodys = table.getElementsByTagName('tbody');
+            var arrs = []
+            for (let i=0; i<tbodys.length; i++){
+                var by_td = tbodys[i].childNodes[1].children[2].children[0].attributes[0].value;
+                if(by_td=="forum-8-1.html"){
+                    arrs.push(tbodys[i]);
+                }
+            }
+            for (let i=0; i<arrs.length; i++){
+                arrs[i].parentNode.removeChild(arrs[i]);
+            }
+            console.log("悬赏贴屏蔽成功");
+        }
+    }
+    delateReward();
+
     // 注册脚本菜单
     function registerMenuCommand() {
         var menu_thread_pageLoading_;
@@ -305,6 +327,8 @@
                                 } catch (e) {
                                     console.log(e);
                                 }
+                                //删除悬赏贴
+                                delateReward();
                             }
                         } catch (e) {
                             console.log(e);
