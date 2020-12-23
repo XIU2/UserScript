@@ -2,7 +2,7 @@
 // @name         知乎增强
 // @version      1.2.0
 // @author       X.I.U
-// @description  移除登录弹窗、一键收起回答、置顶显示时间、区分问题文章、默认高清原图、默认站外直链、默认折叠邀请
+// @description  移除登录弹窗、一键收起回答、置顶显示时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/static/favicon.ico
