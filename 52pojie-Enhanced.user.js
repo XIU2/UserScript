@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.1.7
+// @version      1.1.8
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页（全站）
 // @match        *://www.52pojie.cn/*
@@ -18,45 +18,29 @@
 // ==/UserScript==
 
 (function() {
-    var menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading');
-    var menu_thread_pageLoading_ID, menu_feedBack_ID;
+    var menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading'),
+        menu_delateReward = GM_getValue('xiu2_menu_delateReward');
+    var menu_feedBack_ID, menu_thread_pageLoading_ID, menu_delateReward_ID;
     if (menu_thread_pageLoading == null){menu_thread_pageLoading = false; GM_setValue('xiu2_menu_thread_pageLoading', menu_thread_pageLoading)};
+    if (menu_delateReward == null){menu_delateReward = false; GM_setValue('xiu2_menu_delateReward', menu_delateReward)};
     registerMenuCommand();
-
-    //屏蔽悬赏帖
-    function delateReward(){
-        // delateSwitch: 是否开启新帖区屏蔽悬赏帖，true或者false
-        var delateSwitch = true;
-        if(location.href === "https://www.52pojie.cn/forum.php?mod=guide&view=newthread" && delateSwitch){
-            var table = document.querySelector("#threadlist > div.bm_c > table");
-            var tbodys = table.getElementsByTagName('tbody');
-            var arrs = []
-            for (let i=0; i<tbodys.length; i++){
-                var by_td = tbodys[i].childNodes[1].children[2].children[0].attributes[0].value;
-                if(by_td=="forum-8-1.html"){
-                    arrs.push(tbodys[i]);
-                }
-            }
-            for (let i=0; i<arrs.length; i++){
-                arrs[i].parentNode.removeChild(arrs[i]);
-            }
-            console.log("悬赏帖屏蔽成功");
-        }
-    }
-    delateReward();
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        var menu_thread_pageLoading_;
+        var menu_thread_pageLoading_, menu_delateReward_;
         if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
             GM_unregisterMenuCommand(menu_thread_pageLoading_ID);
+            GM_unregisterMenuCommand(menu_delateReward_ID);
             GM_unregisterMenuCommand(menu_feedBack_ID);
             menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading');
+            menu_delateReward = GM_getValue('xiu2_menu_delateReward');
         }
 
         if (menu_thread_pageLoading){menu_thread_pageLoading_ = "√";}else{menu_thread_pageLoading_ = "×";}
+        if (menu_delateReward){menu_delateReward_ = "√";}else{menu_delateReward_ = "×";}
 
         menu_thread_pageLoading_ID = GM_registerMenuCommand(`[ ${menu_thread_pageLoading_} ] 帖子内自动翻页`, function(){menu_switch(menu_thread_pageLoading,'xiu2_menu_thread_pageLoading','帖子内自动翻页')});
+        menu_delateReward_ID = GM_registerMenuCommand(`[ ${menu_delateReward_} ] 屏蔽悬赏贴（导读 - 最新发表）`, function(){menu_switch(menu_delateReward,'xiu2_menu_delateReward','帖子内自动翻页')});
         menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
@@ -72,6 +56,8 @@
         registerMenuCommand(); // 重新注册脚本菜单
     };
 
+    var ShowPager;
+    showPager();
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
 
@@ -140,6 +126,7 @@
         patt_forum = /\/forum-\d+-\d+\.html/,
         patt_forum_2 = /mod\=forumdisplay/,
         patt_guide = /mod\=guide\&view\=(hot|digest|new|newthread|my|tech|help)/,
+        patt_guide_newthread = /mod\=guide\&view\=newthread/,
         patt_collection = /mod\=collection/
 
     // URL 判断
@@ -152,17 +139,18 @@
     }else if (patt_guide.test(location.search)){
         // 导读帖子列表
         curSite = DBSite.guide;
+        delateReward(); // 屏蔽悬赏贴（导读-最新发表）
     }else if (patt_collection.test(location.search)){
         // 淘贴列表
         curSite = DBSite.collection;
     }else if(location.pathname === '/search.php'){
         // 搜索结果列表
         curSite = DBSite.search;
+    }else if(location.href === "https://www.52pojie.cn/home.php?mod=task&do=draw&id=2"){
+        qianDaoBack();        // 先看看是不是签到跳转页面，如果是则返回
     }
     curSite.pageUrl = ""; // 下一页URL
 
-
-    qianDaoBack();        // 先看看是不是签到跳转页面，如果是则返回
     qianDao();            // 看看有没有签到
     pageLoading();        // 自动翻页
 
@@ -171,6 +159,7 @@
     function pageLoading() {
         if (curSite.SiteTypeID > 0){
             windowScroll(function (direction, e) {
+                //console.log('1111111')
                 if (direction === "down") { // 下滑才准备翻页
                     var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
                     let scrollDelta = curSite.pager.scrollDelta;
@@ -204,11 +193,9 @@
 
     // 签到后立即返回
     function qianDaoBack() {
-        if(location.href === "https://www.52pojie.cn/home.php?mod=task&do=draw&id=2"){
-            var qiandaoback = document.querySelector('#messagetext p.alert_btnleft a');
-            if (qiandaoback){
-                setTimeout(function(){qiandaoback.click()}, 500);
-            }
+        var qiandaoback = document.querySelector('#messagetext p.alert_btnleft a');
+        if (qiandaoback){
+            setTimeout(function(){qiandaoback.click()}, 500);
         }
     }
 
@@ -226,6 +213,29 @@
                 beforeScrollTop = afterScrollTop;
             }, false);
         }, 1000)
+    }
+
+
+    //屏蔽悬赏贴（导读-最新发表）
+    function delateReward(){
+        if(patt_guide_newthread.test(location.search) && menu_delateReward){
+            var table = document.querySelector("#threadlist > div.bm_c > table"),
+                tbodys = table.getElementsByTagName('tbody'),
+                arrs = [];
+            for (let i=0; i<tbodys.length; i++){
+                var by_td = tbodys[i].childNodes[1].children[2].children[0].attributes[0].value;
+                if(by_td=="forum-8-1.html"){
+                    arrs.push(tbodys[i]);
+                }
+            }
+            for (let i=0; i<arrs.length; i++){
+                arrs[i].parentNode.removeChild(arrs[i]);
+            }
+        }
+        if(document.body.scrollHeight < window.innerHeight) {
+            // 如果屏蔽悬赏贴后，剩余帖子列表太少会没有滚动条，无法滚动页面触发自动翻页事件，需要手动触发
+            ShowPager.loadMorePage();
+        }
     }
 
 
@@ -251,93 +261,95 @@
         window.XMLHttpRequest.prototype.send = sendReplacement;
     }
 
-
-    var ShowPager = { // 修改自 https://greasyfork.org/scripts/14178
-        getFullHref: function (e) {
-            if(e == null) return '';
-            "string" != typeof e && (e = e.getAttribute("href"));
-            var t = this.getFullHref.a;
-            return t || (this.getFullHref.a = t = document.createElement("a")), t.href = e, t.href;
-        },
-        createDocumentByString: function (e) {
-            if (e) {
-                if ("HTML" !== document.documentElement.nodeName) return (new DOMParser).parseFromString(e, "application/xhtml+xml");
-                var t;
-                try {
-                    t = (new DOMParser).parseFromString(e, "text/html");
-                } catch (e) {
-                }
-                if (t) return t;
-                if (document.implementation.createHTMLDocument) t = document.implementation.createHTMLDocument("ADocument"); else try {
-                    (t = document.cloneNode(!1)).appendChild(t.importNode(document.documentElement, !1)),
-                        t.documentElement.appendChild(t.createElement("head")), t.documentElement.appendChild(t.createElement("body"));
-                } catch (e) {
-                }
-                if (t) {
-                    var r = document.createRange();
-                    r.selectNodeContents(document.body);
-                    var n = r.createContextualFragment(e);
-                    t.body.appendChild(n);
-                    for (var a, o = {
-                        TITLE: !0,
-                        META: !0,
-                        LINK: !0,
-                        STYLE: !0,
-                        BASE: !0
-                    }, i = t.body, s = i.childNodes, c = s.length - 1; c >= 0; c--) o[(a = s[c]).nodeName] && i.removeChild(a);
-                    return t;
-                }
-            } else console.error("没有找到要转成DOM的字符串");
-        },
-        loadMorePage: function () {
-            if (curSite.pager) {
-                let curPageEle = getElementByXpath(curSite.pager.nextLink);
-                var url = this.getFullHref(curPageEle);
-                //console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
-                if(url === '') return;
-                if(curSite.pageUrl === url) return;// 不会重复加载相同的页面
-                curSite.pageUrl = url;
-                // 读取下一页的数据
-                curSite.pager.startFilter && curSite.pager.startFilter();
-                GM_xmlhttpRequest({
-                    url: url,
-                    method: "GET",
-                    timeout: 5000,
-                    onload: function (response) {
-                        try {
-                            var newBody = ShowPager.createDocumentByString(response.responseText);
-                            let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody);
-                            let toElement = getAllElements(curSite.pager.HT_insert[0])[0];
-                            if (pageElems.length >= 0) {
-                                let addTo = "beforeend";
-                                if (curSite.pager.HT_insert[1] == 1) addTo = "beforebegin";
-                                // 插入新页面元素
-                                pageElems.forEach(function (one) {
-                                    toElement.insertAdjacentElement(addTo, one);
-                                });
-                                // 替换待替换元素
-                                try {
-                                    let oriE = getAllElements(curSite.pager.replaceE);
-                                    let repE = getAllElements(curSite.pager.replaceE, newBody, newBody);
-                                    if (oriE.length === repE.length) {
-                                        for (var i = 0; i < oriE.length; i++) {
-                                            oriE[i].outerHTML = repE[i].outerHTML;
-                                        }
-                                    }
-                                } catch (e) {
-                                    console.log(e);
-                                }
-                                //屏蔽悬赏帖
-                                delateReward();
-                            }
-                        } catch (e) {
-                            console.log(e);
-                        }
+    // 自动无缝翻页，修改自 https://greasyfork.org/scripts/14178
+    function showPager() {
+        ShowPager = {
+            getFullHref: function (e) {
+                if(e == null) return '';
+                "string" != typeof e && (e = e.getAttribute("href"));
+                var t = this.getFullHref.a;
+                return t || (this.getFullHref.a = t = document.createElement("a")), t.href = e, t.href;
+            },
+            createDocumentByString: function (e) {
+                if (e) {
+                    if ("HTML" !== document.documentElement.nodeName) return (new DOMParser).parseFromString(e, "application/xhtml+xml");
+                    var t;
+                    try {
+                        t = (new DOMParser).parseFromString(e, "text/html");
+                    } catch (e) {
                     }
-                });
-            }
-        },
-    };
+                    if (t) return t;
+                    if (document.implementation.createHTMLDocument) t = document.implementation.createHTMLDocument("ADocument"); else try {
+                        (t = document.cloneNode(!1)).appendChild(t.importNode(document.documentElement, !1)),
+                            t.documentElement.appendChild(t.createElement("head")), t.documentElement.appendChild(t.createElement("body"));
+                    } catch (e) {
+                    }
+                    if (t) {
+                        var r = document.createRange();
+                        r.selectNodeContents(document.body);
+                        var n = r.createContextualFragment(e);
+                        t.body.appendChild(n);
+                        for (var a, o = {
+                            TITLE: !0,
+                            META: !0,
+                            LINK: !0,
+                            STYLE: !0,
+                            BASE: !0
+                        }, i = t.body, s = i.childNodes, c = s.length - 1; c >= 0; c--) o[(a = s[c]).nodeName] && i.removeChild(a);
+                        return t;
+                    }
+                } else console.error("没有找到要转成DOM的字符串");
+            },
+            loadMorePage: function () {
+                if (curSite.pager) {
+                    let curPageEle = getElementByXpath(curSite.pager.nextLink);
+                    var url = this.getFullHref(curPageEle);
+                    //console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
+                    if(url === '') return;
+                    if(curSite.pageUrl === url) return;// 不会重复加载相同的页面
+                    curSite.pageUrl = url;
+                    // 读取下一页的数据
+                    curSite.pager.startFilter && curSite.pager.startFilter();
+                    GM_xmlhttpRequest({
+                        url: url,
+                        method: "GET",
+                        timeout: 5000,
+                        onload: function (response) {
+                            try {
+                                var newBody = ShowPager.createDocumentByString(response.responseText);
+                                let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody);
+                                let toElement = getAllElements(curSite.pager.HT_insert[0])[0];
+                                if (pageElems.length >= 0) {
+                                    let addTo = "beforeend";
+                                    if (curSite.pager.HT_insert[1] == 1) addTo = "beforebegin";
+                                    // 插入新页面元素
+                                    pageElems.forEach(function (one) {
+                                        toElement.insertAdjacentElement(addTo, one);
+                                    });
+                                    //删除悬赏贴
+                                    delateReward();
+                                    // 替换待替换元素
+                                    try {
+                                        let oriE = getAllElements(curSite.pager.replaceE);
+                                        let repE = getAllElements(curSite.pager.replaceE, newBody, newBody);
+                                        if (oriE.length === repE.length) {
+                                            for (var i = 0; i < oriE.length; i++) {
+                                                oriE[i].outerHTML = repE[i].outerHTML;
+                                            }
+                                        }
+                                    } catch (e) {
+                                        console.log(e);
+                                    }
+                                }
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                    });
+                }
+            },
+        };
+    }
 
 
     function getElementByXpath(e, t, r) {
