@@ -23,7 +23,7 @@
     if (menu_thread_pageLoading == null){menu_thread_pageLoading = false; GM_setValue('xiu2_menu_thread_pageLoading', menu_thread_pageLoading)};
     registerMenuCommand();
 
-    //屏蔽悬赏贴
+    //屏蔽悬赏帖
     function delateReward(){
         // delateSwitch: 是否开启新帖区屏蔽悬赏帖，true或者false
         var delateSwitch = true;
@@ -40,7 +40,7 @@
             for (let i=0; i<arrs.length; i++){
                 arrs[i].parentNode.removeChild(arrs[i]);
             }
-            console.log("悬赏贴屏蔽成功");
+            console.log("悬赏帖屏蔽成功");
         }
     }
     delateReward();
@@ -327,7 +327,7 @@
                                 } catch (e) {
                                     console.log(e);
                                 }
-                                //删除悬赏贴
+                                //屏蔽悬赏帖
                                 delateReward();
                             }
                         } catch (e) {
