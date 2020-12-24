@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.2.0
+// @version      1.2.1
 // @author       X.I.U
-// @description  移除登录弹窗、一键收起回答、置顶显示时间、区分问题文章、默认高清原图、默认站外直链
+// @description  移除登录弹窗、一键收起回答、置顶显示时间、区分问题文章、默认高清原图、默认站外直链、默认折叠邀请
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/static/favicon.ico
@@ -352,6 +352,7 @@ function addTypeTips() {
         // URL 匹配正则表达式
         var patt_zhuanlan = /zhuanlan.zhihu.com/,
             patt_question = /question\/\d+/,
+            patt_question_answer = /answer\/\d+/,
             patt_video = /\/zvideo\//,
             patt_tip = /zhihu_e_tips/
         var postList = document.querySelectorAll('h2.ContentItem-title a');
@@ -359,12 +360,16 @@ function addTypeTips() {
         //console.log(`${postList.length} ${postNum.length}`)
         if (postList.length > postNum.length){
             for(var num = postNum.length;num<postList.length;num++){
-                if (!patt_tip.test(postList[num].innerHTML)){             // 判断是否已添加
-                    if (patt_zhuanlan.test(postList[num].href)){          // 如果是文章
+                if (!patt_tip.test(postList[num].innerHTML)){               // 判断是否已添加
+                    if (patt_zhuanlan.test(postList[num].href)){            // 如果是文章
                         postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #2196F3;display: inline-block;height: 18px;">文章</small> ` + postList[num].innerHTML
-                    }else if (patt_question.test(postList[num].href)){    // 如果是问题
-                        postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #f68b83;display: inline-block;height: 18px;">问题</small> ` + postList[num].innerHTML
-                    }else if (patt_video.test(postList[num].href)){       // 如果是视频
+                    }else if (patt_question.test(postList[num].href)){      // 如果是问题
+                        if (patt_question_answer.test(postList[num].href)){ // 如果是指向回答的问题（而非指向纯问题的链接）
+                            postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #f68b83;display: inline-block;height: 18px;">问题</small> ` + postList[num].innerHTML
+                        }else{
+                            postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #ff5a4e;display: inline-block;height: 18px;">问题</small> ` + postList[num].innerHTML
+                        }
+                    }else if (patt_video.test(postList[num].href)){         // 如果是视频
                         postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #00BCD4;display: inline-block;height: 18px;">视频</small> ` + postList[num].innerHTML
                     }
                     //postNum += 1;
