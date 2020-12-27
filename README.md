@@ -11,23 +11,22 @@
 ## 脚本列表
 
 > 详细的脚本介绍、使用说明、截图，请点击第三列的 **「安装」** 前往 GreasyFork 查看。  
-> 备用安装由 **`jsDelivr CDN`** 提供，优点是速度快（国内CDN），缺点是有 24小时缓存。   
 
 | 脚本名称 | 脚本功能 | 安装 | 备用 |
 | :---- | :---- | :----: | :----: |
-| **知乎 美化** | 宽屏显示、隐藏文章开头大图、文章编辑页宽度统一... | **[「安装」](https://greasyfork.org/scripts/412212)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Beautification.user.js)** |
-| **知乎 增强** | 移除登录弹窗、一键收起回答、置顶显示时间、区分问题... | **[「安装」](https://greasyfork.org/scripts/419081)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Enhanced.user.js)** |
-|  **Github 增强** | 高速下载 Clone、Release、Raw、Code(ZIP) 文件... | **[「安装」](https://greasyfork.org/scripts/412245)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GithubEnhanced-High-Speed-Download.user.js)** |
-| **3DM论坛 美化** | 精简多余内容 | **[「安装」](https://greasyfork.org/scripts/413593)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Beautification.user.js)** |
-| **3DM论坛 增强** | 自动回复、自动无缝翻页、清理置顶帖子 | **[「安装」](https://greasyfork.org/scripts/412890)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Enhanced.user.js)** |
-|  **423Down 增强 \*** | 自动无缝翻页 | **[「安装」](https://greasyfork.org/scripts/419215)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/423Down-Enhanced.user.js)** |
-| **智友邦论坛 美化** | 精简多余内容、宽屏显示 | **[「安装」](https://greasyfork.org/scripts/412361)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Beautification.user.js)** |
-| **智友邦论坛 增强** | 自动签到、自动回复、自动无缝翻页、清理置顶帖子... | **[「安装」](https://greasyfork.org/scripts/412362)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Enhanced.user.js)** |
-|  ~~_**Google 翻译 美化**_~~ | ~~_精简多余内容、修复翻译结果溢出屏幕问题_~~ | ~~_**[「安装」](https://greasyfork.org/scripts/413721)**_~~ | ~~_**[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GoogleTranslate-Beautification.user.js)**_~~ |
-| **吾爱破解论坛 美化** | 精简多余内容 | **[「安装」](https://greasyfork.org/scripts/412681)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Beautification.user.js)** |
-| **吾爱破解论坛 增强** | 自动签到、自动无缝翻页 | **[「安装」](https://greasyfork.org/scripts/412680)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Enhanced.user.js)** |
-| **全球主机交流论坛 增强 \*** | 自动无缝翻页、自动显示帖子内被隐藏的回复 | **[「安装」](https://greasyfork.org/scripts/414005)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Hostloc-Enhanced.user.js)** |
-| **Steam 创意工坊大图 修复** | 修复 Steam 创意工坊预览大图无法显示的问题 | **[「安装」](https://greasyfork.org/scripts/397666)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/SteamWorkshopImageRepair.user.js)** |
+| **知乎 美化** | 宽屏显示、隐藏文章开头大图、文章编辑页宽度统一... | **<a href="https://greasyfork.org/zh-CN/scripts/412212" target="_blank">「安装」</a>** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Beautification.user.js)** |
+| **知乎 增强** | 移除登录弹窗、一键收起回答、置顶显示时间、区分问题... | **<a href="https://greasyfork.org/zh-CN/scripts/419081" target="_blank">「安装」</a>** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Enhanced.user.js)** |
+|  **Github 增强** | 高速下载 Clone、Release、Raw、Code(ZIP) 文件... | **<a href="https://greasyfork.org/zh-CN/scripts/412245" target="_blank">「安装」</a>** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GithubEnhanced-High-Speed-Download.user.js)** |
+| **3DM论坛 美化** | 精简多余内容 | **<a href="https://greasyfork.org/zh-CN/scripts/413593" target="_blank">「安装」</a>** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Beautification.user.js)** |
+| **3DM论坛 增强** | 自动回复、自动无缝翻页、清理置顶帖子 | **<a href="https://greasyfork.org/zh-CN/scripts/412890" target="_blank">「安装」</a>** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Enhanced.user.js)** |
+|  **423Down 增强 \*** | 自动无缝翻页 | **<a href="https://greasyfork.org/zh-CN/scripts/419215" target="_blank">「安装」</a>** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/423Down-Enhanced.user.js)** |
+| **智友邦论坛 美化** | 精简多余内容、宽屏显示 | **<a href="https://greasyfork.org/zh-CN/scripts/412361" target="_blank">「安装」</a>** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Beautification.user.js)** |
+| **智友邦论坛 增强** | 自动签到、自动回复、自动无缝翻页、清理置顶帖子... | **<a href="https://greasyfork.org/zh-CN/scripts/412362" target="_blank">「安装」</a>** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Enhanced.user.js)** |
+|  ~~_**Google 翻译 美化**_~~ | ~~_精简多余内容、修复翻译结果溢出屏幕问题_~~ | ~~_**<a href="https://greasyfork.org/zh-CN/scripts/413721" target="_blank">「安装」</a>**_~~ | ~~_**[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GoogleTranslate-Beautification.user.js)**_~~ |
+| **吾爱破解论坛 美化** | 精简多余内容 | **<a href="https://greasyfork.org/zh-CN/scripts/412681" target="_blank">「安装」</a>** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Beautification.user.js)** |
+| **吾爱破解论坛 增强** | 自动签到、自动无缝翻页 | **<a href="https://greasyfork.org/zh-CN/scripts/412680" target="_blank">「安装」</a>** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Enhanced.user.js)** |
+| **全球主机交流论坛 增强 \*** | 自动无缝翻页、自动显示帖子内被隐藏的回复 | **<a href="https://greasyfork.org/zh-CN/scripts/414005" target="_blank">「安装」</a>** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Hostloc-Enhanced.user.js)** |
+| **Steam 创意工坊大图 修复** | 修复 Steam 创意工坊预览大图无法显示的问题 | **<a href="https://greasyfork.org/zh-CN/scripts/397666" target="_blank">「安装」</a>** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/SteamWorkshopImageRepair.user.js)** |
 
 > 脚本名称末尾 **`*`** 代表该脚本为**网友主动提出需求**而写的。如果你也有需求，可以[告诉我](https://github.com/XIU2/UserScript/issues/new/choose)！  
 > 所有脚本均在 **Chrome、Firefox、Edge 浏览器 + Tampermonkey 扩展** 环境下测试通过！
