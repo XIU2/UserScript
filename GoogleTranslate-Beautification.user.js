@@ -14,7 +14,7 @@
 // @grant        GM_notification
 // @license      GPL-3.0 License
 // @run-at       document-start
-// @namespace    https://github.com/XIU2/UserScript
+// @namespace    https://greasyfork.org/scripts/413721
 // ==/UserScript==
 
 (function() {
