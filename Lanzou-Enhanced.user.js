@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.0.0
+// @version      1.0.1
 // @author       X.I.U
 // @description  自动显示更多文件（文件夹末尾按钮）
 // @match        https://www.lanzou.com/account.php
@@ -25,9 +25,24 @@
     // 注册脚本菜单
     GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
 
+
+    // 获取 iframe 框架
+    var mainframe,
+        patt_mydisk=/mydisk\.php\?/;
+    if(patt_mydisk.test(window.top.location.href)){
+        mainframe = window; // 如果当前位于最后一个套娃 iframe 本身，则不再需要寻找 iframe 框架，暂时没什么用，但是以后如果要增加其他功能可能用得上
+        EventXMLHttpRequest(); // 监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
+    }else{
+        mainframe = document.getElementById("mainframe");
+        if(mainframe){ // 只有找到 iframe 框架时才会继续运行脚本
+            mainframe = mainframe.contentWindow;
+            EventXMLHttpRequest(); // 监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
+        }
+    }
+
+
     // 自动显示更多文件
     function fileMore() {
-        var mainframe = document.getElementById("mainframe").contentWindow;
         var filemore = mainframe.document.getElementById("filemore");
         if(filemore && filemore.style.display != "none"){
             if(filemore.children[0]){
@@ -35,6 +50,19 @@
             }
         }
     }
-    // 定时执行（为了确保不漏掉，只能用这个笨方法了。。。）
-    setInterval(fileMore,100)
+
+
+    // 定时执行（旧方法，每隔 100ms 执行一次，比较笨且浪费一丢丢性能，但优点是不会漏掉且反应更快）
+    //setInterval(fileMore,100);
+
+
+    // 监听 XMLHttpRequest 事件并执行（新方法，只有在产生事件时才会执行 [自动显示更多文件]，平时不会执行，更优雅~）
+    function EventXMLHttpRequest() {
+        var _send = mainframe.XMLHttpRequest.prototype.send
+        function sendReplacement(data) {
+            setTimeout(fileMore, 200); // 延迟执行，避免网页还没加载完
+            return _send.apply(this, arguments);
+        }
+        mainframe.XMLHttpRequest.prototype.send = sendReplacement;
+    }
 })();
