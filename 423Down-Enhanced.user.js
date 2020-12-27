@@ -8,6 +8,7 @@
 // @icon         https://www.423down.com/favicon.ico
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
+// @grant        GM_openInTab
 // @license      GPL-3.0 License
 // @run-at       document-end
 // @namespace    https://github.com/XIU2/UserScript
@@ -15,7 +16,7 @@
 
 (function() {
     // 注册脚本菜单
-    GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript', {active: true,insert: true,setParent: true});});
+    GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
 
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
