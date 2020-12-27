@@ -14,7 +14,7 @@
 // @grant        GM_notification
 // @license      GPL-3.0 License
 // @run-at       document-start
-// @namespace    https://greasyfork.org/scripts/413721
+// @namespace    https://github.com/XIU2/UserScript
 // ==/UserScript==
 
 (function() {
@@ -67,28 +67,8 @@
 }`,
             style_2 = `
 /* 清理多余内容 */
-.input-button-container,.ft-icon-row,.frame:before,.app-download-bar,#gb,.gp-footer,.feedback-link,#gt-input-tool {
+.rQKk7.zJmlgc {
 	display: none !important;
-}
-/* 主体顶部留白 */
-.homepage-content-wrap {
-    margin-top: 26px;
-}
-/* 部分元素的边框调整 */
-.gt-lc.gt-lc-mobile .gt-cd,.gt-lc.gt-lc-mobile.show-as-one-card {
-	border: .6px solid #eeeeee !important;
-	border-radius: 2px !important;
-}
-.main-header {
-	border: 1px solid #eee !important;
-	box-shadow: none !important;
-}
-.ls-wrap {
-	border-top: none !important;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
-}
-.results-container.empty {
-	border-left: 1px solid rgba(0, 0, 0, 0.06) !important;
 }`,
             style_Add = document.createElement('style');
         if (menu_streamline) {
@@ -97,6 +77,6 @@
             style = style_1;
         }
         style_Add.innerHTML = style;
-    document.head.appendChild(style_Add);
+        document.head.appendChild(style_Add);
     }
 })();

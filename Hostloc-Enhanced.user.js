@@ -2,7 +2,7 @@
 // @name         全球主机交流论坛增强
 // @version      1.0.3
 // @author       X.I.U
-// @description  自动无缝翻页
+// @description  自动无缝翻页、自动显示帖子内被隐藏的回复
 // @match        *://www.hostloc.com/*
 // @icon         https://www.hostloc.com/favicon.ico
 // @grant        GM_xmlhttpRequest
