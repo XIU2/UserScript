@@ -56,20 +56,20 @@
     function addStyle() {
         var style,
             style_1 = `
-/* 翻译结果的选择列表宽度 */
+/* 翻译结果的选择列表宽度
 .alt-menu {
     max-width: 35% !important;
-}
-/* 翻译结果选择时显示翻译结果的翻译结果 */
+} */
+/* 翻译结果选择时显示翻译结果的翻译结果
 .goog-menu.round-trip-content {
     white-space: normal !important;
     word-break: break-all !important;
-}`,
+} */`,
             style_2 = `
-/* 清理多余内容 */
+/* 清理多余内容
 .rQKk7.zJmlgc {
 	display: none !important;
-}`,
+} */`,
             style_Add = document.createElement('style');
         if (menu_streamline) {
             style = style_1 + style_2;
