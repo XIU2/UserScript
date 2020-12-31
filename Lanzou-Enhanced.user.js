@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.0.3
+// @version      1.0.4
 // @author       X.I.U
 // @description  自动显示更多文件（文件夹末尾按钮）、自动打开分享链接（点击文件时）
 // @match        *://www.lanzou.com/account.php
@@ -87,10 +87,10 @@
         if(menu_open_fileSha){ // 脚本菜单开启时才继续
             var f_sha = mainframe.document.getElementById("f_sha"); // 寻找分享链接（下载链接）信息框
             if(f_sha && f_sha.style.display == "block"){ // 判断信息框是否存在且可见
-                let f_sha1 = mainframe.document.getElementById("f_sha1").innerText; // 获取分享链接（下载链接）
-                if(f_sha1 != ""){ // 确保分享链接（下载链接）不是空
+                let code = mainframe.document.getElementById("code").getAttribute("title"); // 获取分享链接（下载链接）
+                if(code != ""){ // 确保分享链接（下载链接）不是空
                     f_sha.style.display = "none"; // 隐藏分享链接（下载链接）信息框
-                    window.GM_openInTab(f_sha1, {active: true,insert: true,setParent: true}) // 打开分享链接（下载链接）
+                    window.GM_openInTab(code, {active: true,insert: true,setParent: true}) // 打开分享链接（下载链接）
                 }
             }
         }
