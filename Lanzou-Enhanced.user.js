@@ -1,10 +1,14 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.0.2
+// @version      1.0.3
 // @author       X.I.U
 // @description  自动显示更多文件（文件夹末尾按钮）、自动打开分享链接（点击文件时）
-// @match        https://www.lanzou.com/account.php
-// @match        https://up.woozooo.com/mydisk.php*
+// @match        *://www.lanzou.com/account.php
+// @match        *://www.lanzou.com/u
+// @match        *://up.woozooo.com/u
+// @match        *://up.woozooo.com/mydisk.php*
+// @match        *://pc.woozooo.com/u
+// @match        *://pc.woozooo.com/mydisk.php*
 // @icon         https://www.lanzou.com/favicon.ico
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
@@ -20,10 +24,8 @@
 // ==/UserScript==
 
 (function() {
-    // 如果位于 [https://www.lanzou.com/account.php] 网页，则跳转至 iframe 指向的 [https://up.woozooo.com/mydisk.php] 网页
-    // 用来解决 iframe 跨域无法操作的问题，其实 [https://up.woozooo.com/mydisk.php] 还套了一个 iframe，但已经是同域可以操作了，没必要再跳转了
-    if(window.top.location.href === "https://www.lanzou.com/account.php"){
-        window.top.location.href = "https://up.woozooo.com/mydisk.php"
+    if(window.top.location.href != "https://pc.woozooo.com/mydisk.php"){
+        window.top.location.href = "https://pc.woozooo.com/mydisk.php"
     }
 
     var menu_open_fileSha = GM_getValue('xiu2_menu_open_fileSha');
@@ -61,17 +63,11 @@
 
 
     // 获取 iframe 框架
-    var mainframe,
-        patt_mydisk=/mydisk\.php\?/;
-    if(patt_mydisk.test(window.top.location.href)){
-        mainframe = window; // 如果当前位于最后一个套娃 iframe 本身，则不再需要寻找 iframe 框架，暂时没什么用，但是以后如果要增加其他功能可能用得上
+    var mainframe
+    mainframe = document.getElementById("mainframe");
+    if(mainframe){ // 只有找到 iframe 框架时才会继续运行脚本
+        mainframe = mainframe.contentWindow;
         EventXMLHttpRequest(); // 监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
-    }else{
-        mainframe = document.getElementById("mainframe");
-        if(mainframe){ // 只有找到 iframe 框架时才会继续运行脚本
-            mainframe = mainframe.contentWindow;
-            EventXMLHttpRequest(); // 监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
-        }
     }
 
 
@@ -109,8 +105,8 @@
     function EventXMLHttpRequest() {
         var _send = mainframe.XMLHttpRequest.prototype.send
         function sendReplacement(data) {
-            setTimeout(fileMore, 300); // 自动显示更多文件
-            setTimeout(fileSha, 300); // 自动打开分享链接（点击文件时）
+            setTimeout(fileMore, 200); // 自动显示更多文件
+            setTimeout(fileSha, 200); // 自动打开分享链接（点击文件时）
             return _send.apply(this, arguments);
         }
         mainframe.XMLHttpRequest.prototype.send = sendReplacement;
