@@ -20,7 +20,7 @@
 | **3DM论坛 美化** | 精简多余内容 | **[「安装」](https://greasyfork.org/zh-CN/scripts/413593)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Beautification.user.js)** |
 | **3DM论坛 增强** | 自动回复、自动无缝翻页、清理置顶帖子 | **[「安装」](https://greasyfork.org/zh-CN/scripts/412890)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Enhanced.user.js)** |
 |  **423Down 增强 \*** | 自动无缝翻页 | **[「安装」](https://greasyfork.org/zh-CN/scripts/419215)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/423Down-Enhanced.user.js)** |
-|  **蓝奏云网盘 增强 \*** | 自动显示更多文件（文件夹末尾按钮） | **[「安装」](https://greasyfork.org/zh-CN/scripts/419224)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Lanzou-Enhanced.user.js)** |
+|  **蓝奏云网盘 增强 \*** | 自动显示更多文件、自动打开分享链接(点击文件时)... | **[「安装」](https://greasyfork.org/zh-CN/scripts/419224)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Lanzou-Enhanced.user.js)** |
 | **智友邦论坛 美化** | 精简多余内容、宽屏显示 | **[「安装」](https://greasyfork.org/zh-CN/scripts/412361)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Beautification.user.js)** |
 | **智友邦论坛 增强** | 自动签到、自动回复、自动无缝翻页、清理置顶帖子... | **[「安装」](https://greasyfork.org/zh-CN/scripts/412362)** | **[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Enhanced.user.js)** |
 |  ~~_**Google 翻译 美化**_~~ | ~~_精简多余内容、修复翻译结果溢出屏幕问题_~~ | ~~_**[「安装」](https://greasyfork.org/zh-CN/scripts/413721)**_~~ | ~~_**[「安装」](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GoogleTranslate-Beautification.user.js)**_~~ |
