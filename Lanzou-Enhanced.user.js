@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.0.4
+// @version      1.0.5
 // @author       X.I.U
-// @description  自动显示更多文件（文件夹末尾按钮）、自动打开分享链接（点击文件时）
+// @description  自动显示更多文件（文件夹末尾按钮）、自动打开分享链接（点击文件时）、自动复制分享链接（点击文件时）
 // @match        *://www.lanzou.com/account.php
 // @match        *://www.lanzou.com/u
 // @match        *://up.woozooo.com/u
@@ -29,22 +29,28 @@
     }
 
     var menu_open_fileSha = GM_getValue('xiu2_menu_open_fileSha');
-    var menu_open_fileSha_ID, menu_feedBack_ID;
+    var menu_copy_fileSha = GM_getValue('xiu2_menu_copy_fileSha');
+    var menu_open_fileSha_ID, menu_copy_fileSha_ID, menu_feedBack_ID;
     if (menu_open_fileSha == null){menu_open_fileSha = true; GM_setValue('xiu2_menu_open_fileSha', menu_open_fileSha)};
+    if (menu_copy_fileSha == null){menu_copy_fileSha = true; GM_setValue('xiu2_menu_copy_fileSha', menu_copy_fileSha)};
     registerMenuCommand();
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        var menu_open_fileSha_;
+        var menu_open_fileSha_, menu_copy_fileSha_;
         if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
             GM_unregisterMenuCommand(menu_open_fileSha_ID);
+            GM_unregisterMenuCommand(menu_copy_fileSha_ID);
             GM_unregisterMenuCommand(menu_feedBack_ID);
             menu_open_fileSha = GM_getValue('xiu2_menu_open_fileSha');
+            menu_copy_fileSha = GM_getValue('xiu2_menu_copy_fileSha');
         }
 
         if (menu_open_fileSha){menu_open_fileSha_ = "√";}else{menu_open_fileSha_ = "×";}
+        if (menu_copy_fileSha){menu_copy_fileSha_ = "√";}else{menu_copy_fileSha_ = "×";}
 
-        menu_open_fileSha_ID = GM_registerMenuCommand(`[ ${menu_open_fileSha_} ] 自动打开分享链接（点击文件时）`, function(){menu_switch(menu_open_fileSha,'xiu2_menu_open_fileSha','自动打开分享链接（点击文件时）')});
+        menu_open_fileSha_ID = GM_registerMenuCommand(`[ ${menu_open_fileSha_} ] 自动打开分享链接（点击文件时）`, function(){menu_switch(menu_open_fileSha,'xiu2_menu_open_fileSha','自动打开分享链接')});
+        menu_copy_fileSha_ID = GM_registerMenuCommand(`[ ${menu_copy_fileSha_} ] 自动复制分享链接（点击文件时）`, function(){menu_switch(menu_copy_fileSha,'xiu2_menu_copy_fileSha','自动复制分享链接')});
         menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
@@ -82,17 +88,54 @@
     }
 
 
-    // 自动打开分享链接（点击文件时）
+    // 分享链接相关（点击文件时）
     function fileSha() {
-        if(menu_open_fileSha){ // 脚本菜单开启时才继续
-            var f_sha = mainframe.document.getElementById("f_sha"); // 寻找分享链接（下载链接）信息框
-            if(f_sha && f_sha.style.display == "block"){ // 判断信息框是否存在且可见
-                let code = mainframe.document.getElementById("code").getAttribute("title"); // 获取分享链接（下载链接）
-                if(code != ""){ // 确保分享链接（下载链接）不是空
-                    f_sha.style.display = "none"; // 隐藏分享链接（下载链接）信息框
-                    window.GM_openInTab(code, {active: true,insert: true,setParent: true}) // 打开分享链接（下载链接）
-                }
+        var f_sha = mainframe.document.getElementById("f_sha"); // 寻找分享链接（下载链接）信息框
+        if(f_sha && f_sha.style.display == "block"){ // 判断信息框是否存在且可见
+            fileSha_Open(); // 自动打开分享链接（点击文件时）
+            fileSha_Copy(); // 自动复制分享链接（点击文件时）
+            if(menu_open_fileSha || menu_copy_fileSha){
+                f_sha.style.display = "none"; // 隐藏分享链接（下载链接）信息框
             }
+        }
+    }
+
+
+    // 自动打开分享链接（点击文件时）
+    function fileSha_Open() {
+        if(menu_open_fileSha){ // 脚本菜单开启时才继续
+            let code = mainframe.document.getElementById("code").getAttribute("title"); // 获取分享链接（下载链接）
+            if(code != ""){ // 确保分享链接（下载链接）不是空
+                window.GM_openInTab(code, {active: true,insert: true,setParent: true}) // 打开分享链接（下载链接）
+            }
+        }
+    }
+
+
+    // 自动复制分享链接（点击文件时）
+    function fileSha_Copy() {
+        if(menu_copy_fileSha){ // 脚本菜单开启时才继续
+            let f_sha1 = mainframe.document.getElementById("f_sha1").innerText; // 获取分享链接（下载链接）
+            if(f_sha1 != ""){ // 确保分享链接（下载链接）不是空
+                copyToClipboard(f_sha1); // 复制到剪切板
+            }
+        }
+    }
+
+
+    // 复制到剪切板
+    function copyToClipboard(s){
+        if(window.clipboardData){
+            window.clipboardData.setData('text',s);
+        }else{
+            (function(s){
+                document.oncopy=function(e){
+                    e.clipboardData.setData('text',s);
+                    e.preventDefault();
+                    document.oncopy=null;
+                }
+            })(s);
+            document.execCommand('Copy');
         }
     }
 
