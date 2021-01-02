@@ -2,7 +2,7 @@
 // @name         蓝奏云网盘增强
 // @version      1.0.6
 // @author       X.I.U
-// @description  刷新网页路径不变（F5）、自动显示更多文件（文件夹末尾按钮）、自动打开分享链接（点击文件时）、自动复制分享链接（点击文件时）
+// @description  刷新不返回根目录（F5）、自动显示更多文件（文件夹末尾按钮）、自动打开分享链接（点击文件时）、自动复制分享链接（点击文件时）
 // @match        *://www.lanzou.com/account.php
 // @match        *://www.lanzou.com/u
 // @match        *://up.woozooo.com/u
@@ -55,7 +55,7 @@
 
         menu_open_fileSha_ID = GM_registerMenuCommand(`[ ${menu_open_fileSha_} ] 自动打开分享链接（点击文件时）`, function(){menu_switch(menu_open_fileSha,'xiu2_menu_open_fileSha','自动打开分享链接', true)});
         menu_copy_fileSha_ID = GM_registerMenuCommand(`[ ${menu_copy_fileSha_} ] 自动复制分享链接（点击文件时）`, function(){menu_switch(menu_copy_fileSha,'xiu2_menu_copy_fileSha','自动复制分享链接', true)});
-        menu_refreshCorrection_ID = GM_registerMenuCommand(`[ ${menu_refreshCorrection_} ] 刷新网页路径不变（F5）`, function(){if(menu_refreshCorrection){UNrefreshCorrection();}else{refreshCorrection();};menu_switch(menu_refreshCorrection,'xiu2_menu_refreshCorrection','刷新网页路径不变', false)});
+        menu_refreshCorrection_ID = GM_registerMenuCommand(`[ ${menu_refreshCorrection_} ] 刷新不返回根目录（F5）`, function(){if(menu_refreshCorrection){UNrefreshCorrection();}else{refreshCorrection();};menu_switch(menu_refreshCorrection,'xiu2_menu_refreshCorrection','刷新不返回根目录', false)});
         menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
@@ -84,13 +84,13 @@
     if(mainframe){ // 只有找到 iframe 框架时才会继续运行脚本
         mainframe = mainframe.contentWindow;
         if(menu_refreshCorrection){
-            refreshCorrection(); // 刷新网页路径不变（F5）
+            refreshCorrection(); // 刷新不返回根目录（F5）
         }
         EventXMLHttpRequest(); // 监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
     }
 
 
-    // 刷新网页路径不变（F5）
+    // 刷新不返回根目录（F5）
     function refreshCorrection() {
         document.onkeydown = mainframe.onkeydown = function (e) {
             e = window.event || e;
