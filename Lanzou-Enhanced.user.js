@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.0.5
+// @version      1.0.6
 // @author       X.I.U
-// @description  自动显示更多文件（文件夹末尾按钮）、自动打开分享链接（点击文件时）、自动复制分享链接（点击文件时）
+// @description  刷新网页路径不变（F5）、自动显示更多文件（文件夹末尾按钮）、自动打开分享链接（点击文件时）、自动复制分享链接（点击文件时）
 // @match        *://www.lanzou.com/account.php
 // @match        *://www.lanzou.com/u
 // @match        *://up.woozooo.com/u
@@ -22,7 +22,6 @@
 // @run-at       document-end
 // @namespace    https://github.com/XIU2/UserScript
 // ==/UserScript==
-
 (function() {
     if(window.top.location.href != "https://pc.woozooo.com/mydisk.php"){
         window.top.location.href = "https://pc.woozooo.com/mydisk.php"
@@ -30,39 +29,50 @@
 
     var menu_open_fileSha = GM_getValue('xiu2_menu_open_fileSha');
     var menu_copy_fileSha = GM_getValue('xiu2_menu_copy_fileSha');
-    var menu_open_fileSha_ID, menu_copy_fileSha_ID, menu_feedBack_ID;
+    var menu_refreshCorrection = GM_getValue('xiu2_menu_refreshCorrection');
+    var menu_open_fileSha_ID, menu_copy_fileSha_ID, menu_refreshCorrection_ID, menu_feedBack_ID;
     if (menu_open_fileSha == null){menu_open_fileSha = true; GM_setValue('xiu2_menu_open_fileSha', menu_open_fileSha)};
     if (menu_copy_fileSha == null){menu_copy_fileSha = true; GM_setValue('xiu2_menu_copy_fileSha', menu_copy_fileSha)};
+    if (menu_refreshCorrection == null){menu_refreshCorrection = true; GM_setValue('xiu2_menu_refreshCorrection', menu_refreshCorrection)};
     registerMenuCommand();
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        var menu_open_fileSha_, menu_copy_fileSha_;
+        var menu_open_fileSha_, menu_copy_fileSha_, menu_refreshCorrection_;
         if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
             GM_unregisterMenuCommand(menu_open_fileSha_ID);
             GM_unregisterMenuCommand(menu_copy_fileSha_ID);
-            GM_unregisterMenuCommand(menu_feedBack_ID);
+            GM_unregisterMenuCommand(menu_copy_fileSha_ID);
+            GM_unregisterMenuCommand(menu_refreshCorrection_ID);
             menu_open_fileSha = GM_getValue('xiu2_menu_open_fileSha');
             menu_copy_fileSha = GM_getValue('xiu2_menu_copy_fileSha');
+            menu_refreshCorrection = GM_getValue('xiu2_menu_refreshCorrection');
         }
 
         if (menu_open_fileSha){menu_open_fileSha_ = "√";}else{menu_open_fileSha_ = "×";}
         if (menu_copy_fileSha){menu_copy_fileSha_ = "√";}else{menu_copy_fileSha_ = "×";}
+        if (menu_refreshCorrection){menu_refreshCorrection_ = "√";}else{menu_refreshCorrection_ = "×";}
 
-        menu_open_fileSha_ID = GM_registerMenuCommand(`[ ${menu_open_fileSha_} ] 自动打开分享链接（点击文件时）`, function(){menu_switch(menu_open_fileSha,'xiu2_menu_open_fileSha','自动打开分享链接')});
-        menu_copy_fileSha_ID = GM_registerMenuCommand(`[ ${menu_copy_fileSha_} ] 自动复制分享链接（点击文件时）`, function(){menu_switch(menu_copy_fileSha,'xiu2_menu_copy_fileSha','自动复制分享链接')});
+        menu_open_fileSha_ID = GM_registerMenuCommand(`[ ${menu_open_fileSha_} ] 自动打开分享链接（点击文件时）`, function(){menu_switch(menu_open_fileSha,'xiu2_menu_open_fileSha','自动打开分享链接', true)});
+        menu_copy_fileSha_ID = GM_registerMenuCommand(`[ ${menu_copy_fileSha_} ] 自动复制分享链接（点击文件时）`, function(){menu_switch(menu_copy_fileSha,'xiu2_menu_copy_fileSha','自动复制分享链接', true)});
+        menu_refreshCorrection_ID = GM_registerMenuCommand(`[ ${menu_refreshCorrection_} ] 刷新网页路径不变（F5）`, function(){if(menu_refreshCorrection){UNrefreshCorrection();}else{refreshCorrection();};menu_switch(menu_refreshCorrection,'xiu2_menu_refreshCorrection','刷新网页路径不变', false)});
         menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
 
     // 菜单开关
-    function menu_switch(menu_status, Name, Tips) {
+    function menu_switch(menu_status, Name, Tips, RefreshTips) {
+        if(RefreshTips){
+            RefreshTips = "\n（刷新网页后生效）"
+        }else{
+            RefreshTips = ""
+        }
         if (menu_status){
             GM_setValue(`${Name}`, false);
-            GM_notification(`已关闭 [${Tips}] 功能\n（刷新网页后生效）`);
+            GM_notification(`已关闭 [${Tips}] 功能${RefreshTips}`);
         }else{
             GM_setValue(`${Name}`, true);
-            GM_notification(`已开启 [${Tips}] 功能\n（刷新网页后生效）`);
+            GM_notification(`已开启 [${Tips}] 功能${RefreshTips}`);
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
@@ -73,7 +83,41 @@
     mainframe = document.getElementById("mainframe");
     if(mainframe){ // 只有找到 iframe 框架时才会继续运行脚本
         mainframe = mainframe.contentWindow;
+        if(menu_refreshCorrection){
+            refreshCorrection(); // 刷新网页路径不变（F5）
+        }
         EventXMLHttpRequest(); // 监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
+    }
+
+
+    // 刷新网页路径不变（F5）
+    function refreshCorrection() {
+        document.onkeydown = mainframe.onkeydown = function (e) {
+            e = window.event || e;
+            let keycode = e.keyCode;
+            if (keycode == 116) {
+                e.keyCode = 0;
+                let folderID = /-?\d+/.exec(mainframe.document.getElementById("filemore").children[0].getAttribute("onclick"))
+                if(folderID.length > 0){
+                    mainframe.folder(folderID[0]);
+                    e.returnValue = false;
+                    e.cancelBubble = true;
+                    return false;
+                }
+            }
+        }
+    }
+
+
+    // 恢复刷新机制
+    function UNrefreshCorrection() {
+        document.onkeydown = mainframe.onkeydown = function (e) {
+            e = window.event || e;
+            let keycode = e.keyCode;
+            if (keycode == 116) {
+                return true;
+            }
+        }
     }
 
 
