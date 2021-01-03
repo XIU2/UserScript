@@ -2,7 +2,7 @@
 // @name         蓝奏云网盘增强
 // @version      1.1.0
 // @author       X.I.U
-// @description  刷新不返回根目录、文件右键显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接
+// @description  刷新不返回根目录、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接
 // @match        *://*.lanzous.com/*
 // @match        *://*.lanzoux.com/*
 // @match        *://*.lanzoui.com/*
@@ -60,7 +60,7 @@
         menu_open_fileSha_ID = GM_registerMenuCommand(`[ ${menu_open_fileSha_} ] 自动打开分享链接`, function(){menu_switch(menu_open_fileSha,'xiu2_menu_open_fileSha','自动打开分享链接', true)});
         menu_copy_fileSha_ID = GM_registerMenuCommand(`[ ${menu_copy_fileSha_} ] 自动复制分享链接`, function(){menu_switch(menu_copy_fileSha,'xiu2_menu_copy_fileSha','自动复制分享链接', true)});
         menu_refreshCorrection_ID = GM_registerMenuCommand(`[ ${menu_refreshCorrection_} ] 刷新不返回根目录`, function(){if(menu_refreshCorrection){UNrefreshCorrection();}else{refreshCorrection();};menu_switch(menu_refreshCorrection,'xiu2_menu_refreshCorrection','刷新不返回根目录', false)});
-        menu_rightClickMenu_ID = GM_registerMenuCommand(`[ ${menu_rightClickMenu_} ] 文件右键显示菜单`, function(){menu_switch(menu_rightClickMenu,'xiu2_menu_rightClickMenu','文件右键显示菜单', true)});
+        menu_rightClickMenu_ID = GM_registerMenuCommand(`[ ${menu_rightClickMenu_} ] 右键文件显示菜单`, function(){menu_switch(menu_rightClickMenu,'xiu2_menu_rightClickMenu','右键文件显示菜单', true)});
         menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
@@ -140,7 +140,7 @@
     }
 
 
-    // 文件右键显示菜单
+    // 右键文件显示菜单
     function rightClickMenu() {
         if(menu_rightClickMenu){ // 脚本菜单开启时才继续
             var folder_list = mainframe.document.getElementById("sub_folder_list");
@@ -271,7 +271,7 @@
         function sendReplacement(data) {
             setTimeout(fileMore, 200); // 自动显示更多文件
             setTimeout(fileSha, 200); // 自动打开分享链接（点击文件时）
-            setTimeout(rightClickMenu, 500); // 右键菜单
+            setTimeout(rightClickMenu, 500); // 右键文件显示菜单
             return _send.apply(this, arguments);
         }
         mainframe.XMLHttpRequest.prototype.send = sendReplacement;
