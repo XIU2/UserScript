@@ -2,7 +2,7 @@
 // @name         蓝奏云网盘增强
 // @version      1.0.7
 // @author       X.I.U
-// @description  刷新不返回根目录（F5）、自动显示更多文件、自动打开分享链接（点击文件时）、自动复制分享链接（点击文件时）
+// @description  刷新不返回根目录、自动显示更多文件、自动打开分享链接、自动复制分享链接
 // @match        *://*.lanzous.com/*
 // @match        *://*.lanzoux.com/*
 // @match        *://*.lanzoui.com/*
@@ -52,9 +52,9 @@
         if (menu_copy_fileSha){menu_copy_fileSha_ = "√";}else{menu_copy_fileSha_ = "×";}
         if (menu_refreshCorrection){menu_refreshCorrection_ = "√";}else{menu_refreshCorrection_ = "×";}
 
-        menu_open_fileSha_ID = GM_registerMenuCommand(`[ ${menu_open_fileSha_} ] 自动打开分享链接（点击文件时）`, function(){menu_switch(menu_open_fileSha,'xiu2_menu_open_fileSha','自动打开分享链接', true)});
-        menu_copy_fileSha_ID = GM_registerMenuCommand(`[ ${menu_copy_fileSha_} ] 自动复制分享链接（点击文件时）`, function(){menu_switch(menu_copy_fileSha,'xiu2_menu_copy_fileSha','自动复制分享链接', true)});
-        menu_refreshCorrection_ID = GM_registerMenuCommand(`[ ${menu_refreshCorrection_} ] 刷新不返回根目录（F5）`, function(){if(menu_refreshCorrection){UNrefreshCorrection();}else{refreshCorrection();};menu_switch(menu_refreshCorrection,'xiu2_menu_refreshCorrection','刷新不返回根目录', false)});
+        menu_open_fileSha_ID = GM_registerMenuCommand(`[ ${menu_open_fileSha_} ] 自动打开分享链接`, function(){menu_switch(menu_open_fileSha,'xiu2_menu_open_fileSha','自动打开分享链接', true)});
+        menu_copy_fileSha_ID = GM_registerMenuCommand(`[ ${menu_copy_fileSha_} ] 自动复制分享链接`, function(){menu_switch(menu_copy_fileSha,'xiu2_menu_copy_fileSha','自动复制分享链接', true)});
+        menu_refreshCorrection_ID = GM_registerMenuCommand(`[ ${menu_refreshCorrection_} ] 刷新不返回根目录`, function(){if(menu_refreshCorrection){UNrefreshCorrection();}else{refreshCorrection();};menu_switch(menu_refreshCorrection,'xiu2_menu_refreshCorrection','刷新不返回根目录', false)});
         menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
