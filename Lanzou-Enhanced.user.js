@@ -1,8 +1,11 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.0.6
+// @version      1.0.7
 // @author       X.I.U
-// @description  刷新不返回根目录（F5）、自动显示更多文件（文件夹末尾按钮）、自动打开分享链接（点击文件时）、自动复制分享链接（点击文件时）
+// @description  刷新不返回根目录（F5）、自动显示更多文件、自动打开分享链接（点击文件时）、自动复制分享链接（点击文件时）
+// @match        *://*.lanzous.com/*
+// @match        *://*.lanzoux.com/*
+// @match        *://*.lanzoui.com/*
 // @match        *://www.lanzou.com/account.php
 // @match        *://www.lanzou.com/u
 // @match        *://up.woozooo.com/u
@@ -23,10 +26,6 @@
 // @namespace    https://github.com/XIU2/UserScript
 // ==/UserScript==
 (function() {
-    if(window.top.location.href != "https://pc.woozooo.com/mydisk.php"){
-        window.top.location.href = "https://pc.woozooo.com/mydisk.php"
-    }
-
     var menu_open_fileSha = GM_getValue('xiu2_menu_open_fileSha');
     var menu_copy_fileSha = GM_getValue('xiu2_menu_copy_fileSha');
     var menu_refreshCorrection = GM_getValue('xiu2_menu_refreshCorrection');
@@ -78,15 +77,29 @@
     };
 
 
-    // 获取 iframe 框架
-    var mainframe
-    mainframe = document.getElementById("mainframe");
-    if(mainframe){ // 只有找到 iframe 框架时才会继续运行脚本
-        mainframe = mainframe.contentWindow;
-        if(menu_refreshCorrection){
-            refreshCorrection(); // 刷新不返回根目录（F5）
+    if(document.getElementById("infos")){ // 分享链接文件列表页
+        setTimeout(fileMoreS, 300); // 自动显示更多文件
+    }else if(document.querySelector("iframe.ifr2")){ // 分享链接文件下载页（暂时没有这方面的功能，先空着）
+        //console.log()
+    }else if(document.getElementById("mainframe") || window.top.location.href.indexOf("mydisk.php?") > -1){ // 后台页
+        if(window.top.location.href != "https://pc.woozooo.com/mydisk.php"){
+            window.top.location.href = "https://pc.woozooo.com/mydisk.php"
         }
-        EventXMLHttpRequest(); // 监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
+        var mainframe;
+        iframe();
+    }
+
+
+    // 获取 iframe 框架
+    function iframe() {
+        mainframe = document.getElementById("mainframe");
+        if(mainframe){ // 只有找到 iframe 框架时才会继续运行脚本
+            mainframe = mainframe.contentWindow;
+            if(menu_refreshCorrection){
+                refreshCorrection(); // 刷新不返回根目录（F5）
+            }
+            EventXMLHttpRequest(); // 监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
+        }
     }
 
 
@@ -128,6 +141,15 @@
             if(filemore.children[0]){ // 判断按钮元素下第一个元素是否存在
                 filemore.children[0].click(); // 点击 [显示更多文件] 按钮
             }
+        }
+    }
+
+
+    // 自动显示更多文件
+    function fileMoreS() {
+        let filemore = document.getElementById("filemore"); // 寻找 [显示更多文件] 按钮
+        if(filemore && filemore.style.display != "none"){ // 判断按钮是否存在且可见
+            filemore.click(); // 点击 [显示更多文件] 按钮
         }
     }
 
