@@ -55,7 +55,7 @@
                 pageElement: 'css;section#latest-posts > article',
                 HT_insert: ['css;nav.navigation.pagination', 1],
                 replaceE: 'css;div.nav-links',
-                scrollDelta: 1500
+                scrollDelta: 1300
             }
         }
     };
