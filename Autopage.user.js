@@ -1,12 +1,15 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.1.0
+// @version      1.1.1
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：423Down、Apphot(原烈火汉化)
+// @description  自动无缝翻页，目前支持：423Down、Apphot(原烈火汉化)、小众软件
 // @match        *://www.423down.com/*
 // @exclude      *://www.423down.com/*.html
 // @match        *://apphot.cc/*
 // @exclude      *://apphot.cc/*.html
+// @match        *://www.appinn.com/
+// @match        *://www.appinn.com/*/*/
+// @match        *://www.appinn.com/?s=*
 // @icon         https://github.githubassets.com/favicon.ico
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
@@ -44,13 +47,24 @@
                 replaceE: 'css;div.pagination',
                 scrollDelta: 1500
             }
+        },
+        postslist_appinn: {
+            SiteTypeID: 3,
+            pager: {
+                nextLink: '//a[@class="next page-numbers"][@href]',
+                pageElement: 'css;section#latest-posts > article',
+                HT_insert: ['css;nav.navigation.pagination', 1],
+                replaceE: 'css;div.nav-links',
+                scrollDelta: 1500
+            }
         }
     };
 
     // 用于脚本内部判断当前 URL 类型
     let SiteType = {
         POSTSLIST_423DOWN: DBSite.postslist_423down.SiteTypeID,
-        POSTSLIST_APPHOT: DBSite.postslist_apphot.SiteTypeID
+        POSTSLIST_APPHOT: DBSite.postslist_apphot.SiteTypeID,
+        POSTSLIST_APPINN: DBSite.postslist_appinn.SiteTypeID
     };
 
     switch (location.host) {
@@ -59,6 +73,9 @@
             break;
         case "apphot.cc":
             curSite = DBSite.postslist_apphot;
+            break;
+        case "www.appinn.com":
+            curSite = DBSite.postslist_appinn;
             break;
     }
     curSite.pageUrl = ""; // 下一页URL
