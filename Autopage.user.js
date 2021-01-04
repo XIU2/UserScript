@@ -1,11 +1,13 @@
 // ==UserScript==
-// @name         423Down 增强
-// @version      1.0.0
+// @name         自动无缝翻页
+// @version      1.1.0
 // @author       X.I.U
-// @description  自动无缝翻页
+// @description  自动无缝翻页，目前支持：423Down、Apphot(原烈火汉化)
 // @match        *://www.423down.com/*
 // @exclude      *://www.423down.com/*.html
-// @icon         https://www.423down.com/favicon.ico
+// @match        *://apphot.cc/*
+// @exclude      *://apphot.cc/*.html
+// @icon         https://github.githubassets.com/favicon.ico
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
 // @grant        GM_openInTab
@@ -16,41 +18,60 @@
 
 (function() {
     // 注册脚本菜单
-    GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+    GM_registerMenuCommand('反馈 & 申请添加支持', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
 
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
 
     // 自动翻页规则
     let DBSite = {
-        postslist: {
+        postslist_423down: {
             SiteTypeID: 1,
             pager: {
                 nextLink: '//div[@class="paging"]//a[contains(text(),"下一页")][@href]',
                 pageElement: 'css;div.content-wrap ul.excerpt > li',
                 HT_insert: ['css;div.content-wrap ul.excerpt', 2],
                 replaceE: 'css;div.paging',
+                scrollDelta: 1300
+            }
+        },
+        postslist_apphot: {
+            SiteTypeID: 2,
+            pager: {
+                nextLink: '//div[@class="pagination"]//a[contains(text(),"下一页")][@href]',
+                pageElement: 'css;div.content > article.excerpt',
+                HT_insert: ['css;div.pagination', 1],
+                replaceE: 'css;div.pagination',
+                scrollDelta: 1500
             }
         }
     };
 
     // 用于脚本内部判断当前 URL 类型
     let SiteType = {
-        POSTSLIST: DBSite.postslist.SiteTypeID
+        POSTSLIST_423DOWN: DBSite.postslist_423down.SiteTypeID,
+        POSTSLIST_APPHOT: DBSite.postslist_apphot.SiteTypeID
     };
 
-    curSite = DBSite.postslist;
+    switch (location.host) {
+        case "www.423down.com":
+            curSite = DBSite.postslist_423down;
+            break;
+        case "apphot.cc":
+            curSite = DBSite.postslist_apphot;
+            break;
+    }
     curSite.pageUrl = ""; // 下一页URL
-    pageLoading();        // 自动翻页
+    pageLoading(); // 自动无缝翻页
 
 
-    // 自动翻页
+    // 自动无缝翻页
     function pageLoading() {
         if (curSite.SiteTypeID > 0){
             windowScroll(function (direction, e) {
                 if (direction === "down") { // 下滑才准备翻页
                     var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-                    let scrollDelta = 1299;
+                    let scrollDelta = curSite.pager.scrollDelta;
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
                         ShowPager.loadMorePage();
                     }
