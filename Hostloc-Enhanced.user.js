@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.0.3
+// @version      1.0.4
 // @author       X.I.U
 // @description  自动无缝翻页、自动显示帖子内被隐藏的回复
 // @match        *://www.hostloc.com/*
@@ -18,23 +18,29 @@
 // ==/UserScript==
 
 (function() {
-    var menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading');
-    var menu_thread_pageLoading_ID, menu_feedBack_ID;
+    var menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading'),
+        menu_showhide = GM_getValue('xiu2_menu_showhide');
+    var menu_thread_pageLoading_ID, menu_showhide_ID, menu_feedBack_ID;
     if (menu_thread_pageLoading == null){menu_thread_pageLoading = true; GM_setValue('xiu2_menu_thread_pageLoading', menu_thread_pageLoading)};
+    if (menu_showhide == null){menu_showhide = true; GM_setValue('xiu2_menu_showhide', menu_showhide)};
     registerMenuCommand();
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        var menu_thread_pageLoading_;
+        let menu_thread_pageLoading_, menu_showhide_;
         if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
             GM_unregisterMenuCommand(menu_thread_pageLoading_ID);
+            GM_unregisterMenuCommand(menu_showhide_ID);
             GM_unregisterMenuCommand(menu_feedBack_ID);
             menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading');
+            menu_showhide = GM_getValue('xiu2_menu_showhide');
         }
 
         if (menu_thread_pageLoading){menu_thread_pageLoading_ = "√";}else{menu_thread_pageLoading_ = "×";}
+        if (menu_showhide){menu_showhide_ = "√";}else{menu_showhide_ = "×";}
 
         menu_thread_pageLoading_ID = GM_registerMenuCommand(`[ ${menu_thread_pageLoading_} ] 帖子内自动翻页`, function(){menu_switch(menu_thread_pageLoading,'xiu2_menu_thread_pageLoading','帖子内自动翻页')});
+        menu_showhide_ID = GM_registerMenuCommand(`[ ${menu_showhide_} ] 自动显示隐藏回复`, function(){menu_switch(menu_showhide,'xiu2_menu_showhide','自动显示隐藏回复')});
         menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
@@ -89,10 +95,10 @@
 
     // 用于脚本内部判断当前 URL 类型
     let SiteType = {
-        FORUM: DBSite.forum.SiteTypeID,   // 各板块帖子列表
+        FORUM: DBSite.forum.SiteTypeID, // 各板块帖子列表
         THREAD: DBSite.thread.SiteTypeID, // 帖子内
-        GUIDE: DBSite.guide.SiteTypeID,    // 导读帖子列表
-        SEARCH: DBSite.search.SiteTypeID  // 搜索结果列表
+        GUIDE: DBSite.guide.SiteTypeID, // 导读帖子列表
+        SEARCH: DBSite.search.SiteTypeID // 搜索结果列表
     };
 
     // URL 匹配正则表达式
@@ -120,7 +126,7 @@
     }
 
     curSite.pageUrl = ""; // 下一页URL
-    pageLoading();        // 自动翻页
+    pageLoading(); // 自动翻页
 
 
     // 自动翻页
@@ -148,9 +154,11 @@
 
     // 自动显示帖子内被隐藏的回复
     function showPosts() {
-        var showposts = document.querySelector('#hiddenpoststip a');
-        if (showposts){ // 如果存在
-            showposts.click();
+        if(menu_showhide){
+            var showposts = document.querySelector('#hiddenpoststip a');
+            if (showposts){ // 如果存在
+                showposts.click();
+            }
         }
     }
 

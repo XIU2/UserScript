@@ -21,7 +21,7 @@
 |  **Github 增强** | 高速下载 Clone、Release、Raw、Code(ZIP) 等文件、快捷下载... | **[安装](https://greasyfork.org/zh-CN/scripts/412245) \| [备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GithubEnhanced-High-Speed-Download.user.js)** |
 |  **自动无缝翻页 \*** | 目前支持：423Down、Apphot(原烈火汉化)、小众软件... | **[安装](https://greasyfork.org/zh-CN/scripts/419215) \| [备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Autopage.user.js)** |
 | **3DM论坛 美化** | 精简多余内容 | **[安装](https://greasyfork.org/zh-CN/scripts/413593) \| [备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Beautification.user.js)** |
-| **3DM论坛 增强** | 自动回复、自动无缝翻页、清理置顶帖子... | **[安装](https://greasyfork.org/zh-CN/scripts/412890) \| [备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Enhanced.user.js)** |
+| **3DM论坛 增强** | 自动回复、自动无缝翻页、清理置顶帖子 | **[安装](https://greasyfork.org/zh-CN/scripts/412890) \| [备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Enhanced.user.js)** |
 | **智友邦论坛 美化** | 精简多余内容、宽屏显示 | **[安装](https://greasyfork.org/zh-CN/scripts/412361) \| [备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Beautification.user.js)** |
 | **智友邦论坛 增强** | 自动签到、自动回复、自动无缝翻页、清理置顶帖子、简化附件... | **[安装](https://greasyfork.org/zh-CN/scripts/412362) \| [备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Enhanced.user.js)** |
 |  **蓝奏云网盘 增强 \*** | 刷新不回根目录、右键显示菜单、自动显示更多文件、分享链接... | **[安装](https://greasyfork.org/zh-CN/scripts/419224) \| [备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Lanzou-Enhanced.user.js)** |
