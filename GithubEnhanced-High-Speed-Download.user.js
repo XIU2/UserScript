@@ -4,7 +4,7 @@
 // @author       X.I.U
 // @description  高速下载 Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
-// @icon         https://github.githubassets.com/favicon.ico
+// @icon         https://github.com/favicon.ico
 // @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
