@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.1.0
+// @version      1.1.1
 // @author       X.I.U
 // @description  刷新不返回根目录、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接
 // @match        *://*.lanzous.com/*
@@ -143,53 +143,37 @@
     // 右键文件显示菜单
     function rightClickMenu() {
         if(menu_rightClickMenu){ // 脚本菜单开启时才继续
-            var folder_list = mainframe.document.getElementById("sub_folder_list");
-            if(folder_list){ // 文件夹列表
-                folder_list.oncontextmenu = function(e){
-                    e.preventDefault(); // 屏蔽浏览器自身右键菜单
-                    let folder_list_ID = e.target.id;
-                    //console.log(e.target.nodeName)
-                    //console.log(e.target.className)
-                    //console.log(e.target.id)
-                    if(e.target.nodeName == "FONT")
-                    {
-                        folder_list_ID = e.target.parentNode.parentNode.id
-                    }else if(e.target.id == ""){
-                        folder_list_ID = e.target.parentNode.id
-                    }
-                    folder_list_ID = /\d+/.exec(folder_list_ID)
-                    if(folder_list_ID.length > 0){
-                        mainframe.document.getElementById("folse" + folder_list_ID[0]).focus();
-                        mainframe.document.getElementById("folse" + folder_list_ID[0]).click();
-                    }
+            rightClickMenu_("sub_folder_list", "fols", "folse") // 文件夹
+            rightClickMenu_("filelist", "fs", "fse") // 文件
+        }
+    }
+
+
+    // 右键文件显示菜单，参数：文件/文件夹列表 ID、菜单 ID 前缀
+    function rightClickMenu_(list_id_name, menu_id_name_prefix, list_id_name_prefix) {
+        let list_ = mainframe.document.getElementById(list_id_name);
+        if(list_){ // 文件/文件夹列表
+            list_.oncontextmenu = function(e){
+                e.preventDefault(); // 屏蔽浏览器自身右键菜单
+                let left = e.pageX - 30; // 右键菜单弹出位置
+                let list_ID = e.target.id;
+                if(e.target.nodeName == "FONT"){
+                    list_ID = e.target.parentNode.parentNode.id
+                }else if(e.target.id == ""){
+                    list_ID = e.target.parentNode.id
                 }
-            }
-            var file_list = mainframe.document.getElementById("filelist");
-            if(file_list){ // 文件列表
-                file_list.oncontextmenu = function(e){
-                    e.preventDefault(); // 屏蔽浏览器自身右键菜单
-                    let file_list_ID = e.target.id;
-                    //console.log(e.target.nodeName)
-                    //console.log(e.target.className)
-                    //console.log(e.target.id)
-                    if(e.target.nodeName == "FONT")
-                    {
-                        file_list_ID = e.target.parentNode.parentNode.id
-                    }else if(e.target.id == ""){
-                        file_list_ID = e.target.parentNode.id
-                    }
-                    file_list_ID = /\d+/.exec(file_list_ID)
-                    if(file_list_ID.length > 0){
-                        mainframe.document.getElementById("fse" + file_list_ID[0]).focus();
-                        mainframe.document.getElementById("fse" + file_list_ID[0]).click();
-                    }
+                list_ID = /\d+/.exec(list_ID)
+                if(list_ID.length > 0){
+                    mainframe.document.getElementById(menu_id_name_prefix + list_ID[0]).style.cssText="position: absolute !important; left: " + left + "px;" // 修改右键菜单弹出位置（X）
+                    mainframe.document.getElementById(list_id_name_prefix + list_ID[0]).focus();
+                    mainframe.document.getElementById(list_id_name_prefix + list_ID[0]).click();
                 }
             }
         }
     }
 
 
-    // 自动显示更多文件
+    // 自动显示更多文件（后台页）
     function fileMore() {
         let filemore = mainframe.document.getElementById("filemore"); // 寻找 [显示更多文件] 按钮
         if(filemore && filemore.style.display == "block"){ // 判断按钮是否存在且可见
@@ -200,7 +184,7 @@
     }
 
 
-    // 自动显示更多文件
+    // 自动显示更多文件（分享链接列表页）
     function fileMoreS() {
         let filemore = document.getElementById("filemore"); // 寻找 [显示更多文件] 按钮
         if(filemore && filemore.style.display != "none"){ // 判断按钮是否存在且可见
