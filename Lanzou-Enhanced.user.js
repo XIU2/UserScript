@@ -2,7 +2,7 @@
 // @name         蓝奏云网盘增强
 // @version      1.1.2
 // @author       X.I.U
-// @description  刷新不返回根目录、右键文件显示菜单、分享链接重定向（解决部分地区无法访问）、自动显示更多文件、自动打开分享链接、自动复制分享链接
+// @description  刷新不返回根目录、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接
 // @match        *://*.lanzous.com/*
 // @match        *://*.lanzoux.com/*
 // @match        *://*.lanzoui.com/*
@@ -30,44 +30,38 @@
     var menu_open_fileSha = GM_getValue('xiu2_menu_open_fileSha'),
         menu_copy_fileSha = GM_getValue('xiu2_menu_copy_fileSha'),
         menu_refreshCorrection = GM_getValue('xiu2_menu_refreshCorrection'),
-        menu_rightClickMenu = GM_getValue('xiu2_menu_rightClickMenu'),
-        menu_urlRedirect = GM_getValue('xiu2_menu_urlRedirect');
-    var menu_open_fileSha_ID, menu_copy_fileSha_ID, menu_refreshCorrection_ID, menu_rightClickMenu_ID, menu_urlRedirect_ID, menu_feedBack_ID;
+        menu_rightClickMenu = GM_getValue('xiu2_menu_rightClickMenu');
+    var menu_open_fileSha_ID, menu_copy_fileSha_ID, menu_refreshCorrection_ID, menu_rightClickMenu_ID, menu_feedBack_ID;
     if (menu_open_fileSha == null){menu_open_fileSha = true; GM_setValue('xiu2_menu_open_fileSha', menu_open_fileSha)};
     if (menu_copy_fileSha == null){menu_copy_fileSha = true; GM_setValue('xiu2_menu_copy_fileSha', menu_copy_fileSha)};
     if (menu_refreshCorrection == null){menu_refreshCorrection = true; GM_setValue('xiu2_menu_refreshCorrection', menu_refreshCorrection)};
     if (menu_rightClickMenu == null){menu_rightClickMenu = true; GM_setValue('xiu2_menu_rightClickMenu', menu_rightClickMenu)};
-    if (menu_urlRedirect == null){menu_urlRedirect = false; GM_setValue('xiu2_menu_urlRedirect', menu_urlRedirect)};
     registerMenuCommand();
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        var menu_open_fileSha_, menu_copy_fileSha_, menu_refreshCorrection_, menu_rightClickMenu_, menu_urlRedirect_;
+        var menu_open_fileSha_, menu_copy_fileSha_, menu_refreshCorrection_, menu_rightClickMenu_;
         if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
             GM_unregisterMenuCommand(menu_open_fileSha_ID);
             GM_unregisterMenuCommand(menu_copy_fileSha_ID);
             GM_unregisterMenuCommand(menu_refreshCorrection_ID);
             GM_unregisterMenuCommand(menu_rightClickMenu_ID);
-            GM_unregisterMenuCommand(menu_urlRedirect_ID);
             GM_unregisterMenuCommand(menu_feedBack_ID);
             menu_open_fileSha = GM_getValue('xiu2_menu_open_fileSha');
             menu_copy_fileSha = GM_getValue('xiu2_menu_copy_fileSha');
             menu_refreshCorrection = GM_getValue('xiu2_menu_refreshCorrection');
             menu_rightClickMenu = GM_getValue('xiu2_menu_rightClickMenu');
-            menu_rightClickMenu = GM_getValue('xiu2_menu_urlRedirect');
         }
 
         if (menu_open_fileSha){menu_open_fileSha_ = "√";}else{menu_open_fileSha_ = "×";}
         if (menu_copy_fileSha){menu_copy_fileSha_ = "√";}else{menu_copy_fileSha_ = "×";}
         if (menu_refreshCorrection){menu_refreshCorrection_ = "√";}else{menu_refreshCorrection_ = "×";}
         if (menu_rightClickMenu){menu_rightClickMenu_ = "√";}else{menu_rightClickMenu_ = "×";}
-        if (menu_urlRedirect){menu_urlRedirect_ = "√";}else{menu_urlRedirect_ = "×";}
 
         menu_open_fileSha_ID = GM_registerMenuCommand(`[ ${menu_open_fileSha_} ] 自动打开分享链接`, function(){menu_switch(menu_open_fileSha,'xiu2_menu_open_fileSha','自动打开分享链接', true)});
         menu_copy_fileSha_ID = GM_registerMenuCommand(`[ ${menu_copy_fileSha_} ] 自动复制分享链接`, function(){menu_switch(menu_copy_fileSha,'xiu2_menu_copy_fileSha','自动复制分享链接', true)});
         menu_refreshCorrection_ID = GM_registerMenuCommand(`[ ${menu_refreshCorrection_} ] 刷新不返回根目录`, function(){if(menu_refreshCorrection){UNrefreshCorrection();}else{refreshCorrection();};menu_switch(menu_refreshCorrection,'xiu2_menu_refreshCorrection','刷新不返回根目录', false)});
         menu_rightClickMenu_ID = GM_registerMenuCommand(`[ ${menu_rightClickMenu_} ] 右键文件显示菜单`, function(){menu_switch(menu_rightClickMenu,'xiu2_menu_rightClickMenu','右键文件显示菜单', true)});
-        menu_urlRedirect_ID = GM_registerMenuCommand(`[ ${menu_urlRedirect_} ] 分享链接重定向（解决部分地区无法访问）`, function(){menu_switch(menu_urlRedirect,'xiu2_menu_urlRedirect','分享链接重定向', true)});
         menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
@@ -90,7 +84,6 @@
     };
 
 
-    urlRedirect(); // 分享链接重定向
     if(document.getElementById("infos")){ // 分享链接文件列表页
         setTimeout(fileMoreS, 300); // 自动显示更多文件
     }else if(document.querySelector("iframe.ifr2")){ // 分享链接文件下载页（暂时没有这方面的功能，先空着）
@@ -147,15 +140,6 @@
         }
     }
 
-
-    // 分享链接重定向
-    function urlRedirect() {
-        if(menu_urlRedirect){
-            if(/lanzou[s|x|i]\.com/.test(window.top.location.hostname)){
-                window.top.location.hostname = "pan.lanzou.com"
-            }
-        }
-    }
 
     // 右键文件显示菜单
     function rightClickMenu() {
