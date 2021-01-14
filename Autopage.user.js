@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.1.1
+// @version      1.1.2
 // @author       X.I.U
 // @description  自动无缝翻页，目前支持：423Down、Apphot(原烈火汉化)、小众软件
 // @match        *://www.423down.com/*
@@ -35,7 +35,7 @@
                 pageElement: 'css;div.content-wrap ul.excerpt > li',
                 HT_insert: ['css;div.content-wrap ul.excerpt', 2],
                 replaceE: 'css;div.paging',
-                scrollDelta: 1300
+                scrollDelta: 1500
             }
         },
         postslist_apphot: {
@@ -55,7 +55,7 @@
                 pageElement: 'css;section#latest-posts > article',
                 HT_insert: ['css;nav.navigation.pagination', 1],
                 replaceE: 'css;div.nav-links',
-                scrollDelta: 1300
+                scrollDelta: 1500
             }
         }
     };
@@ -88,6 +88,7 @@
             windowScroll(function (direction, e) {
                 if (direction === "down") { // 下滑才准备翻页
                     var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+                    console.log(document.documentElement.scrollHeight)
                     let scrollDelta = curSite.pager.scrollDelta;
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
                         ShowPager.loadMorePage();
