@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.2.1
+// @version      1.2.2
 // @author       X.I.U
-// @description  移除登录弹窗、一键收起回答、置顶显示时间、区分问题文章、默认高清原图、默认站外直链
+// @description  移除登录弹窗、一键收起回答、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/static/favicon.ico
@@ -107,6 +107,18 @@ function topTime_index()
     })
 }
 
+
+// UTC 标准时转 UTC+8 北京时间，来自：https://greasyfork.org/zh-CN/scripts/402808
+function getUTC8 (datetime) {
+    let month = (datetime.getMonth() + 1) < 10 ? "0" + (datetime.getMonth() + 1) : (datetime.getMonth() + 1);
+    let date = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
+    let hours = datetime.getHours() < 10 ? "0" + datetime.getHours() : datetime.getHours();
+    let minutes = datetime.getMinutes() < 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
+    let seconds = datetime.getSeconds() < 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
+    return (datetime.getFullYear() + "-" + month + "-" + date + "\xa0\xa0" + hours + ":" + minutes + ":" + seconds);
+}
+
+
 // 置顶显示时间 - 回答页，来自：https://greasyfork.org/scripts/402808
 function topTime_question()
 {
@@ -147,6 +159,17 @@ function topTime_question()
     })
 
     $(".Pc-card.Card").attr("style","display:none")
+
+    //问题创建时间，来自：https://greasyfork.org/zh-CN/scripts/402808
+    if ($(".QuestionPage .QuestionHeader-side p").length == 0 && window.location.href.indexOf("log") == -1) //非问题日志页
+    {
+        let createtime = $(".QuestionPage>[itemprop~=dateCreated]").attr("content");
+        let modifiedtime = $(".QuestionPage>[itemprop~=dateModified]").attr("content");
+        createtime = getUTC8(new Date(createtime));
+        modifiedtime = getUTC8(new Date(modifiedtime));
+
+        $(".QuestionPage .QuestionHeader-side").append('<div style=\"color:#8590a6; margin-top:15px\"><p>创建时间:&nbsp;&nbsp;' + createtime + '</p><p>最后编辑:&nbsp;&nbsp;' + modifiedtime + '</p></div>');
+    }
 }
 
 // 置顶显示时间 - 专栏/文章，来自：https://greasyfork.org/scripts/402808
@@ -397,21 +420,21 @@ function removeLogin() {
 function EventXMLHttpRequest() {
     var _send = window.XMLHttpRequest.prototype.send
     function sendReplacement(data) {
-        console.log(`111111`);
+        //console.log(`111111`);
         addTypeTips();
         return _send.apply(this, arguments);
     }
     window.XMLHttpRequest.prototype.send = sendReplacement;
 }
 
-(function (open) {
+/*(function (open) {
     XMLHttpRequest.prototype.open = function () {
         this.addEventListener("readystatechange", function () {
-                console.log(this.responseURL);
+                //console.log(this.responseURL);
         }, false);
         open.apply(this, arguments);
     };
-})(XMLHttpRequest.prototype.open);
+})(XMLHttpRequest.prototype.open);*/
 
 (function() {
     if (document.querySelector('button.AppHeader-login')){ // 未登录时才会监听并移除登录弹窗
