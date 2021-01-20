@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.3.1
+// @version      1.3.2
 // @author       X.I.U
 // @description  高速下载 Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -39,6 +39,7 @@
         ],
         raw_url = [
             ['https://raw.githubusercontent.com','Github 原生',''],
+            ['https://raw.sevencdn.com','中国国内',''],
             ['https://cdn.jsdelivr.net','中国国内','注意：该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10;注意：当前分支所有文件总文件大小超过 50MB 时，该加速源不可用。&#10;注意：当前分支名为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。&#10;&#10;'],
             ['https://raw.fastgit.org','中国香港','注意：单个文件太大时可能会提示超时（实时获取中），请重试。&#10;&#10;']
         ],
@@ -201,12 +202,14 @@
             var href = location.href.replace('https://github.com',''),
                 href2 = href.replace('/blob/','/'),
                 url = [
-                    raw_url[1][0] + "/gh" + href.replace('/blob/','@'),
-                    raw_url[2][0] + href2
+                    raw_url[1][0] + href2,
+                    raw_url[2][0] + "/gh" + href.replace('/blob/','@'),
+                    raw_url[3][0] + href2
                 ],
                 html = `
 <a href="${url[0]}" title="${raw_url[1][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[1][1]}</a>
 <a href="${url[1]}" title="${raw_url[2][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[2][1]}</a>
+<a href="${url[2]}" title="${raw_url[3][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[3][1]}</a>
 `;
             $(this).after(html);
         });
@@ -255,14 +258,19 @@
                     url_tip = raw_url[0][2];
                     break;
                 case 1:
-                    url = raw_url[1][0] + '/gh' + href.replace('/blob/','@');
+                    url = raw_url[1][0] + href2;
                     url_name = raw_url[1][1];
                     url_tip = raw_url[1][2];
                     break;
                 case 2:
-                    url = raw_url[2][0] + href2;
+                    url = raw_url[2][0] + '/gh' + href.replace('/blob/','@');
                     url_name = raw_url[2][1];
                     url_tip = raw_url[2][2];
+                    break;
+                case 3:
+                    url = raw_url[3][0] + href2;
+                    url_name = raw_url[3][1];
+                    url_tip = raw_url[3][2];
                     break;
             }
             var html = ` <a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url[menu_raw_fast][1]} ] 加速源 (☁) 即可切换。">${svg[2]}</a>`;
