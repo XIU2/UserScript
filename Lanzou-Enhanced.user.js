@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.1.2
+// @version      1.1.3
 // @author       X.I.U
-// @description  刷新不返回根目录、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接
+// @description  刷新不返回根目录、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、调整话说编辑框初始大小
 // @match        *://*.lanzous.com/*
 // @match        *://*.lanzoux.com/*
 // @match        *://*.lanzoui.com/*
@@ -105,6 +105,7 @@
             if(menu_refreshCorrection){
                 refreshCorrection(); // 刷新不返回根目录（F5）
             }
+            setTimeout(folderDescdes, 200); // 调整话说编辑框初始大小
             EventXMLHttpRequest(); // 监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
         }
     }
@@ -190,6 +191,15 @@
         let filemore = document.getElementById("filemore"); // 寻找 [显示更多文件] 按钮
         if(filemore && filemore.style.display != "none"){ // 判断按钮是否存在且可见
             filemore.click(); // 点击 [显示更多文件] 按钮
+        }
+    }
+
+
+    // 调整话说编辑框初始大小
+    function folderDescdes() {
+        let folderdescdes = mainframe.document.getElementById("folder_descdes"); // 寻找话说（描述）编辑框
+        if(folderdescdes){ // 判断话说（描述）元素是否存在
+            folderdescdes.style.cssText="margin: 15px 0px; width: 666px; height: 150px;"
         }
     }
 
