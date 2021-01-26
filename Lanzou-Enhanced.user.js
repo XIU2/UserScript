@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.1.3
+// @version      1.1.4
 // @author       X.I.U
-// @description  刷新不返回根目录、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、调整话说编辑框初始大小
+// @description  刷新不返回根目录、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、调整描述（话说）编辑框初始大小
 // @match        *://*.lanzous.com/*
 // @match        *://*.lanzoux.com/*
 // @match        *://*.lanzoui.com/*
@@ -200,6 +200,14 @@
         let folderdescdes = mainframe.document.getElementById("folder_descdes"); // 寻找话说（描述）编辑框
         if(folderdescdes){ // 判断话说（描述）元素是否存在
             folderdescdes.style.cssText="margin: 15px 0px; width: 666px; height: 150px;"
+        }
+        let folderdescdes2 = mainframe.document.getElementById("fol_credes"); // 寻找话说（描述）编辑框
+        if(folderdescdes2){ // 判断话说（描述）元素是否存在
+            folderdescdes2.style.cssText="margin: 15px 0px; width: 666px; height: 150px;"
+        }
+        let folderdescdes3 = mainframe.document.getElementById("file_desc"); // 寻找话说（描述）编辑框
+        if(folderdescdes3){ // 判断话说（描述）元素是否存在
+            folderdescdes3.style.cssText="margin: 15px 0px; width: 666px; height: 150px;"
         }
     }
 
