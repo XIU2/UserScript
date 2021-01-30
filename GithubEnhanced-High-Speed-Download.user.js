@@ -21,8 +21,8 @@
     var backColor = '#ffffff';
     var fontColor = '#888888';
     if('dark' == $('html').attr('data-color-mode')){ // 黑暗模式判断
-        backColor = '#272727';
-        fontColor = '#dedede';
+        backColor = '#0D1117';
+        fontColor = '#b2b8bf';
     }
     var download_url = [
         ['https://gh.con.sh','美国'],
