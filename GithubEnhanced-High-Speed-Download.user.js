@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.3.2
+// @version      1.3.3
 // @author       X.I.U
 // @description  高速下载 Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -21,8 +21,8 @@
     var backColor = '#ffffff';
     var fontColor = '#888888';
     if('dark' == $('html').attr('data-color-mode')){ // 黑暗模式判断
-        backColor = '#0D1117';
-        fontColor = '#58A6FF';
+        backColor = '#272727';
+        fontColor = '#dedede';
     }
     var download_url = [
         ['https://gh.con.sh','美国'],
