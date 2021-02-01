@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.1.4
+// @version      1.1.5
 // @author       X.I.U
-// @description  刷新不返回根目录、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、调整描述（话说）编辑框初始大小
+// @description  刷新不返回根目录、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、调整描述（话说）编辑框初始大小、拖入文件自动显示上传框
 // @match        *://*.lanzous.com/*
 // @match        *://*.lanzoux.com/*
 // @match        *://*.lanzoui.com/*
@@ -21,6 +21,7 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_notification
+// @grant        unsafeWindow
 // @noframes
 // @license      GPL-3.0 License
 // @run-at       document-end
@@ -107,6 +108,8 @@
             }
             setTimeout(folderDescdes, 200); // 调整话说编辑框初始大小
             EventXMLHttpRequest(); // 监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
+
+            dragEnter(); // 拖入文件自动显示上传框
         }
     }
 
@@ -209,6 +212,20 @@
         if(folderdescdes3){ // 判断话说（描述）元素是否存在
             folderdescdes3.style.cssText="margin: 15px 0px; width: 666px; height: 150px;"
         }
+    }
+
+
+    // 拖入文件自动显示上传框
+    function dragEnter() {
+        mainframe.addEventListener("dragenter", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            let f_upb = mainframe.document.querySelector(".f_upb")
+            if(f_upb.style.top != "-36px") {
+                f_upb.style.top = "-36px";
+                mainframe.f_upc();
+            }
+        }, false);
     }
 
 
