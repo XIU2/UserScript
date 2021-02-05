@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.1.5
+// @version      1.1.6
 // @author       X.I.U
 // @description  刷新不返回根目录、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、调整描述（话说）编辑框初始大小、拖入文件自动显示上传框
 // @match        *://*.lanzous.com/*
 // @match        *://*.lanzoux.com/*
 // @match        *://*.lanzoui.com/*
 // @match        *://pan.lanzou.com/*
-// @match        *://www.lanzou.com/account.php
+// @match        *://www.lanzou.com/account.php*
 // @match        *://www.lanzou.com/u
 // @match        *://up.woozooo.com/u
 // @match        *://up.woozooo.com/mydisk.php*
