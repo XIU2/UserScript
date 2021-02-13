@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.3.3
+// @version      1.3.4
 // @author       X.I.U
 // @description  高速下载 Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -39,9 +39,10 @@
         ],
         raw_url = [
             ['https://raw.githubusercontent.com','Github 原生',''],
-            ['https://raw.sevencdn.com','中国国内',''],
-            ['https://cdn.jsdelivr.net','中国国内','注意：该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10;注意：当前分支所有文件总文件大小超过 50MB 时，该加速源不可用。&#10;注意：当前分支名为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。&#10;&#10;'],
-            ['https://raw.fastgit.org','中国香港','注意：单个文件太大时可能会提示超时（实时获取中），请重试。&#10;&#10;']
+            ['https://raw.sevencdn.com','中国国内 01',''],
+            ['https://cdn.jsdelivr.net','中国国内 02','注意：该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10;注意：当前分支所有文件总文件大小超过 50MB 时，该加速源不可用。&#10;注意：当前分支名为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。&#10;&#10;'],
+            ['https://raw.fastgit.org','中国香港','注意：单个文件太大时可能会提示超时（实时获取中），请重试。&#10;&#10;'],
+            ['https://ghproxy.com','韩国首尔','']
         ],
         svg = [
             '<svg class="octicon octicon-file-zip mr-3" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M3.5 1.75a.25.25 0 01.25-.25h3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h2.086a.25.25 0 01.177.073l2.914 2.914a.25.25 0 01.073.177v8.586a.25.25 0 01-.25.25h-.5a.75.75 0 000 1.5h.5A1.75 1.75 0 0014 13.25V4.664c0-.464-.184-.909-.513-1.237L10.573.513A1.75 1.75 0 009.336 0H3.75A1.75 1.75 0 002 1.75v11.5c0 .649.353 1.214.874 1.515a.75.75 0 10.752-1.298.25.25 0 01-.126-.217V1.75zM8.75 3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM6 5.25a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5A.75.75 0 016 5.25zm2 1.5A.75.75 0 018.75 6h.5a.75.75 0 010 1.5h-.5A.75.75 0 018 6.75zm-1.25.75a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM8 9.75A.75.75 0 018.75 9h.5a.75.75 0 010 1.5h-.5A.75.75 0 018 9.75zm-.75.75a1.75 1.75 0 00-1.75 1.75v3c0 .414.336.75.75.75h2.5a.75.75 0 00.75-.75v-3a1.75 1.75 0 00-1.75-1.75h-.5zM7 12.25a.25.25 0 01.25-.25h.5a.25.25 0 01.25.25v2.25H7v-2.25z"></path></svg>',
@@ -204,12 +205,14 @@
                 url = [
                     raw_url[1][0] + href2,
                     raw_url[2][0] + "/gh" + href.replace('/blob/','@'),
-                    raw_url[3][0] + href2
+                    raw_url[3][0] + href2,
+                    raw_url[4][0] + "/" + raw_url[0][0] + href2
                 ],
                 html = `
 <a href="${url[0]}" title="${raw_url[1][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[1][1]}</a>
 <a href="${url[1]}" title="${raw_url[2][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[2][1]}</a>
 <a href="${url[2]}" title="${raw_url[3][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[3][1]}</a>
+<a href="${url[3]}" title="${raw_url[4][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[4][1]}</a>
 `;
             $(this).after(html);
         });
@@ -252,25 +255,20 @@
             var href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
             switch(menu_raw_fast)
             {
-                case 0:
-                    url = raw_url[0][0] + href2;
-                    url_name = raw_url[0][1];
-                    url_tip = raw_url[0][2];
-                    break;
-                case 1:
-                    url = raw_url[1][0] + href2;
-                    url_name = raw_url[1][1];
-                    url_tip = raw_url[1][2];
-                    break;
                 case 2:
                     url = raw_url[2][0] + '/gh' + href.replace('/blob/','@');
                     url_name = raw_url[2][1];
                     url_tip = raw_url[2][2];
                     break;
-                case 3:
-                    url = raw_url[3][0] + href2;
-                    url_name = raw_url[3][1];
-                    url_tip = raw_url[3][2];
+                case 4:
+                    url = raw_url[4][0] + "/" + raw_url[0][0] + href2;
+                    url_name = raw_url[4][1];
+                    url_tip = raw_url[4][2];
+                    break;
+                default:
+                    url = raw_url[menu_raw_fast][0] + href2;
+                    url_name = raw_url[menu_raw_fast][1];
+                    url_tip = raw_url[menu_raw_fast][2];
                     break;
             }
             var html = ` <a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url[menu_raw_fast][1]} ] 加速源 (☁) 即可切换。">${svg[2]}</a>`;
