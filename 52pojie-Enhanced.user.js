@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.1.9
+// @version      1.2.0
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页（全站）
 // @match        *://www.52pojie.cn/*
@@ -75,7 +75,7 @@
                 nextLink: '//div[@id="pgt"]//a[contains(text(),"下一页")][@href]',
                 pageElement: 'css;div#postlist > div[id^="post_"]',
                 HT_insert: ['css;div#postlist', 2],
-                replaceE: '//div[@class="pg"] | //div[@class="pgbtn"]',
+                replaceE: 'css;div.pg',
                 scrollDelta: 766
             }
         },
@@ -132,7 +132,10 @@
     // URL 判断
     if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)){
         // 帖子内
-        if(menu_thread_pageLoading)curSite = DBSite.thread;
+        if(menu_thread_pageLoading) {
+            curSite = DBSite.thread;
+            hidePgbtn(); // 隐藏帖子内的 [下一页] 按钮
+        }
     }else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)){
         // 各板块帖子列表
         curSite = DBSite.forum;
@@ -195,7 +198,7 @@
     function qianDaoBack() {
         var qiandaoback = document.querySelector('#messagetext p.alert_btnleft a');
         if (qiandaoback){
-            setTimeout(function(){qiandaoback.click()}, 100);
+            setTimeout(function(){qiandaoback.click()}, 200);
         }
     }
 
@@ -236,6 +239,14 @@
             // 如果屏蔽悬赏贴后，剩余帖子列表太少会没有滚动条，无法滚动页面触发自动翻页事件，需要手动触发
             ShowPager.loadMorePage();
         }
+    }
+
+
+    // 隐藏帖子内的 [下一页] 按钮
+    function hidePgbtn(){
+        let style_hidePgbtn = document.createElement('style');
+        style_hidePgbtn.innerHTML = `.pgbtn {display: none;}`;
+        document.head.appendChild(style_hidePgbtn);
     }
 
 
@@ -331,7 +342,9 @@
                                     // 替换待替换元素
                                     try {
                                         let oriE = getAllElements(curSite.pager.replaceE);
+                                        console.log(oriE)
                                         let repE = getAllElements(curSite.pager.replaceE, newBody, newBody);
+                                        console.log(repE)
                                         if (oriE.length === repE.length) {
                                             for (var i = 0; i < oriE.length; i++) {
                                                 oriE[i].outerHTML = repE[i].outerHTML;
