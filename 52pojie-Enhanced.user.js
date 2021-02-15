@@ -342,9 +342,7 @@
                                     // 替换待替换元素
                                     try {
                                         let oriE = getAllElements(curSite.pager.replaceE);
-                                        console.log(oriE)
                                         let repE = getAllElements(curSite.pager.replaceE, newBody, newBody);
-                                        console.log(repE)
                                         if (oriE.length === repE.length) {
                                             for (var i = 0; i < oriE.length; i++) {
                                                 oriE[i].outerHTML = repE[i].outerHTML;
