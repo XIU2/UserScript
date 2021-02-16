@@ -251,7 +251,7 @@
 
 
     // 监听 XMLHttpRequest 事件
-    function EventXMLHttpRequest() {
+    /*function EventXMLHttpRequest() {
         var _send = window.XMLHttpRequest.prototype.send
         function sendReplacement(data) {
             if(this.onreadystatechange) {
@@ -270,7 +270,7 @@
             return this._onreadystatechange.apply(this, arguments);
         }
         window.XMLHttpRequest.prototype.send = sendReplacement;
-    }
+    }*/
 
     // 自动无缝翻页，修改自 https://greasyfork.org/scripts/14178
     function showPager() {
