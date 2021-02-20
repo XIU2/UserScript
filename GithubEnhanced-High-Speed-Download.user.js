@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.3.4
+// @version      1.3.5
 // @author       X.I.U
-// @description  高速下载 Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
+// @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
 // @icon         https://github.com/favicon.ico
 // @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
@@ -33,15 +33,15 @@
         ['https://pd.zwc365.com/seturl','中国香港']
     ],
         clone_url = [
-            'https://hub.fastgit.org',
-            'https://gitclone.com',
-            'https://github.com.cnpmjs.org'
+            ['https://hub.fastgit.org','中国香港'],
+            ['https://gitclone.com','中国浙江杭州'],
+            ['https://github.com.cnpmjs.org','新加坡']
         ],
         raw_url = [
             ['https://raw.githubusercontent.com','Github 原生',''],
             ['https://raw.sevencdn.com','中国国内 01',''],
-            ['https://cdn.jsdelivr.net','中国国内 02','注意：该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10;注意：当前分支所有文件总文件大小超过 50MB 时，该加速源不可用。&#10;注意：当前分支名为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。&#10;&#10;'],
-            ['https://raw.fastgit.org','中国香港','注意：单个文件太大时可能会提示超时（实时获取中），请重试。&#10;&#10;'],
+            ['https://cdn.jsdelivr.net','中国国内 02','注意：该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10;注意：当前分支所有文件总文件大小超过 50MB 时，该加速源不可用。&#10;注意：当前分支名为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。'],
+            ['https://raw.fastgit.org','中国香港','注意：单个文件太大时可能会提示超时（实时获取中），请重试。'],
             ['https://ghproxy.com','韩国首尔','']
         ],
         svg = [
@@ -50,7 +50,6 @@
             '<svg class="octicon octicon-cloud-download" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M9 12h2l-3 3-3-3h2V7h2v5zm3-8c0-.44-.91-3-4.5-3C5.08 1 3 2.92 3 5 1.02 5 0 6.52 0 8c0 1.53 1 3 3 3h3V9.7H3C1.38 9.7 1.3 8.28 1.3 8c0-.17.05-1.7 1.7-1.7h1.3V5c0-1.39 1.56-2.7 3.2-2.7 2.55 0 3.13 1.55 3.2 1.8v1.2H12c.81 0 2.7.22 2.7 2.2 0 2.09-2.25 2.2-2.7 2.2h-2V11h2c2.08 0 4-1.16 4-3.5C16 5.06 14.08 4 12 4z"></path></svg>'
         ],
         style = ['padding:0 6px;margin-right: -1px;border-radius: 2px;background-color: '+backColor+';border-color: rgba(27, 31, 35, 0.1);font-size: 11px;color: '+fontColor+';'],
-
         menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'),
         menu_menu_raw_fast_ID, menu_feedBack_ID;
     if (menu_raw_fast == null || menu_raw_fast == '中国国内'){menu_raw_fast = 1; GM_setValue('xiu2_menu_raw_fast', 1)}; // 调整上个版本的设置存储变量内容
@@ -103,7 +102,7 @@
     function addRelease(){
         $(".Box.Box--condensed").each(function () {
             $(this).find(".d-flex.Box-body>a").each(function () {
-                var href = $(this).attr("href"),
+                let href = $(this).attr("href"),
                     url = [
                         download_url[0][0] + '/https://github.com' + href,
                         download_url[1][0] + '/https://github.com' + href,
@@ -112,14 +111,12 @@
                         download_url[4][0] + '/https://github.com' + href,
                         download_url[5][0] + '/https://github.com' + href
                     ],
-                    html = `<div style="display: flex;justify-content: flex-end;">
-<div><a style="${style[0]}" class="btn" href="${url[0]}" rel="noreferrer noopener nofollow">${download_url[0][1]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[1]}" rel="noreferrer noopener nofollow">${download_url[1][1]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[2]}" rel="noreferrer noopener nofollow">${download_url[2][1]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[3]}" rel="noreferrer noopener nofollow">${download_url[3][1]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[4]}" rel="noreferrer noopener nofollow">${download_url[4][1]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[5]}" rel="noreferrer noopener nofollow">${download_url[5][1]}</a></div>
-</div>`;
+                    html = `<div style="display: flex;justify-content: flex-end;">`;
+                for (let i=0;i<url.length;i++)
+                {
+                    html = html + `<div><a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a></div>`
+                }
+                html = html + `</div>`
                 $(this).next().after(html);
             });
             // 修改[文件大小]元素样式
@@ -128,7 +125,7 @@
 
             // Source Code
             $(this).find(".d-block.Box-body>a").each(function () {
-                var href = $(this).attr("href"),
+                let href = $(this).attr("href"),
                     url = [
                         download_url[0][0] + '/https://github.com' + href,
                         download_url[1][0] + '/https://github.com' + href,
@@ -137,14 +134,12 @@
                         download_url[4][0] + '/https://github.com' + href,
                         download_url[5][0] + '/https://github.com' + href
                     ],
-                    html = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">
-<div><a style="${style[0]}" class="btn" href="${url[0]}" rel="noreferrer noopener nofollow">${download_url[0][1]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[1]}" rel="noreferrer noopener nofollow">${download_url[1][1]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[2]}" rel="noreferrer noopener nofollow">${download_url[2][1]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[3]}" rel="noreferrer noopener nofollow">${download_url[3][1]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[4]}" rel="noreferrer noopener nofollow">${download_url[4][1]}</a></div>
-<div><a style="${style[0]}" class="btn" href="${url[5]}" rel="noreferrer noopener nofollow">${download_url[5][1]}</a></div>
-</div>`;
+                    html = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">`;
+                for (let i=0;i<url.length;i++)
+                {
+                    html = html + `<div><a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a></div>`
+                }
+                html = html + `</div>`
                 $(this).after(html);
             });
         });
@@ -156,7 +151,7 @@
     // Download ZIP
     function addDownloadZIP(){
         $(".dropdown-menu.dropdown-menu-sw.p-0 ul li:last-child").each(function () {
-            var href = $(this).children("a").attr("href"),
+            let href = $(this).children("a").attr("href"),
                 url = [
                     download_url[0][0] + "/https://github.com" + href,
                     download_url[1][0] + "/https://github.com" + href,
@@ -165,14 +160,11 @@
                     download_url[4][0] + "/https://github.com" + href,
                     download_url[5][0] + '/https://github.com' + href
                 ],
-                html = `
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[0]}">${svg[0]}Download ZIP ${download_url[0][1]}</a></li>
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[1]}">${svg[0]}Download ZIP ${download_url[1][1]}</a></li>
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[2]}">${svg[0]}Download ZIP ${download_url[2][1]}</a></li>
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[3]}">${svg[0]}Download ZIP ${download_url[3][1]}</a></li>
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[4]}">${svg[0]}Download ZIP ${download_url[4][1]}</a></li>
-<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[5]}">${svg[0]}Download ZIP ${download_url[5][1]}</a></li>
-`;
+                html = ``;
+            for (let i=0;i<url.length;i++)
+            {
+                html = html + `<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[i]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
+            }
             $(this).after(html);
         });
     }
@@ -181,17 +173,17 @@
     // Git Clone
     function addGitClone(){
         $("[role='tabpanel'] div.input-group").first().each(function () {
-            var href_split = location.href.split("/"),
+            let href_split = location.href.split("/"),
                 url = [
-                    clone_url[0] + "/" + href_split[3] + "/" + href_split[4] + ".git",
-                    clone_url[1] + "/github.com/" + href_split[3] + "/" + href_split[4] + ".git",
-                    clone_url[2] + "/" + href_split[3] + "/" + href_split[4] + ".git"
+                    clone_url[0][0] + "/" + href_split[3] + "/" + href_split[4] + ".git",
+                    clone_url[1][0] + "/github.com/" + href_split[3] + "/" + href_split[4] + ".git",
+                    clone_url[2][0] + "/" + href_split[3] + "/" + href_split[4] + ".git"
                 ],
-                html = `
-<div class="input-group" style="margin-top: 4px;"><input value="${url[0]}" aria-label="${url[0]}" type="text" class="form-control input-monospace input-sm bg-gray-light" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url[0]}" aria-label="Copy to clipboard" class="btn btn-sm" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>
-<div class="input-group" style="margin-top: 4px;"><input value="${url[1]}" aria-label="${url[1]}" type="text" class="form-control input-monospace input-sm bg-gray-light" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url[1]}" aria-label="Copy to clipboard" class="btn btn-sm" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>
-<div class="input-group" style="margin-top: 4px;"><input value="${url[2]}" aria-label="${url[2]}" type="text" class="form-control input-monospace input-sm bg-gray-light" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url[2]}" aria-label="Copy to clipboard" class="btn btn-sm" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>
-`;
+                html = ``;
+            for (let i=0;i<url.length;i++)
+            {
+                html = html + `<div class="input-group" style="margin-top: 4px;" title="加速源：${clone_url[i][1]} （点击可直接复制）"><input value="${url[i]}" aria-label="${url[i]}" type="text" class="form-control input-monospace input-sm bg-gray-light" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url[i]}" aria-label="Copy to clipboard" class="btn btn-sm" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
+            }
             $(this).after(html);
         });
     }
@@ -200,7 +192,7 @@
     // Raw
     function addRawFile(){
         $("#raw-url").each(function () {
-            var href = location.href.replace('https://github.com',''),
+            let href = location.href.replace('https://github.com',''),
                 href2 = href.replace('/blob/','/'),
                 url = [
                     raw_url[1][0] + href2,
@@ -208,12 +200,11 @@
                     raw_url[3][0] + href2,
                     raw_url[4][0] + "/" + raw_url[0][0] + href2
                 ],
-                html = `
-<a href="${url[0]}" title="${raw_url[1][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[1][1]}</a>
-<a href="${url[1]}" title="${raw_url[2][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[2][1]}</a>
-<a href="${url[2]}" title="${raw_url[3][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[3][1]}</a>
-<a href="${url[3]}" title="${raw_url[4][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[4][1]}</a>
-`;
+                html = ``;
+            for (let i=0;i<url.length;i++)
+            {
+                html = html + `<a href="${url[i]}" title="${raw_url[i+1][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[i+1][1]}</a>`
+            }
             $(this).after(html);
         });
     }
@@ -222,14 +213,14 @@
     // 添加 Raw 下载链接（☁）
     function addRawDownLink(){
         // 如果不是项目文件页面，就返回
-        var files = $('div.Box-row svg.octicon.octicon-file');
+        let files = $('div.Box-row svg.octicon.octicon-file');
         if(files.length === 0) return;
-        var files1 = $('a.fileDownLink');
+        let files1 = $('a.fileDownLink');
         if(files1.length > 0) return;
 
         // 鼠标指向则显示
         var mouseOverHandler = function(evt){
-            var elem = evt.currentTarget,
+            let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
                 aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.text-gray-light');
             aElm_new.forEach(el=>el.style.cssText = 'display: inline');
@@ -238,7 +229,7 @@
 
         // 鼠标离开则隐藏
         var mouseOutHandler = function(evt){
-            var elem = evt.currentTarget,
+            let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
                 aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.text-gray-light');
             aElm_new.forEach(el=>el.style.cssText = 'display: none');
@@ -247,12 +238,12 @@
 
         // 循环添加
         files.each(function(i,fileElm){
-            var trElm = fileElm.parentNode.parentNode,
+            let trElm = fileElm.parentNode.parentNode,
                 cntElm_a = trElm.querySelector('.css-truncate.css-truncate-target.d-block.width-fit a'),
                 cntElm_svg = trElm.querySelector('.mr-3.flex-shrink-0 svg.octicon.octicon-file.text-gray-light'),
                 Name = cntElm_a.innerText,
                 href = cntElm_a.attributes['href'].nodeValue.replace('https://github.com','');
-            var href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
+            let href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
             switch(menu_raw_fast)
             {
                 case 2:
@@ -271,7 +262,7 @@
                     url_tip = raw_url[menu_raw_fast][2];
                     break;
             }
-            var html = ` <a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url[menu_raw_fast][1]} ] 加速源 (☁) 即可切换。">${svg[2]}</a>`;
+            let html = ` <a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url[menu_raw_fast][1]} ] 加速源 (☁) 即可切换。">${svg[2]}</a>`;
             $(cntElm_svg).after(html);
             // 绑定鼠标事件
             trElm.onmouseover=mouseOverHandler;
@@ -282,9 +273,9 @@
 
     // 删除 Raw 快捷下载（☁）
     function delRawDownLink(){
-        var aElm = document.querySelectorAll('.fileDownLink');
+        let aElm = document.querySelectorAll('.fileDownLink');
         if(aElm.length === 0) return;
-        for(var num = 0;num<aElm.length;num++){
+        for(let num = 0;num<aElm.length;num++){
             aElm[num].remove();
         };
     }
