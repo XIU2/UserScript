@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         3DM论坛增强
-// @version      1.0.5
+// @version      1.0.6
 // @author       X.I.U
-// @description  自动回复、自动无缝翻页、清理置顶帖子 
+// @description  自动回复、自动无缝翻页、清理置顶帖子
 // @match        *://bbs.3dmgame.com/*
 // @icon         https://bbs.3dmgame.com/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -20,33 +20,39 @@
 (function() {
     var menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading'),
         menu_autoReply = GM_getValue('xiu2_menu_autoReply'),
-        menu_cleanTopPost = GM_getValue('xiu2_menu_cleanTopPost');
-    var menu_thread_pageLoading_ID, menu_autoReply_ID, menu_cleanTopPost_ID, menu_feedBack_ID;
+        menu_cleanTopPost = GM_getValue('xiu2_menu_cleanTopPost'),
+        menu_scrollToShowhide = GM_getValue('xiu2_menu_scrollToShowhide');
+    var menu_thread_pageLoading_ID, menu_autoReply_ID, menu_cleanTopPost_ID, menu_scrollToShowhide_ID, menu_feedBack_ID;
     if (menu_thread_pageLoading == null){menu_thread_pageLoading = false; GM_setValue('xiu2_menu_thread_pageLoading', menu_thread_pageLoading)};
     if (menu_autoReply == null){menu_autoReply = true; GM_setValue('xiu2_menu_autoReply', menu_autoReply)};
     if (menu_cleanTopPost == null){menu_cleanTopPost = true; GM_setValue('xiu2_menu_cleanTopPost', menu_cleanTopPost)};
+    if (menu_scrollToShowhide == null){menu_scrollToShowhide = true; GM_setValue('xiu2_menu_scrollToShowhide', menu_scrollToShowhide)};
     registerMenuCommand();
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        var menu_thread_pageLoading_, menu_autoReply_, menu_cleanTopPost_;
+        let menu_thread_pageLoading_, menu_autoReply_, menu_cleanTopPost_, menu_scrollToShowhide_;
         if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
             GM_unregisterMenuCommand(menu_thread_pageLoading_ID);
             GM_unregisterMenuCommand(menu_autoReply_ID);
             GM_unregisterMenuCommand(menu_cleanTopPost_ID);
+            GM_unregisterMenuCommand(menu_scrollToShowhide_ID);
             GM_unregisterMenuCommand(menu_feedBack_ID);
             menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading');
             menu_autoReply = GM_getValue('xiu2_menu_autoReply');
             menu_cleanTopPost = GM_getValue('xiu2_menu_cleanTopPost');
+            menu_scrollToShowhide = GM_getValue('xiu2_menu_scrollToShowhide');
         }
 
         if (menu_thread_pageLoading){menu_thread_pageLoading_ = "√";}else{menu_thread_pageLoading_ = "×";}
         if (menu_autoReply){menu_autoReply_ = "√";}else{menu_autoReply_ = "×";}
         if (menu_cleanTopPost){menu_cleanTopPost_ = "√";}else{menu_cleanTopPost_ = "×";}
+        if (menu_scrollToShowhide){menu_scrollToShowhide_ = "√";}else{menu_scrollToShowhide_ = "×";}
 
         menu_autoReply_ID = GM_registerMenuCommand(`[ ${menu_autoReply_} ] 自动回复`, function(){menu_switch(menu_autoReply,'xiu2_menu_autoReply','自动回复')});
         menu_cleanTopPost_ID = GM_registerMenuCommand(`[ ${menu_cleanTopPost_} ] 清理置顶帖子`, function(){menu_switch(menu_cleanTopPost,'xiu2_menu_cleanTopPost','清理置顶帖子')});
         menu_thread_pageLoading_ID = GM_registerMenuCommand(`[ ${menu_thread_pageLoading_} ] 帖子内自动翻页`, function(){menu_switch(menu_thread_pageLoading,'xiu2_menu_thread_pageLoading','帖子内自动翻页')});
+        menu_scrollToShowhide_ID = GM_registerMenuCommand(`[ ${menu_scrollToShowhide_} ] 自动滚动至隐藏内容`, function(){menu_switch(menu_scrollToShowhide,'xiu2_menu_scrollToShowhide','自动滚动至隐藏内容')});
         menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
@@ -127,7 +133,7 @@
     curSite.pageUrl = "";
 
     // URL 匹配正则表达式
-    var patt_thread = /\/thread-\d+-\d+\-\d+.html/,
+    let patt_thread = /\/thread-\d+-\d+\-\d+.html/,
         patt_thread_2 = /mod\=viewthread/,
         patt_forum = /\/forum-\d+-\d+\.html/,
         patt_forum_2 = /mod\=forumdisplay/,
@@ -141,6 +147,7 @@
         if(menu_thread_pageLoading)curSite = DBSite.thread;
         if(menu_autoReply)autoReply();        // 如果有隐藏内容，则自动回复
         pageLoading();                        // 自动翻页
+        if(menu_scrollToShowhide)setTimeout(`window.scrollTo(0,document.querySelector('.showhide').offsetTop)`, 500); // 滚动至隐藏内容
     }else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)){
         // 各板块帖子列表
         curSite = DBSite.forum;
@@ -155,9 +162,9 @@
 
     // 判断是否登陆
     function checkLogin(){
-        var checklogin = document.querySelectorAll('.wp.h_menu p a');
+        let checklogin = document.querySelectorAll('.wp.h_menu p a');
         if (checklogin){
-            for (var value of checklogin) {
+            for (let value of checklogin) {
                 if (value.innerHTML == "退出"){
                     loginStatus = true;
                 }
@@ -171,11 +178,11 @@
         if (curSite.SiteTypeID > 0){
             windowScroll(function (direction, e) {
                 if (direction === "down") { // 下滑才准备翻页
-                    var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+                    let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
                     let scrollDelta = 666;
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
                         if (curSite.SiteTypeID === SiteType.FORUM) { // 如果是各版块帖子列表则直接点下一页就行了
-                            var autopbn = document.querySelector('#autopbn');
+                            let autopbn = document.querySelector('#autopbn');
                             if (autopbn && autopbn.innerText == "下一页 »"){ // 如果已经在加载中了，就忽略
                                 autopbn.click();
                             }
@@ -193,10 +200,20 @@
     function autoReply(){
         if (loginStatus){
             // 存在隐藏内容，则自动回复
-            var autoreply = document.querySelector('.locked a');
+            let autoreply = document.querySelector('.locked a');
             if (autoreply){
                 writeReply();
-                setTimeout(`window.scrollTo(0,0)`, 1000);
+                // 滚动至隐藏内容
+                if(menu_scrollToShowhide){
+                    let showhideTime=setInterval(function(){
+                        let showhide=document.querySelector('.showhide')
+                        if(showhide){
+                            clearInterval(showhideTime)
+                            window.scrollTo(0,showhide.offsetTop)
+                        }}, 100)
+                    }else{
+                        setTimeout(`window.scrollTo(0,0)`, 1000);
+                    }
             }
         }
 
@@ -205,10 +222,10 @@
 
     // 写入自动回复内容
     function writeReply(){
-        var textarea = document.getElementById("fastpostmessage");
+        let textarea = document.getElementById("fastpostmessage");
         if (textarea){
             textarea.value = textarea.value + replyList[Math.floor((Math.random()*replyList.length))] + replyList[Math.floor((Math.random()*replyList.length))];
-            var fastpostsubmit = document.getElementById("fastpostsubmit");
+            let fastpostsubmit = document.getElementById("fastpostsubmit");
             if (fastpostsubmit){
                 fastpostsubmit.click();
             }
@@ -218,7 +235,7 @@
 
     // 清理置顶帖子
     function cleanTopPost(){
-        var showhide = document.querySelectorAll("a.showhide.y");
+        let showhide = document.querySelectorAll("a.showhide.y");
         if (showhide.length > 0){
             showhide.forEach(el=>el.click());
         }
