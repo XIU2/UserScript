@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         智友邦论坛增强
-// @version      1.1.4
+// @version      1.1.5
 // @author       X.I.U
 // @description  自动签到、自动回复、自动无缝翻页、清理置顶帖子、简化附件兑换/下载、清理帖子标题〖XXX〗【XXX】文字
 // @icon         http://bbs.zhiyoo.net/favicon.ico
@@ -240,12 +240,12 @@
             // 如果已显示隐藏内容，则定位到隐藏内容区域
             // 如果没有发现已显示隐藏内容，就不定位了
             if (document.getElementsByClassName("showhide").length > 0){
-                // 如果使用了我的智友帮美化脚本，则定位至底部，反之定位至顶部
-                if (document.getElementById("fastpostmessage").offsetParent == null){
-                    setTimeout(`window.scrollTo(0,99999999)`, 1000);
-                }
+                // 如果使用了我的智友帮美化脚本，则定位至底部
+                /*if (document.getElementById("fastpostmessage").offsetParent == null){
+                    //setTimeout(`window.scrollTo(0,99999999)`, 1000);
+                }*/
+                setTimeout(`window.scrollTo(0,document.querySelector('.showhide').offsetTop)`, 500);
                 //setTimeout(`location.hash='#footer'`, 1000);
-                //console.log(`${$(".showhide").scrollTop()}`);
             }
         }
     }
