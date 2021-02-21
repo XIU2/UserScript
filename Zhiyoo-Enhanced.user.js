@@ -208,12 +208,7 @@
             // 存在隐藏内容，自动回复
             if (document.getElementsByClassName("showhide").length == 0){
                 writeReply();
-                // 如果使用了我的智友帮美化脚本，则定位至底部，反之定位至顶部
-                if (document.getElementById("fastpostmessage").offsetParent == null){
-                    setTimeout(`window.scrollTo(0,99999999)`, 1000);
-                }else{
-                    setTimeout(`window.scrollTo(0,0)`, 1000);
-                }
+                setTimeout(`window.scrollTo(0,document.querySelector('.showhide').offsetTop)`, 1000);
             }
         }
     }
@@ -240,12 +235,7 @@
             // 如果已显示隐藏内容，则定位到隐藏内容区域
             // 如果没有发现已显示隐藏内容，就不定位了
             if (document.getElementsByClassName("showhide").length > 0){
-                // 如果使用了我的智友帮美化脚本，则定位至底部
-                /*if (document.getElementById("fastpostmessage").offsetParent == null){
-                    //setTimeout(`window.scrollTo(0,99999999)`, 1000);
-                }*/
                 setTimeout(`window.scrollTo(0,document.querySelector('.showhide').offsetTop)`, 500);
-                //setTimeout(`location.hash='#footer'`, 1000);
             }
         }
     }
