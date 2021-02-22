@@ -28,7 +28,7 @@
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        var menu_cleanPostTitle_;
+        let menu_cleanPostTitle_;
         if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
             GM_unregisterMenuCommand(menu_cleanPostTitle_ID);
             GM_unregisterMenuCommand(menu_qianDaoRedirectURL_ID);
@@ -115,49 +115,49 @@
 
     // 用于脚本内部判断当前 URL 类型
     let SiteType = {
-        FORUMDISPLAY: DBSite.forumdisplay.SiteTypeID,  // 各板块帖子列表
-        SEARCH: DBSite.search.SiteTypeID  // 搜索结果列表
+        FORUMDISPLAY: DBSite.forumdisplay.SiteTypeID, // 各板块帖子列表
+        SEARCH: DBSite.search.SiteTypeID // 搜索结果列表
     };
 
     var attachmentHrefTime = 0;
-    curSite.pageUrl = "";  // 下一页URL
+    curSite.pageUrl = ""; // 下一页URL
 
-    var patt_thread = /\/thread-\d+-\d+\-\d+.html/, // 匹配 /thread-XXX-X-X.html 帖子正则表达式
-        patt_search = /\/thread-\d+-\d+\-\d+.html/, // 匹配搜索结果列表正则表达式
-        patt_posttitle = /^〖.+〗(：)?|^【.+】(：)?/, // 匹配帖子标题中的〖XXX〗【XXX】正则表达式
+    var patt_thread = /\/thread-\d+-\d+\-\d+.html/, //      匹配 /thread-XXX-X-X.html 帖子正则表达式
+        patt_search = /\/thread-\d+-\d+\-\d+.html/, //      匹配搜索结果列表正则表达式
+        patt_posttitle = /^〖.+〗(：)?|^【.+】(：)?/, //    匹配帖子标题中的〖XXX〗【XXX】正则表达式
         patt_attachment_href = /(?<=\\').+(?=\\')/
 
     if (location.pathname === '/plugin.php'){
         switch(getQueryVariable("id"))
         {
-            case 'dsu_paulsign:sign':      // 被重定向到签到页面
-                qiandao();                 // 自动签到
+            case 'dsu_paulsign:sign': //                被重定向到签到页面
+                qiandao(); //                           自动签到
                 break;
-            case 'piaobo_attachment':      // 兑换附件后的提示页面
-                attachmentBack();          // 立即返回帖子
+            case 'piaobo_attachment': //                兑换附件后的提示页面
+                attachmentBack(); //                    立即返回帖子
                 break;
-            case 'threed_attach:downld':   // 附件下载页面
-                goPan();                   // 跳转至网盘页
+            case 'threed_attach:downld': //             附件下载页面
+                goPan(); //                             跳转至网盘页
                 break;
         }
     }else if(location.pathname === '/forum.php'){
         switch(getQueryVariable("mod"))
         {
-            case 'viewthread':         // 浏览帖子内容
-                showHide();            // 先看看是否有隐藏内容，如果已显示则定位到隐藏内容区域，如果没有隐藏内容，则啥都不干
-                autoReply();           // 自动回复（有隐藏内容才会回复），回复过就定位到底部（隐藏内容区域）
+            case 'viewthread': //                      浏览帖子内容
+                showHide(); //                         先看看是否有隐藏内容，如果已显示则定位到隐藏内容区域，如果没有隐藏内容，则啥都不干
+                autoReply(); //                        自动回复（有隐藏内容才会回复），回复过就定位到底部（隐藏内容区域）
                 var attachmentHref_Interval = setInterval(attachmentHref,100); // 兑换附件按钮改为直链（不再弹出确认提示框）
                 break;
-            case 'forumdisplay':       // 浏览帖子列表
-                curSite = DBSite.forumdisplay;  // 帖子列表页（自动翻页）
-                cleanTop();            // 清理置顶帖子
-                cleanPostTitle();      // 清理帖子列表中帖子标题开头的〖XXX〗【XXX】文字
-                pageLoading();         // 自动无缝翻页
+            case 'forumdisplay': //                    浏览帖子列表
+                curSite = DBSite.forumdisplay; //      帖子列表页（自动翻页）
+                cleanTop(); //                         清理置顶帖子
+                cleanPostTitle(); //                   清理帖子列表中帖子标题开头的〖XXX〗【XXX】文字
+                pageLoading(); //                      自动无缝翻页
                 break;
         }
     }else if(location.pathname === '/search.php'){
-        curSite = DBSite.search;      // 搜索结果列表页（自动翻页）
-        pageLoading();                // 自动无缝翻页
+        curSite = DBSite.search; //                    搜索结果列表页（自动翻页）
+        pageLoading(); //                              自动无缝翻页
     }else if (patt_thread.test(location.pathname)){ // 对于 /thread-XXX-X-X.html 这种帖子页面也和上面一样
         showHide();
         autoReply();
@@ -166,7 +166,7 @@
 
     // 判断是否登陆
     function checkLogin(){
-        var checklogin = document.querySelector('.Quater_user.logined');
+        let checklogin = document.querySelector('.Quater_user.logined');
         if (checklogin){
             loginStatus = true;
         }
@@ -177,8 +177,8 @@
     function pageLoading() {
         if (curSite.SiteTypeID > 0){
             windowScroll(function (direction, e) {
-                if (direction === "down") { // 下滑才准备翻页
-                    var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+                if (direction === "down") { //           下滑才准备翻页
+                    let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
                     let scrollDelta = 666;
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
                         ShowPager.loadMorePage();
@@ -208,7 +208,12 @@
             // 存在隐藏内容，自动回复
             if (document.getElementsByClassName("showhide").length == 0){
                 writeReply();
-                setTimeout(`window.scrollTo(0,document.querySelector('.showhide').offsetTop)`, 1000);
+                // 如果使用了我的 [智友邦美化] 脚本，则定位至底部，反之定位至隐藏内容区域
+                if (document.getElementById("fastpostmessage").offsetParent == null){
+                    setTimeout(`window.scrollTo(0,99999999)`, 500);
+                }else{
+                    setTimeout(`window.scrollTo(0,document.querySelector('.showhide').offsetTop)`, 500);
+                }
             }
         }
     }
@@ -216,7 +221,7 @@
 
     // 写入自动回复内容
     function writeReply(){
-        var textarea = document.getElementById("fastpostmessage");
+        let textarea = document.getElementById("fastpostmessage");
         if (textarea){
             // 随机写入回复内容
             textarea.value = textarea.value + replyList[Math.floor((Math.random()*replyList.length))] + replyList[Math.floor((Math.random()*replyList.length))];
@@ -235,7 +240,14 @@
             // 如果已显示隐藏内容，则定位到隐藏内容区域
             // 如果没有发现已显示隐藏内容，就不定位了
             if (document.getElementsByClassName("showhide").length > 0){
-                setTimeout(`window.scrollTo(0,document.querySelector('.showhide').offsetTop)`, 500);
+                // 如果使用了我的 [智友邦美化] 脚本，则定位至底部，反之定位至隐藏内容区域
+                if (document.getElementById("fastpostmessage").offsetParent == null){
+                    setTimeout(`window.scrollTo(0,99999999)`, 500);
+                    console.log("111")
+                }else{
+                    setTimeout(`window.scrollTo(0,document.querySelector('.showhide').offsetTop)`, 500);
+                    console.log("222")
+                }
             }
         }
     }
@@ -243,7 +255,7 @@
 
     // 兑换附件后立即返回
     function attachmentBack() {
-        var attachmentback = document.querySelector('#messagetext p.alert_btnleft a');
+        let attachmentback = document.querySelector('#messagetext p.alert_btnleft a');
         if (attachmentback){
             attachmentback.click();
         }
@@ -252,7 +264,7 @@
 
     // 附件下载页直接跳转至网盘
     function goPan() {
-        var gopan = document.querySelector('.threed_panbox .panframe .pan_left p a');
+        let gopan = document.querySelector('.threed_panbox .panframe .pan_left p a');
         if (gopan){
             location.href=gopan.href;
         }
@@ -262,9 +274,9 @@
     // 兑换附件按钮改为直链（不再弹出确认提示框）
     function attachmentHref() {
         attachmentHrefTime += 1; // 计算该函数执行次数
-        var attachmenthref = document.querySelector('.tab_button .button a');
+        let attachmenthref = document.querySelector('.tab_button .button a');
         if (attachmenthref && attachmenthref.href == "javascript:;"){
-            var attachmenthref_href = attachmenthref.onclick.toString();
+            let attachmenthref_href = attachmenthref.onclick.toString();
             attachmenthref.href = attachmenthref_href.match(patt_attachment_href)[0];
             attachmenthref.onclick = null;
         }
@@ -276,7 +288,7 @@
 
     // 清理置顶帖子
     function cleanTop(){
-        var showhide = document.querySelectorAll("a.showhide.y");
+        let showhide = document.querySelectorAll("a.showhide.y");
         if (showhide.length > 0){
             showhide.forEach(el=>el.click());
         }
@@ -286,9 +298,9 @@
     // 清理帖子列表中帖子标题开头的〖XXX〗【XXX】文字
     function cleanPostTitle(){
         if (menu_cleanPostTitle){
-            var cleanposttitle = document.querySelectorAll("a.s.xst");
+            let cleanposttitle = document.querySelectorAll("a.s.xst");
             if (cleanposttitle.length > 0){
-                for(var num = postNum;num<cleanposttitle.length;num++){
+                for(let num = postNum;num<cleanposttitle.length;num++){
                     cleanposttitle[num].innerText = cleanposttitle[num].innerText.replace(patt_posttitle, ``);
                     postNum += 1;
                 }
