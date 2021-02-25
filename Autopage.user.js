@@ -10,7 +10,7 @@
 // @match        *://www.appinn.com/
 // @match        *://www.appinn.com/*/*/
 // @match        *://www.appinn.com/?s=*
-// @icon         https://github.com/favicon.ico
+// @icon         https://s3.ax1x.com/2021/02/25/yj2s4f.png
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
 // @grant        GM_openInTab
