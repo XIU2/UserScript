@@ -5,7 +5,7 @@
 // @description  移除登录弹窗、一键收起回答、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
-// @icon         https://static.zhihu.com/static/favicon.ico
+// @icon         https://static.zhihu.com/heifetz/favicon.ico
 // @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand

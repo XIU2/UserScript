@@ -5,7 +5,7 @@
 // @description  宽屏显示、隐藏文章开头大图、文章编辑页面与实际文章宽度一致 
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/p/*
-// @icon         https://static.zhihu.com/static/favicon.ico
+// @icon         https://static.zhihu.com/heifetz/favicon.ico
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
 // @grant        GM_openInTab
