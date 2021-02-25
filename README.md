@@ -14,22 +14,22 @@
 
 > 详细的脚本介绍、使用说明、截图，请点击第三列的 **安装** 前往 GreasyFork 查看。  
 
-| 脚本名称 | 脚本功能 | 安装 \| 备用 |
-| :---- | :---- | :----: |
-| **知乎 美化** | 宽屏显示、隐藏文章开头大图、文章编辑页面与实际文章宽度一致... | **[安装](https://greasyfork.org/zh-CN/scripts/412212)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Beautification.user.js)** |
-| **知乎 增强** | 移除登录弹窗、一键收起回答、置顶显示时间、区分问题文章... | **[安装](https://greasyfork.org/zh-CN/scripts/419081)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Enhanced.user.js)** |
-|  **Github 增强** | 高速下载 Clone、Release、Raw、Code(ZIP) 等文件、快捷下载... | **[安装](https://greasyfork.org/zh-CN/scripts/412245)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GithubEnhanced-High-Speed-Download.user.js)** |
-|  **自动无缝翻页 \*** | 目前支持：423Down、Apphot(原烈火汉化)、小众软件... | **[安装](https://greasyfork.org/zh-CN/scripts/419215)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Autopage.user.js)** |
-| **3DM论坛 美化** | 精简多余内容 | **[安装](https://greasyfork.org/zh-CN/scripts/413593)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Beautification.user.js)** |
-| **3DM论坛 增强** | 自动回复、自动无缝翻页、清理置顶帖子 | **[安装](https://greasyfork.org/zh-CN/scripts/412890)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Enhanced.user.js)** |
-| **智友邦论坛 美化** | 精简多余内容、宽屏显示 | **[安装](https://greasyfork.org/zh-CN/scripts/412361)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Beautification.user.js)** |
-| **智友邦论坛 增强** | 自动签到、自动回复、自动无缝翻页、清理置顶帖子、简化附件... | **[安装](https://greasyfork.org/zh-CN/scripts/412362)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Enhanced.user.js)** |
-|  **蓝奏云网盘 增强 \*** | 刷新不回根目录、右键显示菜单、自动显示更多文件、分享链接... | **[安装](https://greasyfork.org/zh-CN/scripts/419224)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Lanzou-Enhanced.user.js)** |
-|  ~~_**Google 翻译 美化**_~~ | ~~_精简多余内容、修复翻译结果溢出屏幕问题_~~ | ~~_**[安装](https://zhuanlan.zhihu.com/p/286815739)** \| **[备用](https://zhuanlan.zhihu.com/p/286815739)**_~~ |
-| **吾爱破解论坛 美化** | 精简多余内容 | **[安装](https://greasyfork.org/zh-CN/scripts/412681)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Beautification.user.js)** |
-| **吾爱破解论坛 增强** | 自动签到、自动无缝翻页 | **[安装](https://greasyfork.org/zh-CN/scripts/412680)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Enhanced.user.js)** |
-| **全球主机交流论坛 增强 \*** | 自动无缝翻页、自动显示帖子内被隐藏的回复 | **[安装](https://greasyfork.org/zh-CN/scripts/414005)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Hostloc-Enhanced.user.js)** |
-| **Steam 创意工坊大图 修复** | 修复 Steam 创意工坊预览大图无法显示的问题 | **[安装](https://greasyfork.org/zh-CN/scripts/397666)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/SteamWorkshopImageRepair.user.js)** |
+|  | 脚本名称 | 脚本功能 | 安装 \| 备用 |
+| :----: | :---- | :---- | :----: |
+| <img src="https://static.zhihu.com/static/favicon.ico" height="16px" /> | **知乎 美化** | 宽屏显示、隐藏文章开头大图、文章编辑页面与实际文章宽度一致... | **[安装](https://greasyfork.org/zh-CN/scripts/412212)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Beautification.user.js)** |
+| <img src="https://static.zhihu.com/static/favicon.ico" height="16px" /> | **知乎 增强** | 移除登录弹窗、一键收起回答、置顶显示时间、区分问题文章... | **[安装](https://greasyfork.org/zh-CN/scripts/419081)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Enhanced.user.js)** |
+| <img src="https://github.com/favicon.ico" height="16px" /> |  **Github 增强** | 高速下载 Git Clone、Release、Raw、Code(ZIP) 、快捷下载... | **[安装](https://greasyfork.org/zh-CN/scripts/412245)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GithubEnhanced-High-Speed-Download.user.js)** |
+| <img src="https://github.com/favicon.ico" height="16px" /> |  **自动无缝翻页 \*** | 目前支持：423Down、Apphot(原烈火汉化)、小众软件... | **[安装](https://greasyfork.org/zh-CN/scripts/419215)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Autopage.user.js)** |
+| <img src="https://bbs.3dmgame.com/favicon.ico" height="16px" /> | **3DM论坛 美化** | 精简多余内容 | **[安装](https://greasyfork.org/zh-CN/scripts/413593)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Beautification.user.js)** |
+| <img src="https://bbs.3dmgame.com/favicon.ico" height="16px" /> | **3DM论坛 增强** | 自动回复、自动无缝翻页、清理置顶帖子 | **[安装](https://greasyfork.org/zh-CN/scripts/412890)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/3dm-Enhanced.user.js)** |
+| <img src="http://bbs.zhiyoo.net/favicon.ico" height="16px" /> | **智友邦论坛 美化** | 精简多余内容、宽屏显示 | **[安装](https://greasyfork.org/zh-CN/scripts/412361)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Beautification.user.js)** |
+| <img src="http://bbs.zhiyoo.net/favicon.ico" height="16px" /> | **智友邦论坛 增强** | 自动签到、自动回复、自动无缝翻页、清理置顶帖子、简化附件... | **[安装](https://greasyfork.org/zh-CN/scripts/412362)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhiyoo-Enhanced.user.js)** |
+| <img src="https://www.lanzou.com/favicon.ico" height="16px" /> |  **蓝奏云网盘 增强 \*** | 刷新不回根目录、后退返回上一级、右键显示菜单、自动显示... | **[安装](https://greasyfork.org/zh-CN/scripts/419224)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Lanzou-Enhanced.user.js)** |
+| <img src="https://translate.google.cn/favicon.ico" height="16px" /> |  ~~_**Google 翻译 美化**_~~ | ~~_精简多余内容、修复翻译结果溢出屏幕问题_~~ | ~~_**[安装](https://zhuanlan.zhihu.com/p/286815739)** \| **[备用](https://zhuanlan.zhihu.com/p/286815739)**_~~ |
+| <img src="https://www.52pojie.cn/favicon.ico" height="16px" /> | **吾爱破解论坛 美化** | 精简多余内容 | **[安装](https://greasyfork.org/zh-CN/scripts/412681)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Beautification.user.js)** |
+| <img src="https://www.52pojie.cn/favicon.ico" height="16px" /> | **吾爱破解论坛 增强** | 自动签到、自动无缝翻页 | **[安装](https://greasyfork.org/zh-CN/scripts/412680)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Enhanced.user.js)** |
+| <img src="https://www.hostloc.com/favicon.ico" height="16px" /> | **全球主机交流论坛 增强 \*** | 自动无缝翻页、自动显示帖子内被隐藏的回复 | **[安装](https://greasyfork.org/zh-CN/scripts/414005)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Hostloc-Enhanced.user.js)** |
+| <img src="https://store.steampowered.com/favicon.ico" height="16px" /> | **Steam 创意工坊大图 修复** | 修复 Steam 创意工坊预览大图无法显示的问题 | **[安装](https://greasyfork.org/zh-CN/scripts/397666)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/SteamWorkshopImageRepair.user.js)** |
 
 > 脚本名称末尾 **`*`** 代表该脚本为**网友主动提出需求**而写的。如果你也有需求，可以[告诉我](https://github.com/XIU2/UserScript/issues/new/choose)！  
 > 所有脚本均在 **Chrome、Firefox、Edge 浏览器 + Tampermonkey 扩展** 环境下测试通过！
