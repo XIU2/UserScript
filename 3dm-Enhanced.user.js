@@ -4,7 +4,7 @@
 // @author       X.I.U
 // @description  自动回复、自动无缝翻页、清理置顶帖子
 // @match        *://bbs.3dmgame.com/*
-// @icon         https://bbs.3dmgame.com/favicon.ico
+// @icon         https://www.3dmgame.com/favicon.ico
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
