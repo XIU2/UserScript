@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.1.7
+// @version      1.2.0
 // @author       X.I.U
-// @description  刷新不返回根目录、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、调整描述（话说）编辑框初始大小、拖入文件自动显示上传框
+// @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、调整描述（话说）编辑框初始大小、拖入文件自动显示上传框
 // @match        *://*.lanzous.com/*
 // @match        *://*.lanzoux.com/*
 // @match        *://*.lanzoui.com/*
@@ -33,7 +33,7 @@
         menu_refreshCorrection = GM_getValue('xiu2_menu_refreshCorrection'),
         menu_rightClickMenu = GM_getValue('xiu2_menu_rightClickMenu'),
         menu_folderDescdesMenu = GM_getValue('xiu2_menu_folderDescdesMenu');
-    var menu_open_fileSha_ID, menu_copy_fileSha_ID, menu_refreshCorrection_ID, menu_rightClickMenu_ID, menu_folderDescdesMenu_ID, menu_feedBack_ID;
+    var menu_open_fileSha_ID, menu_copy_fileSha_ID, menu_refreshCorrection_ID, menu_rightClickMenu_ID, menu_folderDescdesMenu_ID, menu_feedBack_ID, lastFolderID;
     if (menu_open_fileSha == null){menu_open_fileSha = true; GM_setValue('xiu2_menu_open_fileSha', menu_open_fileSha)};
     if (menu_copy_fileSha == null){menu_copy_fileSha = true; GM_setValue('xiu2_menu_copy_fileSha', menu_copy_fileSha)};
     if (menu_refreshCorrection == null){menu_refreshCorrection = true; GM_setValue('xiu2_menu_refreshCorrection', menu_refreshCorrection)};
@@ -107,15 +107,16 @@
     // 获取 iframe 框架
     function iframe() {
         mainframe = document.getElementById("mainframe");
-        if(mainframe){ // 只有找到 iframe 框架时才会继续运行脚本
+        if(mainframe){ //                      只有找到 iframe 框架时才会继续运行脚本
             mainframe = mainframe.contentWindow;
             if(menu_refreshCorrection){
-                refreshCorrection(); // 刷新不返回根目录（F5）
+                refreshCorrection(); //        刷新不返回根目录（F5）
             }
             setTimeout(folderDescdes, 200); // 调整话说编辑框初始大小
-            EventXMLHttpRequest(); // 监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
+            fobiddenBack(); //                 禁止浏览器返回（并绑定新的返回事件）
+            EventXMLHttpRequest(); //          监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
 
-            dragEnter(); // 拖入文件自动显示上传框
+            dragEnter(); //                    拖入文件自动显示上传框
         }
     }
 
@@ -289,6 +290,39 @@
     }
 
 
+    // 禁止浏览器返回（并绑定新的返回事件）
+    function fobiddenBack() {
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate',backEvent)
+    }
+
+
+    // 允许浏览器返回
+    function enableBack() {
+        history.go(-1);
+        window.removeEventListener('popstate',backEvent)
+    }
+
+
+    // 浏览器后退事件函数
+    function backEvent() {
+        if(lastFolderID) {
+            mainframe.folder(lastFolderID);
+        }
+        history.pushState(null, null, document.URL);
+    }
+
+
+    // 获取上个文件夹 ID（用于浏览器后退事件）
+    function getLastFolderID() {
+        lastFolderID = null
+        let f_tpspan = mainframe.document.querySelectorAll("span.f_tpspan");
+        if(f_tpspan.length > 1) {
+            lastFolderID = /-?\d+/.exec(f_tpspan[f_tpspan.length - 2].getAttribute("onclick"))[0];
+        }
+    }
+
+
     // 定时执行（旧方法，每隔 100ms 执行一次，比较笨且浪费一丢丢性能，但优点是不会漏掉且反应更快）
     //setInterval(fileMore,100);
 
@@ -300,6 +334,7 @@
             setTimeout(fileMore, 200); // 自动显示更多文件
             setTimeout(fileSha, 200); // 自动打开分享链接（点击文件时）
             setTimeout(rightClickMenu, 500); // 右键文件显示菜单
+            setTimeout(getLastFolderID, 200); // 获取上个文件夹 ID（用于浏览器后退事件）
             return _send.apply(this, arguments);
         }
         mainframe.XMLHttpRequest.prototype.send = sendReplacement;
