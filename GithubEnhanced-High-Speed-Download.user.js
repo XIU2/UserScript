@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.3.5
+// @version      1.3.6
 // @author       X.I.U
 // @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -120,7 +120,7 @@
                 $(this).next().after(html);
             });
             // 修改[文件大小]元素样式
-            document.querySelectorAll('small.pl-2.text-gray.flex-shrink-0').forEach(el=>el.style.cssText='display: flex; justify-content: flex-end; flex-grow: 1; margin-right: 8px;');
+            document.querySelectorAll('small.pl-2.color-text-secondary.flex-shrink-0').forEach(el=>el.style.cssText='display: flex; justify-content: flex-end; flex-grow: 1; margin-right: 8px;');
 
 
             // Source Code
