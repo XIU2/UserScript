@@ -198,12 +198,12 @@
 
 
     // 签到后立即返回
-    function qianDaoBack() {
+    /*function qianDaoBack() {
         var qiandaoback = document.querySelector('#messagetext p.alert_btnleft a');
         if (qiandaoback){
             setTimeout(function(){qiandaoback.click()}, 200);
         }
-    }
+    }*/
 
 
     // 滚动条事件
