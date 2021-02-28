@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.2.0
+// @version      1.2.1
 // @author       X.I.U
 // @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、拖入文件自动显示上传框、调整描述（话说）编辑框初始大小
 // @match        *://*.lanzous.com/*
@@ -91,9 +91,9 @@
     };
 
 
-    if(document.getElementById("infos")){ // 分享链接文件列表页
-        setTimeout(fileMoreS, 300); // 自动显示更多文件
-    }else if(document.querySelector("iframe.ifr2")){ // 分享链接文件下载页（暂时没有这方面的功能，先空着）
+    if(document.getElementById("infos")){ //             分享链接文件列表页
+        setTimeout(fileMoreS, 300); //                   自动显示更多文件
+    }else if(document.querySelector("iframe.ifr2")){ //  分享链接文件下载页（暂时没有这方面的功能，先空着）
         //console.log()
     }else if(document.getElementById("mainframe") || window.top.location.href.indexOf("mydisk.php?") > -1){ // 后台页
         if(window.top.location.href != "https://pc.woozooo.com/mydisk.php"){
@@ -107,16 +107,17 @@
     // 获取 iframe 框架
     function iframe() {
         mainframe = document.getElementById("mainframe");
-        if(mainframe){ //                      只有找到 iframe 框架时才会继续运行脚本
+        if(mainframe){ //                                只有找到 iframe 框架时才会继续运行脚本
             mainframe = mainframe.contentWindow;
             if(menu_refreshCorrection){
-                refreshCorrection(); //        刷新不返回根目录（F5）
+                refreshCorrection(); //                  刷新不返回根目录（F5）
             }
-            setTimeout(folderDescdes, 200); // 调整话说编辑框初始大小
-            fobiddenBack(); //                 禁止浏览器返回（并绑定新的返回事件）
-            EventXMLHttpRequest(); //          监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
+            setTimeout(folderDescdes, 200); //           调整话说编辑框初始大小
+            setTimeout(hideSha, 200); //                 隐藏分享链接窗口（这样自动打开/复制分享链接时，不会一闪而过）
+            fobiddenBack(); //                           禁止浏览器返回（并绑定新的返回事件）
+            EventXMLHttpRequest(); //                    监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
 
-            dragEnter(); //                    拖入文件自动显示上传框
+            dragEnter(); //                              拖入文件自动显示上传框
         }
     }
 
@@ -154,9 +155,9 @@
 
     // 右键文件显示菜单
     function rightClickMenu() {
-        if(menu_rightClickMenu){ // 脚本菜单开启时才继续
+        if(menu_rightClickMenu){ //                                脚本菜单开启时才继续
             rightClickMenu_("sub_folder_list", "fols", "folse") // 文件夹
-            rightClickMenu_("filelist", "fs", "fse") // 文件
+            rightClickMenu_("filelist", "fs", "fse") //            文件
         }
     }
 
@@ -164,10 +165,10 @@
     // 右键文件显示菜单，参数：文件/文件夹列表 ID、菜单 ID 前缀
     function rightClickMenu_(list_id_name, menu_id_name_prefix, list_id_name_prefix) {
         let list_ = mainframe.document.getElementById(list_id_name);
-        if(list_){ // 文件/文件夹列表
+        if(list_){ //                                          文件/文件夹列表
             list_.oncontextmenu = function(e){
-                e.preventDefault(); // 屏蔽浏览器自身右键菜单
-                let left = e.pageX - 30; // 右键菜单弹出位置
+                e.preventDefault(); //                         屏蔽浏览器自身右键菜单
+                let left = e.pageX - 30; //                    右键菜单弹出位置
                 let list_ID = e.target.id;
                 if(e.target.nodeName == "FONT"){
                     list_ID = e.target.parentNode.parentNode.id
@@ -188,9 +189,9 @@
     // 自动显示更多文件（后台页）
     function fileMore() {
         let filemore = mainframe.document.getElementById("filemore"); // 寻找 [显示更多文件] 按钮
-        if(filemore && filemore.style.display == "block"){ // 判断按钮是否存在且可见
-            if(filemore.children[0]){ // 判断按钮元素下第一个元素是否存在
-                filemore.children[0].click(); // 点击 [显示更多文件] 按钮
+        if(filemore && filemore.style.display == "block"){ //            判断按钮是否存在且可见
+            if(filemore.children[0]){ //                                 判断按钮元素下第一个元素是否存在
+                filemore.children[0].click(); //                         点击 [显示更多文件] 按钮
             }
         }
     }
@@ -199,8 +200,8 @@
     // 自动显示更多文件（分享链接列表页）
     function fileMoreS() {
         let filemore = document.getElementById("filemore"); // 寻找 [显示更多文件] 按钮
-        if(filemore && filemore.style.display != "none"){ // 判断按钮是否存在且可见
-            filemore.click(); // 点击 [显示更多文件] 按钮
+        if(filemore && filemore.style.display != "none"){ //   判断按钮是否存在且可见
+            filemore.click(); //                               点击 [显示更多文件] 按钮
         }
     }
 
@@ -209,15 +210,15 @@
     function folderDescdes() {
         if(menu_folderDescdesMenu) {
             let folderdescdes = mainframe.document.getElementById("folder_descdes"); // 寻找话说（描述）编辑框
-            if(folderdescdes){ // 判断话说（描述）元素是否存在
+            if(folderdescdes){ //                                                       判断话说（描述）元素是否存在
                 folderdescdes.style.cssText="margin: 15px 0px; width: 550px; height: 125px;"
             }
-            let folderdescdes2 = mainframe.document.getElementById("fol_credes"); // 寻找话说（描述）编辑框
-            if(folderdescdes2){ // 判断话说（描述）元素是否存在
+            let folderdescdes2 = mainframe.document.getElementById("fol_credes"); //    寻找话说（描述）编辑框
+            if(folderdescdes2){ //                                                      判断话说（描述）元素是否存在
                 folderdescdes2.style.cssText="margin: 15px 0px; width: 550px; height: 125px;"
             }
-            let folderdescdes3 = mainframe.document.getElementById("file_desc"); // 寻找话说（描述）编辑框
-            if(folderdescdes3){ // 判断话说（描述）元素是否存在
+            let folderdescdes3 = mainframe.document.getElementById("file_desc"); //     寻找话说（描述）编辑框
+            if(folderdescdes3){ //                                                      判断话说（描述）元素是否存在
                 folderdescdes3.style.cssText="margin: 15px 0px; width: 550px; height: 125px;"
             }
         }
@@ -241,11 +242,11 @@
     // 分享链接相关（点击文件时）
     function fileSha() {
         var f_sha = mainframe.document.getElementById("f_sha"); // 寻找分享链接（下载链接）信息框
-        if(f_sha && f_sha.style.display == "block"){ // 判断信息框是否存在且可见
-            fileSha_Open(); // 自动打开分享链接（点击文件时）
-            fileSha_Copy(); // 自动复制分享链接（点击文件时）
+        if(f_sha && f_sha.style.display == "block"){ //            判断信息框是否存在且可见
+            fileSha_Open(); //                                     自动打开分享链接（点击文件时）
+            fileSha_Copy(); //                                     自动复制分享链接（点击文件时）
             if(menu_open_fileSha || menu_copy_fileSha){
-                f_sha.style.display = "none"; // 隐藏分享链接（下载链接）信息框
+                f_sha.style.display = "none"; //                   隐藏分享链接（下载链接）信息框
             }
         }
     }
@@ -253,10 +254,10 @@
 
     // 自动打开分享链接（点击文件时）
     function fileSha_Open() {
-        if(menu_open_fileSha){ // 脚本菜单开启时才继续
+        if(menu_open_fileSha){ //                                                          脚本菜单开启时才继续
             let code = mainframe.document.getElementById("code").getAttribute("title"); // 获取分享链接（下载链接）
-            if(code != ""){ // 确保分享链接（下载链接）不是空
-                window.GM_openInTab(code, {active: true,insert: true,setParent: true}) // 打开分享链接（下载链接）
+            if(code != ""){ //                                                             确保分享链接（下载链接）不是空
+                window.GM_openInTab(code, {active: true,insert: true,setParent: true}) //  打开分享链接（下载链接）
             }
         }
     }
@@ -264,10 +265,10 @@
 
     // 自动复制分享链接（点击文件时）
     function fileSha_Copy() {
-        if(menu_copy_fileSha){ // 脚本菜单开启时才继续
+        if(menu_copy_fileSha){ //                                                  脚本菜单开启时才继续
             let f_sha1 = mainframe.document.getElementById("f_sha1").innerText; // 获取分享链接（下载链接）
-            if(f_sha1 != ""){ // 确保分享链接（下载链接）不是空
-                copyToClipboard(f_sha1); // 复制到剪切板
+            if(f_sha1 != ""){ //                                                   确保分享链接（下载链接）不是空
+                copyToClipboard(f_sha1); //                                        复制到剪切板
             }
         }
     }
@@ -286,6 +287,17 @@
                 }
             })(s);
             document.execCommand('Copy');
+        }
+    }
+
+
+    // 隐藏分享链接窗口（这样自动打开/复制分享链接时，不会一闪而过）
+    function hideSha(){
+        if(menu_open_fileSha || menu_copy_fileSha){ // [自动复制分享链接] 或 [自动打开分享链接] 任意一个功能开启时才继续
+            let style_Add = mainframe.document.createElement('style');
+            style_Add.type = 'text/css';
+            style_Add.innerHTML = `#f_sha {display: none !important;}`;
+            mainframe.document.head.appendChild(style_Add);
         }
     }
 
