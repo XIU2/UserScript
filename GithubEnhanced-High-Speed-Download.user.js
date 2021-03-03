@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.3.6
+// @version      1.3.7
 // @author       X.I.U
 // @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -28,7 +28,7 @@
         ['https://gh.con.sh','美国'],
         ['https://gh.api.99988866.xyz','美国'],
         ['https://download.fastgit.org','日本东京'],
-        ['https://github.xiu2.xyz','日本东京'],
+        ['https://gh.xiu2.xyz','日本东京'],
         ['https://ghproxy.com','韩国首尔'],
         ['https://pd.zwc365.com/seturl','中国香港']
     ],
