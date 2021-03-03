@@ -21,7 +21,7 @@
     var backColor = '#ffffff';
     var fontColor = '#888888';
     if('dark' == $('html').attr('data-color-mode')){ // 黑暗模式判断
-        backColor = '#0D1117';
+        backColor = '#161a21';
         fontColor = '#b2b8bf';
     }
     var download_url = [
@@ -114,7 +114,7 @@
                     html = `<div style="display: flex;justify-content: flex-end;">`;
                 for (let i=0;i<url.length;i++)
                 {
-                    html = html + `<div><a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a></div>`
+                    html = html + `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
                 }
                 html = html + `</div>`
                 $(this).next().after(html);
@@ -137,7 +137,7 @@
                     html = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">`;
                 for (let i=0;i<url.length;i++)
                 {
-                    html = html + `<div><a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a></div>`
+                    html = html + `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
                 }
                 html = html + `</div>`
                 $(this).after(html);
