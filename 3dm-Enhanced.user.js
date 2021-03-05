@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         3DM论坛增强
-// @version      1.0.6
+// @version      1.0.7
 // @author       X.I.U
 // @description  自动回复、自动无缝翻页、清理置顶帖子
 // @match        *://bbs.3dmgame.com/*
@@ -60,10 +60,10 @@
     function menu_switch(menu_status, Name, Tips) {
         if (menu_status){
             GM_setValue(`${Name}`, false);
-            GM_notification(`已关闭 [${Tips}] 功能\n（刷新网页后生效）`);
+            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }else{
             GM_setValue(`${Name}`, true);
-            GM_notification(`已开启 [${Tips}] 功能\n（刷新网页后生效）`);
+            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
@@ -124,9 +124,9 @@
 
     // 用于脚本内部判断当前 URL 类型
     let SiteType = {
-        FORUM: DBSite.forum.SiteTypeID,   // 各板块帖子列表
+        FORUM: DBSite.forum.SiteTypeID, //   各板块帖子列表
         THREAD: DBSite.thread.SiteTypeID, // 帖子内
-        GUIDE: DBSite.guide.SiteTypeID    // 导读帖子列表
+        GUIDE: DBSite.guide.SiteTypeID //    导读帖子列表
     };
 
     // 下一页URL
@@ -145,18 +145,18 @@
     if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)){
         // 帖子内
         if(menu_thread_pageLoading)curSite = DBSite.thread;
-        if(menu_autoReply)autoReply();        // 如果有隐藏内容，则自动回复
-        pageLoading();                        // 自动翻页
+        if(menu_autoReply)autoReply(); //       如果有隐藏内容，则自动回复
+        pageLoading(); //                       自动翻页
         if(menu_scrollToShowhide)setTimeout(`window.scrollTo(0,document.querySelector('.showhide').offsetTop)`, 500); // 滚动至隐藏内容
     }else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)){
         // 各板块帖子列表
         curSite = DBSite.forum;
-        if(menu_cleanTopPost)cleanTopPost();  // 清理置顶帖子
-        pageLoading();                        // 自动翻页
+        if(menu_cleanTopPost)cleanTopPost(); // 清理置顶帖子
+        pageLoading(); //                       自动翻页
     }else if (patt_guide.test(location.search)){
         // 导读帖子列表
         curSite = DBSite.guide;
-        pageLoading();                        // 自动翻页
+        pageLoading(); //                       自动翻页
     }
 
 

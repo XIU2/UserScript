@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.3.8
+// @version      1.3.9
 // @author       X.I.U
 // @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -80,7 +80,7 @@
         GM_setValue('xiu2_menu_raw_fast', menu_raw_fast);
         delRawDownLink(); // 删除旧加速源
         addRawDownLink(); // 添加新加速源
-        GM_notification(`已切换加速源为：${raw_url[menu_raw_fast][1]}`); // 提示消息
+        GM_notification({text: "已切换加速源为：" + raw_url[menu_raw_fast][1], timeout: 3000}); // 提示消息
         registerMenuCommand(); // 重新注册脚本菜单
     };
 

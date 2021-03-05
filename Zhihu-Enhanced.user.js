@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.2.2
+// @version      1.2.3
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -59,10 +59,10 @@ function registerMenuCommand() {
 function menu_switch(menu_status, Name, Tips) {
     if (menu_status){
         GM_setValue(`${Name}`, false);
-        GM_notification(`已关闭 [${Tips}] 功能\n（刷新网页后生效）`);
+        GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
     }else{
         GM_setValue(`${Name}`, true);
-        GM_notification(`已开启 [${Tips}] 功能\n（刷新网页后生效）`);
+        GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
     }
     registerMenuCommand(); // 重新注册脚本菜单
 };

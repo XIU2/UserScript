@@ -39,8 +39,8 @@
 
         if (menu_cleanPostTitle){menu_cleanPostTitle_ = "√";}else{menu_cleanPostTitle_ = "×";}
 
-        menu_cleanPostTitle_ID = GM_registerMenuCommand(`[ ${menu_cleanPostTitle_} ] 清理帖子标题开头〖〗【】文字`, function(){menu_switch(menu_cleanPostTitle,'xiu2_menu_cleanPostTitle','[清理帖子标题开头〖〗【】文字] 功能（刷新网页后生效）')});
-        menu_qianDaoRedirectURL_ID = GM_registerMenuCommand(`当前页面设为签到后重定向地址`, function(){GM_setValue('xiu2_menu_qianDaoRedirectURL', location.href);GM_notification(`已设置当前页面为签到后重定向地址`);})
+        menu_cleanPostTitle_ID = GM_registerMenuCommand(`[ ${menu_cleanPostTitle_} ] 清理帖子标题开头〖〗【】文字`, function(){menu_switch(menu_cleanPostTitle,'xiu2_menu_cleanPostTitle','清理帖子标题开头〖〗【】文字')});
+        menu_qianDaoRedirectURL_ID = GM_registerMenuCommand(`当前页面设为签到后重定向地址`, function(){GM_setValue('xiu2_menu_qianDaoRedirectURL', location.href);GM_notification({text: `已设置当前页面为签到后重定向地址`, timeout: 3000});;})
         menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
@@ -48,10 +48,10 @@
     function menu_switch(menu_status, Name, Tips) {
         if (menu_status){
             GM_setValue(`${Name}`, false);
-            GM_notification(`已关闭 ${Tips}`);
+            GM_notification({text: `已关闭 [${Tips}] 功能（刷新网页后生效）`, timeout: 3500});
         }else{
             GM_setValue(`${Name}`, true);
-            GM_notification(`已开启 ${Tips}`);
+            GM_notification({text: `已开启 [${Tips}] 功能（刷新网页后生效）`, timeout: 3500});
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };

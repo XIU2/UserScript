@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.2.1
+// @version      1.2.2
 // @author       X.I.U
 // @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、拖入文件自动显示上传框、调整描述（话说）编辑框初始大小
 // @match        *://*.lanzous.com/*
@@ -82,10 +82,10 @@
         }
         if (menu_status){
             GM_setValue(`${Name}`, false);
-            GM_notification(`已关闭 [${Tips}] 功能${RefreshTips}`);
+            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }else{
             GM_setValue(`${Name}`, true);
-            GM_notification(`已开启 [${Tips}] 功能${RefreshTips}`);
+            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };

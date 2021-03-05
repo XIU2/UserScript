@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.0.5
+// @version      1.0.6
 // @author       X.I.U
-// @description  宽屏显示、隐藏文章开头大图、文章编辑页面与实际文章宽度一致 
+// @description  宽屏显示、隐藏文章开头大图、文章编辑页面与实际文章宽度一致
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/p/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -43,10 +43,10 @@
     function menu_switch(menu_status, Name, Tips) {
         if (menu_status){
             GM_setValue(`${Name}`, false);
-            GM_notification(`已关闭 [${Tips}] 功能\n（刷新网页后生效）`);
+            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }else{
             GM_setValue(`${Name}`, true);
-            GM_notification(`已开启 [${Tips}] 功能\n（刷新网页后生效）`);
+            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };

@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.2.1
+// @version      1.2.2
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页（全站）
 // @match        *://www.52pojie.cn/*
@@ -48,10 +48,10 @@
     function menu_switch(menu_status, Name, Tips) {
         if (menu_status){
             GM_setValue(`${Name}`, false);
-            GM_notification(`已关闭 [${Tips}] 功能\n（刷新网页后生效）`, '吾爱破解论坛增强');
+            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, title: '吾爱破解论坛增强', timeout: 3500});
         }else{
             GM_setValue(`${Name}`, true);
-            GM_notification(`已开启 [${Tips}] 功能\n（刷新网页后生效）`, '吾爱破解论坛增强');
+            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, title: '吾爱破解论坛增强', timeout: 3500});
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };

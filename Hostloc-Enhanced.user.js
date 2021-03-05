@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.0.4
+// @version      1.0.5
 // @author       X.I.U
 // @description  自动无缝翻页、自动显示帖子内被隐藏的回复
 // @match        *://www.hostloc.com/*
@@ -48,10 +48,10 @@
     function menu_switch(menu_status, Name, Tips) {
         if (menu_status){
             GM_setValue(`${Name}`, false);
-            GM_notification(`已关闭 [${Tips}] 功能\n（刷新网页后生效）`);
+            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }else{
             GM_setValue(`${Name}`, true);
-            GM_notification(`已开启 [${Tips}] 功能\n（刷新网页后生效）`);
+            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
