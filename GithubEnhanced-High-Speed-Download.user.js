@@ -1,9 +1,10 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.3.7
+// @version      1.3.8
 // @author       X.I.U
 // @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
+// @match        *://hub.fastgit.org/*
 // @icon         https://github.com/favicon.ico
 // @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
 // @grant        GM_registerMenuCommand
