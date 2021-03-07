@@ -48,10 +48,10 @@
     function menu_switch(menu_status, Name, Tips) {
         if (menu_status){
             GM_setValue(`${Name}`, false);
-            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, title: '吾爱破解论坛增强', timeout: 3500});
+            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, title: '吾爱破解论坛增强', timeout: 3000});
         }else{
             GM_setValue(`${Name}`, true);
-            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, title: '吾爱破解论坛增强', timeout: 3500});
+            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, title: '吾爱破解论坛增强', timeout: 3000});
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
@@ -61,7 +61,7 @@
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
 
-    // 自动翻页规则，scrollDelta 数值越大，滚动条触发点越高
+    // 自动翻页规则，scrollDelta 数值越大，滚动条触发点越靠上
     let DBSite = {
         forum: {
             SiteTypeID: 1,
@@ -113,15 +113,15 @@
 
     // 用于脚本内部判断当前 URL 类型
     let SiteType = {
-        FORUM: DBSite.forum.SiteTypeID,        // 各板块帖子列表
-        THREAD: DBSite.thread.SiteTypeID,      // 帖子内
-        GUIDE: DBSite.guide.SiteTypeID,        // 导读帖子列表
-        COLLECTION: DBSite.collection.SiteTypeID,    // 淘贴列表
-        SEARCH: DBSite.search.SiteTypeID  // 搜索结果列表
+        FORUM: DBSite.forum.SiteTypeID, //           各板块帖子列表
+        THREAD: DBSite.thread.SiteTypeID, //         帖子内
+        GUIDE: DBSite.guide.SiteTypeID, //           导读帖子列表
+        COLLECTION: DBSite.collection.SiteTypeID, // 淘贴列表
+        SEARCH: DBSite.search.SiteTypeID //          搜索结果列表
     };
 
     // URL 匹配正则表达式
-    var patt_thread = /\/thread-\d+-\d+\-\d+.html/,
+    let patt_thread = /\/thread-\d+-\d+\-\d+.html/,
         patt_thread_2 = /mod\=viewthread/,
         patt_forum = /\/forum-\d+-\d+\.html/,
         patt_forum_2 = /mod\=forumdisplay/,
@@ -131,46 +131,39 @@
 
     // URL 判断
     if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)){
-        // 帖子内
         if(menu_thread_pageLoading) {
-            curSite = DBSite.thread;
-            hidePgbtn(); // 隐藏帖子内的 [下一页] 按钮
+            curSite = DBSite.thread; //      帖子内
+            hidePgbtn(); //                  隐藏帖子内的 [下一页] 按钮
         }
     }else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)){
-        // 各板块帖子列表
-        curSite = DBSite.forum;
+        curSite = DBSite.forum; //           各板块帖子列表
     }else if (patt_guide.test(location.search)){
-        // 导读帖子列表
-        curSite = DBSite.guide;
-        delateReward(); // 屏蔽悬赏贴（导读-最新发表）
+        curSite = DBSite.guide; //           导读帖子列表
+        delateReward(); //                   屏蔽悬赏贴（导读-最新发表）
     }else if (patt_collection.test(location.search)){
-        // 淘贴列表
-        curSite = DBSite.collection;
+        curSite = DBSite.collection; //      淘贴列表
     }else if(location.pathname === '/search.php'){
-        // 搜索结果列表
-        curSite = DBSite.search;
+        curSite = DBSite.search; //          搜索结果列表
     }else if(location.href === "https://www.52pojie.cn/home.php?mod=task&do=draw&id=2"){
-        window.opener=null;window.open('','_self');window.close();
-        //qianDaoBack();        // 先看看是不是签到跳转页面，如果是则返回
+        window.opener=null;window.open('','_self');window.close(); // 关闭当前网页标签页
     }
     curSite.pageUrl = ""; // 下一页URL
 
-    qianDao();            // 看看有没有签到
-    pageLoading();        // 自动翻页
+    qianDao(); // 看看有没有签到
+    pageLoading(); // 自动翻页
 
 
     // 自动翻页
     function pageLoading() {
         if (curSite.SiteTypeID > 0){
             windowScroll(function (direction, e) {
-                //console.log('1111111')
                 if (direction === "down") { // 下滑才准备翻页
-                    var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+                    let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
                     let scrollDelta = curSite.pager.scrollDelta;
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
                         if (curSite.SiteTypeID === SiteType.FORUM) { // 如果是原创、精品等版块则直接点下一页就行了
-                            var autopbn = document.querySelector('#autopbn');
-                            if (autopbn && autopbn.innerText == "下一页 »"){ // 如果已经在加载中了，就忽略
+                            let autopbn = document.querySelector('#autopbn');
+                            if (autopbn && autopbn.innerText == "下一页 »"){ // 如果没有在加载时，再去点击，免得一不注意加载几十页
                                 autopbn.click();
                             }
                         }else{
@@ -185,47 +178,19 @@
 
     // 自动签到
     function qianDao() {
-        var qiandao = document.querySelector('#um p:last-child a:first-child');
+        let qiandao = document.querySelector('#um p:last-child a:first-child');
         if (qiandao){
-            //if(qiandao.href === "https://www.52pojie.cn/home.php?mod=task&do=apply&id=2")
-            //{
             window.GM_openInTab(qiandao.href, {active: false,insert: true,setParent: true}) // 后台打开签到地址
             qiandao.querySelector('.qq_bind').setAttribute('src','https://www.52pojie.cn/static/image/common/wbs.png') // 修改 [打卡签到] 图标为 [签到完毕]
-            //qiandao.click();
-            //}
+            qiandao.href = "#" // 修改 URL 为 #
         }
-    }
-
-
-    // 签到后立即返回
-    /*function qianDaoBack() {
-        var qiandaoback = document.querySelector('#messagetext p.alert_btnleft a');
-        if (qiandaoback){
-            setTimeout(function(){qiandaoback.click()}, 200);
-        }
-    }*/
-
-
-    // 滚动条事件
-    function windowScroll(fn1) {
-        var beforeScrollTop = document.documentElement.scrollTop,
-            fn = fn1 || function () {};
-        setTimeout(function () { // 延时执行，避免刚载入到页面就触发翻页事件
-            window.addEventListener("scroll", function (e) {
-                var afterScrollTop = document.documentElement.scrollTop,
-                    delta = afterScrollTop - beforeScrollTop;
-                if (delta == 0) return false;
-                fn(delta > 0 ? "down" : "up", e);
-                beforeScrollTop = afterScrollTop;
-            }, false);
-        }, 1000)
     }
 
 
     //屏蔽悬赏贴（导读-最新发表）
     function delateReward(){
         if(patt_guide_newthread.test(location.search) && menu_delateReward){
-            var table = document.querySelector("#threadlist > div.bm_c > table"),
+            let table = document.querySelector("#threadlist > div.bm_c > table"),
                 tbodys = table.getElementsByTagName('tbody'),
                 arrs = [];
             for (let i=0; i<tbodys.length; i++){
@@ -253,27 +218,21 @@
     }
 
 
-    // 监听 XMLHttpRequest 事件
-    /*function EventXMLHttpRequest() {
-        var _send = window.XMLHttpRequest.prototype.send
-        function sendReplacement(data) {
-            if(this.onreadystatechange) {
-                this._onreadystatechange = this.onreadystatechange;
-            }
-            this.onreadystatechange = onReadyStateChangeReplacement;
-            return _send.apply(this, arguments);
-        }
-        function onReadyStateChangeReplacement() {
-            if(this._onreadystatechange) {
-                if (this.readyState==4 && this.status==200)
-                {
-                    console.log('xxx')
-                }
-            }
-            return this._onreadystatechange.apply(this, arguments);
-        }
-        window.XMLHttpRequest.prototype.send = sendReplacement;
-    }*/
+    // 滚动条事件
+    function windowScroll(fn1) {
+        var beforeScrollTop = document.documentElement.scrollTop,
+            fn = fn1 || function () {};
+        setTimeout(function () { // 延时执行，避免刚载入到页面就触发翻页事件
+            window.addEventListener("scroll", function (e) {
+                var afterScrollTop = document.documentElement.scrollTop,
+                    delta = afterScrollTop - beforeScrollTop;
+                if (delta == 0) return false;
+                fn(delta > 0 ? "down" : "up", e);
+                beforeScrollTop = afterScrollTop;
+            }, false);
+        }, 1000)
+    }
+
 
     // 自动无缝翻页，修改自 https://greasyfork.org/scripts/14178
     function showPager() {
