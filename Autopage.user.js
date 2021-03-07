@@ -67,7 +67,7 @@
             pager: {
                 type: 2,
                 nextLink: 'button.load-button.next-page',
-                scrollDelta: 1000
+                scrollDelta: 1500
             }
         }
     };
