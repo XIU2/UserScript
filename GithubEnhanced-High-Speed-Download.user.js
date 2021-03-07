@@ -5,7 +5,7 @@
 // @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
 // @match        *://hub.fastgit.org/*
-// @icon         https://github.com/favicon.ico
+// @icon         https://i.loli.net/2021/03/07/oUHPFSOTjKnkMzJ.png
 // @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
