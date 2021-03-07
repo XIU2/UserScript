@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.1.2
+// @version      1.1.3
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：423Down、Apphot(原烈火汉化)、小众软件
+// @description  自动无缝翻页，目前支持：423Down、Apphot(原烈火汉化)、小众软件、PubMed
 // @match        *://www.423down.com/*
 // @exclude      *://www.423down.com/*.html
 // @match        *://apphot.cc/*
@@ -10,7 +10,8 @@
 // @match        *://www.appinn.com/
 // @match        *://www.appinn.com/*/*/
 // @match        *://www.appinn.com/?s=*
-// @icon         https://s3.ax1x.com/2021/02/25/yj2s4f.png
+// @match        *://pubmed.ncbi.nlm.nih.gov/?term=*
+// @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
 // @grant        GM_openInTab
@@ -31,6 +32,7 @@
         postslist_423down: {
             SiteTypeID: 1,
             pager: {
+                type: 1,
                 nextLink: '//div[@class="paging"]//a[contains(text(),"下一页")][@href]',
                 pageElement: 'css;div.content-wrap ul.excerpt > li',
                 HT_insert: ['css;div.content-wrap ul.excerpt', 2],
@@ -41,6 +43,7 @@
         postslist_apphot: {
             SiteTypeID: 2,
             pager: {
+                type: 1,
                 nextLink: '//div[@class="pagination"]//a[contains(text(),"下一页")][@href]',
                 pageElement: 'css;div.content > article.excerpt',
                 HT_insert: ['css;div.pagination', 1],
@@ -51,11 +54,20 @@
         postslist_appinn: {
             SiteTypeID: 3,
             pager: {
+                type: 1,
                 nextLink: '//a[@class="next page-numbers"][@href]',
                 pageElement: 'css;section#latest-posts > article',
                 HT_insert: ['css;nav.navigation.pagination', 1],
                 replaceE: 'css;div.nav-links',
                 scrollDelta: 1500
+            }
+        },
+        postslist_pubmed: {
+            SiteTypeID: 4,
+            pager: {
+                type: 2,
+                nextLink: 'button.load-button.next-page',
+                scrollDelta: 1000
             }
         }
     };
@@ -64,7 +76,8 @@
     let SiteType = {
         POSTSLIST_423DOWN: DBSite.postslist_423down.SiteTypeID,
         POSTSLIST_APPHOT: DBSite.postslist_apphot.SiteTypeID,
-        POSTSLIST_APPINN: DBSite.postslist_appinn.SiteTypeID
+        POSTSLIST_APPINN: DBSite.postslist_appinn.SiteTypeID,
+        POSTSLIST_PUBMED: DBSite.postslist_pubmed.SiteTypeID
     };
 
     switch (location.host) {
@@ -77,6 +90,9 @@
         case "www.appinn.com":
             curSite = DBSite.postslist_appinn;
             break;
+        case "pubmed.ncbi.nlm.nih.gov":
+            curSite = DBSite.postslist_pubmed;
+            break;
     }
     curSite.pageUrl = ""; // 下一页URL
     pageLoading(); // 自动无缝翻页
@@ -87,11 +103,18 @@
         if (curSite.SiteTypeID > 0){
             windowScroll(function (direction, e) {
                 if (direction === "down") { // 下滑才准备翻页
-                    var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-                    console.log(document.documentElement.scrollHeight)
+                    let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+                    //console.log(document.documentElement.scrollHeight)
                     let scrollDelta = curSite.pager.scrollDelta;
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
-                        ShowPager.loadMorePage();
+                        if (curSite.pager.type === 1) {
+                            ShowPager.loadMorePage();
+                        }else{
+                            let autopbn = document.querySelector(curSite.pager.nextLink);
+                            if (autopbn){
+                                autopbn.click();
+                            }
+                        }
                     }
                 }
             });
