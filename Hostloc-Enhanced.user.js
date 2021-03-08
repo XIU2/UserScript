@@ -102,7 +102,7 @@
     };
 
     // URL 匹配正则表达式
-    var patt_thread = /\/thread-\d+-\d+\-\d+.html/,
+    let patt_thread = /\/thread-\d+-\d+\-\d+.html/,
         patt_thread_2 = /mod\=viewthread/,
         patt_forum = /\/forum-\d+-\d+\.html/,
         patt_forum_2 = /mod\=forumdisplay/,
@@ -134,11 +134,11 @@
         if (curSite.SiteTypeID > 0){
             windowScroll(function (direction, e) {
                 if (direction === "down") { // 下滑才准备翻页
-                    var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+                    let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
                     let scrollDelta = 766;
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
                         if (curSite.SiteTypeID === SiteType.FORUM) { // 如果是各版块帖子列表则直接点下一页就行了
-                            var autopbn = document.querySelector('#autopbn');
+                            let autopbn = document.querySelector('#autopbn');
                             if (autopbn && autopbn.innerText == "下一页 »"){ // 如果已经在加载中了，就忽略
                                 autopbn.click();
                             }
@@ -155,7 +155,7 @@
     // 自动显示帖子内被隐藏的回复
     function showPosts() {
         if(menu_showhide){
-            var showposts = document.querySelector('#hiddenpoststip a');
+            let showposts = document.querySelector('#hiddenpoststip a');
             if (showposts){ // 如果存在
                 showposts.click();
             }
