@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.2.4
+// @version      1.2.5
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -480,31 +480,32 @@ function EventXMLHttpRequest() {
     setInterval(originalPic,100); //                                    默认高清原图
     if(menu_directLink) setInterval(directLink, 100); //                默认站外直链
 
-    //每个页面对应的功能函数
-    if(window.location.href.indexOf("question") > -1){ //               回答页 //
+    //                                                                  每个页面对应的功能函数
+    if(window.location.href.indexOf("question") > -1){ //             回答页 //
         if(window.location.href.indexOf("waiting") == -1){
             collapsedAnswer(); //                                       一键收起回答
         }
         setInterval(topTime_question, 300); //                          置顶显示时间
-    }else if(window.location.href.indexOf("search") > -1){ //           搜索结果页 //
+    }else if(window.location.href.indexOf("search") > -1){ //         搜索结果页 //
         collapsedAnswer(); //                                           一键收起回答
         setInterval(topTime_search, 300); //                            置顶显示时间
         EventXMLHttpRequest(); //                                       区分问题文章
-    }else if(window.location.href.indexOf("topic") > -1){ //            话题页 //
+    }else if(window.location.href.indexOf("topic") > -1){ //          话题页 //
         if(window.location.href.indexOf("unanswered") == -1){
             collapsedAnswer(); //                                       一键收起回答
             setInterval(topTime_search, 300); //                        置顶显示时间
             EventXMLHttpRequest(); //                                   区分问题文章
         }
-    }else if(window.location.href.indexOf("zhuanlan") > -1){ //         文章 //
+    }else if(window.location.href.indexOf("zhuanlan") > -1){ //       文章 //
+        removeLogin(); //                                               移除登录弹窗
         setInterval(topTime_zhuanlan, 300); //                          置顶显示时间
-    }else if(window.location.href.indexOf("column") > -1){ //           专栏 //
+    }else if(window.location.href.indexOf("column") > -1){ //         专栏 //
         collapsedAnswer(); //                                           一键收起回答
         setInterval(topTime_zhuanlan, 300); //                          置顶显示时间
     }else if(window.location.href.indexOf("people") > -1 || window.location.href.indexOf("org") > -1){ // 用户主页 //
         collapsedAnswer(); //                                           一键收起回答
         setInterval(topTime_people, 300); //                            置顶显示时间
-    }else{ //                                                           首页 //
+    }else{ //                                                         首页 //
         collapsedAnswer(); //                                           一键收起回答
         setInterval(topTime_index, 300); //                             置顶显示时间
         EventXMLHttpRequest(); //                                       区分问题文章
