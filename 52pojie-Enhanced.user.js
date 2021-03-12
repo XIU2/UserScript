@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.2.2
+// @version      1.2.3
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页（全站）
 // @match        *://www.52pojie.cn/*
@@ -27,7 +27,7 @@
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        var menu_thread_pageLoading_, menu_delateReward_;
+        let menu_thread_pageLoading_, menu_delateReward_;
         if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
             GM_unregisterMenuCommand(menu_thread_pageLoading_ID);
             GM_unregisterMenuCommand(menu_delateReward_ID);
@@ -179,7 +179,7 @@
     // 自动签到
     function qianDao() {
         let qiandao = document.querySelector('#um p:last-child a:first-child');
-        if (qiandao){
+        if (qiandao && qiandao.href === "https://www.52pojie.cn/home.php?mod=task&do=draw&id=2"){
             window.GM_openInTab(qiandao.href, {active: false,insert: true,setParent: true}) // 后台打开签到地址
             qiandao.querySelector('.qq_bind').setAttribute('src','https://www.52pojie.cn/static/image/common/wbs.png') // 修改 [打卡签到] 图标为 [签到完毕]
             qiandao.href = "#" // 修改 URL 为 #
