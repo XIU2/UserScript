@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         吾爱破解论坛美化
-// @version      1.0.5
+// @version      1.0.6
 // @author       X.I.U
-// @description  精简多余内容
+// @description  精简多余内容、样式优化
 // @match        *://www.52pojie.cn/*
 // @icon         https://www.52pojie.cn/favicon.ico
 // @grant        GM_registerMenuCommand
@@ -25,7 +25,7 @@
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        var menu_rule_;
+        let menu_rule_;
         if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
             GM_unregisterMenuCommand(menu_rule_ID);
             GM_unregisterMenuCommand(menu_feedBack_ID);
@@ -42,16 +42,16 @@
     function menu_switch(menu_status, Name, Tips) {
         if (menu_status){
             GM_setValue(`${Name}`, false);
-            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
+            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3000});
         }else{
             GM_setValue(`${Name}`, true);
-            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
+            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3000});
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
 
     function addStyle() {
-        var style,
+        let style,
             style_1 = `.bml {display:none !important;}`,
             style_2 = `
 a[href="connect.php?mod=config"], #toptb, #navmenu, #nv_ph, #nv, #pt .y, #chart, #ft, #custominfo_pmenu, .bm.lk, .dnch_eo_pt, .dnch_eo_pr, .dnch_eo_f, dl.pil.cl, td.plc.plm .sign, .dnch_eo_pb, .dnch_eo_pt, .pls .side-star, .pls .side-group, .res-footer-note, .comiis_nav, .scbar_hot_td, .md_ctrl, .pls.favatar .xg1 {
@@ -125,6 +125,10 @@ textarea#fastpostmessage {
 	border-top:0;
 	border-bottom:0;
 	background:0;
+}
+/* 链接点击后颜色变浅（灰白色） */
+.tl th a:visited, .tl td.fn a:visited {
+    color: #aaa;
 }`,
             style_Add = document.createElement('style');
         if (menu_rule) {
