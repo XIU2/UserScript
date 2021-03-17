@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.3.9
+// @version      1.4.0
 // @author       X.I.U
 // @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -21,9 +21,14 @@
 (function() {
     var backColor = '#ffffff';
     var fontColor = '#888888';
-    if('dark' == $('html').attr('data-color-mode')){ // 黑暗模式判断
-        backColor = '#161a21';
-        fontColor = '#b2b8bf';
+    if($('html').attr('data-color-mode') == 'dark'){ // 黑暗模式判断
+        if($('html').attr('data-dark-theme') == 'dark_dimmed'){
+            backColor = '#272e37';
+            fontColor = '#768390';
+        }else{
+            backColor = '#161a21';
+            fontColor = '#b2b8bf';
+        }
     }
     var download_url = [
         ['https://gh.con.sh','美国'],
