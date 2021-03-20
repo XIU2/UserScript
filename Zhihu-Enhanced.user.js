@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.2.5
+// @version      1.2.6
 // @author       X.I.U
-// @description  移除登录弹窗、一键收起回答、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
+// @description  移除登录弹窗、一键收起回答、收起当前回答（点击空白处）、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -19,12 +19,14 @@
 // ==/UserScript==
 
 var menu_collapsedAnswer = GM_getValue('xiu2_menu_collapsedAnswer'),
+    menu_collapsedNowAnswer = GM_getValue('xiu2_menu_collapsedNowAnswer'),
     menu_publishTop = GM_getValue('xiu2_menu_publishTop'),
     menu_allTime = GM_getValue('xiu2_menu_allTime'),
     menu_typeTips = GM_getValue('xiu2_menu_typeTips'),
     menu_directLink = GM_getValue('xiu2_menu_directLink'),
-    menu_collapsedAnswer_ID, menu_publishTop_ID, menu_typeTips_ID, menu_allTime_ID, menu_directLink_ID, menu_feedBack_ID;
+    menu_collapsedAnswer_ID, menu_collapsedNowAnswer_ID, menu_publishTop_ID, menu_typeTips_ID, menu_allTime_ID, menu_directLink_ID, menu_feedBack_ID;
 if (menu_collapsedAnswer == null){menu_collapsedAnswer = true; GM_setValue('xiu2_menu_collapsedAnswer', menu_collapsedAnswer)};
+if (menu_collapsedNowAnswer == null){menu_collapsedNowAnswer = true; GM_setValue('xiu2_menu_collapsedNowAnswer', menu_collapsedNowAnswer)};
 if (menu_publishTop == null){menu_publishTop = true; GM_setValue('xiu2_menu_publishTop', menu_publishTop)};
 if (menu_typeTips == null){menu_typeTips = true; GM_setValue('xiu2_menu_typeTips', menu_typeTips)};
 if (menu_allTime == null){menu_allTime = true; GM_setValue('xiu2_menu_allTime', menu_allTime)};
@@ -33,14 +35,16 @@ registerMenuCommand();
 
 // 注册脚本菜单
 function registerMenuCommand() {
-    var menu_collapsedAnswer_, menu_publishTop_, menu_typeTips_, menu_allTime_, menu_directLink_;
+    var menu_collapsedAnswer_, menu_collapsedNowAnswer_, menu_publishTop_, menu_typeTips_, menu_allTime_, menu_directLink_;
     if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
         GM_unregisterMenuCommand(menu_collapsedAnswer_ID);
+        GM_unregisterMenuCommand(menu_collapsedNowAnswer_ID);
         GM_unregisterMenuCommand(menu_publishTop_ID);
         GM_unregisterMenuCommand(menu_typeTips_ID);
         GM_unregisterMenuCommand(menu_directLink_ID);
         GM_unregisterMenuCommand(menu_feedBack_ID);
         menu_collapsedAnswer = GM_getValue('xiu2_menu_collapsedAnswer');
+        menu_collapsedNowAnswer = GM_getValue('xiu2_menu_collapsedNowAnswer');
         menu_publishTop = GM_getValue('xiu2_menu_publishTop');
         menu_allTime = GM_getValue('xiu2_menu_allTime');
         menu_typeTips = GM_getValue('xiu2_menu_typeTips');
@@ -48,12 +52,14 @@ function registerMenuCommand() {
     }
 
     if (menu_collapsedAnswer){menu_collapsedAnswer_ = "√";}else{menu_collapsedAnswer_ = "×";}
+    if (menu_collapsedNowAnswer){menu_collapsedNowAnswer_ = "√";}else{menu_collapsedNowAnswer_ = "×";}
     if (menu_publishTop){menu_publishTop_ = "√";}else{menu_publishTop_ = "×";}
     if (menu_typeTips){menu_typeTips_ = "√";}else{menu_typeTips_ = "×";}
     if (menu_allTime){menu_allTime_ = "√";}else{menu_allTime_ = "×";}
     if (menu_directLink){menu_directLink_ = "√";}else{menu_directLink_ = "×";}
 
     menu_collapsedAnswer_ID = GM_registerMenuCommand(`[ ${menu_collapsedAnswer_} ] 一键收起回答`, function(){menu_switch(menu_collapsedAnswer,'xiu2_menu_collapsedAnswer','一键收起回答')});
+    menu_collapsedNowAnswer_ID = GM_registerMenuCommand(`[ ${menu_collapsedNowAnswer_} ] 收起当前回答（点击空白处）`, function(){menu_switch(menu_collapsedNowAnswer,'xiu2_menu_collapsedNowAnswer','收起当前回答')});
     menu_publishTop_ID = GM_registerMenuCommand(`[ ${menu_publishTop_} ] 置顶显示时间`, function(){menu_switch(menu_publishTop,'xiu2_menu_publishTop','置顶显示时间')});
     menu_publishTop_ID = GM_registerMenuCommand(`[ ${menu_allTime_} ] 完整显示时间`, function(){menu_switch(menu_allTime,'xiu2_menu_allTime','完整显示时间')});
     menu_typeTips_ID = GM_registerMenuCommand(`[ ${menu_typeTips_} ] 区分问题文章`, function(){menu_switch(menu_typeTips,'xiu2_menu_typeTips','区分问题文章')});
@@ -294,7 +300,7 @@ function directLink () {
         else if ($(this).attr("href").indexOf("link.zhihu.com/?target=") > -1) {
             external_href = $(this).attr("href");
             new_href = external_href.substring(external_href = $(this).attr("href").indexOf("link.zhihu.com/?target=") + "link.zhihu.com/?target=".length);
-            console.log(`${new_href}`)
+            //console.log(`${new_href}`)
             $(this).attr("href", decodeURIComponent(new_href));
         }
         else {
@@ -360,8 +366,8 @@ function originalPic(){
 // 一键收起回答
 function collapsedAnswer(){
     if(menu_collapsedAnswer){
-        var button_Add = `<button id="collapsed-button" data-tooltip="收起回答" data-tooltip-position="left" data-tooltip-will-hide-on-click="false" aria-label="收起回答" type="button" class="Button CornerButton Button--plain"><svg class="ContentItem-arrowIcon is-active" aria-label="收起回答" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M16.036 19.59a1 1 0 0 1-.997.995H9.032a.996.996 0 0 1-.997-.996v-7.005H5.03c-1.1 0-1.36-.633-.578-1.416L11.33 4.29a1.003 1.003 0 0 1 1.412 0l6.878 6.88c.782.78.523 1.415-.58 1.415h-3.004v7.005z"></path></svg></button>`
-        var style_Add = document.createElement('style');
+        let button_Add = `<button id="collapsed-button" data-tooltip="收起回答" data-tooltip-position="left" data-tooltip-will-hide-on-click="false" aria-label="收起回答" type="button" class="Button CornerButton Button--plain"><svg class="ContentItem-arrowIcon is-active" aria-label="收起回答" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M16.036 19.59a1 1 0 0 1-.997.995H9.032a.996.996 0 0 1-.997-.996v-7.005H5.03c-1.1 0-1.36-.633-.578-1.416L11.33 4.29a1.003 1.003 0 0 1 1.412 0l6.878 6.88c.782.78.523 1.415-.58 1.415h-3.004v7.005z"></path></svg></button>`
+        let style_Add = document.createElement('style');
         style_Add.innerHTML = '.CornerButton{margin-bottom:8px !important;}.CornerButtons{bottom:45px !important;}';
         document.head.appendChild(style_Add);
         $(".CornerAnimayedFlex").prepend(button_Add);
@@ -375,21 +381,43 @@ function collapsedAnswer(){
     }
 }
 
+// 收起当前回答（收起回答）
+function collapsedNowAnswer_2(){
+    let rightButton = document.querySelector('.ContentItem-actions.Sticky.RichContent-actions.is-fixed.is-bottom')
+    if(rightButton) {
+        rightButton = rightButton.querySelector('.ContentItem-rightButton')
+        if(rightButton && rightButton.attributes[0].name === "data-zop-retract-question") {
+            rightButton.click();
+        }
+    }
+}
+
+// 收起当前回答（监听点击事件）
+function collapsedNowAnswer(selectors){
+    if(menu_collapsedNowAnswer){
+        document.querySelector(selectors).onclick = function(event){
+            if (event.target==this) {
+                collapsedNowAnswer_2();
+            }
+        }
+    }
+}
+
 var postNum;
 // 区分问题文章
 function addTypeTips() {
     if(menu_typeTips){
         // URL 匹配正则表达式
-        var patt_zhuanlan = /zhuanlan.zhihu.com/,
+        let patt_zhuanlan = /zhuanlan.zhihu.com/,
             patt_question = /question\/\d+/,
             patt_question_answer = /answer\/\d+/,
             patt_video = /\/zvideo\//,
             patt_tip = /zhihu_e_tips/
-        var postList = document.querySelectorAll('h2.ContentItem-title a');
+        let postList = document.querySelectorAll('h2.ContentItem-title a');
         postNum = document.querySelectorAll('small.zhihu_e_tips');
         //console.log(`${postList.length} ${postNum.length}`)
         if (postList.length > postNum.length){
-            for(var num = postNum.length;num<postList.length;num++){
+            for(let num = postNum.length;num<postList.length;num++){
                 if (!patt_tip.test(postList[num].innerHTML)){               // 判断是否已添加
                     if (patt_zhuanlan.test(postList[num].href)){            // 如果是文章
                         postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #2196F3;display: inline-block;height: 18px;">文章</small> ` + postList[num].innerHTML
@@ -477,36 +505,48 @@ function EventXMLHttpRequest() {
         }
     })
 
+
     setInterval(originalPic,100); //                                    默认高清原图
     if(menu_directLink) setInterval(directLink, 100); //                默认站外直链
 
-    //                                                                  每个页面对应的功能函数
-    if(window.location.href.indexOf("question") > -1){ //             回答页 //
+
+    if(window.location.href.indexOf("question") > -1){ //                             回答页 //
         if(window.location.href.indexOf("waiting") == -1){
             collapsedAnswer(); //                                       一键收起回答
+            collapsedNowAnswer(".QuestionPage");
+            collapsedNowAnswer(".Question-main");
         }
         setInterval(topTime_question, 300); //                          置顶显示时间
-    }else if(window.location.href.indexOf("search") > -1){ //         搜索结果页 //
+    }else if(window.location.href.indexOf("search") > -1){ //                        搜索结果页 //
         collapsedAnswer(); //                                           一键收起回答
+        collapsedNowAnswer("main div");
+        collapsedNowAnswer(".Search-container");
         setInterval(topTime_search, 300); //                            置顶显示时间
         EventXMLHttpRequest(); //                                       区分问题文章
-    }else if(window.location.href.indexOf("topic") > -1){ //          话题页 //
+    }else if(window.location.href.indexOf("topic") > -1){ //                         话题页 //
         if(window.location.href.indexOf("unanswered") == -1){
             collapsedAnswer(); //                                       一键收起回答
+            collapsedNowAnswer("main.App-main");
+            collapsedNowAnswer(".ContentLayout");
             setInterval(topTime_search, 300); //                        置顶显示时间
             EventXMLHttpRequest(); //                                   区分问题文章
         }
-    }else if(window.location.href.indexOf("zhuanlan") > -1){ //       文章 //
+    }else if(window.location.href.indexOf("zhuanlan") > -1){ //                      文章 //
         removeLogin(); //                                               移除登录弹窗
         setInterval(topTime_zhuanlan, 300); //                          置顶显示时间
-    }else if(window.location.href.indexOf("column") > -1){ //         专栏 //
+    }else if(window.location.href.indexOf("column") > -1){ //                        专栏 //
         collapsedAnswer(); //                                           一键收起回答
+        collapsedNowAnswer("main div");
         setInterval(topTime_zhuanlan, 300); //                          置顶显示时间
     }else if(window.location.href.indexOf("people") > -1 || window.location.href.indexOf("org") > -1){ // 用户主页 //
         collapsedAnswer(); //                                           一键收起回答
+        collapsedNowAnswer("main div");
+        collapsedNowAnswer(".Profile-main");
         setInterval(topTime_people, 300); //                            置顶显示时间
-    }else{ //                                                         首页 //
+    }else{ //                                                                        首页 //
         collapsedAnswer(); //                                           一键收起回答
+        collapsedNowAnswer("main div");
+        collapsedNowAnswer(".Topstory-container");
         setInterval(topTime_index, 300); //                             置顶显示时间
         EventXMLHttpRequest(); //                                       区分问题文章
     }
