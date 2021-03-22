@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.2.6
+// @version      1.2.7
 // @author       X.I.U
-// @description  移除登录弹窗、一键收起回答、收起当前回答（点击空白处）、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
+// @description  移除登录弹窗、一键收起回答、收起当前回答（点击两侧空白处）、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -28,8 +28,8 @@ var menu_collapsedAnswer = GM_getValue('xiu2_menu_collapsedAnswer'),
 if (menu_collapsedAnswer == null){menu_collapsedAnswer = true; GM_setValue('xiu2_menu_collapsedAnswer', menu_collapsedAnswer)};
 if (menu_collapsedNowAnswer == null){menu_collapsedNowAnswer = true; GM_setValue('xiu2_menu_collapsedNowAnswer', menu_collapsedNowAnswer)};
 if (menu_publishTop == null){menu_publishTop = true; GM_setValue('xiu2_menu_publishTop', menu_publishTop)};
-if (menu_typeTips == null){menu_typeTips = true; GM_setValue('xiu2_menu_typeTips', menu_typeTips)};
 if (menu_allTime == null){menu_allTime = true; GM_setValue('xiu2_menu_allTime', menu_allTime)};
+if (menu_typeTips == null){menu_typeTips = true; GM_setValue('xiu2_menu_typeTips', menu_typeTips)};
 if (menu_directLink == null){menu_directLink = true; GM_setValue('xiu2_menu_directLink', menu_directLink)};
 registerMenuCommand();
 
@@ -40,6 +40,7 @@ function registerMenuCommand() {
         GM_unregisterMenuCommand(menu_collapsedAnswer_ID);
         GM_unregisterMenuCommand(menu_collapsedNowAnswer_ID);
         GM_unregisterMenuCommand(menu_publishTop_ID);
+        GM_unregisterMenuCommand(menu_allTime_ID);
         GM_unregisterMenuCommand(menu_typeTips_ID);
         GM_unregisterMenuCommand(menu_directLink_ID);
         GM_unregisterMenuCommand(menu_feedBack_ID);
@@ -54,14 +55,14 @@ function registerMenuCommand() {
     if (menu_collapsedAnswer){menu_collapsedAnswer_ = "√";}else{menu_collapsedAnswer_ = "×";}
     if (menu_collapsedNowAnswer){menu_collapsedNowAnswer_ = "√";}else{menu_collapsedNowAnswer_ = "×";}
     if (menu_publishTop){menu_publishTop_ = "√";}else{menu_publishTop_ = "×";}
-    if (menu_typeTips){menu_typeTips_ = "√";}else{menu_typeTips_ = "×";}
     if (menu_allTime){menu_allTime_ = "√";}else{menu_allTime_ = "×";}
+    if (menu_typeTips){menu_typeTips_ = "√";}else{menu_typeTips_ = "×";}
     if (menu_directLink){menu_directLink_ = "√";}else{menu_directLink_ = "×";}
 
     menu_collapsedAnswer_ID = GM_registerMenuCommand(`[ ${menu_collapsedAnswer_} ] 一键收起回答`, function(){menu_switch(menu_collapsedAnswer,'xiu2_menu_collapsedAnswer','一键收起回答')});
-    menu_collapsedNowAnswer_ID = GM_registerMenuCommand(`[ ${menu_collapsedNowAnswer_} ] 收起当前回答（点击空白处）`, function(){menu_switch(menu_collapsedNowAnswer,'xiu2_menu_collapsedNowAnswer','收起当前回答')});
+    menu_collapsedNowAnswer_ID = GM_registerMenuCommand(`[ ${menu_collapsedNowAnswer_} ] 收起当前回答（点击两侧空白处）`, function(){menu_switch(menu_collapsedNowAnswer,'xiu2_menu_collapsedNowAnswer','收起当前回答')});
     menu_publishTop_ID = GM_registerMenuCommand(`[ ${menu_publishTop_} ] 置顶显示时间`, function(){menu_switch(menu_publishTop,'xiu2_menu_publishTop','置顶显示时间')});
-    menu_publishTop_ID = GM_registerMenuCommand(`[ ${menu_allTime_} ] 完整显示时间`, function(){menu_switch(menu_allTime,'xiu2_menu_allTime','完整显示时间')});
+    menu_allTime_ID = GM_registerMenuCommand(`[ ${menu_allTime_} ] 完整显示时间`, function(){menu_switch(menu_allTime,'xiu2_menu_allTime','完整显示时间')});
     menu_typeTips_ID = GM_registerMenuCommand(`[ ${menu_typeTips_} ] 区分问题文章`, function(){menu_switch(menu_typeTips,'xiu2_menu_typeTips','区分问题文章')});
     menu_directLink_ID = GM_registerMenuCommand(`[ ${menu_directLink_} ] 默认站外直链`, function(){menu_switch(menu_directLink,'xiu2_menu_directLink','默认站外直链')});
     menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
