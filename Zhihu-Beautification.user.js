@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.0.8
+// @version      1.0.9
 // @author       X.I.U
 // @description  宽屏显示、隐藏文章开头大图、调整图片最大高度、浏览回答向下翻时自动隐藏标题、文章编辑页面与实际文章宽度一致
 // @match        *://www.zhihu.com/*
