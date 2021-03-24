@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.0.9
+// @version      1.1.0
 // @author       X.I.U
-// @description  宽屏显示、隐藏文章开头大图、调整图片最大高度、浏览回答向下翻时自动隐藏标题、文章编辑页面与实际文章宽度一致
+// @description  宽屏显示、隐藏文章开头大图、调整图片最大高度、浏览回答向下翻时自动隐藏标题、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/p/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -72,7 +72,8 @@
 
     // 添加样式
     function addStyle() {
-        let style = ``,
+        let style = `/* 屏蔽登录提示 */
+.Question-mainColumnLogin {display: none;}`,
             style_1 = `/* 宽屏显示 */
 .GlobalSideBar,.Question-sideColumn,.ContentLayout-sideColumn,.SearchSideBar,.Card.QuestionHeaderTopicMeta {
 	display: none !important;
