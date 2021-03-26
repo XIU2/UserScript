@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.1.3
+// @version      1.1.4
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：423Down、Apphot(原烈火汉化)、小众软件、PubMed
+// @description  自动无缝翻页，目前支持：423Down、Apphot(原烈火汉化)、小众软件、PubMed、三国杀论坛
 // @match        *://www.423down.com/*
 // @exclude      *://www.423down.com/*.html
 // @match        *://apphot.cc/*
@@ -11,6 +11,7 @@
 // @match        *://www.appinn.com/*/*/
 // @match        *://www.appinn.com/?s=*
 // @match        *://pubmed.ncbi.nlm.nih.gov/?term=*
+// @match        *://club.sanguosha.com/*
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
@@ -27,9 +28,9 @@
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
 
-    // 自动翻页规则
+    // 自动翻页规则，HT_insert：1 = 插入元素前面；2 = 插入元素中的最后一个子元素后面
     let DBSite = {
-        postslist_423down: {
+        _423down_postslist: {
             SiteTypeID: 1,
             pager: {
                 type: 1,
@@ -40,7 +41,7 @@
                 scrollDelta: 1500
             }
         },
-        postslist_apphot: {
+        apphot_postslist: {
             SiteTypeID: 2,
             pager: {
                 type: 1,
@@ -51,7 +52,7 @@
                 scrollDelta: 1500
             }
         },
-        postslist_appinn: {
+        appinn_postslist: {
             SiteTypeID: 3,
             pager: {
                 type: 1,
@@ -62,36 +63,69 @@
                 scrollDelta: 1500
             }
         },
-        postslist_pubmed: {
+        pubmed_postslist: {
             SiteTypeID: 4,
             pager: {
                 type: 2,
                 nextLink: 'button.load-button.next-page',
                 scrollDelta: 1500
             }
+        },
+        sanguosha_forum: {
+            SiteTypeID: 5,
+            pager: {
+                type: 2,
+                nextLink: 'a.bm_h',
+                scrollDelta: 800
+            }
+        },
+        sanguosha_thread: {
+            SiteTypeID: 6,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;div#postlist > div[id^="post_"]',
+                HT_insert: ['css;div#postlist', 2],
+                replaceE: 'css;div.pg',
+                scrollDelta: 800
+            }
+        },
+        sanguosha_search: {
+            SiteTypeID: 7,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;div#threadlist > ul',
+                HT_insert: ['css;div#threadlist', 2],
+                replaceE: 'css;div.pg',
+                scrollDelta: 800
+            }
         }
     };
 
-    // 用于脚本内部判断当前 URL 类型
-    let SiteType = {
-        POSTSLIST_423DOWN: DBSite.postslist_423down.SiteTypeID,
-        POSTSLIST_APPHOT: DBSite.postslist_apphot.SiteTypeID,
-        POSTSLIST_APPINN: DBSite.postslist_appinn.SiteTypeID,
-        POSTSLIST_PUBMED: DBSite.postslist_pubmed.SiteTypeID
-    };
 
     switch (location.host) {
         case "www.423down.com":
-            curSite = DBSite.postslist_423down;
+            curSite = DBSite._423down_postslist;
             break;
         case "apphot.cc":
-            curSite = DBSite.postslist_apphot;
+            curSite = DBSite.apphot_postslist;
             break;
         case "www.appinn.com":
-            curSite = DBSite.postslist_appinn;
+            curSite = DBSite.appinn_postslist;
             break;
         case "pubmed.ncbi.nlm.nih.gov":
-            curSite = DBSite.postslist_pubmed;
+            curSite = DBSite.pubmed_postslist;
+            break;
+        case "club.sanguosha.com":
+            if(location.pathname.indexOf("forum") > -1){ //        各版块帖子列表
+                curSite = DBSite.sanguosha_forum;
+            }else if(location.pathname.indexOf("thread") > -1){ // 帖子内
+                curSite = DBSite.sanguosha_thread;
+                hidePgbtn(); //                                    隐藏帖子内的 [下一页] 按钮
+            }else if(location.pathname.indexOf("search") > -1){ // 搜索结果
+                curSite = DBSite.sanguosha_search;
+            }
             break;
     }
     curSite.pageUrl = ""; // 下一页URL
@@ -119,6 +153,14 @@
                 }
             });
         }
+    }
+
+
+    // 隐藏帖子内的 [下一页] 按钮
+    function hidePgbtn(){
+        let style_hidePgbtn = document.createElement('style');
+        style_hidePgbtn.innerHTML = `.pgbtn {display: none;}`;
+        document.head.appendChild(style_hidePgbtn);
     }
 
 
@@ -179,7 +221,7 @@
             if (curSite.pager) {
                 let curPageEle = getElementByXpath(curSite.pager.nextLink);
                 var url = this.getFullHref(curPageEle);
-                //console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
+                console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
                 if(url === '') return;
                 if(curSite.pageUrl === url) return;// 不会重复加载相同的页面
                 curSite.pageUrl = url;
@@ -191,6 +233,7 @@
                     timeout: 5000,
                     onload: function (response) {
                         try {
+                            //console.log(`${response.responseText}`)
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody);
                             let toElement = getAllElements(curSite.pager.HT_insert[0])[0];
