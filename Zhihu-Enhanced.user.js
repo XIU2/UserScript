@@ -60,7 +60,7 @@ function registerMenuCommand() {
     if (menu_directLink){menu_directLink_ = "√";}else{menu_directLink_ = "×";}
 
     menu_collapsedAnswer_ID = GM_registerMenuCommand(`[ ${menu_collapsedAnswer_} ] 一键收起回答`, function(){menu_switch(menu_collapsedAnswer,'xiu2_menu_collapsedAnswer','一键收起回答')});
-    menu_collapsedNowAnswer_ID = GM_registerMenuCommand(`[ ${menu_collapsedNowAnswer_} ] 收起当前回答（点击两侧空白处）`, function(){menu_switch(menu_collapsedNowAnswer,'xiu2_menu_collapsedNowAnswer','收起当前回答')});
+    menu_collapsedNowAnswer_ID = GM_registerMenuCommand(`[ ${menu_collapsedNowAnswer_} ] 收起当前回答/评论（点击两侧空白处）`, function(){menu_switch(menu_collapsedNowAnswer,'xiu2_menu_collapsedNowAnswer','收起当前回答')});
     menu_publishTop_ID = GM_registerMenuCommand(`[ ${menu_publishTop_} ] 置顶显示时间`, function(){menu_switch(menu_publishTop,'xiu2_menu_publishTop','置顶显示时间')});
     menu_allTime_ID = GM_registerMenuCommand(`[ ${menu_allTime_} ] 完整显示时间`, function(){menu_switch(menu_allTime,'xiu2_menu_allTime','完整显示时间')});
     menu_typeTips_ID = GM_registerMenuCommand(`[ ${menu_typeTips_} ] 区分问题文章`, function(){menu_switch(menu_typeTips,'xiu2_menu_typeTips','区分问题文章')});
