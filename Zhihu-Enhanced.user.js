@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.2.7
+// @version      1.2.8
 // @author       X.I.U
-// @description  移除登录弹窗、一键收起回答、收起当前回答（点击两侧空白处）、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
+// @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -382,27 +382,29 @@ function collapsedAnswer(){
     }
 }
 
-// 收起当前回答（收起回答）
-function collapsedNowAnswer_2(){
-    let rightButton = document.querySelector('.ContentItem-actions.Sticky.RichContent-actions.is-fixed.is-bottom')
-    if(rightButton) {
-        rightButton = rightButton.querySelector('.ContentItem-rightButton')
-        if(rightButton && rightButton.attributes[0].name === "data-zop-retract-question") {
-            rightButton.click();
-        }
-    }
-}
 
-// 收起当前回答（监听点击事件）
+// 收起当前回答（监听点击事件，点击网页两侧空白处）
 function collapsedNowAnswer(selectors){
     if(menu_collapsedNowAnswer){
         document.querySelector(selectors).onclick = function(event){
             if (event.target==this) {
-                collapsedNowAnswer_2();
+                let rightButton = document.querySelector('.ContentItem-actions.Sticky.RichContent-actions.is-fixed.is-bottom')
+                if(rightButton) {
+                    rightButton = rightButton.querySelector('.ContentItem-rightButton')
+                    if(rightButton && rightButton.attributes[0].name === "data-zop-retract-question") {
+                        rightButton.click();
+                    }
+                }
+
+                let commentCollapseButton = document.querySelector('.CommentCollapseButton')
+                if(commentCollapseButton) {
+                    commentCollapseButton.click();
+                }
             }
         }
     }
 }
+
 
 var postNum;
 // 区分问题文章
@@ -438,17 +440,40 @@ function addTypeTips() {
     }
 }
 
-// 知乎免登录，来自：https://greasyfork.org/zh-CN/scripts/417126
-function removeLogin() {
+// 监听 网页插入元素 事件
+function addEventListener_DOMNodeInserted() {
+    // 知乎免登录，来自：https://greasyfork.org/zh-CN/scripts/417126
     let removeLoginModal = e => {
-        if (e.target.getElementsByClassName('Modal-wrapper').length > 0) {
+        if (e.target.innerHTML && e.target.getElementsByClassName('Modal-wrapper').length > 0) {
             if (e.target.getElementsByClassName('Modal-wrapper')[0].querySelector('.signFlowModal')){
                 e.target.getElementsByClassName('Modal-wrapper')[0].remove();
             }
             setTimeout(() => {document.documentElement.style.overflowY = 'scroll';}, 0);
         }
     }
-    document.addEventListener('DOMNodeInserted', removeLoginModal);
+
+    // 收起当前评论（监听点击事件，点击网页两侧空白处）
+    let collapseNowComment = e => {
+        if (e.target.innerHTML && e.target.getElementsByClassName('Modal-wrapper Modal-enter').length > 0) {
+            document.getElementsByClassName('Modal-backdrop')[0].onclick = function(event){
+                if (event.target==this) {
+                    let closeButton = document.getElementsByClassName('Modal-closeButton')[0]
+                    if(closeButton) {
+                        closeButton.click();
+                    }
+                }
+            }
+        }
+    }
+
+    if (document.querySelector('button.AppHeader-login')){ // 未登录时才会监听并移除登录弹窗
+        document.addEventListener('DOMNodeInserted', removeLoginModal);
+        document.querySelector('button.AppHeader-login').onclick=function(){location.href='https://www.zhihu.com/signin';} // [登录]按钮跳转至登录页面
+        document.querySelector('.AppHeader-profile button.Button--primary').onclick=function(){location.href='https://www.zhihu.com/signin';} // [加入知乎]按钮跳转至注册页面（实际上是同一个页面）
+    } else if(window.location.href.indexOf("zhuanlan") > -1){
+        document.addEventListener('DOMNodeInserted', removeLoginModal);
+    }
+    document.addEventListener('DOMNodeInserted', collapseNowComment); // 收起当前评论（监听点击事件，点击网页两侧空白处）
 }
 
 
@@ -473,11 +498,7 @@ function EventXMLHttpRequest() {
 })(XMLHttpRequest.prototype.open);*/
 
 (function() {
-    if (document.querySelector('button.AppHeader-login')){ // 未登录时才会监听并移除登录弹窗
-        removeLogin();
-        document.querySelector('button.AppHeader-login').onclick=function(){location.href='https://www.zhihu.com/signin';} // [登录]按钮跳转至登录页面
-        document.querySelector('.AppHeader-profile button.Button--primary').onclick=function(){location.href='https://www.zhihu.com/signin';} // [加入知乎]按钮跳转至注册页面（实际上是同一个页面）
-    }
+    addEventListener_DOMNodeInserted(); // 监听 网页插入元素 事件
 
 
     // 默认折叠邀请，来自：https://greasyfork.org/scripts/402808
@@ -533,7 +554,6 @@ function EventXMLHttpRequest() {
             EventXMLHttpRequest(); //                                   区分问题文章
         }
     }else if(window.location.href.indexOf("zhuanlan") > -1){ //                      文章 //
-        removeLogin(); //                                               移除登录弹窗
         setInterval(topTime_zhuanlan, 300); //                          置顶显示时间
     }else if(window.location.href.indexOf("column") > -1){ //                        专栏 //
         collapsedAnswer(); //                                           一键收起回答
