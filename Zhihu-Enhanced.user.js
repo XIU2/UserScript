@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.3.0
+// @version      1.3.1
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -389,23 +389,25 @@ function collapsedNowAnswer(selectors){
         document.querySelector(selectors).onclick = function(event){
             if (event.target==this) {
                 let rightButton = document.querySelector('.ContentItem-actions.Sticky.RichContent-actions.is-fixed.is-bottom')
-                if(rightButton) { // 悬浮 [收起回答]
-                    // 固定 [收起评论]
+                if(rightButton) { // 悬浮的 [收起回答]
+                    // 固定的 [收起评论]
                     let commentCollapseButton = rightButton.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel')
                     if(commentCollapseButton && commentCollapseButton.innerText.indexOf("收起评论") > -1) {
-                        commentCollapseButton.click(); // 收起评论
+                        commentCollapseButton.click();
                     }
+                    // 悬浮的 [收起回答]
                     rightButton = rightButton.querySelector('.ContentItem-rightButton')
                     if(rightButton && rightButton.attributes[0].name === "data-zop-retract-question") {
-                        rightButton.click(); // 收起回答
+                        rightButton.click();
                     }
-                }else{ // 固定 [收起回答]
+                }else{ // 固定的 [收起回答]
                     document.querySelectorAll('.ContentItem-rightButton').forEach(function (el) {
                         if (el.attributes[0].name === "data-zop-retract-question") {
                             if (isElementInViewport(el)) {
-                                let commentCollapseButton = document.querySelector('.ContentItem-rightButton').parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel')
+                                // 固定的 [收起评论]
+                                let commentCollapseButton = el.parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel')
                                 if(commentCollapseButton && commentCollapseButton.innerText.indexOf("收起评论") > -1) {
-                                    commentCollapseButton.click(); // 收起评论
+                                    commentCollapseButton.click();
                                 }
                                 el.click()
                             }
@@ -413,11 +415,11 @@ function collapsedNowAnswer(selectors){
                     })
                 }
 
-                // 悬浮 [收起评论]
+                // 悬浮的 [收起评论]
                 let commentCollapseButton = document.querySelector('.CommentCollapseButton')
                 if(commentCollapseButton) {
                     commentCollapseButton.click();
-                }else{ // 固定 [收起评论]（针对短篇没有收起按钮的回答）
+                }else{ // 固定的 [收起评论]（针对短篇没有收起按钮的回答）
                     document.querySelectorAll('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel').forEach(function (el) {
                         if (el.innerText.indexOf("收起评论") > -1) {
                             if (isElementInViewport(el)) {
