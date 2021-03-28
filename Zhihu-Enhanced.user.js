@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.2.8
+// @version      1.2.9
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -383,19 +383,25 @@ function collapsedAnswer(){
 }
 
 
-// 收起当前回答（监听点击事件，点击网页两侧空白处）
+// 收起当前回答、评论（监听点击事件，点击网页两侧空白处）
 function collapsedNowAnswer(selectors){
     if(menu_collapsedNowAnswer){
         document.querySelector(selectors).onclick = function(event){
             if (event.target==this) {
                 let rightButton = document.querySelector('.ContentItem-actions.Sticky.RichContent-actions.is-fixed.is-bottom')
                 if(rightButton) {
+                    // 先判断是否展开了评论（非评论弹窗）
+                    let commentCollapseButton = rightButton.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel')
+                    if(commentCollapseButton && commentCollapseButton.innerText.indexOf("收起评论") > -1) {
+                        commentCollapseButton.click(); // 收起评论
+                    }
                     rightButton = rightButton.querySelector('.ContentItem-rightButton')
                     if(rightButton && rightButton.attributes[0].name === "data-zop-retract-question") {
-                        rightButton.click();
+                        rightButton.click(); // 收起回答
                     }
                 }
 
+                // 如果当前在看评论，则收起评论
                 let commentCollapseButton = document.querySelector('.CommentCollapseButton')
                 if(commentCollapseButton) {
                     commentCollapseButton.click();
