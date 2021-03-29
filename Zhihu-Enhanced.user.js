@@ -374,7 +374,7 @@ function collapsedAnswer(){
         $(".CornerAnimayedFlex").prepend(button_Add);
         $("#collapsed-button").on("click", function () {
             document.querySelectorAll('.ContentItem-rightButton').forEach(function (el) {
-                if (el.attributes[0].name === "data-zop-retract-question") {
+                if (el.hasAttribute('data-zop-retract-question')) {
                     el.click()
                 }
             });
@@ -397,12 +397,12 @@ function collapsedNowAnswer(selectors){
                     }
                     // 悬浮的 [收起回答]
                     rightButton = rightButton.querySelector('.ContentItem-rightButton')
-                    if(rightButton && rightButton.attributes[0].name === "data-zop-retract-question") {
+                    if(rightButton && rightButton.hasAttribute('data-zop-retract-question')) {
                         rightButton.click();
                     }
                 }else{ // 固定的 [收起回答]
                     document.querySelectorAll('.ContentItem-rightButton').forEach(function (el) {
-                        if (el.attributes[0].name === "data-zop-retract-question") {
+                        if (el.hasAttribute('data-zop-retract-question')) {
                             if (isElementInViewport(el)) {
                                 // 固定的 [收起评论]
                                 let commentCollapseButton = el.parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel')
