@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.4.0
+// @version      1.4.1
 // @author       X.I.U
 // @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
 // @match        *://hub.fastgit.org/*
 // @icon         https://i.loli.net/2021/03/07/oUHPFSOTjKnkMzJ.png
 // @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
+/* globals $ */
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
 // @grant        GM_openInTab
@@ -120,9 +121,9 @@
                     html = `<div style="display: flex;justify-content: flex-end;">`;
                 for (let i=0;i<url.length;i++)
                 {
-                    html = html + `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
+                    html += `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
                 }
-                html = html + `</div>`
+                html += `</div>`
                 $(this).next().after(html);
             });
             // 修改[文件大小]元素样式
@@ -143,9 +144,9 @@
                     html = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">`;
                 for (let i=0;i<url.length;i++)
                 {
-                    html = html + `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
+                    html += `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
                 }
-                html = html + `</div>`
+                html += `</div>`
                 $(this).after(html);
             });
         });
@@ -169,7 +170,7 @@
                 html = ``;
             for (let i=0;i<url.length;i++)
             {
-                html = html + `<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[i]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
+                html += `<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[i]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
             }
             $(this).after(html);
         });
@@ -188,7 +189,7 @@
                 html = ``;
             for (let i=0;i<url.length;i++)
             {
-                html = html + `<div class="input-group" style="margin-top: 4px;" title="加速源：${clone_url[i][1]} （点击可直接复制）"><input value="${url[i]}" aria-label="${url[i]}" type="text" class="form-control input-monospace input-sm bg-gray-light" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url[i]}" aria-label="Copy to clipboard" class="btn btn-sm" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
+                html += `<div class="input-group" style="margin-top: 4px;" title="加速源：${clone_url[i][1]} （点击可直接复制）"><input value="${url[i]}" aria-label="${url[i]}" type="text" class="form-control input-monospace input-sm bg-gray-light" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url[i]}" aria-label="Copy to clipboard" class="btn btn-sm" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
             }
             $(this).after(html);
         });
@@ -209,7 +210,7 @@
                 html = ``;
             for (let i=0;i<url.length;i++)
             {
-                html = html + `<a href="${url[i]}" title="${raw_url[i+1][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[i+1][1]}</a>`
+                html += `<a href="${url[i]}" title="${raw_url[i+1][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[i+1][1]}</a>`
             }
             $(this).after(html);
         });
@@ -228,7 +229,7 @@
         var mouseOverHandler = function(evt){
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
-                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.text-gray-light');
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.color-icon-tertiary');
             aElm_new.forEach(el=>el.style.cssText = 'display: inline');
             aElm_now.forEach(el=>el.style.cssText = 'display: none');
         };
@@ -237,7 +238,7 @@
         var mouseOutHandler = function(evt){
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
-                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.text-gray-light');
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.color-icon-tertiary');
             aElm_new.forEach(el=>el.style.cssText = 'display: none');
             aElm_now.forEach(el=>el.style.cssText = 'display: inline');
         };
@@ -246,10 +247,11 @@
         files.each(function(i,fileElm){
             let trElm = fileElm.parentNode.parentNode,
                 cntElm_a = trElm.querySelector('.css-truncate.css-truncate-target.d-block.width-fit a'),
-                cntElm_svg = trElm.querySelector('.mr-3.flex-shrink-0 svg.octicon.octicon-file.text-gray-light'),
+                cntElm_svg = trElm.querySelector('.mr-3.flex-shrink-0 svg.octicon.octicon-file.color-icon-tertiary'),
                 Name = cntElm_a.innerText,
                 href = cntElm_a.attributes['href'].nodeValue.replace('https://github.com','');
             let href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
+            console.log(cntElm_a, cntElm_svg, Name, href)
             switch(menu_raw_fast)
             {
                 case 2:
