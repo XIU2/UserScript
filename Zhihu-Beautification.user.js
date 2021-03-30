@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.1.0
+// @version      1.1.1
 // @author       X.I.U
-// @description  宽屏显示、隐藏文章开头大图、调整图片最大高度、浏览回答向下翻时自动隐藏标题、文章编辑页面与实际文章宽度一致、屏蔽登录提示
+// @description  宽屏显示、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/p/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -22,7 +22,7 @@
         ['menu_widescreenDisplay', '宽屏显示', '一键收起回答', true],
         ['menu_picHeight', '调整图片最大高度', '调整图片最大高度', true],
         ['menu_postimg', '隐藏文章开头大图', '隐藏文章开头大图', true],
-        ['menu_hideTitle', '隐藏浏览回答标题', '隐藏浏览回答标题', true]
+        ['menu_hideTitle', '向下翻时自动隐藏顶栏', '向下翻时自动隐藏顶栏', true]
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
@@ -100,7 +100,7 @@
 	font-size: 24px;
 }
 `,
-            style_4 = `/* 浏览回答时，向下翻隐藏顶栏（问题的标题）*/
+            style_4 = `/* 向下翻时自动隐藏顶栏*/
 header.is-hidden {
 	display: none;
 }
@@ -124,7 +124,7 @@ header.is-hidden {
         if (menu_value('menu_postimg')) {
             style += style_2;
         }
-        // 浏览回答向下翻时自动隐藏标题
+        // 向下翻时自动隐藏顶栏
         if (menu_value('menu_hideTitle')) {
             style += style_4;
         }
