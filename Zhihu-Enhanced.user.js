@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.3.1
+// @version      1.3.2
 // @author       X.I.U
-// @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
+// @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -19,59 +19,37 @@
 // @namespace    https://greasyfork.org/scripts/412205
 // ==/UserScript==
 
-var menu_collapsedAnswer = GM_getValue('xiu2_menu_collapsedAnswer'),
-    menu_collapsedNowAnswer = GM_getValue('xiu2_menu_collapsedNowAnswer'),
-    menu_publishTop = GM_getValue('xiu2_menu_publishTop'),
-    menu_allTime = GM_getValue('xiu2_menu_allTime'),
-    menu_typeTips = GM_getValue('xiu2_menu_typeTips'),
-    menu_directLink = GM_getValue('xiu2_menu_directLink'),
-    menu_collapsedAnswer_ID, menu_collapsedNowAnswer_ID, menu_publishTop_ID, menu_typeTips_ID, menu_allTime_ID, menu_directLink_ID, menu_feedBack_ID;
-if (menu_collapsedAnswer == null){menu_collapsedAnswer = true; GM_setValue('xiu2_menu_collapsedAnswer', menu_collapsedAnswer)};
-if (menu_collapsedNowAnswer == null){menu_collapsedNowAnswer = true; GM_setValue('xiu2_menu_collapsedNowAnswer', menu_collapsedNowAnswer)};
-if (menu_publishTop == null){menu_publishTop = true; GM_setValue('xiu2_menu_publishTop', menu_publishTop)};
-if (menu_allTime == null){menu_allTime = true; GM_setValue('xiu2_menu_allTime', menu_allTime)};
-if (menu_typeTips == null){menu_typeTips = true; GM_setValue('xiu2_menu_typeTips', menu_typeTips)};
-if (menu_directLink == null){menu_directLink = true; GM_setValue('xiu2_menu_directLink', menu_directLink)};
+var menu_ALL = [
+    ['menu_collapsedAnswer', '一键收起回答', '一键收起回答', true],
+    ['menu_collapsedNowAnswer', '收起当前回答/评论（点击两侧空白处）', '收起当前回答/评论', true],
+    ['menu_backToTop', '快捷回到顶部（右键两侧空白处）', '快捷回到顶部', true],
+    ['menu_publishTop', '置顶显示时间', '置顶显示时间', true],
+    ['menu_allTime', '完整显示时间', '完整显示时间', true],
+    ['menu_typeTips', '区分问题文章', '区分问题文章', true],
+    ['menu_directLink', '默认站外直链', '默认站外直链', true]
+], menu_ID = [];
+for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
+    if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
+}
 registerMenuCommand();
 
 // 注册脚本菜单
 function registerMenuCommand() {
-    var menu_collapsedAnswer_, menu_collapsedNowAnswer_, menu_publishTop_, menu_typeTips_, menu_allTime_, menu_directLink_;
-    if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
-        GM_unregisterMenuCommand(menu_collapsedAnswer_ID);
-        GM_unregisterMenuCommand(menu_collapsedNowAnswer_ID);
-        GM_unregisterMenuCommand(menu_publishTop_ID);
-        GM_unregisterMenuCommand(menu_allTime_ID);
-        GM_unregisterMenuCommand(menu_typeTips_ID);
-        GM_unregisterMenuCommand(menu_directLink_ID);
-        GM_unregisterMenuCommand(menu_feedBack_ID);
-        menu_collapsedAnswer = GM_getValue('xiu2_menu_collapsedAnswer');
-        menu_collapsedNowAnswer = GM_getValue('xiu2_menu_collapsedNowAnswer');
-        menu_publishTop = GM_getValue('xiu2_menu_publishTop');
-        menu_allTime = GM_getValue('xiu2_menu_allTime');
-        menu_typeTips = GM_getValue('xiu2_menu_typeTips');
-        menu_directLink = GM_getValue('xiu2_menu_directLink');
+    if (menu_ID.length > menu_ALL.length){ // 如果菜单ID数组多于菜单数组，说明不是首次添加菜单，需要卸载所有脚本菜单
+        for (let i=0;i<menu_ID.length;i++){
+            GM_unregisterMenuCommand(menu_ID[i]);
+        }
     }
-
-    if (menu_collapsedAnswer){menu_collapsedAnswer_ = "√";}else{menu_collapsedAnswer_ = "×";}
-    if (menu_collapsedNowAnswer){menu_collapsedNowAnswer_ = "√";}else{menu_collapsedNowAnswer_ = "×";}
-    if (menu_publishTop){menu_publishTop_ = "√";}else{menu_publishTop_ = "×";}
-    if (menu_allTime){menu_allTime_ = "√";}else{menu_allTime_ = "×";}
-    if (menu_typeTips){menu_typeTips_ = "√";}else{menu_typeTips_ = "×";}
-    if (menu_directLink){menu_directLink_ = "√";}else{menu_directLink_ = "×";}
-
-    menu_collapsedAnswer_ID = GM_registerMenuCommand(`[ ${menu_collapsedAnswer_} ] 一键收起回答`, function(){menu_switch(menu_collapsedAnswer,'xiu2_menu_collapsedAnswer','一键收起回答')});
-    menu_collapsedNowAnswer_ID = GM_registerMenuCommand(`[ ${menu_collapsedNowAnswer_} ] 收起当前回答/评论（点击两侧空白处）`, function(){menu_switch(menu_collapsedNowAnswer,'xiu2_menu_collapsedNowAnswer','收起当前回答')});
-    menu_publishTop_ID = GM_registerMenuCommand(`[ ${menu_publishTop_} ] 置顶显示时间`, function(){menu_switch(menu_publishTop,'xiu2_menu_publishTop','置顶显示时间')});
-    menu_allTime_ID = GM_registerMenuCommand(`[ ${menu_allTime_} ] 完整显示时间`, function(){menu_switch(menu_allTime,'xiu2_menu_allTime','完整显示时间')});
-    menu_typeTips_ID = GM_registerMenuCommand(`[ ${menu_typeTips_} ] 区分问题文章`, function(){menu_switch(menu_typeTips,'xiu2_menu_typeTips','区分问题文章')});
-    menu_directLink_ID = GM_registerMenuCommand(`[ ${menu_directLink_} ] 默认站外直链`, function(){menu_switch(menu_directLink,'xiu2_menu_directLink','默认站外直链')});
-    menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+    for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
+        menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
+        menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+    }
+    menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
 }
 
 // 菜单开关
 function menu_switch(menu_status, Name, Tips) {
-    if (menu_status){
+    if (menu_status == 'true'){
         GM_setValue(`${Name}`, false);
         GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
     }else{
@@ -81,6 +59,16 @@ function menu_switch(menu_status, Name, Tips) {
     registerMenuCommand(); // 重新注册脚本菜单
 };
 
+// 返回菜单值
+function menu_value(menuName) {
+    for (let menu of menu_ALL) {
+        if (menu[0] == menuName) {
+            return menu[3]
+        }
+    }
+}
+
+
 // 置顶显示时间 - 首页，来自：https://greasyfork.org/scripts/402808
 function topTime_index()
 {
@@ -88,7 +76,7 @@ function topTime_index()
         if( !($(this).find(".ContentItem-time").hasClass("full")) && $(this).find(".ContentItem-time").length>0 && $(this).find(".ContentItem-time").find("span").text() != null)
         {
             // 完整显示时间
-            if(menu_allTime)
+            if(menu_value('menu_allTime'))
             {
                 if($(this).find(".ContentItem-time").text().indexOf("发布于")==-1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") > -1) //只有"编辑于"时增加具体发布时间data-tooltip
                 {
@@ -106,7 +94,7 @@ function topTime_index()
             }
 
             //发布时间置顶
-            if(menu_publishTop)
+            if(menu_value('menu_publishTop'))
             {
                 if(!$(this).find(".ContentItem-time").parent().hasClass("ContentItem-meta"))
                 {
@@ -141,7 +129,7 @@ function topTime_question()
         if( !($(this).find(".ContentItem-time").hasClass("full")) && $(this).find(".ContentItem-time").length>0 && $(this).find(".ContentItem-time").find("span").text() != null)
         {
             // 完整显示时间
-            if(menu_allTime)
+            if(menu_value('menu_allTime'))
             {
                 if($(this).find(".ContentItem-time").text().indexOf("发布于")==-1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") > -1) //只有"编辑于"时增加具体发布时间data-tooltip
                 {
@@ -159,7 +147,7 @@ function topTime_question()
             }
 
             //发布时间置顶
-            if(menu_publishTop)
+            if(menu_value('menu_publishTop'))
             {
                 if(!$(this).find(".ContentItem-time").parent().hasClass("ContentItem-meta"))
                 {
@@ -193,7 +181,7 @@ function topTime_zhuanlan()
     $(".Recommendations-Main").hide();
 
     // 完整显示时间
-    if(menu_allTime)
+    if(menu_value('menu_allTime'))
     {
         if( $(".ContentItem-time").text().indexOf("编辑于")>-1 && !$(".ContentItem-time").hasClass("done"))
         {
@@ -205,7 +193,7 @@ function topTime_zhuanlan()
     }
 
     //发布时间置顶
-    if(menu_publishTop && $(".Post-Header").find(".ContentItem-time").length==0)
+    if(menu_value('menu_publishTop') && $(".Post-Header").find(".ContentItem-time").length==0)
     {
         $(".ContentItem-time").css({"padding":"0px 0px 0px 0px","margin-top": "14px"});
         $(".ContentItem-time").appendTo($(".Post-Header"))
@@ -219,7 +207,7 @@ function topTime_search()
         if( !($(this).find(".ContentItem-time").hasClass("full")) && $(this).find(".ContentItem-time").length>0 && $(this).find(".ContentItem-time").find("span").text() != null)
         {
             // 完整显示时间
-            if(menu_allTime)
+            if(menu_value('menu_allTime'))
             {
                 if($(this).find(".ContentItem-time").text().indexOf("发布于")==-1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") > -1) //只有"编辑于"时，增加具体发布时间data-tooltip
                 {
@@ -237,7 +225,7 @@ function topTime_search()
             }
 
             //发布时间置顶
-            if(menu_publishTop)
+            if(menu_value('menu_publishTop'))
             {
                 if(!$(this).find(".ContentItem-time").parent().hasClass("SearchItem-meta"))
                 {
@@ -258,7 +246,7 @@ function topTime_people()
         if( !($(this).find(".ContentItem-time").hasClass("full")) && $(this).find(".ContentItem-time").length>0 && $(this).find(".ContentItem-time").find("span").text() != null)
         {
             // 完整显示时间
-            if(menu_allTime)
+            if(menu_value('menu_allTime'))
             {
                 if($(this).find(".ContentItem-time").text().indexOf("发布于")==-1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") > -1) //只有"编辑于"时增加具体发布时间data-tooltip
                 {
@@ -276,7 +264,7 @@ function topTime_people()
             }
 
             //发布时间置顶
-            if(menu_publishTop)
+            if(menu_value('menu_publishTop'))
             {
                 if(!$(this).find(".ContentItem-time").parent().hasClass("ContentItem-meta"))
                 {
@@ -365,7 +353,7 @@ function originalPic(){
 
 // 一键收起回答
 function collapsedAnswer(){
-    if(menu_collapsedAnswer){
+    if(menu_value('menu_collapsedAnswer')){
         let button_Add = `<button id="collapsed-button" data-tooltip="收起回答" data-tooltip-position="left" data-tooltip-will-hide-on-click="false" aria-label="收起回答" type="button" class="Button CornerButton Button--plain"><svg class="ContentItem-arrowIcon is-active" aria-label="收起回答" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M16.036 19.59a1 1 0 0 1-.997.995H9.032a.996.996 0 0 1-.997-.996v-7.005H5.03c-1.1 0-1.36-.633-.578-1.416L11.33 4.29a1.003 1.003 0 0 1 1.412 0l6.878 6.88c.782.78.523 1.415-.58 1.415h-3.004v7.005z"></path></svg></button>`
         let style_Add = document.createElement('style');
         style_Add.innerHTML = '.CornerButton{margin-bottom:8px !important;}.CornerButtons{bottom:45px !important;}';
@@ -384,7 +372,8 @@ function collapsedAnswer(){
 
 // 收起当前回答、评论（监听点击事件，点击网页两侧空白处）
 function collapsedNowAnswer(selectors){
-    if(menu_collapsedNowAnswer){
+    backToTop(selectors)
+    if(menu_value('menu_collapsedNowAnswer')){
         document.querySelector(selectors).onclick = function(event){
             if (event.target==this) {
                 let rightButton = document.querySelector('.ContentItem-actions.Sticky.RichContent-actions.is-fixed.is-bottom')
@@ -433,6 +422,19 @@ function collapsedNowAnswer(selectors){
 }
 
 
+// 回到顶部（监听点击事件，鼠标右键点击网页两侧空白处）
+function backToTop(selectors){
+    if(menu_value('menu_backToTop')){
+        document.querySelector(selectors).oncontextmenu = function(event){
+            if (event.target==this) {
+                event.preventDefault();
+                window.scrollTo(0,0)
+            }
+        }
+    }
+}
+
+
 //获取元素是否在可视区域
 function isElementInViewport(el) {
     let rect = el.getBoundingClientRect();
@@ -450,7 +452,7 @@ function isElementInViewport(el) {
 var postNum;
 // 区分问题文章
 function addTypeTips() {
-    if(menu_typeTips){
+    if(menu_value('menu_typeTips')){
         // URL 匹配正则表达式
         let patt_zhuanlan = /zhuanlan.zhihu.com/,
             patt_question = /question\/\d+/,
@@ -570,7 +572,7 @@ function EventXMLHttpRequest() {
 
 
     setInterval(originalPic,100); //                                    默认高清原图
-    if(menu_directLink) setInterval(directLink, 100); //                默认站外直链
+    if(menu_value('menu_directLink')) setInterval(directLink, 100); //                默认站外直链
 
 
     if(window.location.href.indexOf("question") > -1){ //                             回答页 //
@@ -595,6 +597,8 @@ function EventXMLHttpRequest() {
             EventXMLHttpRequest(); //                                   区分问题文章
         }
     }else if(window.location.href.indexOf("zhuanlan") > -1){ //                      文章 //
+        backToTop("article.Post-Main.Post-NormalMain")
+        backToTop("div.Post-Sub.Post-NormalSub")
         setInterval(topTime_zhuanlan, 300); //                          置顶显示时间
     }else if(window.location.href.indexOf("column") > -1){ //                        专栏 //
         collapsedAnswer(); //                                           一键收起回答
