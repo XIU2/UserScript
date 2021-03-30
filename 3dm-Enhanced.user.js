@@ -147,7 +147,7 @@
         if(menu_thread_pageLoading)curSite = DBSite.thread;
         if(menu_autoReply)autoReply(); //       如果有隐藏内容，则自动回复
         pageLoading(); //                       自动翻页
-        if(menu_scrollToShowhide)setTimeout(`window.scrollTo(0,document.querySelector('.showhide').offsetTop)`, 500); // 滚动至隐藏内容
+        if(menu_scrollToShowhide)setTimeout(function(){window.scrollTo(0,document.querySelector('.showhide').offsetTop)}, 500); // 滚动至隐藏内容
     }else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)){
         // 各板块帖子列表
         curSite = DBSite.forum;
@@ -212,7 +212,7 @@
                             window.scrollTo(0,showhide.offsetTop)
                         }}, 100)
                     }else{
-                        setTimeout(`window.scrollTo(0,0)`, 1000);
+                        setTimeout(function(){window.scrollTo(0,0)}, 1000);
                     }
             }
         }
