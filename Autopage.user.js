@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.1.4
+// @version      1.1.5
 // @author       X.I.U
 // @description  自动无缝翻页，目前支持：423Down、Apphot(原烈火汉化)、小众软件、PubMed、三国杀论坛
 // @match        *://www.423down.com/*
@@ -28,7 +28,10 @@
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
 
-    // 自动翻页规则，HT_insert：1 = 插入元素前面；2 = 插入元素中的最后一个子元素后面
+    // 自动翻页规则
+    // type：1 = 脚本实现自动无缝翻页，2 = 网站自带了自动无缝翻页功能，只需要点击下一页按钮即可，这时 nextText 为按钮文本，避免一瞬间加载太多次下一页
+    // HT_insert：1 = 插入元素前面；2 = 插入元素中的最后一个子元素后面
+    // scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页）
     let DBSite = {
         _423down_postslist: {
             SiteTypeID: 1,
@@ -68,6 +71,7 @@
             pager: {
                 type: 2,
                 nextLink: 'button.load-button.next-page',
+                nextText: 'Show more',
                 scrollDelta: 1500
             }
         },
@@ -75,7 +79,8 @@
             SiteTypeID: 5,
             pager: {
                 type: 2,
-                nextLink: 'a.bm_h',
+                nextLink: '#autopbn',
+                nextText: '下一页 »',
                 scrollDelta: 800
             }
         },
@@ -145,7 +150,7 @@
                             ShowPager.loadMorePage();
                         }else{
                             let autopbn = document.querySelector(curSite.pager.nextLink);
-                            if (autopbn){
+                            if (autopbn && autopbn.innerText == curSite.pager.nextText){ // 如果正在加载，就不再点击
                                 autopbn.click();
                             }
                         }
