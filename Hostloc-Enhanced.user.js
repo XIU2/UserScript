@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.0.5
+// @version      1.0.6
 // @author       X.I.U
-// @description  自动无缝翻页、自动显示帖子内被隐藏的回复
-// @match        *://www.hostloc.com/*
+// @description  自动无缝翻页、自动显示帖子内隐藏回复
+// @match        *://hostloc.com/*
 // @icon         https://www.hostloc.com/favicon.ico
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
@@ -18,35 +18,32 @@
 // ==/UserScript==
 
 (function() {
-    var menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading'),
-        menu_showhide = GM_getValue('xiu2_menu_showhide');
-    var menu_thread_pageLoading_ID, menu_showhide_ID, menu_feedBack_ID;
-    if (menu_thread_pageLoading == null){menu_thread_pageLoading = true; GM_setValue('xiu2_menu_thread_pageLoading', menu_thread_pageLoading)};
-    if (menu_showhide == null){menu_showhide = true; GM_setValue('xiu2_menu_showhide', menu_showhide)};
+    var menu_ALL = [
+        ['menu_thread_pageLoading', '帖子内自动翻页', '帖子内自动翻页', true],
+        ['menu_showhide', '自动显示隐藏回复', '自动显示隐藏回复', true]
+    ], menu_ID = [];
+    for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
+        if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
+    }
     registerMenuCommand();
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        let menu_thread_pageLoading_, menu_showhide_;
-        if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
-            GM_unregisterMenuCommand(menu_thread_pageLoading_ID);
-            GM_unregisterMenuCommand(menu_showhide_ID);
-            GM_unregisterMenuCommand(menu_feedBack_ID);
-            menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading');
-            menu_showhide = GM_getValue('xiu2_menu_showhide');
+        if (menu_ID.length > menu_ALL.length){ // 如果菜单ID数组多于菜单数组，说明不是首次添加菜单，需要卸载所有脚本菜单
+            for (let i=0;i<menu_ID.length;i++){
+                GM_unregisterMenuCommand(menu_ID[i]);
+            }
         }
-
-        if (menu_thread_pageLoading){menu_thread_pageLoading_ = "√";}else{menu_thread_pageLoading_ = "×";}
-        if (menu_showhide){menu_showhide_ = "√";}else{menu_showhide_ = "×";}
-
-        menu_thread_pageLoading_ID = GM_registerMenuCommand(`[ ${menu_thread_pageLoading_} ] 帖子内自动翻页`, function(){menu_switch(menu_thread_pageLoading,'xiu2_menu_thread_pageLoading','帖子内自动翻页')});
-        menu_showhide_ID = GM_registerMenuCommand(`[ ${menu_showhide_} ] 自动显示隐藏回复`, function(){menu_switch(menu_showhide,'xiu2_menu_showhide','自动显示隐藏回复')});
-        menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+        for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
+            menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
+            menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+        }
+        menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
     // 菜单开关
     function menu_switch(menu_status, Name, Tips) {
-        if (menu_status){
+        if (menu_status == 'true'){
             GM_setValue(`${Name}`, false);
             GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }else{
@@ -55,6 +52,15 @@
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
+
+    // 返回菜单值
+    function menu_value(menuName) {
+        for (let menu of menu_ALL) {
+            if (menu[0] == menuName) {
+                return menu[3]
+            }
+        }
+    }
 
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
@@ -111,7 +117,7 @@
     // URL 判断
     if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)){
         // 帖子内
-        if(menu_thread_pageLoading)curSite = DBSite.thread;
+        if(menu_value('menu_thread_pageLoading'))curSite = DBSite.thread;
         // 自动显示帖子内被隐藏的回复
         showPosts();
     }else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)){
@@ -154,7 +160,7 @@
 
     // 自动显示帖子内被隐藏的回复
     function showPosts() {
-        if(menu_showhide){
+        if(menu_value('menu_showhide')){
             let showposts = document.querySelector('#hiddenpoststip a');
             if (showposts){ // 如果存在
                 showposts.click();
@@ -266,42 +272,42 @@
 
 
     function getElementByXpath(e, t, r) {
-      r = r || document, t = t || r;
-      try {
-        return r.evaluate(e, t, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-      } catch (t) {
-        return void console.error("无效的xpath");
-      }
+        r = r || document, t = t || r;
+        try {
+            return r.evaluate(e, t, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        } catch (t) {
+            return void console.error("无效的xpath");
+        }
     }
 
 
     function getAllElements(e, t, r, n, o) {
-      let getAllElementsByXpath = function(e, t, r) {
-        return r = r || document, t = t || r, r.evaluate(e, t, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-      }
+        let getAllElementsByXpath = function(e, t, r) {
+            return r = r || document, t = t || r, r.evaluate(e, t, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        }
 
-      var i, s = [];
-      if (!e) return s;
-      if (r = r || document, n = n || window, o = o || void 0, t = t || r, "string" == typeof e) i = 0 === e.search(/^css;/i) ? function getAllElementsByCSS(e, t) {
-        return (t || document).querySelectorAll(e);
-      }(e.slice(4), t) : getAllElementsByXpath(e, t, r); else {
-        if (!(i = e(r, n, o))) return s;
-        if (i.nodeType) return s[0] = i, s;
-      }
-      return function makeArray(e) {
-        var t, r, n, o = [];
-        if (e.pop) {
-          for (t = 0, r = e.length; t < r; t++) (n = e[t]) && (n.nodeType ? o.push(n) : o = o.concat(makeArray(n)));
-          return a()(o);
+        var i, s = [];
+        if (!e) return s;
+        if (r = r || document, n = n || window, o = o || void 0, t = t || r, "string" == typeof e) i = 0 === e.search(/^css;/i) ? function getAllElementsByCSS(e, t) {
+            return (t || document).querySelectorAll(e);
+        }(e.slice(4), t) : getAllElementsByXpath(e, t, r); else {
+            if (!(i = e(r, n, o))) return s;
+            if (i.nodeType) return s[0] = i, s;
         }
-        if (e.item) {
-          for (t = e.length; t;) o[--t] = e[t];
-          return o;
-        }
-        if (e.iterateNext) {
-          for (t = e.snapshotLength; t;) o[--t] = e.snapshotItem(t);
-          return o;
-        }
-      }(i);
+        return function makeArray(e) {
+            var t, r, n, o = [];
+            if (e.pop) {
+                for (t = 0, r = e.length; t < r; t++) (n = e[t]) && (n.nodeType ? o.push(n) : o = o.concat(makeArray(n)));
+                return a()(o);
+            }
+            if (e.item) {
+                for (t = e.length; t;) o[--t] = e[t];
+                return o;
+            }
+            if (e.iterateNext) {
+                for (t = e.snapshotLength; t;) o[--t] = e.snapshotItem(t);
+                return o;
+            }
+        }(i);
     }
 })();
