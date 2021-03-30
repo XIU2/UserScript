@@ -221,7 +221,7 @@ function topTime_search()
             // 完整显示时间
             if(menu_allTime)
             {
-                if($(this).find(".ContentItem-time").text().indexOf("发布于")==-1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") > -1)  //只有"编辑于"时，增加具体发布时间data-tooltip
+                if($(this).find(".ContentItem-time").text().indexOf("发布于")==-1 && $(this).find(".ContentItem-time").text().indexOf("编辑于") > -1) //只有"编辑于"时，增加具体发布时间data-tooltip
                 {
                     let data_tooltip = $(this).find(".ContentItem-time").find("span").attr("data-tooltip");
                     var oldtext =$(this).find(".ContentItem-time").find("span").text();
@@ -298,19 +298,18 @@ function directLink () {
         if ($(this).find("span").length > 0) {
             new_href = $(this).text();
             $(this).attr("href", new_href);
-        }
-        else if ($(this).attr("href").indexOf("link.zhihu.com/?target=") > -1) {
+        } else if ($(this).attr("href").indexOf("link.zhihu.com/?target=") > -1) {
             external_href = $(this).attr("href");
             new_href = external_href.substring(external_href = $(this).attr("href").indexOf("link.zhihu.com/?target=") + "link.zhihu.com/?target=".length);
             //console.log(`${new_href}`)
             $(this).attr("href", decodeURIComponent(new_href));
-        }
-        else {
+        } else {
             external_href = $(this).attr("href");
-            if (external_href.lastIndexOf("https%3A"))
+            if (external_href.lastIndexOf("https%3A")) {
                 new_href = $(this).attr("href").substring($(this).attr("href").lastIndexOf("https%3A"));
-            else if (external_href.lastIndexOf("http%3A%2F%2F"))
+            } else if (external_href.lastIndexOf("http%3A%2F%2F")) {
                 new_href = $(this).attr("href").substring($(this).attr("href").lastIndexOf("http%3A"));
+            }
             $(this).attr("href", decodeURIComponent(new_href));
         }
     });
@@ -320,18 +319,17 @@ function directLink () {
         if ($(this).find("LinkCard-title").length > 0 && $(this).find("LinkCard-title").indexOf("http") > -1) {
             new_href = $(this).find("LinkCard-title").text();
             $(this).attr("href", new_href);
-        }
-        else if ($(this).attr("href").indexOf("link.zhihu.com/?target=") > -1) {
+        } else if ($(this).attr("href").indexOf("link.zhihu.com/?target=") > -1) {
             external_href = $(this).attr("href");
             new_href = external_href.substring(external_href = $(this).attr("href").indexOf("link.zhihu.com/?target=") + "link.zhihu.com/?target=".length);
             $(this).attr("href", decodeURIComponent(new_href));
-        }
-        else {
+        } else {
             external_href = $(this).attr("href");
-            if (external_href.lastIndexOf("https%3A"))
+            if (external_href.lastIndexOf("https%3A")) {
                 new_href = $(this).attr("href").substring($(this).attr("href").lastIndexOf("https%3A"));
-            else if (external_href.lastIndexOf("http%3A%2F%2F"))
+            } else if (external_href.lastIndexOf("http%3A%2F%2F")) {
                 new_href = $(this).attr("href").substring($(this).attr("href").lastIndexOf("http%3A"));
+            }
             $(this).attr("href", decodeURIComponent(new_href));
         }
     });
@@ -356,10 +354,10 @@ function directLink () {
 // 默认高清原图，来自：https://greasyfork.org/scripts/402808
 function originalPic(){
     $("img").each(function(){
-        if($(this).attr("data-original")!=undefined && !$(this).hasClass("comment_sticker"))
-        {
-            if($(this).attr("src") != $(this).attr("data-original"))
+        if ($(this).attr("data-original")!=undefined && !$(this).hasClass("comment_sticker")) {
+            if ($(this).attr("src") != $(this).attr("data-original")) {
                 $(this).attr("src",$(this).attr("data-original"))
+            }
         }
     })
     $(".Modal-inner").css({"overflow-y":"hidden"})
@@ -464,16 +462,16 @@ function addTypeTips() {
         //console.log(`${postList.length} ${postNum.length}`)
         if (postList.length > postNum.length){
             for(let num = postNum.length;num<postList.length;num++){
-                if (!patt_tip.test(postList[num].innerHTML)){               // 判断是否已添加
-                    if (patt_zhuanlan.test(postList[num].href)){            // 如果是文章
+                if (!patt_tip.test(postList[num].innerHTML)){ //               判断是否已添加
+                    if (patt_zhuanlan.test(postList[num].href)){ //            如果是文章
                         postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #2196F3;display: inline-block;height: 18px;">文章</small> ` + postList[num].innerHTML
-                    }else if (patt_question.test(postList[num].href)){      // 如果是问题
+                    }else if (patt_question.test(postList[num].href)){ //      如果是问题
                         if (patt_question_answer.test(postList[num].href)){ // 如果是指向回答的问题（而非指向纯问题的链接）
                             postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #f68b83;display: inline-block;height: 18px;">问题</small> ` + postList[num].innerHTML
                         }else{
                             postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #ff5a4e;display: inline-block;height: 18px;">问题</small> ` + postList[num].innerHTML
                         }
-                    }else if (patt_video.test(postList[num].href)){         // 如果是视频
+                    }else if (patt_video.test(postList[num].href)){ //         如果是视频
                         postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #00BCD4;display: inline-block;height: 18px;">视频</small> ` + postList[num].innerHTML
                     }
                     //postNum += 1;

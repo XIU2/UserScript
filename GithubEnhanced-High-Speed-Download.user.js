@@ -5,7 +5,7 @@
 // @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
 // @match        *://hub.fastgit.org/*
-// @icon         https://i.loli.net/2021/03/07/oUHPFSOTjKnkMzJ.png
+// @icon         https://i.loli.net/2021/03/30/ULV9XunaHesqGIR.png
 // @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
 /* globals $ */
 // @grant        GM_registerMenuCommand
@@ -127,7 +127,7 @@
                 $(this).next().after(html);
             });
             // 修改[文件大小]元素样式
-            document.querySelectorAll('small.pl-2.color-text-secondary.flex-shrink-0').forEach(el=>el.style.cssText='display: flex; justify-content: flex-end; flex-grow: 1; margin-right: 8px;');
+            document.querySelectorAll('small.pl-2.color-text-secondary.flex-shrink-0').forEach(el=>{el.style.cssText='display: flex; justify-content: flex-end; flex-grow: 1; margin-right: 8px;'});
 
 
             // Source Code
@@ -151,7 +151,7 @@
             });
         });
         // 修改 Source code 样式，使其和加速按钮并列一排
-        document.querySelectorAll('div.d-block.py-1.py-md-2.Box-body.px-2').forEach(el=>el.className='d-flex py-1 py-md-2 Box-body px-2');
+        document.querySelectorAll('div.d-block.py-1.py-md-2.Box-body.px-2').forEach(el=>{el.className='d-flex py-1 py-md-2 Box-body px-2'});
     }
 
 
@@ -230,8 +230,8 @@
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
                 aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.color-icon-tertiary');
-            aElm_new.forEach(el=>el.style.cssText = 'display: inline');
-            aElm_now.forEach(el=>el.style.cssText = 'display: none');
+            aElm_new.forEach(el=>{el.style.cssText = 'display: inline'});
+            aElm_now.forEach(el=>{el.style.cssText = 'display: none'});
         };
 
         // 鼠标离开则隐藏
@@ -239,8 +239,8 @@
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
                 aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.color-icon-tertiary');
-            aElm_new.forEach(el=>el.style.cssText = 'display: none');
-            aElm_now.forEach(el=>el.style.cssText = 'display: inline');
+            aElm_new.forEach(el=>{el.style.cssText = 'display: none'});
+            aElm_now.forEach(el=>{el.style.cssText = 'display: inline'});
         };
 
         // 循环添加
@@ -249,7 +249,7 @@
                 cntElm_a = trElm.querySelector('.css-truncate.css-truncate-target.d-block.width-fit a'),
                 cntElm_svg = trElm.querySelector('.mr-3.flex-shrink-0 svg.octicon.octicon-file.color-icon-tertiary'),
                 Name = cntElm_a.innerText,
-                href = cntElm_a.attributes['href'].nodeValue.replace('https://github.com','');
+                href = cntElm_a.attributes.href.nodeValue.replace('https://github.com','');
             let href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
             console.log(cntElm_a, cntElm_svg, Name, href)
             switch(menu_raw_fast)
