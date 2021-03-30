@@ -18,47 +18,34 @@
 // ==/UserScript==
 
 (function() {
-    var menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading'),
-        menu_autoReply = GM_getValue('xiu2_menu_autoReply'),
-        menu_cleanTopPost = GM_getValue('xiu2_menu_cleanTopPost'),
-        menu_scrollToShowhide = GM_getValue('xiu2_menu_scrollToShowhide');
-    var menu_thread_pageLoading_ID, menu_autoReply_ID, menu_cleanTopPost_ID, menu_scrollToShowhide_ID, menu_feedBack_ID;
-    if (menu_thread_pageLoading == null){menu_thread_pageLoading = false; GM_setValue('xiu2_menu_thread_pageLoading', menu_thread_pageLoading)};
-    if (menu_autoReply == null){menu_autoReply = true; GM_setValue('xiu2_menu_autoReply', menu_autoReply)};
-    if (menu_cleanTopPost == null){menu_cleanTopPost = true; GM_setValue('xiu2_menu_cleanTopPost', menu_cleanTopPost)};
-    if (menu_scrollToShowhide == null){menu_scrollToShowhide = true; GM_setValue('xiu2_menu_scrollToShowhide', menu_scrollToShowhide)};
+    var menu_ALL = [
+        ['menu_thread_pageLoading', '自动回复', '自动回复', true],
+        ['menu_autoReply', '清理置顶帖子', '清理置顶帖子', true],
+        ['menu_cleanTopPost', '帖子内自动翻页', '帖子内自动翻页', true],
+        ['menu_scrollToShowhide', '自动滚动至隐藏内容', '自动滚动至隐藏内容', true]
+    ], menu_ID = [];
+    for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
+        if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
+    }
     registerMenuCommand();
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        let menu_thread_pageLoading_, menu_autoReply_, menu_cleanTopPost_, menu_scrollToShowhide_;
-        if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
-            GM_unregisterMenuCommand(menu_thread_pageLoading_ID);
-            GM_unregisterMenuCommand(menu_autoReply_ID);
-            GM_unregisterMenuCommand(menu_cleanTopPost_ID);
-            GM_unregisterMenuCommand(menu_scrollToShowhide_ID);
-            GM_unregisterMenuCommand(menu_feedBack_ID);
-            menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading');
-            menu_autoReply = GM_getValue('xiu2_menu_autoReply');
-            menu_cleanTopPost = GM_getValue('xiu2_menu_cleanTopPost');
-            menu_scrollToShowhide = GM_getValue('xiu2_menu_scrollToShowhide');
+        if (menu_ID.length > menu_ALL.length){ // 如果菜单ID数组多于菜单数组，说明不是首次添加菜单，需要卸载所有脚本菜单
+            for (let i=0;i<menu_ID.length;i++){
+                GM_unregisterMenuCommand(menu_ID[i]);
+            }
         }
-
-        if (menu_thread_pageLoading){menu_thread_pageLoading_ = "√";}else{menu_thread_pageLoading_ = "×";}
-        if (menu_autoReply){menu_autoReply_ = "√";}else{menu_autoReply_ = "×";}
-        if (menu_cleanTopPost){menu_cleanTopPost_ = "√";}else{menu_cleanTopPost_ = "×";}
-        if (menu_scrollToShowhide){menu_scrollToShowhide_ = "√";}else{menu_scrollToShowhide_ = "×";}
-
-        menu_autoReply_ID = GM_registerMenuCommand(`[ ${menu_autoReply_} ] 自动回复`, function(){menu_switch(menu_autoReply,'xiu2_menu_autoReply','自动回复')});
-        menu_cleanTopPost_ID = GM_registerMenuCommand(`[ ${menu_cleanTopPost_} ] 清理置顶帖子`, function(){menu_switch(menu_cleanTopPost,'xiu2_menu_cleanTopPost','清理置顶帖子')});
-        menu_thread_pageLoading_ID = GM_registerMenuCommand(`[ ${menu_thread_pageLoading_} ] 帖子内自动翻页`, function(){menu_switch(menu_thread_pageLoading,'xiu2_menu_thread_pageLoading','帖子内自动翻页')});
-        menu_scrollToShowhide_ID = GM_registerMenuCommand(`[ ${menu_scrollToShowhide_} ] 自动滚动至隐藏内容`, function(){menu_switch(menu_scrollToShowhide,'xiu2_menu_scrollToShowhide','自动滚动至隐藏内容')});
-        menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+        for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
+            menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
+            menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+        }
+        menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
     // 菜单开关
     function menu_switch(menu_status, Name, Tips) {
-        if (menu_status){
+        if (menu_status == 'true'){
             GM_setValue(`${Name}`, false);
             GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }else{
@@ -67,6 +54,16 @@
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
+
+    // 返回菜单值
+    function menu_value(menuName) {
+        for (let menu of menu_ALL) {
+            if (menu[0] == menuName) {
+                return menu[3]
+            }
+        }
+    }
+
 
     // 随机回复帖子的内容
     var replyList = [
@@ -144,14 +141,14 @@
     // URL 判断
     if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)){
         // 帖子内
-        if(menu_thread_pageLoading)curSite = DBSite.thread;
-        if(menu_autoReply)autoReply(); //       如果有隐藏内容，则自动回复
+        if(menu_value('menu_thread_pageLoading'))curSite = DBSite.thread;
+        if(menu_value('menu_autoReply'))autoReply(); //       如果有隐藏内容，则自动回复
         pageLoading(); //                       自动翻页
-        if(menu_scrollToShowhide)setTimeout(function(){window.scrollTo(0,document.querySelector('.showhide').offsetTop)}, 500); // 滚动至隐藏内容
+        if(menu_value('menu_scrollToShowhide'))setTimeout(function(){window.scrollTo(0,document.querySelector('.showhide').offsetTop)}, 500); // 滚动至隐藏内容
     }else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)){
         // 各板块帖子列表
         curSite = DBSite.forum;
-        if(menu_cleanTopPost)cleanTopPost(); // 清理置顶帖子
+        if(menu_value('menu_cleanTopPost'))cleanTopPost(); // 清理置顶帖子
         pageLoading(); //                       自动翻页
     }else if (patt_guide.test(location.search)){
         // 导读帖子列表
@@ -204,7 +201,7 @@
             if (autoreply){
                 writeReply();
                 // 滚动至隐藏内容
-                if(menu_scrollToShowhide){
+                if(menu_value('menu_scrollToShowhide')){
                     let showhideTime=setInterval(function(){
                         let showhide=document.querySelector('.showhide')
                         if(showhide){

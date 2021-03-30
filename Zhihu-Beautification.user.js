@@ -18,62 +18,59 @@
 // ==/UserScript==
 
 (function() {
-    var menu_widescreenDisplay = GM_getValue('xiu2_menu_widescreenDisplay'),
-        menu_picHeight = GM_getValue('xiu2_menu_picHeight'),
-        menu_postimg = GM_getValue('xiu2_menu_postimg'),
-        menu_hideTitle = GM_getValue('xiu2_menu_hideTitle'),
-    menu_widescreenDisplay_ID, menu_picHeight_ID, menu_postimg_ID, menu_hideTitle_ID, menu_feedBack_ID;
-    if (menu_widescreenDisplay == null){menu_widescreenDisplay = true; GM_setValue('xiu2_menu_widescreenDisplay', menu_widescreenDisplay)};
-    if (menu_picHeight == null){menu_picHeight = true; GM_setValue('xiu2_menu_picHeight', menu_picHeight)};
-    if (menu_postimg == null){menu_postimg = true; GM_setValue('xiu2_menu_postimg', menu_postimg)};
-    if (menu_hideTitle == null){menu_hideTitle = true; GM_setValue('xiu2_menu_hideTitle', menu_hideTitle)};
+    var menu_ALL = [
+        ['menu_widescreenDisplay', '宽屏显示', '一键收起回答', true],
+        ['menu_picHeight', '调整图片最大高度', '调整图片最大高度', true],
+        ['menu_postimg', '隐藏文章开头大图', '隐藏文章开头大图', true],
+        ['menu_hideTitle', '隐藏浏览回答标题', '隐藏浏览回答标题', true]
+    ], menu_ID = [];
+    for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
+        if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
+    }
     registerMenuCommand();
     addStyle();
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        let menu_widescreenDisplay_, menu_picHeight_, menu_postimg_, menu_hideTitle_;
-        if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
-            GM_unregisterMenuCommand(menu_widescreenDisplay_ID);
-            GM_unregisterMenuCommand(menu_picHeight_ID);
-            GM_unregisterMenuCommand(menu_postimg_ID);
-            GM_unregisterMenuCommand(menu_hideTitle_ID);
-            GM_unregisterMenuCommand(menu_feedBack_ID);
-            menu_widescreenDisplay = GM_getValue('xiu2_menu_widescreenDisplay');
-            menu_picHeight = GM_getValue('xiu2_menu_picHeight');
-            menu_postimg = GM_getValue('xiu2_menu_postimg');
-            menu_hideTitle = GM_getValue('xiu2_menu_hideTitle');
+        if (menu_ID.length > menu_ALL.length){ // 如果菜单ID数组多于菜单数组，说明不是首次添加菜单，需要卸载所有脚本菜单
+            for (let i=0;i<menu_ID.length;i++){
+                GM_unregisterMenuCommand(menu_ID[i]);
+            }
         }
-
-        if (menu_widescreenDisplay){menu_widescreenDisplay_ = "√";}else{menu_widescreenDisplay_ = "×";}
-        if (menu_picHeight){menu_picHeight_ = "√";}else{menu_picHeight_ = "×";}
-        if (menu_postimg){menu_postimg_ = "√";}else{menu_postimg_ = "×";}
-        if (menu_hideTitle){menu_hideTitle_ = "√";}else{menu_hideTitle_ = "×";}
-
-        menu_widescreenDisplay_ID = GM_registerMenuCommand(`[ ${menu_widescreenDisplay_} ] 宽屏显示`, function(){menu_switch(menu_widescreenDisplay,'xiu2_menu_widescreenDisplay','宽屏显示')});
-        menu_picHeight_ID = GM_registerMenuCommand(`[ ${menu_picHeight_} ] 调整图片最大高度`, function(){menu_switch(menu_picHeight,'xiu2_menu_picHeight','调整图片最大高度')});
-        menu_postimg_ID = GM_registerMenuCommand(`[ ${menu_postimg_} ] 隐藏文章开头大图`, function(){menu_switch(menu_postimg,'xiu2_menu_postimg','隐藏文章开头大图')});
-        menu_hideTitle_ID = GM_registerMenuCommand(`[ ${menu_hideTitle_} ] 隐藏浏览回答标题`, function(){menu_switch(menu_hideTitle,'xiu2_menu_hideTitle','隐藏浏览回答标题')});
-        menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+        for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
+            menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
+            menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+        }
+        menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
     // 菜单开关
     function menu_switch(menu_status, Name, Tips) {
-        if (menu_status){
+        if (menu_status == 'true'){
             GM_setValue(`${Name}`, false);
-            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3000});
+            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }else{
             GM_setValue(`${Name}`, true);
-            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3000});
+            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
+
+    // 返回菜单值
+    function menu_value(menuName) {
+        for (let menu of menu_ALL) {
+            if (menu[0] == menuName) {
+                return menu[3]
+            }
+        }
+    }
 
 
     // 添加样式
     function addStyle() {
         let style = `/* 屏蔽登录提示 */
-.Question-mainColumnLogin {display: none;}`,
+.Question-mainColumnLogin {display: none;}
+`,
             style_1 = `/* 宽屏显示 */
 .GlobalSideBar,.Question-sideColumn,.ContentLayout-sideColumn,.SearchSideBar,.Card.QuestionHeaderTopicMeta {
 	display: none !important;
@@ -116,19 +113,19 @@ header.is-hidden {
 `
         let style_Add = document.createElement('style');
         // 宽屏显示
-        if (menu_widescreenDisplay) {
+        if (menu_value('menu_widescreenDisplay')) {
             style += style_1;
         }
         // 调整图片最大高度
-        if (menu_picHeight) {
+        if (menu_value('menu_picHeight')) {
             style += style_5;
         }
         // 隐藏文章开头大图
-        if (menu_postimg) {
+        if (menu_value('menu_postimg')) {
             style += style_2;
         }
         // 浏览回答向下翻时自动隐藏标题
-        if (menu_hideTitle) {
+        if (menu_value('menu_hideTitle')) {
             style += style_4;
         }
         // 文章编辑页面与实际文章宽度一致

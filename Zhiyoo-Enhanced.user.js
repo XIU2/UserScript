@@ -19,42 +19,53 @@
 // ==/UserScript==
 
 (function() {
-    var menu_cleanPostTitle = GM_getValue('xiu2_menu_cleanPostTitle'),
-        menu_qianDaoRedirectURL = GM_getValue('xiu2_menu_qianDaoRedirectURL');
-    var menu_cleanPostTitle_ID, menu_qianDaoRedirectURL_ID, menu_feedBack_ID;
-    if (menu_cleanPostTitle == null){menu_cleanPostTitle = true; GM_setValue('xiu2_menu_cleanPostTitle', menu_cleanPostTitle)};
-    if (menu_qianDaoRedirectURL == null){menu_qianDaoRedirectURL = `http://bbs.zhiyoo.net/forum.php?mod=forumdisplay&fid=42&filter=author&orderby=dateline`; GM_setValue('xiu2_menu_qianDaoRedirectURL', menu_qianDaoRedirectURL)};
+    var menu_ALL = [
+        ['menu_cleanPostTitle', '清理帖子标题开头〖〗【】文字', '清理帖子标题开头〖〗【】文字', true],
+        ['menu_qianDaoRedirectURL', '当前页面设为签到后重定向地址', '已设置当前页面为签到后重定向地址', 'http://bbs.zhiyoo.net/forum.php?mod=forumdisplay&fid=42&filter=author&orderby=dateline']
+    ], menu_ID = [];
+    for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
+        if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
+    }
     registerMenuCommand();
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        let menu_cleanPostTitle_;
-        if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
-            GM_unregisterMenuCommand(menu_cleanPostTitle_ID);
-            GM_unregisterMenuCommand(menu_qianDaoRedirectURL_ID);
-            GM_unregisterMenuCommand(menu_feedBack_ID);
-            menu_cleanPostTitle = GM_getValue('xiu2_menu_cleanPostTitle');
-            menu_qianDaoRedirectURL = GM_getValue('xiu2_menu_qianDaoRedirectURL');
+        if (menu_ID.length > menu_ALL.length){ // 如果菜单ID数组多于菜单数组，说明不是首次添加菜单，需要卸载所有脚本菜单
+            for (let i=0;i<menu_ID.length;i++){
+                GM_unregisterMenuCommand(menu_ID[i]);
+            }
         }
-
-        if (menu_cleanPostTitle){menu_cleanPostTitle_ = "√";}else{menu_cleanPostTitle_ = "×";}
-
-        menu_cleanPostTitle_ID = GM_registerMenuCommand(`[ ${menu_cleanPostTitle_} ] 清理帖子标题开头〖〗【】文字`, function(){menu_switch(menu_cleanPostTitle,'xiu2_menu_cleanPostTitle','清理帖子标题开头〖〗【】文字')});
-        menu_qianDaoRedirectURL_ID = GM_registerMenuCommand(`当前页面设为签到后重定向地址`, function(){GM_setValue('xiu2_menu_qianDaoRedirectURL', location.href);GM_notification({text: `已设置当前页面为签到后重定向地址`, timeout: 3000});;})
-        menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+        for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
+            menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
+            if (menu_ALL[i][0] == 'menu_qianDaoRedirectURL') {
+                menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][1]}`, function(){GM_setValue(`${menu_ALL[i][0]}`, location.href);GM_notification({text: `${menu_ALL[i][2]}`, timeout: 3000});})
+            } else {
+                menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+            }
+        }
+        menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
     // 菜单开关
     function menu_switch(menu_status, Name, Tips) {
-        if (menu_status){
+        if (menu_status == 'true'){
             GM_setValue(`${Name}`, false);
-            GM_notification({text: `已关闭 [${Tips}] 功能（刷新网页后生效）`, timeout: 3500});
+            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }else{
             GM_setValue(`${Name}`, true);
-            GM_notification({text: `已开启 [${Tips}] 功能（刷新网页后生效）`, timeout: 3500});
+            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
+
+    // 返回菜单值
+    function menu_value(menuName) {
+        for (let menu of menu_ALL) {
+            if (menu[0] == menuName) {
+                return menu[3]
+            }
+        }
+    }
 
 
     // 随机回复帖子的内容
@@ -197,7 +208,7 @@
                 document.querySelector('#yl').click();
                 document.querySelector('.tr3.tac div a').click();
             }
-            setTimeout(location.href=menu_qianDaoRedirectURL, 2000); // 跳转到指定URL
+            setTimeout(location.href=menu_value('menu_qianDaoRedirectURL'), 2000); // 跳转到指定URL
         }
     }
 
@@ -295,7 +306,7 @@
 
     // 清理帖子列表中帖子标题开头的〖XXX〗【XXX】文字
     function cleanPostTitle(){
-        if (menu_cleanPostTitle){
+        if (menu_value('menu_cleanPostTitle')){
             let cleanposttitle = document.querySelectorAll("a.s.xst");
             if (cleanposttitle.length > 0){
                 for(let num = postNum;num<cleanposttitle.length;num++){

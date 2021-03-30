@@ -28,67 +28,58 @@
 // @namespace    https://github.com/XIU2/UserScript
 // ==/UserScript==
 (function() {
-    var menu_open_fileSha = GM_getValue('xiu2_menu_open_fileSha'),
-        menu_copy_fileSha = GM_getValue('xiu2_menu_copy_fileSha'),
-        menu_refreshCorrection = GM_getValue('xiu2_menu_refreshCorrection'),
-        menu_rightClickMenu = GM_getValue('xiu2_menu_rightClickMenu'),
-        menu_folderDescdesMenu = GM_getValue('xiu2_menu_folderDescdesMenu');
-    var menu_open_fileSha_ID, menu_copy_fileSha_ID, menu_refreshCorrection_ID, menu_rightClickMenu_ID, menu_folderDescdesMenu_ID, menu_feedBack_ID, lastFolderID;
-    if (menu_open_fileSha == null){menu_open_fileSha = true; GM_setValue('xiu2_menu_open_fileSha', menu_open_fileSha)};
-    if (menu_copy_fileSha == null){menu_copy_fileSha = true; GM_setValue('xiu2_menu_copy_fileSha', menu_copy_fileSha)};
-    if (menu_refreshCorrection == null){menu_refreshCorrection = true; GM_setValue('xiu2_menu_refreshCorrection', menu_refreshCorrection)};
-    if (menu_rightClickMenu == null){menu_rightClickMenu = true; GM_setValue('xiu2_menu_rightClickMenu', menu_rightClickMenu)};
-    if (menu_folderDescdesMenu == null){menu_folderDescdesMenu = true; GM_setValue('xiu2_menu_folderDescdesMenu', menu_folderDescdesMenu)};
+    var menu_ALL = [
+        ['menu_open_fileSha', '自动打开分享链接', '自动打开分享链接', true],
+        ['menu_copy_fileSha', '自动复制分享链接', '自动复制分享链接', true],
+        ['menu_refreshCorrection', '刷新不返回根目录', '刷新不返回根目录', true],
+        ['menu_rightClickMenu', '右键文件显示菜单', '右键文件显示菜单', true],
+        ['menu_folderDescdesMenu', '调整描述（话说）编辑框大小', '调整描述（话说）编辑框大小', true]
+    ], menu_ID = [], lastFolderID;
+    for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
+        if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
+    }
     registerMenuCommand();
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        var menu_open_fileSha_, menu_copy_fileSha_, menu_refreshCorrection_, menu_rightClickMenu_, menu_folderDescdesMenu_;
-        if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
-            GM_unregisterMenuCommand(menu_open_fileSha_ID);
-            GM_unregisterMenuCommand(menu_copy_fileSha_ID);
-            GM_unregisterMenuCommand(menu_refreshCorrection_ID);
-            GM_unregisterMenuCommand(menu_rightClickMenu_ID);
-            GM_unregisterMenuCommand(menu_folderDescdesMenu_ID);
-            GM_unregisterMenuCommand(menu_feedBack_ID);
-            menu_open_fileSha = GM_getValue('xiu2_menu_open_fileSha');
-            menu_copy_fileSha = GM_getValue('xiu2_menu_copy_fileSha');
-            menu_refreshCorrection = GM_getValue('xiu2_menu_refreshCorrection');
-            menu_rightClickMenu = GM_getValue('xiu2_menu_rightClickMenu');
-            menu_folderDescdesMenu = GM_getValue('xiu2_menu_folderDescdesMenu');
+        if (menu_ID.length > menu_ALL.length){ // 如果菜单ID数组多于菜单数组，说明不是首次添加菜单，需要卸载所有脚本菜单
+            for (let i=0;i<menu_ID.length;i++){
+                GM_unregisterMenuCommand(menu_ID[i]);
+            }
         }
-
-        if (menu_open_fileSha){menu_open_fileSha_ = "√";}else{menu_open_fileSha_ = "×";}
-        if (menu_copy_fileSha){menu_copy_fileSha_ = "√";}else{menu_copy_fileSha_ = "×";}
-        if (menu_refreshCorrection){menu_refreshCorrection_ = "√";}else{menu_refreshCorrection_ = "×";}
-        if (menu_rightClickMenu){menu_rightClickMenu_ = "√";}else{menu_rightClickMenu_ = "×";}
-        if (menu_folderDescdesMenu){menu_folderDescdesMenu_ = "√";}else{menu_folderDescdesMenu_ = "×";}
-
-        menu_open_fileSha_ID = GM_registerMenuCommand(`[ ${menu_open_fileSha_} ] 自动打开分享链接`, function(){menu_switch(menu_open_fileSha,'xiu2_menu_open_fileSha','自动打开分享链接', true)});
-        menu_copy_fileSha_ID = GM_registerMenuCommand(`[ ${menu_copy_fileSha_} ] 自动复制分享链接`, function(){menu_switch(menu_copy_fileSha,'xiu2_menu_copy_fileSha','自动复制分享链接', true)});
-        menu_refreshCorrection_ID = GM_registerMenuCommand(`[ ${menu_refreshCorrection_} ] 刷新不返回根目录`, function(){if(menu_refreshCorrection){UNrefreshCorrection();}else{refreshCorrection();};menu_switch(menu_refreshCorrection,'xiu2_menu_refreshCorrection','刷新不返回根目录', false)});
-        menu_rightClickMenu_ID = GM_registerMenuCommand(`[ ${menu_rightClickMenu_} ] 右键文件显示菜单`, function(){menu_switch(menu_rightClickMenu,'xiu2_menu_rightClickMenu','右键文件显示菜单', true)});
-        menu_folderDescdesMenu_ID = GM_registerMenuCommand(`[ ${menu_folderDescdesMenu_} ] 调整描述（话说）编辑框大小`, function(){menu_switch(menu_folderDescdesMenu,'xiu2_menu_folderDescdesMenu','调整描述（话说）编辑框大小', true)});
-        menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+        for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
+            menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
+            if (menu_ALL[i][0] == 'menu_refreshCorrection') {
+                menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){if(menu_value('menu_refreshCorrection')){UNrefreshCorrection();}else{refreshCorrection();};menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+            }else{
+                menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+            }
+        }
+        menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
-
     // 菜单开关
-    function menu_switch(menu_status, Name, Tips, RefreshTips) {
-        if(RefreshTips){
-            RefreshTips = "\n（刷新网页后生效）"
-        }else{
-            RefreshTips = ""
-        }
-        if (menu_status){
+    function menu_switch(menu_status, Name, Tips) {
+        let RefreshTips = '\n（刷新网页后生效）';
+        if (Name == 'menu_refreshCorrection')RefreshTips = ''
+        if (menu_status == 'true'){
             GM_setValue(`${Name}`, false);
-            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
+            GM_notification({text: `已关闭 [${Tips}] 功能${RefreshTips}`, timeout: 3500});
         }else{
             GM_setValue(`${Name}`, true);
-            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
+            GM_notification({text: `已开启 [${Tips}] 功能${RefreshTips}`, timeout: 3500});
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
+
+    // 返回菜单值
+    function menu_value(menuName) {
+        for (let menu of menu_ALL) {
+            if (menu[0] == menuName) {
+                return menu[3]
+            }
+        }
+    }
 
 
     if(document.getElementById("infos")){ //             分享链接文件列表页
@@ -109,7 +100,7 @@
         mainframe = document.getElementById("mainframe");
         if(mainframe){ //                                只有找到 iframe 框架时才会继续运行脚本
             mainframe = mainframe.contentWindow;
-            if(menu_refreshCorrection){
+            if(menu_value('menu_refreshCorrection')){
                 refreshCorrection(); //                  刷新不返回根目录（F5）
             }
             setTimeout(folderDescdes, 200); //           调整话说编辑框初始大小
@@ -155,7 +146,7 @@
 
     // 右键文件显示菜单
     function rightClickMenu() {
-        if(menu_rightClickMenu){ //                                脚本菜单开启时才继续
+        if(menu_value('menu_rightClickMenu')){ //                                脚本菜单开启时才继续
             rightClickMenu_("sub_folder_list", "fols", "folse") // 文件夹
             rightClickMenu_("filelist", "fs", "fse") //            文件
         }
@@ -208,7 +199,7 @@
 
     // 调整话说编辑框初始大小
     function folderDescdes() {
-        if(menu_folderDescdesMenu) {
+        if(menu_value('menu_folderDescdesMenu')) {
             let folderdescdes = mainframe.document.getElementById("folder_descdes"); // 寻找话说（描述）编辑框
             if(folderdescdes){ //                                                       判断话说（描述）元素是否存在
                 folderdescdes.style.cssText="margin: 15px 0px; width: 550px; height: 125px;"
@@ -245,7 +236,7 @@
         if(f_sha && f_sha.style.display == "block"){ //            判断信息框是否存在且可见
             fileSha_Open(); //                                     自动打开分享链接（点击文件时）
             fileSha_Copy(); //                                     自动复制分享链接（点击文件时）
-            if(menu_open_fileSha || menu_copy_fileSha){
+            if(menu_value('menu_open_fileSha') || menu_value('menu_copy_fileSha')){
                 f_sha.style.display = "none"; //                   隐藏分享链接（下载链接）信息框
             }
         }
@@ -254,7 +245,7 @@
 
     // 自动打开分享链接（点击文件时）
     function fileSha_Open() {
-        if(menu_open_fileSha){ //                                                          脚本菜单开启时才继续
+        if(menu_value('menu_open_fileSha')){ //                                                          脚本菜单开启时才继续
             let code = mainframe.document.getElementById("code").getAttribute("title"); // 获取分享链接（下载链接）
             if(code != ""){ //                                                             确保分享链接（下载链接）不是空
                 window.GM_openInTab(code, {active: true,insert: true,setParent: true}) //  打开分享链接（下载链接）
@@ -265,7 +256,7 @@
 
     // 自动复制分享链接（点击文件时）
     function fileSha_Copy() {
-        if(menu_copy_fileSha){ //                                                  脚本菜单开启时才继续
+        if(menu_value('menu_copy_fileSha')){ //                                                  脚本菜单开启时才继续
             let f_sha1 = mainframe.document.getElementById("f_sha1").innerText; // 获取分享链接（下载链接）
             if(f_sha1 != ""){ //                                                   确保分享链接（下载链接）不是空
                 copyToClipboard(f_sha1); //                                        复制到剪切板
@@ -293,7 +284,7 @@
 
     // 隐藏分享链接窗口（这样自动打开/复制分享链接时，不会一闪而过）
     function hideSha(){
-        if(menu_open_fileSha || menu_copy_fileSha){ // [自动复制分享链接] 或 [自动打开分享链接] 任意一个功能开启时才继续
+        if(menu_value('menu_open_fileSha') || menu_value('menu_copy_fileSha')){ // [自动复制分享链接] 或 [自动打开分享链接] 任意一个功能开启时才继续
             let style_Add = mainframe.document.createElement('style');
             style_Add.type = 'text/css';
             style_Add.innerHTML = `#f_sha {display: none !important;}`;

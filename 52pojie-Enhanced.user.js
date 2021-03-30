@@ -2,7 +2,7 @@
 // @name         吾爱破解论坛增强 - 自动签到、翻页
 // @version      1.2.4
 // @author       X.I.U
-// @description  自动签到、自动无缝翻页（全站）
+// @description  自动签到、自动无缝翻页（全站）、屏蔽导读悬赏贴（最新发表）
 // @match        *://www.52pojie.cn/*
 // @icon         https://www.52pojie.cn/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -18,35 +18,32 @@
 // ==/UserScript==
 
 (function() {
-    var menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading'),
-        menu_delateReward = GM_getValue('xiu2_menu_delateReward');
-    var menu_feedBack_ID, menu_thread_pageLoading_ID, menu_delateReward_ID;
-    if (menu_thread_pageLoading == null){menu_thread_pageLoading = false; GM_setValue('xiu2_menu_thread_pageLoading', menu_thread_pageLoading)};
-    if (menu_delateReward == null){menu_delateReward = false; GM_setValue('xiu2_menu_delateReward', menu_delateReward)};
+    var menu_ALL = [
+        ['menu_thread_pageLoading', '帖子内自动翻页', '帖子内自动翻页', true],
+        ['menu_delateReward', '屏蔽导读悬赏贴（最新发表）', '屏蔽导读悬赏贴', true]
+    ], menu_ID = [];
+    for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
+        if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
+    }
     registerMenuCommand();
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        let menu_thread_pageLoading_, menu_delateReward_;
-        if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
-            GM_unregisterMenuCommand(menu_thread_pageLoading_ID);
-            GM_unregisterMenuCommand(menu_delateReward_ID);
-            GM_unregisterMenuCommand(menu_feedBack_ID);
-            menu_thread_pageLoading = GM_getValue('xiu2_menu_thread_pageLoading');
-            menu_delateReward = GM_getValue('xiu2_menu_delateReward');
+        if (menu_ID.length > menu_ALL.length){ // 如果菜单ID数组多于菜单数组，说明不是首次添加菜单，需要卸载所有脚本菜单
+            for (let i=0;i<menu_ID.length;i++){
+                GM_unregisterMenuCommand(menu_ID[i]);
+            }
         }
-
-        if (menu_thread_pageLoading){menu_thread_pageLoading_ = "√";}else{menu_thread_pageLoading_ = "×";}
-        if (menu_delateReward){menu_delateReward_ = "√";}else{menu_delateReward_ = "×";}
-
-        menu_thread_pageLoading_ID = GM_registerMenuCommand(`[ ${menu_thread_pageLoading_} ] 帖子内自动翻页`, function(){menu_switch(menu_thread_pageLoading,'xiu2_menu_thread_pageLoading','帖子内自动翻页')});
-        menu_delateReward_ID = GM_registerMenuCommand(`[ ${menu_delateReward_} ] 屏蔽悬赏贴（导读 - 最新发表）`, function(){menu_switch(menu_delateReward,'xiu2_menu_delateReward','帖子内自动翻页')});
-        menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+        for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
+            menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
+            menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+        }
+        menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
     // 菜单开关
     function menu_switch(menu_status, Name, Tips) {
-        if (menu_status){
+        if (menu_status == 'true'){
             GM_setValue(`${Name}`, false);
             GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, title: '吾爱破解论坛增强', timeout: 3000});
         }else{
@@ -55,6 +52,15 @@
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
+
+    // 返回菜单值
+    function menu_value(menuName) {
+        for (let menu of menu_ALL) {
+            if (menu[0] == menuName) {
+                return menu[3]
+            }
+        }
+    }
 
     var ShowPager;
     showPager();
@@ -131,7 +137,7 @@
 
     // URL 判断
     if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)){
-        if(menu_thread_pageLoading) {
+        if(menu_value('menu_thread_pageLoading')) {
             curSite = DBSite.thread; //      帖子内
             hidePgbtn(); //                  隐藏帖子内的 [下一页] 按钮
         }
@@ -139,7 +145,7 @@
         curSite = DBSite.forum; //           各板块帖子列表
     }else if (patt_guide.test(location.search)){
         curSite = DBSite.guide; //           导读帖子列表
-        delateReward(); //                   屏蔽悬赏贴（导读-最新发表）
+        delateReward(); //                   屏蔽导读悬赏贴（最新发表）
     }else if (patt_collection.test(location.search)){
         curSite = DBSite.collection; //      淘贴列表
     }else if(location.pathname === '/search.php'){
@@ -189,7 +195,7 @@
 
     //屏蔽悬赏贴（导读-最新发表）
     function delateReward(){
-        if(patt_guide_newthread.test(location.search) && menu_delateReward){
+        if(patt_guide_newthread.test(location.search) && menu_value('menu_delateReward')){
             let table = document.querySelector("#threadlist > div.bm_c > table"),
                 tbodys = table.getElementsByTagName('tbody'),
                 arrs = [];

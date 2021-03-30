@@ -17,38 +17,49 @@
 // ==/UserScript==
 
 (function() {
-    var menu_rule = GM_getValue('xiu2_menu_rule');
-    var menu_rule_ID, menu_feedBack_ID;
-    if (menu_rule == null){menu_rule = false; GM_setValue('xiu2_menu_rule', menu_rule)};
+    var menu_ALL = [
+        ['menu_rule', '隐藏版规', '隐藏版规', false]
+    ], menu_ID = [];
+    for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
+        if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
+    }
     registerMenuCommand();
     addStyle();
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        let menu_rule_;
-        if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
-            GM_unregisterMenuCommand(menu_rule_ID);
-            GM_unregisterMenuCommand(menu_feedBack_ID);
-            menu_rule = GM_getValue('xiu2_menu_rule');
+        if (menu_ID.length > menu_ALL.length){ // 如果菜单ID数组多于菜单数组，说明不是首次添加菜单，需要卸载所有脚本菜单
+            for (let i=0;i<menu_ID.length;i++){
+                GM_unregisterMenuCommand(menu_ID[i]);
+            }
         }
-
-        if (menu_rule){menu_rule_ = "√";}else{menu_rule_ = "×";}
-
-        menu_rule_ID = GM_registerMenuCommand(`[ ${menu_rule_} ] 隐藏版规`, function(){menu_switch(menu_rule,'xiu2_menu_rule','隐藏版规')});
-        menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+        for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
+            menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
+            menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+        }
+        menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
     // 菜单开关
     function menu_switch(menu_status, Name, Tips) {
-        if (menu_status){
+        if (menu_status == 'true'){
             GM_setValue(`${Name}`, false);
-            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3000});
+            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }else{
             GM_setValue(`${Name}`, true);
-            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3000});
+            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
+
+    // 返回菜单值
+    function menu_value(menuName) {
+        for (let menu of menu_ALL) {
+            if (menu[0] == menuName) {
+                return menu[3]
+            }
+        }
+    }
 
     function addStyle() {
         let style,
@@ -131,10 +142,9 @@ textarea#fastpostmessage {
     color: #aaa;
 }`,
             style_Add = document.createElement('style');
-        if (menu_rule) {
-            style = style_1 + style_2;
-        }else{
-            style = style_2;
+        style = style_2
+        if (menu_value('menu_rule')) {
+            style += style_1;
         }
         style_Add.innerHTML = style;
         document.head.appendChild(style_Add);
