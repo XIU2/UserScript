@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.2.4
+// @version      1.2.5
 // @author       X.I.U
-// @description  自动签到、自动无缝翻页（全站）、屏蔽导读悬赏贴（最新发表）
+// @description  自动签到、自动无缝翻页、屏蔽导读悬赏贴（最新发表页）
 // @match        *://www.52pojie.cn/*
 // @icon         https://www.52pojie.cn/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -19,6 +19,7 @@
 
 (function() {
     var menu_ALL = [
+        ['menu_autoClockIn', '自动签到', '自动签到', true],
         ['menu_thread_pageLoading', '帖子内自动翻页', '帖子内自动翻页', true],
         ['menu_delateReward', '屏蔽导读悬赏贴（最新发表）', '屏蔽导读悬赏贴', true]
     ], menu_ID = [];
@@ -67,17 +68,24 @@
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
 
-    // 自动翻页规则，scrollDelta 数值越大，滚动条触发点越靠上
+    // 自动翻页规则
+    // type：1 = 脚本实现自动无缝翻页，2 = 网站自带了自动无缝翻页功能，只需要点击下一页按钮即可，这时 nextText 为按钮文本，避免一瞬间加载太多次下一页
+    // HT_insert：1 = 插入元素前面；2 = 插入元素中的最后一个子元素后面
+    // scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页）
     let DBSite = {
         forum: {
             SiteTypeID: 1,
             pager: {
+                type: 2,
+                nextLink: '#autopbn',
+                nextText: '下一页 »',
                 scrollDelta: 766
             }
         },
         thread: {
             SiteTypeID: 2,
             pager: {
+                type: 1,
                 nextLink: '//div[@id="pgt"]//a[contains(text(),"下一页")][@href]',
                 pageElement: 'css;div#postlist > div[id^="post_"]',
                 HT_insert: ['css;div#postlist', 2],
@@ -88,6 +96,7 @@
         guide: {
             SiteTypeID: 3,
             pager: {
+                type: 1,
                 nextLink: '//div[@id="pgt"]//a[contains(text(),"下一页")][@href]',
                 pageElement: 'css;div#threadlist div.bm_c table > tbody[id^="normalthread_"]',
                 HT_insert: ['css;div#threadlist div.bm_c table', 2],
@@ -98,6 +107,7 @@
         collection: {
             SiteTypeID: 4,
             pager: {
+                type: 1,
                 nextLink: '//div[@class="pg"]//a[contains(text(),"下一页")][@href]',
                 pageElement: 'css;div#ct div.bm_c table > tbody',
                 HT_insert: ['css;div#ct div.bm_c table', 2],
@@ -108,6 +118,7 @@
         search: {
             SiteTypeID: 5,
             pager: {
+                type: 1,
                 nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;div#threadlist > ul',
                 HT_insert: ['css;div#threadlist', 2],
@@ -115,15 +126,6 @@
                 scrollDelta: 766
             }
         }
-    };
-
-    // 用于脚本内部判断当前 URL 类型
-    let SiteType = {
-        FORUM: DBSite.forum.SiteTypeID, //           各板块帖子列表
-        THREAD: DBSite.thread.SiteTypeID, //         帖子内
-        GUIDE: DBSite.guide.SiteTypeID, //           导读帖子列表
-        COLLECTION: DBSite.collection.SiteTypeID, // 淘贴列表
-        SEARCH: DBSite.search.SiteTypeID //          搜索结果列表
     };
 
     // URL 匹配正则表达式
@@ -150,12 +152,12 @@
         curSite = DBSite.collection; //      淘贴列表
     }else if(location.pathname === '/search.php'){
         curSite = DBSite.search; //          搜索结果列表
-    }else if(location.href === "https://www.52pojie.cn/home.php?mod=task&do=draw&id=2"){
-        window.opener=null;window.open('','_self');window.close(); // 关闭当前网页标签页
+    /*}else if(location.href === "https://www.52pojie.cn/home.php?mod=task&do=draw&id=2"){
+        window.opener=null;window.open('','_self');window.close(); // 签到完成页面，关闭该标签页*/
     }
     curSite.pageUrl = ""; // 下一页URL
 
-    qianDao(); // 看看有没有签到
+    qianDao(); // 自动签到
     pageLoading(); // 自动翻页
 
 
@@ -167,13 +169,13 @@
                     let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
                     let scrollDelta = curSite.pager.scrollDelta;
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
-                        if (curSite.SiteTypeID === SiteType.FORUM) { // 如果是原创、精品等版块则直接点下一页就行了
-                            let autopbn = document.querySelector('#autopbn');
-                            if (autopbn && autopbn.innerText == "下一页 »"){ // 如果没有在加载时，再去点击，免得一不注意加载几十页
+                        if (curSite.pager.type === 1) {
+                            ShowPager.loadMorePage();
+                        }else{
+                            let autopbn = document.querySelector(curSite.pager.nextLink);
+                            if (autopbn && autopbn.innerText == curSite.pager.nextText){ // 如果正在加载，就不再点击
                                 autopbn.click();
                             }
-                        }else{
-                            ShowPager.loadMorePage();
                         }
                     }
                 }
@@ -183,12 +185,39 @@
 
 
     // 自动签到
+    /*function qianDao() {
+        if (menu_value('menu_autoClockIn')){
+            let qiandao = document.querySelector('#um p:last-child a:first-child');
+            if (qiandao && qiandao.href === "https://www.52pojie.cn/home.php?mod=task&do=apply&id=2"){
+                window.GM_openInTab(qiandao.href, {active: false,insert: true,setParent: true}) // 后台打开签到地址
+                qiandao.querySelector('.qq_bind').setAttribute('src','https://www.52pojie.cn/static/image/common/wbs.png') // 修改 [打卡签到] 图标为 [签到完毕]
+                qiandao.href = "#" // 修改 URL 为 #
+            }
+        }
+    }*/
+
+
+    // 自动签到（后台）
     function qianDao() {
-        let qiandao = document.querySelector('#um p:last-child a:first-child');
-        if (qiandao && qiandao.href === "https://www.52pojie.cn/home.php?mod=task&do=apply&id=2"){
-            window.GM_openInTab(qiandao.href, {active: false,insert: true,setParent: true}) // 后台打开签到地址
-            qiandao.querySelector('.qq_bind').setAttribute('src','https://www.52pojie.cn/static/image/common/wbs.png') // 修改 [打卡签到] 图标为 [签到完毕]
-            qiandao.href = "#" // 修改 URL 为 #
+        if (menu_value('menu_autoClockIn')) {
+            let qiandao = document.querySelector('#um a[href="home.php?mod=task&do=apply&id=2"]');
+            if (qiandao){
+                GM_xmlhttpRequest({
+                    url: qiandao.href,
+                    method: "GET",
+                    timeout: 5000,
+                    onload: function (response) {
+                        let html = ShowPager.createDocumentByString(response.responseText);
+                        html = html.querySelector('#messagetext p')
+                        if (html && html.innerText.indexOf("任务已完成") > -1) {
+                            qiandao.querySelector('.qq_bind').setAttribute('src','https://www.52pojie.cn/static/image/common/wbs.png') // 修改 [打卡签到] 图标为 [签到完毕]
+                            qiandao.href = "#" // 修改 URL 为 #
+                        }else{
+                            GM_notification({text: '自动签到失败！请联系作者解决！', title: '吾爱破解论坛增强', timeout: 3000});
+                        }
+                    }
+                });
+            }
         }
     }
 
