@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.3.2
+// @version      1.3.3
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -67,6 +67,212 @@ function menu_value(menuName) {
         }
     }
 }
+
+
+// 一键收起回答
+function collapsedAnswer(){
+    if(menu_value('menu_collapsedAnswer')){
+        let button_Add = `<button id="collapsed-button" data-tooltip="收起回答" data-tooltip-position="left" data-tooltip-will-hide-on-click="false" aria-label="收起回答" type="button" class="Button CornerButton Button--plain"><svg class="ContentItem-arrowIcon is-active" aria-label="收起回答" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M16.036 19.59a1 1 0 0 1-.997.995H9.032a.996.996 0 0 1-.997-.996v-7.005H5.03c-1.1 0-1.36-.633-.578-1.416L11.33 4.29a1.003 1.003 0 0 1 1.412 0l6.878 6.88c.782.78.523 1.415-.58 1.415h-3.004v7.005z"></path></svg></button>`
+        let style_Add = document.createElement('style');
+        style_Add.innerHTML = '.CornerButton{margin-bottom:8px !important;}.CornerButtons{bottom:45px !important;}';
+        document.head.appendChild(style_Add);
+        $(".CornerAnimayedFlex").prepend(button_Add);
+        $("#collapsed-button").on("click", function () {
+            document.querySelectorAll('.ContentItem-rightButton').forEach(function (el) {
+                if (el.hasAttribute('data-zop-retract-question')) {
+                    el.click()
+                }
+            });
+        })
+    }
+}
+
+
+// 收起当前回答、评论（监听点击事件，点击网页两侧空白处）
+function collapsedNowAnswer(selectors){
+    backToTop(selectors)
+    if(menu_value('menu_collapsedNowAnswer')){
+        document.querySelector(selectors).onclick = function(event){
+            if (event.target==this) {
+                let rightButton = document.querySelector('.ContentItem-actions.Sticky.RichContent-actions.is-fixed.is-bottom')
+                if(rightButton) { // 悬浮的 [收起回答]（此时正在浏览回答内容 [头部区域 + 中间区域]）
+                    // 固定的 [收起评论]（先看看是否展开评论）
+                    let commentCollapseButton = rightButton.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel')
+                    if(commentCollapseButton && commentCollapseButton.innerText.indexOf("收起评论") > -1) {
+                        commentCollapseButton.click();
+                    }
+                    // 再去收起回答
+                    rightButton = rightButton.querySelector('.ContentItem-rightButton')
+                    if(rightButton && rightButton.hasAttribute('data-zop-retract-question')) {
+                        rightButton.click();
+                    }
+                }else{ // 固定的 [收起回答]（此时正在浏览回答内容 [尾部区域]）
+                    for (let el of document.querySelectorAll('.ContentItem-rightButton')) {
+                        if (el.hasAttribute('data-zop-retract-question')) {
+                            if (isElementInViewport(el)) {
+                                // 固定的 [收起评论]（先看看是否展开评论）
+                                let commentCollapseButton = el.parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel')
+                                if(commentCollapseButton && commentCollapseButton.innerText.indexOf("收起评论") > -1) {
+                                    commentCollapseButton.click();
+                                }
+                                el.click() // 再去收起回答
+                                break
+                            }
+                        }
+                    }
+                }
+
+                var commentCollapseButton_ = false;
+                // 悬浮的 [收起评论]（此时正在浏览评论内容 [中间区域]）
+                let commentCollapseButton = document.querySelector('.CommentCollapseButton')
+                if(commentCollapseButton) {
+                    commentCollapseButton.click();
+                }else{ // 固定的 [收起评论]（此时正在浏览评论内容 [头部区域]）
+                    for (let el of document.querySelectorAll('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel')) {
+                        if (el.innerText.indexOf("收起评论") > -1) {
+                            if (isElementInViewport(el)) {
+                                el.click()
+                                commentCollapseButton_ = true // 如果找到并点击了，就没必要执行下面的代码了（可视区域中没有 [收起评论] 时）
+                                break
+                            }
+                        }
+                    }
+                    if(commentCollapseButton_ == false){ // 可视区域中没有 [收起评论] 时（此时正在浏览评论内容 [头部区域] + [尾部区域](不上不下的，既看不到固定的 [收起评论] 又看不到悬浮的 [收起评论])），需要判断可视区域中是否存在评论元素
+                        for (let el of document.querySelectorAll('.NestComment')) {
+                            if (isElementInViewport(el)) {
+                                let commentCollapseButton = el.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel')
+                                if (commentCollapseButton.innerText.indexOf("收起评论") > -1) {
+                                    commentCollapseButton.click()
+                                    break
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// 回到顶部（监听点击事件，鼠标右键点击网页两侧空白处）
+function backToTop(selectors){
+    if(menu_value('menu_backToTop')){
+        document.querySelector(selectors).oncontextmenu = function(event){
+            if (event.target==this) {
+                event.preventDefault();
+                window.scrollTo(0,0)
+            }
+        }
+    }
+}
+
+
+//获取元素是否在可视区域
+function isElementInViewport(el) {
+    let rect = el.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <=
+        (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <=
+        (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
+
+
+var postNum;
+// 区分问题文章
+function addTypeTips() {
+    if(menu_value('menu_typeTips')){
+        // URL 匹配正则表达式
+        let patt_zhuanlan = /zhuanlan.zhihu.com/,
+            patt_question = /question\/\d+/,
+            patt_question_answer = /answer\/\d+/,
+            patt_video = /\/zvideo\//,
+            patt_tip = /zhihu_e_tips/
+        let postList = document.querySelectorAll('h2.ContentItem-title a');
+        postNum = document.querySelectorAll('small.zhihu_e_tips');
+        //console.log(`${postList.length} ${postNum.length}`)
+        if (postList.length > postNum.length){
+            for(let num = postNum.length;num<postList.length;num++){
+                if (!patt_tip.test(postList[num].innerHTML)){ //               判断是否已添加
+                    if (patt_zhuanlan.test(postList[num].href)){ //            如果是文章
+                        postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #2196F3;display: inline-block;height: 18px;">文章</small> ` + postList[num].innerHTML
+                    }else if (patt_question.test(postList[num].href)){ //      如果是问题
+                        if (patt_question_answer.test(postList[num].href)){ // 如果是指向回答的问题（而非指向纯问题的链接）
+                            postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #f68b83;display: inline-block;height: 18px;">问题</small> ` + postList[num].innerHTML
+                        }else{
+                            postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #ff5a4e;display: inline-block;height: 18px;">问题</small> ` + postList[num].innerHTML
+                        }
+                    }else if (patt_video.test(postList[num].href)){ //         如果是视频
+                        postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #00BCD4;display: inline-block;height: 18px;">视频</small> ` + postList[num].innerHTML
+                    }
+                    //postNum += 1;
+                }
+            }
+        }
+    }
+}
+
+
+// 监听 网页插入元素 事件
+function addEventListener_DOMNodeInserted() {
+    // 知乎免登录，来自：https://greasyfork.org/zh-CN/scripts/417126
+    let removeLoginModal = e => {
+        if (e.target.innerHTML && e.target.getElementsByClassName('Modal-wrapper').length > 0) {
+            if (e.target.getElementsByClassName('Modal-wrapper')[0].querySelector('.signFlowModal')){
+                e.target.getElementsByClassName('Modal-wrapper')[0].remove();
+            }
+            setTimeout(() => {document.documentElement.style.overflowY = 'scroll';}, 0);
+        }
+    }
+
+    // 收起当前评论（监听点击事件，点击网页两侧空白处）
+    let collapseNowComment = e => {
+        if (e.target.innerHTML && e.target.getElementsByClassName('Modal-wrapper Modal-enter').length > 0) {
+            document.getElementsByClassName('Modal-backdrop')[0].onclick = function(event){
+                if (event.target==this) {
+                    let closeButton = document.getElementsByClassName('Modal-closeButton')[0]
+                    if(closeButton) {
+                        closeButton.click();
+                    }
+                }
+            }
+        }
+    }
+
+    if (document.querySelector('button.AppHeader-login')){ // 未登录时才会监听并移除登录弹窗
+        document.addEventListener('DOMNodeInserted', removeLoginModal);
+        document.querySelector('button.AppHeader-login').onclick=function(){location.href='https://www.zhihu.com/signin';} // [登录]按钮跳转至登录页面
+        document.querySelector('.AppHeader-profile button.Button--primary').onclick=function(){location.href='https://www.zhihu.com/signin';} // [加入知乎]按钮跳转至注册页面（实际上是同一个页面）
+    } else if(window.location.href.indexOf("zhuanlan") > -1){
+        document.addEventListener('DOMNodeInserted', removeLoginModal);
+    }
+    document.addEventListener('DOMNodeInserted', collapseNowComment); // 收起当前评论（监听点击事件，点击网页两侧空白处）
+}
+
+
+// 监听 XMLHttpRequest 事件
+function EventXMLHttpRequest() {
+    var _send = window.XMLHttpRequest.prototype.send
+    function sendReplacement(data) {
+        //console.log(`111111`);
+        addTypeTips();
+        return _send.apply(this, arguments);
+    }
+    window.XMLHttpRequest.prototype.send = sendReplacement;
+}
+
+/*(function (open) {
+    XMLHttpRequest.prototype.open = function () {
+        this.addEventListener("readystatechange", function () {
+                //console.log(this.responseURL);
+        }, false);
+        open.apply(this, arguments);
+    };
+})(XMLHttpRequest.prototype.open);*/
 
 
 // 置顶显示时间 - 首页，来自：https://greasyfork.org/scripts/402808
@@ -339,6 +545,7 @@ function directLink () {
     $(".TopstoryItem--advertCard").hide();
 }
 
+
 // 默认高清原图，来自：https://greasyfork.org/scripts/402808
 function originalPic(){
     $("img").each(function(){
@@ -351,198 +558,9 @@ function originalPic(){
     $(".Modal-inner").css({"overflow-y":"hidden"})
 }
 
-// 一键收起回答
-function collapsedAnswer(){
-    if(menu_value('menu_collapsedAnswer')){
-        let button_Add = `<button id="collapsed-button" data-tooltip="收起回答" data-tooltip-position="left" data-tooltip-will-hide-on-click="false" aria-label="收起回答" type="button" class="Button CornerButton Button--plain"><svg class="ContentItem-arrowIcon is-active" aria-label="收起回答" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M16.036 19.59a1 1 0 0 1-.997.995H9.032a.996.996 0 0 1-.997-.996v-7.005H5.03c-1.1 0-1.36-.633-.578-1.416L11.33 4.29a1.003 1.003 0 0 1 1.412 0l6.878 6.88c.782.78.523 1.415-.58 1.415h-3.004v7.005z"></path></svg></button>`
-        let style_Add = document.createElement('style');
-        style_Add.innerHTML = '.CornerButton{margin-bottom:8px !important;}.CornerButtons{bottom:45px !important;}';
-        document.head.appendChild(style_Add);
-        $(".CornerAnimayedFlex").prepend(button_Add);
-        $("#collapsed-button").on("click", function () {
-            document.querySelectorAll('.ContentItem-rightButton').forEach(function (el) {
-                if (el.hasAttribute('data-zop-retract-question')) {
-                    el.click()
-                }
-            });
-        })
-    }
-}
-
-
-// 收起当前回答、评论（监听点击事件，点击网页两侧空白处）
-function collapsedNowAnswer(selectors){
-    backToTop(selectors)
-    if(menu_value('menu_collapsedNowAnswer')){
-        document.querySelector(selectors).onclick = function(event){
-            if (event.target==this) {
-                let rightButton = document.querySelector('.ContentItem-actions.Sticky.RichContent-actions.is-fixed.is-bottom')
-                if(rightButton) { // 悬浮的 [收起回答]
-                    // 固定的 [收起评论]
-                    let commentCollapseButton = rightButton.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel')
-                    if(commentCollapseButton && commentCollapseButton.innerText.indexOf("收起评论") > -1) {
-                        commentCollapseButton.click();
-                    }
-                    // 悬浮的 [收起回答]
-                    rightButton = rightButton.querySelector('.ContentItem-rightButton')
-                    if(rightButton && rightButton.hasAttribute('data-zop-retract-question')) {
-                        rightButton.click();
-                    }
-                }else{ // 固定的 [收起回答]
-                    document.querySelectorAll('.ContentItem-rightButton').forEach(function (el) {
-                        if (el.hasAttribute('data-zop-retract-question')) {
-                            if (isElementInViewport(el)) {
-                                // 固定的 [收起评论]
-                                let commentCollapseButton = el.parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel')
-                                if(commentCollapseButton && commentCollapseButton.innerText.indexOf("收起评论") > -1) {
-                                    commentCollapseButton.click();
-                                }
-                                el.click()
-                            }
-                        }
-                    })
-                }
-
-                // 悬浮的 [收起评论]
-                let commentCollapseButton = document.querySelector('.CommentCollapseButton')
-                if(commentCollapseButton) {
-                    commentCollapseButton.click();
-                }else{ // 固定的 [收起评论]（针对短篇没有收起按钮的回答）
-                    document.querySelectorAll('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel').forEach(function (el) {
-                        if (el.innerText.indexOf("收起评论") > -1) {
-                            if (isElementInViewport(el)) {
-                                el.click()
-                            }
-                        }
-                    })
-                }
-            }
-        }
-    }
-}
-
-
-// 回到顶部（监听点击事件，鼠标右键点击网页两侧空白处）
-function backToTop(selectors){
-    if(menu_value('menu_backToTop')){
-        document.querySelector(selectors).oncontextmenu = function(event){
-            if (event.target==this) {
-                event.preventDefault();
-                window.scrollTo(0,0)
-            }
-        }
-    }
-}
-
-
-//获取元素是否在可视区域
-function isElementInViewport(el) {
-    let rect = el.getBoundingClientRect();
-    return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <=
-        (window.innerWidth || document.documentElement.clientWidth)
-    );
-}
-
-
-var postNum;
-// 区分问题文章
-function addTypeTips() {
-    if(menu_value('menu_typeTips')){
-        // URL 匹配正则表达式
-        let patt_zhuanlan = /zhuanlan.zhihu.com/,
-            patt_question = /question\/\d+/,
-            patt_question_answer = /answer\/\d+/,
-            patt_video = /\/zvideo\//,
-            patt_tip = /zhihu_e_tips/
-        let postList = document.querySelectorAll('h2.ContentItem-title a');
-        postNum = document.querySelectorAll('small.zhihu_e_tips');
-        //console.log(`${postList.length} ${postNum.length}`)
-        if (postList.length > postNum.length){
-            for(let num = postNum.length;num<postList.length;num++){
-                if (!patt_tip.test(postList[num].innerHTML)){ //               判断是否已添加
-                    if (patt_zhuanlan.test(postList[num].href)){ //            如果是文章
-                        postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #2196F3;display: inline-block;height: 18px;">文章</small> ` + postList[num].innerHTML
-                    }else if (patt_question.test(postList[num].href)){ //      如果是问题
-                        if (patt_question_answer.test(postList[num].href)){ // 如果是指向回答的问题（而非指向纯问题的链接）
-                            postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #f68b83;display: inline-block;height: 18px;">问题</small> ` + postList[num].innerHTML
-                        }else{
-                            postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #ff5a4e;display: inline-block;height: 18px;">问题</small> ` + postList[num].innerHTML
-                        }
-                    }else if (patt_video.test(postList[num].href)){ //         如果是视频
-                        postList[num].innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #00BCD4;display: inline-block;height: 18px;">视频</small> ` + postList[num].innerHTML
-                    }
-                    //postNum += 1;
-                }
-            }
-        }
-    }
-}
-
-// 监听 网页插入元素 事件
-function addEventListener_DOMNodeInserted() {
-    // 知乎免登录，来自：https://greasyfork.org/zh-CN/scripts/417126
-    let removeLoginModal = e => {
-        if (e.target.innerHTML && e.target.getElementsByClassName('Modal-wrapper').length > 0) {
-            if (e.target.getElementsByClassName('Modal-wrapper')[0].querySelector('.signFlowModal')){
-                e.target.getElementsByClassName('Modal-wrapper')[0].remove();
-            }
-            setTimeout(() => {document.documentElement.style.overflowY = 'scroll';}, 0);
-        }
-    }
-
-    // 收起当前评论（监听点击事件，点击网页两侧空白处）
-    let collapseNowComment = e => {
-        if (e.target.innerHTML && e.target.getElementsByClassName('Modal-wrapper Modal-enter').length > 0) {
-            document.getElementsByClassName('Modal-backdrop')[0].onclick = function(event){
-                if (event.target==this) {
-                    let closeButton = document.getElementsByClassName('Modal-closeButton')[0]
-                    if(closeButton) {
-                        closeButton.click();
-                    }
-                }
-            }
-        }
-    }
-
-    if (document.querySelector('button.AppHeader-login')){ // 未登录时才会监听并移除登录弹窗
-        document.addEventListener('DOMNodeInserted', removeLoginModal);
-        document.querySelector('button.AppHeader-login').onclick=function(){location.href='https://www.zhihu.com/signin';} // [登录]按钮跳转至登录页面
-        document.querySelector('.AppHeader-profile button.Button--primary').onclick=function(){location.href='https://www.zhihu.com/signin';} // [加入知乎]按钮跳转至注册页面（实际上是同一个页面）
-    } else if(window.location.href.indexOf("zhuanlan") > -1){
-        document.addEventListener('DOMNodeInserted', removeLoginModal);
-    }
-    document.addEventListener('DOMNodeInserted', collapseNowComment); // 收起当前评论（监听点击事件，点击网页两侧空白处）
-}
-
-
-// 监听 XMLHttpRequest 事件
-function EventXMLHttpRequest() {
-    var _send = window.XMLHttpRequest.prototype.send
-    function sendReplacement(data) {
-        //console.log(`111111`);
-        addTypeTips();
-        return _send.apply(this, arguments);
-    }
-    window.XMLHttpRequest.prototype.send = sendReplacement;
-}
-
-/*(function (open) {
-    XMLHttpRequest.prototype.open = function () {
-        this.addEventListener("readystatechange", function () {
-                //console.log(this.responseURL);
-        }, false);
-        open.apply(this, arguments);
-    };
-})(XMLHttpRequest.prototype.open);*/
 
 (function() {
     addEventListener_DOMNodeInserted(); // 监听 网页插入元素 事件
-
 
     // 默认折叠邀请，来自：https://greasyfork.org/scripts/402808
     let timer=setInterval(function(){
