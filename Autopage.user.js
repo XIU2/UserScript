@@ -1,19 +1,20 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.1.6
+// @version      1.1.7
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、三国杀论坛、PubMed
+// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、AlphaCoders、三国杀论坛、PubMed
 // @match        *://www.423down.com/*
 // @exclude      *://www.423down.com/*.html
 // @match        *://apphot.cc/*
 // @exclude      *://apphot.cc/*.html
+// @match        *://iao.su/*
 // @match        *://www.appinn.com/
 // @match        *://www.appinn.com/*/*/
 // @match        *://www.appinn.com/?s=*
-// @match        *://pubmed.ncbi.nlm.nih.gov/?term=*
-// @match        *://club.sanguosha.com/*
 // @match        *://www.iplaysoft.com/*
-// @match        *://iao.su/*
+// @match        *://*.alphacoders.com/*
+// @match        *://club.sanguosha.com/*
+// @match        *://pubmed.ncbi.nlm.nih.gov/?term=*
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
@@ -141,6 +142,17 @@
                 nextText: 'Show more',
                 scrollDelta: 1500
             }
+        },
+        wall_alphacoders: {
+            SiteTypeID: 11,
+            pager: {
+                type: 1,
+                nextLink: '//a[@id="next_page"][@href]',
+                pageElement: 'css;.thumb-container-big, .avatar-thumb, .thumb-element',
+                HT_insert: ['css;.thumb-container-big:nth-last-child(1), .avatar-thumb:nth-last-child(1), .thumb-element:nth-last-child(1)', 4],
+                replaceE: '//div[@class="hidden-xs hidden-sm"]/..',
+                scrollDelta: 1000
+            }
         }
     };
 
@@ -152,11 +164,23 @@
         case "apphot.cc":
             curSite = DBSite.apphot_postslist;
             break;
+        case "iao.su":
+            curSite = DBSite.iao_su_postslist;
+            break;
         case "www.appinn.com":
             curSite = DBSite.appinn_postslist;
             break;
-        case "pubmed.ncbi.nlm.nih.gov":
-            curSite = DBSite.pubmed_postslist;
+        case "www.iplaysoft.com":
+            if(location.pathname.indexOf(".html") > -1 || location.pathname.indexOf("/p/") > -1){ // 文章内
+                curSite = DBSite.iplaysoft_postcomments;
+            }else{ // 其他页面
+                curSite = DBSite.iplaysoft_postslist;
+            }
+            break;
+        case "wall.alphacoders.com":
+        case "avatars.alphacoders.com":
+        case "mobile.alphacoders.com":
+            curSite = DBSite.wall_alphacoders;
             break;
         case "club.sanguosha.com":
             if(location.pathname.indexOf("forum") > -1){ //        各版块帖子列表
@@ -168,15 +192,8 @@
                 curSite = DBSite.sanguosha_search;
             }
             break;
-        case "www.iplaysoft.com":
-            if(location.pathname.indexOf(".html") > -1 || location.pathname.indexOf("/p/") > -1){ // 文章内
-                curSite = DBSite.iplaysoft_postcomments;
-            }else{ // 其他页面
-                curSite = DBSite.iplaysoft_postslist;
-            }
-            break;
-        case "iao.su":
-            curSite = DBSite.iao_su_postslist;
+        case "pubmed.ncbi.nlm.nih.gov":
+            curSite = DBSite.pubmed_postslist;
             break;
     }
     curSite.pageUrl = ""; // 下一页URL
