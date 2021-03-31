@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         3DM论坛增强
-// @version      1.0.7
+// @version      1.0.8
 // @author       X.I.U
-// @description  自动回复、自动无缝翻页、清理置顶帖子
+// @description  自动回复、自动无缝翻页、清理置顶帖子、自动滚动至隐藏内容
 // @match        *://bbs.3dmgame.com/*
 // @icon         https://www.3dmgame.com/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -19,9 +19,9 @@
 
 (function() {
     var menu_ALL = [
-        ['menu_thread_pageLoading', '自动回复', '自动回复', true],
-        ['menu_autoReply', '清理置顶帖子', '清理置顶帖子', true],
-        ['menu_cleanTopPost', '帖子内自动翻页', '帖子内自动翻页', true],
+        ['menu_autoReply', '自动回复', '自动回复', true],
+        ['menu_cleanTopPost', '清理置顶帖子', '清理置顶帖子', true],
+        ['menu_thread_pageLoading', '帖子内自动翻页', '帖子内自动翻页', true],
         ['menu_scrollToShowhide', '自动滚动至隐藏内容', '自动滚动至隐藏内容', true]
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
