@@ -2,7 +2,7 @@
 // @name         自动无缝翻页
 // @version      1.1.6
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：423Down、Apphot、小众软件、PubMed、异次元软件、不死鸟、三国杀论坛
+// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、三国杀论坛、PubMed
 // @match        *://www.423down.com/*
 // @exclude      *://www.423down.com/*.html
 // @match        *://apphot.cc/*
@@ -25,7 +25,7 @@
 
 (function() {
     // 注册脚本菜单
-    GM_registerMenuCommand('反馈 & 申请添加支持', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+    GM_registerMenuCommand('反馈 & 欢迎申请支持', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
 
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
@@ -58,8 +58,20 @@
                 scrollDelta: 1500
             }
         },
-        appinn_postslist: {
+        iao_su_postslist: {
             SiteTypeID: 3,
+            pager: {
+                type: 1,
+                nextLink: '//li[@class="btn btn-primary next"]//a[@href]',
+                pageElement: 'css;#index > article, #archive > article',
+                HT_insert: ['css;ol.page-navigator', 1],
+                replaceE: 'css;ol.page-navigator',
+                scrollDelta: 800,
+                beforeFunction: iao_su_postslist_beforeFunction
+            }
+        },
+        appinn_postslist: {
+            SiteTypeID: 4,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="next page-numbers"][@href]',
@@ -69,48 +81,8 @@
                 scrollDelta: 1500
             }
         },
-        pubmed_postslist: {
-            SiteTypeID: 4,
-            pager: {
-                type: 2,
-                nextLink: 'button.load-button.next-page',
-                nextText: 'Show more',
-                scrollDelta: 1500
-            }
-        },
-        sanguosha_forum: {
-            SiteTypeID: 5,
-            pager: {
-                type: 2,
-                nextLink: '#autopbn',
-                nextText: '下一页 »',
-                scrollDelta: 800
-            }
-        },
-        sanguosha_thread: {
-            SiteTypeID: 6,
-            pager: {
-                type: 1,
-                nextLink: '//a[@class="nxt"][@href]',
-                pageElement: 'css;div#postlist > div[id^="post_"]',
-                HT_insert: ['css;div#postlist', 3],
-                replaceE: 'css;div.pg',
-                scrollDelta: 800
-            }
-        },
-        sanguosha_search: {
-            SiteTypeID: 7,
-            pager: {
-                type: 1,
-                nextLink: '//a[@class="nxt"][@href]',
-                pageElement: 'css;div#threadlist > ul',
-                HT_insert: ['css;div#threadlist', 3],
-                replaceE: 'css;div.pg',
-                scrollDelta: 800
-            }
-        },
         iplaysoft_postslist: {
-            SiteTypeID: 8,
+            SiteTypeID: 5,
             pager: {
                 type: 1,
                 nextLink: '//div[@class="pagenavi"]//a[@title="下一页"][@href]',
@@ -122,7 +94,7 @@
             }
         },
         iplaysoft_postcomments: {
-            SiteTypeID: 9,
+            SiteTypeID: 6,
             pager: {
                 type: 2,
                 nextLink: '#loadHistoryComments',
@@ -130,18 +102,46 @@
                 scrollDelta: 1200
             }
         },
-        iao_su_postslist: {
-            SiteTypeID: 10,
+        sanguosha_forum: {
+            SiteTypeID: 7,
             pager: {
-                type: 1,
-                nextLink: '//li[@class="btn btn-primary next"]//a[@href]',
-                pageElement: 'css;#index > article, #archive > article',
-                HT_insert: ['css;ol.page-navigator', 1],
-                replaceE: 'css;ol.page-navigator',
-                scrollDelta: 1000,
-                beforeFunction: iao_su_postslist_beforeFunction
+                type: 2,
+                nextLink: '#autopbn',
+                nextText: '下一页 »',
+                scrollDelta: 800
             }
         },
+        sanguosha_thread: {
+            SiteTypeID: 8,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;div#postlist > div[id^="post_"]',
+                HT_insert: ['css;div#postlist', 3],
+                replaceE: 'css;div.pg',
+                scrollDelta: 800
+            }
+        },
+        sanguosha_search: {
+            SiteTypeID: 9,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;div#threadlist > ul',
+                HT_insert: ['css;div#threadlist', 3],
+                replaceE: 'css;div.pg',
+                scrollDelta: 800
+            }
+        },
+        pubmed_postslist: {
+            SiteTypeID: 10,
+            pager: {
+                type: 2,
+                nextLink: 'button.load-button.next-page',
+                nextText: 'Show more',
+                scrollDelta: 1500
+            }
+        }
     };
 
 
