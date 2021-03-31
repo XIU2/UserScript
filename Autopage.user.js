@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.1.5
+// @version      1.1.6
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：423Down、Apphot(原烈火汉化)、小众软件、PubMed、三国杀论坛
+// @description  自动无缝翻页，目前支持：423Down、Apphot、小众软件、PubMed、异次元软件、不死鸟、三国杀论坛
 // @match        *://www.423down.com/*
 // @exclude      *://www.423down.com/*.html
 // @match        *://apphot.cc/*
@@ -12,6 +12,8 @@
 // @match        *://www.appinn.com/?s=*
 // @match        *://pubmed.ncbi.nlm.nih.gov/?term=*
 // @match        *://club.sanguosha.com/*
+// @match        *://www.iplaysoft.com/*
+// @match        *://iao.su/*
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
@@ -30,8 +32,9 @@
 
     // 自动翻页规则
     // type：1 = 脚本实现自动无缝翻页，2 = 网站自带了自动无缝翻页功能，只需要点击下一页按钮即可，这时 nextText 为按钮文本，避免一瞬间加载太多次下一页
-    // HT_insert：1 = 插入元素前面；2 = 插入元素中的最后一个子元素后面
+    // HT_insert：1 = 插入该元素本身的前面；2 = 插入该元素当中，第一个子元素前面；3 = 插入该元素当中，最后一个子元素后面；4 = 插入该元素本身的后面；
     // scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页）
+    // beforeFunction = 插入前执行函数；afterFunction = 插入后执行函数
     let DBSite = {
         _423down_postslist: {
             SiteTypeID: 1,
@@ -39,7 +42,7 @@
                 type: 1,
                 nextLink: '//div[@class="paging"]//a[contains(text(),"下一页")][@href]',
                 pageElement: 'css;div.content-wrap ul.excerpt > li',
-                HT_insert: ['css;div.content-wrap ul.excerpt', 2],
+                HT_insert: ['css;div.content-wrap ul.excerpt', 3],
                 replaceE: 'css;div.paging',
                 scrollDelta: 1500
             }
@@ -90,7 +93,7 @@
                 type: 1,
                 nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;div#postlist > div[id^="post_"]',
-                HT_insert: ['css;div#postlist', 2],
+                HT_insert: ['css;div#postlist', 3],
                 replaceE: 'css;div.pg',
                 scrollDelta: 800
             }
@@ -101,11 +104,44 @@
                 type: 1,
                 nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;div#threadlist > ul',
-                HT_insert: ['css;div#threadlist', 2],
+                HT_insert: ['css;div#threadlist', 3],
                 replaceE: 'css;div.pg',
                 scrollDelta: 800
             }
-        }
+        },
+        iplaysoft_postslist: {
+            SiteTypeID: 8,
+            pager: {
+                type: 1,
+                nextLink: '//div[@class="pagenavi"]//a[@title="下一页"][@href]',
+                pageElement: 'css;#postlist > div.entry',
+                HT_insert: ['css;#postlist > .pagenavi-button', 1],
+                replaceE: 'css;.pagenavi-button, .pagenavi',
+                scrollDelta: 1200,
+                beforeFunction: iplaysoft_postslist_beforeFunction
+            }
+        },
+        iplaysoft_postcomments: {
+            SiteTypeID: 9,
+            pager: {
+                type: 2,
+                nextLink: '#loadHistoryComments',
+                nextText: '展开后面',
+                scrollDelta: 1200
+            }
+        },
+        iao_su_postslist: {
+            SiteTypeID: 10,
+            pager: {
+                type: 1,
+                nextLink: '//li[@class="btn btn-primary next"]//a[@href]',
+                pageElement: 'css;#index > article, #archive > article',
+                HT_insert: ['css;ol.page-navigator', 1],
+                replaceE: 'css;ol.page-navigator',
+                scrollDelta: 1000,
+                beforeFunction: iao_su_postslist_beforeFunction
+            }
+        },
     };
 
 
@@ -132,6 +168,16 @@
                 curSite = DBSite.sanguosha_search;
             }
             break;
+        case "www.iplaysoft.com":
+            if(location.pathname.indexOf(".html") > -1 || location.pathname.indexOf("/p/") > -1){ // 文章内
+                curSite = DBSite.iplaysoft_postcomments;
+            }else{ // 其他页面
+                curSite = DBSite.iplaysoft_postslist;
+            }
+            break;
+        case "iao.su":
+            curSite = DBSite.iao_su_postslist;
+            break;
     }
     curSite.pageUrl = ""; // 下一页URL
     pageLoading(); // 自动无缝翻页
@@ -143,15 +189,18 @@
             windowScroll(function (direction, e) {
                 if (direction === "down") { // 下滑才准备翻页
                     let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-                    //console.log(document.documentElement.scrollHeight)
                     let scrollDelta = curSite.pager.scrollDelta;
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
                         if (curSite.pager.type === 1) {
                             ShowPager.loadMorePage();
                         }else{
                             let autopbn = document.querySelector(curSite.pager.nextLink);
-                            if (autopbn && autopbn.innerText == curSite.pager.nextText){ // 如果正在加载，就不再点击
-                                autopbn.click();
+                            if (autopbn){ // 如果正在加载，就不再点击
+                                if (!curSite.pager.nextText){ // 如果没有指定 nextText 就直接点击
+                                    autopbn.click();
+                                }else if (autopbn.innerText.indexOf(curSite.pager.nextText) > -1){ // 如果指定了 nextText 就需要判断后再点击（避免已经在加载了，还重复点击）
+                                    autopbn.click();
+                                }
                             }
                         }
                     }
@@ -166,6 +215,32 @@
         let style_hidePgbtn = document.createElement('style');
         style_hidePgbtn.innerHTML = `.pgbtn {display: none;}`;
         document.head.appendChild(style_hidePgbtn);
+    }
+
+
+    // iplaysoft 的插入前函数
+    function iplaysoft_postslist_beforeFunction(pageElems) {
+        pageElems.forEach(function (one) {
+            let now = one.querySelector("img.lazyload")
+            if (now && !now.getAttribute('src')) {
+                now.setAttribute("src",now.getAttribute('data-src'))
+                now.setAttribute("srcset",now.getAttribute('data-src'))
+                now.setAttribute("class","lazyloaded")
+            }
+        });
+        return pageElems
+    }
+
+
+    // iao.su 的插入前函数
+    function iao_su_postslist_beforeFunction(pageElems) {
+        pageElems.forEach(function (one) {
+            let now = one.getElementsByClassName("post-card")[0]
+            if (now) {
+                now.getElementsByClassName("blog-background")[0].style.backgroundImage = 'url("' + RegExp("(?<=loadBannerDirect\\(').*(?=', '',)").exec(now.getElementsByTagName("script")[0].innerText)[0]; + '")';
+            }
+        });
+        return pageElems
     }
 
 
@@ -226,9 +301,9 @@
             if (curSite.pager) {
                 let curPageEle = getElementByXpath(curSite.pager.nextLink);
                 var url = this.getFullHref(curPageEle);
-                //console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
+                console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
                 if(url === '') return;
-                if(curSite.pageUrl === url) return;// 不会重复加载相同的页面
+                if(curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
                 // 读取下一页的数据
                 curSite.pager.startFilter && curSite.pager.startFilter();
@@ -243,8 +318,24 @@
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody);
                             let toElement = getAllElements(curSite.pager.HT_insert[0])[0];
                             if (pageElems.length >= 0) {
-                                let addTo = "beforeend";
-                                if (curSite.pager.HT_insert[1] == 1) addTo = "beforebegin";
+                                // 如果有插入前函数就执行函数
+                                if (curSite.pager.beforeFunction)pageElems = curSite.pager.beforeFunction(pageElems);
+                                // 插入位置
+                                let addTo;
+                                switch (curSite.pager.HT_insert[1]) {
+                                    case 1:
+                                        addTo = "beforebegin"
+                                        break;
+                                    case 2:
+                                        addTo = "afterbegin"
+                                        break;
+                                    case 3:
+                                        addTo = "beforeend"
+                                        break;
+                                    case 4:
+                                        addTo = "afterend"
+                                        break;
+                                }
                                 // 插入新页面元素
                                 pageElems.forEach(function (one) {
                                     toElement.insertAdjacentElement(addTo, one);
@@ -261,6 +352,8 @@
                                 } catch (e) {
                                     console.log(e);
                                 }
+                                // 如果有插入后函数就执行函数
+                                if (curSite.pager.afterFunction)curSite.pager.afterFunction();
                             }
                         } catch (e) {
                             console.log(e);
