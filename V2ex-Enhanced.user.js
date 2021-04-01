@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.0.3
+// @version      1.0.4
 // @author       X.I.U
-// @description  自动签到、自动无缝翻页、回到顶部（右键点击两侧空白处）
+// @description  自动签到、自动无缝翻页、回到顶部（右键点击两侧空白处）、标签页伪装为 Github（摸鱼）
 // @match        *://v2ex.com/*
 // @match        *://*.v2ex.com/*
 // @icon         https://www.v2ex.com/static/favicon.ico
@@ -23,7 +23,8 @@
         ['menu_autoClockIn', '自动签到', '自动签到', true],
         ['menu_pageLoading', '自动无缝翻页', '自动无缝翻页', true],
         ['menu_pageLoading_reply', '帖子内自动翻页', '帖子内自动翻页', false],
-        ['menu_backToTop', '回到顶部（右键点击两侧空白处）', '回到顶部', true]
+        ['menu_backToTop', '回到顶部（右键点击两侧空白处）', '回到顶部', true],
+        ['menu_fish', '标签页伪装为 Github（摸鱼）', '标签页伪装为 Github', false]
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
@@ -160,6 +161,7 @@
     }
 
     curSite.pageUrl = ""; // 下一页URL
+    if(menu_value('menu_fish'))fish() // 标签页伪装为 Github（摸鱼）
     if(menu_value('menu_autoClockIn'))setTimeout(qianDao, 1000) // 自动签到（后台），延迟 1 秒执行是为了兼容 [V2ex Plus] 扩展
     if(menu_value('menu_pageLoading'))pageLoading(); // 自动翻页（无缝）
     if(menu_value('menu_backToTop'))backToTop(); // 回到顶部（右键点击空白处）
@@ -200,6 +202,17 @@
                 event.preventDefault();
                 window.scrollTo(0,0)
             }
+        }
+    }
+
+
+    // 标签页伪装为 Github（摸鱼）
+    function fish() {
+        window.document.title = 'GitHub'
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.querySelector("link[rel*='shortcut icon']").href = 'https://github.githubassets.com/favicons/favicon-dark.png'
+        } else {
+            document.querySelector("link[rel*='shortcut icon']").href = 'https://github.githubassets.com/favicons/favicon.png'
         }
     }
 
