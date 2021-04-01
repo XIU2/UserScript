@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.0.1
+// @version      1.0.2
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页、回到顶部（右键点击两侧空白处）
 // @match        *://v2ex.com/*
@@ -48,10 +48,10 @@
     function menu_switch(menu_status, Name, Tips) {
         if (menu_status == 'true'){
             GM_setValue(`${Name}`, false);
-            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, title: '吾爱破解论坛增强', timeout: 3000});
+            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3000});
         }else{
             GM_setValue(`${Name}`, true);
-            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, title: '吾爱破解论坛增强', timeout: 3000});
+            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3000});
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
