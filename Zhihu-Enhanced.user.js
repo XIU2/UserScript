@@ -6,7 +6,6 @@
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
-// @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
 // @grant        GM_openInTab
