@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.0.2
+// @version      1.0.3
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页、回到顶部（右键点击两侧空白处）
 // @match        *://v2ex.com/*
@@ -195,7 +195,7 @@
 
     // 回到顶部（右键点击空白处）
     function backToTop() {
-        document.getElementById("Wrapper").oncontextmenu = function(event){
+        document.getElementById("Wrapper").oncontextmenu = document.querySelector("#Wrapper > .content").oncontextmenu = function(event){
             if (event.target==this) {
                 event.preventDefault();
                 window.scrollTo(0,0)
