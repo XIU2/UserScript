@@ -80,7 +80,7 @@
                 type: 1,
                 nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
                 pageElement: 'css;.cell.item',
-                HT_insert: ['//*[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
+                HT_insert: ['//div[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
                 replaceE: 'css;#Main > .box > .cell[style]:not(.item) > table',
                 scrollDelta: 600
             }
@@ -101,8 +101,8 @@
             pager: {
                 type: 1,
                 nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
-                pageElement: '//*[@id="Main"]//div[@class="box"]//div[@class="dock_area"] | //*[@id="Main"]//div[@class="box"]//div[@class="inner"] | //*[@id="Main"]//div[@class="box"]//div[@class="dock_area"][last()]/following-sibling::div[@class="cell"][1]',
-                HT_insert: ['//*[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
+                pageElement: '//div[@id="Main"]//div[@class="box"]//div[@class="dock_area"] | //*[@id="Main"]//div[@class="box"]//div[@class="inner"] | //*[@id="Main"]//div[@class="box"]//div[@class="dock_area"][last()]/following-sibling::div[@class="cell"][1]',
+                HT_insert: ['//div[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
                 replaceE: 'css;#Main > .box > .cell[style] > table',
                 scrollDelta: 1000
             }
