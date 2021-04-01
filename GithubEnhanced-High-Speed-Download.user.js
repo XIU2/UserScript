@@ -1,13 +1,11 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.4.1
+// @version      1.4.2
 // @author       X.I.U
 // @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
 // @match        *://hub.fastgit.org/*
 // @icon         https://i.loli.net/2021/03/30/ULV9XunaHesqGIR.png
-// @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
-/* globals $ */
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
 // @grant        GM_openInTab
@@ -22,8 +20,8 @@
 (function() {
     var backColor = '#ffffff';
     var fontColor = '#888888';
-    if($('html').attr('data-color-mode') == 'dark'){ // 黑暗模式判断
-        if($('html').attr('data-dark-theme') == 'dark_dimmed'){
+    if(document.getElementsByTagName('html')[0].getAttribute('data-color-mode') == 'dark'){ // 黑暗模式判断
+        if(document.getElementsByTagName('html')[0].getAttribute('data-dark-theme') == 'dark_dimmed'){
             backColor = '#272e37';
             fontColor = '#768390';
         }else{
@@ -31,6 +29,7 @@
             fontColor = '#b2b8bf';
         }
     }
+
     var download_url = [
         ['https://gh.con.sh','美国'],
         ['https://gh.api.99988866.xyz','美国'],
@@ -59,7 +58,7 @@
         style = ['padding:0 6px;margin-right: -1px;border-radius: 2px;background-color: '+backColor+';border-color: rgba(27, 31, 35, 0.1);font-size: 11px;color: '+fontColor+';'],
         menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'),
         menu_menu_raw_fast_ID, menu_feedBack_ID;
-    if (menu_raw_fast == null || menu_raw_fast == '中国国内'){menu_raw_fast = 1; GM_setValue('xiu2_menu_raw_fast', 1)}; // 调整上个版本的设置存储变量内容
+    if (menu_raw_fast == null){menu_raw_fast = 1; GM_setValue('xiu2_menu_raw_fast', 1)};
 
     registerMenuCommand();
     // 注册脚本菜单
@@ -107,9 +106,11 @@
 
     // Release
     function addRelease(){
-        $(".Box.Box--condensed").each(function () {
-            $(this).find(".d-flex.Box-body>a").each(function () {
-                let href = $(this).attr("href"),
+        let original = document.getElementsByClassName('Box Box--condensed')
+        if (!original) return
+        Array.from(original).forEach(function (current) {
+            current.querySelectorAll('.d-flex.Box-body > a').forEach(function (current2) {
+                let href = current2.href,
                     url = [
                         download_url[0][0] + '/https://github.com' + href,
                         download_url[1][0] + '/https://github.com' + href,
@@ -124,15 +125,15 @@
                     html += `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
                 }
                 html += `</div>`
-                $(this).next().after(html);
+                current2.nextElementSibling.insertAdjacentHTML('afterend', html);
             });
             // 修改[文件大小]元素样式
             document.querySelectorAll('small.pl-2.color-text-secondary.flex-shrink-0').forEach(el=>{el.style.cssText='display: flex; justify-content: flex-end; flex-grow: 1; margin-right: 8px;'});
 
 
             // Source Code
-            $(this).find(".d-block.Box-body>a").each(function () {
-                let href = $(this).attr("href"),
+            current.querySelectorAll('.d-block.Box-body > a').forEach(function (current2) {
+                let href = current2.href,
                     url = [
                         download_url[0][0] + '/https://github.com' + href,
                         download_url[1][0] + '/https://github.com' + href,
@@ -147,7 +148,7 @@
                     html += `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
                 }
                 html += `</div>`
-                $(this).after(html);
+                current2.insertAdjacentHTML('afterend', html);
             });
         });
         // 修改 Source code 样式，使其和加速按钮并列一排
@@ -157,72 +158,72 @@
 
     // Download ZIP
     function addDownloadZIP(){
-        $(".dropdown-menu.dropdown-menu-sw.p-0 ul li:last-child").each(function () {
-            let href = $(this).children("a").attr("href"),
-                url = [
-                    download_url[0][0] + "/https://github.com" + href,
-                    download_url[1][0] + "/https://github.com" + href,
-                    download_url[2][0] + href,
-                    download_url[3][0] + "/https://github.com" + href,
-                    download_url[4][0] + "/https://github.com" + href,
-                    download_url[5][0] + '/https://github.com' + href
-                ],
-                html = ``;
-            for (let i=0;i<url.length;i++)
-            {
-                html += `<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center text-gray-dark text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[i]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
-            }
-            $(this).after(html);
-        });
+        let original = document.querySelector('.dropdown-menu.dropdown-menu-sw.p-0 ul li:last-child');
+        if (!original) return
+        let href = original.getElementsByTagName('a')[0].href,
+            url = [
+                download_url[0][0] + "/https://github.com" + href,
+                download_url[1][0] + "/https://github.com" + href,
+                download_url[2][0] + href,
+                download_url[3][0] + "/https://github.com" + href,
+                download_url[4][0] + "/https://github.com" + href,
+                download_url[5][0] + '/https://github.com' + href
+            ],
+            html = ``;
+        for (let i=0;i<url.length;i++)
+        {
+            html += `<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center color-text-primary text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[i]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
+        }
+        original.insertAdjacentHTML('afterend', html);
     }
 
 
     // Git Clone
     function addGitClone(){
-        $("[role='tabpanel'] div.input-group").first().each(function () {
-            let href_split = location.href.split("/"),
-                url = [
-                    clone_url[0][0] + "/" + href_split[3] + "/" + href_split[4] + ".git",
-                    clone_url[1][0] + "/github.com/" + href_split[3] + "/" + href_split[4] + ".git",
-                    clone_url[2][0] + "/" + href_split[3] + "/" + href_split[4] + ".git"
-                ],
-                html = ``;
-            for (let i=0;i<url.length;i++)
-            {
-                html += `<div class="input-group" style="margin-top: 4px;" title="加速源：${clone_url[i][1]} （点击可直接复制）"><input value="${url[i]}" aria-label="${url[i]}" type="text" class="form-control input-monospace input-sm bg-gray-light" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url[i]}" aria-label="Copy to clipboard" class="btn btn-sm" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
-            }
-            $(this).after(html);
-        });
+        let original = document.querySelector('[role="tabpanel"] div.input-group');
+        if (!original) return
+        let href_split = location.href.split("/"),
+            url = [
+                clone_url[0][0] + "/" + href_split[3] + "/" + href_split[4] + ".git",
+                clone_url[1][0] + "/github.com/" + href_split[3] + "/" + href_split[4] + ".git",
+                clone_url[2][0] + "/" + href_split[3] + "/" + href_split[4] + ".git"
+            ],
+            html = ``;
+        for (let i=0;i<url.length;i++)
+        {
+            html += `<div class="input-group" style="margin-top: 4px;" title="加速源：${clone_url[i][1]} （点击可直接复制）"><input value="${url[i]}" aria-label="${url[i]}" type="text" class="form-control input-monospace input-sm bg-gray-light" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url[i]}" aria-label="Copy to clipboard" class="btn btn-sm" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
+        }
+        original.insertAdjacentHTML('afterend', html);
     }
 
 
     // Raw
     function addRawFile(){
-        $("#raw-url").each(function () {
-            let href = location.href.replace('https://github.com',''),
-                href2 = href.replace('/blob/','/'),
-                url = [
-                    raw_url[1][0] + href2,
-                    raw_url[2][0] + "/gh" + href.replace('/blob/','@'),
-                    raw_url[3][0] + href2,
-                    raw_url[4][0] + "/" + raw_url[0][0] + href2
-                ],
-                html = ``;
-            for (let i=0;i<url.length;i++)
-            {
-                html += `<a href="${url[i]}" title="${raw_url[i+1][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[i+1][1]}</a>`
-            }
-            $(this).after(html);
-        });
+        let original = document.getElementById('raw-url')
+        if (!original) return
+        let href = location.href.replace('https://github.com',''),
+            href2 = href.replace('/blob/','/'),
+            url = [
+                raw_url[1][0] + href2,
+                raw_url[2][0] + "/gh" + href.replace('/blob/','@'),
+                raw_url[3][0] + href2,
+                raw_url[4][0] + "/" + raw_url[0][0] + href2
+            ],
+            html = ``;
+        for (let i=0;i<url.length;i++)
+        {
+            html += `<a href="${url[i]}" title="${raw_url[i+1][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[i+1][1]}</a>`
+        }
+        original.insertAdjacentHTML('afterend', html);
     }
 
 
     // 添加 Raw 下载链接（☁）
     function addRawDownLink(){
         // 如果不是项目文件页面，就返回
-        let files = $('div.Box-row svg.octicon.octicon-file');
+        let files = document.querySelectorAll('div.Box-row svg.octicon.octicon-file');
         if(files.length === 0) return;
-        let files1 = $('a.fileDownLink');
+        let files1 = document.querySelectorAll('a.fileDownLink');
         if(files1.length > 0) return;
 
         // 鼠标指向则显示
@@ -244,14 +245,13 @@
         };
 
         // 循环添加
-        files.each(function(i,fileElm){
+        files.forEach(function(fileElm, i){
             let trElm = fileElm.parentNode.parentNode,
                 cntElm_a = trElm.querySelector('.css-truncate.css-truncate-target.d-block.width-fit a'),
                 cntElm_svg = trElm.querySelector('.mr-3.flex-shrink-0 svg.octicon.octicon-file.color-icon-tertiary'),
                 Name = cntElm_a.innerText,
                 href = cntElm_a.attributes.href.nodeValue.replace('https://github.com','');
             let href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
-            console.log(cntElm_a, cntElm_svg, Name, href)
             switch(menu_raw_fast)
             {
                 case 2:
@@ -271,10 +271,10 @@
                     break;
             }
             let html = ` <a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url[menu_raw_fast][1]} ] 加速源 (☁) 即可切换。">${svg[2]}</a>`;
-            $(cntElm_svg).after(html);
+            cntElm_svg.insertAdjacentHTML('afterend', html);
             // 绑定鼠标事件
-            trElm.onmouseover=mouseOverHandler;
-            trElm.onmouseout=mouseOutHandler;
+            trElm.onmouseover = mouseOverHandler;
+            trElm.onmouseout = mouseOutHandler;
         });
     }
 
@@ -283,8 +283,8 @@
     function delRawDownLink(){
         let aElm = document.querySelectorAll('.fileDownLink');
         if(aElm.length === 0) return;
-        for(let num = 0;num<aElm.length;num++){
-            aElm[num].remove();
-        };
+        aElm.forEach(function(fileElm){
+            fileElm.remove()
+        })
     }
 })();
