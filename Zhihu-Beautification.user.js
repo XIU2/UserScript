@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.1.1
+// @version      1.1.2
 // @author       X.I.U
 // @description  宽屏显示、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -69,7 +69,13 @@
     // 添加样式
     function addStyle() {
         let style = `/* 屏蔽登录提示 */
-.Question-mainColumnLogin {display: none;}
+.Question-mainColumnLogin {display: none !important;}
+/* 屏蔽首页广告 */
+.TopstoryItem--advertCard {display: none !important;}
+/* 屏蔽回答页广告 */
+.Pc-card.Card {display: none !important;}
+/* 屏蔽文章页推荐文章 */
+.Recommendations-Main {display: none !important;}
 `,
             style_1 = `/* 宽屏显示 */
 .GlobalSideBar,.Question-sideColumn,.ContentLayout-sideColumn,.SearchSideBar,.Card.QuestionHeaderTopicMeta {
