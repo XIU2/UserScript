@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         V2ex 增强
-// @version      1.0.0
+// @version      1.0.1
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页、回到顶部（右键点击两侧空白处）
 // @match        *://v2ex.com/*
@@ -41,7 +41,7 @@
             menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
             menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
         }
-        menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+        menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/424246/feedback', {active: true,insert: true,setParent: true});});
     }
 
     // 菜单开关
@@ -69,7 +69,9 @@
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
 
-    // 自动翻页规则，HT_insert：1 = 插入该元素的前面；2 = 插入该元素内的最后面
+    // 自动翻页规则
+    // HT_insert：1 = 插入该元素的前面；2 = 插入该元素内的最后面
+    // scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大
     let DBSite = {
         recent: { // 最近主题页
             SiteTypeID: 1,
@@ -147,20 +149,19 @@
         case "/notifications": // 提醒消息页
             curSite = DBSite.notifications;
             break;
-        case "/member/XIU2/replies": // 用户回复页
-            curSite = DBSite.replies;
-            break;
         default:
             if (location.pathname.indexOf('/go/') > -1) { // 分类主题页
                 curSite = DBSite.go;
             } else if (location.pathname.indexOf('/t/') > -1) { // 帖子内容页
-                if(menu_value('menu_pageLoading_reply'))curSite = DBSite.reply_positive;
+                if(menu_value('menu_pageLoading_reply'))curSite = DBSite.reply_positive; // 帖子内自动无缝翻页
+            } else if (location.pathname.indexOf('/replies') > -1) { // 用户回复页
+                curSite = DBSite.replies;
             }
     }
 
     curSite.pageUrl = ""; // 下一页URL
     if(menu_value('menu_autoClockIn'))setTimeout(qianDao, 1000) // 自动签到（后台），延迟 1 秒执行是为了兼容 [V2ex Plus] 扩展
-    if(menu_value('menu_pageLoading'))pageLoading // 自动翻页（无缝）
+    if(menu_value('menu_pageLoading'))pageLoading(); // 自动翻页（无缝）
     if(menu_value('menu_backToTop'))backToTop(); // 回到顶部（右键点击空白处）
 
 
@@ -181,7 +182,8 @@
                         qiandao.innerText = `自动签到成功！${html}`;
                         qiandao.href = '#';
                     } else {
-                        GM_notification({text: '自动签到失败！请联系作者解决！', timeout: 4000});
+                        GM_notification({text: '自动签到失败！请联系作者解决！', timeout: 4000, onclick() {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/424246/feedback', {active: true,insert: true,setParent: true});}});
+                        qiandao.innerText = '自动签到失败！请尝试手动签到！';
                     }
                 }
             });
@@ -199,10 +201,6 @@
                 window.scrollTo(0,0)
             }
         }
-        /*let backToTop = `<div style="position: fixed;bottom: 0;right: 0;opacity: 0.1;"><div style="transition: height .2s ease;"><button type="button" style="display: flex;align-items: center;justify-content: center;background: #fff;border-radius: 3px;width: 200px;height: 200px;color: #8590a6;box-shadow: 0 1px 3px rgba(18,18,18,.1);border: none;cursor: pointer;outline: none;" title="回到顶部" onclick="window.scrollTo(0,0)"><svg fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M16.036 19.59a1 1 0 0 1-.997.995H9.032a.996.996 0 0 1-.997-.996v-7.005H5.03c-1.1 0-1.36-.633-.578-1.416L11.33 4.29a1.003 1.003 0 0 1 1.412 0l6.878 6.88c.782.78.523 1.415-.58 1.415h-3.004v7.005z"></path></svg></button></div></div>`
-        let backToTop_add = document.createElement('div');
-        backToTop_add.innerHTML = `${backToTop}`;
-        document.body.appendChild(backToTop_add);*/
     }
 
 
