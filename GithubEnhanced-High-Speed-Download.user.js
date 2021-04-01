@@ -106,11 +106,10 @@
 
     // Release
     function addRelease(){
-        let original = document.getElementsByClassName('Box Box--condensed')
-        if (!original) return
-        Array.from(original).forEach(function (current) {
-            current.querySelectorAll('.d-flex.Box-body > a').forEach(function (current2) {
-                let href = current2.href,
+        let html = document.getElementsByClassName('Box Box--condensed');if (!html) return
+        Array.from(html).forEach(function (current) {
+            current.querySelectorAll('.d-flex.Box-body > a').forEach(function (_this) {
+                let href = _this.href,
                     url = [
                         download_url[0][0] + '/https://github.com' + href,
                         download_url[1][0] + '/https://github.com' + href,
@@ -119,21 +118,21 @@
                         download_url[4][0] + '/https://github.com' + href,
                         download_url[5][0] + '/https://github.com' + href
                     ],
-                    html = `<div style="display: flex;justify-content: flex-end;">`;
+                    _html = `<div style="display: flex;justify-content: flex-end;">`;
                 for (let i=0;i<url.length;i++)
                 {
-                    html += `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
+                    _html += `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
                 }
-                html += `</div>`
-                current2.nextElementSibling.insertAdjacentHTML('afterend', html);
+                _html += `</div>`
+                _this.nextElementSibling.insertAdjacentHTML('afterend', _html);
             });
             // 修改[文件大小]元素样式
             document.querySelectorAll('small.pl-2.color-text-secondary.flex-shrink-0').forEach(el=>{el.style.cssText='display: flex; justify-content: flex-end; flex-grow: 1; margin-right: 8px;'});
 
 
             // Source Code
-            current.querySelectorAll('.d-block.Box-body > a').forEach(function (current2) {
-                let href = current2.href,
+            current.querySelectorAll('.d-block.Box-body > a').forEach(function (_this) {
+                let href = _this.href,
                     url = [
                         download_url[0][0] + '/https://github.com' + href,
                         download_url[1][0] + '/https://github.com' + href,
@@ -142,13 +141,13 @@
                         download_url[4][0] + '/https://github.com' + href,
                         download_url[5][0] + '/https://github.com' + href
                     ],
-                    html = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">`;
+                    _html = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">`;
                 for (let i=0;i<url.length;i++)
                 {
-                    html += `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
+                    _html += `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
                 }
-                html += `</div>`
-                current2.insertAdjacentHTML('afterend', html);
+                _html += `</div>`
+                _this.insertAdjacentHTML('afterend', _html);
             });
         });
         // 修改 Source code 样式，使其和加速按钮并列一排
@@ -158,9 +157,8 @@
 
     // Download ZIP
     function addDownloadZIP(){
-        let original = document.querySelector('.dropdown-menu.dropdown-menu-sw.p-0 ul li:last-child');
-        if (!original) return
-        let href = original.getElementsByTagName('a')[0].href,
+        let html = document.querySelector('.dropdown-menu.dropdown-menu-sw.p-0 ul li:last-child');if (!html) return
+        let href = html.getElementsByTagName('a')[0].href,
             url = [
                 download_url[0][0] + "/https://github.com" + href,
                 download_url[1][0] + "/https://github.com" + href,
@@ -169,38 +167,36 @@
                 download_url[4][0] + "/https://github.com" + href,
                 download_url[5][0] + '/https://github.com' + href
             ],
-            html = ``;
+            _html = ``;
         for (let i=0;i<url.length;i++)
         {
-            html += `<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center color-text-primary text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[i]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
+            _html += `<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center color-text-primary text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[i]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
         }
-        original.insertAdjacentHTML('afterend', html);
+        html.insertAdjacentHTML('afterend', _html);
     }
 
 
     // Git Clone
     function addGitClone(){
-        let original = document.querySelector('[role="tabpanel"] div.input-group');
-        if (!original) return
+        let html = document.querySelector('[role="tabpanel"] div.input-group');if (!html) return
         let href_split = location.href.split("/"),
             url = [
                 clone_url[0][0] + "/" + href_split[3] + "/" + href_split[4] + ".git",
                 clone_url[1][0] + "/github.com/" + href_split[3] + "/" + href_split[4] + ".git",
                 clone_url[2][0] + "/" + href_split[3] + "/" + href_split[4] + ".git"
             ],
-            html = ``;
+            _html = ``;
         for (let i=0;i<url.length;i++)
         {
-            html += `<div class="input-group" style="margin-top: 4px;" title="加速源：${clone_url[i][1]} （点击可直接复制）"><input value="${url[i]}" aria-label="${url[i]}" type="text" class="form-control input-monospace input-sm bg-gray-light" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url[i]}" aria-label="Copy to clipboard" class="btn btn-sm" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
+            _html += `<div class="input-group" style="margin-top: 4px;" title="加速源：${clone_url[i][1]} （点击可直接复制）"><input value="${url[i]}" aria-label="${url[i]}" type="text" class="form-control input-monospace input-sm bg-gray-light" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url[i]}" aria-label="Copy to clipboard" class="btn btn-sm" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
         }
-        original.insertAdjacentHTML('afterend', html);
+        html.insertAdjacentHTML('afterend', _html);
     }
 
 
     // Raw
     function addRawFile(){
-        let original = document.getElementById('raw-url')
-        if (!original) return
+        let html = document.getElementById('raw-url');if (!html) return
         let href = location.href.replace('https://github.com',''),
             href2 = href.replace('/blob/','/'),
             url = [
@@ -209,22 +205,20 @@
                 raw_url[3][0] + href2,
                 raw_url[4][0] + "/" + raw_url[0][0] + href2
             ],
-            html = ``;
+            _html = ``;
         for (let i=0;i<url.length;i++)
         {
-            html += `<a href="${url[i]}" title="${raw_url[i+1][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[i+1][1]}</a>`
+            _html += `<a href="${url[i]}" title="${raw_url[i+1][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[i+1][1]}</a>`
         }
-        original.insertAdjacentHTML('afterend', html);
+        html.insertAdjacentHTML('afterend', _html);
     }
 
 
     // 添加 Raw 下载链接（☁）
     function addRawDownLink(){
         // 如果不是项目文件页面，就返回
-        let files = document.querySelectorAll('div.Box-row svg.octicon.octicon-file');
-        if(files.length === 0) return;
-        let files1 = document.querySelectorAll('a.fileDownLink');
-        if(files1.length > 0) return;
+        let files = document.querySelectorAll('div.Box-row svg.octicon.octicon-file');if(files.length === 0) return;
+        let files1 = document.querySelectorAll('a.fileDownLink');if(files1.length > 0) return;
 
         // 鼠标指向则显示
         var mouseOverHandler = function(evt){
@@ -270,8 +264,8 @@
                     url_tip = raw_url[menu_raw_fast][2];
                     break;
             }
-            let html = ` <a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url[menu_raw_fast][1]} ] 加速源 (☁) 即可切换。">${svg[2]}</a>`;
-            cntElm_svg.insertAdjacentHTML('afterend', html);
+            let _html = ` <a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url[menu_raw_fast][1]} ] 加速源 (☁) 即可切换。">${svg[2]}</a>`;
+            cntElm_svg.insertAdjacentHTML('afterend', _html);
             // 绑定鼠标事件
             trElm.onmouseover = mouseOverHandler;
             trElm.onmouseout = mouseOutHandler;
@@ -281,8 +275,7 @@
 
     // 删除 Raw 快捷下载（☁）
     function delRawDownLink(){
-        let aElm = document.querySelectorAll('.fileDownLink');
-        if(aElm.length === 0) return;
+        let aElm = document.querySelectorAll('.fileDownLink');if(aElm.length === 0) return;
         aElm.forEach(function(fileElm){
             fileElm.remove()
         })
