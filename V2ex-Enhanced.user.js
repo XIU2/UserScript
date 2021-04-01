@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         V2ex 增强
+// @name         V2EX 增强
 // @version      1.0.1
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页、回到顶部（右键点击两侧空白处）
