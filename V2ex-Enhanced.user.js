@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.0.4
+// @version      1.0.5
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页、回到顶部（右键点击两侧空白处）、标签页伪装为 Github（摸鱼）
 // @match        *://v2ex.com/*
@@ -71,7 +71,7 @@
     var curSite = {SiteTypeID: 0};
 
     // 自动翻页规则
-    // HT_insert：1 = 插入该元素的前面；2 = 插入该元素内的最后面
+    // HT_insert：1 = 插入该元素本身的前面；2 = 插入该元素当中，第一个子元素前面；3 = 插入该元素当中，最后一个子元素后面；4 = 插入该元素本身的后面；
     // scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大
     let DBSite = {
         recent: { // 最近主题页
@@ -91,7 +91,7 @@
                 type: 1,
                 nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
                 pageElement: 'css;#notifications > div',
-                HT_insert: ['css;#notifications', 2],
+                HT_insert: ['css;#notifications', 3],
                 replaceE: 'css;#Main .box > .cell:not(.item) > table',
                 scrollDelta: 600
             }
@@ -113,7 +113,7 @@
                 type: 1,
                 nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
                 pageElement: 'css;#TopicsNode > div',
-                HT_insert: ['css;#TopicsNode', 2],
+                HT_insert: ['css;#TopicsNode', 3],
                 replaceE: 'css;#Main .box > .cell:not(.item) > table',
                 scrollDelta: 700
             }
@@ -135,8 +135,19 @@
                 type: 1,
                 nextLink: '//a[@class="page_current"]/preceding-sibling::a[1][@href]',
                 pageElement: 'css;.cell[id^="r_"]',
-                HT_insert: ['//div[starts-with(@id, "r_")][position()=1]', 1],
+                HT_insert: ['//div[starts-with(@id, "r_")][1]', 1],
                 replaceE: 'css;#Main .box > .cell:not(.normalUser) > table',
+                scrollDelta: 700
+            }
+        },
+        balance: { // 账户余额页
+            SiteTypeID: 7,
+            pager: {
+                type: 1,
+                nextLink: '//div[@id="Main"]//div[@class="cell"][last()]//a[@class="page_current"]/following-sibling::a[1][@href]',
+                pageElement: '//div[@id="Main"]//div[@class="cell"][last()]/preceding-sibling::div[1]//tr[position()>1]',
+                HT_insert: ['//div[@id="Main"]//div[@class="cell"][last()]/preceding-sibling::div[1]//tr[last()]', 4],
+                replaceE: 'css;#Main .box .cell[style] > table',
                 scrollDelta: 700
             }
         }
@@ -144,11 +155,14 @@
 
 
     switch (location.pathname) {
-        case "/recent": // 最近主题页
+        case "/recent": //        最近主题页
             curSite = DBSite.recent;
             break;
         case "/notifications": // 提醒消息页
             curSite = DBSite.notifications;
+            break;
+        case "/balance": //       账户余额页
+            curSite = DBSite.balance;
             break;
         default:
             if (location.pathname.indexOf('/go/') > -1) { // 分类主题页
@@ -161,8 +175,8 @@
     }
 
     curSite.pageUrl = ""; // 下一页URL
-    if(menu_value('menu_fish'))fish() // 标签页伪装为 Github（摸鱼）
-    if(menu_value('menu_autoClockIn'))setTimeout(qianDao, 1000) // 自动签到（后台），延迟 1 秒执行是为了兼容 [V2ex Plus] 扩展
+    if(menu_value('menu_fish'))fish(); // 标签页伪装为 Github（摸鱼）
+    if(menu_value('menu_autoClockIn'))setTimeout(qianDao, 1000); // 自动签到（后台），延迟 1 秒执行是为了兼容 [V2ex Plus] 扩展
     if(menu_value('menu_pageLoading'))pageLoading(); // 自动翻页（无缝）
     if(menu_value('menu_backToTop'))backToTop(); // 回到顶部（右键点击空白处）
 
@@ -314,8 +328,22 @@
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody);
                             let toElement = getAllElements(curSite.pager.HT_insert[0])[0];
                             if (pageElems.length >= 0) {
-                                let addTo = "beforeend";
-                                if (curSite.pager.HT_insert[1] == 1) addTo = "beforebegin";
+                                // 插入位置
+                                let addTo;
+                                switch (curSite.pager.HT_insert[1]) {
+                                    case 1:
+                                        addTo = "beforebegin"
+                                        break;
+                                    case 2:
+                                        addTo = "afterbegin"
+                                        break;
+                                    case 3:
+                                        addTo = "beforeend"
+                                        break;
+                                    case 4:
+                                        addTo = "afterend"
+                                        break;
+                                }
                                 // 插入新页面元素
                                 pageElems.forEach(function (one) {
                                     toElement.insertAdjacentElement(addTo, one);
