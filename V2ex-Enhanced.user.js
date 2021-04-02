@@ -171,6 +171,7 @@
                 curSite = DBSite.go;
             } else if (location.pathname.indexOf('/t/') > -1) { // 帖子内容页
                 if(menu_value('menu_pageLoading_reply'))curSite = DBSite.reply_positive; // 帖子内自动无缝翻页
+                if(menu_value('menu_quickReply'))quickReply(); // 快速回复（双击左右两侧空白处）
             } else if (location.pathname.indexOf('/replies') > -1) { // 用户回复页
                 curSite = DBSite.replies;
             }
@@ -182,7 +183,6 @@
     if(menu_value('menu_pageLoading'))pageLoading(); // 自动翻页（无缝）
     if(menu_value('menu_backToTop'))backToTop(); // 回到顶部（右键点击左右两侧空白处）
     if(menu_value('menu_linksToImgs'))linksToImgs(); // 链接转图片
-    if(menu_value('menu_quickReply'))quickReply(); // 快速回复（双击左右两侧空白处）
 
 
     // 自动签到（后台）
