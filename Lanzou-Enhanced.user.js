@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.2.2
+// @version      1.2.3
 // @author       X.I.U
-// @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、拖入文件自动显示上传框、调整描述（话说）编辑框初始大小
+// @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @match        *://*.lanzous.com/*
 // @match        *://*.lanzoux.com/*
 // @match        *://*.lanzoui.com/*
@@ -82,12 +82,15 @@
     }
 
 
-    if(document.getElementById("infos")){ //             分享链接文件列表页
+    if (document.getElementById("infos")) { //             分享链接文件列表页
+        if (document.getElementById("pwdload")) { //       分享链接输入密码页
+            enterToPass(); //                              输入密码后回车确认
+        }
         setTimeout(fileMoreS, 300); //                   自动显示更多文件
-    }else if(document.querySelector("iframe.ifr2")){ //  分享链接文件下载页（暂时没有这方面的功能，先空着）
+    } else if (document.querySelector("iframe.ifr2")) { //  分享链接文件下载页（暂时没有这方面的功能，先空着）
         //console.log()
-    }else if(document.getElementById("mainframe") || window.top.location.href.indexOf("mydisk.php?") > -1){ // 后台页
-        if(window.top.location.href != "https://pc.woozooo.com/mydisk.php"){
+    } else if (document.getElementById("mainframe") || window.top.location.href.indexOf("mydisk.php?") > -1) { // 后台页
+        if (window.top.location.href != "https://pc.woozooo.com/mydisk.php") {
             window.top.location.href = "https://pc.woozooo.com/mydisk.php"
         }
         var mainframe;
@@ -323,6 +326,16 @@
         if(f_tpspan.length > 1) {
             lastFolderID = /-?\d+/.exec(f_tpspan[f_tpspan.length - 2].getAttribute("onclick"))[0];
         }
+    }
+
+
+    // 输入密码后回车确认
+    function enterToPass() {
+        document.getElementById('pwd').onkeydown = function(e){
+            if(e.keyCode == 13){
+                document.getElementById('sub').click();
+            }
+        };
     }
 
 
