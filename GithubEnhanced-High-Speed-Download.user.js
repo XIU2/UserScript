@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.4.2
+// @version      1.4.3
 // @author       X.I.U
 // @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -109,14 +109,14 @@
         let html = document.getElementsByClassName('Box Box--condensed');if (!html) return
         Array.from(html).forEach(function (current) {
             current.querySelectorAll('.d-flex.Box-body > a').forEach(function (_this) {
-                let href = _this.href,
+                let href = _this.href.split('github.com'),
                     url = [
-                        download_url[0][0] + '/https://github.com' + href,
-                        download_url[1][0] + '/https://github.com' + href,
-                        download_url[2][0] + href,
-                        download_url[3][0] + '/https://github.com' + href,
-                        download_url[4][0] + '/https://github.com' + href,
-                        download_url[5][0] + '/https://github.com' + href
+                        download_url[0][0] + '/' + _this.href,
+                        download_url[1][0] + '/' + _this.href,
+                        download_url[2][0] + href[1],
+                        download_url[3][0] + '/' + _this.href,
+                        download_url[4][0] + '/' + _this.href,
+                        download_url[5][0] + '/' + _this.href
                     ],
                     _html = `<div style="display: flex;justify-content: flex-end;">`;
                 for (let i=0;i<url.length;i++)
@@ -132,14 +132,14 @@
 
             // Source Code
             current.querySelectorAll('.d-block.Box-body > a').forEach(function (_this) {
-                let href = _this.href,
+                let href = _this.href.split('github.com'),
                     url = [
-                        download_url[0][0] + '/https://github.com' + href,
-                        download_url[1][0] + '/https://github.com' + href,
-                        download_url[2][0] + href,
-                        download_url[3][0] + '/https://github.com' + href,
-                        download_url[4][0] + '/https://github.com' + href,
-                        download_url[5][0] + '/https://github.com' + href
+                        download_url[0][0] + '/' + _this.href,
+                        download_url[1][0] + '/' + _this.href,
+                        download_url[2][0] + href[1],
+                        download_url[3][0] + '/' + _this.href,
+                        download_url[4][0] + '/' + _this.href,
+                        download_url[5][0] + '/' + _this.href
                     ],
                     _html = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">`;
                 for (let i=0;i<url.length;i++)
@@ -160,12 +160,12 @@
         let html = document.querySelector('.dropdown-menu.dropdown-menu-sw.p-0 ul li:last-child');if (!html) return
         let href = html.getElementsByTagName('a')[0].href,
             url = [
-                download_url[0][0] + "/https://github.com" + href,
-                download_url[1][0] + "/https://github.com" + href,
-                download_url[2][0] + href,
-                download_url[3][0] + "/https://github.com" + href,
-                download_url[4][0] + "/https://github.com" + href,
-                download_url[5][0] + '/https://github.com' + href
+                download_url[0][0] + "/" + href,
+                download_url[1][0] + "/" + href,
+                download_url[2][0] + href.split('github.com')[1],
+                download_url[3][0] + "/" + href,
+                download_url[4][0] + "/" + href,
+                download_url[5][0] + '/' + href
             ],
             _html = ``;
         for (let i=0;i<url.length;i++)
@@ -179,11 +179,11 @@
     // Git Clone
     function addGitClone(){
         let html = document.querySelector('[role="tabpanel"] div.input-group');if (!html) return
-        let href_split = location.href.split("/"),
+        let href_split = html.querySelector('input').getAttribute('value').split('github.com'),
             url = [
-                clone_url[0][0] + "/" + href_split[3] + "/" + href_split[4] + ".git",
-                clone_url[1][0] + "/github.com/" + href_split[3] + "/" + href_split[4] + ".git",
-                clone_url[2][0] + "/" + href_split[3] + "/" + href_split[4] + ".git"
+                clone_url[0][0] + href_split[1],
+                clone_url[1][0] + '/github.com' + href_split[1],
+                clone_url[2][0] + href_split[1]
             ],
             _html = ``;
         for (let i=0;i<url.length;i++)
