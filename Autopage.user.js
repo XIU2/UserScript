@@ -34,8 +34,8 @@
     // 自动翻页规则
     // type：1 = 脚本实现自动无缝翻页，2 = 网站自带了自动无缝翻页功能，只需要点击下一页按钮即可，这时 nextText 为按钮文本，避免一瞬间加载太多次下一页
     // HT_insert：1 = 插入该元素本身的前面；2 = 插入该元素当中，第一个子元素前面；3 = 插入该元素当中，最后一个子元素后面；4 = 插入该元素本身的后面；
-    // scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页）
-    // beforeFunction = 插入前执行函数；afterFunction = 插入后执行函数
+    // scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大
+    // function：before = 插入前执行函数；after = 插入后执行函数；parameter = 参数
     let DBSite = {
         _423down_postslist: {
             SiteTypeID: 1,
@@ -67,8 +67,10 @@
                 pageElement: 'css;#index > article, #archive > article',
                 HT_insert: ['css;ol.page-navigator', 1],
                 replaceE: 'css;ol.page-navigator',
-                scrollDelta: 800,
-                beforeFunction: iao_su_postslist_beforeFunction
+                scrollDelta: 800
+            },
+            function: {
+                before: iao_su_postslist_beforeFunction
             }
         },
         appinn_postslist: {
@@ -90,8 +92,10 @@
                 pageElement: 'css;#postlist > div.entry',
                 HT_insert: ['css;#postlist > .pagenavi-button', 1],
                 replaceE: 'css;.pagenavi-button, .pagenavi',
-                scrollDelta: 1200,
-                beforeFunction: iplaysoft_postslist_beforeFunction
+                scrollDelta: 1200
+            },
+            function: {
+                before: iplaysoft_postslist_beforeFunction
             }
         },
         iplaysoft_postcomments: {
@@ -318,7 +322,7 @@
             if (curSite.pager) {
                 let curPageEle = getElementByXpath(curSite.pager.nextLink);
                 var url = this.getFullHref(curPageEle);
-                console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
+                //console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
                 if(url === '') return;
                 if(curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
@@ -336,7 +340,13 @@
                             let toElement = getAllElements(curSite.pager.HT_insert[0])[0];
                             if (pageElems.length >= 0) {
                                 // 如果有插入前函数就执行函数
-                                if (curSite.pager.beforeFunction)pageElems = curSite.pager.beforeFunction(pageElems);
+                                if (curSite.function && curSite.function.before) {
+                                    if (curSite.function.parameter) { // 如果指定了参数
+                                        pageElems = curSite.function.before(curSite.function.parameter);
+                                    }else{
+                                        pageElems = curSite.function.before(pageElems);
+                                    }
+                                }
                                 // 插入位置
                                 let addTo;
                                 switch (curSite.pager.HT_insert[1]) {
@@ -370,7 +380,13 @@
                                     console.log(e);
                                 }
                                 // 如果有插入后函数就执行函数
-                                if (curSite.pager.afterFunction)curSite.pager.afterFunction();
+                                if (curSite.function && curSite.function.after) {
+                                    if (curSite.function.parameter) { // 如果指定了参数
+                                        curSite.function.after(curSite.function.parameter);
+                                    }else{
+                                        curSite.function.after();
+                                    }
+                                }
                             }
                         } catch (e) {
                             console.log(e);
