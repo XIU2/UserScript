@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.0.6
+// @version      1.0.7
 // @author       X.I.U
-// @description  自动签到、自动无缝翻页、回到顶部（右键点击两侧空白处）、标签页伪装为 Github（摸鱼）
+// @description  自动签到、链接转图片、自动无缝翻页、回到顶部（右键点击两侧空白处）、快速回复（左键双击两侧空白处）、标签页伪装为 Github（摸鱼）
 // @match        *://v2ex.com/*
 // @match        *://*.v2ex.com/*
 // @icon         https://www.v2ex.com/static/favicon.ico
@@ -21,9 +21,11 @@
 (function() {
     var menu_ALL = [
         ['menu_autoClockIn', '自动签到', '自动签到', true],
+        ['menu_linksToImgs', '链接转图片', '链接转图片', true],
         ['menu_pageLoading', '自动无缝翻页', '自动无缝翻页', true],
         ['menu_pageLoading_reply', '帖子内自动翻页', '帖子内自动翻页', false],
         ['menu_backToTop', '回到顶部（右键点击两侧空白处）', '回到顶部', true],
+        ['menu_quickReply', '快速回复（左键双击两侧空白处）', '快速回复', true],
         ['menu_fish', '标签页伪装为 Github（摸鱼）', '标签页伪装为 Github', false]
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
@@ -178,7 +180,9 @@
     if(menu_value('menu_fish'))fish(); // 标签页伪装为 Github（摸鱼）
     if(menu_value('menu_autoClockIn'))setTimeout(qianDao, 1000); // 自动签到（后台），延迟 1 秒执行是为了兼容 [V2ex Plus] 扩展
     if(menu_value('menu_pageLoading'))pageLoading(); // 自动翻页（无缝）
-    if(menu_value('menu_backToTop'))backToTop(); // 回到顶部（右键点击空白处）
+    if(menu_value('menu_backToTop'))backToTop(); // 回到顶部（右键点击左右两侧空白处）
+    if(menu_value('menu_linksToImgs'))linksToImgs(); // 链接转图片
+    if(menu_value('menu_quickReply'))quickReply(); // 快速回复（双击左右两侧空白处）
 
 
     // 自动签到（后台）
@@ -209,7 +213,7 @@
     }
 
 
-    // 回到顶部（右键点击空白处）
+    // 回到顶部（右键左右两侧空白处）
     function backToTop() {
         document.getElementById("Wrapper").oncontextmenu = document.querySelector("#Wrapper > .content").oncontextmenu = function(event){
             if (event.target==this) {
@@ -230,6 +234,42 @@
         }
     }
 
+
+    // 链接转图片，修改自：https://greasyfork.org/scripts/14182
+    function linksToImgs() {
+        let links = document.links;
+        Array.from(links).forEach(function (_this) {
+            if (/^https.*\.(?:jpg|jpeg|jpe|bmp|png|gif)/i.test(_this.href) && !(/<img\s/i.test(_this.innerHTML))) {
+                _this.innerHTML = `<img src="${_this.href}" style="max-width: 100%!important;" />`;
+            }
+        });
+    }
+
+
+    // 快速回复（双击左右两侧空白处）
+    function quickReply() {
+        document.getElementById("Wrapper").ondblclick = document.querySelector("#Wrapper > .content").ondblclick = function(event){
+            if (event.target==this) {
+                if (document.querySelector('.box.reply-box-sticky')) {
+                    document.getElementById('undock-button').click();
+                }else{
+                    let _top = document.body.scrollTop + document.documentElement.scrollTop;
+                    document.getElementById('reply_content').focus();
+                    window.scrollTo(0,_top);console.log(_top);
+                }
+            }
+        }
+        //document.querySelector('div.topic_buttons').insertAdjacentHTML('beforeend', '<a href="javascript:void(0);" id="reply_233" class="tb">快速回复</a>');
+        /*document.getElementById('reply_233').onclick = function () {
+            if (document.querySelector('.box.reply-box-sticky')) {
+                document.getElementById('undock-button').click();
+            }else{
+                let _top = document.body.scrollTop + document.documentElement.scrollTop;
+                document.getElementById('reply_content').focus();
+                window.scrollTo(0,_top);console.log(_top);
+            }
+        }*/
+    }
 
     // 自动无缝翻页
     function pageLoading() {
