@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.4.3
+// @version      1.4.4
 // @author       X.I.U
 // @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -45,8 +45,7 @@
         ],
         raw_url = [
             ['https://raw.githubusercontent.com','Github 原生',''],
-            ['https://raw.sevencdn.com','中国国内 01',''],
-            ['https://cdn.jsdelivr.net','中国国内 02','注意：该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10;注意：当前分支所有文件总文件大小超过 50MB 时，该加速源不可用。&#10;注意：当前分支名为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。'],
+            ['https://cdn.jsdelivr.net','中国国内','注意：该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10;注意：当前分支所有文件总文件大小超过 50MB 时，该加速源不可用。&#10;注意：当前分支名为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。'],
             ['https://raw.fastgit.org','中国香港','注意：单个文件太大时可能会提示超时（实时获取中），请重试。'],
             ['https://ghproxy.com','韩国首尔','']
         ],
@@ -200,10 +199,9 @@
         let href = location.href.replace('https://github.com',''),
             href2 = href.replace('/blob/','/'),
             url = [
-                raw_url[1][0] + href2,
-                raw_url[2][0] + "/gh" + href.replace('/blob/','@'),
-                raw_url[3][0] + href2,
-                raw_url[4][0] + "/" + raw_url[0][0] + href2
+                raw_url[1][0] + "/gh" + href.replace('/blob/','@'),
+                raw_url[2][0] + href2,
+                raw_url[3][0] + "/" + raw_url[0][0] + href2
             ],
             _html = ``;
         for (let i=0;i<url.length;i++)
@@ -248,15 +246,15 @@
             let href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
             switch(menu_raw_fast)
             {
-                case 2:
-                    url = raw_url[2][0] + '/gh' + href.replace('/blob/','@');
-                    url_name = raw_url[2][1];
-                    url_tip = raw_url[2][2];
+                case 1:
+                    url = raw_url[1][0] + '/gh' + href.replace('/blob/','@');
+                    url_name = raw_url[1][1];
+                    url_tip = raw_url[1][2];
                     break;
-                case 4:
-                    url = raw_url[4][0] + "/" + raw_url[0][0] + href2;
-                    url_name = raw_url[4][1];
-                    url_tip = raw_url[4][2];
+                case 3:
+                    url = raw_url[3][0] + "/" + raw_url[0][0] + href2;
+                    url_name = raw_url[3][1];
+                    url_tip = raw_url[3][2];
                     break;
                 default:
                     url = raw_url[menu_raw_fast][0] + href2;
