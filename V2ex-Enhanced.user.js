@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.0.7
+// @version      1.0.8
 // @author       X.I.U
-// @description  自动签到、链接转图片、自动无缝翻页、回到顶部（右键点击两侧空白处）、快速回复（左键双击两侧空白处）、标签页伪装为 Github（摸鱼）
+// @description  自动签到、链接转图片、自动无缝翻页、回到顶部（右键点击两侧空白处）、快速回复（左键双击两侧空白处）、新标签页打开链接、标签页伪装为 Github（摸鱼）
 // @match        *://v2ex.com/*
 // @match        *://*.v2ex.com/*
 // @icon         https://www.v2ex.com/static/favicon.ico
@@ -26,6 +26,7 @@
         ['menu_pageLoading_reply', '帖子内自动翻页', '帖子内自动翻页', false],
         ['menu_backToTop', '回到顶部（右键点击两侧空白处）', '回到顶部', true],
         ['menu_quickReply', '快速回复（左键双击两侧空白处）', '快速回复', true],
+        ['menu_linksBlank', '新标签页打开链接', '新标签页打开链接', true],
         ['menu_fish', '标签页伪装为 Github（摸鱼）', '标签页伪装为 Github', false]
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
@@ -75,6 +76,7 @@
     // 自动翻页规则
     // HT_insert：1 = 插入该元素本身的前面；2 = 插入该元素当中，第一个子元素前面；3 = 插入该元素当中，最后一个子元素后面；4 = 插入该元素本身的后面；
     // scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大
+    // function：before = 插入前执行函数；after = 插入后执行函数；parameter = 参数
     let DBSite = {
         recent: { // 最近主题页
             SiteTypeID: 1,
@@ -85,6 +87,10 @@
                 HT_insert: ['//div[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
                 replaceE: 'css;#Main > .box > .cell[style]:not(.item) > table',
                 scrollDelta: 600
+            },
+            function: {
+                after: linksBlank,
+                parameter: '#Main a.topic-link:not([target])'
             }
         },
         notifications: { // 提醒消息页
@@ -96,6 +102,10 @@
                 HT_insert: ['css;#notifications', 3],
                 replaceE: 'css;#Main > .box > .cell[style] > table',
                 scrollDelta: 1000
+            },
+            function: {
+                after: linksBlank,
+                parameter: '#Main a[href^="/t/"]:not([target])'
             }
         },
         replies: { // 用户回复页
@@ -107,6 +117,10 @@
                 HT_insert: ['//div[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
                 replaceE: 'css;#Main > .box > .cell[style] > table',
                 scrollDelta: 1000
+            },
+            function: {
+                after: linksBlank,
+                parameter: '#Main a[href^="/t/"]:not([target])'
             }
         },
         go: { // 分类主题页
@@ -118,6 +132,10 @@
                 HT_insert: ['css;#TopicsNode', 3],
                 replaceE: 'css;#Main > .box > .cell[style] > table',
                 scrollDelta: 700
+            },
+            function: {
+                after: linksBlank,
+                parameter: '#Main a.topic-link:not([target])'
             }
         },
         reply: { // 帖子内容页
@@ -157,11 +175,16 @@
 
 
     switch (location.pathname) {
+        case "/": //              首页
+            linksBlank('#Main a.topic-link:not([target])');
+            break;
         case "/recent": //        最近主题页
             curSite = DBSite.recent;
+            linksBlank('#Main a.topic-link:not([target])');
             break;
         case "/notifications": // 提醒消息页
             curSite = DBSite.notifications;
+            linksBlank('#Main a[href^="/t/"]:not([target])');
             break;
         case "/balance": //       账户余额页
             curSite = DBSite.balance;
@@ -169,11 +192,14 @@
         default:
             if (location.pathname.indexOf('/go/') > -1) { // 分类主题页
                 curSite = DBSite.go;
+                linksBlank('#Main a.topic-link:not([target])');
             } else if (location.pathname.indexOf('/t/') > -1) { // 帖子内容页
                 if(menu_value('menu_pageLoading_reply'))curSite = DBSite.reply_positive; // 帖子内自动无缝翻页
                 if(menu_value('menu_quickReply'))quickReply(); // 快速回复（双击左右两侧空白处）
+                linksBlank('#Main .box .topic_content a:not([href^="/member"]):not([target])');
             } else if (location.pathname.indexOf('/replies') > -1) { // 用户回复页
                 curSite = DBSite.replies;
+                linksBlank('#Main a[href^="/t/"]:not([target])');
             }
     }
 
@@ -187,29 +213,70 @@
 
     // 自动签到（后台）
     function qianDao() {
-        let qiandao = document.querySelector('.box .inner a[href="/mission/daily"]');
-        if (qiandao) {
-            let url = (location.origin + "/mission/daily/redeem?" + RegExp("once\\=(\\d+)").exec(document.querySelector('div#Top .tools').innerHTML)[0]);
-            GM_xmlhttpRequest({
-                url: url,
-                method: "GET",
-                timeout: 5000,
-                onload: function (response) {
-                    let html = ShowPager.createDocumentByString(response.responseText);
-                    console.log(html)
-                    if (html.querySelector('li.fa.fa-ok-sign')) {
-                        html = html.getElementById('Main').innerText.match(/已连续登录 (\d+?) 天/)[0];
-                        qiandao.innerText = `自动签到成功！${html}`;
-                        qiandao.href = '#';
-                    } else {
-                        GM_notification({text: '自动签到失败！请联系作者解决！', timeout: 4000, onclick() {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/424246/feedback', {active: true,insert: true,setParent: true});}});
-                        qiandao.innerText = '自动签到失败！请尝试手动签到！';
-                    }
-                }
-            });
-        } else if (document.getElementById('gift_v2excellent')) { // 兼容 [V2ex Plus] 扩展
-            document.getElementById('gift_v2excellent').click();
+        let timeNow = new Date().getUTCFullYear() + "/" + (new Date().getUTCMonth() + 1) + "/" + new Date().getUTCDate() // 当前 UTC-0 时间（V2EX 按这个时间的）
+        if (location.pathname == '/') { //                               在首页
+            let qiandao = document.querySelector('.box .inner a[href="/mission/daily"]');
+            if (qiandao) { //                                            如果找到了签到提示
+                qianDao_(qiandao, timeNow); //                           后台签到
+            } else if (document.getElementById('gift_v2excellent')) { // 兼容 [V2ex Plus] 扩展
+                document.getElementById('gift_v2excellent').click();
+                GM_setValue('menu_clockInTime', timeNow); //             写入签到时间以供后续比较
+            } else { //                                                  都没有找到，说明已经签过到了
+                console.log('已经签过到了。')
+            }
+        } else { //                                                      不在首页
+            let timeOld = GM_getValue('menu_clockInTime')
+            if (!timeOld || timeOld != timeNow) {
+                qianDaoStatus_(timeNow) //                               后台获取签到状态（并判断是否需要签到）
+            } else { //                                                  新旧签到时间一致
+                console.log('已经签过到了。')
+            }
         }
+    }
+
+
+    // 后台签到
+    function qianDao_(qiandao, timeNow) {
+        let url = (location.origin + "/mission/daily/redeem?" + RegExp("once\\=(\\d+)").exec(document.querySelector('div#Top .tools').innerHTML)[0]);
+        GM_xmlhttpRequest({
+            url: url,
+            method: "GET",
+            timeout: 5000,
+            onload: function (response) {
+                let html = ShowPager.createDocumentByString(response.responseText);
+                if (html.querySelector('li.fa.fa-ok-sign')) {
+                    html = html.getElementById('Main').innerText.match(/已连续登录 (\d+?) 天/)[0];
+                    GM_setValue('menu_clockInTime', timeNow); // 写入签到时间以供后续比较
+                    console.log('自动签到完成！')
+                    if (qiandao) {
+                        qiandao.innerText = `自动签到完成！${html}`;
+                        qiandao.href = '#';
+                    }
+                } else {
+                    GM_notification({text: '自动签到失败！请联系作者解决！', timeout: 4000, onclick() {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/424246/feedback', {active: true,insert: true,setParent: true});}});
+                    if (qiandao) qiandao.innerText = '自动签到失败！请尝试手动签到！';
+                }
+            }
+        });
+    }
+
+
+    // 后台获取签到状态（并判断是否需要签到）
+    function qianDaoStatus_(timeNow) {
+        GM_xmlhttpRequest({
+            url: 'https://www.v2ex.com/mission/daily',
+            method: "GET",
+            timeout: 5000,
+            onload: function (response) {
+                let html = ShowPager.createDocumentByString(response.responseText);
+                if (html.querySelector('input[value^="领取"]')) { //     还没有签到...
+                    qianDao_(null, timeNow); //                          后台签到
+                } else { //                                              已经签到了...
+                    console.log('已经签过到了。')
+                    GM_setValue('menu_clockInTime', timeNow); //         写入签到时间以供后续比较
+                }
+            }
+        });
     }
 
 
@@ -270,6 +337,17 @@
             }
         }*/
     }
+
+
+    // 新标签页打开链接
+    function linksBlank(css) {
+        if (!menu_value('menu_linksBlank')) return
+        let links = document.querySelectorAll(css);if (!links) return
+        Array.from(links).forEach(function (_this) {
+            _this.target = '_blank'
+        });
+    }
+
 
     // 自动无缝翻页
     function pageLoading() {
@@ -368,6 +446,14 @@
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody);
                             let toElement = getAllElements(curSite.pager.HT_insert[0])[0];
                             if (pageElems.length >= 0) {
+                                // 如果有插入前函数就执行函数
+                                if (curSite.function && curSite.function.before) {
+                                    if (curSite.function.parameter) { // 如果指定了参数
+                                        pageElems = curSite.function.before(curSite.function.parameter);
+                                    }else{
+                                        pageElems = curSite.function.before(pageElems);
+                                    }
+                                }
                                 // 插入位置
                                 let addTo;
                                 switch (curSite.pager.HT_insert[1]) {
@@ -399,6 +485,14 @@
                                     }
                                 } catch (e) {
                                     console.log(e);
+                                }
+                                // 如果有插入后函数就执行函数
+                                if (curSite.function && curSite.function.after) {
+                                    if (curSite.function.parameter) { // 如果指定了参数
+                                        curSite.function.after(curSite.function.parameter);
+                                    }else{
+                                        curSite.function.after();
+                                    }
                                 }
                             }
                         } catch (e) {
