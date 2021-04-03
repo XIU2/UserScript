@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.2.5
+// @version      1.2.6
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页、屏蔽导读悬赏贴（最新发表页）
 // @match        *://www.52pojie.cn/*
@@ -23,19 +23,19 @@
         ['menu_thread_pageLoading', '帖子内自动翻页', '帖子内自动翻页', true],
         ['menu_delateReward', '屏蔽导读悬赏贴（最新发表）', '屏蔽导读悬赏贴', true]
     ], menu_ID = [];
-    for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
+    for (let i=0;i<menu_ALL.length;i++) { // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
     }
     registerMenuCommand();
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        if (menu_ID.length > menu_ALL.length){ // 如果菜单ID数组多于菜单数组，说明不是首次添加菜单，需要卸载所有脚本菜单
-            for (let i=0;i<menu_ID.length;i++){
+        if (menu_ID.length > menu_ALL.length) { // 如果菜单ID数组多于菜单数组，说明不是首次添加菜单，需要卸载所有脚本菜单
+            for (let i=0;i<menu_ID.length;i++) {
                 GM_unregisterMenuCommand(menu_ID[i]);
             }
         }
-        for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
+        for (let i=0;i<menu_ALL.length;i++) { // 循环注册脚本菜单
             menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
             menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
         }
@@ -44,10 +44,10 @@
 
     // 菜单开关
     function menu_switch(menu_status, Name, Tips) {
-        if (menu_status == 'true'){
+        if (menu_status == 'true') {
             GM_setValue(`${Name}`, false);
             GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, title: '吾爱破解论坛增强', timeout: 3000});
-        }else{
+        } else {
             GM_setValue(`${Name}`, true);
             GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, title: '吾爱破解论坛增强', timeout: 3000});
         }
@@ -138,19 +138,19 @@
         patt_collection = /mod\=collection/
 
     // URL 判断
-    if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)){
-        if(menu_value('menu_thread_pageLoading')) {
+    if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)) {
+        if (menu_value('menu_thread_pageLoading')) {
             curSite = DBSite.thread; //      帖子内
             hidePgbtn(); //                  隐藏帖子内的 [下一页] 按钮
         }
-    }else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)){
+    } else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)) {
         curSite = DBSite.forum; //           各板块帖子列表
-    }else if (patt_guide.test(location.search)){
+    } else if (patt_guide.test(location.search)) {
         curSite = DBSite.guide; //           导读帖子列表
         delateReward(); //                   屏蔽导读悬赏贴（最新发表）
-    }else if (patt_collection.test(location.search)){
+    } else if (patt_collection.test(location.search)) {
         curSite = DBSite.collection; //      淘贴列表
-    }else if(location.pathname === '/search.php'){
+    } else if (location.pathname === '/search.php') {
         curSite = DBSite.search; //          搜索结果列表
     /*}else if(location.href === "https://www.52pojie.cn/home.php?mod=task&do=draw&id=2"){
         window.opener=null;window.open('','_self');window.close(); // 签到完成页面，关闭该标签页*/
@@ -163,7 +163,7 @@
 
     // 自动翻页
     function pageLoading() {
-        if (curSite.SiteTypeID > 0){
+        if (curSite.SiteTypeID > 0) {
             windowScroll(function (direction, e) {
                 if (direction === "down") { // 下滑才准备翻页
                     let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
@@ -171,9 +171,9 @@
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
                         if (curSite.pager.type === 1) {
                             ShowPager.loadMorePage();
-                        }else{
+                        } else {
                             let autopbn = document.querySelector(curSite.pager.nextLink);
-                            if (autopbn && autopbn.innerText == curSite.pager.nextText){ // 如果正在加载，就不再点击
+                            if (autopbn && autopbn.innerText == curSite.pager.nextText) { // 如果正在加载，就不再点击
                                 autopbn.click();
                             }
                         }
@@ -186,59 +186,53 @@
 
     // 自动签到
     /*function qianDao() {
-        if (menu_value('menu_autoClockIn')){
-            let qiandao = document.querySelector('#um p:last-child a:first-child');
-            if (qiandao && qiandao.href === "https://www.52pojie.cn/home.php?mod=task&do=apply&id=2"){
-                window.GM_openInTab(qiandao.href, {active: false,insert: true,setParent: true}) // 后台打开签到地址
-                qiandao.querySelector('.qq_bind').setAttribute('src','https://www.52pojie.cn/static/image/common/wbs.png') // 修改 [打卡签到] 图标为 [签到完毕]
-                qiandao.href = "#" // 修改 URL 为 #
-            }
+        if (!menu_value('menu_autoClockIn')) return
+        let qiandao = document.querySelector('#um p:last-child a:first-child');
+        if (qiandao && qiandao.href === "https://www.52pojie.cn/home.php?mod=task&do=apply&id=2"){
+            window.GM_openInTab(qiandao.href, {active: false,insert: true,setParent: true}) // 后台打开签到地址
+            qiandao.querySelector('.qq_bind').setAttribute('src','https://www.52pojie.cn/static/image/common/wbs.png') // 修改 [打卡签到] 图标为 [签到完毕]
+            qiandao.href = "#" // 修改 URL 为 #
         }
     }*/
 
 
     // 自动签到（后台）
     function qianDao() {
-        if (menu_value('menu_autoClockIn')) {
-            let qiandao = document.querySelector('#um a[href="home.php?mod=task&do=apply&id=2"]');
-            if (qiandao){
-                GM_xmlhttpRequest({
-                    url: qiandao.href,
-                    method: "GET",
-                    timeout: 5000,
-                    onload: function (response) {
-                        let html = ShowPager.createDocumentByString(response.responseText);
-                        html = html.querySelector('#messagetext p')
-                        if (html && html.innerText.indexOf("任务已完成") > -1) {
-                            qiandao.querySelector('.qq_bind').setAttribute('src','https://www.52pojie.cn/static/image/common/wbs.png') // 修改 [打卡签到] 图标为 [签到完毕]
-                            qiandao.href = "#" // 修改 URL 为 #
-                        }else{
-                            GM_notification({text: '自动签到失败！请联系作者解决！', title: '吾爱破解论坛增强', timeout: 3000});
-                        }
+        if (!menu_value('menu_autoClockIn')) return
+        let qiandao = document.querySelector('#um a[href="home.php?mod=task&do=apply&id=2"]');
+        if (qiandao) {
+            GM_xmlhttpRequest({
+                url: qiandao.href,
+                method: "GET",
+                timeout: 5000,
+                onload: function (response) {
+                    let html = ShowPager.createDocumentByString(response.responseText);
+                    html = html.querySelector('#messagetext p')
+                    if (html && html.innerText.indexOf("任务已完成") > -1) {
+                        qiandao.querySelector('.qq_bind').setAttribute('src','https://www.52pojie.cn/static/image/common/wbs.png') // 修改 [打卡签到] 图标为 [签到完毕]
+                        qiandao.href = "#" // 修改 URL 为 #
+                    } else {
+                        GM_notification({text: '自动签到失败！请联系作者解决！', title: '吾爱破解论坛增强', timeout: 3000});
                     }
-                });
-            }
+                }
+            });
         }
     }
 
 
     //屏蔽悬赏贴（导读-最新发表）
-    function delateReward(){
-        if(patt_guide_newthread.test(location.search) && menu_value('menu_delateReward')){
-            let table = document.querySelector("#threadlist > div.bm_c > table"),
-                tbodys = table.getElementsByTagName('tbody'),
-                arrs = [];
-            for (let i=0; i<tbodys.length; i++){
-                var by_td = tbodys[i].childNodes[1].children[2].children[0].attributes[0].value;
-                if(by_td=="forum-8-1.html"){
-                    arrs.push(tbodys[i]);
+    function delateReward() {
+        if (!menu_value('menu_delateReward')) return
+        if (patt_guide_newthread.test(location.search)) {
+            let tbody = document.querySelectorAll('#threadlist tbody[id^="normalthread"]');
+            Array.from(tbody).forEach(function (_this) {
+                if (_this.querySelector('img[alt="悬赏"]')) {
+                    _this.remove();
                 }
-            }
-            for (let i=0; i<arrs.length; i++){
-                arrs[i].parentNode.removeChild(arrs[i]);
-            }
+            })
         }
-        if(document.body.scrollHeight < window.innerHeight) {
+
+        if (document.body.scrollHeight < window.innerHeight) {
             // 如果屏蔽悬赏贴后，剩余帖子列表太少会没有滚动条，无法滚动页面触发自动翻页事件，需要手动触发
             ShowPager.loadMorePage();
         }
@@ -246,7 +240,7 @@
 
 
     // 隐藏帖子内的 [下一页] 按钮
-    function hidePgbtn(){
+    function hidePgbtn() {
         let style_hidePgbtn = document.createElement('style');
         style_hidePgbtn.innerHTML = `.pgbtn {display: none;}`;
         document.head.appendChild(style_hidePgbtn);
