@@ -143,9 +143,7 @@ textarea#fastpostmessage {
 }`,
             style_Add = document.createElement('style');
         style = style_2
-        if (menu_value('menu_rule')) {
-            style += style_1;
-        }
+        if (menu_value('menu_rule')) style += style_1;
         style_Add.innerHTML = style;
         document.head.appendChild(style_Add);
     }
