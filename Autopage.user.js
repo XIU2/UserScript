@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.1.7
+// @version      1.1.8
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、AlphaCoders、三国杀论坛、PubMed
+// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛
 // @match        *://www.423down.com/*
 // @exclude      *://www.423down.com/*.html
 // @match        *://apphot.cc/*
@@ -12,8 +12,10 @@
 // @match        *://www.appinn.com/*/*/
 // @match        *://www.appinn.com/?s=*
 // @match        *://www.iplaysoft.com/*
+// @match        *://www.pixiv.net/tags/*/*
 // @match        *://*.alphacoders.com/*
 // @match        *://club.sanguosha.com/*
+// @match        *://www.centbrowser.net/*
 // @match        *://pubmed.ncbi.nlm.nih.gov/?term=*
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_xmlhttpRequest
@@ -107,16 +109,16 @@
                 scrollDelta: 1200
             }
         },
-        sanguosha_forum: {
+        discuz_forum: {
             SiteTypeID: 7,
             pager: {
                 type: 2,
                 nextLink: '#autopbn',
                 nextText: '下一页 »',
-                scrollDelta: 800
+                scrollDelta: 1000
             }
         },
-        sanguosha_thread: {
+        discuz_thread: {
             SiteTypeID: 8,
             pager: {
                 type: 1,
@@ -124,10 +126,10 @@
                 pageElement: 'css;div#postlist > div[id^="post_"]',
                 HT_insert: ['css;div#postlist', 3],
                 replaceE: 'css;div.pg',
-                scrollDelta: 800
+                scrollDelta: 1000
             }
         },
-        sanguosha_search: {
+        discuz_search: {
             SiteTypeID: 9,
             pager: {
                 type: 1,
@@ -135,7 +137,7 @@
                 pageElement: 'css;div#threadlist > ul',
                 HT_insert: ['css;div#threadlist', 3],
                 replaceE: 'css;div.pg',
-                scrollDelta: 800
+                scrollDelta: 1000
             }
         },
         pubmed_postslist: {
@@ -157,6 +159,17 @@
                 replaceE: '//div[@class="hidden-xs hidden-sm"]/..',
                 scrollDelta: 1000
             }
+        },
+        pixiv_tags: {
+            SiteTypeID: 12,
+            pager: {
+                type: 1,
+                nextLink: '//nav[not(starts-with(@class,"sc-"))]//button/following-sibling::a[1][@href]',
+                pageElement: 'css;section > div > ul > li',
+                HT_insert: ['css;section > div > ul', 3],
+                replaceE: 'css;nav:not([class^="sc-"])',
+                scrollDelta: 1000
+            }
         }
     };
 
@@ -175,25 +188,40 @@
             curSite = DBSite.appinn_postslist;
             break;
         case "www.iplaysoft.com":
-            if(location.pathname.indexOf(".html") > -1 || location.pathname.indexOf("/p/") > -1){ // 文章内
+            if (location.pathname.indexOf(".html") > -1 || location.pathname.indexOf("/p/") > -1) { // 文章内
                 curSite = DBSite.iplaysoft_postcomments;
-            }else{ // 其他页面
+            } else { // 其他页面
                 curSite = DBSite.iplaysoft_postslist;
             }
+            break;
+        case "www.pixiv.net":
+            curSite = DBSite.pixiv_tags;
             break;
         case "wall.alphacoders.com":
         case "avatars.alphacoders.com":
         case "mobile.alphacoders.com":
             curSite = DBSite.wall_alphacoders;
             break;
-        case "club.sanguosha.com":
-            if(location.pathname.indexOf("forum") > -1){ //        各版块帖子列表
-                curSite = DBSite.sanguosha_forum;
-            }else if(location.pathname.indexOf("thread") > -1){ // 帖子内
-                curSite = DBSite.sanguosha_thread;
-                hidePgbtn(); //                                    隐藏帖子内的 [下一页] 按钮
-            }else if(location.pathname.indexOf("search") > -1){ // 搜索结果
-                curSite = DBSite.sanguosha_search;
+        case "club.sanguosha.com": //                                           Discuz! 论坛专用
+        case "www.centbrowser.net":
+            if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
+                if (location.pathname.indexOf('forum') > -1) { //               各版块帖子列表
+                    curSite = DBSite.discuz_forum;
+                } else if (location.pathname.indexOf('thread') > -1) { //       帖子内
+                    curSite = DBSite.discuz_thread;
+                    hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
+                }else if(location.pathname.indexOf('search') > -1) { //         搜索结果
+                    curSite = DBSite.discuz_search;
+                }
+            } else {
+                if (location.search.indexOf('mod=forumdisplay') > -1) { //      各版块帖子列表
+                    curSite = DBSite.discuz_forum;
+                } else if (location.search.indexOf('mod=viewthread') > -1) { // 帖子内
+                    curSite = DBSite.discuz_thread;
+                    hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
+                } else if (location.pathname.indexOf('search') > -1) { //       搜索结果
+                    curSite = DBSite.discuz_search;
+                }
             }
             break;
         case "pubmed.ncbi.nlm.nih.gov":
@@ -206,7 +234,7 @@
 
     // 自动无缝翻页
     function pageLoading() {
-        if (curSite.SiteTypeID > 0){
+        if (curSite.SiteTypeID > 0) {
             windowScroll(function (direction, e) {
                 if (direction === "down") { // 下滑才准备翻页
                     let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
@@ -214,12 +242,12 @@
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
                         if (curSite.pager.type === 1) {
                             ShowPager.loadMorePage();
-                        }else{
+                        } else {
                             let autopbn = document.querySelector(curSite.pager.nextLink);
-                            if (autopbn){ // 如果正在加载，就不再点击
-                                if (!curSite.pager.nextText){ // 如果没有指定 nextText 就直接点击
+                            if (autopbn) { // 如果正在加载，就不再点击
+                                if (!curSite.pager.nextText) { // 如果没有指定 nextText 就直接点击
                                     autopbn.click();
-                                }else if (autopbn.innerText.indexOf(curSite.pager.nextText) > -1){ // 如果指定了 nextText 就需要判断后再点击（避免已经在加载了，还重复点击）
+                                } else if (autopbn.innerText.indexOf(curSite.pager.nextText) > -1){ // 如果指定了 nextText 就需要判断后再点击（避免已经在加载了，还重复点击）
                                     autopbn.click();
                                 }
                             }
@@ -232,7 +260,7 @@
 
 
     // 隐藏帖子内的 [下一页] 按钮
-    function hidePgbtn(){
+    function hidePgbtn() {
         let style_hidePgbtn = document.createElement('style');
         style_hidePgbtn.innerHTML = `.pgbtn {display: none;}`;
         document.head.appendChild(style_hidePgbtn);
@@ -334,7 +362,7 @@
                     timeout: 5000,
                     onload: function (response) {
                         try {
-                            //console.log(`${response.responseText}`)
+                            console.log(`${response.responseText}`)
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody);
                             let toElement = getAllElements(curSite.pager.HT_insert[0])[0];
