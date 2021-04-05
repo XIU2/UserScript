@@ -222,14 +222,14 @@
                 document.getElementById('gift_v2excellent').click();
                 GM_setValue('menu_clockInTime', timeNow); //             写入签到时间以供后续比较
             } else { //                                                  都没有找到，说明已经签过到了
-                console.log('已经签过到了。')
+                console.info('[V2EX 增强] 已经签过到了。')
             }
         } else { //                                                      不在首页
             let timeOld = GM_getValue('menu_clockInTime')
             if (!timeOld || timeOld != timeNow) {
                 qianDaoStatus_(timeNow) //                               后台获取签到状态（并判断是否需要签到）
             } else { //                                                  新旧签到时间一致
-                console.log('已经签过到了。')
+                console.info('[V2EX 增强] 已经签过到了。')
             }
         }
     }
@@ -247,13 +247,14 @@
                 if (html.querySelector('li.fa.fa-ok-sign')) {
                     html = html.getElementById('Main').innerText.match(/已连续登录 (\d+?) 天/)[0];
                     GM_setValue('menu_clockInTime', timeNow); // 写入签到时间以供后续比较
-                    console.log('自动签到完成！')
+                    console.info('[V2EX 增强] 自动签到完成！')
                     if (qiandao) {
                         qiandao.innerText = `自动签到完成！${html}`;
                         qiandao.href = '#';
                     }
                 } else {
                     GM_notification({text: '自动签到失败！请联系作者解决！', timeout: 4000, onclick() {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/424246/feedback', {active: true,insert: true,setParent: true});}});
+                    console.warn('[V2EX 增强] 自动签到失败！请联系作者解决！')
                     if (qiandao) qiandao.innerText = '自动签到失败！请尝试手动签到！';
                 }
             }
@@ -272,7 +273,7 @@
                 if (html.querySelector('input[value^="领取"]')) { //     还没有签到...
                     qianDao_(null, timeNow); //                          后台签到
                 } else { //                                              已经签到了...
-                    console.log('已经签过到了。')
+                    console.info('[V2EX 增强] 已经签过到了。')
                     GM_setValue('menu_clockInTime', timeNow); //         写入签到时间以供后续比较
                 }
             }
