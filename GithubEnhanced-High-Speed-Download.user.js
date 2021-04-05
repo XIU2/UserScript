@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.4.4
+// @version      1.4.5
 // @author       X.I.U
 // @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -101,6 +101,15 @@
         addRawFile(); // 添加 Raw 加速按钮
         setTimeout(addRawDownLink, 2000); // 添加 Raw 下载链接（☁），延迟 2 秒执行，避免被 pjax 刷掉
     });
+
+    pushHistory();
+    window.addEventListener('popstate', function(e) {
+        addRawDownLink_(); // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）鼠标事件
+    }, false);
+    function pushHistory() {
+        let state = {title: 'title',url: '#'};
+        window.history.pushState(state, '', '');
+    }
 
 
     // Release
@@ -214,7 +223,7 @@
 
     // 添加 Raw 下载链接（☁）
     function addRawDownLink(){
-        // 如果不是项目文件页面，就返回
+        // 如果不是项目文件页面，就返回，如果网页有 Raw 下载链接（☁）就返回
         let files = document.querySelectorAll('div.Box-row svg.octicon.octicon-file');if(files.length === 0) return;
         let files1 = document.querySelectorAll('a.fileDownLink');if(files1.length > 0) return;
 
@@ -244,8 +253,7 @@
                 Name = cntElm_a.innerText,
                 href = cntElm_a.attributes.href.nodeValue.replace('https://github.com','');
             let href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
-            switch(menu_raw_fast)
-            {
+            switch(menu_raw_fast) {
                 case 1:
                     url = raw_url[1][0] + '/gh' + href.replace('/blob/','@');
                     url_name = raw_url[1][1];
@@ -277,5 +285,39 @@
         aElm.forEach(function(fileElm){
             fileElm.remove()
         })
+    }
+
+
+    // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）鼠标事件
+    function addRawDownLink_(){
+        // 如果不是项目文件页面，就返回，如果网页没有 Raw 下载链接（☁）就返回
+        let files = document.querySelectorAll('div.Box-row svg.octicon.octicon-file');if(files.length === 0) return;
+        let files1 = document.querySelectorAll('a.fileDownLink');if(files1.length === 0) return;
+
+        // 鼠标指向则显示
+        var mouseOverHandler = function(evt){
+            let elem = evt.currentTarget,
+                aElm_new = elem.querySelectorAll('.fileDownLink'),
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.color-icon-tertiary');
+            aElm_new.forEach(el=>{el.style.cssText = 'display: inline'});
+            aElm_now.forEach(el=>{el.style.cssText = 'display: none'});
+        };
+
+        // 鼠标离开则隐藏
+        var mouseOutHandler = function(evt){
+            let elem = evt.currentTarget,
+                aElm_new = elem.querySelectorAll('.fileDownLink'),
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.color-icon-tertiary');
+            aElm_new.forEach(el=>{el.style.cssText = 'display: none'});
+            aElm_now.forEach(el=>{el.style.cssText = 'display: inline'});
+        };
+
+        // 循环添加
+        files.forEach(function(fileElm, i){
+            let trElm = fileElm.parentNode.parentNode;
+            // 绑定鼠标事件
+            trElm.onmouseover = mouseOverHandler;
+            trElm.onmouseout = mouseOutHandler;
+        });
     }
 })();
