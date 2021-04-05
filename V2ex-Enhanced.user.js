@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.0.8
+// @version      1.0.9
 // @author       X.I.U
 // @description  自动签到、链接转图片、自动无缝翻页、回到顶部（右键点击两侧空白处）、快速回复（左键双击两侧空白处）、新标签页打开链接、标签页伪装为 Github（摸鱼）
 // @match        *://v2ex.com/*
@@ -86,7 +86,7 @@
                 pageElement: 'css;.cell.item',
                 HT_insert: ['//div[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
                 replaceE: 'css;#Main > .box > .cell[style]:not(.item) > table',
-                scrollDelta: 600
+                scrollDelta: 1000
             },
             function: {
                 after: linksBlank,
@@ -131,7 +131,7 @@
                 pageElement: 'css;#TopicsNode > div',
                 HT_insert: ['css;#TopicsNode', 3],
                 replaceE: 'css;#Main > .box > .cell[style] > table',
-                scrollDelta: 700
+                scrollDelta: 1000
             },
             function: {
                 after: linksBlank,
@@ -146,7 +146,7 @@
                 pageElement: 'css;.cell[id^="r_"]',
                 HT_insert: ['//div[starts-with(@id, "r_")][last()]/following-sibling::div[@class="cell"][1]', 1],
                 replaceE: 'css;#Main > .box > .cell[style] > table',
-                scrollDelta: 700
+                scrollDelta: 1000
             }
         },
         reply_positive: { // 帖子内容页（正序）
@@ -157,7 +157,7 @@
                 pageElement: 'css;.cell[id^="r_"]',
                 HT_insert: ['//div[starts-with(@id, "r_")][1]', 1],
                 replaceE: 'css;#Main > .box > .cell[style] > table',
-                scrollDelta: 700
+                scrollDelta: 1000
             }
         },
         balance: { // 账户余额页
@@ -177,6 +177,7 @@
     switch (location.pathname) {
         case "/": //              首页
             linksBlank('#Main a.topic-link:not([target])');
+            addChangesLink();
             break;
         case "/recent": //        最近主题页
             curSite = DBSite.recent;
@@ -347,6 +348,13 @@
         Array.from(links).forEach(function (_this) {
             _this.target = '_blank'
         });
+    }
+
+
+    // 添加全站最近更新主题链接
+    function addChangesLink() {
+        let links = document.querySelector('#Main .box .inner:last-child');if (!links) return
+        links.innerHTML = `<div style="float: left;"><span class="chevron">»</span> &nbsp;<a href="/recent" target="_blank">更多新主题</a></div><div style="text-align: right;"><a href="/changes" target="_blank" style="text-align: right;">全站最近更新主题</a> &nbsp;<span class="chevron">«</span></div>`
     }
 
 
