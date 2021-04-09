@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.1.8
+// @version      1.1.9
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛
+// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、FitGirl Repacks、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛
 // @match        *://www.423down.com/*
 // @exclude      *://www.423down.com/*.html
 // @match        *://apphot.cc/*
@@ -12,7 +12,7 @@
 // @match        *://www.appinn.com/*/*/
 // @match        *://www.appinn.com/?s=*
 // @match        *://www.iplaysoft.com/*
-// @match        *://www.pixiv.net/tags/*/*
+// @match        *://fitgirl-repacks.site/*
 // @match        *://*.alphacoders.com/*
 // @match        *://club.sanguosha.com/*
 // @match        *://www.centbrowser.net/*
@@ -160,15 +160,15 @@
                 scrollDelta: 1000
             }
         },
-        pixiv_tags: {
+        fitgirl: {
             SiteTypeID: 12,
             pager: {
                 type: 1,
-                nextLink: '//nav[not(starts-with(@class,"sc-"))]//button/following-sibling::a[1][@href]',
-                pageElement: 'css;section > div > ul > li',
-                HT_insert: ['css;section > div > ul', 3],
-                replaceE: 'css;nav:not([class^="sc-"])',
-                scrollDelta: 1000
+                nextLink: '//a[@class="next page-numbers"][@href]',
+                pageElement: 'css;article[id^="post-"]',
+                HT_insert: ['css;nav.navigation.paging-navigation', 1],
+                replaceE: 'css;nav.navigation.paging-navigation',
+                scrollDelta: 2000
             }
         }
     };
@@ -194,8 +194,8 @@
                 curSite = DBSite.iplaysoft_postslist;
             }
             break;
-        case "www.pixiv.net":
-            curSite = DBSite.pixiv_tags;
+        case "fitgirl-repacks.site":
+            curSite = DBSite.fitgirl;
             break;
         case "wall.alphacoders.com":
         case "avatars.alphacoders.com":
