@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.2.6
+// @version      1.2.7
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页、屏蔽导读悬赏贴（最新发表页）
 // @match        *://www.52pojie.cn/*
@@ -20,7 +20,8 @@
 (function() {
     var menu_ALL = [
         ['menu_autoClockIn', '自动签到', '自动签到', true],
-        ['menu_thread_pageLoading', '帖子内自动翻页', '帖子内自动翻页', true],
+        ['menu_pageLoading', '自动无缝翻页', '自动无缝翻页', true],
+        ['menu_thread_pageLoading', '帖子内自动无缝翻页', '帖子内自动无缝翻页', true],
         ['menu_delateReward', '屏蔽导读悬赏贴（最新发表）', '屏蔽导读悬赏贴', true]
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++) { // 如果读取到的值为 null 就写入默认值
@@ -163,6 +164,7 @@
 
     // 自动翻页
     function pageLoading() {
+        if (!menu_value('menu_pageLoading')) return
         if (curSite.SiteTypeID > 0) {
             windowScroll(function (direction, e) {
                 if (direction === "down") { // 下滑才准备翻页
