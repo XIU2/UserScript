@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.1.9
+// @version      1.2.0
 // @author       X.I.U
 // @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、FitGirl Repacks、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛
 // @match        *://www.423down.com/*
@@ -160,8 +160,22 @@
                 scrollDelta: 1000
             }
         },
-        fitgirl: {
+        art_alphacoders: {
             SiteTypeID: 12,
+            pager: {
+                type: 1,
+                nextLink: '//a[@id="next_page"][@href]',
+                pageElement: 'css;.container-masonry > div',
+                HT_insert: ['css;.container-masonry', 3],
+                replaceE: '//div[@class="hidden-xs hidden-sm"]/..',
+                scrollDelta: 1000
+            },
+            function: {
+                before: art_alphacoders_beforeFunction
+            }
+        },
+        fitgirl: {
+            SiteTypeID: 13,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="next page-numbers"][@href]',
@@ -196,6 +210,10 @@
             break;
         case "fitgirl-repacks.site":
             curSite = DBSite.fitgirl;
+            break;
+        case "art.alphacoders.com":
+            curSite = DBSite.art_alphacoders;
+            setTimeout(art_alphacoders_beforeFunction_0, 1000);
             break;
         case "wall.alphacoders.com":
         case "avatars.alphacoders.com":
@@ -293,6 +311,25 @@
     }
 
 
+    // art_alphacoders
+    function art_alphacoders_beforeFunction_0() {
+        let pageElems1 = document.querySelectorAll(".container-masonry > div")
+        document.querySelector(".container-masonry").style.height = "auto"
+        pageElems1.forEach(function (one) {
+            one.setAttribute("style","float: left");
+        });
+    }
+
+
+    // art_alphacoders 的插入前函数
+    function art_alphacoders_beforeFunction(pageElems) {
+        pageElems.forEach(function (one) {
+            one.setAttribute("style","float: left");
+        });
+        return pageElems
+    }
+
+
     // 滚动条事件
     function windowScroll(fn1) {
         var beforeScrollTop = document.documentElement.scrollTop,
@@ -362,7 +399,7 @@
                     timeout: 5000,
                     onload: function (response) {
                         try {
-                            console.log(`${response.responseText}`)
+                            //console.log(`${response.responseText}`)
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody);
                             let toElement = getAllElements(curSite.pager.HT_insert[0])[0];
