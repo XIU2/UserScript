@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛美化
-// @version      1.0.6
+// @version      1.0.7
 // @author       X.I.U
 // @description  精简多余内容、样式优化
 // @match        *://www.52pojie.cn/*
@@ -65,6 +65,10 @@
         let style,
             style_1 = `.bml {display:none !important;}`,
             style_2 = `
+#postlist .plc .t_f img, #postlist .plc .tattl img {
+    max-height: 500px !important;
+    width: auto !important;
+}
 a[href="connect.php?mod=config"], #toptb, #navmenu, #nv_ph, #nv, #pt .y, #chart, #ft, #custominfo_pmenu, .bm.lk, .dnch_eo_pt, .dnch_eo_pr, .dnch_eo_f, dl.pil.cl, td.plc.plm .sign, .dnch_eo_pb, .dnch_eo_pt, .pls .side-star, .pls .side-group, .res-footer-note, .comiis_nav, .scbar_hot_td, .md_ctrl, .pls.favatar .xg1 {
 	display:none !important;
 }
@@ -145,6 +149,11 @@ textarea#fastpostmessage {
         style = style_2
         if (menu_value('menu_rule')) style += style_1;
         style_Add.innerHTML = style;
-        document.head.appendChild(style_Add);
+        let timer = setInterval(function(){
+            if (document.head) {
+                document.head.appendChild(style_Add);
+                clearInterval(timer);
+            }
+        }, 10);
     }
 })();
