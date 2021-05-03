@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.1.2
+// @version      1.1.3
 // @author       X.I.U
-// @description  宽屏显示、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
+// @description  宽屏显示、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、优化暗黑模式（知乎自带）、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/p/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -22,7 +22,8 @@
         ['menu_widescreenDisplay', '宽屏显示', '一键收起回答', true],
         ['menu_picHeight', '调整图片最大高度', '调整图片最大高度', true],
         ['menu_postimg', '隐藏文章开头大图', '隐藏文章开头大图', true],
-        ['menu_hideTitle', '向下翻时自动隐藏顶栏', '向下翻时自动隐藏顶栏', true]
+        ['menu_hideTitle', '向下翻时自动隐藏顶栏', '向下翻时自动隐藏顶栏', true],
+        ['menu_darkMode', '优化暗黑模式（知乎自带）', '优化暗黑模式', true]
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
@@ -116,6 +117,25 @@ header.is-hidden {
 	max-height: 500px;
 	width: auto;
 }
+`,
+            style_6 = `/* 优化暗黑模式（知乎自带）*/
+/* 文字颜色 */
+html[data-theme=dark] body {color: #ccc !important;}
+html[data-theme=dark] .ContentItem-title, html[data-theme=dark] .QuestionHeader-title {color: #ddd !important;}
+/* 背景颜色 - 网页 */
+html[data-theme=dark] body {background: #22272E !important;}
+/* 背景颜色 - 问题 */
+html[data-theme=dark] .AppHeader, html[data-theme=dark] .QuestionHeader, html[data-theme=dark] .QuestionHeader-footer, html[data-theme=dark] .Input-wrapper.Input-wrapper--grey, html[data-theme=dark] .EmoticonsFooter-item--selected, html[data-theme=dark] .Card, html[data-theme=dark] .ContentItem-actions, html[data-theme=dark] .MoreAnswers .List-headerText, html[data-theme=dark] .CommentsV2-withPagination, html[data-theme=dark] .Topbar, html[data-theme=dark] .CommentsV2-footer, html[data-theme=dark] .CommentEditorV2-inputWrap--active, html[data-theme=dark] .InputLike, html[data-theme=dark] .Popover-content, html[data-theme=dark] .Notifications-footer, html[data-theme=dark] .Messages-footer, html[data-theme=dark] .Modal-inner, html[data-theme=dark] .Emoticons, html[data-theme=dark] .EmoticonsFooter, html[data-theme=dark] .SearchTabs {background: #1c2129 !important;}
+html[data-theme=dark] .CommentListV2-header-divider, html[data-theme=dark] .CommentsV2-openComment-divider {background-color: #222933 !important;}
+/* 背景颜色 - 用户页面 */
+html[data-theme=dark] .ProfileHeader-wrapper, html[data-theme=dark] .UserCover {background: #1c2129 !important;}
+/* 背景颜色 - 用户页面 - 封面大图 */
+html[data-theme=dark] .UserCover {opacity: 0.7;}
+/* 边框 */
+html[data-theme=dark] .Topbar, html[data-theme=dark] .CommentsV2-footer, html[data-theme=dark] .Topstory-mainColumnCard .Card:not(.Topstory-tabCard), html[data-theme=dark] .NestComment:not(:last-child):after, html[data-theme=dark] .NestComment--rootComment:after, html[data-theme=dark] .NestComment .NestComment--child:after, html[data-theme=dark] .NestComment .NestComment--child:after, html[data-theme=dark] .CommentsV2-replyNum, html[data-theme=dark] .CommentItemV2:not(:first-child):after {border-bottom: 1px solid #1c2129 !important;}
+/* 背景颜色 - 专栏/文章 */
+html[data-theme=dark] .WhiteBg-body, html[data-theme=dark] .Post-content {background: #22272E !important;}
+html[data-theme=dark] .ColumnPageHeader {background: #1c2129 !important;}
 `
         let style_Add = document.createElement('style');
         // 宽屏显示
@@ -133,6 +153,10 @@ header.is-hidden {
         // 向下翻时自动隐藏顶栏
         if (menu_value('menu_hideTitle')) {
             style += style_4;
+        }
+        // 优化暗黑模式（知乎自带）
+        if (menu_value('menu_darkMode')) {
+            style += style_6;
         }
         // 文章编辑页面与实际文章宽度一致
         if(window.location.href.indexOf("zhuanlan") > -1){
