@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.1.3
+// @version      1.1.4
 // @author       X.I.U
-// @description  宽屏显示、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、优化暗黑模式（知乎自带）、文章编辑页面与实际文章宽度一致、屏蔽登录提示
+// @description  宽屏显示、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、开启暗黑模式（样式优化过）、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/p/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -23,7 +23,7 @@
         ['menu_picHeight', '调整图片最大高度', '调整图片最大高度', true],
         ['menu_postimg', '隐藏文章开头大图', '隐藏文章开头大图', true],
         ['menu_hideTitle', '向下翻时自动隐藏顶栏', '向下翻时自动隐藏顶栏', true],
-        ['menu_darkMode', '优化暗黑模式（知乎自带）', '优化暗黑模式', true]
+        ['menu_darkMode', '开启暗黑模式（样式优化过）', '开启暗黑模式', true]
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
@@ -118,7 +118,7 @@ header.is-hidden {
 	width: auto;
 }
 `,
-            style_6 = `/* 优化暗黑模式（知乎自带）*/
+            style_6 = `/* 开启暗黑模式（样式优化过） */
 /* 文字颜色 */
 html[data-theme=dark] body {color: #ccc !important;}
 html[data-theme=dark] .ContentItem-title, html[data-theme=dark] .QuestionHeader-title {color: #ddd !important;}
@@ -154,9 +154,13 @@ html[data-theme=dark] .ColumnPageHeader {background: #1c2129 !important;}
         if (menu_value('menu_hideTitle')) {
             style += style_4;
         }
-        // 优化暗黑模式（知乎自带）
+        // 开启暗黑模式（样式优化过）
         if (menu_value('menu_darkMode')) {
             style += style_6;
+            if (document.getElementsByTagName('html')[0].getAttribute('data-theme') != 'dark') {
+                document.getElementsByTagName('html')[0].setAttribute('data-theme', 'dark')
+                location.search = '?theme=dark'
+            }
         }
         // 文章编辑页面与实际文章宽度一致
         if(window.location.href.indexOf("zhuanlan") > -1){
