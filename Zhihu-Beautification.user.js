@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.1.6
+// @version      1.1.7
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（3种）、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -50,7 +50,7 @@
         menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/412212/feedback', {active: true,insert: true,setParent: true});});
     }
 
-    // 切换加速源
+    // 切换暗黑模式
     function menu_toggle(menu_status, Name) {
         menu_status = parseInt(menu_status)
         if (menu_status >= 3){
@@ -59,8 +59,8 @@
             menu_status += 1;
         }
         GM_setValue(`${Name}`, menu_status);
-        GM_notification({text: `已切换暗黑模式为：方案 ${menu_status}\n（刷新网页后生效）`, timeout: 3500}); // 提示消息
-        registerMenuCommand(); // 重新注册脚本菜单
+        //GM_notification({text: `已切换暗黑模式为：方案 ${menu_status}\n（刷新网页后生效）`, timeout: 3500}); // 提示消息
+        location.reload(); // 刷新网页
     };
 
     // 菜单开关
