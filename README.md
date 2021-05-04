@@ -17,7 +17,7 @@
 
 |  | 脚本名称 | 脚本功能 | 安装 \| 备用 |
 | :----: | :---- | :---- | :----: |
-| [<img src="https://static.zhihu.com/heifetz/favicon.ico" height="16px" />](https://www.zhihu.com/people/xiu2) | **知乎 美化** | 宽屏显示、隐藏文章开头大图、调整图片最大高度、隐藏浏览... | **[安装](https://greasyfork.org/zh-CN/scripts/412212)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Beautification.user.js)** |
+| [<img src="https://static.zhihu.com/heifetz/favicon.ico" height="16px" />](https://www.zhihu.com/people/xiu2) | **知乎 美化** | 宽屏显示、**暗黑模式**、隐藏文章开头大图、调整图片最大高度... | **[安装](https://greasyfork.org/zh-CN/scripts/412212)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Beautification.user.js)** |
 | [<img src="https://static.zhihu.com/heifetz/favicon.ico" height="16px" />](https://www.zhihu.com/people/xiu2) | **知乎 增强** | **移除登录弹窗**、一键收起回答、置顶显示时间、区分问题文章... | **[安装](https://greasyfork.org/zh-CN/scripts/419081)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Enhanced.user.js)** |
 | [<img src="https://www.v2ex.com/static/favicon.ico" height="16px" />](https://www.v2ex.com/) | **V2ex 增强** | **自动签到**、自动无缝翻页、回到顶部 (右键点击两侧空白处... | **[安装](https://greasyfork.org/zh-CN/scripts/424246)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/V2ex-Enhanced.user.js)** |
 | [<img src="https://i.loli.net/2021/03/30/ULV9XunaHesqGIR.png" height="16px" />](https://github.com/XIU2) |  **Github 增强** | **高速下载** Git Clone、Release、Raw、Code(ZIP) 等文件... | **[安装](https://greasyfork.org/zh-CN/scripts/412245)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/GithubEnhanced-High-Speed-Download.user.js)** |
