@@ -142,7 +142,7 @@ header.is-hidden {
 `,
             style_6 = `/* 暗黑模式（方案 1） */
 /* 文字颜色 */
-html[data-theme=dark] body, html[data-theme=dark] .ContentItem-title, html[data-theme=dark] .QuestionHeader-title, html[data-theme=dark] .Tabs-link, html[data-theme=dark] .CreatorEntrance-title {color: #d1d5d9 !important;}
+html[data-theme=dark] body, html[data-theme=dark] .ContentItem-title, html[data-theme=dark] .QuestionHeader-title, html[data-theme=dark] .Tabs-link, html[data-theme=dark] .CreatorEntrance-title {color: #adbac7 !important;}
 
 /* 背景颜色 - 网页 */
 html[data-theme=dark] body {background: #22272E !important;}
@@ -152,8 +152,11 @@ html[data-theme=dark] .CommentListV2-header-divider, html[data-theme=dark] .Comm
 /* 背景颜色 - 用户页面 */
 html[data-theme=dark] .ProfileHeader-wrapper, html[data-theme=dark] .UserCover {background: #1c2129 !important;}
 
+/* 背景颜色 - 引用 */
+html[data-theme=dark] .ztext blockquote {color: #768390 !important;border-left: 3px solid #3b3b3b !important;}
+
 /* 封面大图/文章头部大图 */
-html[data-theme=dark] img.UserCover-image, html[data-theme=dark] img.TitleImage {opacity: 0.8 !important;}
+html[data-theme=dark] img.UserCover-image, html[data-theme=dark] img.TitleImage {opacity: 0.7 !important;}
 /* 其他图片 */
 html[data-theme=dark] img {opacity: 0.9 !important;}
 
@@ -174,10 +177,10 @@ html {filter: invert(80%) !important;}
 img, .ZVideoItem-video, .ZVideo-video {filter: invert(1) !important;}
 `,
             style_8 = `/* 暗黑模式（方案 3） */
-html {filter: brightness(80%) !important;}
+html {filter: brightness(75%) !important;}
 `,
             style_9 = `/* 暗黑模式（方案 4） */
-html {filter: brightness(80%) sepia(30%) !important;}
+html {filter: brightness(75%) sepia(30%) !important;}
 `
         let style_Add = document.createElement('style');
 
