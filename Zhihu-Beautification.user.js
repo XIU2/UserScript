@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.1.4
+// @version      1.1.5
 // @author       X.I.U
 // @description  宽屏显示、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、开启暗黑模式（样式优化过）、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -120,8 +120,8 @@ header.is-hidden {
 `,
             style_6 = `/* 开启暗黑模式（样式优化过） */
 /* 文字颜色 */
-html[data-theme=dark] body {color: #ccc !important;}
-html[data-theme=dark] .ContentItem-title, html[data-theme=dark] .QuestionHeader-title {color: #ddd !important;}
+html[data-theme=dark] body {color: #bbb !important;}
+html[data-theme=dark] .ContentItem-title, html[data-theme=dark] .QuestionHeader-title {color: #ccc !important;}
 /* 背景颜色 - 网页 */
 html[data-theme=dark] body {background: #22272E !important;}
 /* 背景颜色 - 问题 */
@@ -129,13 +129,16 @@ html[data-theme=dark] .AppHeader, html[data-theme=dark] .QuestionHeader, html[da
 html[data-theme=dark] .CommentListV2-header-divider, html[data-theme=dark] .CommentsV2-openComment-divider {background-color: #222933 !important;}
 /* 背景颜色 - 用户页面 */
 html[data-theme=dark] .ProfileHeader-wrapper, html[data-theme=dark] .UserCover {background: #1c2129 !important;}
-/* 背景颜色 - 用户页面 - 封面大图 */
-html[data-theme=dark] .UserCover {opacity: 0.7;}
+/* 背景颜色 - 用户页面 - 封面大图/文章头部大图 */
+html[data-theme=dark] img.UserCover-image, html[data-theme=dark] img.TitleImage {opacity: 0.7;}
 /* 边框 */
 html[data-theme=dark] .Topbar, html[data-theme=dark] .CommentsV2-footer, html[data-theme=dark] .Topstory-mainColumnCard .Card:not(.Topstory-tabCard), html[data-theme=dark] .NestComment:not(:last-child):after, html[data-theme=dark] .NestComment--rootComment:after, html[data-theme=dark] .NestComment .NestComment--child:after, html[data-theme=dark] .NestComment .NestComment--child:after, html[data-theme=dark] .CommentsV2-replyNum, html[data-theme=dark] .CommentItemV2:not(:first-child):after {border-bottom: 1px solid #1c2129 !important;}
 /* 背景颜色 - 专栏/文章 */
 html[data-theme=dark] .WhiteBg-body, html[data-theme=dark] .Post-content {background: #22272E !important;}
 html[data-theme=dark] .ColumnPageHeader {background: #1c2129 !important;}
+/* 赞同按钮颜色（蓝色） */
+.TopstoryTabs-link.is-active, html[data-theme=dark] .TopstoryTabs-link.is-active, html[data-theme=dark] .VoteButton {color: #3faaff !important;}
+/*html[data-theme=dark] .Tabs-link.is-active:after {background: #2196F3 !important;}*/
 `
         let style_Add = document.createElement('style');
         // 宽屏显示
