@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.1.7
+// @version      1.1.8
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（3种）、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -159,7 +159,8 @@ html[data-theme=dark] .ColumnPageHeader {background: #1c2129 !important;}
 /*html[data-theme=dark] .Tabs-link.is-active:after {background: #2196F3 !important;}*/
 `,
             style_7 = `/* 暗黑模式（方案 2） */
-html {filter: invert(0.8) !important;} img {filter: invert(1) !important;}
+html {filter: invert(0.8) !important;}
+img, .ZVideoItem-video, .ZVideo-video {filter: invert(1) !important;}
 `,
             style_8 = `/* 暗黑模式（方案 3） */
 html {filter: brightness(0.8) !important;}
