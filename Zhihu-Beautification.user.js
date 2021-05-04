@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.1.5
+// @version      1.1.6
 // @author       X.I.U
-// @description  宽屏显示、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、开启暗黑模式（样式优化过）、文章编辑页面与实际文章宽度一致、屏蔽登录提示
+// @description  宽屏显示、暗黑模式（3种）、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/p/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -20,10 +20,11 @@
 (function() {
     var menu_ALL = [
         ['menu_widescreenDisplay', '宽屏显示', '一键收起回答', true],
+        ['menu_darkMode', '暗黑模式', '暗黑模式', true],
+        ['menu_darkModeType', '暗黑模式切换（1~3）', '暗黑模式切换', 1],
         ['menu_picHeight', '调整图片最大高度', '调整图片最大高度', true],
         ['menu_postimg', '隐藏文章开头大图', '隐藏文章开头大图', true],
-        ['menu_hideTitle', '向下翻时自动隐藏顶栏', '向下翻时自动隐藏顶栏', true],
-        ['menu_darkMode', '开启暗黑模式（样式优化过）', '开启暗黑模式', true]
+        ['menu_hideTitle', '向下翻时自动隐藏顶栏', '向下翻时自动隐藏顶栏', true]
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
@@ -40,17 +41,34 @@
         }
         for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
             menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
-            menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+            if (menu_ALL[i][0] === 'menu_darkModeType') {
+                menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]} ] ${menu_ALL[i][1]}`, function(){menu_toggle(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
+            } else {
+                menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+            }
         }
         menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/412212/feedback', {active: true,insert: true,setParent: true});});
     }
+
+    // 切换加速源
+    function menu_toggle(menu_status, Name) {
+        menu_status = parseInt(menu_status)
+        if (menu_status >= 3){
+            menu_status = 1;
+        } else {
+            menu_status += 1;
+        }
+        GM_setValue(`${Name}`, menu_status);
+        GM_notification({text: `已切换暗黑模式为：方案 ${menu_status}\n（刷新网页后生效）`, timeout: 3500}); // 提示消息
+        registerMenuCommand(); // 重新注册脚本菜单
+    };
 
     // 菜单开关
     function menu_switch(menu_status, Name, Tips) {
         if (menu_status == 'true'){
             GM_setValue(`${Name}`, false);
             GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
-        }else{
+        } else {
             GM_setValue(`${Name}`, true);
             GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }
@@ -118,7 +136,7 @@ header.is-hidden {
 	width: auto;
 }
 `,
-            style_6 = `/* 开启暗黑模式（样式优化过） */
+            style_6 = `/* 暗黑模式（方案 1） */
 /* 文字颜色 */
 html[data-theme=dark] body {color: #bbb !important;}
 html[data-theme=dark] .ContentItem-title, html[data-theme=dark] .QuestionHeader-title {color: #ccc !important;}
@@ -139,38 +157,74 @@ html[data-theme=dark] .ColumnPageHeader {background: #1c2129 !important;}
 /* 赞同按钮颜色（蓝色） */
 .TopstoryTabs-link.is-active, html[data-theme=dark] .TopstoryTabs-link.is-active, html[data-theme=dark] .VoteButton {color: #3faaff !important;}
 /*html[data-theme=dark] .Tabs-link.is-active:after {background: #2196F3 !important;}*/
+`,
+            style_7 = `/* 暗黑模式（方案 2） */
+html {filter: invert(0.8) !important;} img {filter: invert(1) !important;}
+`,
+            style_8 = `/* 暗黑模式（方案 3） */
+html {filter: brightness(0.8) !important;}
 `
         let style_Add = document.createElement('style');
+
         // 宽屏显示
         if (menu_value('menu_widescreenDisplay')) {
             style += style_1;
         }
+
         // 调整图片最大高度
         if (menu_value('menu_picHeight')) {
             style += style_5;
         }
+
         // 隐藏文章开头大图
         if (menu_value('menu_postimg')) {
             style += style_2;
         }
+
         // 向下翻时自动隐藏顶栏
         if (menu_value('menu_hideTitle')) {
             style += style_4;
         }
-        // 开启暗黑模式（样式优化过）
+
+        // 暗黑模式
         if (menu_value('menu_darkMode')) {
-            style += style_6;
-            if (document.getElementsByTagName('html')[0].getAttribute('data-theme') != 'dark') {
-                document.getElementsByTagName('html')[0].setAttribute('data-theme', 'dark')
-                location.search = '?theme=dark'
+            switch(menu_value('menu_darkModeType')) {
+                case 1:
+                    style += style_6;
+                    if (document.getElementsByTagName('html')[0].getAttribute('data-theme') != 'dark') {
+                        document.getElementsByTagName('html')[0].setAttribute('data-theme', 'dark')
+                        location.search = '?theme=dark'
+                    }
+                    break;
+                case 2:
+                    style += style_7;
+                    if (document.getElementsByTagName('html')[0].getAttribute('data-theme') === 'dark') {
+                        document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light')
+                        location.search = '?theme=light'
+                    }
+                    break;
+                case 3:
+                    style += style_8;
+                    if (document.getElementsByTagName('html')[0].getAttribute('data-theme') === 'dark') {
+                        document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light')
+                        location.search = '?theme=light'
+                    }
+                    break;
+            }
+        } else {
+            if (document.getElementsByTagName('html')[0].getAttribute('data-theme') === 'dark') {
+                document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light')
+                location.search = '?theme=light'
             }
         }
+
         // 文章编辑页面与实际文章宽度一致
         if(window.location.href.indexOf("zhuanlan") > -1){
             if(window.location.href.indexOf("/edit") > -1){
                 style += style_3;
             }
         }
+
         style_Add.innerHTML = style;
         document.head.appendChild(style_Add);
     }
