@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.1.8
+// @version      1.1.9
 // @author       X.I.U
-// @description  宽屏显示、暗黑模式（3种）、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
+// @description  宽屏显示、暗黑模式（4种）、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/p/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -21,7 +21,7 @@
     var menu_ALL = [
         ['menu_widescreenDisplay', '宽屏显示', '一键收起回答', true],
         ['menu_darkMode', '暗黑模式', '暗黑模式', true],
-        ['menu_darkModeType', '暗黑模式切换（1~3）', '暗黑模式切换', 1],
+        ['menu_darkModeType', '暗黑模式切换（1~4）', '暗黑模式切换', 1],
         ['menu_picHeight', '调整图片最大高度', '调整图片最大高度', true],
         ['menu_postimg', '隐藏文章开头大图', '隐藏文章开头大图', true],
         ['menu_hideTitle', '向下翻时自动隐藏顶栏', '向下翻时自动隐藏顶栏', true]
@@ -42,6 +42,10 @@
         for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
             menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
             if (menu_ALL[i][0] === 'menu_darkModeType') {
+                if (menu_ALL[i][3] > 4){ // 避免在减少 raw 数组后，用户储存的数据大于数组而报错
+                    menu_ALL[i][3] = 1;
+                    GM_setValue('menu_darkModeType', menu_ALL[i][3]);
+                }
                 menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]} ] ${menu_ALL[i][1]}`, function(){menu_toggle(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
             } else {
                 menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
@@ -53,7 +57,7 @@
     // 切换暗黑模式
     function menu_toggle(menu_status, Name) {
         menu_status = parseInt(menu_status)
-        if (menu_status >= 3){
+        if (menu_status >= 4){
             menu_status = 1;
         } else {
             menu_status += 1;
@@ -159,11 +163,14 @@ html[data-theme=dark] .ColumnPageHeader {background: #1c2129 !important;}
 /*html[data-theme=dark] .Tabs-link.is-active:after {background: #2196F3 !important;}*/
 `,
             style_7 = `/* 暗黑模式（方案 2） */
-html {filter: invert(0.8) !important;}
+html {filter: invert(80%) !important;}
 img, .ZVideoItem-video, .ZVideo-video {filter: invert(1) !important;}
 `,
             style_8 = `/* 暗黑模式（方案 3） */
-html {filter: brightness(0.8) !important;}
+html {filter: brightness(80%) !important;}
+`,
+            style_9 = `/* 暗黑模式（方案 4） */
+html {filter: brightness(80%) sepia(30%) !important;}
 `
         let style_Add = document.createElement('style');
 
@@ -206,6 +213,13 @@ html {filter: brightness(0.8) !important;}
                     break;
                 case 3:
                     style += style_8;
+                    if (document.getElementsByTagName('html')[0].getAttribute('data-theme') === 'dark') {
+                        document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light')
+                        location.search = '?theme=light'
+                    }
+                    break;
+                case 4:
+                    style += style_9;
                     if (document.getElementsByTagName('html')[0].getAttribute('data-theme') === 'dark') {
                         document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light')
                         location.search = '?theme=light'
