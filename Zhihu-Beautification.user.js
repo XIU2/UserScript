@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.1.12
+// @version      1.1.13
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -20,7 +20,7 @@
 (function() {
     var menu_ALL = [
         ['menu_widescreenDisplay', '宽屏显示', '宽屏显示', true],
-        ['menu_darkMode', '暗黑模式', '暗黑模式', true],
+        ['menu_darkMode', '暗黑模式', '暗黑模式', false],
         ['menu_darkModeType', '暗黑模式切换（1~4）', '暗黑模式切换', 1],
         ['menu_picHeight', '调整图片最大高度', '调整图片最大高度', true],
         ['menu_postimg', '隐藏文章开头大图', '隐藏文章开头大图', true],
