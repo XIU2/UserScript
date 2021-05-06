@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.1.11
+// @version      1.1.12
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -19,7 +19,7 @@
 
 (function() {
     var menu_ALL = [
-        ['menu_widescreenDisplay', '宽屏显示', '一键收起回答', true],
+        ['menu_widescreenDisplay', '宽屏显示', '宽屏显示', true],
         ['menu_darkMode', '暗黑模式', '暗黑模式', true],
         ['menu_darkModeType', '暗黑模式切换（1~4）', '暗黑模式切换', 1],
         ['menu_picHeight', '调整图片最大高度', '调整图片最大高度', true],
@@ -63,18 +63,43 @@
             menu_status += 1;
         }
         GM_setValue(`${Name}`, menu_status);
-        //GM_notification({text: `已切换暗黑模式为：方案 ${menu_status}\n（刷新网页后生效）`, timeout: 3500}); // 提示消息
-        location.reload(); // 刷新网页
+        if (menu_status === 1) { // 设置 Cookie
+            if (getTheme() === 'light') document.cookie="theme=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/";
+        } else {
+            if (getTheme() === 'dark') document.cookie="theme=light; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/";
+        }
+        if (menu_value('menu_darkMode')) {
+            location.reload(); // 刷新网页
+        } else {
+            GM_notification({text: `已切换暗黑模式为：方案 ${menu_status}\n`, timeout: 3500}); // 提示消息
+            registerMenuCommand(); // 重新注册脚本菜单
+        }
     };
 
     // 菜单开关
     function menu_switch(menu_status, Name, Tips) {
         if (menu_status == 'true'){
             GM_setValue(`${Name}`, false);
-            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
+
+            if (Name === 'menu_darkMode') { // 暗黑模式
+                if (getTheme() === 'dark') document.cookie="theme=light; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/";
+                location.reload(); // 刷新网页
+            } else {
+                GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
+            }
         } else {
             GM_setValue(`${Name}`, true);
-            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
+
+            if (Name === 'menu_darkMode') {
+                if (menu_value('menu_darkModeType') === 1) {
+                    if (getTheme() === 'light') document.cookie="theme=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/";
+                } else {
+                    if (getTheme() === 'dark') document.cookie="theme=light; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/";
+                }
+                location.reload(); // 刷新网页
+            } else {
+                GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
+            }
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
@@ -147,13 +172,21 @@ html[data-theme=dark] body, html[data-theme=dark] .ContentItem-title, html[data-
 /* 背景颜色 - 网页 */
 html[data-theme=dark] body {background: #22272E !important;}
 /* 背景颜色 - 问题 */
-html[data-theme=dark] .AppHeader, html[data-theme=dark] .QuestionHeader, html[data-theme=dark] .QuestionHeader-footer, html[data-theme=dark] .Input-wrapper.Input-wrapper--grey, html[data-theme=dark] .EmoticonsFooter-item--selected, html[data-theme=dark] .Card, html[data-theme=dark] .ContentItem-actions, html[data-theme=dark] .MoreAnswers .List-headerText, html[data-theme=dark] .CommentsV2-withPagination, html[data-theme=dark] .Topbar, html[data-theme=dark] .CommentsV2-footer, html[data-theme=dark] .CommentEditorV2-inputWrap--active, html[data-theme=dark] .InputLike, html[data-theme=dark] .Popover-content, html[data-theme=dark] .Notifications-footer, html[data-theme=dark] .Messages-footer, html[data-theme=dark] .Modal-inner, html[data-theme=dark] .Emoticons, html[data-theme=dark] .EmoticonsFooter, html[data-theme=dark] .SearchTabs {background: #2D333B !important;}
+html[data-theme=dark] .AppHeader, html[data-theme=dark] .QuestionHeader, html[data-theme=dark] .QuestionHeader-footer, html[data-theme=dark] .Input-wrapper.Input-wrapper--grey, html[data-theme=dark] .EmoticonsFooter-item--selected, html[data-theme=dark] .Card, html[data-theme=dark] .ContentItem-actions, html[data-theme=dark] .MoreAnswers .List-headerText, html[data-theme=dark] .CommentsV2-withPagination, html[data-theme=dark] .Topbar, html[data-theme=dark] .CommentsV2-footer, html[data-theme=dark] .CommentEditorV2-inputWrap--active, html[data-theme=dark] .InputLike, html[data-theme=dark] .Popover-content, html[data-theme=dark] .Notifications-footer, html[data-theme=dark] .Messages-footer, html[data-theme=dark] .Modal-inner, html[data-theme=dark] .Emoticons, html[data-theme=dark] .EmoticonsFooter, html[data-theme=dark] .SearchTabs, html[data-theme=dark] .Popover-arrow:after, html[data-theme=dark] .CommentEditorV2-inputWrap, html[data-theme=dark] .ProfileHeader-wrapper, html[data-theme=dark] .UserCover {background: #2D333B !important;}
 html[data-theme=dark] .CommentListV2-header-divider, html[data-theme=dark] .CommentsV2-openComment-divider {background-color: #222933 !important;}
-/* 背景颜色 - 用户页面 */
-html[data-theme=dark] .ProfileHeader-wrapper, html[data-theme=dark] .UserCover {background: #1c2129 !important;}
 
 /* 背景颜色 - 引用 */
 html[data-theme=dark] .ztext blockquote {color: #768390 !important;border-left: 3px solid #3b3b3b !important;}
+
+/* 私信 */
+html[data-theme=dark] .Input-wrapper {background-color: #30363f !important;}
+html[data-theme="dark"] .TextMessage-sender, html[data-theme="dark"] .TextMessage-sender::after {background-color: #57616f !important;}
+html[data-theme="dark"] .TextMessage-receiver, html[data-theme="dark"] .TextMessage-receiver::after {background-color: #1e5fbf !important;}
+
+html[data-theme="dark"] .TextMessage-sender, html[data-theme=dark] .TextMessage-receiver {color: #dcdcdc !important;}
+/*html[data-theme="dark"] .MessagesBox::-webkit-scrollbar {width: 0px !important;height: 0px !important;}*/
+html[data-theme=dark] .ToolBar, html[data-theme=dark] .Input-wrapper {border: none !important;}
+html[data-theme=dark] .Messages-item:hover {background-color: #272c33 !important;}
 
 /* 封面大图/文章头部大图 */
 html[data-theme=dark] img.UserCover-image, html[data-theme=dark] img.TitleImage {opacity: 0.7 !important;}
@@ -161,7 +194,15 @@ html[data-theme=dark] img.UserCover-image, html[data-theme=dark] img.TitleImage 
 html[data-theme=dark] img {opacity: 0.9 !important;}
 
 /* 边框 */
-html[data-theme=dark] .Topbar, html[data-theme=dark] .CommentsV2-footer, html[data-theme=dark] .Topstory-mainColumnCard .Card:not(.Topstory-tabCard), html[data-theme=dark] .NestComment:not(:last-child):after, html[data-theme=dark] .NestComment--rootComment:after, html[data-theme=dark] .NestComment .NestComment--child:after, html[data-theme=dark] .NestComment .NestComment--child:after, html[data-theme=dark] .CommentsV2-replyNum, html[data-theme=dark] .CommentItemV2:not(:first-child):after, html[data-theme=dark] .Tabs {border-bottom: 1px solid #282d35 !important;}
+html[data-theme=dark] .Topbar, html[data-theme=dark] .CommentsV2-footer, html[data-theme=dark] .Topstory-mainColumnCard .Card:not(.Topstory-tabCard), html[data-theme=dark] .NestComment:not(:last-child):after, html[data-theme=dark] .NestComment--rootComment:after, html[data-theme=dark] .NestComment .NestComment--child:after, html[data-theme=dark] .NestComment .NestComment--child:after, html[data-theme=dark] .CommentsV2-replyNum, html[data-theme=dark] .CommentItemV2:not(:first-child):after, html[data-theme=dark] .Tabs, html[data-theme=dark] .Popover-arrow:after {border-bottom: 1px solid #282d35 !important;}
+html[data-theme=dark] .CommentEditorV2-inputWrap--active, html[data-theme=dark] .CommentEditorV2-inputWrap {border: none !important;}
+html[data-theme=dark] .InputLike {border: 1px solid #424b56 !important;}
+
+/* 滚动条 */
+html[data-theme=dark] body::-webkit-scrollbar, html[data-theme="dark"] .MessagesBox::-webkit-scrollbar, html[data-theme="dark"] .Messages-list::-webkit-scrollbar, html[data-theme=dark] .PushNotifications-list::-webkit-scrollbar, html[data-theme=dark] .CommentListV2::-webkit-scrollbar {width: 6px !important;height: 1px !important;}
+html[data-theme=dark] body::-webkit-scrollbar-thumb, html[data-theme="dark"] .MessagesBox::-webkit-scrollbar-thumb, html[data-theme="dark"] .Messages-list::-webkit-scrollbar-thumb, html[data-theme=dark] .PushNotifications-list::-webkit-scrollbar-thumb, html[data-theme=dark] .CommentListV2::-webkit-scrollbar-thumb {background: #3f4752 !important;}
+html[data-theme=dark] body::-webkit-scrollbar-track {background: #22272e !important;}
+html[data-theme="dark"] .MessagesBox::-webkit-scrollbar-track, html[data-theme="dark"] .Messages-list::-webkit-scrollbar-track, html[data-theme=dark] .PushNotifications-list::-webkit-scrollbar-track, html[data-theme=dark] .CommentListV2::-webkit-scrollbar-track {background: #2d333b !important;}
 
 /* 背景颜色 - 专栏/文章 */
 html[data-theme=dark] .WhiteBg-body, html[data-theme=dark] .Post-content {background: #22272E !important;}
@@ -209,37 +250,16 @@ html {filter: brightness(75%) sepia(30%) !important;}
             switch(menu_value('menu_darkModeType')) {
                 case 1:
                     style += style_6;
-                    if (document.getElementsByTagName('html')[0].getAttribute('data-theme') != 'dark') {
-                        document.getElementsByTagName('html')[0].setAttribute('data-theme', 'dark')
-                        location.search = '?theme=dark'
-                    }
                     break;
                 case 2:
                     style += style_7;
-                    if (document.getElementsByTagName('html')[0].getAttribute('data-theme') === 'dark') {
-                        document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light')
-                        location.search = '?theme=light'
-                    }
                     break;
                 case 3:
                     style += style_8;
-                    if (document.getElementsByTagName('html')[0].getAttribute('data-theme') === 'dark') {
-                        document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light')
-                        location.search = '?theme=light'
-                    }
                     break;
                 case 4:
                     style += style_9;
-                    if (document.getElementsByTagName('html')[0].getAttribute('data-theme') === 'dark') {
-                        document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light')
-                        location.search = '?theme=light'
-                    }
                     break;
-            }
-        } else {
-            if (document.getElementsByTagName('html')[0].getAttribute('data-theme') === 'dark') {
-                document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light')
-                location.search = '?theme=light'
             }
         }
 
@@ -252,5 +272,15 @@ html {filter: brightness(75%) sepia(30%) !important;}
 
         style_Add.innerHTML = style;
         document.head.appendChild(style_Add);
+    }
+    function getTheme() {
+        var name = "theme=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++)
+        {
+            var c = ca[i].trim();
+            if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+        }
+        return "light";
     }
 })();
