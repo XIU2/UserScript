@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.3.7
+// @version      1.3.8
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽指定用户、屏蔽盐选内容、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -21,13 +21,14 @@ var menu_ALL = [
     ['menu_collapsedAnswer', '一键收起回答', '一键收起回答', true],
     ['menu_collapsedNowAnswer', '收起当前回答/评论（点击两侧空白处）', '收起当前回答/评论', true],
     ['menu_backToTop', '快捷回到顶部（右键两侧空白处）', '快捷回到顶部', true],
-    ['menu_blockUsers', '屏蔽指定用户（测试）', '屏蔽指定用户', false],
+    ['menu_blockUsers', '屏蔽指定用户', '屏蔽指定用户', false],
+    ['menu_customBlockUsers', '自定义屏蔽用户', '自定义屏蔽用户', ['故事档案局', '盐选推荐', '盐选科普', '盐选成长计划', '知乎盐选会员', '知乎盐选创作者', '盐选心理', '盐选健康必修课', '盐选奇妙物语', '盐选生活馆', '盐选职场', '盐选文学甄选', '盐选作者小管家', '盐选博物馆', '盐选点金', '盐选测评室', '盐选科技前沿', '盐选会员精品']],
     ['menu_blockYanXuan', '屏蔽盐选内容', '屏蔽盐选内容', false],
     ['menu_publishTop', '置顶显示时间', '置顶显示时间', true],
     ['menu_allTime', '完整显示时间', '完整显示时间', true],
     ['menu_typeTips', '区分问题文章', '区分问题文章', true],
     ['menu_directLink', '默认站外直链', '默认站外直链', true]
-], menu_ID = [], blockUsersList = ['故事档案局', '盐选推荐', '盐选科普', '盐选成长计划', '知乎盐选会员', '知乎盐选创作者', '盐选心理', '盐选健康必修课', '盐选奇妙物语', '盐选生活馆', '盐选职场', '盐选文学甄选', '盐选作者小管家', '盐选博物馆', '盐选点金', '盐选测评室', '盐选科技前沿', '盐选会员精品'];
+], menu_ID = [];
 for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
     if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
 }
@@ -42,7 +43,11 @@ function registerMenuCommand() {
     }
     for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
         menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
-        menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+        if (menu_ALL[i][0] === 'menu_customBlockUsers') {
+            menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){customBlockUsers()});
+        } else {
+            menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+        }
     }
     menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419081/feedback', {active: true,insert: true,setParent: true});});
 }
@@ -187,7 +192,19 @@ function isElementInViewport(el) {
 }
 
 
-// 屏蔽指定用户（测试）
+// 自定义屏蔽用户
+function customBlockUsers() {
+    let nowBlockUsers = '';
+    menu_value('menu_customBlockUsers').forEach(function(item){nowBlockUsers = nowBlockUsers + '|' + item})
+    let newBlockUsers = prompt('编辑 [自定义屏蔽用户]\n（不同用户名之间使用 "|" 分隔，例如：用户A|用户B|用户C ）', nowBlockUsers.replace('|',''));
+    if (newBlockUsers != null) {
+        GM_setValue('menu_customBlockUsers', newBlockUsers.split('|'));
+        registerMenuCommand(); // 重新注册脚本菜单
+    }
+};
+
+
+// 屏蔽指定用户
 function blockUsers(type) {
     if (!menu_value('menu_blockUsers')) return
     switch(type) {
@@ -207,7 +224,7 @@ function blockUsers(type) {
             if (e.target.innerHTML && e.target.getElementsByClassName('Feed').length > 0) {
                 let item = e.target.getElementsByClassName('Feed')[0].getElementsByClassName('ContentItem AnswerItem')[0]; // 用户名所在元素
                 if (item) {
-                    blockUsersList.forEach(function(item1){ // 遍历用户黑名单
+                    menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
                         if (item.dataset.zop.indexOf('authorName":"' + item1 + '",') > -1) { // 找到就删除该信息流
                             console.log(item.dataset.zop);
                             item.parentNode.parentNode.remove();
@@ -222,7 +239,7 @@ function blockUsers(type) {
         Array.from(listItem).forEach(function(item){ // 遍历所有回答
             let listName = item.querySelector('.ContentItem.AnswerItem') // 用户名所在元素
             if (listName) {
-                blockUsersList.forEach(function(item1){ // 遍历用户黑名单
+                menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
                     if (listName.dataset.zop.indexOf('authorName":"' + item1 + '",') > -1) { // 找到就删除该信息流
                         console.log(listName.dataset.zop);
                         item.remove();
@@ -237,7 +254,7 @@ function blockUsers(type) {
             if (e.target.innerHTML && e.target.getElementsByClassName('ContentItem AnswerItem').length > 0) {
                 let item = e.target.getElementsByClassName('ContentItem AnswerItem')[0]; // 用户名所在元素
                 if (item) {
-                    blockUsersList.forEach(function(item1){ // 遍历用户黑名单
+                    menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
                         if (item.dataset.zop.indexOf('authorName":"' + item1 + '",') > -1) { // 找到就删除该回答
                             console.log(item.dataset.zop)
                             item.parentNode.remove();
@@ -251,7 +268,7 @@ function blockUsers(type) {
         let listItem = document.getElementsByClassName('ContentItem AnswerItem');
         Array.from(listItem).forEach(function(item){ // 遍历所有回答 // 用户名所在元素
             if (item) {
-                blockUsersList.forEach(function(item1){ // 遍历用户黑名单
+                menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
                     if (item.dataset.zop.indexOf('authorName":"' + item1 + '",') > -1) { // 找到就删除该回答
                         console.log(item.dataset.zop)
                         item.parentNode.remove();
