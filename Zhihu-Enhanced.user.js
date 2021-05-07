@@ -626,54 +626,54 @@ function questionInvitation(){
 
 
 (function() {
-    addEventListener_DOMNodeInserted(); //                              监听 网页插入元素 事件
-    questionInvitation(); //                                            默认折叠邀请
-    setInterval(originalPic,100); //                                    默认高清原图
-    if (menu_value('menu_directLink')) setInterval(directLink, 100); // 默认站外直链
+    addEventListener_DOMNodeInserted(); //                                 监听 网页插入元素 事件
+    questionInvitation(); //                                               默认折叠邀请
+    setInterval(originalPic,100); //                                       默认高清原图
+    if (menu_value('menu_directLink')) setInterval(directLink, 100); //    默认站外直链
 
     if (window.location.href.indexOf("question") > -1) { //       回答页 //
         if (window.location.href.indexOf("waiting") == -1) {
-            collapsedAnswer(); //                                       一键收起回答
-            collapsedNowAnswer(".QuestionPage"); //                     收起当前回答 + 快捷返回顶部
-            collapsedNowAnswer(".Question-main"); //                    收起当前回答 + 快捷返回顶部
-            blockUsers('question');
-            blockYanXuan();
+            collapsedAnswer(); //                                          一键收起回答
+            collapsedNowAnswer(".QuestionPage"); //                        收起当前回答 + 快捷返回顶部
+            collapsedNowAnswer(".Question-main"); //                       收起当前回答 + 快捷返回顶部
+            blockUsers('question'); //                                     屏蔽指定用户
+            blockYanXuan(); //                                             屏蔽盐选内容
         }
-        setInterval(topTime_question, 300); //                          置顶显示时间
+        setInterval(topTime_question, 300); //                             置顶显示时间
     } else if (window.location.href.indexOf("search") > -1) { // 搜索结果页 //
-        collapsedAnswer(); //                                           一键收起回答
-        collapsedNowAnswer("main div"); //                              收起当前回答 + 快捷返回顶部
-        collapsedNowAnswer(".Search-container"); //                     收起当前回答 + 快捷返回顶部
-        setInterval(topTime_search, 300); //                            置顶显示时间
-        EventXMLHttpRequest(); //                                       区分问题文章
-        blockUsers('search');
+        collapsedAnswer(); //                                              一键收起回答
+        collapsedNowAnswer("main div"); //                                 收起当前回答 + 快捷返回顶部
+        collapsedNowAnswer(".Search-container"); //                        收起当前回答 + 快捷返回顶部
+        setInterval(topTime_search, 300); //                               置顶显示时间
+        EventXMLHttpRequest(); //                                          区分问题文章
+        blockUsers('search'); //                                           屏蔽指定用户
     } else if (window.location.href.indexOf("topic") > -1) { //   话题页 //
         if (window.location.href.indexOf("hot") > -1 || window.location.href.indexOf("top-answers") > -1) { // 仅限 [讨论] [精华]
-            collapsedAnswer(); //                                       一键收起回答
-            collapsedNowAnswer("main.App-main"); //                     收起当前回答 + 快捷返回顶部
-            collapsedNowAnswer(".ContentLayout"); //                    收起当前回答 + 快捷返回顶部
-            setInterval(topTime_people, 300); //                        置顶显示时间
-            EventXMLHttpRequest(); //                                   区分问题文章
+            collapsedAnswer(); //                                          一键收起回答
+            collapsedNowAnswer("main.App-main"); //                        收起当前回答 + 快捷返回顶部
+            collapsedNowAnswer(".ContentLayout"); //                       收起当前回答 + 快捷返回顶部
+            setInterval(topTime_people, 300); //                           置顶显示时间
+            EventXMLHttpRequest(); //                                      区分问题文章
         }
     } else if (window.location.href.indexOf("zhuanlan") > -1){ //   文章 //
-        backToTop("article.Post-Main.Post-NormalMain"); //              快捷返回顶部
-        backToTop("div.Post-Sub.Post-NormalSub"); //                    快捷返回顶部
-        setInterval(topTime_zhuanlan, 300); //                          置顶显示时间
+        backToTop("article.Post-Main.Post-NormalMain"); //                 快捷返回顶部
+        backToTop("div.Post-Sub.Post-NormalSub"); //                       快捷返回顶部
+        setInterval(topTime_zhuanlan, 300); //                             置顶显示时间
     } else if (window.location.href.indexOf("column") > -1) { //    专栏 //
-        collapsedAnswer(); //                                           一键收起回答
-        collapsedNowAnswer("main div"); //                              收起当前回答 + 快捷返回顶部
-        setInterval(topTime_zhuanlan, 300); //                          置顶显示时间
+        collapsedAnswer(); //                                              一键收起回答
+        collapsedNowAnswer("main div"); //                                 收起当前回答 + 快捷返回顶部
+        setInterval(topTime_zhuanlan, 300); //                             置顶显示时间
     } else if (window.location.href.indexOf("people") > -1 || window.location.href.indexOf("org") > -1) { // 用户主页 //
-        collapsedAnswer(); //                                           一键收起回答
-        collapsedNowAnswer("main div"); //                              收起当前回答 + 快捷返回顶部
-        collapsedNowAnswer(".Profile-main"); //                         收起当前回答 + 快捷返回顶部
-        setInterval(topTime_people, 300); //                            置顶显示时间
+        collapsedAnswer(); //                                              一键收起回答
+        collapsedNowAnswer("main div"); //                                 收起当前回答 + 快捷返回顶部
+        collapsedNowAnswer(".Profile-main"); //                            收起当前回答 + 快捷返回顶部
+        setInterval(topTime_people, 300); //                               置顶显示时间
     } else { //                                                     首页 //
-        collapsedAnswer(); //                                           一键收起回答
-        collapsedNowAnswer("main div"); //                              收起当前回答 + 快捷返回顶部
-        collapsedNowAnswer(".Topstory-container"); //                   收起当前回答 + 快捷返回顶部
-        setInterval(topTime_index, 300); //                             置顶显示时间
-        EventXMLHttpRequest(); //                                       区分问题文章
-        blockUsers('index');
+        collapsedAnswer(); //                                              一键收起回答
+        collapsedNowAnswer("main div"); //                                 收起当前回答 + 快捷返回顶部
+        collapsedNowAnswer(".Topstory-container"); //                      收起当前回答 + 快捷返回顶部
+        setInterval(topTime_index, 300); //                                置顶显示时间
+        EventXMLHttpRequest(); //                                          区分问题文章
+        blockUsers('index'); //                                            屏蔽指定用户
     }
 })();
