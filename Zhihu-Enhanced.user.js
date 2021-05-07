@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.3.6
+// @version      1.3.7
 // @author       X.I.U
-// @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
+// @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽指定用户、屏蔽盐选内容、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -21,11 +21,13 @@ var menu_ALL = [
     ['menu_collapsedAnswer', '一键收起回答', '一键收起回答', true],
     ['menu_collapsedNowAnswer', '收起当前回答/评论（点击两侧空白处）', '收起当前回答/评论', true],
     ['menu_backToTop', '快捷回到顶部（右键两侧空白处）', '快捷回到顶部', true],
+    ['menu_blockUsers', '屏蔽指定用户（测试）', '屏蔽指定用户', false],
+    ['menu_blockYanXuan', '屏蔽盐选内容', '屏蔽盐选内容', false],
     ['menu_publishTop', '置顶显示时间', '置顶显示时间', true],
     ['menu_allTime', '完整显示时间', '完整显示时间', true],
     ['menu_typeTips', '区分问题文章', '区分问题文章', true],
     ['menu_directLink', '默认站外直链', '默认站外直链', true]
-], menu_ID = [];
+], menu_ID = [], blockUsersList = ['故事档案局', '盐选推荐', '盐选科普', '盐选成长计划', '知乎盐选会员', '知乎盐选创作者', '盐选心理', '盐选健康必修课', '盐选奇妙物语', '盐选生活馆', '盐选职场', '盐选文学甄选', '盐选作者小管家', '盐选博物馆', '盐选点金', '盐选测评室', '盐选科技前沿', '盐选会员精品'];
 for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
     if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
 }
@@ -182,6 +184,120 @@ function isElementInViewport(el) {
         rect.right <=
         (window.innerWidth || document.documentElement.clientWidth)
     );
+}
+
+
+// 屏蔽指定用户（测试）
+function blockUsers(type) {
+    if (!menu_value('menu_blockUsers')) return
+    switch(type) {
+        case 'index':
+            blockUsers_index();
+            break;
+        case 'question':
+            blockUsers_question();
+            break;
+        case 'search':
+            blockUsers_search();
+            break;
+    }
+
+    function blockUsers_index() {
+        let blockUsers = e => {
+            if (e.target.innerHTML && e.target.getElementsByClassName('Feed').length > 0) {
+                let item = e.target.getElementsByClassName('Feed')[0].getElementsByClassName('ContentItem AnswerItem')[0]; // 用户名所在元素
+                if (item) {
+                    blockUsersList.forEach(function(item1){ // 遍历用户黑名单
+                        if (item.dataset.zop.indexOf('authorName":"' + item1 + '",') > -1) { // 找到就删除该信息流
+                            console.log(item.dataset.zop);
+                            item.parentNode.parentNode.remove();
+                        }
+                    })
+                }
+            }
+        }
+        document.addEventListener('DOMNodeInserted', blockUsers); // 监听插入事件
+
+        let listItem = document.getElementsByClassName('Card TopstoryItem TopstoryItem--old TopstoryItem-isRecommend');
+        Array.from(listItem).forEach(function(item){ // 遍历所有回答
+            let listName = item.querySelector('.ContentItem.AnswerItem') // 用户名所在元素
+            if (listName) {
+                blockUsersList.forEach(function(item1){ // 遍历用户黑名单
+                    if (listName.dataset.zop.indexOf('authorName":"' + item1 + '",') > -1) { // 找到就删除该信息流
+                        console.log(listName.dataset.zop);
+                        item.remove();
+                    }
+                })
+            }
+        })
+    }
+
+    function blockUsers_question() {
+        let blockUsers = e => {
+            if (e.target.innerHTML && e.target.getElementsByClassName('ContentItem AnswerItem').length > 0) {
+                let item = e.target.getElementsByClassName('ContentItem AnswerItem')[0]; // 用户名所在元素
+                if (item) {
+                    blockUsersList.forEach(function(item1){ // 遍历用户黑名单
+                        if (item.dataset.zop.indexOf('authorName":"' + item1 + '",') > -1) { // 找到就删除该回答
+                            console.log(item.dataset.zop)
+                            item.parentNode.remove();
+                        }
+                    })
+                }
+            }
+        }
+        document.addEventListener('DOMNodeInserted', blockUsers); // 监听插入事件
+
+        let listItem = document.getElementsByClassName('ContentItem AnswerItem');
+        Array.from(listItem).forEach(function(item){ // 遍历所有回答 // 用户名所在元素
+            if (item) {
+                blockUsersList.forEach(function(item1){ // 遍历用户黑名单
+                    if (item.dataset.zop.indexOf('authorName":"' + item1 + '",') > -1) { // 找到就删除该回答
+                        console.log(item.dataset.zop)
+                        item.parentNode.remove();
+                    }
+                })
+            }
+        })
+    }
+
+    function blockUsers_search() {
+        let blockUsers = e => {
+            if (e.target.innerHTML && e.target.getElementsByClassName('List-item').length > 0) {
+                let item = e.target.getElementsByClassName('List-item')[0];
+                let listName = item.querySelector('.RichText.ztext.CopyrightRichText-richText b') // 用户名所在元素
+                if (listName) {
+                    blockUsersList.forEach(function(item1){ // 遍历用户黑名单
+                        if (item1 === listName.innerText) { // 找到就删除该搜索结果
+                            console.log(listName.innerText);
+                            item.parentNode.remove();
+                        }
+                    })
+                }
+            }
+        }
+        document.addEventListener('DOMNodeInserted', blockUsers); // 监听插入事件
+    }
+}
+
+
+// 屏蔽盐选内容
+function blockYanXuan() {
+    if (!menu_value('menu_blockYanXuan')) return
+    let blockYanXuan = e => {
+        if (e.target.innerHTML && e.target.getElementsByClassName('KfeCollection-PurchaseBtn-mask').length > 0) {
+            let item = e.target.getElementsByClassName('KfeCollection-PurchaseBtn-mask')[0];
+            item.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+        }
+    }
+    document.addEventListener('DOMNodeInserted', blockYanXuan); // 监听插入事件
+
+    let listItem = document.getElementsByClassName('List-item');
+    Array.from(listItem).forEach(function(item){
+        if (item.getElementsByClassName('KfeCollection-PurchaseBtn-mask').length > 0) {
+            item.remove();
+        }
+    })
 }
 
 
@@ -520,6 +636,8 @@ function questionInvitation(){
             collapsedAnswer(); //                                       一键收起回答
             collapsedNowAnswer(".QuestionPage"); //                     收起当前回答 + 快捷返回顶部
             collapsedNowAnswer(".Question-main"); //                    收起当前回答 + 快捷返回顶部
+            blockUsers('question');
+            blockYanXuan();
         }
         setInterval(topTime_question, 300); //                          置顶显示时间
     } else if (window.location.href.indexOf("search") > -1) { // 搜索结果页 //
@@ -528,6 +646,7 @@ function questionInvitation(){
         collapsedNowAnswer(".Search-container"); //                     收起当前回答 + 快捷返回顶部
         setInterval(topTime_search, 300); //                            置顶显示时间
         EventXMLHttpRequest(); //                                       区分问题文章
+        blockUsers('search');
     } else if (window.location.href.indexOf("topic") > -1) { //   话题页 //
         if (window.location.href.indexOf("hot") > -1 || window.location.href.indexOf("top-answers") > -1) { // 仅限 [讨论] [精华]
             collapsedAnswer(); //                                       一键收起回答
@@ -555,5 +674,6 @@ function questionInvitation(){
         collapsedNowAnswer(".Topstory-container"); //                   收起当前回答 + 快捷返回顶部
         setInterval(topTime_index, 300); //                             置顶显示时间
         EventXMLHttpRequest(); //                                       区分问题文章
+        blockUsers('index');
     }
 })();
