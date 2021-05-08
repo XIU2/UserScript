@@ -131,30 +131,24 @@
 
     // URL 匹配正则表达式
     let patt_thread = /\/thread-\d+-\d+\-\d+.html/,
-        patt_thread_2 = /mod\=viewthread/,
         patt_forum = /\/forum-\d+-\d+\.html/,
-        patt_forum_2 = /mod\=forumdisplay/,
-        patt_guide = /mod\=guide\&view\=(hot|digest|new|newthread|my|tech|help)/,
-        patt_guide_newthread = /mod\=guide\&view\=newthread/,
-        patt_collection = /mod\=collection/
+        patt_guide = /mod\=guide\&view\=(hot|digest|new|newthread|my|tech|help)/
 
     // URL 判断
-    if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)) {
+    if (patt_thread.test(location.pathname) || location.search.indexOf('mod=viewthread') > -1) {
         if (menu_value('menu_thread_pageLoading')) {
             curSite = DBSite.thread; //      帖子内
             hidePgbtn(); //                  隐藏帖子内的 [下一页] 按钮
         }
-    } else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)) {
+    } else if (patt_forum.test(location.pathname) || location.search.indexOf('mod=forumdisplay') > -1) {
         curSite = DBSite.forum; //           各板块帖子列表
     } else if (patt_guide.test(location.search)) {
         curSite = DBSite.guide; //           导读帖子列表
         delateReward(); //                   屏蔽导读悬赏贴（最新发表）
-    } else if (patt_collection.test(location.search)) {
+    } else if (location.search.indexOf('mod=collection') > -1) {
         curSite = DBSite.collection; //      淘贴列表
     } else if (location.pathname === '/search.php') {
         curSite = DBSite.search; //          搜索结果列表
-    /*}else if(location.href === "https://www.52pojie.cn/home.php?mod=task&do=draw&id=2"){
-        window.opener=null;window.open('','_self');window.close(); // 签到完成页面，关闭该标签页*/
     }
     curSite.pageUrl = ""; // 下一页URL
 
@@ -186,18 +180,6 @@
     }
 
 
-    // 自动签到
-    /*function qianDao() {
-        if (!menu_value('menu_autoClockIn')) return
-        let qiandao = document.querySelector('#um p:last-child a:first-child');
-        if (qiandao && qiandao.href === "https://www.52pojie.cn/home.php?mod=task&do=apply&id=2"){
-            window.GM_openInTab(qiandao.href, {active: false,insert: true,setParent: true}) // 后台打开签到地址
-            qiandao.querySelector('.qq_bind').setAttribute('src','https://www.52pojie.cn/static/image/common/wbs.png') // 修改 [打卡签到] 图标为 [签到完毕]
-            qiandao.href = "#" // 修改 URL 为 #
-        }
-    }*/
-
-
     // 自动签到（后台）
     function qianDao() {
         if (!menu_value('menu_autoClockIn')) return
@@ -225,7 +207,7 @@
     //屏蔽悬赏贴（导读-最新发表）
     function delateReward() {
         if (!menu_value('menu_delateReward')) return
-        if (patt_guide_newthread.test(location.search)) {
+        if (location.search.indexOf('mod=guide&view=newthread') > -1) {
             let tbody = document.querySelectorAll('#threadlist tbody[id^="normalthread"]');
             Array.from(tbody).forEach(function (_this) {
                 if (_this.querySelector('img[alt="悬赏"]')) {

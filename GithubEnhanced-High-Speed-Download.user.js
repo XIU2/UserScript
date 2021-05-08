@@ -20,11 +20,11 @@
 (function() {
     var backColor = '#ffffff';
     var fontColor = '#888888';
-    if(document.getElementsByTagName('html')[0].getAttribute('data-color-mode') == 'dark'){ // 黑暗模式判断
-        if(document.getElementsByTagName('html')[0].getAttribute('data-dark-theme') == 'dark_dimmed'){
+    if (document.getElementsByTagName('html')[0].getAttribute('data-color-mode') == 'dark') { // 黑暗模式判断
+        if (document.getElementsByTagName('html')[0].getAttribute('data-dark-theme') == 'dark_dimmed') {
             backColor = '#272e37';
             fontColor = '#768390';
-        }else{
+        } else {
             backColor = '#161a21';
             fontColor = '#b2b8bf';
         }
@@ -62,12 +62,12 @@
     registerMenuCommand();
     // 注册脚本菜单
     function registerMenuCommand() {
-        if (menu_feedBack_ID){ // 如果反馈菜单ID不是 null，则删除所有脚本菜单
+        if (menu_feedBack_ID) { // 如果反馈菜单ID不是 null，则删除所有脚本菜单
             GM_unregisterMenuCommand(menu_menu_raw_fast_ID);
             GM_unregisterMenuCommand(menu_feedBack_ID);
             menu_raw_fast = GM_getValue('xiu2_menu_raw_fast');
         }
-        if(menu_raw_fast > raw_url.length - 1){ // 避免在减少 raw 数组后，用户储存的数据大于数组而报错
+        if (menu_raw_fast > raw_url.length - 1) { // 避免在减少 raw 数组后，用户储存的数据大于数组而报错
             menu_raw_fast = 0
         }
         menu_menu_raw_fast_ID = GM_registerMenuCommand(`🔄 [ ${raw_url[menu_raw_fast][1]} ] 加速源 (☁) - 点击切换`, menu_toggle_raw_fast);
@@ -76,9 +76,9 @@
 
     // 切换加速源
     function menu_toggle_raw_fast() {
-        if (menu_raw_fast >= raw_url.length - 1){ // 如果当前加速源位置大于等于加速源总数，则改为第一个加速源，反之递增下一个加速源
+        if (menu_raw_fast >= raw_url.length - 1) { // 如果当前加速源位置大于等于加速源总数，则改为第一个加速源，反之递增下一个加速源
             menu_raw_fast = 0;
-        }else{
+        } else {
             menu_raw_fast += 1;
         }
         GM_setValue('xiu2_menu_raw_fast', menu_raw_fast);
@@ -113,7 +113,7 @@
 
 
     // Release
-    function addRelease(){
+    function addRelease() {
         let html = document.getElementsByClassName('Box Box--condensed');if (!html) return
         Array.from(html).forEach(function (current) {
             current.querySelectorAll('.d-flex.Box-body > a').forEach(function (_this) {
@@ -127,8 +127,7 @@
                         download_url[5][0] + '/' + _this.href
                     ],
                     _html = `<div style="display: flex;justify-content: flex-end;">`;
-                for (let i=0;i<url.length;i++)
-                {
+                for (let i=0;i<url.length;i++) {
                     _html += `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
                 }
                 _html += `</div>`
@@ -150,8 +149,7 @@
                         download_url[5][0] + '/' + _this.href
                     ],
                     _html = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">`;
-                for (let i=0;i<url.length;i++)
-                {
+                for (let i=0;i<url.length;i++) {
                     _html += `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
                 }
                 _html += `</div>`
@@ -164,7 +162,7 @@
 
 
     // Download ZIP
-    function addDownloadZIP(){
+    function addDownloadZIP() {
         let html = document.querySelector('.dropdown-menu.dropdown-menu-sw.p-0 ul li:last-child');if (!html) return
         let href = html.getElementsByTagName('a')[0].href,
             url = [
@@ -176,8 +174,7 @@
                 download_url[5][0] + '/' + href
             ],
             _html = ``;
-        for (let i=0;i<url.length;i++)
-        {
+        for (let i=0;i<url.length;i++) {
             _html += `<li class="Box-row Box-row--hover-gray p-0"><a class="d-flex flex-items-center color-text-primary text-bold no-underline p-3" rel="noreferrer noopener nofollow" href="${url[i]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
         }
         html.insertAdjacentHTML('afterend', _html);
@@ -185,7 +182,7 @@
 
 
     // Git Clone
-    function addGitClone(){
+    function addGitClone() {
         let html = document.querySelector('[role="tabpanel"] div.input-group');if (!html) return
         let href_split = html.querySelector('input').getAttribute('value').split('github.com'),
             url = [
@@ -194,8 +191,7 @@
                 clone_url[2][0] + href_split[1]
             ],
             _html = ``;
-        for (let i=0;i<url.length;i++)
-        {
+        for (let i=0;i<url.length;i++) {
             _html += `<div class="input-group" style="margin-top: 4px;" title="加速源：${clone_url[i][1]} （点击可直接复制）"><input value="${url[i]}" aria-label="${url[i]}" type="text" class="form-control input-monospace input-sm bg-gray-light" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url[i]}" aria-label="Copy to clipboard" class="btn btn-sm" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
         }
         html.insertAdjacentHTML('afterend', _html);
@@ -203,7 +199,7 @@
 
 
     // Raw
-    function addRawFile(){
+    function addRawFile() {
         let html = document.getElementById('raw-url');if (!html) return
         let href = location.href.replace('https://github.com',''),
             href2 = href.replace('/blob/','/'),
@@ -213,8 +209,7 @@
                 raw_url[3][0] + "/" + raw_url[0][0] + href2
             ],
             _html = ``;
-        for (let i=0;i<url.length;i++)
-        {
+        for (let i=0;i<url.length;i++) {
             _html += `<a href="${url[i]}" title="${raw_url[i+1][2]}" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[i+1][1]}</a>`
         }
         html.insertAdjacentHTML('afterend', _html);
@@ -222,13 +217,13 @@
 
 
     // 添加 Raw 下载链接（☁）
-    function addRawDownLink(){
+    function addRawDownLink() {
         // 如果不是项目文件页面，就返回，如果网页有 Raw 下载链接（☁）就返回
         let files = document.querySelectorAll('div.Box-row svg.octicon.octicon-file');if(files.length === 0) return;
         let files1 = document.querySelectorAll('a.fileDownLink');if(files1.length > 0) return;
 
         // 鼠标指向则显示
-        var mouseOverHandler = function(evt){
+        var mouseOverHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
                 aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.color-icon-tertiary');
@@ -237,7 +232,7 @@
         };
 
         // 鼠标离开则隐藏
-        var mouseOutHandler = function(evt){
+        var mouseOutHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
                 aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.color-icon-tertiary');
@@ -246,7 +241,7 @@
         };
 
         // 循环添加
-        files.forEach(function(fileElm, i){
+        files.forEach(function(fileElm, i) {
             let trElm = fileElm.parentNode.parentNode,
                 cntElm_a = trElm.querySelector('.css-truncate.css-truncate-target.d-block.width-fit a'),
                 cntElm_svg = trElm.querySelector('.mr-3.flex-shrink-0 svg.octicon.octicon-file.color-icon-tertiary'),
@@ -280,22 +275,22 @@
 
 
     // 删除 Raw 快捷下载（☁）
-    function delRawDownLink(){
+    function delRawDownLink() {
         let aElm = document.querySelectorAll('.fileDownLink');if(aElm.length === 0) return;
-        aElm.forEach(function(fileElm){
+        aElm.forEach(function(fileElm) {
             fileElm.remove()
         })
     }
 
 
     // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）鼠标事件
-    function addRawDownLink_(){
+    function addRawDownLink_() {
         // 如果不是项目文件页面，就返回，如果网页没有 Raw 下载链接（☁）就返回
         let files = document.querySelectorAll('div.Box-row svg.octicon.octicon-file');if(files.length === 0) return;
         let files1 = document.querySelectorAll('a.fileDownLink');if(files1.length === 0) return;
 
         // 鼠标指向则显示
-        var mouseOverHandler = function(evt){
+        var mouseOverHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
                 aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.color-icon-tertiary');
@@ -304,7 +299,7 @@
         };
 
         // 鼠标离开则隐藏
-        var mouseOutHandler = function(evt){
+        var mouseOutHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
                 aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.color-icon-tertiary');
@@ -313,7 +308,7 @@
         };
 
         // 循环添加
-        files.forEach(function(fileElm, i){
+        files.forEach(function(fileElm, i) {
             let trElm = fileElm.parentNode.parentNode;
             // 绑定鼠标事件
             trElm.onmouseover = mouseOverHandler;
