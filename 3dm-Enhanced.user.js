@@ -131,30 +131,25 @@
 
     // URL 匹配正则表达式
     let patt_thread = /\/thread-\d+-\d+\-\d+.html/,
-        patt_thread_2 = /mod\=viewthread/,
         patt_forum = /\/forum-\d+-\d+\.html/,
-        patt_forum_2 = /mod\=forumdisplay/,
-        patt_guide = /mod\=guide\&view\=(hot|digest)/,
-        patt_reply = /mod\=post&action\=reply/,
-        patt_reply_2 = /extra\=page\%3D1&page\=/
+        patt_guide = /mod\=guide\&view\=(hot|digest)/
 
     // URL 判断
-    if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)){
+    if (patt_thread.test(location.pathname) || location.search.indexOf('mod=viewthread') > -1){
         // 帖子内
         if(menu_value('menu_thread_pageLoading'))curSite = DBSite.thread;
         if(menu_value('menu_autoReply'))autoReply(); //       如果有隐藏内容，则自动回复
-        pageLoading(); //                       自动翻页
         if(menu_value('menu_scrollToShowhide'))setTimeout(function(){window.scrollTo(0,document.querySelector('.showhide').offsetTop)}, 500); // 滚动至隐藏内容
-    }else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)){
+    }else if (patt_forum.test(location.pathname) || location.search.indexOf('mod=forumdisplay') > -1){
         // 各板块帖子列表
         curSite = DBSite.forum;
         if(menu_value('menu_cleanTopPost'))cleanTopPost(); // 清理置顶帖子
-        pageLoading(); //                       自动翻页
     }else if (patt_guide.test(location.search)){
         // 导读帖子列表
         curSite = DBSite.guide;
-        pageLoading(); //                       自动翻页
     }
+
+    pageLoading(); //                       自动翻页
 
 
     // 判断是否登陆

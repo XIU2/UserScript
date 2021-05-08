@@ -109,18 +109,16 @@
 
     // URL 匹配正则表达式
     let patt_thread = /\/thread-\d+-\d+\-\d+.html/,
-        patt_thread_2 = /mod\=viewthread/,
         patt_forum = /\/forum-\d+-\d+\.html/,
-        patt_forum_2 = /mod\=forumdisplay/,
         patt_guide = /mod\=guide\&view\=(hot|digest)/
 
     // URL 判断
-    if (patt_thread.test(location.pathname) || patt_thread_2.test(location.search)){
+    if (patt_thread.test(location.pathname) || location.search.indexOf('mod=viewthread') > -1){
         // 帖子内
         if(menu_value('menu_thread_pageLoading'))curSite = DBSite.thread;
         // 自动显示帖子内被隐藏的回复
         showPosts();
-    }else if (patt_forum.test(location.pathname) || patt_forum_2.test(location.search)){
+    }else if (patt_forum.test(location.pathname) || location.search.indexOf('mod=forumdisplay') > -1){
         // 各板块帖子列表
         curSite = DBSite.forum;
     }else if (patt_guide.test(location.search)){
