@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.3.8
+// @version      1.3.9
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽指定用户、屏蔽盐选内容、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -356,13 +356,11 @@ function addTypeTips() {
 
 // 监听 网页插入元素 事件
 function addEventListener_DOMNodeInserted() {
-    // 知乎免登录，来自：https://greasyfork.org/zh-CN/scripts/417126
+    // 知乎免登录，修改自：https://greasyfork.org/zh-CN/scripts/417126
     let removeLoginModal = e => {
         if (e.target.innerHTML && e.target.getElementsByClassName('Modal-wrapper').length > 0) {
-            if (e.target.getElementsByClassName('Modal-wrapper')[0].querySelector('.signFlowModal')){
-                e.target.getElementsByClassName('Modal-wrapper')[0].remove();
-            }
-            setTimeout(() => {document.documentElement.style.overflowY = 'scroll';}, 0);
+            let button = e.target.getElementsByClassName('Modal-wrapper')[0].getElementsByClassName('Button Modal-closeButton Button--plain')[0];
+            if (button)button.click();
         }
     }
 
@@ -382,8 +380,8 @@ function addEventListener_DOMNodeInserted() {
 
     if (document.querySelector('button.AppHeader-login')){ // 未登录时才会监听并移除登录弹窗
         document.addEventListener('DOMNodeInserted', removeLoginModal);
-        document.querySelector('button.AppHeader-login').onclick=function(){location.href='https://www.zhihu.com/signin';} // [登录]按钮跳转至登录页面
-        document.querySelector('.AppHeader-profile button.Button--primary').onclick=function(){location.href='https://www.zhihu.com/signin';} // [加入知乎]按钮跳转至注册页面（实际上是同一个页面）
+        document.querySelector('button.AppHeader-login').onclick=function(){location.href='https://www.zhihu.com/signin';} // [登录] 按钮跳转至登录页面
+        document.querySelector('.AppHeader-profile button.Button--primary').onclick=function(){location.href='https://www.zhihu.com/signin';} // [加入知乎] 按钮跳转至注册页面（实际上是同一个页面）
     } else if(window.location.href.indexOf("zhuanlan") > -1){
         document.addEventListener('DOMNodeInserted', removeLoginModal);
     }
