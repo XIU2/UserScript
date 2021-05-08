@@ -359,7 +359,7 @@ function addEventListener_DOMNodeInserted() {
     // 知乎免登录，修改自：https://greasyfork.org/zh-CN/scripts/417126
     let removeLoginModal = e => {
         if (e.target.innerHTML && e.target.getElementsByClassName('Modal-wrapper').length > 0) {
-            let button = e.target.getElementsByClassName('Modal-wrapper')[0].getElementsByClassName('Button Modal-closeButton Button--plain')[0];
+            let button = e.target.getElementsByClassName('Button Modal-closeButton Button--plain')[0];
             if (button)button.click();
         }
     }
