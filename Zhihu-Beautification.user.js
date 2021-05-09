@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.1.16
+// @version      1.1.17
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -196,6 +196,8 @@ html[data-theme=dark] .PushNotifications-item a {color: #8ab5e0 !important;}
 html[data-theme=dark] img.UserCover-image, html[data-theme=dark] img.TitleImage {opacity: 0.7 !important;}
 /* 其他图片 */
 html[data-theme=dark] img {opacity: 0.9 !important;}
+/* GIF 动图除外 */
+html[data-theme=dark] .GifPlayer img {opacity: 1 !important;}
 
 /* 边框 */
 html[data-theme=dark] .Topbar, html[data-theme=dark] .CommentsV2-footer, html[data-theme=dark] .Topstory-mainColumnCard .Card:not(.Topstory-tabCard), html[data-theme=dark] .NestComment:not(:last-child):after, html[data-theme=dark] .NestComment--rootComment:after, html[data-theme=dark] .NestComment .NestComment--child:after, html[data-theme=dark] .NestComment .NestComment--child:after, html[data-theme=dark] .CommentsV2-replyNum, html[data-theme=dark] .CommentItemV2:not(:first-child):after, html[data-theme=dark] .Tabs, html[data-theme=dark] .Popover-arrow:after {border-bottom: 1px solid #282d35 !important;}
@@ -220,6 +222,8 @@ html[data-theme=dark] .Reward-rewardBtn {color: #ffffff !important;}
             style_7 = `/* 暗黑模式（方案 2） */
 html {filter: invert(80%) !important;}
 img, .ZVideoItem-video, .ZVideo-video {filter: invert(1) !important;}
+.GifPlayer img, .GifPlayer.isPlaying video {filter: invert(1) !important;}
+.GifPlayer.isPlaying img.ztext-gif.GifPlayer-gif2mp4Image {filter: none !important;}
 `,
             style_8 = `/* 暗黑模式（方案 3） */
 html {filter: brightness(75%) !important;}
