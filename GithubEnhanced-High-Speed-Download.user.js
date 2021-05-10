@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.4.5
+// @version      1.4.6
 // @author       X.I.U
 // @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -31,7 +31,6 @@
     }
 
     var download_url = [
-        ['https://gh.con.sh','美国'],
         ['https://gh.api.99988866.xyz','美国'],
         ['https://download.fastgit.org','日本东京'],
         ['https://gh.xiu2.xyz','日本东京'],
@@ -120,11 +119,10 @@
                 let href = _this.href.split('github.com'),
                     url = [
                         download_url[0][0] + '/' + _this.href,
-                        download_url[1][0] + '/' + _this.href,
-                        download_url[2][0] + href[1],
+                        download_url[1][0] + href[1],
+                        download_url[2][0] + '/' + _this.href,
                         download_url[3][0] + '/' + _this.href,
-                        download_url[4][0] + '/' + _this.href,
-                        download_url[5][0] + '/' + _this.href
+                        download_url[4][0] + '/' + _this.href
                     ],
                     _html = `<div style="display: flex;justify-content: flex-end;">`;
                 for (let i=0;i<url.length;i++) {
@@ -142,11 +140,10 @@
                 let href = _this.href.split('github.com'),
                     url = [
                         download_url[0][0] + '/' + _this.href,
-                        download_url[1][0] + '/' + _this.href,
-                        download_url[2][0] + href[1],
+                        download_url[1][0] + href[1],
+                        download_url[2][0] + '/' + _this.href,
                         download_url[3][0] + '/' + _this.href,
-                        download_url[4][0] + '/' + _this.href,
-                        download_url[5][0] + '/' + _this.href
+                        download_url[4][0] + '/' + _this.href
                     ],
                     _html = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">`;
                 for (let i=0;i<url.length;i++) {
@@ -167,11 +164,10 @@
         let href = html.getElementsByTagName('a')[0].href,
             url = [
                 download_url[0][0] + "/" + href,
-                download_url[1][0] + "/" + href,
-                download_url[2][0] + href.split('github.com')[1],
+                download_url[1][0] + href.split('github.com')[1],
+                download_url[2][0] + "/" + href,
                 download_url[3][0] + "/" + href,
-                download_url[4][0] + "/" + href,
-                download_url[5][0] + '/' + href
+                download_url[4][0] + '/' + href
             ],
             _html = ``;
         for (let i=0;i<url.length;i++) {
