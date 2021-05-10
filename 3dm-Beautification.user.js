@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         3DM论坛美化
-// @version      1.0.0
+// @version      1.0.1
 // @author       X.I.U
 // @description  精简多余内容、样式优化
 // @icon         https://www.3dmgame.com/favicon.ico
@@ -9,9 +9,9 @@
 // @run-at       document-start
 // @namespace    https://greasyfork.org/scripts/413593
 // ==/UserScript==
- 
+
 (function() {
-    var style_Add = document.createElement('style');
+    let style_Add = document.createElement('style');
     style_Add.innerHTML = `
 [url=home.php?mod=space&uid=945662]@media[/url] (min-width:1366px) {
 	body {
@@ -87,5 +87,14 @@ textarea#fastpostmessage {
 	border-top: 0;
 	border-bottom: 0;
 }`;
-    document.head.appendChild(style_Add);
+    if (document.head) {
+        document.head.appendChild(style_Add);
+    } else {
+        let timer = setInterval(function(){
+            if (document.head) {
+                document.head.appendChild(style_Add);
+                clearInterval(timer);
+            }
+        }, 1);
+    }
 })();

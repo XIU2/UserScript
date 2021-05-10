@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛美化
-// @version      1.0.7
+// @version      1.0.8
 // @author       X.I.U
 // @description  精简多余内容、样式优化
 // @match        *://www.52pojie.cn/*
@@ -149,11 +149,15 @@ textarea#fastpostmessage {
         style = style_2
         if (menu_value('menu_rule')) style += style_1;
         style_Add.innerHTML = style;
-        let timer = setInterval(function(){
-            if (document.head) {
-                document.head.appendChild(style_Add);
-                clearInterval(timer);
-            }
-        }, 10);
+        if (document.head) {
+            document.head.appendChild(style_Add);
+        } else {
+            let timer = setInterval(function(){
+                if (document.head) {
+                    document.head.appendChild(style_Add);
+                    clearInterval(timer);
+                }
+            }, 1);
+        }
     }
 })();

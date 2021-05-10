@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         智友邦论坛美化
-// @version      1.0.1
+// @version      1.0.2
 // @author       X.I.U
 // @description  精简多余内容、样式优化、宽屏显示
 // @icon         http://bbs.zhiyoo.net/favicon.ico
@@ -11,7 +11,7 @@
 // ==/UserScript==
 
 (function() {
-    var style_Add = document.createElement('style');
+    let style_Add = document.createElement('style');
     style_Add.innerHTML = `
 /* 精简多于内容 */
 .forum_top,#main_sidebar,.drag,.nav,.tps,.bm.bml,.ct2 .sd,.mn div.box.cl:nth-of-type(3),#f_pst,.plc.plm,#diy_like1,#hm_qrcode_main,#ft,.po.bbd.reply_p,.ft_top.cl,div a[href="https://weibo.com/372458419"] {
@@ -43,5 +43,14 @@
 #postlist .pcb img {
 	max-width: 30%;
 }`;
-    document.head.appendChild(style_Add);
+    if (document.head) {
+        document.head.appendChild(style_Add);
+    } else {
+        let timer = setInterval(function(){
+            if (document.head) {
+                document.head.appendChild(style_Add);
+                clearInterval(timer);
+            }
+        }, 1);
+    }
 })();
