@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.3.9
+// @version      1.4.0
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽指定用户、屏蔽盐选内容、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -284,7 +284,7 @@ function blockUsers(type) {
                 let item = e.target.getElementsByClassName('List-item')[0];
                 let listName = item.querySelector('.RichText.ztext.CopyrightRichText-richText b') // 用户名所在元素
                 if (listName) {
-                    blockUsersList.forEach(function(item1){ // 遍历用户黑名单
+                    menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
                         if (item1 === listName.innerText) { // 找到就删除该搜索结果
                             console.log(listName.innerText);
                             item.parentNode.remove();
@@ -359,8 +359,10 @@ function addEventListener_DOMNodeInserted() {
     // 知乎免登录，修改自：https://greasyfork.org/zh-CN/scripts/417126
     let removeLoginModal = e => {
         if (e.target.innerHTML && e.target.getElementsByClassName('Modal-wrapper').length > 0) {
-            let button = e.target.getElementsByClassName('Button Modal-closeButton Button--plain')[0];
-            if (button)button.click();
+            if (e.target.getElementsByClassName('Modal-wrapper')[0].querySelector('.signFlowModal')){
+                let button = e.target.getElementsByClassName('Button Modal-closeButton Button--plain')[0];
+                if (button)button.click();
+            }
         }
     }
 
@@ -378,13 +380,19 @@ function addEventListener_DOMNodeInserted() {
         }
     }
 
-    if (document.querySelector('button.AppHeader-login')){ // 未登录时才会监听并移除登录弹窗
-        document.addEventListener('DOMNodeInserted', removeLoginModal);
-        document.querySelector('button.AppHeader-login').onclick=function(){location.href='https://www.zhihu.com/signin';} // [登录] 按钮跳转至登录页面
-        document.querySelector('.AppHeader-profile button.Button--primary').onclick=function(){location.href='https://www.zhihu.com/signin';} // [加入知乎] 按钮跳转至注册页面（实际上是同一个页面）
-    } else if(window.location.href.indexOf("zhuanlan") > -1){
-        document.addEventListener('DOMNodeInserted', removeLoginModal);
+    // 未登录时才会监听并移除登录弹窗
+    if(window.location.href.indexOf("zhuanlan") > -1) { // 如果是文章页
+        if (!document.querySelector('button.ColumnPageHeader-MenuToggler')) { // 判断不存在，则已登录
+            document.addEventListener('DOMNodeInserted', removeLoginModal);
+        }
+    } else { // 不是文章页
+        if (document.querySelector('button.AppHeader-login')) { // 如果存在，则未登录
+            document.addEventListener('DOMNodeInserted', removeLoginModal);
+            document.querySelector('button.AppHeader-login').onclick=function(){location.href='https://www.zhihu.com/signin';} // [登录] 按钮跳转至登录页面
+            document.querySelector('.AppHeader-profile button.Button--primary').onclick=function(){location.href='https://www.zhihu.com/signin';} // [加入知乎] 按钮跳转至注册页面（实际上是同一个页面）
+        }
     }
+
     document.addEventListener('DOMNodeInserted', collapseNowComment); // 收起当前评论（监听点击事件，点击网页两侧空白处）
 }
 
