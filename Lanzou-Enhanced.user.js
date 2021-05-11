@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.2.4
+// @version      1.2.5
 // @author       X.I.U
 // @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @match        *://*.lanzous.com/*
@@ -83,11 +83,11 @@
     }
 
 
-    if (document.getElementById("infos")) { //             分享链接文件列表页
-        if (document.getElementById("pwdload")) { //       分享链接输入密码页
-            enterToPass(); //                              输入密码后回车确认
+    if (document.getElementById("infos")) { //              分享链接文件列表页
+        if (document.getElementById("pwdload")) { //        分享链接输入密码页
+            enterToPass(); //                               输入密码后回车确认
         }
-        setTimeout(fileMoreS, 300); //                   自动显示更多文件
+        setTimeout(fileMoreS, 300); //                      自动显示更多文件
     } else if (document.querySelector("iframe.ifr2")) { //  分享链接文件下载页（暂时没有这方面的功能，先空着）
         //console.log()
     } else if (document.getElementById("mainframe") || window.top.location.href.indexOf("mydisk.php?") > -1) { // 后台页
@@ -194,10 +194,43 @@
 
     // 自动显示更多文件（分享链接列表页）
     function fileMoreS() {
-        let filemore = document.getElementById("filemore"); // 寻找 [显示更多文件] 按钮
-        if(filemore && filemore.style.display != "none"){ //   判断按钮是否存在且可见
-            filemore.click(); //                               点击 [显示更多文件] 按钮
+        if (document.getElementById("fileview")) { //              新版页面
+            windowScroll(function (direction, e) {
+                if (direction === "down") { // 下滑才准备加载更多
+                    let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+                    let scrollDelta = 500;
+                    if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
+                        let filemore = document.getElementById("filemore"); // 寻找 [显示更多文件] 按钮
+                        if (filemore && filemore.style.display != "none") { // 如果正在加载，就不再点击
+                            if (filemore.innerText.indexOf('更多') > -1){ //   避免已经在加载了，重复点击
+                                filemore.click(); //                           点击 [显示更多文件] 按钮
+                            }
+                        }
+                    }
+                }
+            });
+        } else { //                                                旧版页面
+            let filemore = document.getElementById("filemore"); // 寻找 [显示更多文件] 按钮
+            if(filemore && filemore.style.display != "none"){ //   判断按钮是否存在且可见
+                filemore.click(); //                               点击 [显示更多文件] 按钮
+            }
         }
+    }
+
+
+    // 滚动条事件
+    function windowScroll(fn1) {
+        var beforeScrollTop = document.documentElement.scrollTop,
+            fn = fn1 || function () {};
+        setTimeout(function () { // 延时执行，避免刚载入到页面就触发翻页事件
+            window.addEventListener("scroll", function (e) {
+                var afterScrollTop = document.documentElement.scrollTop,
+                    delta = afterScrollTop - beforeScrollTop;
+                if (delta == 0) return false;
+                fn(delta > 0 ? "down" : "up", e);
+                beforeScrollTop = afterScrollTop;
+            }, false);
+        }, 1000)
     }
 
 
@@ -231,6 +264,12 @@
                 mainframe.f_upc();
             }
         }, false);
+        mainframe.addEventListener("drop", function (e) {
+            e.preventDefault();
+            //e.stopPropagation();
+            console.log('111111')
+            //console.log(e.dataTransfer.files)
+        });
     }
 
 
