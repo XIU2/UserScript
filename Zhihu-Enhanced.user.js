@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.4.0
+// @version      1.4.1
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽指定用户、屏蔽盐选内容、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -128,7 +128,7 @@ function collapsedNowAnswer(selectors) {
                 }
             }
 
-            var commentCollapseButton_ = false;
+            var commentCollapseButton_ = false, commentCollapseButton__ = false;
             // 悬浮的 [收起评论]（此时正在浏览评论内容 [中间区域]）
             let commentCollapseButton = document.querySelector('.CommentCollapseButton')
             if (commentCollapseButton) {
@@ -154,7 +154,23 @@ function collapsedNowAnswer(selectors) {
                                 let commentCollapseButton = el.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                                 if (commentCollapseButton.innerText.indexOf('收起评论') > -1) {
                                     commentCollapseButton.click()
+                                    commentCollapseButton__ = true // 如果找到并点击了，就没必要执行下面的代码了（可视区域中没有 评论元素 时）
                                     break
+                                }
+                            }
+                        }
+                    }
+                    if (commentCollapseButton__ == false) { // 如果上面的都没找到，那么就尝试寻找评论末尾的 [评论回复框]
+                        let commentCollapseButton_2 = document.querySelectorAll('.CommentsV2-footer.CommentEditorV2--normal .CommentEditorV2-inputWrap')
+                        if (commentCollapseButton_2.length > 0) {
+                            for (let el of commentCollapseButton_2) {
+                                if (isElementInViewport(el)) {
+                                    let commentCollapseButton = el.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
+                                    console.log(commentCollapseButton)
+                                    if (commentCollapseButton.innerText.indexOf('收起评论') > -1) {
+                                        commentCollapseButton.click()
+                                        break
+                                    }
                                 }
                             }
                         }
