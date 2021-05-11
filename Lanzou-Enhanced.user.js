@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.2.6
+// @version      1.2.7
 // @author       X.I.U
-// @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
+// @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @match        *://*.lanzous.com/*
 // @match        *://*.lanzoux.com/*
 // @match        *://*.lanzoui.com/*
@@ -83,19 +83,24 @@
     }
 
 
-    if (document.getElementById("infos")) { //              分享链接文件列表页
-        if (document.getElementById("pwdload")) { //        分享链接输入密码页
-            enterToPass(); //                               输入密码后回车确认
-        }
-        setTimeout(fileMoreS, 300); //                      自动显示更多文件
-    } else if (document.querySelector("iframe.ifr2")) { //  分享链接文件下载页（暂时没有这方面的功能，先空着）
-        //console.log()
-    } else if (document.getElementById("mainframe") || window.top.location.href.indexOf("mydisk.php?") > -1) { // 后台页
+    if (window.top.location.pathname === '/u' || window.top.location.pathname.indexOf('account.php') > -1 || window.top.location.pathname.indexOf('mydisk.php') > -1) { // 后台页
         if (window.top.location.href != "https://pc.woozooo.com/mydisk.php") {
             window.top.location.href = "https://pc.woozooo.com/mydisk.php"
         }
         var mainframe;
         iframe();
+    } else if (window.top.location.pathname.indexOf('%') > -1) { // 带密码的分享链接页面
+        shareLinkWithPassword(); //                                 带密码的分享链接自动输密码
+    } else {
+        setTimeout(function() { //                                  延迟 300 毫秒（避免网页还没加载完）
+            if (document.getElementById('infos')) { //              分享链接文件列表页
+                if (document.getElementById('pwdload')) { //        分享链接输入密码页
+                    enterPassword(); //                             自动输入密码（仅支持访问 带密码的分享链接 时）
+                    enterToPass(); //                               输入密码后回车确认
+                }
+                fileMoreS(); //                                     自动显示更多文件
+            }
+        }, 300);
     }
 
 
@@ -113,6 +118,33 @@
             EventXMLHttpRequest(); //                    监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
 
             dragEnter(); //                              拖入文件自动显示上传框
+        }
+    }
+
+
+    // 带密码的分享链接自动输密码
+    function shareLinkWithPassword() {
+        if (location.pathname.indexOf('%E5%AF%86%E7%A0%81') > -1) {
+            let shareLink = location.pathname.split('%')
+            if (shareLink.length > 0) {
+                shareLink = location.origin + shareLink[0]
+                let password = location.pathname.replace('%E5%AF%86%E7%A0%81',':').replace(/%([A-Z]|[0-9]){2}/ig, '').split(':')
+                if (password.length > 0) {
+                    location.replace(shareLink + '?password=' + password[password.length - 1])
+                }
+            }
+        }
+    }
+
+
+    // 自动输入密码（仅支持访问 带密码的分享链接 时）
+    function enterPassword() {
+        if (location.search.indexOf('?password=') > -1) {
+            let password = location.search.split('=')
+            if (password.length > 0) {
+                document.getElementById('pwd').value = password[password.length - 1]
+                document.getElementById('sub').click();
+            }
         }
     }
 
@@ -370,10 +402,6 @@
             }
         };
     }
-
-
-    // 定时执行（旧方法，每隔 100ms 执行一次，比较笨且浪费一丢丢性能，但优点是不会漏掉且反应更快）
-    //setInterval(fileMore,100);
 
 
     // 监听 XMLHttpRequest 事件并执行（新方法，只有在产生事件时才会执行 [自动显示更多文件]，平时不会执行，更优雅~）
