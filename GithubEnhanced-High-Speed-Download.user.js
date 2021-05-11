@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.4.6
+// @version      1.4.7
 // @author       X.I.U
 // @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -32,8 +32,8 @@
 
     var download_url = [
         ['https://gh.api.99988866.xyz','美国'],
+        ['https://gh.xiu2.xyz','美国'],
         ['https://download.fastgit.org','日本东京'],
-        ['https://gh.xiu2.xyz','日本东京'],
         ['https://ghproxy.com','韩国首尔'],
         ['https://pd.zwc365.com/seturl','中国香港']
     ],
@@ -119,8 +119,8 @@
                 let href = _this.href.split('github.com'),
                     url = [
                         download_url[0][0] + '/' + _this.href,
-                        download_url[1][0] + href[1],
-                        download_url[2][0] + '/' + _this.href,
+                        download_url[1][0] + '/' + _this.href,
+                        download_url[2][0] + href[1],
                         download_url[3][0] + '/' + _this.href,
                         download_url[4][0] + '/' + _this.href
                     ],
@@ -140,8 +140,8 @@
                 let href = _this.href.split('github.com'),
                     url = [
                         download_url[0][0] + '/' + _this.href,
-                        download_url[1][0] + href[1],
-                        download_url[2][0] + '/' + _this.href,
+                        download_url[1][0] + '/' + _this.href,
+                        download_url[2][0] + href[1],
                         download_url[3][0] + '/' + _this.href,
                         download_url[4][0] + '/' + _this.href
                     ],
@@ -164,8 +164,8 @@
         let href = html.getElementsByTagName('a')[0].href,
             url = [
                 download_url[0][0] + "/" + href,
-                download_url[1][0] + href.split('github.com')[1],
-                download_url[2][0] + "/" + href,
+                download_url[1][0] + "/" + href,
+                download_url[2][0] + href.split('github.com')[1],
                 download_url[3][0] + "/" + href,
                 download_url[4][0] + '/' + href
             ],
