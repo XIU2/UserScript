@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.2.5
+// @version      1.2.6
 // @author       X.I.U
 // @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @match        *://*.lanzous.com/*
@@ -194,27 +194,20 @@
 
     // 自动显示更多文件（分享链接列表页）
     function fileMoreS() {
-        if (document.getElementById("fileview")) { //              新版页面
-            windowScroll(function (direction, e) {
-                if (direction === "down") { // 下滑才准备加载更多
-                    let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-                    let scrollDelta = 500;
-                    if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
-                        let filemore = document.getElementById("filemore"); // 寻找 [显示更多文件] 按钮
-                        if (filemore && filemore.style.display != "none") { // 如果正在加载，就不再点击
-                            if (filemore.innerText.indexOf('更多') > -1){ //   避免已经在加载了，重复点击
-                                filemore.click(); //                           点击 [显示更多文件] 按钮
-                            }
+        windowScroll(function (direction, e) {
+            if (direction === "down") { // 下滑才准备加载更多
+                let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+                let scrollDelta = 500;
+                if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
+                    let filemore = document.getElementById("filemore"); // 寻找 [显示更多文件] 按钮
+                    if (filemore && filemore.style.display != "none") { // 如果正在加载，就不再点击
+                        if (filemore.innerText.indexOf('更多') > -1){ //   避免已经在加载了，重复点击
+                            filemore.click(); //                           点击 [显示更多文件] 按钮
                         }
                     }
                 }
-            });
-        } else { //                                                旧版页面
-            let filemore = document.getElementById("filemore"); // 寻找 [显示更多文件] 按钮
-            if(filemore && filemore.style.display != "none"){ //   判断按钮是否存在且可见
-                filemore.click(); //                               点击 [显示更多文件] 按钮
             }
-        }
+        });
     }
 
 
