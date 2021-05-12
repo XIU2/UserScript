@@ -2,7 +2,7 @@
 // @name         Github 增强 - 高速下载
 // @version      1.4.9
 // @author       X.I.U
-// @description  高速下载 Git Clone、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
+// @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
 // @match        *://hub.fastgit.org/*
 // @icon         https://i.loli.net/2021/03/30/ULV9XunaHesqGIR.png
