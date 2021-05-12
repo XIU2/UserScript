@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.1.18
+// @version      1.2.0
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -207,8 +207,11 @@ html[data-theme=dark] .InputLike {border: 1px solid #424b56 !important;}
 /* 滚动条 */
 html[data-theme=dark] body::-webkit-scrollbar, html[data-theme="dark"] .MessagesBox::-webkit-scrollbar, html[data-theme="dark"] .Messages-list::-webkit-scrollbar, html[data-theme=dark] .PushNotifications-list::-webkit-scrollbar, html[data-theme=dark] .CommentListV2::-webkit-scrollbar, .ChatListGroup-SectionContent::-webkit-scrollbar, html[data-theme=dark] .ChatSideBar-Search-ResultListWrap::-webkit-scrollbar {width: 6px !important;height: 1px !important;}
 html[data-theme=dark] body::-webkit-scrollbar-thumb, html[data-theme="dark"] .MessagesBox::-webkit-scrollbar-thumb, html[data-theme="dark"] .Messages-list::-webkit-scrollbar-thumb, html[data-theme=dark] .PushNotifications-list::-webkit-scrollbar-thumb, html[data-theme=dark] .CommentListV2::-webkit-scrollbar-thumb, .ChatListGroup-SectionContent::-webkit-scrollbar-thumb, html[data-theme=dark] .ChatSideBar-Search-ResultListWrap::-webkit-scrollbar-thumb {background: #3f4752 !important;}
-html[data-theme=dark] body::-webkit-scrollbar-track, .ChatListGroup-SectionContent::-webkit-scrollbar-track, html[data-theme=dark] .ChatSideBar-Search-ResultListWrap::-webkit-scrollbar-track {background: #22272e !important;}
-html[data-theme=dark] .MessagesBox::-webkit-scrollbar-track, html[data-theme="dark"] .Messages-list::-webkit-scrollbar-track, html[data-theme=dark] .PushNotifications-list::-webkit-scrollbar-track, html[data-theme=dark] .CommentListV2::-webkit-scrollbar-track {background: #2d333b !important;}
+html[data-theme=dark] body::-webkit-scrollbar-track {background: #22272e !important;}
+html[data-theme=dark] .MessagesBox::-webkit-scrollbar-track, html[data-theme="dark"] .Messages-list::-webkit-scrollbar-track, html[data-theme=dark] .PushNotifications-list::-webkit-scrollbar-track, html[data-theme=dark] .CommentListV2::-webkit-scrollbar-track, .ChatListGroup-SectionContent::-webkit-scrollbar-track, html[data-theme=dark] .ChatSideBar-Search-ResultListWrap::-webkit-scrollbar-track {background: #2d333b !important;}
+
+html {scrollbar-width: thin; scrollbar-color: #3f4752 #22272e;}
+.MessagesBox, .Messages-list, .PushNotifications-list, .CommentListV2, .ChatListGroup-SectionContent, .ChatSideBar-Search-ResultListWrap {scrollbar-width: thin; scrollbar-color: #3f4752 #2D333B;}
 
 /* 背景颜色 - 专栏/文章 */
 html[data-theme=dark] .WhiteBg-body, html[data-theme=dark] .Post-content {background: #22272E !important;}
@@ -228,11 +231,23 @@ img, .ZVideoItem-video, .ZVideo-video {filter: invert(1) !important;}
 .GifPlayer img, .GifPlayer.isPlaying video {filter: invert(1) !important;}
 .GifPlayer.isPlaying img.ztext-gif.GifPlayer-gif2mp4Image {filter: none !important;}
 `,
+            style_darkMode_2_firefox = `/* 暗黑模式（方案 2） */
+html {filter: invert(80%) !important; background-image: url();}
+img, .ZVideoItem-video, .ZVideo-video {filter: invert(1) !important;}
+.GifPlayer img, .GifPlayer.isPlaying video {filter: invert(1) !important;}
+.GifPlayer.isPlaying img.ztext-gif.GifPlayer-gif2mp4Image {filter: none !important;}
+`,
             style_darkMode_3 = `/* 暗黑模式（方案 3） */
 html {filter: brightness(75%) !important;}
 `,
+            style_darkMode_3_firefox = `/* 暗黑模式（方案 3） */
+html {filter: brightness(75%) !important; background-image: url();}
+`,
             style_darkMode_4 = `/* 暗黑模式（方案 4） */
 html {filter: brightness(75%) sepia(30%) !important;}
+`,
+             style_darkMode_4_firefox = `/* 暗黑模式（方案 4） */
+html {filter: brightness(75%) sepia(30%) !important; background-image: url();}
 `
         let style_Add = document.createElement('style');
 
@@ -249,6 +264,11 @@ html {filter: brightness(75%) sepia(30%) !important;}
                     document.cookie="theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
                     document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light');
                     location.reload(); // 刷新网页
+                }
+                if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+                    style_darkMode_2 = style_darkMode_2_firefox
+                    style_darkMode_3 = style_darkMode_3_firefox
+                    style_darkMode_4 = style_darkMode_4_firefox
                 }
             }
             switch(menu_value('menu_darkModeType')) {
