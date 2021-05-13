@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         暗黑模式
+// @name         护眼模式
 // @version      1.0.0
 // @author       X.I.U
-// @description  最简单的全网通用暗黑模式
+// @description  最简单的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_registerMenuCommand
@@ -25,7 +25,7 @@
     }
     registerMenuCommand();
     addStyle();
- 
+
 
     // 注册脚本菜单
     function registerMenuCommand() {

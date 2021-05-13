@@ -17,7 +17,7 @@
 
 |  | 脚本名称 | 脚本功能 | 安装 \| 备用 |
 | :----: | :---- | :---- | :----: |
-| [<img src="https://i.loli.net/2021/03/30/T85mFlDGnfNWQvp.png" height="16px" />](https://github.com/XIU2) | **暗黑模式** | 最简单的全网通用暗黑模式 | **[安装](https://greasyfork.org/zh-CN/scripts/426377)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/DarkMode.user.js)** |
+| [<img src="https://i.loli.net/2021/03/30/T85mFlDGnfNWQvp.png" height="16px" />](https://github.com/XIU2) | **护眼模式** | 最简单的全网通用护眼模式、夜间模式、暗黑模式 | **[安装](https://greasyfork.org/zh-CN/scripts/426377)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/DarkMode.user.js)** |
 | [<img src="https://static.zhihu.com/heifetz/favicon.ico" height="16px" />](https://www.zhihu.com/people/xiu2) | **知乎 美化** | 宽屏显示、**暗黑模式**、隐藏文章开头大图、调整图片最大高度... | **[安装](https://greasyfork.org/zh-CN/scripts/412212)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Beautification.user.js)** |
 | [<img src="https://static.zhihu.com/heifetz/favicon.ico" height="16px" />](https://www.zhihu.com/people/xiu2) | **知乎 增强** | **移除登录弹窗**、一键收起回答、屏蔽指定用户、屏蔽盐选内容... | **[安装](https://greasyfork.org/zh-CN/scripts/419081)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Zhihu-Enhanced.user.js)** |
 | [<img src="https://www.v2ex.com/static/favicon.ico" height="16px" />](https://www.v2ex.com/) | **V2ex 增强** | **自动签到**、链接转图片、自动无缝翻页、新标签页打开链接... | **[安装](https://greasyfork.org/zh-CN/scripts/424246)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/V2ex-Enhanced.user.js)** |
