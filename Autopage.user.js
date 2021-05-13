@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.2.0
+// @version      1.2.1
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、FitGirl Repacks、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛
+// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、FitGirl Repacks、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛
 // @match        *://www.423down.com/*
 // @exclude      *://www.423down.com/*.html
 // @match        *://apphot.cc/*
@@ -12,6 +12,7 @@
 // @match        *://www.appinn.com/*/*/
 // @match        *://www.appinn.com/?s=*
 // @match        *://www.iplaysoft.com/*
+// @match        *://www.weidown.com/*
 // @match        *://fitgirl-repacks.site/*
 // @match        *://*.alphacoders.com/*
 // @match        *://club.sanguosha.com/*
@@ -184,6 +185,39 @@
                 replaceE: 'css;nav.navigation.paging-navigation',
                 scrollDelta: 2000
             }
+        },
+        weidown: {
+            SiteTypeID: 14,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nextpage"][@href]',
+                pageElement: 'css;.articleWrapper > .itemArticle, .articleWrapper > .richTextItem.search',
+                HT_insert: ['css;.articleWrapper', 3],
+                replaceE: 'css;#pageGroup',
+                scrollDelta: 1500
+            }
+        },
+        weidown_search: {
+            SiteTypeID: 14,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nextpage"][@href]',
+                pageElement: 'css;.articleListWrapper > .richTextItem.search',
+                HT_insert: ['css;#pageGroup', 1],
+                replaceE: 'css;#pageGroup',
+                scrollDelta: 700
+            }
+        },
+        weidown_special: {
+            SiteTypeID: 14,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nextpage"][@href]',
+                pageElement: 'css;.special > .item',
+                HT_insert: ['css;.special', 3],
+                replaceE: 'css;#pageGroup',
+                scrollDelta: 700
+            }
         }
     };
 
@@ -206,6 +240,15 @@
                 curSite = DBSite.iplaysoft_postcomments;
             } else { // 其他页面
                 curSite = DBSite.iplaysoft_postslist;
+            }
+            break;
+        case "www.weidown.com":
+            if (location.pathname.indexOf("/search/") > -1) {
+                curSite = DBSite.weidown_search;
+            } else if (location.pathname.indexOf("/special/") > -1) {
+                curSite = DBSite.weidown_special;
+            } else {
+                curSite = DBSite.weidown;
             }
             break;
         case "fitgirl-repacks.site":
