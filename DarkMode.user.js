@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.0.0
+// @version      1.0.1
 // @author       X.I.U
 // @description  最简单的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -121,7 +121,7 @@
         }
 
         // 白天（7点到19点）
-        if (hours > 6 || hours < 19) {
+        if (hours > 6 && hours < 19) {
             if (menu_value('menu_runDuringTheDay')) {
                 style_12 = style_11
                 style_22 = style_21
