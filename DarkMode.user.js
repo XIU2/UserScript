@@ -25,7 +25,7 @@
     }
     registerMenuCommand();
     addStyle();
-
+ 
 
     // 注册脚本菜单
     function registerMenuCommand() {
