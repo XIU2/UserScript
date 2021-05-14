@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.2.1
+// @version      1.2.2
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、FitGirl Repacks、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛
+// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、豆瓣、FitGirl Repacks、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛
 // @match        *://www.423down.com/*
 // @exclude      *://www.423down.com/*.html
 // @match        *://apphot.cc/*
@@ -18,6 +18,7 @@
 // @match        *://club.sanguosha.com/*
 // @match        *://www.centbrowser.net/*
 // @match        *://pubmed.ncbi.nlm.nih.gov/?term=*
+// @match        *://movie.douban.com/*
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
@@ -218,6 +219,39 @@
                 replaceE: 'css;#pageGroup',
                 scrollDelta: 700
             }
+        },
+        douban_subject_comments: {
+            SiteTypeID: 15,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="next"][@href]',
+                pageElement: 'css;#comments > .comment-item',
+                HT_insert: ['css;#paginator', 1],
+                replaceE: 'css;#paginator',
+                scrollDelta: 700
+            }
+        },
+        douban_subject_reviews: {
+            SiteTypeID: 16,
+            pager: {
+                type: 1,
+                nextLink: '//link[@rel="next"][@href]',
+                pageElement: 'css;.review-list > div',
+                HT_insert: ['css;.review-list', 3],
+                replaceE: 'css;.paginator',
+                scrollDelta: 700
+            }
+        },
+        douban_subject_episode: {
+            SiteTypeID: 17,
+            pager: {
+                type: 1,
+                nextLink: '//link[@rel="next"][@href]',
+                pageElement: 'css;#comments > div',
+                HT_insert: ['css;#comments', 3],
+                replaceE: 'css;.paginator',
+                scrollDelta: 700
+            }
         }
     };
 
@@ -287,6 +321,15 @@
             break;
         case "pubmed.ncbi.nlm.nih.gov":
             curSite = DBSite.pubmed_postslist;
+            break;
+        case "movie.douban.com":
+            if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/comments') > -1) { //               短评
+                curSite = DBSite.douban_subject_comments;
+            } else if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/reviews') > -1) { //       影评
+                curSite = DBSite.douban_subject_reviews;
+            }else if(location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/episode') > -1) { //         电视剧每集评论
+                curSite = DBSite.douban_subject_episode;
+            }
             break;
     }
     curSite.pageUrl = ""; // 下一页URL
