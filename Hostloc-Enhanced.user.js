@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.0.6
+// @version      1.0.7
 // @author       X.I.U
 // @description  自动无缝翻页、自动显示帖子内隐藏回复
 // @match        *://hostloc.com/*
@@ -76,7 +76,7 @@
                 nextLink: '//div[@id="pgt"]//a[contains(text(),"下一页")][@href]',
                 pageElement: 'css;div#postlist > div[id^="post_"]',
                 HT_insert: ['css;div#postlist', 2],
-                replaceE: '//div[@class="pg"] | //div[@class="pgbtn"]',
+                replaceE: 'css;div.pg',
             }
         },
         guide: {
@@ -115,9 +115,11 @@
     // URL 判断
     if (patt_thread.test(location.pathname) || location.search.indexOf('mod=viewthread') > -1){
         // 帖子内
-        if(menu_value('menu_thread_pageLoading'))curSite = DBSite.thread;
-        // 自动显示帖子内被隐藏的回复
-        showPosts();
+        if(menu_value('menu_thread_pageLoading')) {
+            curSite = DBSite.thread;
+            hidePgbtn(); // 隐藏帖子内的 [下一页] 按钮
+        }
+        showPosts(); // 自动显示帖子内被隐藏的回复
     }else if (patt_forum.test(location.pathname) || location.search.indexOf('mod=forumdisplay') > -1){
         // 各板块帖子列表
         curSite = DBSite.forum;
@@ -164,6 +166,14 @@
                 showposts.click();
             }
         }
+    }
+
+
+    // 隐藏帖子内的 [下一页] 按钮
+    function hidePgbtn() {
+        let style_hidePgbtn = document.createElement('style');
+        style_hidePgbtn.innerHTML = `.pgbtn {display: none;}`;
+        document.head.appendChild(style_hidePgbtn);
     }
 
 
