@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.0.7
+// @version      1.0.8
 // @author       X.I.U
-// @description  自动无缝翻页、自动显示帖子内隐藏回复
+// @description  自动无缝翻页、自动显示帖子内隐藏回复、回到顶部（右键点击两侧空白处）
 // @match        *://hostloc.com/*
 // @icon         https://www.hostloc.com/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -20,7 +20,8 @@
 (function() {
     var menu_ALL = [
         ['menu_thread_pageLoading', '帖子内自动翻页', '帖子内自动翻页', true],
-        ['menu_showhide', '自动显示隐藏回复', '自动显示隐藏回复', true]
+        ['menu_showhide', '自动显示隐藏回复', '自动显示隐藏回复', true],
+        ['menu_backToTop', '回到顶部（右键点击两侧空白处）', '回到顶部', true]
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
@@ -133,6 +134,7 @@
 
     curSite.pageUrl = ""; // 下一页URL
     pageLoading(); // 自动翻页
+    if(menu_value('menu_backToTop'))backToTop(); // 回到顶部（右键点击左右两侧空白处）
 
 
     // 自动翻页
@@ -174,6 +176,17 @@
         let style_hidePgbtn = document.createElement('style');
         style_hidePgbtn.innerHTML = `.pgbtn {display: none;}`;
         document.head.appendChild(style_hidePgbtn);
+    }
+
+
+    // 回到顶部（右键左右两侧空白处）
+    function backToTop() {
+        document.body.oncontextmenu = function(event){
+            if (event.target==this) {
+                event.preventDefault();
+                window.scrollTo(0,0)
+            }
+        }
     }
 
 
