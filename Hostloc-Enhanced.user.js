@@ -2,7 +2,7 @@
 // @name         全球主机交流论坛增强
 // @version      1.0.9
 // @author       X.I.U
-// @description  自动无缝翻页、自动显示帖子内隐藏回复、自动屏蔽阅读权限 255 的帖子、回到顶部（右键点击两侧空白处）
+// @description  自动无缝翻页、自动显示帖子内隐藏回复、自动隐藏阅读权限 255 的帖子、回到顶部（右键点击两侧空白处）
 // @match        *://hostloc.com/*
 // @icon         https://www.hostloc.com/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -21,7 +21,7 @@
     var menu_ALL = [
         ['menu_thread_pageLoading', '帖子内自动翻页', '帖子内自动翻页', true],
         ['menu_showhide', '自动显示隐藏回复', '自动显示隐藏回复', true],
-        ['menu_delate255', '自动屏蔽阅读权限 255 的帖子', '自动屏蔽阅读权限 255 的帖子', true],
+        ['menu_delate255', '自动隐藏阅读权限 255 的帖子', '自动隐藏阅读权限 255 的帖子', true],
         ['menu_backToTop', '回到顶部（右键点击两侧空白处）', '回到顶部', true]
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
@@ -125,7 +125,7 @@
     }else if (patt_forum.test(location.pathname) || location.search.indexOf('mod=forumdisplay') > -1){
         // 各板块帖子列表
         curSite = DBSite.forum;
-        if (menu_value('menu_delate255')) delate255(); // 屏蔽阅读权限 255 的帖子
+        if (menu_value('menu_delate255')) delate255(); // 自动隐藏阅读权限 255 的帖子
     }else if (patt_guide.test(location.search)){
         // 导读帖子列表
         curSite = DBSite.guide;
@@ -150,7 +150,7 @@
                             let autopbn = document.querySelector('#autopbn');
                             if (autopbn && autopbn.innerText === "下一页 »"){ // 如果已经在加载中了，就忽略
                                 autopbn.click();
-                                if (menu_value('menu_delate255')) {
+                                if (menu_value('menu_delate255')) { // 自动隐藏阅读权限 255 的帖子
                                     let timer = setInterval(function(){
                                         if (document.querySelector('#autopbn').innerText === "下一页 »") {
                                             delate255();
@@ -199,7 +199,7 @@
     }
 
 
-    // 屏蔽阅读权限 255 的帖子
+    // 自动隐藏阅读权限 255 的帖子
     function delate255() {
         if (patt_forum.test(location.pathname) || location.search.indexOf('mod=forumdisplay') > -1){
             let tbody = document.querySelectorAll('tbody[id^="normalthread_"] .common .xw1');
