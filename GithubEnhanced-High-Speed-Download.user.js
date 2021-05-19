@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.4.9
+// @version      1.5.0
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -222,6 +222,8 @@
         let href_split = html.getElementsByTagName('input')[0].getAttribute('value').split(':'),
             url = [],
             _html = ``;
+
+        if (href_split[0] != 'git@github.com') return
 
         for (let i=0;i<clone_ssh_url.length;i++){
                 url[i] = clone_ssh_url[i][0] + ':' + href_split[1]
