@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.0.9
+// @version      1.1.0
 // @author       X.I.U
-// @description  自动无缝翻页、自动显示帖子内隐藏回复、自动隐藏阅读权限 255 的帖子、回到顶部（右键点击两侧空白处）
+// @description  自动签到（访问空间）、自动无缝翻页、自动显示帖子内隐藏回复、自动隐藏阅读权限 255 的帖子、回到顶部（右键点击两侧空白处）
 // @match        *://hostloc.com/*
 // @icon         https://www.hostloc.com/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -19,6 +19,8 @@
 
 (function() {
     var menu_ALL = [
+        ['menu_autoSignIn', '自动签到', '自动签到', true],
+        ['menu_reAutoSignIn', '重新签到', '重新签到', ''],
         ['menu_thread_pageLoading', '帖子内自动翻页', '帖子内自动翻页', true],
         ['menu_showhide', '自动显示隐藏回复', '自动显示隐藏回复', true],
         ['menu_delate255', '自动隐藏阅读权限 255 的帖子', '自动隐藏阅读权限 255 的帖子', true],
@@ -38,7 +40,11 @@
         }
         for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
             menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
-            menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+            if (menu_ALL[i][0] === 'menu_reAutoSignIn') {
+                menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){reAutoSignIn()});
+            } else {
+                menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+            }
         }
         menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/414005/feedback', {active: true,insert: true,setParent: true});});
     }
@@ -136,7 +142,49 @@
 
     curSite.pageUrl = ""; // 下一页URL
     pageLoading(); // 自动翻页
-    if(menu_value('menu_backToTop'))backToTop(); // 回到顶部（右键点击左右两侧空白处）
+    if(menu_value('menu_backToTop'))backToTop(); //    回到顶部（右键点击左右两侧空白处）
+    if(menu_value('menu_autoSignIn'))autoSignIn(); //  自动签到（访问空间 10 次 = 20 积分）
+
+
+    // 自动签到（访问空间 10 次 = 20 积分）
+    function autoSignIn() {
+        if (GM_getValue('menu_signingIn')) return
+        let timeNow = new Date().getFullYear() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getDate(),
+            timeOld = GM_getValue('menu_signInTime');
+        if (!timeOld || timeOld != timeNow) { // 是新的一天
+            GM_notification({text: '请不要关闭/刷新网页！耐心等待 60 秒~\n在此期间可以在 "其他标签页" 浏览论坛！', timeout: 10000});
+            let url_list = [],
+                url = 0;
+            // 随机生成 12 个空间地址（2 个冗余）
+            for(let i = 0;i < 12;i++){url_list[i] = "https://hostloc.com/space-uid-" + Math.floor(Math.random()*(50000-10000+1)+10000) + ".html";}
+            // 每 5 秒访问一次（避免触发网站防御机制）
+            GM_setValue('menu_signingIn', true);
+            let signIn = setInterval(function(){
+                GM_xmlhttpRequest({
+                    url: url_list[url++],
+                    method: "GET",
+                    timeout: 4000
+                });
+                console.log(`[全球主机交流论坛 增强] 金钱 +2 (${url_list[url]})`);
+                if (url === 11) { // 次数够了就取消定时循环
+                    console.log('[全球主机交流论坛 增强] 签到完成！');
+                    GM_setValue('menu_signingIn', false);
+                    GM_setValue('menu_signInTime', timeNow); //      写入签到时间以供后续比较
+                    clearInterval(signIn);
+                }
+            }, 5000);
+        } else { //                                                  新旧签到时间一致
+            console.info('[全球主机交流论坛 增强] 已经签过到了。')
+        }
+    }
+
+
+    // 重新签到
+    function reAutoSignIn() {
+        GM_setValue('menu_signingIn', false);
+        GM_setValue('menu_signInTime', '1970/1/1');
+        location.reload(); // 刷新网页
+    }
 
 
     // 自动翻页
