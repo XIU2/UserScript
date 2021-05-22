@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.1.0
+// @version      1.1.1
 // @author       X.I.U
 // @description  自动签到（访问空间）、自动无缝翻页、自动显示帖子内隐藏回复、自动隐藏阅读权限 255 的帖子、回到顶部（右键点击两侧空白处）
 // @match        *://hostloc.com/*
@@ -168,6 +168,7 @@
                 console.log(`[全球主机交流论坛 增强] 金钱 +2 (${url_list[url]})`);
                 if (url === 11) { // 次数够了就取消定时循环
                     console.log('[全球主机交流论坛 增强] 签到完成！');
+                    GM_notification({text: '签到完成！金钱 +20 ~', timeout: 3500});
                     GM_setValue('menu_signingIn', false);
                     GM_setValue('menu_signInTime', timeNow); //      写入签到时间以供后续比较
                     clearInterval(signIn);
