@@ -152,7 +152,7 @@
         let timeNow = new Date().getFullYear() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getDate(),
             timeOld = GM_getValue('menu_signInTime');
         if (!timeOld || timeOld != timeNow) { // 是新的一天
-            GM_notification({text: '请不要关闭/刷新网页！耐心等待 60 秒~\n在此期间可以在 "其他标签页" 浏览论坛！', timeout: 10000});
+            GM_notification({text: '请不要关闭/刷新本页！耐心等待 60 秒~\n在此期间可以在 "其他标签页" 浏览论坛！', timeout: 10000});
             let url_list = [],
                 url = 0;
             // 随机生成 12 个空间地址（2 个冗余）
