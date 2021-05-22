@@ -153,9 +153,7 @@
     function refreshCorrection() {
         document.onkeydown = mainframe.onkeydown = function (e) {
             e = window.event || e;
-            let keycode = e.keyCode;
-            if (keycode == 116) {
-                e.keyCode = 0;
+            if (e.key === 'F5') {
                 let folderID = /-?\d+/.exec(mainframe.document.getElementById("filemore").children[0].getAttribute("onclick"))
                 if(folderID.length > 0){
                     mainframe.folder(folderID[0]);
@@ -172,8 +170,7 @@
     function UNrefreshCorrection() {
         document.onkeydown = mainframe.onkeydown = function (e) {
             e = window.event || e;
-            let keycode = e.keyCode;
-            if (keycode == 116) {
+            if (e.key === 'F5') {
                 return true;
             }
         }
