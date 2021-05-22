@@ -397,7 +397,7 @@
     // 输入密码后回车确认
     function enterToPass() {
         document.getElementById('pwd').onkeydown = function(e){
-            if(e.keyCode == 13){
+            if(e.key === 'Enter'){
                 document.getElementById('sub').click();
             }
         };
