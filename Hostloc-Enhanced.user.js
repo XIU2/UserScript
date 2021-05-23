@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.1.2
+// @version      1.1.3
 // @author       X.I.U
 // @description  自动签到（访问空间）、屏蔽指定用户（黑名单）、自动无缝翻页、自动显示帖子内隐藏回复、自动隐藏阅读权限 255 的帖子、回到顶部（右键点击两侧空白处）
 // @match        *://hostloc.com/*
@@ -231,7 +231,7 @@
                 menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
                     let itemName = item.querySelector('a[href^="space-uid"]'); // 寻找用户名
                     if (itemName && itemName.innerText === item1) {
-                        //console.log(item1);
+                        console.log(item1);
                         item.remove(); // 删除帖子
                     }
                 })
@@ -255,6 +255,7 @@
                                     let timer = setInterval(function(){
                                         if (document.querySelector('#autopbn').innerText === "下一页 »") {
                                             delate255();
+                                            blockUsers('forum');
                                             clearInterval(timer);
                                         }
                                     }, 10);
@@ -392,6 +393,13 @@
                                 pageElems.forEach(function (one) {
                                     toElement.insertAdjacentElement(addTo, one);
                                 });
+                                if (menu_value('menu_blockUsers')) { // 屏蔽指定用户
+                                    if (patt_thread.test(location.pathname) || location.search.indexOf('mod=viewthread') > -1) {
+                                        blockUsers('thread');
+                                    } else if (location.pathname === '/search.php') {
+                                        blockUsers('search');
+                                    }
+                                }
                                 // 替换待替换元素
                                 try {
                                     let oriE = getAllElements(curSite.pager.replaceE);
