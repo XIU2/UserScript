@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.1.1
+// @version      1.1.2
 // @author       X.I.U
-// @description  自动签到（访问空间）、自动无缝翻页、自动显示帖子内隐藏回复、自动隐藏阅读权限 255 的帖子、回到顶部（右键点击两侧空白处）
+// @description  自动签到（访问空间）、屏蔽指定用户（黑名单）、自动无缝翻页、自动显示帖子内隐藏回复、自动隐藏阅读权限 255 的帖子、回到顶部（右键点击两侧空白处）
 // @match        *://hostloc.com/*
 // @icon         https://www.hostloc.com/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -21,6 +21,8 @@
     var menu_ALL = [
         ['menu_autoSignIn', '自动签到', '自动签到', true],
         ['menu_reAutoSignIn', '重新签到', '重新签到', ''],
+        ['menu_blockUsers', '屏蔽指定用户', '屏蔽指定用户', false],
+        ['menu_customBlockUsers', '自定义屏蔽用户', '自定义屏蔽用户', []],
         ['menu_thread_pageLoading', '帖子内自动翻页', '帖子内自动翻页', true],
         ['menu_showhide', '自动显示隐藏回复', '自动显示隐藏回复', true],
         ['menu_delate255', '自动隐藏阅读权限 255 的帖子', '自动隐藏阅读权限 255 的帖子', true],
@@ -42,6 +44,8 @@
             menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
             if (menu_ALL[i][0] === 'menu_reAutoSignIn') {
                 menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){reAutoSignIn()});
+            } else if (menu_ALL[i][0] === 'menu_customBlockUsers') {
+                menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){customBlockUsers()});
             } else {
                 menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
             }
@@ -128,16 +132,19 @@
             hidePgbtn(); // 隐藏帖子内的 [下一页] 按钮
         }
         showPosts(); // 自动显示帖子内被隐藏的回复
+        blockUsers('thread');
     }else if (patt_forum.test(location.pathname) || location.search.indexOf('mod=forumdisplay') > -1){
         // 各板块帖子列表
         curSite = DBSite.forum;
         if (menu_value('menu_delate255')) delate255(); // 自动隐藏阅读权限 255 的帖子
+        blockUsers('forum');
     }else if (patt_guide.test(location.search)){
         // 导读帖子列表
         curSite = DBSite.guide;
     }else if(location.pathname === '/search.php'){
         // 搜索结果列表
         curSite = DBSite.search;
+        blockUsers('search');
     }
 
     curSite.pageUrl = ""; // 下一页URL
@@ -185,6 +192,51 @@
         GM_setValue('menu_signingIn', false);
         GM_setValue('menu_signInTime', '1970/1/1');
         location.reload(); // 刷新网页
+    }
+
+
+    // 自定义屏蔽用户
+    function customBlockUsers() {
+        let nowBlockUsers = '';
+        menu_value('menu_customBlockUsers').forEach(function(item){nowBlockUsers = nowBlockUsers + '|' + item})
+        let newBlockUsers = prompt('编辑 [自定义屏蔽用户]，刷新网页后生效\n（不同用户名之间使用 "|" 分隔，\n（例如：用户A|用户B|用户C，如果只有一个就不需要 "|" 了。', nowBlockUsers.replace('|',''));
+        if (newBlockUsers === '') {
+            GM_setValue('menu_customBlockUsers', []);
+        } else if (newBlockUsers != null) {
+            GM_setValue('menu_customBlockUsers', newBlockUsers.split('|'));
+        }
+    };
+
+
+    // 屏蔽指定用户
+    function blockUsers(type) {
+        if (!menu_value('menu_blockUsers')) return
+        if (!menu_value('menu_customBlockUsers') || menu_value('menu_customBlockUsers').length < 1) return
+        switch(type) {
+            case 'thread':
+                blockUsers_('[id^="post_"]');
+                break;
+            case 'forum':
+                blockUsers_('[id^="normalthread_"]');
+                break;
+            case 'search':
+                blockUsers_('.pbw');
+                break;
+        }
+
+        function blockUsers_(list) {
+            let listItem = document.querySelectorAll(list);
+            if (listItem.length < 1) return
+            listItem.forEach(function(item){ // 遍历所有帖子
+                menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
+                    let itemName = item.querySelector('a[href^="space-uid"]'); // 寻找用户名
+                    if (itemName && itemName.innerText === item1) {
+                        //console.log(item1);
+                        item.remove(); // 删除帖子
+                    }
+                })
+            })
+        }
     }
 
 
