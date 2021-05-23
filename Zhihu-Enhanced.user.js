@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.4.1
+// @version      1.4.2
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽指定用户、屏蔽盐选内容、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -213,7 +213,10 @@ function customBlockUsers() {
     let nowBlockUsers = '';
     menu_value('menu_customBlockUsers').forEach(function(item){nowBlockUsers = nowBlockUsers + '|' + item})
     let newBlockUsers = prompt('编辑 [自定义屏蔽用户]\n（不同用户名之间使用 "|" 分隔，例如：用户A|用户B|用户C ）', nowBlockUsers.replace('|',''));
-    if (newBlockUsers != null) {
+    if (newBlockUsers === '') {
+        GM_setValue('menu_customBlockUsers', []);
+        registerMenuCommand(); // 重新注册脚本菜单
+    } else if (newBlockUsers != null) {
         GM_setValue('menu_customBlockUsers', newBlockUsers.split('|'));
         registerMenuCommand(); // 重新注册脚本菜单
     }
@@ -223,6 +226,7 @@ function customBlockUsers() {
 // 屏蔽指定用户
 function blockUsers(type) {
     if (!menu_value('menu_blockUsers')) return
+    if (!menu_value('menu_customBlockUsers') || menu_value('menu_customBlockUsers').length < 1) return
     switch(type) {
         case 'index':
             blockUsers_index();
