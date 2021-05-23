@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.1.4
+// @version      1.1.5
 // @author       X.I.U
 // @description  自动签到（访问空间）、屏蔽指定用户（黑名单）、自动无缝翻页、自动显示帖子内隐藏回复、自动隐藏阅读权限 255 的帖子、回到顶部（右键点击两侧空白处）
 // @match        *://hostloc.com/*
@@ -72,6 +72,12 @@
                 return menu[3]
             }
         }
+    }
+
+    // 检查是否登陆
+    var loginStatus = false;
+    if (document.getElementById('um')){
+        loginStatus = true;
     }
 
     // 默认 ID 为 0
@@ -155,6 +161,7 @@
 
     // 自动签到（访问空间 10 次 = 20 积分）
     function autoSignIn() {
+        if (!loginStatus) return
         if (GM_getValue('menu_signingIn')) return
         let timeNow = new Date().getFullYear() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getDate(),
             timeOld = GM_getValue('menu_signInTime');
