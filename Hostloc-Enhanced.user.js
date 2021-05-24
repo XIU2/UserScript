@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.1.5
+// @version      1.1.6
 // @author       X.I.U
-// @description  自动签到（访问空间）、屏蔽指定用户（黑名单）、自动无缝翻页、自动显示帖子内隐藏回复、自动隐藏阅读权限 255 的帖子、回到顶部（右键点击两侧空白处）
+// @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、自动无缝翻页、自动显示帖子内隐藏回复、自动隐藏阅读权限 255 的帖子、回到顶部（右键点击两侧空白处）
 // @match        *://hostloc.com/*
 // @icon         https://www.hostloc.com/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -21,8 +21,10 @@
     var menu_ALL = [
         ['menu_autoSignIn', '自动签到', '自动签到', true],
         ['menu_reAutoSignIn', '重新签到', '重新签到', ''],
-        ['menu_blockUsers', '屏蔽指定用户', '屏蔽指定用户', false],
+        ['menu_blockUsers', '屏蔽用户', '屏蔽用户', false],
         ['menu_customBlockUsers', '自定义屏蔽用户', '自定义屏蔽用户', []],
+        ['menu_blockKeywords', '屏蔽关键词（帖子标题）', '屏蔽关键词（帖子标题）', false],
+        ['menu_customBlockKeywords', '自定义屏蔽关键词', '自定义屏蔽关键词', []],
         ['menu_thread_pageLoading', '帖子内自动翻页', '帖子内自动翻页', true],
         ['menu_showhide', '自动显示隐藏回复', '自动显示隐藏回复', true],
         ['menu_delate255', '自动隐藏阅读权限 255 的帖子', '自动隐藏阅读权限 255 的帖子', true],
@@ -46,6 +48,8 @@
                 menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){reAutoSignIn()});
             } else if (menu_ALL[i][0] === 'menu_customBlockUsers') {
                 menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){customBlockUsers()});
+            } else if (menu_ALL[i][0] === 'menu_customBlockKeywords') {
+                menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){customBlockKeywords()});
             } else {
                 menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
             }
@@ -134,23 +138,27 @@
     if (patt_thread.test(location.pathname) || location.search.indexOf('mod=viewthread') > -1) { // 帖子内
         if (menu_value('menu_thread_pageLoading')) {
             curSite = DBSite.thread;
-            hidePgbtn(); // 隐藏帖子内的 [下一页] 按钮
+            hidePgbtn(); //                               隐藏帖子内的 [下一页] 按钮
         }
-        showPosts(); // 自动显示帖子内被隐藏的回复
-        blockUsers('thread');
+        showPosts(); //                                   自动显示帖子内被隐藏的回复
+        blockUsers('thread'); //                          屏蔽用户（黑名单）
     } else if (patt_forum.test(location.pathname) || location.search.indexOf('mod=forumdisplay') > -1) { // 各板块帖子列表
         curSite = DBSite.forum;
-        if (menu_value('menu_delate255')) delate255(); // 自动隐藏阅读权限 255 的帖子
-        blockUsers('forum');
-     }else if (patt_guide.test(location.search)) { // 导读帖子列表
+        if (menu_value('menu_delate255')) { //            自动隐藏阅读权限 255 的帖子
+            delate255();
+            setTimeout(delate255, 1500); //               为了避免有时候网页加载太慢时没有隐藏成功的问题
+        }
+        blockUsers('forum'); //                           屏蔽用户（黑名单）
+        blockKeywords(); //                               屏蔽关键词（帖子标题）
+     }else if (patt_guide.test(location.search)) { //     导读帖子列表
         curSite = DBSite.guide;
-    } else if(location.pathname === '/search.php') { // 搜索结果列表
+    } else if(location.pathname === '/search.php') { //   搜索结果列表
         curSite = DBSite.search;
-        blockUsers('search');
+        blockUsers('search'); //                          屏蔽用户（黑名单）
     } else if(location.pathname === '/home.php' && location.search.indexOf('mod=space&do=notice&view=mypost') > -1) { // 消息(帖子/点评/提到)
-        blockUsers('notice');
+        blockUsers('notice'); //                          屏蔽用户（黑名单）
     } else if(location.pathname === '/home.php' && location.search === '?mod=space&do=pm') { // 消息(私人聊天)
-        blockUsers('pm');
+        blockUsers('pm'); //                              屏蔽用户（黑名单）
     }
 
     curSite.pageUrl = ""; // 下一页URL
@@ -217,7 +225,7 @@
     };
 
 
-    // 屏蔽指定用户
+    // 屏蔽用户
     function blockUsers(type) {
         if (!menu_value('menu_blockUsers')) return
         if (!menu_value('menu_customBlockUsers') || menu_value('menu_customBlockUsers').length < 1) return
@@ -256,6 +264,44 @@
     }
 
 
+    // 自定义屏蔽关键词（帖子标题）
+    function customBlockKeywords() {
+        let nowBlockKeywords = '';
+        GM_getValue('menu_customBlockKeywords').forEach(function(item){nowBlockKeywords = nowBlockKeywords + '|' + item})
+        let newBlockKeywords = prompt('编辑 [自定义屏蔽关键词]，刷新网页后生效\n（不同关键词之间使用 "|" 分隔，\n（例如：嘿嘿|呵呵|嘎嘎，如果只有一个就不需要 "|" 了。', nowBlockKeywords.replace('|',''));
+        if (newBlockKeywords === '') {
+            GM_setValue('menu_customBlockKeywords', []);
+            registerMenuCommand(); // 重新注册脚本菜单
+        } else if (newBlockKeywords != null) {
+            GM_setValue('menu_customBlockKeywords', newBlockKeywords.split('|'));
+            registerMenuCommand(); // 重新注册脚本菜单
+        }
+    };
+
+
+    // 屏蔽关键词（帖子标题）
+    function blockKeywords() {
+        if (!menu_value('menu_blockKeywords')) return
+        if (!menu_value('menu_customBlockKeywords') || menu_value('menu_customBlockKeywords').length < 1) return
+        //console.log('1111');
+        let listItem = document.querySelectorAll('[id^="normalthread_"]');
+        //console.log(listItem);
+        if (listItem.length < 1) return
+        listItem.forEach(function(item){ // 遍历所有帖子标题
+            //console.log(item);
+            menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词
+                let itemName = item.querySelector('th a.s.xst'); // 寻找帖子标题
+                //console.log(itemName);
+                //console.log(item1, itemName.innerText);
+                if (itemName && itemName.innerText.indexOf(item1) > -1) {
+                    console.log(item1, itemName.innerText);
+                    item.remove(); // 删除帖子
+                }
+            })
+        })
+    }
+
+
     // 自动翻页
     function pageLoading() {
         if (curSite.SiteTypeID > 0){
@@ -267,15 +313,14 @@
                             let autopbn = document.querySelector('#autopbn');
                             if (autopbn && autopbn.innerText === "下一页 »"){ // 如果已经在加载中了，就忽略
                                 autopbn.click();
-                                if (menu_value('menu_delate255')) { // 自动隐藏阅读权限 255 的帖子
-                                    let timer = setInterval(function(){
-                                        if (document.querySelector('#autopbn').innerText === "下一页 »") {
-                                            delate255();
-                                            blockUsers('forum');
-                                            clearInterval(timer);
-                                        }
-                                    }, 10);
-                                }
+                                let timer = setInterval(function(){ // 在下一页加载完成后
+                                    if (document.querySelector('#autopbn').innerText === "下一页 »") {
+                                        if (menu_value('menu_delate255')) delate255(); // 隐藏 255 权限帖子
+                                        if (menu_value('menu_blockUsers')) blockUsers('forum'); // 屏蔽用户（黑名单）
+                                        if (menu_value('menu_blockKeywords')) blockKeywords(); // 屏蔽关键词（帖子标题）
+                                        clearInterval(timer);
+                                    }
+                                }, 10);
                             }
                         }else{
                             ShowPager.loadMorePage();
@@ -409,7 +454,7 @@
                                 pageElems.forEach(function (one) {
                                     toElement.insertAdjacentElement(addTo, one);
                                 });
-                                if (menu_value('menu_blockUsers')) { // 屏蔽指定用户
+                                if (menu_value('menu_blockUsers')) { // 屏蔽用户（黑名单）
                                     if (patt_thread.test(location.pathname) || location.search.indexOf('mod=viewthread') > -1) {
                                         blockUsers('thread');
                                     } else if (location.pathname === '/search.php') {
