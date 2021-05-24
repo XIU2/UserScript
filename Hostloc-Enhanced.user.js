@@ -268,7 +268,7 @@
     function customBlockKeywords() {
         let nowBlockKeywords = '';
         GM_getValue('menu_customBlockKeywords').forEach(function(item){nowBlockKeywords = nowBlockKeywords + '|' + item})
-        let newBlockKeywords = prompt('编辑 [自定义屏蔽关键词]，刷新网页后生效\n（不同关键词之间使用 "|" 分隔，\n（例如：嘿嘿|呵呵|嘎嘎，如果只有一个就不需要 "|" 了。', nowBlockKeywords.replace('|',''));
+        let newBlockKeywords = prompt('编辑 [自定义屏蔽关键词]，刷新网页后生效\n（不同关键词之间使用 "|" 分隔，\n（例如：助力|互助|互点，如果只有一个就不需要 "|" 了。', nowBlockKeywords.replace('|',''));
         if (newBlockKeywords === '') {
             GM_setValue('menu_customBlockKeywords', []);
             registerMenuCommand(); // 重新注册脚本菜单
