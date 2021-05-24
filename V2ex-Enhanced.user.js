@@ -222,6 +222,7 @@
             } else if (document.getElementById('gift_v2excellent')) { // 兼容 [V2ex Plus] 扩展
                 document.getElementById('gift_v2excellent').click();
                 GM_setValue('menu_clockInTime', timeNow); //             写入签到时间以供后续比较
+                console.info('[V2EX 增强] 自动签到完成！')
             } else { //                                                  都没有找到，说明已经签过到了
                 console.info('[V2EX 增强] 已经签过到了。')
             }
@@ -345,7 +346,7 @@
     function linksBlank(css) {
         if (!menu_value('menu_linksBlank')) return
         let links = document.querySelectorAll(css);if (!links) return
-        Array.from(links).forEach(function (_this) {
+        links.forEach(function (_this) {
             _this.target = '_blank'
         });
     }
