@@ -196,9 +196,9 @@
                     clearInterval(signIn);
                 }
             }, 5000);
-        } else { //                                                  新旧签到时间一致
+        }/* else { //                                                  新旧签到时间一致
             console.info('[全球主机交流论坛 增强] 已经签过到了。')
-        }
+        }*/
     }
 
 
@@ -255,7 +255,7 @@
                 menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
                     let itemName = item.querySelector(list2); // 寻找用户名
                     if (itemName && itemName.innerText === item1) {
-                        console.log(item1);
+                        console.log(`屏蔽用户：${item1}`);
                         item.remove(); // 删除帖子
                     }
                 })
@@ -283,18 +283,13 @@
     function blockKeywords() {
         if (!menu_value('menu_blockKeywords')) return
         if (!menu_value('menu_customBlockKeywords') || menu_value('menu_customBlockKeywords').length < 1) return
-        //console.log('1111');
         let listItem = document.querySelectorAll('[id^="normalthread_"]');
-        //console.log(listItem);
         if (listItem.length < 1) return
         listItem.forEach(function(item){ // 遍历所有帖子标题
-            //console.log(item);
             menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词
                 let itemName = item.querySelector('th a.s.xst'); // 寻找帖子标题
-                //console.log(itemName);
-                //console.log(item1, itemName.innerText);
                 if (itemName && itemName.innerText.indexOf(item1) > -1) {
-                    console.log(item1, itemName.innerText);
+                    console.log(`屏蔽关键词：[${item1}]`, `，帖子标题：[${itemName.innerText}]`);
                     item.remove(); // 删除帖子
                 }
             })
