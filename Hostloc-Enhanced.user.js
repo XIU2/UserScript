@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.1.6
+// @version      1.1.7
 // @author       X.I.U
 // @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、自动无缝翻页、自动显示帖子内隐藏回复、自动隐藏阅读权限 255 的帖子、回到顶部（右键点击两侧空白处）
 // @match        *://hostloc.com/*
@@ -146,10 +146,11 @@
         curSite = DBSite.forum;
         if (menu_value('menu_delate255')) { //            自动隐藏阅读权限 255 的帖子
             delate255();
-            setTimeout(delate255, 1500); //               为了避免有时候网页加载太慢时没有隐藏成功的问题
+            setTimeout(delate255, 2000); //               为了避免有时候网页加载太慢时没有隐藏成功的问题
         }
         blockUsers('forum'); //                           屏蔽用户（黑名单）
         blockKeywords(); //                               屏蔽关键词（帖子标题）
+        if (patt_forum.test(location.pathname)) blockDOMNodeInserted(); // 监听插入事件（针对的是：有新的回复主题，点击查看）
      }else if (patt_guide.test(location.search)) { //     导读帖子列表
         curSite = DBSite.guide;
     } else if(location.pathname === '/search.php') { //   搜索结果列表
@@ -287,13 +288,27 @@
         if (listItem.length < 1) return
         listItem.forEach(function(item){ // 遍历所有帖子标题
             menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词
-                let itemName = item.querySelector('th a.s.xst'); // 寻找帖子标题
+                let itemName = item.querySelector('a.s.xst'); // 寻找帖子标题
                 if (itemName && itemName.innerText.indexOf(item1) > -1) {
                     console.log(`屏蔽关键词：[${item1}]`, `，帖子标题：[${itemName.innerText}]`);
                     item.remove(); // 删除帖子
                 }
             })
         })
+    }
+
+
+    // 监听插入事件（针对的是：有新的回复主题，点击查看）
+    function blockDOMNodeInserted() {
+        let block = e => {
+            if (e.target.innerText && e.target.innerText.indexOf('newthread') > -1) {
+                setTimeout(function () {
+                    blockUsers('forum'); //                           屏蔽用户（黑名单）
+                    blockKeywords(); //                               屏蔽关键词（帖子标题）
+                }, 100)
+            }
+        }
+        document.addEventListener('DOMNodeInserted', block); // 监听插入事件
     }
 
 
