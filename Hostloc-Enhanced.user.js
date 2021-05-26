@@ -169,18 +169,6 @@
     if(menu_value('menu_autoSignIn'))autoSignIn(); //  自动签到（访问空间 10 次 = 20 积分）
 
 
-    // 显示在线状态
-    function onlineStatus() {
-        document.querySelectorAll('[id^="favatar"]').forEach(function(item){ // 遍历所有帖子
-            let icon = (item.querySelector('[id^="userinfo"] > .i.y em').innerText === '当前在线') ? '🌝' : '🌚';
-            let divStatus = document.createElement('div');
-            divStatus.style = 'position: absolute;margin: -8px 0 0 8px;padding: 0 1px 1.2px;background-color: #ffffff;border-radius: 50%;';
-            divStatus.innerText = icon;
-            let mochu = item.querySelector('.avatar');
-            mochu.parentNode.insertBefore(divStatus,mochu);
-        })
-    }
-
     // 自动签到（访问空间 10 次 = 20 积分）
     function autoSignIn() {
         if (!loginStatus) return
@@ -374,7 +362,7 @@
     }
 
 
-    // 回到顶部（右键左右两侧空白处）
+    // 快捷回到顶部（右键左右两侧空白处）
     function backToTop() {
         document.body.oncontextmenu = function(event){
             if (event.target==this) {
@@ -385,9 +373,8 @@
     }
 
 
-    // 收起当前帖子预览（左键左右两侧空白处）
+    // 收起帖子预览（左键左右两侧空白处）
     function collapsedNowPost() {
-        //if (!menu_value('menu_collapsedNowAnswer')) return
         document.body.onclick = function(event){
             if (event.target==this) {
                 document.querySelectorAll('[id^="threadPreviewTR_"] .showhide').forEach(function (el) {
@@ -395,6 +382,19 @@
                 });
             }
         }
+    }
+
+
+    // 显示在线状态
+    function onlineStatus() {
+        document.querySelectorAll('[id^="favatar"]').forEach(function(item){ // 遍历所有帖子
+            let icon = (item.querySelector('[id^="userinfo"] > .i.y em').innerText === '当前在线') ? '🌝' : '🌚';
+            let divStatus = document.createElement('div');
+            divStatus.style = 'position: absolute;margin: -8px 0 0 8px;padding: 0 1px 1.2px;background-color: #ffffff;border-radius: 50%;';
+            divStatus.innerText = icon;
+            let mochu = item.querySelector('.avatar');
+            mochu.parentNode.insertBefore(divStatus,mochu);
+        })
     }
 
 
