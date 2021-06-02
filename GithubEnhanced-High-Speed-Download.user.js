@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.5.1
+// @version      1.5.2
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -123,11 +123,17 @@
     // Release
     function addRelease() {
         let html = document.getElementsByClassName('Box Box--condensed');if (!html) return
+        let divDisplay;
+        if (document.documentElement.clientWidth > 1000) {
+            divDisplay = 'display: flex;';
+        } else {
+            divDisplay = 'display: block;';
+        }
         Array.from(html).forEach(function (current) {
             current.querySelectorAll('.d-flex.Box-body > a').forEach(function (_this) {
                 let href = _this.href.split('github.com'),
                     url = [],
-                    _html = `<div style="display: flex;justify-content: flex-end;">`;
+                    _html = `<div style="${divDisplay}justify-content: flex-end;">`;
 
                 for (let i=0;i<download_url.length;i++){
                     if (download_url[i][0] === 'https://download.fastgit.org') {
@@ -151,7 +157,7 @@
             current.querySelectorAll('.d-block.Box-body > a').forEach(function (_this) {
                 let href = _this.href.split('github.com'),
                     url = [],
-                    _html = `<div style="display: flex;justify-content: flex-end;flex-grow: 1;">`;
+                    _html = `<div style="${divDisplay}justify-content: flex-end;flex-grow: 1;">`;
 
                 for (let i=0;i<download_url.length;i++){
                     if (download_url[i][0] === 'https://download.fastgit.org') {
