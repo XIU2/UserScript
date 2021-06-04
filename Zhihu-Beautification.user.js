@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.2.3
+// @version      1.2.4
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -143,8 +143,11 @@
 `,
             style_3 = `/* 调整文章编辑页面与实际文章宽度一致 */
 .PostEditor .RichText {min-width: 690px !important;}
+.InputLike.PostEditor.Editable {min-width: 710px !important;border: none !important;padding: 0 10px !important;background-color: #22272e !important;}
 /* 及标题输入框内的文字大小 */
 .WriteIndex-titleInput .Input {min-width: 690px !important;font-size: 24px;}
+label.WriteIndex-titleInput.Input-wrapper.Input-wrapper--multiline {min-width: 710px !important;padding: 0 10px !important;background-color: #22272e !important;}
+
 `,
             style_4 = `/* 向下翻时自动隐藏顶栏*/
 header.is-hidden {display: none;}
