@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.1.8
+// @version      1.1.9
 // @author       X.I.U
 // @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、自动无缝翻页、自动显示帖子内隐藏回复、自动隐藏阅读权限 255 的帖子、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）
 // @match        *://hostloc.com/*
@@ -378,7 +378,12 @@
         document.body.onclick = function(event){
             if (event.target==this) {
                 document.querySelectorAll('[id^="threadPreviewTR_"] .showhide').forEach(function (el) {
-                    el.click()
+                    if (el.parentNode.querySelector('[name="message"]').value === '') { // 避免快速回复过程中误点收起了
+                        let parentElement = el.parentNode.parentNode.parentNode.parentNode.parentNode,
+                            top = parentElement.offsetTop + parentElement.offsetParent.offsetTop + parentElement.offsetParent.offsetParent.offsetTop; // 元素距离顶部的高度
+                        if (top < document.documentElement.scrollTop) window.scrollTo(0,top) // 帖子标题在上面时才会滚动到该帖子处
+                        el.click()
+                    }
                 });
             }
         }
