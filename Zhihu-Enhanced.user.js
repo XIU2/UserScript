@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.4.2
+// @version      1.4.3
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽指定用户、屏蔽盐选内容、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -238,6 +238,7 @@ function blockUsers(type) {
             blockUsers_search();
             break;
     }
+    blockUsers_comment(); // 评论区
 
     function blockUsers_index() {
         let blockUsers = e => {
@@ -311,6 +312,34 @@ function blockUsers(type) {
                         }
                     })
                 }
+            }
+        }
+        document.addEventListener('DOMNodeInserted', blockUsers); // 监听插入事件
+    }
+
+    function blockUsers_comment() {
+        let blockUsers = e => {
+            if (e.target.innerHTML && e.target.querySelector('img.Avatar.UserLink-avatar[width="24"]')) {
+                let item = e.target.querySelectorAll('img.Avatar.UserLink-avatar[width="24"]')
+                item.forEach(function(item1){ // 遍历用户名
+                    menu_value('menu_customBlockUsers').forEach(function(item2){ // 遍历用户黑名单
+                        if (item1.alt === item2) { // 找到就删除该搜索结果
+                            if (item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootCommentNoChild' || item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootComment') {
+                                item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                            } else if (item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootCommentNoChild' || item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootComment') {
+                                item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                            } else if (item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--child') {
+                                item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                            } else if (item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--child') {
+                                item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                            } else if (item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment') {
+                                item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                            } else if (item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'CommentItemV2') {
+                                item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                            }
+                        }
+                    })
+                })
             }
         }
         document.addEventListener('DOMNodeInserted', blockUsers); // 监听插入事件
@@ -697,20 +726,24 @@ function questionInvitation(){
             collapsedNowAnswer(".ContentLayout"); //                       收起当前回答 + 快捷返回顶部
             setInterval(topTime_people, 300); //                           置顶显示时间
             EventXMLHttpRequest(); //                                      区分问题文章
+            blockUsers(); //                                               屏蔽指定用户
         }
     } else if (window.location.href.indexOf("zhuanlan") > -1){ //   文章 //
         backToTop("article.Post-Main.Post-NormalMain"); //                 快捷返回顶部
         backToTop("div.Post-Sub.Post-NormalSub"); //                       快捷返回顶部
         setInterval(topTime_zhuanlan, 300); //                             置顶显示时间
+        blockUsers(); //                                                   屏蔽指定用户
     } else if (window.location.href.indexOf("column") > -1) { //    专栏 //
         collapsedAnswer(); //                                              一键收起回答
         collapsedNowAnswer("main div"); //                                 收起当前回答 + 快捷返回顶部
         setInterval(topTime_zhuanlan, 300); //                             置顶显示时间
+        blockUsers(); //                                                   屏蔽指定用户
     } else if (window.location.href.indexOf("people") > -1 || window.location.href.indexOf("org") > -1) { // 用户主页 //
         collapsedAnswer(); //                                              一键收起回答
         collapsedNowAnswer("main div"); //                                 收起当前回答 + 快捷返回顶部
         collapsedNowAnswer(".Profile-main"); //                            收起当前回答 + 快捷返回顶部
         setInterval(topTime_people, 300); //                               置顶显示时间
+        blockUsers(); //                                                   屏蔽指定用户
     } else { //                                                     首页 //
         collapsedAnswer(); //                                              一键收起回答
         collapsedNowAnswer("main div"); //                                 收起当前回答 + 快捷返回顶部
