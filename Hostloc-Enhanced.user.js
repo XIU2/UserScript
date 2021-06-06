@@ -2,7 +2,7 @@
 // @name         全球主机交流论坛增强
 // @version      1.2.0
 // @author       X.I.U
-// @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、自动无缝翻页、自动显示帖子内隐藏回复、自动隐藏阅读权限 255 的帖子、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名
+// @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
 // @icon         https://www.hostloc.com/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -26,10 +26,10 @@
         ['menu_blockKeywords', '屏蔽关键词（帖子标题）', '屏蔽关键词（帖子标题）', false],
         ['menu_customBlockKeywords', '自定义屏蔽关键词', '自定义屏蔽关键词', []],
         ['menu_thread_pageLoading', '帖子内自动翻页', '帖子内自动翻页', true],
-        ['menu_showhide', '显示隐藏回复', '显示隐藏回复', true],
         ['menu_backToTop', '快捷回到顶部（右键点击两侧空白处）', '快捷回到顶部', true],
         ['menu_collapsedNowPost', '收起预览帖子（左键点击两侧空白处）', '收起预览帖子', true],
         ['menu_onlineStatus', '显示是否在线', '显示是否在线', true],
+        ['menu_showhide', '显示帖子内隐藏回复', '显示帖子内隐藏回复', true],
         ['menu_delate255', '屏蔽阅读权限 255 帖子', '屏蔽阅读权限 255 帖子', true]
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
