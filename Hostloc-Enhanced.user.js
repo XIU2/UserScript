@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.1.9
+// @version      1.2.0
 // @author       X.I.U
-// @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、自动无缝翻页、自动显示帖子内隐藏回复、自动隐藏阅读权限 255 的帖子、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）
+// @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、自动无缝翻页、自动显示帖子内隐藏回复、自动隐藏阅读权限 255 的帖子、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名
 // @match        *://hostloc.com/*
 // @icon         https://www.hostloc.com/favicon.ico
 // @grant        GM_xmlhttpRequest
@@ -151,7 +151,8 @@
         if (menu_value('menu_delate255')) delate255(); //                 自动隐藏阅读权限 255 的帖子
         blockUsers('forum'); //                                           屏蔽用户（黑名单）
         blockKeywords(); //                                               屏蔽关键词（帖子标题）
-        if (patt_forum.test(location.pathname)) blockDOMNodeInserted(); // 监听插入事件（针对的是：有新的回复主题，点击查看）
+        vfastpostDOMNodeInserted(); //                                    监听插入事件（预览快速回复带签名）
+        if (patt_forum.test(location.pathname)) blockDOMNodeInserted(); //监听插入事件（有新的回复主题，点击查看）
      }else if (patt_guide.test(location.search)) { //                     导读帖子列表
         curSite = DBSite.guide;
     } else if(location.pathname === '/search.php') { //                   搜索结果列表
@@ -299,7 +300,7 @@
     }
 
 
-    // 监听插入事件（针对的是：有新的回复主题，点击查看）
+    // 监听插入事件（有新的回复主题，点击查看）
     function blockDOMNodeInserted() {
         let block = e => {
             if (e.target.innerText && e.target.innerText.indexOf('newthread') > -1) {
@@ -310,6 +311,17 @@
             }
         }
         document.addEventListener('DOMNodeInserted', block); // 监听插入事件
+    }
+
+
+    // 监听插入事件（预览快速回复带签名）
+    function vfastpostDOMNodeInserted() {
+        let vfastpost = e => {
+            if (e.target.innerHTML && e.target.innerHTML.indexOf('id="vfastpost"') > -1) {
+                e.target.getElementsByTagName('form')[0].insertAdjacentHTML('afterbegin', `<input type="hidden" name="usesig" value="1">`);
+            }
+        }
+        document.addEventListener('DOMNodeInserted', vfastpost); // 监听插入事件
     }
 
 
