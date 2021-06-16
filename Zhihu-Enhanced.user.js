@@ -355,7 +355,7 @@ function blockUsers(type) {
 function customBlockKeywords() {
     let nowBlockKeywords = '';
     menu_value('menu_customBlockKeywords').forEach(function(item){nowBlockKeywords = nowBlockKeywords + '|' + item})
-    let newBlockKeywords = prompt('编辑 [自定义屏蔽关键词]\n（不同关键词之间使用 "|" 分隔，例如：关键词A|关键词B|关键词C ）', nowBlockKeywords.replace('|',''));
+    let newBlockKeywords = prompt('编辑 [自定义屏蔽关键词]\n（不同关键词之间使用 "|" 分隔，例如：关键词A|关键词B|关键词C \n（关键词不区分大小写', nowBlockKeywords.replace('|',''));
     if (newBlockKeywords === '') {
         GM_setValue('menu_customBlockKeywords', []);
         registerMenuCommand(); // 重新注册脚本菜单
