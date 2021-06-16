@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.4.3
+// @version      1.4.4
 // @author       X.I.U
-// @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽指定用户、屏蔽盐选内容、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
+// @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽指定用户、屏蔽指定关键词（标题）、屏蔽盐选内容、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -23,6 +23,8 @@ var menu_ALL = [
     ['menu_backToTop', '快捷回到顶部（右键两侧空白处）', '快捷回到顶部', true],
     ['menu_blockUsers', '屏蔽指定用户', '屏蔽指定用户', false],
     ['menu_customBlockUsers', '自定义屏蔽用户', '自定义屏蔽用户', ['故事档案局', '盐选推荐', '盐选科普', '盐选成长计划', '知乎盐选会员', '知乎盐选创作者', '盐选心理', '盐选健康必修课', '盐选奇妙物语', '盐选生活馆', '盐选职场', '盐选文学甄选', '盐选作者小管家', '盐选博物馆', '盐选点金', '盐选测评室', '盐选科技前沿', '盐选会员精品']],
+    ['menu_blockKeywords', '屏蔽指定关键词', '屏蔽指定关键词', false],
+    ['menu_customBlockKeywords', '自定义屏蔽关键词', '自定义屏蔽关键词', []],
     ['menu_blockYanXuan', '屏蔽盐选内容', '屏蔽盐选内容', false],
     ['menu_publishTop', '置顶显示时间', '置顶显示时间', true],
     ['menu_allTime', '完整显示时间', '完整显示时间', true],
@@ -45,6 +47,8 @@ function registerMenuCommand() {
         menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
         if (menu_ALL[i][0] === 'menu_customBlockUsers') {
             menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){customBlockUsers()});
+        } else if (menu_ALL[i][0] === 'menu_customBlockKeywords') {
+            menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){customBlockKeywords()});
         } else {
             menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
         }
@@ -343,6 +347,130 @@ function blockUsers(type) {
             }
         }
         document.addEventListener('DOMNodeInserted', blockUsers); // 监听插入事件
+    }
+}
+
+
+// 自定义屏蔽关键词（标题）
+function customBlockKeywords() {
+    let nowBlockKeywords = '';
+    menu_value('menu_customBlockKeywords').forEach(function(item){nowBlockKeywords = nowBlockKeywords + '|' + item})
+    let newBlockKeywords = prompt('编辑 [自定义屏蔽关键词]\n（不同关键词之间使用 "|" 分隔，例如：关键词A|关键词B|关键词C ）', nowBlockKeywords.replace('|',''));
+    if (newBlockKeywords === '') {
+        GM_setValue('menu_customBlockKeywords', []);
+        registerMenuCommand(); // 重新注册脚本菜单
+    } else if (newBlockKeywords != null) {
+        GM_setValue('menu_customBlockKeywords', newBlockKeywords.split('|'));
+        registerMenuCommand(); // 重新注册脚本菜单
+    }
+};
+
+
+// 屏蔽指定关键词（标题）
+function blockKeywords(type) {
+    if (!menu_value('menu_blockKeywords')) return
+    if (!menu_value('menu_customBlockKeywords') || menu_value('menu_customBlockKeywords').length < 1) return
+    switch(type) {
+        case 'index':
+            blockKeywords_index();
+            break;
+        case 'people':
+            blockKeywords_people();
+            break;
+        case 'search':
+            blockKeywords_search();
+            break;
+    }
+
+    function blockKeywords_index() {
+        let blockKeywords = e => {
+            if (e.target.innerHTML && e.target.getElementsByClassName('ContentItem-title').length > 0) {
+                let item = e.target.querySelector('h2.ContentItem-title meta[itemprop="name"]'); // 标题所在元素
+                if (item) {
+                    //console.log(item)
+                    menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
+                        if (item.content.indexOf(item1) > -1) { // 找到就删除该信息流
+                            console.log(item.content);
+                            item.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                        }
+                    })
+                } else { // 如果是文章标题
+                    item = e.target.querySelector('.ContentItem.ArticleItem meta[itemprop="headline"]'); // 标题所在元素
+                    if (item) {
+                        //console.log(item)
+                        menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
+                            if (item.content.indexOf(item1) > -1) { // 找到就删除该信息流
+                                console.log('aaaaaaaa',item.content);
+                                item.parentNode.parentNode.parentNode.remove();
+                            }
+                        })
+                    }
+                }
+            }
+        }
+        document.addEventListener('DOMNodeInserted', blockKeywords); // 监听插入事件
+    }
+
+
+    function blockKeywords_people() {
+        let blockKeywords = e => {
+            if (e.target.innerHTML && e.target.getElementsByClassName('ContentItem-title').length > 0) {
+                let item = e.target.querySelector('h2.ContentItem-title meta[itemprop="name"]'); // 标题所在元素
+                if (item) {
+                    //console.log(item)
+                    menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
+                        if (item.content.indexOf(item1) > -1) { // 找到就删除该信息流
+                            console.log(item.content);
+                            item.parentNode.parentNode.parentNode.parentNode.remove();
+                        }
+                    })
+                } else { // 如果是文章标题
+                    item = e.target.querySelector('.ContentItem.ArticleItem meta[itemprop="headline"]'); // 标题所在元素
+                    if (item) {
+                        //console.log(item)
+                        menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
+                            if (item.content.indexOf(item1) > -1) { // 找到就删除该信息流
+                                console.log('aaaaaaaa',item.content);
+                                item.parentNode.parentNode.remove();
+                            }
+                        })
+                    }
+                }
+            }
+        }
+        document.addEventListener('DOMNodeInserted', blockKeywords); // 监听插入事件
+    }
+
+
+    function blockKeywords_search() {
+        let blockKeywords = e => {
+            //if (e.target.innerHTML) console.log(e.target.innerHTML)
+            if (e.target.innerHTML && e.target.getElementsByClassName('ContentItem-title').length > 0) {
+                //console.log(e.target.innerHTML)
+                let item = e.target.querySelector('h2.ContentItem-title meta[itemprop="name"]'); // 标题所在元素
+                if (item) {
+                    //console.log(item)
+                    menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
+                        if (item.content.indexOf(item1) > -1) { // 找到就删除该信息流
+                            console.log(item.content);
+                            item.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                        }
+                    })
+                } else { // 如果是文章标题
+                    item = e.target.querySelector('h2.ContentItem-title a[data-za-detail-view-id]'); // 标题所在元素
+                    if (item) {
+                        //console.log(item)
+                        menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
+                            if (item.innerText.indexOf(item1) > -1) { // 找到就删除该信息流
+                                console.log('aaaaaaaa',item.content);
+                                item.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                            }
+                        })
+                    }
+                }
+            }
+        }
+        document.addEventListener('DOMNodeInserted', blockKeywords); // 监听插入事件
     }
 }
 
@@ -719,6 +847,7 @@ function questionInvitation(){
         setInterval(topTime_search, 300); //                               置顶显示时间
         EventXMLHttpRequest(); //                                          区分问题文章
         blockUsers('search'); //                                           屏蔽指定用户
+        blockKeywords('search'); //                                        屏蔽指定关键词
     } else if (window.location.href.indexOf("topic") > -1) { //   话题页 //
         if (window.location.href.indexOf("hot") > -1 || window.location.href.indexOf("top-answers") > -1) { // 仅限 [讨论] [精华]
             collapsedAnswer(); //                                          一键收起回答
@@ -744,6 +873,7 @@ function questionInvitation(){
         collapsedNowAnswer(".Profile-main"); //                            收起当前回答 + 快捷返回顶部
         setInterval(topTime_people, 300); //                               置顶显示时间
         blockUsers(); //                                                   屏蔽指定用户
+        blockKeywords('people'); //                                        屏蔽指定关键词
     } else { //                                                     首页 //
         collapsedAnswer(); //                                              一键收起回答
         collapsedNowAnswer("main div"); //                                 收起当前回答 + 快捷返回顶部
@@ -751,5 +881,6 @@ function questionInvitation(){
         setInterval(topTime_index, 300); //                                置顶显示时间
         EventXMLHttpRequest(); //                                          区分问题文章
         blockUsers('index'); //                                            屏蔽指定用户
+        blockKeywords('index'); //                                         屏蔽指定关键词
     }
 })();
