@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.2.2
+// @version      1.2.3
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、豆瓣、FitGirl Repacks、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛
+// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、豆瓣电影、3DM、游民星空、FitGirl Repacks、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛
 // @match        *://www.423down.com/*
 // @exclude      *://www.423down.com/*.html
 // @match        *://apphot.cc/*
@@ -19,6 +19,9 @@
 // @match        *://www.centbrowser.net/*
 // @match        *://pubmed.ncbi.nlm.nih.gov/?term=*
 // @match        *://movie.douban.com/*
+// @match        *://search.douban.com/*
+// @match        *://www.3dmgame.com/bagua/*.html
+// @match        *://www.gamersky.com/ent/*/*.shtml
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
@@ -252,6 +255,39 @@
                 replaceE: 'css;.paginator',
                 scrollDelta: 700
             }
+        },
+        douban_search: {
+            SiteTypeID: 18,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="next"][@href]',
+                pageElement: 'css;#root [class^="_"] [class^="sc-"]',
+                HT_insert: ['css;.paginator', 1],
+                replaceE: 'css;.paginator',
+                scrollDelta: 700
+            }
+        },
+        _3dmgame: {
+            SiteTypeID: 19,
+            pager: {
+                type: 1,
+                nextLink: '//li[@class="next"]/a[@href]',
+                pageElement: 'css;.news_warp_center > p',
+                HT_insert: ['css;.news_warp_center', 3],
+                replaceE: 'css;.pagewrap',
+                scrollDelta: 1000
+            }
+        },
+        gamersky: {
+            SiteTypeID: 20,
+            pager: {
+                type: 1,
+                nextLink: '//div[@class="page_css"]/a[text()="下一页"][@href]',
+                pageElement: 'css;.Mid2L_con > p',
+                HT_insert: ['css;.page_css', 1],
+                replaceE: 'css;.page_css',
+                scrollDelta: 1000
+            }
         }
     };
 
@@ -330,6 +366,17 @@
             }else if(location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/episode') > -1) { //         电视剧每集评论
                 curSite = DBSite.douban_subject_episode;
             }
+            break;
+        case "search.douban.com":
+            curSite = DBSite.douban_search;
+            break;
+        case "www.3dmgame.com":
+            curSite = DBSite._3dmgame;
+            document.lastChild.appendChild(document.createElement('style')).textContent = `#Comments_wrap {display: none !important;}` // 隐藏评论区
+            break;
+        case "www.gamersky.com":
+            curSite = DBSite.gamersky;
+            document.lastElementChild.appendChild(document.createElement('style')).textContent = `.Comment {display: none !important;}` // 隐藏评论区
             break;
     }
     curSite.pageUrl = ""; // 下一页URL
@@ -473,7 +520,7 @@
             if (curSite.pager) {
                 let curPageEle = getElementByXpath(curSite.pager.nextLink);
                 var url = this.getFullHref(curPageEle);
-                //console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
+                console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
                 if(url === '') return;
                 if(curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
@@ -485,7 +532,7 @@
                     timeout: 5000,
                     onload: function (response) {
                         try {
-                            //console.log(`${response.responseText}`)
+                            console.log(`${response.responseText}`)
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody);
                             let toElement = getAllElements(curSite.pager.HT_insert[0])[0];
