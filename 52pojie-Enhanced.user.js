@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.2.7
+// @version      1.2.8
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页、屏蔽导读悬赏贴（最新发表页）
 // @match        *://www.52pojie.cn/*
@@ -116,8 +116,19 @@
                 scrollDelta: 899
             }
         },
-        search: {
+        favorite: {
             SiteTypeID: 5,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;ul#favorite_ul > li',
+                HT_insert: ['css;ul#favorite_ul', 2],
+                replaceE: 'css;div.pg',
+                scrollDelta: 899
+            }
+        },
+        search: {
+            SiteTypeID: 6,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="nxt"][@href]',
@@ -147,6 +158,8 @@
         delateReward(); //                   屏蔽导读悬赏贴（最新发表）
     } else if (location.search.indexOf('mod=collection') > -1) {
         curSite = DBSite.collection; //      淘贴列表
+    } else if (location.search.indexOf('do=favorite') > -1) {
+        curSite = DBSite.favorite; //        收藏列表
     } else if (location.pathname === '/search.php') {
         curSite = DBSite.search; //          搜索结果列表
     }
