@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.4.4
+// @version      1.4.5
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽指定用户、屏蔽指定关键词（标题）、屏蔽盐选内容、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -393,7 +393,7 @@ function blockKeywords(type) {
                 if (item) {
                     //console.log(item)
                     menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                        if (item.content.indexOf(item1) > -1) { // 找到就删除该信息流
+                        if (item.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
                             console.log(item.content);
                             item.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
                         }
@@ -403,7 +403,7 @@ function blockKeywords(type) {
                     if (item) {
                         //console.log(item)
                         menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                            if (item.content.indexOf(item1) > -1) { // 找到就删除该信息流
+                            if (item.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
                                 console.log('文章',item.content);
                                 item.parentNode.parentNode.parentNode.remove();
                             }
@@ -422,7 +422,7 @@ function blockKeywords(type) {
             //console.log(item)
             item.forEach(function(item2){
                 menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                    if (item2.content.indexOf(item1) > -1) { // 找到就删除该信息流
+                    if (item2.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
                         console.log(item2.content);
                         item2.parentNode.parentNode.parentNode.parentNode.remove();
                     }
@@ -434,7 +434,7 @@ function blockKeywords(type) {
                 //console.log(item)
                 item.forEach(function(item2){
                     menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                        if (item2.content.indexOf(item1) > -1) { // 找到就删除该信息流
+                        if (item2.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
                             console.log('文章',item2.content);
                             item2.parentNode.parentNode.remove();
                         }
@@ -452,7 +452,7 @@ function blockKeywords(type) {
                 if (item) {
                     console.log(item)
                     menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                        if (item.content.indexOf(item1) > -1) { // 找到就删除该信息流
+                        if (item.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
                             console.log(item.content);
                             item.parentNode.parentNode.parentNode.parentNode.remove();
                         }
@@ -462,7 +462,7 @@ function blockKeywords(type) {
                     if (item) {
                         console.log(item)
                         menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                            if (item.content.indexOf(item1) > -1) { // 找到就删除该信息流
+                            if (item.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
                                 console.log('文章',item.content);
                                 item.parentNode.parentNode.remove();
                             }
@@ -485,7 +485,7 @@ function blockKeywords(type) {
                 if (item) {
                     //console.log(item)
                     menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                        if (item.content.indexOf(item1) > -1) { // 找到就删除该信息流
+                        if (item.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
                             console.log(item.content);
                             item.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
                         }
@@ -495,7 +495,7 @@ function blockKeywords(type) {
                     if (item) {
                         //console.log(item)
                         menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                            if (item.innerText.indexOf(item1) > -1) { // 找到就删除该信息流
+                            if (item.innerText.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
                                 console.log('文章',item.content);
                                 item.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
                             }
