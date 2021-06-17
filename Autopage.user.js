@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.2.3
+// @version      1.2.4
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、豆瓣电影、3DM、游民星空、FitGirl Repacks、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛
+// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、豆瓣电影、3DM、游民星空、千图网、FitGirl Repacks、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛
 // @match        *://www.423down.com/*
 // @exclude      *://www.423down.com/*.html
 // @match        *://apphot.cc/*
@@ -22,6 +22,7 @@
 // @match        *://search.douban.com/*
 // @match        *://www.3dmgame.com/bagua/*.html
 // @match        *://www.gamersky.com/ent/*/*.shtml
+// @match        *://www.58pic.com/*
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
@@ -288,6 +289,34 @@
                 replaceE: 'css;.page_css',
                 scrollDelta: 1000
             }
+        },
+        _58pic: {
+            SiteTypeID: 21,
+            pager: {
+                type: 1,
+                nextLink: '//div[contains(@class,"page-box")]//a[text()="下一页"][@href]',
+                pageElement: 'css;.pic-box > .qtw-card',
+                HT_insert: ['css;.pic-box', 3],
+                replaceE: 'css;.page-box',
+                scrollDelta: 2000
+            },
+            function: {
+                before: _58pic_beforeFunction
+            }
+        },
+        _58pic_c: {
+            SiteTypeID: 22,
+            pager: {
+                type: 1,
+                nextLink: '//div[contains(@class,"page-box")]//a[text()="下一页"][@href]',
+                pageElement: 'css;.list-box > .qtw-card',
+                HT_insert: ['css;.list-box', 3],
+                replaceE: 'css;.page-box',
+                scrollDelta: 4000
+            },
+            function: {
+                before: _58pic_beforeFunction
+            }
         }
     };
 
@@ -378,6 +407,13 @@
             curSite = DBSite.gamersky;
             document.lastElementChild.appendChild(document.createElement('style')).textContent = `.Comment {display: none !important;}` // 隐藏评论区
             break;
+        case "www.58pic.com":
+            if (location.pathname.indexOf("/tupian/") > -1) {
+                curSite = DBSite._58pic;
+            } else if (location.pathname.indexOf("/c/") > -1) {
+                curSite = DBSite._58pic_c;
+            }
+            break;
     }
     curSite.pageUrl = ""; // 下一页URL
     pageLoading(); // 自动无缝翻页
@@ -463,6 +499,23 @@
     }
 
 
+    // iplaysoft 的插入前函数
+    function _58pic_beforeFunction(pageElems) {
+        let is_one = document.querySelector(".qtw-card.place-box.is-one");
+        if (is_one && is_one.style.display != "none") {
+            is_one.setAttribute("style", "display: none;")
+        }
+        pageElems.forEach(function (one) {
+            let now = one.querySelector("img.lazy")
+            if (now && now.getAttribute('src') === "//icon.qiantucdn.com/static/images/qtw-card/card-place.png") {
+                now.setAttribute("src", now.dataset.original)
+                now.setAttribute("style", "display: block;")
+            }
+        });
+        return pageElems
+    }
+
+
     // 滚动条事件
     function windowScroll(fn1) {
         var beforeScrollTop = document.documentElement.scrollTop,
@@ -520,7 +573,7 @@
             if (curSite.pager) {
                 let curPageEle = getElementByXpath(curSite.pager.nextLink);
                 var url = this.getFullHref(curPageEle);
-                console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
+                //console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
                 if(url === '') return;
                 if(curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
@@ -532,7 +585,7 @@
                     timeout: 5000,
                     onload: function (response) {
                         try {
-                            console.log(`${response.responseText}`)
+                            //console.log(`${response.responseText}`)
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody);
                             let toElement = getAllElements(curSite.pager.HT_insert[0])[0];
