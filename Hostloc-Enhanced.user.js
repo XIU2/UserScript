@@ -1,9 +1,10 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.2.0
+// @version      1.2.1
 // @author       X.I.U
 // @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
+// @match        *://91ai.net/*
 // @icon         https://www.hostloc.com/favicon.ico
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
@@ -181,7 +182,7 @@
             let url_list = [],
                 url = 0;
             // 随机生成 12 个空间地址（2 个冗余）
-            for(let i = 0;i < 12;i++){url_list[i] = "https://hostloc.com/space-uid-" + Math.floor(Math.random()*(50000-10000+1)+10000) + ".html";}
+            for(let i = 0;i < 12;i++){url_list[i] = "https://" + location.host + "/space-uid-" + Math.floor(Math.random()*(50000-10000+1)+10000) + ".html";}
             // 每 5 秒访问一次（避免触发网站防御机制）
             GM_setValue('menu_signingIn', true);
             let signIn = setInterval(function(){
