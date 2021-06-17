@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.4.5
+// @version      1.4.6
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽指定用户、屏蔽指定关键词（标题）、屏蔽盐选内容、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -372,6 +372,7 @@ function blockKeywords(type) {
     if (!menu_value('menu_customBlockKeywords') || menu_value('menu_customBlockKeywords').length < 1) return
     switch(type) {
         case 'index':
+            blockKeywords_index_();
             blockKeywords_index();
             break;
         case 'topic':
@@ -386,6 +387,38 @@ function blockKeywords(type) {
             break;
     }
 
+    function blockKeywords_index_() {
+        let item = document.querySelectorAll('h2.ContentItem-title meta[itemprop="name"]'); // 标题所在元素
+        if (item.length > 0) {
+            item.forEach(function(item2){
+                //console.log(item2)
+                menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
+                    if (item2.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
+                        console.log(item2.content);
+                        if (item2.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'Feed') {
+                            item2.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                        } else {
+                            item2.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                        }
+                    }
+                })
+            })
+        }
+        // 如果是文章标题
+        item = document.querySelectorAll('.ContentItem.ArticleItem meta[itemprop="headline"]'); // 标题所在元素
+        if (item.length > 0) {
+            item.forEach(function(item2){
+                //console.log(item2)
+                menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
+                    if (item2.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
+                        console.log('文章',item2.content);
+                        item2.parentNode.parentNode.parentNode.remove();
+                    }
+                })
+            })
+        }
+    }
+
     function blockKeywords_index() {
         let blockKeywords = e => {
             if (e.target.innerHTML && e.target.getElementsByClassName('ContentItem-title').length > 0) {
@@ -395,7 +428,11 @@ function blockKeywords(type) {
                     menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
                         if (item.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
                             console.log(item.content);
-                            item.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                            if (item.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'Feed') {
+                                item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                            } else {
+                                item.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                            }
                         }
                     })
                 } else { // 如果是文章标题
@@ -428,19 +465,19 @@ function blockKeywords(type) {
                     }
                 })
             })
-        } else { // 如果是文章标题
-            item = document.querySelectorAll('.ContentItem.ArticleItem meta[itemprop="headline"]'); // 标题所在元素
-            if (item.length > 0) {
-                //console.log(item)
-                item.forEach(function(item2){
-                    menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                        if (item2.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
-                            console.log('文章',item2.content);
-                            item2.parentNode.parentNode.remove();
-                        }
-                    })
+        }
+        // 如果是文章标题
+        item = document.querySelectorAll('.ContentItem.ArticleItem meta[itemprop="headline"]'); // 标题所在元素
+        if (item.length > 0) {
+            //console.log(item)
+            item.forEach(function(item2){
+                menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
+                    if (item2.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
+                        console.log('文章',item2.content);
+                        item2.parentNode.parentNode.remove();
+                    }
                 })
-            }
+            })
         }
     }
 
@@ -481,26 +518,15 @@ function blockKeywords(type) {
             //if (e.target.innerHTML) console.log(e.target.innerHTML)
             if (e.target.innerHTML && e.target.getElementsByClassName('ContentItem-title').length > 0) {
                 //console.log(e.target.innerHTML)
-                let item = e.target.querySelector('h2.ContentItem-title meta[itemprop="name"]'); // 标题所在元素
+                let item = e.target.querySelector('h2.ContentItem-title a[data-za-detail-view-id]'); // 标题所在元素
                 if (item) {
                     //console.log(item)
                     menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                        if (item.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
-                            console.log(item.content);
+                        if (item.innerText.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
+                            console.log(item.innerText);
                             item.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
                         }
                     })
-                } else { // 如果是文章标题
-                    item = e.target.querySelector('h2.ContentItem-title a[data-za-detail-view-id]'); // 标题所在元素
-                    if (item) {
-                        //console.log(item)
-                        menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                            if (item.innerText.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
-                                console.log('文章',item.content);
-                                item.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
-                            }
-                        })
-                    }
                 }
             }
         }
