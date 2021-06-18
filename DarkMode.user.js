@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.0.1
+// @version      1.0.2
 // @author       X.I.U
 // @description  最简单的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -17,7 +17,7 @@
 
 (function() {
     var menu_ALL = [
-        ['menu_runDuringTheDay', '白天保持开启 (比晚上更亮一点)', '白天保持开启', true],
+        ['menu_runDuringTheDay', '白天保持开启 (比晚上亮一点点)', '白天保持开启', true],
         ['menu_darkModeType', '点击切换模式', '点击切换模式', 1]
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
@@ -88,11 +88,12 @@
 
     // 添加样式
     function addStyle() {
+        //document.documentElement.style.filter = 'brightness(80%) sepia(20%)';
         let grayLevel,rgbValueArry,
             style_Add = document.createElement('style'),
             hours = new Date().getHours(),
             style = ``,
-            style_00 = `body {background-color: #ffffff !important;}`,
+            style_00 = `body {background-color: #ffffff;}`,
             style_11 = `html {filter: brightness(80%) !important;}`,
             style_11_firefox = `html {filter: brightness(80%) !important; background-image: url();}`,
             style_12 = `html {filter: brightness(70%) !important;}`,
@@ -142,6 +143,7 @@
                 break;
         }
         style_Add.innerHTML = style;
+        //document.lastChild.appendChild(document.createElement("style")).textContent = style;
         if (document.head) {
                 document.head.appendChild(style_Add);
         } else { // 为了避免脚本运行的时候 head 还没加载导致报错
@@ -160,7 +162,7 @@
                     let rgbValueArry = window.getComputedStyle(document.body).backgroundColor.replace ('rgb(', '').replace ('rgba(', '').replace (')', '').split (', '),
                         style_Add1 = document.createElement('style');
                     if (rgbValueArry [0] + rgbValueArry [1] + rgbValueArry [2] === "000") {
-                        style_Add1.innerHTML = 'body {background-color: #ffffff !important;}';
+                        style_Add1.innerHTML = style_00;
                         document.head.appendChild(style_Add1);
                     }
                     clearInterval(timer2);
