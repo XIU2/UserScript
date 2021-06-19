@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.0.3
+// @version      1.0.4
 // @author       X.I.U
 // @description  最简单的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -98,7 +98,7 @@
             style_Add = document.createElement('style'),
             hours = new Date().getHours(),
             style = ``,
-            style_00 = `body {background-color: #ffffff;}`,
+            style_00 = `html {background-color: #ffffff;}`,
             style_11 = `html {filter: brightness(80%) !important;}`,
             style_11_firefox = `html {filter: brightness(80%) !important; background-image: url();}`,
             style_12 = `html {filter: brightness(70%) !important;}`,
@@ -111,11 +111,12 @@
             style_31_firefox = `html {filter: invert(80%) !important;} img, video {filter: invert(1) !important; background-image: url();}`;
 
         // 判断网页是否没有设置背景颜色（没有背景颜色会导致滤镜对背景颜色无效）
-        if (document.body) {
+        /*if (document.body) {
+            console.log(window.getComputedStyle(document.body).backgroundColor)
             rgbValueArry = window.getComputedStyle(document.body).backgroundColor.replace ('rgb(', '').replace ('rgba(', '').replace (')', '').split (', ');
             grayLevel = rgbValueArry [0] + rgbValueArry [1] + rgbValueArry [2];
             if (grayLevel === "000") style += style_00
-        }
+        }*/
 
         // Firefox 浏览器需要特殊对待
         if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
@@ -161,18 +162,18 @@
         }
 
         // 为了避免 body 还没加载导致无法检查是否设置背景颜色的备用措施
-        if (!grayLevel) {
-            let timer2 = setInterval(function(){
-                if (document.body) {
-                    let rgbValueArry = window.getComputedStyle(document.body).backgroundColor.replace ('rgb(', '').replace ('rgba(', '').replace (')', '').split (', '),
-                        style_Add1 = document.createElement('style');
-                    if (rgbValueArry [0] + rgbValueArry [1] + rgbValueArry [2] === "000") {
-                        style_Add1.innerHTML = style_00;
-                        document.head.appendChild(style_Add1);
-                    }
-                    clearInterval(timer2);
+        //if (!grayLevel) {
+        setTimeout(function(){
+            if (document.body) {
+                console.log(window.getComputedStyle(document.body).backgroundColor)
+                let rgbValueArry = window.getComputedStyle(document.body).backgroundColor.replace ('rgb(', '').replace ('rgba(', '').replace (')', '').split (', '),
+                    style_Add1 = document.createElement('style');
+                if (rgbValueArry [0] + rgbValueArry [1] + rgbValueArry [2] === "000") {
+                    style_Add1.innerHTML = style_00;
+                    document.head.appendChild(style_Add1);
                 }
-            }, 1);
-        }
+            }
+        }, 100);
+        //}
     }
 })();
