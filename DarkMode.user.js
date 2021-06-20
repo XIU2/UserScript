@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.0.4
+// @version      1.0.5
 // @author       X.I.U
 // @description  最简单的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -148,9 +148,9 @@
                 style += style_31;
                 break;
         }
-        style_Add.innerHTML = style;
-        //document.lastChild.appendChild(document.createElement("style")).textContent = style;
-        if (document.head) {
+        //style_Add.innerHTML = style;
+        document.lastChild.appendChild(document.createElement("style")).textContent = style;
+        /*if (document.head) {
                 document.head.appendChild(style_Add);
         } else { // 为了避免脚本运行的时候 head 还没加载导致报错
             let timer = setInterval(function(){
@@ -159,18 +159,19 @@
                     clearInterval(timer);
                 }
             }, 1);
-        }
+        }*/
 
         // 为了避免 body 还没加载导致无法检查是否设置背景颜色的备用措施
         //if (!grayLevel) {
         setTimeout(function(){
             if (document.body) {
                 console.log(window.getComputedStyle(document.body).backgroundColor)
-                let rgbValueArry = window.getComputedStyle(document.body).backgroundColor.replace ('rgb(', '').replace ('rgba(', '').replace (')', '').split (', '),
-                    style_Add1 = document.createElement('style');
+                let rgbValueArry = window.getComputedStyle(document.body).backgroundColor.replace ('rgb(', '').replace ('rgba(', '').replace (')', '').split (', ');
+                    //style_Add1 = document.createElement('style');
                 if (rgbValueArry [0] + rgbValueArry [1] + rgbValueArry [2] === "000") {
-                    style_Add1.innerHTML = style_00;
-                    document.head.appendChild(style_Add1);
+                    //style_Add1.innerHTML = style_00;
+                    //document.head.appendChild(style_Add1);
+                    document.lastChild.appendChild(document.createElement("style")).textContent = style_00;
                 }
             }
         }, 100);
