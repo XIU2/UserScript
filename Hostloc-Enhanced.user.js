@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.2.1
+// @version      1.2.2
 // @author       X.I.U
 // @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
@@ -26,6 +26,7 @@
         ['menu_customBlockUsers', '自定义屏蔽用户', '自定义屏蔽用户', []],
         ['menu_blockKeywords', '屏蔽关键词（帖子标题）', '屏蔽关键词（帖子标题）', false],
         ['menu_customBlockKeywords', '自定义屏蔽关键词', '自定义屏蔽关键词', []],
+        ['menu_pageLoading', '自动无缝翻页（总开关）', '自动无缝翻页', true],
         ['menu_thread_pageLoading', '帖子内自动翻页', '帖子内自动翻页', true],
         ['menu_backToTop', '快捷回到顶部（右键点击两侧空白处）', '快捷回到顶部', true],
         ['menu_collapsedNowPost', '收起预览帖子（左键点击两侧空白处）', '收起预览帖子', true],
@@ -328,6 +329,7 @@
 
     // 自动翻页
     function pageLoading() {
+        if (!menu_value('menu_pageLoading')) return
         if (curSite.SiteTypeID > 0){
             windowScroll(function (direction, e) {
                 if (direction === "down") { // 下滑才准备翻页
