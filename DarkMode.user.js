@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.0.5
+// @version      1.0.6
 // @author       X.I.U
 // @description  最简单的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -14,6 +14,7 @@
 // @grant        GM_unregisterMenuCommand
 // @grant        GM_getValue
 // @grant        GM_setValue
+// @grant        GM_notification
 // @noframes
 // @license      GPL-3.0 License
 // @run-at       document-start
@@ -23,6 +24,7 @@
 (function() {
     var menu_ALL = [
         ['menu_runDuringTheDay', '白天保持开启 (比晚上亮一点点)', '白天保持开启', true],
+        ['menu_autoRecognition', '排除自带暗黑模式的网页 (beta)', '排除自带暗黑模式的网页 (beta)', true],
         ['menu_darkModeType', '点击切换模式', '点击切换模式', 1]
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
@@ -93,9 +95,7 @@
 
     // 添加样式
     function addStyle() {
-        //document.documentElement.style.filter = 'brightness(80%) sepia(20%)';
-        let grayLevel,rgbValueArry,
-            style_Add = document.createElement('style'),
+        let style_Add = document.createElement('style'),
             hours = new Date().getHours(),
             style = ``,
             style_00 = `html {background-color: #ffffff;}`,
@@ -109,14 +109,6 @@
             style_22_firefox = `html {filter: brightness(70%) sepia(30%) !important; background-image: url();}`,
             style_31 = `html {filter: invert(80%) !important;} img, video {filter: invert(1) !important;}`,
             style_31_firefox = `html {filter: invert(80%) !important;} img, video {filter: invert(1) !important; background-image: url();}`;
-
-        // 判断网页是否没有设置背景颜色（没有背景颜色会导致滤镜对背景颜色无效）
-        /*if (document.body) {
-            console.log(window.getComputedStyle(document.body).backgroundColor)
-            rgbValueArry = window.getComputedStyle(document.body).backgroundColor.replace ('rgb(', '').replace ('rgba(', '').replace (')', '').split (', ');
-            grayLevel = rgbValueArry [0] + rgbValueArry [1] + rgbValueArry [2];
-            if (grayLevel === "000") style += style_00
-        }*/
 
         // Firefox 浏览器需要特殊对待
         if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
@@ -148,33 +140,26 @@
                 style += style_31;
                 break;
         }
-        //style_Add.innerHTML = style;
-        document.lastChild.appendChild(document.createElement("style")).textContent = style;
-        /*if (document.head) {
-                document.head.appendChild(style_Add);
-        } else { // 为了避免脚本运行的时候 head 还没加载导致报错
-            let timer = setInterval(function(){
-                if (document.head) {
-                    document.head.appendChild(style_Add);
-                    clearInterval(timer);
-                }
-            }, 1);
-        }*/
+        style_Add.id = 'XIU2DarkMode';
+        document.lastChild.appendChild(style_Add).textContent = style;
 
         // 为了避免 body 还没加载导致无法检查是否设置背景颜色的备用措施
-        //if (!grayLevel) {
         setTimeout(function(){
             if (document.body) {
-                console.log(window.getComputedStyle(document.body).backgroundColor)
                 let rgbValueArry = window.getComputedStyle(document.body).backgroundColor.replace ('rgb(', '').replace ('rgba(', '').replace (')', '').split (', ');
-                    //style_Add1 = document.createElement('style');
+                let grayLevel = rgbValueArry [0] + rgbValueArry [1] + rgbValueArry [2];
+                console.log(grayLevel)
+                console.log(window.getComputedStyle(document.body).backgroundColor)
+
                 if (rgbValueArry [0] + rgbValueArry [1] + rgbValueArry [2] === "000") {
-                    //style_Add1.innerHTML = style_00;
-                    //document.head.appendChild(style_Add1);
                     document.lastChild.appendChild(document.createElement("style")).textContent = style_00;
+                } else if (grayLevel < 898989) {
+                    if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
+                        console.log('检测到当前网页自带暗黑模式，停用本脚本ing...')
+                        document.getElementById('XIU2DarkMode').remove();
+                    }
                 }
             }
         }, 100);
-        //}
     }
 })();
