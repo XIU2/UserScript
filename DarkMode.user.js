@@ -146,16 +146,14 @@
         // 为了避免 body 还没加载导致无法检查是否设置背景颜色
         let timer = setInterval(function(){
             if (document.body) {
-                let rgbValueArry = window.getComputedStyle(document.body).backgroundColor.replace('rgb(', '').replace('rgba(', '').replace(')', '').split(', ');
-                let grayLevel = rgbValueArry [0] + rgbValueArry [1] + rgbValueArry [2];
-                console.log(grayLevel)
                 console.log(window.getComputedStyle(document.body).backgroundColor)
-
-                if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)') { // 如果 body 没有 CSS 背景颜色，那就需要添加一个，否则影响滤镜
-                    document.lastChild.appendChild(document.createElement("style")).textContent = style_00;
-                } else if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || grayLevel < 898989) {
+                if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)') {
+                    // 如果 body 没有 CSS 背景颜色，那就需要添加一个背景颜色，否则影响滤镜效果
+                    document.lastChild.appendChild(document.createElement('style')).textContent = style_00;
+                } else if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || window.getComputedStyle(document.body).backgroundColor.replace(/rgb|rgba|\(|\)|,| /g, '') < 898989) {
+                    // 如果是黑色 (等于0,0,0) 或深色 (小于 88,88,88)，就停用本脚本滤镜
                     if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
-                        console.log('检测到当前网页自带暗黑模式，停用本脚本ing...')
+                        console.log('检测到当前网页自带暗黑模式，停用本脚本滤镜...')
                         document.getElementById('XIU2DarkMode').remove();
                     }
                 }
