@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.0.10
+// @version      1.1.0
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -26,7 +26,7 @@
         ['menu_runDuringTheDay', '白天保持开启 (比晚上亮一点点)', '白天保持开启', true],
         ['menu_autoRecognition', '排除自带暗黑模式的网页 (beta)', '排除自带暗黑模式的网页 (beta)', true],
         ['menu_darkModeType', '点击切换模式', '点击切换模式', 1]
-    ], menu_ID = [];
+    ], menu_ID = [], websiteList = ['rarbgprx.org','fitgirl-repacks.site','masquerade.site'];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
     }
@@ -95,7 +95,7 @@
 
     // 添加样式
     function addStyle() {
-        let style_Add = document.createElement('style'),
+        let remove = false, style_Add = document.createElement('style'),
             hours = new Date().getHours(),
             style = ``,
             style_00 = `html {background-color: #ffffff;}`,
@@ -147,26 +147,49 @@
         let timer = setInterval(function(){ // 每 10 毫秒检查一下 body 是否已存在
             if (document.body) {
                 clearInterval(timer); // 取消定时器（每 10 毫秒一次的）
-                setTimeout(function(){ // 为了避免太快 body 的 CSS 还没加载上，先延迟 100 毫秒（缺点就是可能会出现短暂一闪而过的暗黑滤镜）
+                setTimeout(function(){ // 为了避免太快 body 的 CSS 还没加载上，先延迟 150 毫秒（缺点就是可能会出现短暂一闪而过的暗黑滤镜）
                     console.log('html:', window.getComputedStyle(document.lastChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
-                    /*let rgbValueArry1 = window.getComputedStyle(document.body).backgroundColor.replace(/rgba|rgb|\(|\)| /g, '').split (','),
-                        rgbValueArry2 = window.getComputedStyle(document.lastChild).backgroundColor.replace(/rgba|rgb|\(|\)| /g, '').split (','),
-                        grayLevelBody = parseInt(rgbValueArry1[0]) + parseInt(rgbValueArry1[1]) + parseInt(rgbValueArry1[2]),
-                        grayLevelHTML = parseInt(rgbValueArry2[0]) + parseInt(rgbValueArry2[1]) + parseInt(rgbValueArry2[2]);
-                    console.log('html:', window.getComputedStyle(document.lastChild).backgroundColor, rgbValueArry2, grayLevelHTML, 'body:', window.getComputedStyle(document.body).backgroundColor, grayLevelBody)*/
-
                     if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastChild).backgroundColor === 'rgba(0, 0, 0, 0)') {
                         // 如果 body 没有 CSS 背景颜色，那就需要添加一个背景颜色，否则影响滤镜效果
-                        document.lastChild.appendChild(document.createElement('style')).textContent = style_00;
-                    } else if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || window.getComputedStyle(document.body).backgroundColor != 'rgba(0, 0, 0, 0)' && parseInt(window.getComputedStyle(document.body).backgroundColor.replace(/rgba|rgb|\(|\)|,| /g, '')) < 898989 || window.getComputedStyle(document.lastChild).backgroundColor != 'rgba(0, 0, 0, 0)' && parseInt(window.getComputedStyle(document.lastChild).backgroundColor.replace(/rgba|rgb|\(|\)|,| /g, '')) < 898989) {
-                        // 如果是黑色 (等于0,0,0) 或深色 (小于 88,88,88)，就停用本脚本滤镜
+                        let style_Add2 = document.createElement('style');
+                        style_Add2.id = 'XIU2DarkMode2';
+                        document.lastChild.appendChild(style_Add2).textContent = style_00;
+                    } else if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || getColorValue(document.body) > 0 && getColorValue(document.body) < 898989 || getColorValue(document.lastChild) > 0 && getColorValue(document.lastChild) < 898989) {
+                        // 如果是黑色 (等于0,0,0) 或深色 (小于 89,89,89)，就停用本脚本滤镜
                         if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
+                            for (let i=0;i<websiteList.length;i++){ // 这些网站强制启用护眼模式滤镜
+                                if (websiteList[i] === location.host) return
+                            }
                             console.log('检测到当前网页自带暗黑模式，停用本脚本滤镜...')
                             document.getElementById('XIU2DarkMode').remove();
+                            remove = true;
                         }
                     }
                 }, 150);
             }
         }, 10);
+
+        // 在没有找到更好的办法之前，先这样凑活着用
+        setTimeout(function(){
+            console.log('html:', window.getComputedStyle(document.lastChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
+            if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || getColorValue(document.body) > 0 && getColorValue(document.body) < 898989 || getColorValue(document.lastChild) > 0 && getColorValue(document.lastChild) < 898989) {
+                // 如果是黑色 (等于0,0,0) 或深色 (小于 89,89,89)，就停用本脚本滤镜
+                if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
+                    for (let i=0;i<websiteList.length;i++){ // 这些网站强制启用护眼模式滤镜
+                        if (websiteList[i] === location.host) return
+                    }
+                    if (remove) return
+                    console.log('检测到当前网页自带暗黑模式，停用本脚本滤镜...')
+                    if (document.getElementById('XIU2DarkMode')) document.getElementById('XIU2DarkMode').remove();
+                    if (document.getElementById('XIU2DarkMode2')) document.getElementById('XIU2DarkMode2').remove();
+                }
+            }
+        }, 3000);
+    }
+
+    // 获取背景颜色值
+    function getColorValue(e) {
+        let rgbValueArry = window.getComputedStyle(e).backgroundColor.replace(/rgba|rgb|\(|\)| /g, '').split (',')
+        return parseInt(rgbValueArry[0] + rgbValueArry[1] + rgbValueArry[2])
     }
 })();
