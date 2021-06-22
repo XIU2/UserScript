@@ -146,6 +146,7 @@
         // 为了避免 body 还没加载导致无法检查是否设置背景颜色
         let timer = setInterval(function(){ // 每 10 毫秒检查一下 body 是否已存在（onload 太晚了，只能这么干）
             if (document.body) {
+                clearInterval(timer); // 取消定时器（每 10 毫秒一次的）
                 setTimeout(function(){ // 为了避免太快 body 的 CSS 还没加载上，先延迟 100 毫秒（缺点就是可能会出现短暂一闪而过的暗黑滤镜）
                     console.log(window.getComputedStyle(document.lastChild).backgroundColor, window.getComputedStyle(document.body).backgroundColor)
                     if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastChild).backgroundColor === 'rgba(0, 0, 0, 0)') {
@@ -158,7 +159,6 @@
                             document.getElementById('XIU2DarkMode').remove();
                         }
                     }
-                    clearInterval(timer);
                 }, 100);
             }
         }, 10);
