@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.0.6
+// @version      1.0.7
 // @author       X.I.U
 // @description  最简单的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -143,23 +143,24 @@
         style_Add.id = 'XIU2DarkMode';
         document.lastChild.appendChild(style_Add).textContent = style;
 
-        // 为了避免 body 还没加载导致无法检查是否设置背景颜色的备用措施
-        setTimeout(function(){
+        // 为了避免 body 还没加载导致无法检查是否设置背景颜色
+        let timer = setInterval(function(){
             if (document.body) {
-                let rgbValueArry = window.getComputedStyle(document.body).backgroundColor.replace ('rgb(', '').replace ('rgba(', '').replace (')', '').split (', ');
+                let rgbValueArry = window.getComputedStyle(document.body).backgroundColor.replace('rgb(', '').replace('rgba(', '').replace(')', '').split(', ');
                 let grayLevel = rgbValueArry [0] + rgbValueArry [1] + rgbValueArry [2];
                 console.log(grayLevel)
                 console.log(window.getComputedStyle(document.body).backgroundColor)
 
-                if (rgbValueArry [0] + rgbValueArry [1] + rgbValueArry [2] === "000") {
+                if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)') { // 如果 body 没有 CSS 背景颜色，那就需要添加一个，否则影响滤镜
                     document.lastChild.appendChild(document.createElement("style")).textContent = style_00;
-                } else if (grayLevel < 898989) {
+                } else if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || grayLevel < 898989) {
                     if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
                         console.log('检测到当前网页自带暗黑模式，停用本脚本ing...')
                         document.getElementById('XIU2DarkMode').remove();
                     }
                 }
+                clearInterval(timer);
             }
-        }, 100);
+        }, 10);
     }
 })();
