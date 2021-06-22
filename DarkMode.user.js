@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.0.8
+// @version      1.0.9
 // @author       X.I.U
 // @description  最简单的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -144,15 +144,15 @@
         document.lastChild.appendChild(style_Add).textContent = style;
 
         // 为了避免 body 还没加载导致无法检查是否设置背景颜色
-        let timer = setInterval(function(){ // 每 10 毫秒检查一下 body 是否已存在（onload 太晚了，只能这么干）
+        let timer = setInterval(function(){ // 每 10 毫秒检查一下 body 是否已存在
             if (document.body) {
                 clearInterval(timer); // 取消定时器（每 10 毫秒一次的）
                 setTimeout(function(){ // 为了避免太快 body 的 CSS 还没加载上，先延迟 100 毫秒（缺点就是可能会出现短暂一闪而过的暗黑滤镜）
-                    console.log(window.getComputedStyle(document.lastChild).backgroundColor, window.getComputedStyle(document.body).backgroundColor)
+                    console.log('html:', window.getComputedStyle(document.lastChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
                     if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastChild).backgroundColor === 'rgba(0, 0, 0, 0)') {
                         // 如果 body 没有 CSS 背景颜色，那就需要添加一个背景颜色，否则影响滤镜效果
                         document.lastChild.appendChild(document.createElement('style')).textContent = style_00;
-                    } else if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' || window.getComputedStyle(document.body).backgroundColor.replace(/rgb|rgba|\(|\)|,| /g, '') < 898989) {
+                    } else if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || window.getComputedStyle(document.body).backgroundColor.replace(/rgb|rgba|\(|\)|,| /g, '') < 898989 || window.getComputedStyle(document.lastChild).backgroundColor.replace(/rgb|rgba|\(|\)|,| /g, '') < 898989) {
                         // 如果是黑色 (等于0,0,0) 或深色 (小于 88,88,88)，就停用本脚本滤镜
                         if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
                             console.log('检测到当前网页自带暗黑模式，停用本脚本滤镜...')
