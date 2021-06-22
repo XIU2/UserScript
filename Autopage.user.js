@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.2.4
+// @version      1.2.5
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、豆瓣电影、3DM、游民星空、千图网、FitGirl Repacks、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛
+// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、豆瓣电影、3DM、游民星空、千图网、FitGirl Repacks、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛...
 // @match        *://www.423down.com/*
 // @exclude      *://www.423down.com/*.html
 // @match        *://apphot.cc/*
@@ -23,6 +23,7 @@
 // @match        *://www.3dmgame.com/bagua/*.html
 // @match        *://www.gamersky.com/ent/*/*.shtml
 // @match        *://www.58pic.com/*
+// @match        *://rarbgprx.org/torrents.php*
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
@@ -317,6 +318,17 @@
             function: {
                 before: _58pic_beforeFunction
             }
+        },
+        rarbgprx: {
+            SiteTypeID: 23,
+            pager: {
+                type: 1,
+                nextLink: '(//a[@title="next page"])[1][@href]',
+                pageElement: 'css;table.lista2t tr.lista2',
+                HT_insert: ['css;table.lista2t > tbody', 3],
+                replaceE: 'css;#pager_links',
+                scrollDelta: 900
+            }
         }
     };
 
@@ -413,6 +425,9 @@
             } else if (location.pathname.indexOf("/c/") > -1) {
                 curSite = DBSite._58pic_c;
             }
+            break;
+        case "rarbgprx.org":
+            curSite = DBSite.rarbgprx;
             break;
     }
     curSite.pageUrl = ""; // 下一页URL
