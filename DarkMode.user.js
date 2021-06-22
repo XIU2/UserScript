@@ -2,7 +2,7 @@
 // @name         护眼模式
 // @version      1.0.10
 // @author       X.I.U
-// @description  最简单的全网通用护眼模式、夜间模式、暗黑模式
+// @description  简单有效的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
 // @exclude      *://v.qq.com/*
 // @exclude      *://*.iqiyi.com/*
