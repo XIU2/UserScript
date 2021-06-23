@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.1.0
+// @version      1.1.1
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -141,7 +141,17 @@
                 break;
         }
         style_Add.id = 'XIU2DarkMode';
-        document.lastChild.appendChild(style_Add).textContent = style;
+        //console.log(document,document.lastChild,document.querySelector('html'))
+        if (document.lastChild) {
+            document.lastChild.appendChild(style_Add).textContent = style;
+        } else { // 发现个别网站速度太慢的话，就会出现脚本运行太早，连 html 标签都还没加载。。。
+            let timer1 = setInterval(function(){ // 每 5 毫秒检查一下 html 是否已存在
+                if (document.lastChild) {
+                    clearInterval(timer1); // 取消定时器
+                    document.lastChild.appendChild(style_Add).textContent = style;
+                }
+            }, 5);
+        }
 
         // 为了避免 body 还没加载导致无法检查是否设置背景颜色
         let timer = setInterval(function(){ // 每 10 毫秒检查一下 body 是否已存在
