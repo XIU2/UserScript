@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.2.5
+// @version      1.2.6
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、豆瓣电影、3DM、游民星空、千图网、RARBG、FitGirl Repacks、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛...
+// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、3DM、游民星空、千图网、RARBG、FitGirl Repacks、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛...
 // @match        *://www.423down.com/*
 // @exclude      *://www.423down.com/*.html
 // @match        *://apphot.cc/*
@@ -24,6 +24,7 @@
 // @match        *://www.gamersky.com/ent/*/*.shtml
 // @match        *://www.58pic.com/*
 // @match        *://rarbgprx.org/torrents.php*
+// @match        *://www.yxssp.com/*
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
@@ -329,6 +330,17 @@
                 replaceE: 'css;#pager_links',
                 scrollDelta: 900
             }
+        },
+        yxssp: {
+            SiteTypeID: 24,
+            pager: {
+                type: 1,
+                nextLink: '//div[@class="page-nav td-pb-padding-side"]/a[last()][@href]',
+                pageElement: 'css;.td-modules-container.td-module-number4 > div',
+                HT_insert: ['css;.td-modules-container.td-module-number4', 3],
+                replaceE: 'css;.page-nav.td-pb-padding-side',
+                scrollDelta: 900
+            }
         }
     };
 
@@ -361,6 +373,9 @@
             } else {
                 curSite = DBSite.weidown;
             }
+            break;
+        case "www.yxssp.com":
+            curSite = DBSite.yxssp;
             break;
         case "fitgirl-repacks.site":
             curSite = DBSite.fitgirl;
