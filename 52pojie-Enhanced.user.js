@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.2.8
+// @version      1.2.9
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页、屏蔽导读悬赏贴（最新发表页）
 // @match        *://www.52pojie.cn/*
@@ -205,7 +205,7 @@
                 onload: function (response) {
                     let html = ShowPager.createDocumentByString(response.responseText);
                     html = html.querySelector('#messagetext p')
-                    if (html && html.innerText.indexOf("任务已完成") > -1) {
+                    if (html && html.innerText.indexOf('任务已完成') > -1 || html && html.innerText.indexOf('已申请过此任务') > -1) {
                         qiandao.querySelector('.qq_bind').setAttribute('src','https://www.52pojie.cn/static/image/common/wbs.png') // 修改 [打卡签到] 图标为 [签到完毕]
                         qiandao.href = "#" // 修改 URL 为 #
                     } else {
