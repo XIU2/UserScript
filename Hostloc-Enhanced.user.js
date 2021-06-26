@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.2.3
+// @version      1.2.4
 // @author       X.I.U
 // @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
@@ -122,6 +122,15 @@
                 HT_insert: ['css;div#threadlist', 2],
                 replaceE: 'css;div.pg'
             }
+        },
+        myreply: {
+            SiteTypeID: 4,
+            pager: {
+                nextLink: '(//a[@class="nxt"])[1][@href]',
+                pageElement: 'css;div#threadlist div.bm_c table > tbody',
+                HT_insert: ['css;div#threadlist div.bm_c table', 2],
+                replaceE: 'css;div.pg',
+            }
         }
     };
 
@@ -164,12 +173,15 @@
         blockUsers('notice'); //                                          屏蔽用户（黑名单）
     } else if(location.pathname === '/home.php' && location.search === '?mod=space&do=pm') { // 消息(私人聊天)
         blockUsers('pm'); //                                              屏蔽用户（黑名单）
+    } else if(location.pathname === '/forum.php' && location.search === '?mod=guide&view=my&type=reply') { // 我的帖子：回复
+        curSite = DBSite.myreply;
     }
 
     curSite.pageUrl = ""; // 下一页URL
     pageLoading(); // 自动翻页
     if(menu_value('menu_backToTop'))backToTop(); //    回到顶部（右键点击左右两侧空白处）
     if(menu_value('menu_autoSignIn'))autoSignIn(); //  自动签到（访问空间 10 次 = 20 积分）
+    //replyIntervalDOMNodeInserted(); //                 监听插入事件（回帖间隔）
 
 
     // 自动签到（访问空间 10 次 = 20 积分）
@@ -325,6 +337,17 @@
         }
         document.addEventListener('DOMNodeInserted', vfastpost); // 监听插入事件
     }
+
+
+    // 监听插入事件（回帖间隔）
+    /*function replyIntervalDOMNodeInserted() {
+        let replyInterval = e => {
+            if (e.target.innerHTML && e.target.innerText.indexOf('发表回复 金钱+1') > -1) {
+                setTimeout(function () {GM_notification({text: '过去 60 秒了，可以回帖了~', timeout: 3500});}, 60000)
+            }
+        }
+        document.addEventListener('DOMNodeInserted', replyInterval); // 监听插入事件
+    }*/
 
 
     // 自动翻页
