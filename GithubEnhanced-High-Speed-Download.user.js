@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.5.3
+// @version      1.5.4
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -20,18 +20,27 @@
 (function() {
     var backColor = '#ffffff';
     var fontColor = '#888888';
-    if (document.getElementsByTagName('html')[0].getAttribute('data-color-mode') == 'dark') { // 黑暗模式判断
-        if (document.getElementsByTagName('html')[0].getAttribute('data-dark-theme') == 'dark_dimmed') {
+    if (document.getElementsByTagName('html')[0].getAttribute('data-color-mode') === 'dark') { // 黑暗模式判断
+        if (document.getElementsByTagName('html')[0].getAttribute('data-dark-theme') === 'dark_dimmed') {
             backColor = '#272e37';
             fontColor = '#768390';
         } else {
             backColor = '#161a21';
             fontColor = '#b2b8bf';
         }
+    } else if (document.getElementsByTagName('html')[0].getAttribute('data-color-mode') === 'auto') {
+        console.log(window.getComputedStyle(document.body).backgroundColor)
+        if (window.getComputedStyle(document.body).backgroundColor === 'rgb(34, 39, 46)') {
+            backColor = '#272e37';
+            fontColor = '#768390';
+        } else if (window.getComputedStyle(document.body).backgroundColor === 'rgb(13, 17, 23)') {
+            backColor = '#161a21';
+            fontColor = '#b2b8bf';
+        }
     }
-//['https://gh.66ccff.work', '美国'],
-//['https://github.91chifun.workers.dev', '美国'],
-//['https://github.rc1844.workers.dev', '美国'],
+    //['https://gh.66ccff.work', '美国'],
+    //['https://github.91chifun.workers.dev', '美国'],
+    //['https://github.rc1844.workers.dev', '美国'],
     var download_url = [
         ['https://gh.api.99988866.xyz', '美国'],
         ['https://gh.msx.workers.dev', '美国'],
