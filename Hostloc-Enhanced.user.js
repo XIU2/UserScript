@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.2.5
+// @version      1.2.6
 // @author       X.I.U
 // @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
@@ -187,17 +187,18 @@
     // 自动签到（访问空间 10 次 = 20 积分）
     function autoSignIn() {
         if (!loginStatus) return
-        if (GM_getValue('menu_signingIn')) return
+        //if (GM_getValue('menu_signingIn')) return
         let timeNow = new Date().getFullYear() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getDate(),
             timeOld = GM_getValue('menu_signInTime');
         if (!timeOld || timeOld != timeNow) { // 是新的一天
+            GM_setValue('menu_signInTime', timeNow); //      写入签到时间以供后续比较
             GM_notification({text: '请不要关闭/刷新本页！耐心等待 60 秒~\n在此期间可以在 "其他标签页" 浏览论坛！', timeout: 10000});
             let url_list = [],
                 url = 0;
             // 随机生成 12 个空间地址（2 个冗余）
             for(let i = 0;i < 12;i++){url_list[i] = "https://" + location.host + "/space-uid-" + Math.floor(Math.random()*(50000-10000+1)+10000) + ".html";}
             // 每 5 秒访问一次（避免触发网站防御机制）
-            GM_setValue('menu_signingIn', true);
+            //GM_setValue('menu_signingIn', true);
             let signIn = setInterval(function(){
                 GM_xmlhttpRequest({
                     url: url_list[url++],
@@ -206,11 +207,11 @@
                 });
                 console.log(`[全球主机交流论坛 增强] 金钱 +2 (${url_list[url]})`);
                 if (url === 11) { // 次数够了就取消定时循环
+                    clearInterval(signIn);
+                    //GM_setValue('menu_signingIn', false);
+                    //GM_setValue('menu_signInTime', timeNow); //      写入签到时间以供后续比较
                     console.log('[全球主机交流论坛 增强] 签到完成！');
                     GM_notification({text: '签到完成！金钱 +20 ~', timeout: 3500});
-                    GM_setValue('menu_signingIn', false);
-                    GM_setValue('menu_signInTime', timeNow); //      写入签到时间以供后续比较
-                    clearInterval(signIn);
                 }
             }, 5000);
         }/* else { //                                                  新旧签到时间一致
@@ -221,7 +222,7 @@
 
     // 重新签到
     function reAutoSignIn() {
-        GM_setValue('menu_signingIn', false);
+        //GM_setValue('menu_signingIn', false);
         GM_setValue('menu_signInTime', '1970/1/1');
         location.reload(); // 刷新网页
     }
