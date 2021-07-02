@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.5.4
+// @version      1.5.5
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -143,7 +143,7 @@
         }
         Array.from(html).forEach(function (current) {
             current.querySelectorAll('.d-flex.Box-body > a').forEach(function (_this) {
-                let href = _this.href.split('github.com'),
+                let href = _this.href.split(location.host),
                     url = [],
                     _html = `<div style="${divDisplay}justify-content: flex-end;">`;
 
@@ -153,6 +153,7 @@
                     } else {
                         url[i] = download_url[i][0] + '/' + _this.href
                     }
+                    if (location.host === 'hub.fastgit.org') url[i] = url[i].replace('hub.fastgit.org','github.com')
                 }
 
                 for (let i=0;i<url.length;i++) {
@@ -167,7 +168,7 @@
 
             // Source Code
             current.querySelectorAll('.d-block.Box-body > a').forEach(function (_this) {
-                let href = _this.href.split('github.com'),
+                let href = _this.href.split(location.host),
                     url = [],
                     _html = `<div style="${divDisplay}justify-content: flex-end;flex-grow: 1;">`;
 
@@ -177,6 +178,7 @@
                     } else {
                         url[i] = download_url[i][0] + '/' + _this.href
                     }
+                    if (location.host === 'hub.fastgit.org') url[i] = url[i].replace('hub.fastgit.org','github.com')
                 }
 
                 for (let i=0;i<url.length;i++) {
@@ -200,10 +202,11 @@
 
         for (let i=0;i<download_url.length;i++){
             if (download_url[i][0] === 'https://download.fastgit.org') {
-                url[i] = download_url[i][0] + href.split('github.com')[1]
+                url[i] = download_url[i][0] + href.split(location.host)[1]
             } else {
                 url[i] = download_url[i][0] + '/' + href
             }
+            if (location.host === 'hub.fastgit.org') url[i] = url[i].replace('hub.fastgit.org','github.com')
         }
 
         for (let i=0;i<url.length;i++) {
@@ -216,7 +219,7 @@
     // Git Clone
     function addGitClone() {
         let html = document.querySelector('[role="tabpanel"]:nth-child(2) div.input-group');if (!html) return
-        let href_split = html.getElementsByTagName('input')[0].getAttribute('value').split('github.com'),
+        let href_split = html.getElementsByTagName('input')[0].getAttribute('value').split(location.host),
             url = [],
             _html = ``;
 
@@ -258,7 +261,7 @@
     // Raw
     function addRawFile() {
         let html = document.getElementById('raw-url');if (!html) return
-        let href = location.href.replace('https://github.com',''),
+        let href = location.href.replace(`https://${location.host}`,''),
             href2 = href.replace('/blob/','/'),
             url = [
                 raw_url[1][0] + "/gh" + href.replace('/blob/','@'),
@@ -304,7 +307,7 @@
                 cntElm_a = trElm.querySelector('.css-truncate.css-truncate-target.d-block.width-fit a'),
                 cntElm_svg = trElm.querySelector('.mr-3.flex-shrink-0 svg.octicon.octicon-file.color-icon-tertiary'),
                 Name = cntElm_a.innerText,
-                href = cntElm_a.attributes.href.nodeValue.replace('https://github.com','');
+                href = cntElm_a.attributes.href.nodeValue.replace(`https://${location.host}`,'');
             let href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
             switch(menu_raw_fast) {
                 case 1:
