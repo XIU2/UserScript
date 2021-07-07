@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.2.6
+// @version      1.2.7
 // @author       X.I.U
 // @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
@@ -99,7 +99,7 @@
         thread: {
             SiteTypeID: 2,
             pager: {
-                nextLink: '//div[@id="pgt"]//a[contains(text(),"下一页")][@href]',
+                nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;div#postlist > div[id^="post_"]',
                 HT_insert: ['css;div#postlist', 2],
                 replaceE: 'css;div.pg',
@@ -108,7 +108,7 @@
         guide: {
             SiteTypeID: 3,
             pager: {
-                nextLink: '//div[@id="pgt"]//a[contains(text(),"下一页")][@href]',
+                nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;div#threadlist div.bm_c table > tbody[id^="normalthread_"]',
                 HT_insert: ['css;div#threadlist div.bm_c table', 2],
                 replaceE: 'css;div.pg',
@@ -254,6 +254,7 @@
                 break;
             case 'forum': // 各版块帖子列表
                 blockUsers_('[id^="normalthread_"]', 'a[href^="space-uid"]');
+                blockUsers_vfastpost(); // 预览帖子中的回复
                 break;
             case 'search': // 搜索结果
                 blockUsers_('.pbw', 'a[href^="space-uid"]');
@@ -278,6 +279,25 @@
                     }
                 })
             })
+        }
+
+        function blockUsers_vfastpost() {
+            let vfastpost = e => {
+                if (e.target.innerHTML && e.target.innerHTML.indexOf('id="vfastpost"') > -1) {
+                    let listItem = e.target.querySelectorAll('[id^="post_"]');
+                    if (listItem.length < 1) return
+                    listItem.forEach(function(item){ // 遍历所有回复
+                        menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
+                            let itemName = item.querySelector('a.xi2'); // 寻找用户名
+                            if (itemName && itemName.innerText === item1) {
+                                console.log(`屏蔽用户：${item1}`);
+                                item.remove(); // 删除回复
+                            }
+                        })
+                    })
+                }
+            }
+            document.addEventListener('DOMNodeInserted', vfastpost); // 监听插入事件
         }
     }
 
