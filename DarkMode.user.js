@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.1.2
+// @version      1.1.3
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -26,7 +26,7 @@
         ['menu_runDuringTheDay', '白天保持开启 (比晚上亮一点点)', '白天保持开启', true],
         ['menu_autoRecognition', '排除自带暗黑模式的网页 (beta)', '排除自带暗黑模式的网页 (beta)', true],
         ['menu_darkModeType', '点击切换模式', '点击切换模式', 1]
-    ], menu_ID = [], websiteList = ['rarbgprx.org','fitgirl-repacks.site','masquerade.site'];
+    ], menu_ID = [], websiteList = ['rarbgprx.org','fitgirl-repacks.site','masquerade.site','www.gamersky.com'];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
     }
@@ -98,7 +98,7 @@
         let remove = false, style_Add = document.createElement('style'),
             hours = new Date().getHours(),
             style = ``,
-            style_00 = `html {background-color: #ffffff;}`,
+            style_00 = `html, body {background-color: #ffffff;}`,
             style_11 = `html {filter: brightness(80%) !important;}`,
             style_11_firefox = `html {filter: brightness(80%) !important; background-image: url();}`,
             style_12 = `html {filter: brightness(70%) !important;}`,
@@ -108,7 +108,7 @@
             style_22 = `html {filter: brightness(70%) sepia(30%) !important;}`,
             style_22_firefox = `html {filter: brightness(70%) sepia(30%) !important; background-image: url();}`,
             style_31 = `html {filter: invert(80%) !important;} img, video {filter: invert(1) !important;}`,
-            style_31_firefox = `html {filter: invert(80%) !important;} img, video {filter: invert(1) !important; background-image: url();}`;
+            style_31_firefox = `html {filter: invert(80%) !important; background-image: url();} img, video {filter: invert(1) !important;}`;
 
         // Firefox 浏览器需要特殊对待
         if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
@@ -141,6 +141,7 @@
                 break;
         }
         style_Add.id = 'XIU2DarkMode';
+        style_Add.type = 'text/css';
         //console.log(document,document.lastChild,document.querySelector('html'))
         if (document.lastChild) {
             document.lastChild.appendChild(style_Add).textContent = style;
@@ -212,6 +213,16 @@
                 }
             }
         }, 3000);*/
+
+        // 解决远景论坛会清理掉前面插入的 CSS 样式的问题
+        if (location.hostname === 'bbs.pcbeta.com') {
+            let timer1 = setInterval(function(){
+                if (!document.getElementById('XIU2DarkMode')) {
+                    document.lastChild.appendChild(style_Add).textContent = style;
+                    clearInterval(timer1);
+                }
+            }, 10);
+        }
     }
 
     // 获取背景颜色值
