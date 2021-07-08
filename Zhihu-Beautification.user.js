@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.2.4
+// @version      1.2.5
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -281,13 +281,13 @@ html {filter: brightness(75%) sepia(30%) !important; background-image: url();}
             if (menu_value('menu_darkModeType') === 1) {
                 if (getTheme() === 'light') {
                     document.cookie="theme=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/";
-                    document.getElementsByTagName('html')[0].setAttribute('data-theme', 'dark');
+                    document.lastChild.setAttribute('data-theme', 'dark');
                     location.reload(); // 刷新网页
                 }
             } else {
                 if (getTheme() === 'dark') {
                     document.cookie="theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-                    document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light');
+                    document.lastChild.setAttribute('data-theme', 'light');
                     location.reload(); // 刷新网页
                 }
                 if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
@@ -313,7 +313,7 @@ html {filter: brightness(75%) sepia(30%) !important; background-image: url();}
         } else {
             if (getTheme() === 'dark'){
                 document.cookie="theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-                document.getElementsByTagName('html')[0].setAttribute('data-theme', 'light');
+                document.lastChild.setAttribute('data-theme', 'light');
                 location.reload(); // 刷新网页
             }
         }
@@ -345,7 +345,7 @@ html {filter: brightness(75%) sepia(30%) !important; background-image: url();}
             }
         }
 
-        style_Add.innerHTML = style;
+        /*style_Add.innerHTML = style;
         if (document.head) {
                 document.head.appendChild(style_Add);
         } else {
@@ -355,6 +355,17 @@ html {filter: brightness(75%) sepia(30%) !important; background-image: url();}
                     clearInterval(timer);
                 }
             }, 1);
+        }*/
+
+        if (document.lastChild) {
+            document.lastChild.appendChild(style_Add).textContent = style;
+        } else { // 避免网站加载速度太慢的备用措施
+            let timer1 = setInterval(function(){ // 每 5 毫秒检查一下 html 是否已存在
+                if (document.lastChild) {
+                    clearInterval(timer1); // 取消定时器
+                    document.lastChild.appendChild(style_Add).textContent = style;
+                }
+            }, 5);
         }
     }
     function getTheme() {
