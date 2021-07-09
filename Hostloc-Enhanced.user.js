@@ -180,7 +180,7 @@
         blockUsers('pm'); //                                              屏蔽用户（黑名单）
     } else if(location.pathname === '/forum.php' && location.search.indexOf('mod=guide&view=my&type=reply') > -1) { // 我的帖子：回复
         curSite = DBSite.myreply;
-    } else if(location.pathname === '/forum.php' && location.search.indexOf('mod=post&action=reply') > -1) { // 回复：高级回复
+    } else if(location.pathname === '/forum.php' && location.search.indexOf('mod=post&action=reply') > -1 || location.pathname === '/forum.php' && location.search.indexOf('mod=post&action=newthread') > -1) { // 回复：高级回复
         littleTail('reply'); //                                           小尾巴
     }
 
@@ -411,7 +411,7 @@
 
         function littleTail_3() {
             let postsubmit = document.getElementById('postsubmit');
-            if (postsubmit && postsubmit.innerText === '\n参与/回复主题\n') {
+            if (postsubmit && postsubmit.innerText === '\n参与/回复主题\n' || postsubmit && postsubmit.innerText === '\n发表帖子\n') {
                 postsubmit.onclick = function(){document.getElementById('e_textarea').value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');}
             }
         }
