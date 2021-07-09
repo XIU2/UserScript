@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.2.7
+// @version      1.2.8
 // @author       X.I.U
-// @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
+// @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
 // @match        *://91ai.net/*
 // @icon         https://www.hostloc.com/favicon.ico
@@ -26,6 +26,7 @@
         ['menu_customBlockUsers', '自定义屏蔽用户', '自定义屏蔽用户', []],
         ['menu_blockKeywords', '屏蔽关键词（帖子标题）', '屏蔽关键词（帖子标题）', false],
         ['menu_customBlockKeywords', '自定义屏蔽关键词', '自定义屏蔽关键词', []],
+        ['menu_customLittleTail', '自定义小尾巴内容', '自定义小尾巴内容', []],
         ['menu_pageLoading', '自动无缝翻页（总开关）', '自动无缝翻页', true],
         ['menu_thread_pageLoading', '帖子内自动翻页', '帖子内自动翻页', true],
         ['menu_backToTop', '快捷回到顶部（右键点击两侧空白处）', '快捷回到顶部', true],
@@ -54,6 +55,8 @@
                 menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){customBlockUsers()});
             } else if (menu_ALL[i][0] === 'menu_customBlockKeywords') {
                 menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){customBlockKeywords()});
+            } else if (menu_ALL[i][0] === 'menu_customLittleTail') {
+                menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){customLittleTail()});
             } else {
                 menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
             }
@@ -156,6 +159,7 @@
         showPosts(); //                                                   自动显示帖子内被隐藏的回复
         blockUsers('thread'); //                                          屏蔽用户（黑名单）
         if (menu_value('menu_onlineStatus')) onlineStatus(); //           显示是否在线
+        littleTail('thread'); //                                          小尾巴
     } else if (patt_forum.test(location.pathname) || location.search.indexOf('mod=forumdisplay') > -1) { // 各板块帖子列表
         curSite = DBSite.forum;
         if (menu_value('menu_collapsedNowPost')) collapsedNowPost(); //   收起当前帖子预览（左键左右两侧空白处）
@@ -163,6 +167,7 @@
         blockUsers('forum'); //                                           屏蔽用户（黑名单）
         blockKeywords(); //                                               屏蔽关键词（帖子标题）
         vfastpostDOMNodeInserted(); //                                    监听插入事件（预览快速回复带签名）
+        littleTail('forum'); //                                           小尾巴
         if (patt_forum.test(location.pathname)) blockDOMNodeInserted(); //监听插入事件（有新的回复主题，点击查看）
      }else if (patt_guide.test(location.search)) { //                     导读帖子列表
         curSite = DBSite.guide;
@@ -171,10 +176,12 @@
         blockUsers('search'); //                                          屏蔽用户（黑名单）
     } else if(location.pathname === '/home.php' && location.search.indexOf('mod=space&do=notice&view=mypost') > -1) { // 消息(帖子/点评/提到)
         blockUsers('notice'); //                                          屏蔽用户（黑名单）
-    } else if(location.pathname === '/home.php' && location.search === '?mod=space&do=pm') { // 消息(私人聊天)
+    } else if(location.pathname === '/home.php' && location.search.indexOf('mod=space&do=pm') > -1) { // 消息(私人聊天)
         blockUsers('pm'); //                                              屏蔽用户（黑名单）
-    } else if(location.pathname === '/forum.php' && location.search === '?mod=guide&view=my&type=reply') { // 我的帖子：回复
+    } else if(location.pathname === '/forum.php' && location.search.indexOf('mod=guide&view=my&type=reply') > -1) { // 我的帖子：回复
         curSite = DBSite.myreply;
+    } else if(location.pathname === '/forum.php' && location.search.indexOf('mod=post&action=reply') > -1) { // 回复：高级回复
+        littleTail('reply'); //                                           小尾巴
     }
 
     curSite.pageUrl = ""; // 下一页URL
@@ -357,6 +364,57 @@
             }
         }
         document.addEventListener('DOMNodeInserted', vfastpost); // 监听插入事件
+    }
+
+
+    // 自定义小尾巴内容
+    function customLittleTail() {
+        let newLittleTail = prompt('编辑 [自定义小尾巴内容]，刷新网页后生效\n（换行请使用 \\n 例如：我是第一行~\\n我是第二行~', GM_getValue('menu_customLittleTail'));
+        if (newLittleTail === '') {
+            GM_setValue('menu_customLittleTail', []);
+            registerMenuCommand(); // 重新注册脚本菜单
+        } else if (newLittleTail != null) {
+            GM_setValue('menu_customLittleTail', newLittleTail);
+            registerMenuCommand(); // 重新注册脚本菜单
+        }
+    };
+
+
+    // 小尾巴
+    function littleTail(type) {
+        if (!menu_value('menu_customLittleTail')) return
+        switch(type) {
+            case 'forum': // 各版块帖子列表的预览帖子
+                littleTail_1();
+                break;
+            case 'thread': // 帖子内
+                littleTail_1();
+                littleTail_2();
+                break;
+            case 'reply': // 高级回复
+                littleTail_3();
+                break;
+        }
+
+        function littleTail_1() {
+            let floatlayout_reply = e => {
+                if (e.target.innerHTML && e.target.innerHTML.indexOf('id="floatlayout_reply"') > -1) {
+                    document.getElementById('postsubmit').onclick = function(){document.getElementById('postmessage').value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');}
+                }
+            }
+            document.addEventListener('DOMNodeInserted', floatlayout_reply); // 监听插入事件
+        }
+
+        function littleTail_2() { // 帖子底部的回复框
+            document.getElementById('fastpostsubmit').onclick = function(){document.getElementById('fastpostmessage').value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');}
+        }
+
+        function littleTail_3() {
+            let postsubmit = document.getElementById('postsubmit');
+            if (postsubmit && postsubmit.innerText === '\n参与/回复主题\n') {
+                postsubmit.onclick = function(){document.getElementById('e_textarea').value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');}
+            }
+        }
     }
 
 
