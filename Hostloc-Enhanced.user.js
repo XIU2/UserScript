@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.2.8
+// @version      1.2.9
 // @author       X.I.U
 // @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
@@ -369,7 +369,7 @@
 
     // 自定义小尾巴内容
     function customLittleTail() {
-        let newLittleTail = prompt('编辑 [自定义小尾巴内容]，刷新网页后生效\n（换行请使用 \\n 例如：我是第一行~\\n我是第二行~', GM_getValue('menu_customLittleTail'));
+        let newLittleTail = prompt('编辑 [自定义小尾巴内容]，刷新网页后生效（换行请使用 \\n\n提示①：记得在小尾巴前面加上几个 \\n 换行，用来分隔开回帖内容~\n提示②：建议使用 [align=right] 标签来使小尾巴居右~\n提示③：支持论坛富文本标签（建议先找个回复编辑预览好~\n示例：\\n\\n\\n\\n[align=right]第一行内容~\\n第二行内容~[/align]', GM_getValue('menu_customLittleTail'));
         if (newLittleTail === '') {
             GM_setValue('menu_customLittleTail', []);
             registerMenuCommand(); // 重新注册脚本菜单
@@ -385,15 +385,27 @@
         if (!menu_value('menu_customLittleTail')) return
         switch(type) {
             case 'forum': // 各版块帖子列表的预览帖子
-                littleTail_1();
+                littleTail_0(); // 预览帖子 快速回复（底部）
+                littleTail_1(); // 预览帖子 回复（悬浮）
                 break;
             case 'thread': // 帖子内
-                littleTail_1();
-                littleTail_2();
+                littleTail_1(); // 快速回复（悬浮）
+                littleTail_2(); // 回复框（底部）
                 break;
             case 'reply': // 高级回复
                 littleTail_3();
                 break;
+        }
+
+        function littleTail_0() {
+            let vfastpost = e => {
+                if (e.target.innerHTML && e.target.innerHTML.indexOf('id="vfastpost"') > -1) {
+                    let message = e.target.querySelector('input[name="message"]'), id = message.id.match(/\d+/g)[0];
+                    message.parentNode.innerHTML = `<textarea type="text" name="message" id="vmessage_${id}" style="width: 99.8%;height: 30px;border: none;outline: none;font-size: 14px;overflow-y: hidden;"></textarea>`
+                    document.getElementById(`vreplysubmit_${id}`).onclick = function(){document.getElementById(`vmessage_${id}`).value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');}
+                }
+            }
+            document.addEventListener('DOMNodeInserted', vfastpost); // 监听插入事件
         }
 
         function littleTail_1() {
