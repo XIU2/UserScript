@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.1.3
+// @version      1.1.4
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -25,7 +25,10 @@
     var menu_ALL = [
         ['menu_runDuringTheDay', '白天保持开启 (比晚上亮一点点)', '白天保持开启', true],
         ['menu_autoRecognition', '排除自带暗黑模式的网页 (beta)', '排除自带暗黑模式的网页 (beta)', true],
-        ['menu_darkModeType', '点击切换模式', '点击切换模式', 1]
+        ['menu_darkModeType', '点击切换模式', '点击切换模式', 1],
+        ['menu_customMode1', '自定义模式 1', '自定义模式 1', '80|70'],
+        ['menu_customMode2', '自定义模式 2', '自定义模式 2', '80|20|70|30'],
+        ['menu_customMode3', '自定义模式 3', '自定义模式 3', '80']
     ], menu_ID = [], websiteList = ['rarbgprx.org','fitgirl-repacks.site','masquerade.site','www.gamersky.com'];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
@@ -49,11 +52,47 @@
                     GM_setValue('menu_darkModeType', menu_ALL[i][3]);
                 }
                 menu_ID[i] = GM_registerMenuCommand(`🔄 [ ${menu_ALL[i][3]} ] ${menu_ALL[i][1]}`, function(){menu_toggle(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
+            } else if (menu_ALL[i][0] === 'menu_customMode1') {
+                GM_setValue('menu_customMode1', menu_ALL[i][3]);
+                menu_ID[i] = GM_registerMenuCommand(`1️⃣ ${menu_ALL[i][1]}`, function(){menu_customMode(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
+            } else if (menu_ALL[i][0] === 'menu_customMode2') {
+                GM_setValue('menu_customMode2', menu_ALL[i][3]);
+                menu_ID[i] = GM_registerMenuCommand(`2️⃣ ${menu_ALL[i][1]}`, function(){menu_customMode(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
+            } else if (menu_ALL[i][0] === 'menu_customMode3') {
+                GM_setValue('menu_customMode3', menu_ALL[i][3]);
+                menu_ID[i] = GM_registerMenuCommand(`3️⃣ ${menu_ALL[i][1]}`, function(){menu_customMode(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
             } else {
                 menu_ID[i] = GM_registerMenuCommand(`🌝 [ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
             }
         }
         menu_ID[menu_ID.length] = GM_registerMenuCommand('💬 反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/412212/feedback', {active: true,insert: true,setParent: true});});
+    }
+
+
+    function menu_customMode(menu_status, Name) {
+        let newMods, tip, defaults;
+        switch(Name) {
+            case 'menu_customMode1':
+                tip = '自定义 [模式 1]，刷新网页后生效~\n格式：亮度 (白天)|亮度 (晚上)\n默认：80|70（均为百分比 1~100，不需要 % 符号）'
+                defaults = '80|70'
+                break;
+            case 'menu_customMode2':
+                tip = '自定义 [模式 2]，刷新网页后生效~\n格式：亮度 (白天)|暖色 (白天)|亮度 (晚上)|暖色 (晚上)\n默认：80|20|70|30（均为百分比 1~100，不需要 % 符号）'
+                defaults = '80|20|70|30'
+                break;
+            case 'menu_customMode3':
+                tip = '自定义 [模式 3]，刷新网页后生效~\n格式：反色\n默认：80（均为百分比 50~100，不需要 % 符号）'
+                defaults = '80'
+                break;
+        }
+        newMods = prompt(tip, GM_getValue(`${Name}`));
+        if (newMods === '') {
+            GM_setValue(`${Name}`, defaults);
+            registerMenuCommand(); // 重新注册脚本菜单
+        } else if (newMods != null) {
+            GM_setValue(`${Name}`, newMods);
+            registerMenuCommand(); // 重新注册脚本菜单
+        }
     }
 
 
@@ -97,18 +136,21 @@
     function addStyle() {
         let remove = false, style_Add = document.createElement('style'),
             hours = new Date().getHours(),
+            style_10 = GM_getValue('menu_customMode1').split('|'),
+            style_20 = GM_getValue('menu_customMode2').split('|'),
+            style_30 = GM_getValue('menu_customMode3').split('|'),
             style = ``,
             style_00 = `html, body {background-color: #ffffff;}`,
-            style_11 = `html {filter: brightness(80%) !important;}`,
-            style_11_firefox = `html {filter: brightness(80%) !important; background-image: url();}`,
-            style_12 = `html {filter: brightness(70%) !important;}`,
-            style_12_firefox = `html {filter: brightness(70%) !important; background-image: url();}`,
-            style_21 = `html {filter: brightness(80%) sepia(20%) !important;}`,
-            style_21_firefox = `html {filter: brightness(80%) sepia(20%) !important; background-image: url();}`,
-            style_22 = `html {filter: brightness(70%) sepia(30%) !important;}`,
-            style_22_firefox = `html {filter: brightness(70%) sepia(30%) !important; background-image: url();}`,
-            style_31 = `html {filter: invert(80%) !important;} img, video {filter: invert(1) !important;}`,
-            style_31_firefox = `html {filter: invert(80%) !important; background-image: url();} img, video {filter: invert(1) !important;}`;
+            style_11 = `html {filter: brightness(${style_10[0]}%) !important;}`,
+            style_11_firefox = `html {filter: brightness(${style_10[0]}%) !important; background-image: url();}`,
+            style_12 = `html {filter: brightness(${style_10[1]}%) !important;}`,
+            style_12_firefox = `html {filter: brightness(${style_10[1]}%) !important; background-image: url();}`,
+            style_21 = `html {filter: brightness(${style_20[0]}%) sepia(${style_20[1]}%) !important;}`,
+            style_21_firefox = `html {filter: brightness(${style_20[0]}%) sepia(${style_20[1]}%) !important; background-image: url();}`,
+            style_22 = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important;}`,
+            style_22_firefox = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important; background-image: url();}`,
+            style_31 = `html {filter: invert(${style_30[0]}%) !important;} img, video {filter: invert(1) !important;}`,
+            style_31_firefox = `html {filter: invert(${style_30[0]}%) !important; background-image: url();} img, video {filter: invert(1) !important;}`;
 
         // Firefox 浏览器需要特殊对待
         if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
