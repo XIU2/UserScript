@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.1.4
+// @version      1.1.5
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -26,6 +26,7 @@
         ['menu_runDuringTheDay', '白天保持开启 (比晚上亮一点点)', '白天保持开启', true],
         ['menu_autoRecognition', '排除自带暗黑模式的网页 (beta)', '排除自带暗黑模式的网页 (beta)', true],
         ['menu_darkModeType', '点击切换模式', '点击切换模式', 1],
+        ['menu_customMode', '自定义当前模式', '自定义当前模式', '80|70'],
         ['menu_customMode1', '自定义模式 1', '自定义模式 1', '80|70'],
         ['menu_customMode2', '自定义模式 2', '自定义模式 2', '80|20|70|30'],
         ['menu_customMode3', '自定义模式 3', '自定义模式 3', '80']
@@ -52,15 +53,15 @@
                     GM_setValue('menu_darkModeType', menu_ALL[i][3]);
                 }
                 menu_ID[i] = GM_registerMenuCommand(`🔄 [ ${menu_ALL[i][3]} ] ${menu_ALL[i][1]}`, function(){menu_toggle(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
+            } else if (menu_ALL[i][0] === 'menu_customMode') {
+                GM_setValue('menu_customMode', menu_ALL[i][3]);
+                menu_ID[i] = GM_registerMenuCommand(`✅ ${menu_ALL[i][1]}`, function(){menu_customMode()});
             } else if (menu_ALL[i][0] === 'menu_customMode1') {
                 GM_setValue('menu_customMode1', menu_ALL[i][3]);
-                menu_ID[i] = GM_registerMenuCommand(`1️⃣ ${menu_ALL[i][1]}`, function(){menu_customMode(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
             } else if (menu_ALL[i][0] === 'menu_customMode2') {
                 GM_setValue('menu_customMode2', menu_ALL[i][3]);
-                menu_ID[i] = GM_registerMenuCommand(`2️⃣ ${menu_ALL[i][1]}`, function(){menu_customMode(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
             } else if (menu_ALL[i][0] === 'menu_customMode3') {
                 GM_setValue('menu_customMode3', menu_ALL[i][3]);
-                menu_ID[i] = GM_registerMenuCommand(`3️⃣ ${menu_ALL[i][1]}`, function(){menu_customMode(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
             } else {
                 menu_ID[i] = GM_registerMenuCommand(`🌝 [ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
             }
@@ -69,30 +70,36 @@
     }
 
 
-    function menu_customMode(menu_status, Name) {
-        let newMods, tip, defaults;
-        switch(Name) {
-            case 'menu_customMode1':
-                tip = '自定义 [模式 1]，刷新网页后生效~\n格式：亮度 (白天)|亮度 (晚上)\n默认：80|70（均为百分比 1~100，不需要 % 符号）'
-                defaults = '80|70'
+    // 自定义当前模式
+    function menu_customMode() {
+        let newMods, tip, defaults, name;
+        switch(menu_value('menu_darkModeType')) {
+            case 1:
+                tip = '自定义 [模式 1]，修改后立即生效~\n格式：亮度 (白天)|亮度 (晚上)\n默认：80|70（均为百分比 1~100，不需要 % 符号）';
+                defaults = '80|70';
+                name = 'menu_customMode1';
                 break;
-            case 'menu_customMode2':
-                tip = '自定义 [模式 2]，刷新网页后生效~\n格式：亮度 (白天)|暖色 (白天)|亮度 (晚上)|暖色 (晚上)\n默认：80|20|70|30（均为百分比 1~100，不需要 % 符号）'
-                defaults = '80|20|70|30'
+            case 2:
+                tip = '自定义 [模式 2]，修改后立即生效~\n格式：亮度 (白天)|暖色 (白天)|亮度 (晚上)|暖色 (晚上)\n默认：80|20|70|30（均为百分比 1~100，不需要 % 符号）';
+                defaults = '80|20|70|30';
+                name = 'menu_customMode2';
                 break;
-            case 'menu_customMode3':
-                tip = '自定义 [模式 3]，刷新网页后生效~\n格式：反色\n默认：80（均为百分比 50~100，不需要 % 符号）'
-                defaults = '80'
+            case 3:
+                tip = '自定义 [模式 3]，修改后立即生效~\n格式：反色\n默认：80（均为百分比 50~100，不需要 % 符号）';
+                defaults = '80';
+                name = 'menu_customMode3';
                 break;
         }
-        newMods = prompt(tip, GM_getValue(`${Name}`));
+        newMods = prompt(tip, GM_getValue(`${name}`));
         if (newMods === '') {
-            GM_setValue(`${Name}`, defaults);
+            GM_setValue(`${name}`, defaults);
             registerMenuCommand(); // 重新注册脚本菜单
         } else if (newMods != null) {
-            GM_setValue(`${Name}`, newMods);
+            GM_setValue(`${name}`, newMods);
             registerMenuCommand(); // 重新注册脚本菜单
         }
+        document.getElementById('XIU2DarkMode').remove(); // 即时修改样式
+        addStyle();
     }
 
 
@@ -136,9 +143,9 @@
     function addStyle() {
         let remove = false, style_Add = document.createElement('style'),
             hours = new Date().getHours(),
-            style_10 = GM_getValue('menu_customMode1').split('|'),
-            style_20 = GM_getValue('menu_customMode2').split('|'),
-            style_30 = GM_getValue('menu_customMode3').split('|'),
+            style_10 = menu_value('menu_customMode1').split('|'),
+            style_20 = menu_value('menu_customMode2').split('|'),
+            style_30 = menu_value('menu_customMode3').split('|'),
             style = ``,
             style_00 = `html, body {background-color: #ffffff;}`,
             style_11 = `html {filter: brightness(${style_10[0]}%) !important;}`,
