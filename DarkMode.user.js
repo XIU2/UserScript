@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.1.5
+// @version      1.1.6
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -75,17 +75,17 @@
         let newMods, tip, defaults, name;
         switch(menu_value('menu_darkModeType')) {
             case 1:
-                tip = '自定义 [模式 1]，修改后立即生效~\n格式：亮度 (白天)|亮度 (晚上)\n默认：80|70（均为百分比 1~100，不需要 % 符号）';
+                tip = '自定义 [模式 1]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|亮度 (晚上)\n默认：80|70（均为百分比 1~100，不需要 % 符号）';
                 defaults = '80|70';
                 name = 'menu_customMode1';
                 break;
             case 2:
-                tip = '自定义 [模式 2]，修改后立即生效~\n格式：亮度 (白天)|暖色 (白天)|亮度 (晚上)|暖色 (晚上)\n默认：80|20|70|30（均为百分比 1~100，不需要 % 符号）';
+                tip = '自定义 [模式 2]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|暖色 (白天)|亮度 (晚上)|暖色 (晚上)\n默认：80|20|70|30（均为百分比 1~100，不需要 % 符号）';
                 defaults = '80|20|70|30';
                 name = 'menu_customMode2';
                 break;
             case 3:
-                tip = '自定义 [模式 3]，修改后立即生效~\n格式：反色\n默认：80（均为百分比 50~100，不需要 % 符号）';
+                tip = '自定义 [模式 3]，修改后立即生效 (部分网页可能需要刷新)~\n格式：反色\n默认：80（均为百分比 50~100，不需要 % 符号）';
                 defaults = '80';
                 name = 'menu_customMode3';
                 break;
@@ -98,8 +98,10 @@
             GM_setValue(`${name}`, newMods);
             registerMenuCommand(); // 重新注册脚本菜单
         }
-        document.getElementById('XIU2DarkMode').remove(); // 即时修改样式
-        addStyle();
+        if (document.getElementById('XIU2DarkMode')) {
+            document.getElementById('XIU2DarkMode').remove(); // 即时修改样式
+            addStyle();
+        }
     }
 
 
