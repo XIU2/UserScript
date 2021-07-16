@@ -32,7 +32,7 @@
 | [<img src="https://www.52pojie.cn/favicon.ico" height="16px" />](https://www.52pojie.cn) | **吾爱破解论坛 美化** | 精简多余内容、样式优化 | **[安装](https://greasyfork.org/zh-CN/scripts/412681)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Beautification.user.js)** |
 | [<img src="https://www.52pojie.cn/favicon.ico" height="16px" />](https://www.52pojie.cn) | **吾爱破解论坛 增强** | **自动签到**、自动无缝翻页、屏蔽导读悬赏贴 (最新发表页)... | **[安装](https://greasyfork.org/zh-CN/scripts/412680)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/52pojie-Enhanced.user.js)** |
 | [<img src="https://i.loli.net/2021/03/30/tvOSNCmi4rIH3Ju.png" height="16px" />](https://hostloc.com) | **全球主机交流论坛 增强 \*** | **自动访问空间、屏蔽用户**、屏蔽关键词、自动无缝翻页等... | **[安装](https://greasyfork.org/zh-CN/scripts/414005)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/Hostloc-Enhanced.user.js)** |
-| [<img src="https://store.steampowered.com/favicon.ico" height="16px" />](https://store.steampowered.com) | **Steam 创意工坊大图 修复** | 修复 Steam 创意工坊预览大图无法显示的问题 | **[安装](https://greasyfork.org/zh-CN/scripts/397666)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/SteamWorkshopImageRepair.user.js)** |
+| [<img src="https://store.steampowered.com/favicon.ico" height="16px" />](https://store.steampowered.com) | **Steam 创意工坊大图 修复** | 修复 Steam 创意工坊预览大图无法显示的问题 | **[安装](https://github.com/XIU2/UserScript/raw/master/SteamWorkshopImageRepair.user.js)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript@master/SteamWorkshopImageRepair.user.js)** |
 
 > _脚本名称末尾 **`*`** 代表该脚本为**网友主动提出需求**而写的。如果你也有需求，可以[告诉我](https://github.com/XIU2/UserScript/issues/new/choose)！_  
 > _所有脚本均在 **Chrome、Firefox、Edge 浏览器 + Tampermonkey 扩展** 环境下测试通过！_
