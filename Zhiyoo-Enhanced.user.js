@@ -16,6 +16,8 @@
 // @license      GPL-3.0 License
 // @run-at       document-end
 // @namespace    https://greasyfork.org/scripts/412362
+// @supportURL   https://github.com/XIU2/UserScript
+// @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
 (function() {

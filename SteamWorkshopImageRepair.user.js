@@ -9,6 +9,8 @@
 // @license      GPL-3.0 License
 // @run-at       document-end
 // @namespace    https://github.com/XIU2/UserScript
+// @supportURL   https://github.com/XIU2/UserScript
+// @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
 if(typeof onYouTubeIframeAPIReady == 'function') {
