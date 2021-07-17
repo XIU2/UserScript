@@ -19,6 +19,7 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
+'use strict';
 var menu_ALL = [
     ['menu_collapsedAnswer', '一键收起回答', '一键收起回答', true],
     ['menu_collapsedNowAnswer', '收起当前回答/评论（点击两侧空白处）', '收起当前回答/评论', true],

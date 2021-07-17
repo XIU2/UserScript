@@ -19,6 +19,7 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
+'use strict';
 (function() {
     var backColor = '#ffffff';
     var fontColor = '#888888';

@@ -19,6 +19,7 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
+'use strict';
 (function() {
     var menu_streamline = GM_getValue('xiu2_menu_streamline');
     var menu_streamline_ID, menu_feedBack_ID;

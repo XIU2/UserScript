@@ -20,6 +20,7 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
+'use strict';
 (function() {
     var menu_ALL = [
         ['menu_autoReply', '自动回复', '自动回复', true],

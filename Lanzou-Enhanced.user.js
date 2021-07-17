@@ -30,6 +30,8 @@
 // @supportURL   https://github.com/XIU2/UserScript
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
+
+'use strict';
 (function() {
     var menu_ALL = [
         ['menu_open_fileSha', '自动打开分享链接', '自动打开分享链接', true],

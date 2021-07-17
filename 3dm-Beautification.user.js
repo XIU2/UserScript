@@ -12,6 +12,7 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
+'use strict';
 (function() {
     let style_Add = document.createElement('style');
     style_Add.innerHTML = `

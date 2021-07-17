@@ -20,6 +20,7 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
+'use strict';
 (function() {
     var menu_ALL = [
         ['menu_autoClockIn', '自动签到', '自动签到', true],
