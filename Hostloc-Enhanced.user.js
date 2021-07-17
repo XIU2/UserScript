@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.2.9
+// @version      1.3.0
 // @author       X.I.U
 // @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
@@ -137,6 +137,15 @@
                 HT_insert: ['css;div#threadlist div.bm_c table', 2],
                 replaceE: 'css;div.pg',
             }
+        },
+        youreply: {
+            SiteTypeID: 5,
+            pager: {
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;tbody > tr',
+                HT_insert: ['css;tbody', 2],
+                replaceE: 'css;div.pg',
+            }
         }
     };
 
@@ -183,6 +192,8 @@
         blockUsers('pm'); //                                              屏蔽用户（黑名单）
     } else if(location.pathname === '/forum.php' && location.search.indexOf('mod=guide&view=my&type=reply') > -1) { // 我的帖子：回复
         curSite = DBSite.myreply;
+    } else if(location.pathname === '/home.php' && location.search.indexOf('&do=thread&view=me') > -1) { // 别人的帖子：回复
+        curSite = DBSite.youreply;
     } else if(location.pathname === '/forum.php' && location.search.indexOf('mod=post&action=reply') > -1 || location.pathname === '/forum.php' && location.search.indexOf('mod=post&action=newthread') > -1) { // 回复：高级回复
         littleTail('reply'); //                                           小尾巴
     }
