@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.4.6
+// @version      1.4.7
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽指定用户、屏蔽指定关键词（标题）、屏蔽盐选内容、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -14,7 +14,7 @@
 // @grant        GM_notification
 // @license      GPL-3.0 License
 // @run-at       document-end
-// @namespace    https://greasyfork.org/scripts/412205
+// @namespace    https://greasyfork.org/scripts/4122051
 // @supportURL   https://github.com/XIU2/UserScript
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
@@ -244,8 +244,12 @@ function blockUsers(type) {
         case 'search':
             blockUsers_search();
             break;
+        case 'people':
+            blockUsers_button_people(); // 添加屏蔽用户按钮（用户主页）
+            break;
     }
-    blockUsers_comment(); // 评论区
+    blockUsers_comment(); //       评论区
+    blockUsers_button(); //        加入黑名单按钮
 
     function blockUsers_index() {
         let blockUsers = e => {
@@ -346,10 +350,64 @@ function blockUsers(type) {
                             }
                         }
                     })
+
+                    // 添加屏蔽用户按钮（点赞、回复等按钮后面）
+                    if (item1) {
+                        let footer = item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.CommentItemV2-metaSibling > .CommentItemV2-footer');
+                        if (footer && !footer.lastElementChild.dataset.name) {
+                            footer.insertAdjacentHTML('beforeend',`<button type="button" data-name="${item1.alt}" class="Button CommentItemV2-hoverBtn Button--plain"><span style="display: inline-flex; align-items: center;"><svg class="Zi Zi--Like" fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="transform: rotate(180deg); margin-right: 5px;"><path d="M18.376 5.624c-3.498-3.499-9.254-3.499-12.752 0-3.499 3.498-3.499 9.254 0 12.752 3.498 3.499 9.254 3.499 12.752 0 3.499-3.498 3.499-9.14 0-12.752zm-1.693 1.693c2.37 2.37 2.596 6.094.678 8.69l-9.367-9.48c2.708-1.919 6.32-1.58 8.69.79zm-9.48 9.48c-2.37-2.37-2.595-6.095-.676-8.69l9.48 9.48c-2.822 1.918-6.433 1.58-8.803-.79z" fill-rule="evenodd"></path></svg></span>屏蔽用户</button>`);
+                            footer.lastElementChild.onclick = function(){blockUsers_button_add(this.dataset.name)}
+                        }
+                    }
                 })
             }
         }
         document.addEventListener('DOMNodeInserted', blockUsers); // 监听插入事件
+    }
+
+    // 添加屏蔽用户按钮（用户信息悬浮框中）
+    function blockUsers_button() {
+        let blockUsers = e => {
+            if (e.target.innerHTML && e.target.querySelector('.MemberButtonGroup.ProfileButtonGroup.HoverCard-buttons')) {
+                let item = e.target.querySelector('.MemberButtonGroup.ProfileButtonGroup.HoverCard-buttons'),
+                    name = item.parentNode.parentNode.querySelector('a.UserLink-link').innerText;
+                item.insertAdjacentHTML('beforeend', `<button type="button" data-name="${name}" class="Button FollowButton Button--primary Button--red" style="width: 100%;margin: 7px 0 0 0;"><span style="display: inline-flex; align-items: center;">​<svg class="Zi Zi--Plus FollowButton-icon" fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M18.376 5.624c-3.498-3.499-9.254-3.499-12.752 0-3.499 3.498-3.499 9.254 0 12.752 3.498 3.499 9.254 3.499 12.752 0 3.499-3.498 3.499-9.14 0-12.752zm-1.693 1.693c2.37 2.37 2.596 6.094.678 8.69l-9.367-9.48c2.708-1.919 6.32-1.58 8.69.79zm-9.48 9.48c-2.37-2.37-2.595-6.095-.676-8.69l9.48 9.48c-2.822 1.918-6.433 1.58-8.803-.79z" fill-rule="evenodd"></path></svg></span>屏蔽用户</button>`);
+                item.lastElementChild.onclick = function(){blockUsers_button_add(this.dataset.name)}
+            }
+        }
+        document.addEventListener('DOMNodeInserted', blockUsers); // 监听插入事件
+    }
+
+    // 添加屏蔽用户按钮（用户主页）
+    function blockUsers_button_people() {
+        let item = document.querySelector('.MemberButtonGroup.ProfileButtonGroup.ProfileHeader-buttons'), // 获取按钮元素位置
+            name = document.querySelector('.ProfileHeader-name').firstChild.textContent, // 获取用户名
+            users = menu_value('menu_customBlockUsers'); // 读取屏蔽列表
+        for (let num = 0;num<users.length;num++) { // 判断是否已存在
+            if (users[num] === name) {
+                item.insertAdjacentHTML('beforeend', `<button type="button" data-name="${name}" disabled class="Button FollowButton Button--primary Button--red" style="margin: 0 0 0 12px;"><span style="display: inline-flex; align-items: center;">​<svg class="Zi Zi--Plus FollowButton-icon" fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M18.376 5.624c-3.498-3.499-9.254-3.499-12.752 0-3.499 3.498-3.499 9.254 0 12.752 3.498 3.499 9.254 3.499 12.752 0 3.499-3.498 3.499-9.14 0-12.752zm-1.693 1.693c2.37 2.37 2.596 6.094.678 8.69l-9.367-9.48c2.708-1.919 6.32-1.58 8.69.79zm-9.48 9.48c-2.37-2.37-2.595-6.095-.676-8.69l9.48 9.48c-2.822 1.918-6.433 1.58-8.803-.79z" fill-rule="evenodd"></path></svg></span>已屏蔽</button>`);
+                return
+            }
+        };
+        if (item) {
+            item.insertAdjacentHTML('beforeend', `<button type="button" data-name="${name}" class="Button FollowButton Button--primary Button--red" style="margin: 0 0 0 12px;"><span style="display: inline-flex; align-items: center;">​<svg class="Zi Zi--Plus FollowButton-icon" fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M18.376 5.624c-3.498-3.499-9.254-3.499-12.752 0-3.499 3.498-3.499 9.254 0 12.752 3.498 3.499 9.254 3.499 12.752 0 3.499-3.498 3.499-9.14 0-12.752zm-1.693 1.693c2.37 2.37 2.596 6.094.678 8.69l-9.367-9.48c2.708-1.919 6.32-1.58 8.69.79zm-9.48 9.48c-2.37-2.37-2.595-6.095-.676-8.69l9.48 9.48c-2.822 1.918-6.433 1.58-8.803-.79z" fill-rule="evenodd"></path></svg></span>屏蔽用户</button>`);
+            item.lastElementChild.onclick = function(){blockUsers_button_add(this.dataset.name)}
+        }
+    }
+
+    // 屏蔽用户按钮绑定事件
+    function blockUsers_button_add(name) {
+        if (!name) return
+        let users = menu_value('menu_customBlockUsers'); // 读取屏蔽列表
+        for (let num = 0;num<users.length;num++) { // 判断是否已存在
+            if (users[num] === name) {
+                GM_notification({text: `该用户已经被屏蔽啦~`, timeout: 3000});
+                return
+            }
+        };
+        users.push(name); // 追加用户名
+        GM_setValue('menu_customBlockUsers', users); // 写入屏蔽列表
+        GM_notification({text: `该用户已被屏蔽~\n刷新网页后生效~`, timeout: 3000});
     }
 }
 
@@ -936,7 +994,7 @@ function questionInvitation(){
         collapsedNowAnswer("main div"); //                                 收起当前回答 + 快捷返回顶部
         collapsedNowAnswer(".Profile-main"); //                            收起当前回答 + 快捷返回顶部
         setInterval(topTime_people, 300); //                               置顶显示时间
-        blockUsers(); //                                                   屏蔽指定用户
+        blockUsers('people'); //                                                   屏蔽指定用户
         blockKeywords('people'); //                                        屏蔽指定关键词
     } else { //                                                     首页 //
         collapsedAnswer(); //                                              一键收起回答
