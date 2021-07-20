@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.2.0
+// @version      1.2.1
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -254,6 +254,9 @@
             GM_setValue(`${Name}`, true);
             GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
         }
+        if (Name === 'menu_autoRecognition') {
+            location.reload(); // 刷新网页
+        }
         registerMenuCommand(); // 重新注册脚本菜单
     };
 
@@ -332,7 +335,10 @@
             }, 5);
         }
 
-        let websiteList = menu_value('menu_forcedToEnable'); // 强制当前网站启用护眼模式
+        let websiteList = [];
+        if (menu_value('menu_autoRecognition')) { // 智能排除自带暗黑模式的网页 (beta)
+            websiteList = menu_value('menu_forcedToEnable'); // 强制当前网站启用护眼模式
+        }
 
         // 为了避免 body 还没加载导致无法检查是否设置背景颜色
         let timer = setInterval(function(){ // 每 10 毫秒检查一下 body 是否已存在
