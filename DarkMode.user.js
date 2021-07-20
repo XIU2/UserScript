@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.1.6
+// @version      1.2.0
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -26,19 +26,18 @@
 'use strict';
 (function() {
     var menu_ALL = [
+        ['menu_disable', '✅ 已启用 (点击对当前网站禁用)', '❎ 已禁用 (点击对当前网站启用)', []],
         ['menu_runDuringTheDay', '白天保持开启 (比晚上亮一点点)', '白天保持开启', true],
-        ['menu_autoRecognition', '排除自带暗黑模式的网页 (beta)', '排除自带暗黑模式的网页 (beta)', true],
+        ['menu_autoRecognition', '智能排除自带暗黑模式的网页 (beta)', '智能排除自带暗黑模式的网页 (beta)', true],
+        ['menu_forcedToEnable', '✅ 已强制当前网站启用护眼模式 (👆)', '❎ 未强制当前网站启用护眼模式 (👆)', []],
         ['menu_darkModeType', '点击切换模式', '点击切换模式', 1],
-        ['menu_customMode', '自定义当前模式', '自定义当前模式', '80|70'],
-        ['menu_customMode1', '自定义模式 1', '自定义模式 1', '80|70'],
-        ['menu_customMode2', '自定义模式 2', '自定义模式 2', '80|20|70|30'],
-        ['menu_customMode3', '自定义模式 3', '自定义模式 3', '80']
-    ], menu_ID = [], websiteList = ['rarbgprx.org','fitgirl-repacks.site','masquerade.site','www.gamersky.com'];
+        ['menu_customMode', '自定义当前模式', '自定义当前模式', true], ['menu_customMode1',,,'80|70'], ['menu_customMode2',,,'80|20|70|30'], ['menu_customMode3',,,'80']
+    ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
     }
     registerMenuCommand();
-    addStyle();
+    if (menu_ID.length > 1) {addStyle();}
 
 
     // 注册脚本菜单
@@ -50,26 +49,63 @@
         }
         for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
             menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
-            if (menu_ALL[i][0] === 'menu_darkModeType') {
-                if (menu_ALL[i][3] > 3){ // 避免在减少 raw 数组后，用户储存的数据大于数组而报错
-                    menu_ALL[i][3] = 1;
-                    GM_setValue('menu_darkModeType', menu_ALL[i][3]);
+            if (menu_ALL[i][0] === 'menu_disable')
+            { // 启用/禁用护眼模式 (当前网站)
+                if (menu_disable('check')) { // 当前网站是否已存在禁用列表中
+                    menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][2]}`, function(){menu_disable('del')});
+                    return
+                } else {
+                    menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][1]}`, function(){menu_disable('add')});
                 }
-                menu_ID[i] = GM_registerMenuCommand(`🔄 [ ${menu_ALL[i][3]} ] ${menu_ALL[i][1]}`, function(){menu_toggle(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
-            } else if (menu_ALL[i][0] === 'menu_customMode') {
-                GM_setValue('menu_customMode', menu_ALL[i][3]);
-                menu_ID[i] = GM_registerMenuCommand(`✅ ${menu_ALL[i][1]}`, function(){menu_customMode()});
-            } else if (menu_ALL[i][0] === 'menu_customMode1') {
-                GM_setValue('menu_customMode1', menu_ALL[i][3]);
-            } else if (menu_ALL[i][0] === 'menu_customMode2') {
-                GM_setValue('menu_customMode2', menu_ALL[i][3]);
-            } else if (menu_ALL[i][0] === 'menu_customMode3') {
-                GM_setValue('menu_customMode3', menu_ALL[i][3]);
-            } else {
-                menu_ID[i] = GM_registerMenuCommand(`🌝 [ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+            }
+            else if (menu_ALL[i][0] === 'menu_darkModeType')
+            { // 点击切换模式
+                if (menu_ALL[i][3] > 3) { // 避免在减少 raw 数组后，用户储存的数据大于数组而报错
+                    menu_ALL[i][3] = 1;
+                    GM_setValue(menu_ALL[i][0], menu_ALL[i][3]);
+                }
+                menu_ID[i] = GM_registerMenuCommand(`${menu_num(menu_ALL[i][3])} ${menu_ALL[i][1]}`, function(){menu_toggle(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
+            }
+            else if (menu_ALL[i][0] === 'menu_customMode')
+            { // 自定义当前模式
+                GM_setValue(menu_ALL[i][0], menu_ALL[i][3]);
+                menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_customMode()});
+            }
+            else if (menu_ALL[i][0] === 'menu_customMode1' || menu_ALL[i][0] === 'menu_customMode2' || menu_ALL[i][0] === 'menu_customMode3')
+            { // 当前模式值
+                GM_setValue(menu_ALL[i][0], menu_ALL[i][3]);
+            }
+            else if (menu_ALL[i][0] === 'menu_forcedToEnable')
+            { // 强制当前网站启用护眼模式
+                if (menu_value('menu_autoRecognition')) { // 自动排除自带暗黑模式的网页 (beta)
+                    if (menu_forcedToEnable('check')) { // 当前网站是否已存在列表中
+                        menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][1]}`, function(){menu_forcedToEnable('del')});
+                    } else {
+                        menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][2]}`, function(){menu_forcedToEnable('add')});
+                    }
+                }
+            }
+            else
+            {
+                menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❎'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
             }
         }
         menu_ID[menu_ID.length] = GM_registerMenuCommand('💬 反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/412212/feedback', {active: true,insert: true,setParent: true});});
+    }
+
+
+    function menu_num(num) {
+        switch(num) {
+            case 1:
+                return '1️⃣'
+                break;
+            case 2:
+                return '2️⃣'
+                break;
+            case 3:
+                return '3️⃣'
+                break;
+        }
     }
 
 
@@ -104,6 +140,94 @@
         if (document.getElementById('XIU2DarkMode')) {
             document.getElementById('XIU2DarkMode').remove(); // 即时修改样式
             addStyle();
+        }
+    }
+
+
+    // 强制当前网站启用护眼模式
+    function menu_forcedToEnable(type) {
+        switch(type) {
+            case 'check':
+                if(check()) return true
+                return false
+                break;
+            case 'add':
+                add();
+                break;
+            case 'del':
+                del();
+                break;
+        }
+
+        function check() { // 存在返回真，不存在返回假
+            let websiteList = menu_value('menu_forcedToEnable'); // 读取网站列表
+            for (let num = 0;num<websiteList.length;num++) { // 判断是否已存在
+                if (websiteList[num] === location.host) {
+                    return true
+                }
+            };
+            return false
+        }
+
+        function add() {
+            if (check()) return
+            let websiteList = menu_value('menu_forcedToEnable'); // 读取网站列表
+            websiteList.push(location.host); // 追加网站域名
+            GM_setValue('menu_forcedToEnable', websiteList); // 写入配置
+            location.reload(); // 刷新网页
+        }
+
+        function del() {
+            if (!check()) return
+            let websiteList = menu_value('menu_forcedToEnable'), // 读取网站列表
+            index = websiteList.indexOf(location.host);
+            websiteList.splice(index, 1); // 删除网站域名
+            GM_setValue('menu_forcedToEnable', websiteList); // 写入配置
+            location.reload(); // 刷新网页
+        }
+    }
+
+
+    // 启用/禁用护眼模式 (当前网站)
+    function menu_disable(type) {
+        switch(type) {
+            case 'check':
+                if(check()) return true
+                return false
+                break;
+            case 'add':
+                add();
+                break;
+            case 'del':
+                del();
+                break;
+        }
+
+        function check() { // 存在返回真，不存在返回假
+            let websiteList = menu_value('menu_disable'); // 读取网站列表
+            for (let num = 0;num<websiteList.length;num++) { // 判断是否已存在
+                if (websiteList[num] === location.host) {
+                    return true
+                }
+            };
+            return false
+        }
+
+        function add() {
+            if (check()) return
+            let websiteList = menu_value('menu_disable'); // 读取网站列表
+            websiteList.push(location.host); // 追加网站域名
+            GM_setValue('menu_disable', websiteList); // 写入配置
+            location.reload(); // 刷新网页
+        }
+
+        function del() {
+            if (!check()) return
+            let websiteList = menu_value('menu_disable'), // 读取网站列表
+            index = websiteList.indexOf(location.host);
+            websiteList.splice(index, 1); // 删除网站域名
+            GM_setValue('menu_disable', websiteList); // 写入配置
+            location.reload(); // 刷新网页
         }
     }
 
@@ -207,6 +331,8 @@
                 }
             }, 5);
         }
+
+        let websiteList = menu_value('menu_forcedToEnable'); // 强制当前网站启用护眼模式
 
         // 为了避免 body 还没加载导致无法检查是否设置背景颜色
         let timer = setInterval(function(){ // 每 10 毫秒检查一下 body 是否已存在
