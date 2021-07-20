@@ -91,7 +91,7 @@
         if (menu_raw_fast > raw_url.length - 1) { // 避免在减少 raw 数组后，用户储存的数据大于数组而报错
             menu_raw_fast = 0
         }
-        menu_menu_raw_fast_ID = GM_registerMenuCommand(`🔄 [ ${raw_url[menu_raw_fast][1]} ] 加速源 (☁) - 点击切换`, menu_toggle_raw_fast);
+        menu_menu_raw_fast_ID = GM_registerMenuCommand(`${menu_num(menu_raw_fast)} [ ${raw_url[menu_raw_fast][1]} ] 加速源 (☁) - 点击切换`, menu_toggle_raw_fast);
         menu_feedBack_ID = GM_registerMenuCommand('💬 反馈 & 建议 [Github]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/412245/feedback', {active: true,insert: true,setParent: true});});
     }
 
@@ -108,6 +108,32 @@
         GM_notification({text: "已切换加速源为：" + raw_url[menu_raw_fast][1], timeout: 3000}); // 提示消息
         registerMenuCommand(); // 重新注册脚本菜单
     };
+
+    function menu_num(num) {
+        switch(num) {
+            case 0:
+                return '0️⃣'
+                break;
+            case 1:
+                return '1️⃣'
+                break;
+            case 2:
+                return '2️⃣'
+                break;
+            case 3:
+                return '3️⃣'
+                break;
+            case 4:
+                return '4️⃣'
+                break;
+            case 5:
+                return '5️⃣'
+                break;
+            case 6:
+                return '6️⃣'
+                break;
+        }
+    }
 
     addRelease(); // Release 加速
     addDownloadZIP(); // Download ZIP 加速

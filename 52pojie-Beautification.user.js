@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛美化
-// @version      1.0.8
+// @version      1.0.0
 // @author       X.I.U
 // @description  精简多余内容、样式优化
 // @match        *://www.52pojie.cn/*
@@ -38,9 +38,9 @@
         }
         for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
             menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
-            menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+            menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❎'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
         }
-        menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/412681/feedback', {active: true,insert: true,setParent: true});});
+        menu_ID[menu_ID.length] = GM_registerMenuCommand('💬 反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/412681/feedback', {active: true,insert: true,setParent: true});});
     }
 
     // 菜单开关
@@ -81,8 +81,6 @@ a[href="connect.php?mod=config"], #toptb, #navmenu, #nv_ph, #nv, #pt .y, #chart,
 		margin:0 0 2px;
 	}
 	.pls .avatar img {
-		width:100px;
-		height:100px;
 		background:none;
 		padding:0;
 		border:4px solid #ffffff
@@ -90,9 +88,6 @@ a[href="connect.php?mod=config"], #toptb, #navmenu, #nv_ph, #nv, #pt .y, #chart,
 	.avtm img {
 		width:60px;
 	}
-}
-.pls .avatar {
-	text-align:center;
 }
 .t_fsz {
 	min-height:60px;
@@ -144,14 +139,26 @@ textarea#fastpostmessage {
 	border-bottom:0;
 	background:0;
 }
+
+.pls .o li {
+    margin: 0 !important;;
+    height: 20px !important;;
+    line-height: 20px !important;;
+}
+
+/* 左侧层主信息 */
+.pls .avatar img {width: auto !important;max-height: 100px !important;}
+.pls .avatar {text-align:center !important; margin: 0 !important;}
+.pls .tns {padding: 0 !important;}
+
 /* 链接点击后颜色变浅（灰白色） */
 .tl th a:visited, .tl td.fn a:visited {
     color: #aaa;
-}`,
-            style_Add = document.createElement('style');
+}`;
+            //style_Add = document.createElement('style');
         style = style_2
         if (menu_value('menu_rule')) style += style_1;
-        style_Add.innerHTML = style;
+        /*style_Add.innerHTML = style;
         if (document.head) {
             document.head.appendChild(style_Add);
         } else {
@@ -161,6 +168,7 @@ textarea#fastpostmessage {
                     clearInterval(timer);
                 }
             }, 1);
-        }
+        }*/
+        document.lastChild.appendChild(document.createElement("style")).textContent = style;
     }
 })();

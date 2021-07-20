@@ -49,12 +49,12 @@
                     menu_ALL[i][3] = 1;
                     GM_setValue('menu_darkModeType', menu_ALL[i][3]);
                 }
-                menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]} ] ${menu_ALL[i][1]}`, function(){menu_toggle(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
+                menu_ID[i] = GM_registerMenuCommand(`${menu_num(menu_ALL[i][3])} ${menu_ALL[i][1]}`, function(){menu_toggle(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
             } else {
-                menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+                menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❎'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
             }
         }
-        menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/412212/feedback', {active: true,insert: true,setParent: true});});
+        menu_ID[menu_ID.length] = GM_registerMenuCommand('💬 反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/412212/feedback', {active: true,insert: true,setParent: true});});
     }
 
     // 切换暗黑模式
@@ -78,6 +78,23 @@
             registerMenuCommand(); // 重新注册脚本菜单
         }
     };
+
+    function menu_num(num) {
+        switch(num) {
+            case 1:
+                return '1️⃣'
+                break;
+            case 2:
+                return '2️⃣'
+                break;
+            case 3:
+                return '3️⃣'
+                break;
+            case 4:
+                return '4️⃣'
+                break;
+        }
+    }
 
     // 菜单开关
     function menu_switch(menu_status, Name, Tips) {

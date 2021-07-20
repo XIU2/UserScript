@@ -53,18 +53,18 @@
         for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
             menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
             if (menu_ALL[i][0] === 'menu_reAutoSignIn') {
-                menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){reAutoSignIn()});
+                menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){reAutoSignIn()});
             } else if (menu_ALL[i][0] === 'menu_customBlockUsers') {
-                menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){customBlockUsers()});
+                menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockUsers()});
             } else if (menu_ALL[i][0] === 'menu_customBlockKeywords') {
-                menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){customBlockKeywords()});
+                menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockKeywords()});
             } else if (menu_ALL[i][0] === 'menu_customLittleTail') {
-                menu_ID[i] = GM_registerMenuCommand(`[ ⚑ ] ${menu_ALL[i][1]}`, function(){customLittleTail()});
+                menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customLittleTail()});
             } else {
-                menu_ID[i] = GM_registerMenuCommand(`[ ${menu_ALL[i][3]?'√':'×'} ] ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+                menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❎'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
             }
         }
-        menu_ID[menu_ID.length] = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/414005/feedback', {active: true,insert: true,setParent: true});});
+        menu_ID[menu_ID.length] = GM_registerMenuCommand('💬 反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/414005/feedback', {active: true,insert: true,setParent: true});});
     }
 
     // 菜单开关
