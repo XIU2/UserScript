@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.5.5
+// @version      1.5.6
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -19,8 +19,8 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
-'use strict';
 (function() {
+    'use strict';
     var backColor = '#ffffff';
     var fontColor = '#888888';
     if (document.getElementsByTagName('html')[0].getAttribute('data-color-mode') === 'dark') { // 黑暗模式判断
@@ -151,15 +151,27 @@
         setTimeout(addRawDownLink, 2000); // 添加 Raw 下载链接（☁），延迟 2 秒执行，避免被 pjax 刷掉
     });
 
-    pushHistory();
+    addLocationchange();
+    window.addEventListener('locationchange', function(){
+        addRawDownLink_(); // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）事件
+    })
+
+    /*pushHistory();
     window.addEventListener('popstate', function(e) {
-        addRawDownLink_(); // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）鼠标事件
+        addRawDownLink_(); // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）事件
     }, false);
     function pushHistory() {
         let state = {title: 'title',url: '#'};
         window.history.pushState(state, '', '');
-    }
+    }*/
 
+    /*let oldUrl = location.href,
+    timer = setInterval(function(){
+        if (oldUrl != location.href) {
+            oldUrl = location.href;
+            addRawDownLink_(); // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）事件
+        }
+    }, 1000);*/
 
     // Release
     function addRelease() {
@@ -408,6 +420,28 @@
             // 绑定鼠标事件
             trElm.onmouseover = mouseOverHandler;
             trElm.onmouseout = mouseOutHandler;
+        });
+    }
+
+
+    // 自定义 locationchange 事件（用来监听 URL 变化，针对的是 Github 这种因为使用 pjax 而无法依靠 hashchange 监听的网页）
+    function addLocationchange() {
+        history.pushState = ( f => function pushState(){
+            var ret = f.apply(this, arguments);
+            window.dispatchEvent(new Event('pushstate'));
+            window.dispatchEvent(new Event('locationchange'));
+            return ret;
+        })(history.pushState);
+
+        history.replaceState = ( f => function replaceState(){
+            var ret = f.apply(this, arguments);
+            window.dispatchEvent(new Event('replacestate'));
+            window.dispatchEvent(new Event('locationchange'));
+            return ret;
+        })(history.replaceState);
+
+        window.addEventListener('popstate',()=>{
+            window.dispatchEvent(new Event('locationchange'))
         });
     }
 })();
