@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.2.1
+// @version      1.2.2
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -12,6 +12,7 @@
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
+// @grant        GM_openInTab
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_notification
@@ -161,12 +162,8 @@
 
         function check() { // 存在返回真，不存在返回假
             let websiteList = menu_value('menu_forcedToEnable'); // 读取网站列表
-            for (let num = 0;num<websiteList.length;num++) { // 判断是否已存在
-                if (websiteList[num] === location.host) {
-                    return true
-                }
-            };
-            return false
+            if (websiteList.indexOf(location.host) === -1) return false // 不存在返回假
+            return true
         }
 
         function add() {
@@ -205,12 +202,8 @@
 
         function check() { // 存在返回真，不存在返回假
             let websiteList = menu_value('menu_disable'); // 读取网站列表
-            for (let num = 0;num<websiteList.length;num++) { // 判断是否已存在
-                if (websiteList[num] === location.host) {
-                    return true
-                }
-            };
-            return false
+            if (websiteList.indexOf(location.host) === -1) return false // 不存在返回假
+            return true
         }
 
         function add() {
@@ -288,7 +281,7 @@
             style_21_firefox = `html {filter: brightness(${style_20[0]}%) sepia(${style_20[1]}%) !important; background-image: url();}`,
             style_22 = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important;}`,
             style_22_firefox = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important; background-image: url();}`,
-            style_31 = `html {filter: invert(${style_30[0]}%) !important;} img, video {filter: invert(1) !important;}`,
+            style_31 = `html {filter: invert(${style_30[0]}%) !important;} img, video {filter: invert(1) !important;} .mode-fullscreen video {filter: none !important;}`,
             style_31_firefox = `html {filter: invert(${style_30[0]}%) !important; background-image: url();} img, video {filter: invert(1) !important;}`;
 
         // Firefox 浏览器需要特殊对待
