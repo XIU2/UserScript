@@ -37,6 +37,7 @@
                        'www.3dmgame.com',
                        'www.gamersky.com',
                        'www.ali213.net',
+                       'gl.ali213.net',
                        'www.58pic.com',
                        'rarbgprx.org',
                        'www.yxssp.com'];
