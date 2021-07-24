@@ -2,7 +2,7 @@
 // @name         自动无缝翻页
 // @version      1.3.2
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有 Discuz!论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、3DM游戏网、游民星空、千图网、RARBG、FitGirl Repacks、AlphaCoders、PubMed...
+// @description  自动无缝翻页，目前支持：所有 Discuz!论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、3DM游戏网、游侠网、游民星空、千图网、RARBG、FitGirl Repacks、AlphaCoders、PubMed...
 // @match        *://*/*
 // @exclude      *://www.423down.com/*.html
 // @exclude      *://apphot.cc/*.html
