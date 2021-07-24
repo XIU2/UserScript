@@ -1,34 +1,17 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.2.6
+// @version      1.3.0
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、3DM、游民星空、千图网、RARBG、FitGirl Repacks、AlphaCoders、PubMed、三国杀论坛、百分浏览器论坛...
-// @match        *://www.423down.com/*
+// @description  自动无缝翻页，目前支持：所有 Discuz!论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、3DM游戏网、游民星空、千图网、RARBG、FitGirl Repacks、AlphaCoders、PubMed...
+// @match        *://*/*
 // @exclude      *://www.423down.com/*.html
-// @match        *://apphot.cc/*
 // @exclude      *://apphot.cc/*.html
-// @match        *://iao.su/*
-// @match        *://www.appinn.com/
-// @match        *://www.appinn.com/*/*/
-// @match        *://www.appinn.com/?s=*
-// @match        *://www.iplaysoft.com/*
-// @match        *://www.weidown.com/*
-// @match        *://fitgirl-repacks.site/*
-// @match        *://*.alphacoders.com/*
-// @match        *://club.sanguosha.com/*
-// @match        *://www.centbrowser.net/*
-// @match        *://pubmed.ncbi.nlm.nih.gov/?term=*
-// @match        *://movie.douban.com/*
-// @match        *://search.douban.com/*
-// @match        *://www.3dmgame.com/bagua/*.html
-// @match        *://www.gamersky.com/ent/*/*.shtml
-// @match        *://www.58pic.com/*
-// @match        *://rarbgprx.org/torrents.php*
-// @match        *://www.yxssp.com/*
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
 // @grant        GM_openInTab
+// @grant        GM_getValue
+// @grant        GM_setValue
 // @license      GPL-3.0 License
 // @run-at       document-end
 // @namespace    https://github.com/XIU2/UserScript
@@ -36,9 +19,16 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
-'use strict';
 (function() {
+    'use strict';
+    if (GM_getValue('menu_disable') == null){GM_setValue('menu_disable', [])};
     // 注册脚本菜单
+    if (menu_disable('check')) { // 当前网站是否已存在禁用列表中
+        GM_registerMenuCommand('❎ 已禁用 (点击对当前网站启用)', function(){menu_disable('del')});
+        return
+    } else {
+        GM_registerMenuCommand('✅ 已启用 (点击对当前网站禁用)', function(){menu_disable('add')});
+    }
     GM_registerMenuCommand('💬 反馈 & 欢迎申请支持', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
 
     // 默认 ID 为 0
@@ -50,8 +40,39 @@
     // scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大
     // function：before = 插入前执行函数；after = 插入后执行函数；parameter = 参数
     let DBSite = {
-        _423down_postslist: {
+        discuz_forum: {
             SiteTypeID: 1,
+            pager: {
+                type: 2,
+                nextLink: '#autopbn',
+                nextText: '下一页 »',
+                scrollDelta: 1000
+            }
+        },
+        discuz_thread: {
+            SiteTypeID: 2,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;div#postlist > div[id^="post_"]',
+                HT_insert: ['css;div#postlist', 3],
+                replaceE: 'css;div.pg',
+                scrollDelta: 1000
+            }
+        },
+        discuz_search: {
+            SiteTypeID: 3,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;div#threadlist > ul',
+                HT_insert: ['css;div#threadlist', 3],
+                replaceE: 'css;div.pg',
+                scrollDelta: 1000
+            }
+        },
+        _423down_postslist: {
+            SiteTypeID: 4,
             pager: {
                 type: 1,
                 nextLink: '//div[@class="paging"]//a[contains(text(),"下一页")][@href]',
@@ -62,7 +83,7 @@
             }
         },
         apphot_postslist: {
-            SiteTypeID: 2,
+            SiteTypeID: 5,
             pager: {
                 type: 1,
                 nextLink: '//div[@class="pagination"]//a[contains(text(),"下一页")][@href]',
@@ -73,7 +94,7 @@
             }
         },
         iao_su_postslist: {
-            SiteTypeID: 3,
+            SiteTypeID: 6,
             pager: {
                 type: 1,
                 nextLink: '//li[@class="btn btn-primary next"]//a[@href]',
@@ -87,7 +108,7 @@
             }
         },
         appinn_postslist: {
-            SiteTypeID: 4,
+            SiteTypeID: 7,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="next page-numbers"][@href]',
@@ -98,7 +119,7 @@
             }
         },
         iplaysoft_postslist: {
-            SiteTypeID: 5,
+            SiteTypeID: 8,
             pager: {
                 type: 1,
                 nextLink: '//div[@class="pagenavi"]//a[@title="下一页"][@href]',
@@ -112,43 +133,12 @@
             }
         },
         iplaysoft_postcomments: {
-            SiteTypeID: 6,
+            SiteTypeID: 9,
             pager: {
                 type: 2,
                 nextLink: '#loadHistoryComments',
                 nextText: '展开后面',
                 scrollDelta: 1200
-            }
-        },
-        discuz_forum: {
-            SiteTypeID: 7,
-            pager: {
-                type: 2,
-                nextLink: '#autopbn',
-                nextText: '下一页 »',
-                scrollDelta: 1000
-            }
-        },
-        discuz_thread: {
-            SiteTypeID: 8,
-            pager: {
-                type: 1,
-                nextLink: '//a[@class="nxt"][@href]',
-                pageElement: 'css;div#postlist > div[id^="post_"]',
-                HT_insert: ['css;div#postlist', 3],
-                replaceE: 'css;div.pg',
-                scrollDelta: 1000
-            }
-        },
-        discuz_search: {
-            SiteTypeID: 9,
-            pager: {
-                type: 1,
-                nextLink: '//a[@class="nxt"][@href]',
-                pageElement: 'css;div#threadlist > ul',
-                HT_insert: ['css;div#threadlist', 3],
-                replaceE: 'css;div.pg',
-                scrollDelta: 1000
             }
         },
         pubmed_postslist: {
@@ -392,28 +382,6 @@
         case "mobile.alphacoders.com":
             curSite = DBSite.wall_alphacoders;
             break;
-        case "club.sanguosha.com": //                                           Discuz! 论坛专用
-        case "www.centbrowser.net":
-            if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
-                if (location.pathname.indexOf('forum') > -1) { //               各版块帖子列表
-                    curSite = DBSite.discuz_forum;
-                } else if (location.pathname.indexOf('thread') > -1) { //       帖子内
-                    curSite = DBSite.discuz_thread;
-                    hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
-                }else if(location.pathname.indexOf('search') > -1) { //         搜索结果
-                    curSite = DBSite.discuz_search;
-                }
-            } else {
-                if (location.search.indexOf('mod=forumdisplay') > -1) { //      各版块帖子列表
-                    curSite = DBSite.discuz_forum;
-                } else if (location.search.indexOf('mod=viewthread') > -1) { // 帖子内
-                    curSite = DBSite.discuz_thread;
-                    hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
-                } else if (location.pathname.indexOf('search') > -1) { //       搜索结果
-                    curSite = DBSite.discuz_search;
-                }
-            }
-            break;
         case "pubmed.ncbi.nlm.nih.gov":
             curSite = DBSite.pubmed_postslist;
             break;
@@ -447,6 +415,28 @@
         case "rarbgprx.org":
             curSite = DBSite.rarbgprx;
             break;
+        default: //                                                                 < Discuz! 论坛专用 >
+            if (document.querySelector('meta[content*="Discuz!"]')) {
+                if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
+                    if (location.pathname.indexOf('forum') > -1) { //               各版块帖子列表
+                        curSite = DBSite.discuz_forum;
+                    } else if (location.pathname.indexOf('thread') > -1) { //       帖子内
+                        curSite = DBSite.discuz_thread;
+                        hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
+                    }else if(location.pathname.indexOf('search') > -1) { //         搜索结果
+                        curSite = DBSite.discuz_search;
+                    }
+                } else {
+                    if (location.search.indexOf('mod=forumdisplay') > -1) { //      各版块帖子列表
+                        curSite = DBSite.discuz_forum;
+                    } else if (location.search.indexOf('mod=viewthread') > -1) { // 帖子内
+                        curSite = DBSite.discuz_thread;
+                        hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
+                    } else if (location.pathname.indexOf('search') > -1) { //       搜索结果
+                        curSite = DBSite.discuz_search;
+                    }
+                }
+            }
     }
     curSite.pageUrl = ""; // 下一页URL
     pageLoading(); // 自动无缝翻页
@@ -546,6 +536,46 @@
             }
         });
         return pageElems
+    }
+
+
+    // 启用/禁用 (当前网站)
+    function menu_disable(type) {
+        switch(type) {
+            case 'check':
+                if(check()) return true
+                return false
+                break;
+            case 'add':
+                add();
+                break;
+            case 'del':
+                del();
+                break;
+        }
+
+        function check() { // 存在返回真，不存在返回假
+            let websiteList = GM_getValue('menu_disable'); // 读取网站列表
+            if (websiteList.indexOf(location.host) === -1) return false // 不存在返回假
+            return true
+        }
+
+        function add() {
+            if (check()) return
+            let websiteList = GM_getValue('menu_disable'); // 读取网站列表
+            websiteList.push(location.host); // 追加网站域名
+            GM_setValue('menu_disable', websiteList); // 写入配置
+            location.reload(); // 刷新网页
+        }
+
+        function del() {
+            if (!check()) return
+            let websiteList = GM_getValue('menu_disable'), // 读取网站列表
+            index = websiteList.indexOf(location.host);
+            websiteList.splice(index, 1); // 删除网站域名
+            GM_setValue('menu_disable', websiteList); // 写入配置
+            location.reload(); // 刷新网页
+        }
     }
 
 
