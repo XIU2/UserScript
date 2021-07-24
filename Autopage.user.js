@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.3.1
+// @version      1.3.2
 // @author       X.I.U
 // @description  自动无缝翻页，目前支持：所有 Discuz!论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、3DM游戏网、游民星空、千图网、RARBG、FitGirl Repacks、AlphaCoders、PubMed...
 // @match        *://*/*
 // @exclude      *://www.423down.com/*.html
 // @exclude      *://apphot.cc/*.html
+// @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
@@ -35,6 +36,7 @@
                        'search.douban.com',
                        'www.3dmgame.com',
                        'www.gamersky.com',
+                       'www.ali213.net',
                        'www.58pic.com',
                        'rarbgprx.org',
                        'www.yxssp.com'];
@@ -57,11 +59,23 @@
     // 默认 ID 为 0
     var curSite = {SiteTypeID: 0};
 
-    // 自动翻页规则
-    // type：1 = 脚本实现自动无缝翻页，2 = 网站自带了自动无缝翻页功能，只需要点击下一页按钮即可，这时 nextText 为按钮文本，避免一瞬间加载太多次下一页
-    // HT_insert：1 = 插入该元素本身的前面；2 = 插入该元素当中，第一个子元素前面；3 = 插入该元素当中，最后一个子元素后面；4 = 插入该元素本身的后面；
-    // scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大
-    // function：before = 插入前执行函数；after = 插入后执行函数；parameter = 参数
+    /*
+    自动翻页规则
+    type：
+      1 = 脚本实现自动无缝翻页
+      2 = 网站自带了自动无缝翻页功能，只需要点击下一页按钮即可，这时 nextText 为按钮文本，避免一瞬间加载太多次下一页
+      3 = 依靠元素距离可视区域底部的距离来触发翻页
+    HT_insert：
+      1 = 插入该元素本身的前面；
+      2 = 插入该元素当中，第一个子元素前面；
+      3 = 插入该元素当中，最后一个子元素后面；
+      4 = 插入该元素本身的后面；
+    scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大
+    function：
+      before = 插入前执行函数；
+      after = 插入后执行函数；
+      parameter = 参数
+    */
     let DBSite = {
         discuz_forum: {
             SiteTypeID: 1,
@@ -289,27 +303,65 @@
         _3dmgame: {
             SiteTypeID: 19,
             pager: {
-                type: 1,
+                type: 3,
                 nextLink: '//li[@class="next"]/a[@href]',
-                pageElement: 'css;.news_warp_center > p',
+                pageElement: 'css;.news_warp_center > *',
                 HT_insert: ['css;.news_warp_center', 3],
                 replaceE: 'css;.pagewrap',
-                scrollDelta: 1000
+                scrollElement: '.pagewrap',
+                scrollDelta: 400
             }
         },
-        gamersky: {
+        gamersky_ent: {
             SiteTypeID: 20,
             pager: {
-                type: 1,
+                type: 3,
                 nextLink: '//div[@class="page_css"]/a[text()="下一页"][@href]',
-                pageElement: 'css;.Mid2L_con > p',
+                pageElement: 'css;.Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.page_css):not(.gs_ccs_solve):not(.post_ding)',
                 HT_insert: ['css;.page_css', 1],
                 replaceE: 'css;.page_css',
-                scrollDelta: 1000
+                scrollElement: '.page_css',
+                scrollDelta: 100
+            }
+        },
+        gamersky_gl: {
+            SiteTypeID: 21,
+            pager: {
+                type: 3,
+                nextLink: '//div[@class="page_css"]/a[text()="下一页"][@href]',
+                pageElement: 'css;.Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.gs_ccs_solve):not(.post_ding)',
+                HT_insert: ['css;.gs_nc_editor', 1],
+                replaceE: 'css;.page_css',
+                scrollElement: '.pagecss',
+                scrollDelta: -1000
+            }
+        },
+        ali213_www: {
+            SiteTypeID: 22,
+            pager: {
+                type: 3,
+                nextLink: '//a[@id="after_this_page"][@href]',
+                pageElement: 'css;#Content >*:not(.news_ding):not(.page_fenye)',
+                HT_insert: ['css;.page_fenye', 1],
+                replaceE: 'css;.page_fenye',
+                scrollElement: '.page_fenye',
+                scrollDelta: 400
+            }
+        },
+        ali213_gl: {
+            SiteTypeID: 23,
+            pager: {
+                type: 3,
+                nextLink: '//a[@class="next n"][@href]',
+                pageElement: 'css;.c-detail >*',
+                HT_insert: ['css;.c-detail', 3],
+                replaceE: 'css;.page_fenye',
+                scrollElement: '.page_fenye',
+                scrollDelta: 400
             }
         },
         _58pic: {
-            SiteTypeID: 21,
+            SiteTypeID: 24,
             pager: {
                 type: 1,
                 nextLink: '//div[contains(@class,"page-box")]//a[text()="下一页"][@href]',
@@ -323,7 +375,7 @@
             }
         },
         _58pic_c: {
-            SiteTypeID: 22,
+            SiteTypeID: 25,
             pager: {
                 type: 1,
                 nextLink: '//div[contains(@class,"page-box")]//a[text()="下一页"][@href]',
@@ -337,7 +389,7 @@
             }
         },
         rarbgprx: {
-            SiteTypeID: 23,
+            SiteTypeID: 26,
             pager: {
                 type: 1,
                 nextLink: '(//a[@title="next page"])[1][@href]',
@@ -348,7 +400,7 @@
             }
         },
         yxssp: {
-            SiteTypeID: 24,
+            SiteTypeID: 27,
             pager: {
                 type: 1,
                 nextLink: '//div[@class="page-nav td-pb-padding-side"]/a[last()][@href]',
@@ -422,11 +474,21 @@
             break;
         case "www.3dmgame.com":
             curSite = DBSite._3dmgame;
-            document.lastChild.appendChild(document.createElement('style')).textContent = `#Comments_wrap {display: none !important;}` // 隐藏评论区
             break;
         case "www.gamersky.com":
-            curSite = DBSite.gamersky;
-            document.lastElementChild.appendChild(document.createElement('style')).textContent = `.Comment {display: none !important;}` // 隐藏评论区
+            if (location.pathname.indexOf("/ent/") > -1) {
+                curSite = DBSite.gamersky_ent;
+            } else {
+                curSite = DBSite.gamersky_gl;
+            }
+            //document.lastElementChild.appendChild(document.createElement('style')).textContent = `.Comment {display: none !important;}` // 隐藏评论区
+            break;
+        case "www.ali213.net":
+            curSite = DBSite.ali213_www;
+            break;
+        case "gl.ali213.net":
+            curSite = DBSite.ali213_gl;
+            document.lastElementChild.appendChild(document.createElement('style')).textContent = `.n_show_b {display: none !important;}` // 隐藏部分碍事元素
             break;
         case "www.58pic.com":
             if (location.pathname.indexOf("/tupian/") > -1) {
@@ -468,25 +530,43 @@
         if (curSite.SiteTypeID > 0) {
             windowScroll(function (direction, e) {
                 if (direction === "down") { // 下滑才准备翻页
-                    let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-                    let scrollDelta = curSite.pager.scrollDelta;
-                    if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
-                        if (curSite.pager.type === 1) {
+                    let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
+                        scrollHeight = window.innerHeight || document.documentElement.clientHeight,
+                        scrollDelta = curSite.pager.scrollDelta;
+                    if (curSite.pager.type === 3) { // 翻页类型 3
+                        let scrollElement = document.querySelector(curSite.pager.scrollElement);
+                        //console.log(scrollElement.offsetTop - (scrollTop + scrollHeight), scrollDelta, curSite.SiteTypeID)
+                        if (scrollElement.offsetTop - (scrollTop + scrollHeight) <= scrollDelta) {
+                            if (curSite.SiteTypeID === 21) curSite.pager.scrollDelta -= 800 // 游民星空的比较奇葩，需要特殊处理下
                             ShowPager.loadMorePage();
-                        } else {
-                            let autopbn = document.querySelector(curSite.pager.nextLink);
-                            if (autopbn) { // 如果正在加载，就不再点击
-                                if (!curSite.pager.nextText) { // 如果没有指定 nextText 就直接点击
-                                    autopbn.click();
-                                } else if (autopbn.innerText.indexOf(curSite.pager.nextText) > -1){ // 如果指定了 nextText 就需要判断后再点击（避免已经在加载了，还重复点击）
-                                    autopbn.click();
+                        }
+                    } else {
+                        if (document.documentElement.scrollHeight <= scrollHeight + scrollTop + scrollDelta) {
+                            if (curSite.pager.type === 2) { // 翻页类型 2
+                                let autopbn = document.querySelector(curSite.pager.nextLink);
+                                if (autopbn) { // 如果正在加载，就不再点击
+                                    if (!curSite.pager.nextText) { // 如果没有指定 nextText 就直接点击
+                                        autopbn.click();
+                                    } else if (autopbn.innerText.indexOf(curSite.pager.nextText) > -1){ // 如果指定了 nextText 就需要判断后再点击（避免已经在加载了，还重复点击）
+                                        autopbn.click();
+                                    }
                                 }
+                            } else {
+                                ShowPager.loadMorePage();
                             }
                         }
                     }
                 }
             });
         }
+    }
+
+
+    function getElementToPageTop(el) {
+        if(el.parentElement) {
+            return getElementToPageTop(el.parentElement) + el.offsetTop
+        }
+        return el.offsetTop
     }
 
 
@@ -658,8 +738,8 @@
                 let curPageEle = getElementByXpath(curSite.pager.nextLink);
                 var url = this.getFullHref(curPageEle);
                 //console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
-                if(url === '') return;
-                if(curSite.pageUrl === url) return;// 避免重复加载相同的页面
+                if (url === '') return;
+                if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
                 // 读取下一页的数据
                 curSite.pager.startFilter && curSite.pager.startFilter();
