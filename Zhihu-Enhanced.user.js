@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.4.8
+// @version      1.4.9
 // @author       X.I.U
-// @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽指定用户、屏蔽指定关键词（标题）、屏蔽盐选内容、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
+// @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题）、屏蔽盐选内容、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -406,26 +406,21 @@ function blockUsers(type) {
     // 屏蔽用户按钮绑定事件（添加）
     function blockUsers_button_add(name, userid, reload) {
         if (!name || !userid) return
-        let users = menu_value('menu_customBlockUsers'); // 读取屏蔽列表
-        for (let num = 0;num<users.length;num++) { // 判断是否已存在
-            if (users[num] === name) {
-                GM_notification({text: `该用户已经被屏蔽啦，无需重复屏蔽~`, timeout: 3000});
-                return
+        let users = menu_value('menu_customBlockUsers'), // 读取屏蔽列表
+            index = users.indexOf(name);
+        if (index === -1) {
+            users.push(name); // 追加用户名
+            GM_setValue('menu_customBlockUsers', users); // 写入屏蔽列表
+            // 加入知乎自带的黑名单（和本脚本互补~
+            GM_xmlhttpRequest({url: `https://www.zhihu.com/api/v4/members/${userid}/actions/block`,method: 'POST',timeout: 2000});
+            // 是否刷新本页
+            if (reload) {
+                setTimeout(function(){location.reload()}, 200); // 刷新网页，延迟 200 毫秒，避免知乎反应慢~
+            } else {
+                GM_notification({text: `该用户已被屏蔽~\n刷新网页后生效~`, timeout: 3000});
             }
-        };
-        users.push(name); // 追加用户名
-        GM_setValue('menu_customBlockUsers', users); // 写入屏蔽列表
-
-        GM_xmlhttpRequest({ // 加入知乎自带的黑名单（和本脚本互补~
-            url: `https://www.zhihu.com/api/v4/members/${userid}/actions/block`,
-            method: 'POST',
-            timeout: 2000
-        });
-
-        if (reload) {
-            setTimeout(function(){location.reload()}, 200); // 刷新网页，延迟一下，避免知乎反应慢~
         } else {
-            GM_notification({text: `该用户已被屏蔽~\n刷新网页后生效~`, timeout: 3000});
+            GM_notification({text: `该用户已经被屏蔽啦，无需重复屏蔽~`, timeout: 3000});
         }
     }
 
@@ -433,27 +428,22 @@ function blockUsers(type) {
     // 屏蔽用户按钮绑定事件（删除）
     function blockUsers_button_del(name, userid, reload) {
         if (!name || !userid) return
-        let users = menu_value('menu_customBlockUsers'); // 读取屏蔽列表
-        for (let num = 0;num<users.length;num++) { // 判断是否已存在
-            if (users[num] === name) {
-                users.splice(num, 1); // 移除用户名
-                GM_setValue('menu_customBlockUsers', users); // 写入屏蔽列表
-
-                GM_xmlhttpRequest({ // 移除知乎自带的黑名单
-                    url: `https://www.zhihu.com/api/v4/members/${userid}/actions/block`,
-                    method: 'DELETE',
-                    timeout: 2000
-                });
-
-                if (reload) {
-                    setTimeout(function(){location.reload()}, 200); // 刷新网页，延迟一下，避免知乎反应慢~
-                } else {
-                    GM_notification({text: `该用户已取消屏蔽啦~\n刷新网页后生效~`, timeout: 3000});
-                }
-                return
+        let users = menu_value('menu_customBlockUsers'), // 读取屏蔽列表
+            index = users.indexOf(name);
+        if (index > -1) {
+            users.splice(index, 1); // 移除用户名
+            GM_setValue('menu_customBlockUsers', users); // 写入屏蔽列表
+            // 移除知乎自带的黑名单
+            GM_xmlhttpRequest({url: `https://www.zhihu.com/api/v4/members/${userid}/actions/block`,method: 'DELETE',timeout: 2000});
+            // 是否刷新本页
+            if (reload) {
+                setTimeout(function(){location.reload()}, 200); // 刷新网页，延迟 200 毫秒，避免知乎反应慢~
+            } else {
+                GM_notification({text: `该用户已取消屏蔽啦~\n刷新网页后生效~`, timeout: 3000});
             }
-        };
-        GM_notification({text: `没有在屏蔽列表中找到该用户...`, timeout: 3000});
+        } else {
+            GM_notification({text: `没有在屏蔽列表中找到该用户...`, timeout: 3000});
+        }
     }
 }
 
