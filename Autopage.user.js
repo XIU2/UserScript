@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.3.0
+// @version      1.3.1
 // @author       X.I.U
 // @description  自动无缝翻页，目前支持：所有 Discuz!论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、3DM游戏网、游民星空、千图网、RARBG、FitGirl Repacks、AlphaCoders、PubMed...
 // @match        *://*/*
@@ -21,13 +21,36 @@
 
 (function() {
     'use strict';
+    // 目前支持的网站
+    var websiteList = ['www.423down.com',
+                       'apphot.cc',
+                       'iao.su',
+                       'www.appinn.com',
+                       'www.iplaysoft.com',
+                       'www.weidown.com',
+                       'fitgirl-repacks.site',
+                       'art.alphacoders.com', 'wall.alphacoders.com', 'avatars.alphacoders.com', 'mobile.alphacoders.com',
+                       'pubmed.ncbi.nlm.nih.gov',
+                       'movie.douban.com',
+                       'search.douban.com',
+                       'www.3dmgame.com',
+                       'www.gamersky.com',
+                       'www.58pic.com',
+                       'rarbgprx.org',
+                       'www.yxssp.com'];
+
     if (GM_getValue('menu_disable') == null){GM_setValue('menu_disable', [])};
     // 注册脚本菜单
     if (menu_disable('check')) { // 当前网站是否已存在禁用列表中
         GM_registerMenuCommand('❎ 已禁用 (点击对当前网站启用)', function(){menu_disable('del')});
         return
     } else {
-        GM_registerMenuCommand('✅ 已启用 (点击对当前网站禁用)', function(){menu_disable('add')});
+        if (websiteList.indexOf(location.host) > -1 || document.querySelector('meta[name="author"][content*="Discuz!"]')) {
+            GM_registerMenuCommand('✅ 已启用 (点击对当前网站禁用)', function(){menu_disable('add')});
+        } else {
+
+            GM_registerMenuCommand('❌ 当前网站暂不支持，请点击下方选项申请支持~');
+        }
     }
     GM_registerMenuCommand('💬 反馈 & 欢迎申请支持', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
 
@@ -416,25 +439,23 @@
             curSite = DBSite.rarbgprx;
             break;
         default: //                                                                 < Discuz! 论坛专用 >
-            if (document.querySelector('meta[content*="Discuz!"]')) {
-                if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
-                    if (location.pathname.indexOf('forum') > -1) { //               各版块帖子列表
-                        curSite = DBSite.discuz_forum;
-                    } else if (location.pathname.indexOf('thread') > -1) { //       帖子内
-                        curSite = DBSite.discuz_thread;
-                        hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
-                    }else if(location.pathname.indexOf('search') > -1) { //         搜索结果
-                        curSite = DBSite.discuz_search;
-                    }
-                } else {
-                    if (location.search.indexOf('mod=forumdisplay') > -1) { //      各版块帖子列表
-                        curSite = DBSite.discuz_forum;
-                    } else if (location.search.indexOf('mod=viewthread') > -1) { // 帖子内
-                        curSite = DBSite.discuz_thread;
-                        hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
-                    } else if (location.pathname.indexOf('search') > -1) { //       搜索结果
-                        curSite = DBSite.discuz_search;
-                    }
+            if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
+                if (location.pathname.indexOf('forum') > -1) { //               各版块帖子列表
+                    curSite = DBSite.discuz_forum;
+                } else if (location.pathname.indexOf('thread') > -1) { //       帖子内
+                    curSite = DBSite.discuz_thread;
+                    hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
+                }else if(location.pathname.indexOf('search') > -1) { //         搜索结果
+                    curSite = DBSite.discuz_search;
+                }
+            } else {
+                if (location.search.indexOf('mod=forumdisplay') > -1) { //      各版块帖子列表
+                    curSite = DBSite.discuz_forum;
+                } else if (location.search.indexOf('mod=viewthread') > -1) { // 帖子内
+                    curSite = DBSite.discuz_thread;
+                    hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
+                } else if (location.pathname.indexOf('search') > -1) { //       搜索结果
+                    curSite = DBSite.discuz_search;
                 }
             }
     }
@@ -555,25 +576,25 @@
         }
 
         function check() { // 存在返回真，不存在返回假
-            let websiteList = GM_getValue('menu_disable'); // 读取网站列表
-            if (websiteList.indexOf(location.host) === -1) return false // 不存在返回假
+            let list = GM_getValue('menu_disable'); // 读取网站列表
+            if (list.indexOf(location.host) === -1) return false // 不存在返回假
             return true
         }
 
         function add() {
             if (check()) return
-            let websiteList = GM_getValue('menu_disable'); // 读取网站列表
-            websiteList.push(location.host); // 追加网站域名
-            GM_setValue('menu_disable', websiteList); // 写入配置
+            let list = GM_getValue('menu_disable'); // 读取网站列表
+            list.push(location.host); // 追加网站域名
+            GM_setValue('menu_disable', list); // 写入配置
             location.reload(); // 刷新网页
         }
 
         function del() {
             if (!check()) return
-            let websiteList = GM_getValue('menu_disable'), // 读取网站列表
-            index = websiteList.indexOf(location.host);
-            websiteList.splice(index, 1); // 删除网站域名
-            GM_setValue('menu_disable', websiteList); // 写入配置
+            let list = GM_getValue('menu_disable'), // 读取网站列表
+            index = list.indexOf(location.host);
+            list.splice(index, 1); // 删除网站域名
+            GM_setValue('menu_disable', list); // 写入配置
             location.reload(); // 刷新网页
         }
     }
