@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.4.9
+// @version      1.5.0
 // @author       X.I.U
-// @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题）、屏蔽盐选内容、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
+// @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题）、屏蔽盐选内容、展开问题描述、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -30,6 +30,7 @@ var menu_ALL = [
     ['menu_blockKeywords', '屏蔽指定关键词', '屏蔽指定关键词', false],
     ['menu_customBlockKeywords', '自定义屏蔽关键词', '自定义屏蔽关键词', []],
     ['menu_blockYanXuan', '屏蔽盐选内容', '屏蔽盐选内容', false],
+    ['menu_questionRichTextMore', '展开问题描述', '展开问题描述', false],
     ['menu_publishTop', '置顶显示时间', '置顶显示时间', true],
     ['menu_allTime', '完整显示时间', '完整显示时间', true],
     ['menu_typeTips', '区分问题文章', '区分问题文章', true],
@@ -688,6 +689,16 @@ function addTypeTips() {
 }
 
 
+// 展开问题描述
+function questionRichTextMore() {
+    if (!menu_value('menu_questionRichTextMore')) return
+    let button = document.querySelector('button.QuestionRichText-more');
+    if (button) {
+        button.click()
+    }
+}
+
+
 // 监听 网页插入元素 事件
 function addEventListener_DOMNodeInserted() {
     // 知乎免登录，修改自：https://greasyfork.org/zh-CN/scripts/417126
@@ -993,6 +1004,7 @@ function questionInvitation(){
             collapsedAnswer(); //                                          一键收起回答
             collapsedNowAnswer(".QuestionPage"); //                        收起当前回答 + 快捷返回顶部
             collapsedNowAnswer(".Question-main"); //                       收起当前回答 + 快捷返回顶部
+            questionRichTextMore(); //                                     展开问题描述
             blockUsers('question'); //                                     屏蔽指定用户
             blockYanXuan(); //                                             屏蔽盐选内容
         }
