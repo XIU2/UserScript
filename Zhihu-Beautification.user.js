@@ -269,8 +269,8 @@ html[data-theme=dark] .CommentItemV2--highlighted {-webkit-animation: nano !impo
 
 /* 赞赏 */
 html[data-theme=dark] .Reward-TipjarDialog-amountList .Button--red, html[data-theme=dark] .Reward-TipjarDialog-amountList .Button--red, html[data-theme=dark] .Reward-TipjarDialog-amountInput .SimpleInput {color: #d3d3d3 !important; background-color: #353b44 !important; border: none !important;}
-
-/* 问题日志页 */
+`,
+            style_darkMode_1_x = `/* 问题日志页 */
 html[data-theme=dark] .zu-top {background: #2D333B !important;border: none !important;}
 html[data-theme=dark] .zm-tag-editor-labels.zg-clear a {background: rgba(51,119,255,.1) !important;}
 html[data-theme=dark] .zu-main {background: #2D333B !important;padding-left: 20px;padding-right: 20px;}
@@ -279,7 +279,7 @@ html[data-theme=dark] a {color: #D4E5F4 !important;}
 html[data-theme=dark] ins, html[data-theme=dark] ins a {color: #009688 !important;}
 html[data-theme=dark] del a {color: #E91E63 !important;}
 html[data-theme=dark] div#zh-hovercard a {color: #353535 !important;}
-`,
+            `,
             style_darkMode_2 = `/* 暗黑模式（方案 2） */
 html {filter: invert(80%) !important;}
 img, .ZVideoItem-video, .ZVideo-video {filter: invert(1) !important;}
@@ -315,7 +315,8 @@ html {filter: brightness(75%) sepia(30%) !important; background-image: url();}
                     location.reload(); // 刷新网页
                 }
                 if (location.pathname.indexOf('/log') > -1) {
-                    document.documentElement.setAttribute('data-theme', 'dark')
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    style_darkMode_1 += style_darkMode_1_x;
                 }
             } else {
                 if (getTheme() === 'dark') {
