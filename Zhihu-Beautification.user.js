@@ -243,6 +243,8 @@ html[data-theme=dark] .Topbar, html[data-theme=dark] .CommentsV2-footer, html[da
 html[data-theme=dark] .CommentEditorV2-inputWrap--active, html[data-theme=dark] .CommentEditorV2-inputWrap, html[data-theme=dark] .PostItem {border: none !important;}
 html[data-theme=dark] .InputLike {border: 1px solid #424b56 !important;}
 html[data-theme=dark] .Popover .InputLike {border: 1px solid #2d333b !important;}
+html[data-theme=dark] .HotLanding-contentItem:not(:last-child) {border-bottom: 1px solid #424b56 !important;}
+html[data-theme=dark] .HotLanding-content {border-left: 2px solid #424b56 !important;}
 
 html[data-theme=dark] .Popover-content, html[data-theme=dark] .Popover-arrow:after {border: 1px solid #22272e !important;}
 
