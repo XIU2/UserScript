@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.3.2
+// @version      1.3.3
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有 Discuz!论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、3DM游戏网、游侠网、游民星空、千图网、RARBG、FitGirl Repacks、AlphaCoders、PubMed...
+// @description  自动无缝翻页，目前支持：所有 Discuz!论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、3DM游戏网、游侠网、游民星空、千图网、阿里小站、RARBG、FitGirl Repacks、AlphaCoders、PubMed...
 // @match        *://*/*
 // @exclude      *://www.423down.com/*.html
 // @exclude      *://apphot.cc/*.html
@@ -40,7 +40,8 @@
                        'gl.ali213.net',
                        'www.58pic.com',
                        'rarbgprx.org',
-                       'www.yxssp.com'];
+                       'www.yxssp.com',
+                       'pan.yuankongjian.com'];
 
     if (GM_getValue('menu_disable') == null){GM_setValue('menu_disable', [])};
     // 注册脚本菜单
@@ -410,6 +411,15 @@
                 replaceE: 'css;.page-nav.td-pb-padding-side',
                 scrollDelta: 900
             }
+        },
+        yuankongjian: {
+            SiteTypeID: 28,
+            pager: {
+                type: 2,
+                nextLink: 'button[title="加载更多"]',
+                nextText: '加载更多',
+                scrollDelta: 500
+            }
         }
     };
 
@@ -500,6 +510,11 @@
             break;
         case "rarbgprx.org":
             curSite = DBSite.rarbgprx;
+            break;
+        case "pan.yuankongjian.com":
+            if (location.pathname.indexOf('/d/') === -1) {
+                curSite = DBSite.yuankongjian;
+            }
             break;
         default: //                                                                 < Discuz! 论坛专用 >
             if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
