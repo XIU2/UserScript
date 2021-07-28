@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.3.3
+// @version      1.3.4
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有 Discuz!论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、3DM游戏网、游侠网、游民星空、千图网、阿里小站、RARBG、FitGirl Repacks、AlphaCoders、PubMed...
+// @description  自动无缝翻页，目前支持：所有 Discuz!论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、微博评论、3DM游戏网、游侠网、游民星空、千图网、阿里小站、RARBG、FitGirl Repacks、AlphaCoders、PubMed...
 // @match        *://*/*
 // @exclude      *://www.423down.com/*.html
 // @exclude      *://apphot.cc/*.html
@@ -41,7 +41,8 @@
                        'www.58pic.com',
                        'rarbgprx.org',
                        'www.yxssp.com',
-                       'pan.yuankongjian.com'];
+                       'pan.yuankongjian.com',
+                       'weibo.com'];
 
     if (GM_getValue('menu_disable') == null){GM_setValue('menu_disable', [])};
     // 注册脚本菜单
@@ -420,6 +421,15 @@
                 nextText: '加载更多',
                 scrollDelta: 500
             }
+        },
+        weibo_comment: {
+            SiteTypeID: 29,
+            pager: {
+                type: 2,
+                nextLink: 'a[action-type="click_more_comment"]',
+                nextText: '查看更多c',
+                scrollDelta: 1000
+            }
         }
     };
 
@@ -515,6 +525,9 @@
             if (location.pathname.indexOf('/d/') === -1) {
                 curSite = DBSite.yuankongjian;
             }
+            break;
+        case "weibo.com":
+            curSite = DBSite.weibo_comment;
             break;
         default: //                                                                 < Discuz! 论坛专用 >
             if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
