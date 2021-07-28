@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.3.4
+// @version      1.3.5
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有 Discuz!论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、微博评论、3DM游戏网、游侠网、游民星空、千图网、阿里小站、RARBG、FitGirl Repacks、AlphaCoders、PubMed...
+// @description  自动无缝翻页，目前支持：所有 Discuz!论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、微博评论、3DM游戏网、游侠网、游民星空、千图网、阿里小站、RARBG、FitGirl Repacks、AlphaCoders、PubMed、AfreecaTV...
 // @match        *://*/*
 // @exclude      *://www.423down.com/*.html
 // @exclude      *://apphot.cc/*.html
@@ -23,26 +23,19 @@
 (function() {
     'use strict';
     // 目前支持的网站
-    var websiteList = ['www.423down.com',
-                       'apphot.cc',
-                       'iao.su',
-                       'www.appinn.com',
-                       'www.iplaysoft.com',
-                       'www.weidown.com',
-                       'fitgirl-repacks.site',
+    var websiteList = ['www.423down.com', 'apphot.cc', 'iao.su', 'www.appinn.com', 'www.iplaysoft.com', 'www.weidown.com',
                        'art.alphacoders.com', 'wall.alphacoders.com', 'avatars.alphacoders.com', 'mobile.alphacoders.com',
                        'pubmed.ncbi.nlm.nih.gov',
                        'movie.douban.com',
                        'search.douban.com',
-                       'www.3dmgame.com',
-                       'www.gamersky.com',
-                       'www.ali213.net',
-                       'gl.ali213.net',
+                       'www.3dmgame.com', 'www.gamersky.com', 'www.ali213.net', 'gl.ali213.net',
                        'www.58pic.com',
                        'rarbgprx.org',
+                       'fitgirl-repacks.site',
                        'www.yxssp.com',
                        'pan.yuankongjian.com',
-                       'weibo.com'];
+                       'weibo.com',
+                       'www.afreecatv.com'];
 
     if (GM_getValue('menu_disable') == null){GM_setValue('menu_disable', [])};
     // 注册脚本菜单
@@ -430,6 +423,15 @@
                 nextText: '查看更多c',
                 scrollDelta: 1000
             }
+        },
+        afreecatv: {
+            SiteTypeID: 30,
+            pager: {
+                type: 2,
+                nextLink: '.btn-more > button',
+                nextText: '查看更多',
+                scrollDelta: 1000
+            }
         }
     };
 
@@ -528,6 +530,9 @@
             break;
         case "weibo.com":
             curSite = DBSite.weibo_comment;
+            break;
+        case "www.afreecatv.com":
+            curSite = DBSite.afreecatv;
             break;
         default: //                                                                 < Discuz! 论坛专用 >
             if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
