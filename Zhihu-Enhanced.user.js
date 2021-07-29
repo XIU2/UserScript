@@ -1046,6 +1046,7 @@ function questionInvitation(){
     questionInvitation(); //                                               默认折叠邀请
     setInterval(originalPic,100); //                                       默认高清原图
     if (menu_value('menu_directLink')) setInterval(directLink, 100); //    默认站外直链
+    blockKeywords('comment'); //                                           评论屏蔽指定关键词
 
     if (window.location.href.indexOf("question") > -1) { //       回答页 //
         if (window.location.href.indexOf("waiting") == -1) {
@@ -1055,7 +1056,6 @@ function questionInvitation(){
             questionRichTextMore(); //                                     展开问题描述
             blockUsers('question'); //                                     屏蔽指定用户
             blockYanXuan(); //                                             屏蔽盐选内容
-            blockKeywords('comment');  //                                  评论屏蔽指定关键词
         }
         setInterval(topTime_question, 300); //                             置顶显示时间
     } else if (window.location.href.indexOf("search") > -1) { // 搜索结果页 //
