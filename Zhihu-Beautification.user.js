@@ -67,9 +67,9 @@
         }
         GM_setValue(`${Name}`, menu_status);
         if (menu_status === 1) { // 设置 Cookie
-            if (getTheme() === 'light') document.cookie="theme=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/";
+            if (getTheme() === 'light') document.cookie='theme=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';
         } else {
-            if (getTheme() === 'dark') document.cookie="theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+            if (getTheme() === 'dark') document.cookie='theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
         }
         if (menu_value('menu_darkMode')) {
             location.reload(); // 刷新网页
@@ -79,21 +79,9 @@
         }
     };
 
+    // 菜单数字图标
     function menu_num(num) {
-        switch(num) {
-            case 1:
-                return '1️⃣'
-                break;
-            case 2:
-                return '2️⃣'
-                break;
-            case 3:
-                return '3️⃣'
-                break;
-            case 4:
-                return '4️⃣'
-                break;
-        }
+        return ['0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'][num]
     }
 
     // 菜单开关
@@ -102,7 +90,7 @@
             GM_setValue(`${Name}`, false);
 
             if (Name === 'menu_darkMode') { // 暗黑模式
-                if (getTheme() === 'dark') document.cookie="theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+                if (getTheme() === 'dark') document.cookie='theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
                 location.reload(); // 刷新网页
             } else {
                 GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
@@ -112,9 +100,9 @@
 
             if (Name === 'menu_darkMode') {
                 if (menu_value('menu_darkModeType') === 1) {
-                    if (getTheme() === 'light') document.cookie="theme=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/";
+                    if (getTheme() === 'light') document.cookie='theme=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';
                 } else {
-                    if (getTheme() === 'dark') document.cookie="theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+                    if (getTheme() === 'dark') document.cookie='theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
                 }
                 location.reload(); // 刷新网页
             } else {
@@ -254,6 +242,10 @@ html[data-theme=dark] body::-webkit-scrollbar-thumb, html[data-theme="dark"] .Me
 html[data-theme=dark] body::-webkit-scrollbar-track {background: #22272e !important;}
 html[data-theme=dark] .MessagesBox::-webkit-scrollbar-track, html[data-theme="dark"] .Messages-list::-webkit-scrollbar-track, html[data-theme=dark] .PushNotifications-list::-webkit-scrollbar-track, html[data-theme=dark] .CommentListV2::-webkit-scrollbar-track, .ChatListGroup-SectionContent::-webkit-scrollbar-track, html[data-theme=dark] .ChatSideBar-Search-ResultListWrap::-webkit-scrollbar-track, html[data-theme=dark] .ChatBox textarea.Input::-webkit-scrollbar-track {background: #2d333b !important;}
 
+/* 滚动条 - 回答目录 */
+html[data-theme=dark] .AnswerItem .RichContent-hasCatalog .RichContent-inner .Catalog.isCatalogV2::-webkit-scrollbar {width: 0 !important;}
+html[data-theme=dark] .AnswerItem .RichContent-hasCatalog .RichContent-inner .Catalog.isCatalogV2 > :first-child {background: #2D333B !important;}
+
 html {scrollbar-width: thin; scrollbar-color: #3f4752 #22272e;}
 .MessagesBox, .Messages-list, .PushNotifications-list, .CommentListV2, .ChatListGroup-SectionContent, .ChatSideBar-Search-ResultListWrap {scrollbar-width: thin; scrollbar-color: #3f4752 #2D333B;}
 
@@ -308,21 +300,24 @@ html {filter: brightness(75%) sepia(30%) !important; background-image: url();}
 `
         let style_Add = document.createElement('style');
 
-        // 暗黑模式
+        // 如果开启了暗黑模式
         if (menu_value('menu_darkMode')) {
+            // 如果暗黑模式为 1
             if (menu_value('menu_darkModeType') === 1) {
+                // 如果当前知乎主题为白天模式，那就是改为暗黑模式
                 if (getTheme() === 'light') {
-                    document.cookie="theme=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/";
+                    document.cookie='theme=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';
                     document.lastChild.setAttribute('data-theme', 'dark');
                     location.reload(); // 刷新网页
                 }
+                // 如果是问题日志页，则改为暗黑模式
                 if (location.pathname.indexOf('/log') > -1) {
                     document.documentElement.setAttribute('data-theme', 'dark');
                     style_darkMode_1 += style_darkMode_1_x;
                 }
-            } else {
+            } else { // 如果是其他暗黑模式，则需要确保为白天模式
                 if (getTheme() === 'dark') {
-                    document.cookie="theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+                    document.cookie='theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
                     document.lastChild.setAttribute('data-theme', 'light');
                     location.reload(); // 刷新网页
                 }
@@ -348,67 +343,42 @@ html {filter: brightness(75%) sepia(30%) !important; background-image: url();}
             }
         } else {
             if (getTheme() === 'dark'){
-                document.cookie="theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+                document.cookie='theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
                 document.lastChild.setAttribute('data-theme', 'light');
                 location.reload(); // 刷新网页
             }
         }
 
         // 宽屏显示
-        if (menu_value('menu_widescreenDisplay')) {
-            style += style_1;
-        }
-
+        if (menu_value('menu_widescreenDisplay')) style += style_1;
         // 调整图片最大高度
-        if (menu_value('menu_picHeight')) {
-            style += style_5;
-        }
-
+        if (menu_value('menu_picHeight')) style += style_5;
         // 隐藏文章开头大图
-        if (menu_value('menu_postimg')) {
-            style += style_2;
-        }
-
+        if (menu_value('menu_postimg')) style += style_2;
         // 向下翻时自动隐藏顶栏
-        if (menu_value('menu_hideTitle')) {
-            style += style_4;
-        }
+        if (menu_value('menu_hideTitle')) style += style_4;
 
         // 文章编辑页面与实际文章宽度一致
-        if(window.location.href.indexOf("zhuanlan") > -1){
-            if(window.location.href.indexOf("/edit") > -1){
-                style += style_3;
-            }
-        }
-
-        /*style_Add.innerHTML = style;
-        if (document.head) {
-                document.head.appendChild(style_Add);
-        } else {
-            let timer = setInterval(function(){
-                if (document.head) {
-                    document.head.appendChild(style_Add);
-                    clearInterval(timer);
-                }
-            }, 1);
-        }*/
+        if (window.location.href.indexOf('zhuanlan') > -1 && window.location.href.indexOf('/edit') > -1) style += style_3;
 
         if (document.lastChild) {
             document.lastChild.appendChild(style_Add).textContent = style;
         } else { // 避免网站加载速度太慢的备用措施
-            let timer1 = setInterval(function(){ // 每 5 毫秒检查一下 html 是否已存在
+            let timer1 = setInterval(function(){ // 每 10 毫秒检查一下 html 是否已存在
                 if (document.lastChild) {
                     clearInterval(timer1); // 取消定时器
                     document.lastChild.appendChild(style_Add).textContent = style;
                 }
-            }, 5);
+            }, 10);
         }
     }
+
+
+    // 获取知乎 Cookie 中的主题类型
     function getTheme() {
-        let name = "theme=";
-        let ca = document.cookie.split(';');
-        for(let i=0; i<ca.length; i++)
-        {
+        let name = "theme=",
+            ca = document.cookie.split(';');
+        for (let i=0; i<ca.length; i++) {
             let c = ca[i].trim();
             if (c.indexOf(name)==0) return c.substring(name.length,c.length);
         }
