@@ -483,6 +483,9 @@ function blockKeywords(type) {
         case 'search':
             blockKeywords_search();
             break;
+        case 'comment':
+            blockKeywords_comment();
+            break;
     }
 
     function blockKeywords_index_() {
@@ -629,6 +632,52 @@ function blockKeywords(type) {
             }
         }
         document.addEventListener('DOMNodeInserted', blockKeywords); // 监听插入事件
+    }
+
+
+    function blockKeywords_comment() {
+        function filterComment(comment) {
+            let content = comment.querySelector('.RichText');
+            let texts = [content.textContent.toLowerCase()];
+            for (let i = 0; i < content.children.length; i++) {
+                let emoticonValue = content.children[i].getAttribute('data-zhihu-emoticon');
+                if (emoticonValue) {
+                    texts.push(emoticonValue)
+                }
+            }
+
+            let keywords = menu_value('menu_customBlockKeywords');
+            for (const text of texts) {
+                for (const keyword of keywords) { // 遍历关键词黑名单
+                    if (text.indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该信息流
+                        console.log(text);
+                        content.textContent = '[已屏蔽]';
+                        break;
+                    }
+                }
+            }
+        }
+        function blockKeywords(node) {
+            switch (node.className) {
+                case 'NestComment--rootComment':
+                case 'NestComment--child':
+                case 'CommentItemV2':
+                    filterComment(node);
+                    break;
+            }
+        }
+
+        const callback = (mutationsList, observer) => {
+            for (const mutation of mutationsList) {
+                for (const target of mutation.addedNodes) {
+                    for (const node of target.querySelectorAll('*')) {
+                        blockKeywords(node);
+                    }
+                }
+            }
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(document, { childList: true, subtree: true });
     }
 }
 
@@ -992,7 +1041,6 @@ function questionInvitation(){
     });
 }
 
-
 (function() {
     addEventListener_DOMNodeInserted(); //                                 监听 网页插入元素 事件
     questionInvitation(); //                                               默认折叠邀请
@@ -1007,6 +1055,7 @@ function questionInvitation(){
             questionRichTextMore(); //                                     展开问题描述
             blockUsers('question'); //                                     屏蔽指定用户
             blockYanXuan(); //                                             屏蔽盐选内容
+            blockKeywords('comment');  //                                  评论屏蔽指定关键词
         }
         setInterval(topTime_question, 300); //                             置顶显示时间
     } else if (window.location.href.indexOf("search") > -1) { // 搜索结果页 //
