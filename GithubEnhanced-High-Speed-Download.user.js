@@ -44,7 +44,7 @@
     //['https://gh.66ccff.work', '美国'],
     //['https://github.91chifun.workers.dev', '美国'],
     //['https://github.rc1844.workers.dev', '美国'],
-    var download_url = [
+    const download_url = [
         ['https://gh.api.99988866.xyz', '美国'],
         ['https://gh.msx.workers.dev', '美国'],
         ['https://gh.xiu2.xyz', '美国'],
@@ -75,9 +75,8 @@
             '<svg class="octicon octicon-clippy" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M5.75 1a.75.75 0 00-.75.75v3c0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75v-3a.75.75 0 00-.75-.75h-4.5zm.75 3V2.5h3V4h-3zm-2.874-.467a.75.75 0 00-.752-1.298A1.75 1.75 0 002 3.75v9.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0014 13.25v-9.5a1.75 1.75 0 00-.874-1.515.75.75 0 10-.752 1.298.25.25 0 01.126.217v9.5a.25.25 0 01-.25.25h-8.5a.25.25 0 01-.25-.25v-9.5a.25.25 0 01.126-.217z"></path></svg>',
             '<svg class="octicon octicon-cloud-download" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M9 12h2l-3 3-3-3h2V7h2v5zm3-8c0-.44-.91-3-4.5-3C5.08 1 3 2.92 3 5 1.02 5 0 6.52 0 8c0 1.53 1 3 3 3h3V9.7H3C1.38 9.7 1.3 8.28 1.3 8c0-.17.05-1.7 1.7-1.7h1.3V5c0-1.39 1.56-2.7 3.2-2.7 2.55 0 3.13 1.55 3.2 1.8v1.2H12c.81 0 2.7.22 2.7 2.2 0 2.09-2.25 2.2-2.7 2.2h-2V11h2c2.08 0 4-1.16 4-3.5C16 5.06 14.08 4 12 4z"></path></svg>'
         ],
-        style = ['padding:0 6px;margin-right: -1px;border-radius: 2px;background-color: '+backColor+';border-color: rgba(27, 31, 35, 0.1);font-size: 11px;color: '+fontColor+';'],
-        menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'),
-        menu_menu_raw_fast_ID, menu_feedBack_ID;
+        style = ['padding:0 6px;margin-right: -1px;border-radius: 2px;background-color: '+backColor+';border-color: rgba(27, 31, 35, 0.1);font-size: 11px;color: '+fontColor+';'];
+        var menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'), menu_menu_raw_fast_ID, menu_feedBack_ID;
     if (menu_raw_fast == null){menu_raw_fast = 1; GM_setValue('xiu2_menu_raw_fast', 1)};
 
     registerMenuCommand();
@@ -403,7 +402,7 @@
     }
 
 
-    // 自定义 locationchange 事件（用来监听 URL 变化，针对的是 Github 这种因为使用 pjax 而无法依靠 hashchange 监听的网页）
+    // 自定义 locationchange 事件（用来监听 URL 变化）
     function addLocationchange() {
         history.pushState = ( f => function pushState(){
             var ret = f.apply(this, arguments);
