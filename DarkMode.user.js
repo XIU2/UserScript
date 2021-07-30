@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.2.2
+// @version      1.2.3
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -316,7 +316,7 @@
                     clearInterval(timer1); // 取消定时器
                     document.lastChild.appendChild(style_Add).textContent = style;
                 }
-            }, 5);
+            });
         }
 
         let websiteList = [];
@@ -325,7 +325,7 @@
         }
 
         // 为了避免 body 还没加载导致无法检查是否设置背景颜色
-        let timer = setInterval(function(){ // 每 10 毫秒检查一下 body 是否已存在
+        let timer = setInterval(function(){ // 每 5 毫秒检查一下 body 是否已存在
             if (document.body) {
                 clearInterval(timer); // 取消定时器（每 10 毫秒一次的）
                 setTimeout(function(){ // 为了避免太快 body 的 CSS 还没加载上，先延迟 150 毫秒（缺点就是可能会出现短暂一闪而过的暗黑滤镜）
@@ -365,7 +365,7 @@
                     }
                 }, 1500);
             }
-        }, 10);
+        });
 
         // 用来解决一些 CSS 加载缓慢的网站，可能会出现没有正确排除的问题，在没有找到更好的办法之前，先这样凑活着用
         /*setTimeout(function(){
@@ -391,7 +391,7 @@
                     document.lastChild.appendChild(style_Add).textContent = style;
                     clearInterval(timer1);
                 }
-            }, 10);
+            });
         }
     }
 

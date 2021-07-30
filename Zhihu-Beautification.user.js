@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.2.6
+// @version      1.2.7
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -369,7 +369,7 @@ html {filter: brightness(75%) sepia(30%) !important; background-image: url();}
                     clearInterval(timer1); // 取消定时器
                     document.lastChild.appendChild(style_Add).textContent = style;
                 }
-            }, 10);
+            });
         }
     }
 
