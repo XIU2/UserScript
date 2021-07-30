@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.5.0
+// @version      1.5.1
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题）、屏蔽盐选内容、展开问题描述、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -238,13 +238,16 @@ function blockUsers(type) {
     if (!menu_value('menu_customBlockUsers') || menu_value('menu_customBlockUsers').length < 1) return
     switch(type) {
         case 'index':
-            blockUsers_index();
+            blockUsers_('.Card.TopstoryItem.TopstoryItem--old.TopstoryItem-isRecommend', 'Card TopstoryItem TopstoryItem--old TopstoryItem-isRecommend');
             break;
         case 'question':
             blockUsers_question();
             break;
         case 'search':
             blockUsers_search();
+            break;
+        case 'topic':
+            blockUsers_('.List-item.TopicFeedItem', 'List-item TopicFeedItem');
             break;
         case 'people':
             blockUsers_button_people(); // 添加屏蔽用户按钮（用户主页）
@@ -253,29 +256,108 @@ function blockUsers(type) {
     blockUsers_comment(); //       评论区
     blockUsers_button(); //        加入黑名单按钮
 
-    function blockUsers_index() {
-        let blockUsers = e => {
-            if (e.target.innerHTML && e.target.getElementsByClassName('Feed').length > 0) {
-                let item = e.target.getElementsByClassName('Feed')[0].getElementsByClassName('ContentItem AnswerItem')[0]; // 用户名所在元素
+    function blockUsers_(className1, className2) {
+        // 前几条因为是直接加载的，而不是动态插入网页的，所以需要单独判断
+        function blockKeywords_now() {
+            document.querySelectorAll(className1).forEach(function(item1){
+                let item = item1.querySelector('.ContentItem.AnswerItem, .ContentItem.ArticleItem'); // 用户名所在元素
                 if (item) {
-                    menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
-                        if (item.dataset.zop.indexOf('authorName":"' + item1 + '",') > -1) { // 找到就删除该信息流
+                    for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
+                        if (item.dataset.zop.indexOf('authorName":"' + keyword + '",') > -1) { // 找到就删除该信息流
                             console.log(item.dataset.zop);
-                            item.parentNode.parentNode.remove();
+                            item1.remove();
+                            break;
+                        }
+                    }
+                }
+            })
+        }
+
+        blockKeywords_now();
+        addLocationchange();
+        window.addEventListener('locationchange', function(){
+            setTimeout(blockKeywords_now, 500); // 网页 URL 变化后再次执行
+        })
+
+        // 这个是监听网页插入事件，用来判断后续网页动态插入的元素
+        const callback = (mutationsList, observer) => {
+            for (const mutation of mutationsList) {
+                for (const target of mutation.addedNodes) {
+                    if (target.nodeType != 1) return
+                    if (target.className === className2) {
+                        let item = target.querySelector('.ContentItem.AnswerItem, .ContentItem.ArticleItem'); // 用户名所在元素
+                        if (item) {
+                            for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
+                                if (item.dataset.zop.indexOf('authorName":"' + keyword + '",') > -1) { // 找到就删除该信息流
+                                    console.log(item.dataset.zop);
+                                    target.remove();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(document, { childList: true, subtree: true });
+    }
+
+
+    function blockUsers_question() {
+        const blockUsers_question_ = (mutationsList, observer) => {
+            for (const mutation of mutationsList) {
+                for (const target of mutation.addedNodes) {
+                    if (target.nodeType != 1) return
+                    if (target.className === 'List-item' || target.className === 'Card AnswerCard') {
+                        let item1 = target.querySelector('.ContentItem.AnswerItem');
+                        if (item1) {
+                            menu_value('menu_customBlockUsers').forEach(function(item2){ // 遍历用户黑名单
+                                if (item1.dataset.zop.indexOf('authorName":"' + item2 + '",') > -1) { // 找到就删除该回答
+                                    console.log(item1.dataset.zop)
+                                    target.remove();
+                                }
+                            })
+                        }
+                    }
+                }
+            }
+        };
+
+        const blockUsers_question_answer_ = (mutationsList, observer) => {
+            for (const mutation of mutationsList) {
+                for (const target of mutation.addedNodes) {
+                    if (target.nodeType != 1) return
+                    target.querySelectorAll('.List-item, .Card.AnswerCard').forEach(function(item){
+                        let item1 = item.querySelector('.ContentItem.AnswerItem');
+                        if (item1) {
+                            menu_value('menu_customBlockUsers').forEach(function(item2){ // 遍历用户黑名单
+                                if (item1.dataset.zop.indexOf('authorName":"' + item2 + '",') > -1) { // 找到就删除该回答
+                                    console.log(item1.dataset.zop)
+                                    item.remove();
+                                }
+                            })
                         }
                     })
                 }
             }
-        }
-        document.addEventListener('DOMNodeInserted', blockUsers); // 监听插入事件
+        };
 
-        let listItem = document.getElementsByClassName('Card TopstoryItem TopstoryItem--old TopstoryItem-isRecommend');
-        Array.from(listItem).forEach(function(item){ // 遍历所有回答
-            let listName = item.querySelector('.ContentItem.AnswerItem') // 用户名所在元素
-            if (listName) {
-                menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
-                    if (listName.dataset.zop.indexOf('authorName":"' + item1 + '",') > -1) { // 找到就删除该信息流
-                        console.log(listName.dataset.zop);
+        if (location.pathname.indexOf('/answer/') > -1) { // 回答页（就是只有三个回答的页面）
+            const observer = new MutationObserver(blockUsers_question_answer_);
+            observer.observe(document, { childList: true, subtree: true });
+        } else { // 问题页（可以显示所有回答的页面）
+            const observer = new MutationObserver(blockUsers_question_);
+            observer.observe(document, { childList: true, subtree: true });
+        }
+
+        // 针对的是打开网页后直接加载的前面几个回答（上面哪些是针对动态加载的回答）
+        document.querySelectorAll('.List-item, .Card.AnswerCard').forEach(function(item){
+            let item1 = item.querySelector('.ContentItem.AnswerItem');
+            if (item1) {
+                menu_value('menu_customBlockUsers').forEach(function(item2){ // 遍历用户黑名单
+                    if (item1.dataset.zop.indexOf('authorName":"' + item2 + '",') > -1) { // 找到就删除该回答
+                        console.log(item1.dataset.zop)
                         item.remove();
                     }
                 })
@@ -283,105 +365,116 @@ function blockUsers(type) {
         })
     }
 
-    function blockUsers_question() {
-        let blockUsers = e => {
-            if (e.target.innerHTML && e.target.getElementsByClassName('ContentItem AnswerItem').length > 0) {
-                let item = e.target.getElementsByClassName('ContentItem AnswerItem')[0]; // 用户名所在元素
-                if (item) {
-                    menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
-                        if (item.dataset.zop.indexOf('authorName":"' + item1 + '",') > -1) { // 找到就删除该回答
-                            console.log(item.dataset.zop)
-                            item.parentNode.remove();
-                        }
-                    })
-                }
-            }
-        }
-        document.addEventListener('DOMNodeInserted', blockUsers); // 监听插入事件
-
-        let listItem = document.getElementsByClassName('ContentItem AnswerItem');
-        Array.from(listItem).forEach(function(item){ // 遍历所有回答 // 用户名所在元素
-            if (item) {
-                menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
-                    if (item.dataset.zop.indexOf('authorName":"' + item1 + '",') > -1) { // 找到就删除该回答
-                        console.log(item.dataset.zop)
-                        item.parentNode.remove();
-                    }
-                })
-            }
-        })
-    }
-
     function blockUsers_search() {
-        let blockUsers = e => {
-            if (e.target.innerHTML && e.target.getElementsByClassName('List-item').length > 0) {
-                let item = e.target.getElementsByClassName('List-item')[0];
-                let listName = item.querySelector('.RichText.ztext.CopyrightRichText-richText b') // 用户名所在元素
-                if (listName) {
-                    menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
-                        if (item1 === listName.innerText) { // 找到就删除该搜索结果
-                            console.log(listName.innerText);
-                            item.parentNode.remove();
+        function blockUsers_now() {
+            if (location.search.indexOf('type=content') === -1) return // 目前只支持搜索页的 [综合]
+            document.querySelectorAll('.Card.SearchResult-Card[data-za-detail-view-path-module="AnswerItem"], .Card.SearchResult-Card[data-za-detail-view-path-module="PostItem"]').forEach(function(item1){
+                let item = item1.querySelector('.RichText.ztext.CopyrightRichText-richText b'); // 标题所在元素
+                if (item) {
+                    for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历关键词黑名单
+                        if (item.textContent === keyword) { // 找到就删除该信息流
+                            console.log(item.textContent);
+                            item1.remove();
+                            break;
                         }
-                    })
+                    }
+                }
+            })
+        }
+
+        setTimeout(blockUsers_now, 500);
+        addLocationchange();
+        window.addEventListener('locationchange', function(){
+            setTimeout(blockUsers_now, 500); // 网页 URL 变化后再次执行
+        })
+
+        const callback = (mutationsList, observer) => {
+            if (location.search.indexOf('type=content') === -1) return // 目前只支持搜索页的 [综合]
+            for (const mutation of mutationsList) {
+                for (const target of mutation.addedNodes) {
+                    if (target.nodeType != 1) return
+                    if (target.className === 'Card SearchResult-Card' && (target.dataset.zaDetailViewPathModule === 'AnswerItem' || target.dataset.zaDetailViewPathModule === 'PostItem')) {
+                        let item = target.querySelector('.RichText.ztext.CopyrightRichText-richText b'); // 用户名所在元素
+                        if (item) {
+                            for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
+                                if (item.textContent === keyword) { // 找到就删除该信息流
+                                    console.log(item.textContent);
+                                    target.remove();
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
-        }
-        document.addEventListener('DOMNodeInserted', blockUsers); // 监听插入事件
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(document, { childList: true, subtree: true });
     }
 
     function blockUsers_comment() {
-        let blockUsers = e => {
-            if (e.target.innerHTML && e.target.querySelector('img.Avatar.UserLink-avatar[width="24"]')) {
-                let item = e.target.querySelectorAll('img.Avatar.UserLink-avatar[width="24"]')
-                item.forEach(function(item1){ // 遍历用户名
-                    menu_value('menu_customBlockUsers').forEach(function(item2){ // 遍历用户黑名单
-                        if (item1.alt === item2) { // 找到就删除该搜索结果
-                            if (item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootCommentNoChild' || item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootComment') {
-                                item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
-                            } else if (item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootCommentNoChild' || item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootComment') {
-                                item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
-                            } else if (item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--child') {
-                                item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
-                            } else if (item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--child') {
-                                item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
-                            } else if (item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment') {
-                                item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
-                            } else if (item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'CommentItemV2') {
-                                item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+        const callback = (mutationsList, observer) => {
+            for (const mutation of mutationsList) {
+                for (const target of mutation.addedNodes) {
+                    if (target.nodeType != 1) return
+                    let item = target.querySelector('img.Avatar.UserLink-avatar')
+                    if (item) {
+                        menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
+                            if (item.alt === item1) { // 找到就删除该搜索结果
+                                // 试了多种方案，感觉还是这个简单粗暴，缺点就是一旦知乎框架改了就失效了，但好在知乎也不会天天改~
+                                if (item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootCommentNoChild' || item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootComment') {
+                                    item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                                } else if (item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootCommentNoChild' || item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootComment') {
+                                    item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                                } else if (item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--child') {
+                                    item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                                } else if (item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--child') {
+                                    item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                                } else if (item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment') {
+                                    item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                                } else if (item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'CommentItemV2') {
+                                    item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                                }
+                            }
+                        })
+
+                        // 添加屏蔽用户按钮（点赞、回复等按钮后面）
+                        if (item) {
+                            let footer = item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.CommentItemV2-metaSibling > .CommentItemV2-footer'),
+                                userid = item.parentNode;
+                            if (userid && footer && !footer.lastElementChild.dataset.name) {
+                                userid = userid.href.split('/')[4];
+                                footer.insertAdjacentHTML('beforeend',`<button type="button" data-name="${item.alt}" data-userid="${userid}" class="Button CommentItemV2-hoverBtn Button--plain"><span style="display: inline-flex; align-items: center;">&#8203;<svg class="Zi Zi--Like" fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="transform: rotate(180deg); margin-right: 5px;"><path d="M18.376 5.624c-3.498-3.499-9.254-3.499-12.752 0-3.499 3.498-3.499 9.254 0 12.752 3.498 3.499 9.254 3.499 12.752 0 3.499-3.498 3.499-9.14 0-12.752zm-1.693 1.693c2.37 2.37 2.596 6.094.678 8.69l-9.367-9.48c2.708-1.919 6.32-1.58 8.69.79zm-9.48 9.48c-2.37-2.37-2.595-6.095-.676-8.69l9.48 9.48c-2.822 1.918-6.433 1.58-8.803-.79z" fill-rule="evenodd"></path></svg></span>屏蔽用户</button>`);
+                                footer.lastElementChild.onclick = function(){blockUsers_button_add(this.dataset.name, this.dataset.userid, false)}
                             }
                         }
-                    })
-
-                    // 添加屏蔽用户按钮（点赞、回复等按钮后面）
-                    if (item1) {
-                        let footer = item1.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.CommentItemV2-metaSibling > .CommentItemV2-footer'),
-                        userid = item1.parentNode;
-                        if (userid && footer && !footer.lastElementChild.dataset.name) {
-                            userid = userid.href.split('/')[4];
-                            footer.insertAdjacentHTML('beforeend',`<button type="button" data-name="${item1.alt}" data-userid="${userid}" class="Button CommentItemV2-hoverBtn Button--plain"><span style="display: inline-flex; align-items: center;"><svg class="Zi Zi--Like" fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="transform: rotate(180deg); margin-right: 5px;"><path d="M18.376 5.624c-3.498-3.499-9.254-3.499-12.752 0-3.499 3.498-3.499 9.254 0 12.752 3.498 3.499 9.254 3.499 12.752 0 3.499-3.498 3.499-9.14 0-12.752zm-1.693 1.693c2.37 2.37 2.596 6.094.678 8.69l-9.367-9.48c2.708-1.919 6.32-1.58 8.69.79zm-9.48 9.48c-2.37-2.37-2.595-6.095-.676-8.69l9.48 9.48c-2.822 1.918-6.433 1.58-8.803-.79z" fill-rule="evenodd"></path></svg></span>屏蔽用户</button>`);
-                            footer.lastElementChild.onclick = function(){blockUsers_button_add(this.dataset.name, this.dataset.userid, false)}
-                        }
                     }
-                })
+                }
             }
-        }
-        document.addEventListener('DOMNodeInserted', blockUsers); // 监听插入事件
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(document, { childList: true, subtree: true });
     }
 
     // 添加屏蔽用户按钮（用户信息悬浮框中）
     function blockUsers_button() {
-        let blockUsers = e => {
-            if (e.target.innerHTML && e.target.querySelector('.MemberButtonGroup.ProfileButtonGroup.HoverCard-buttons')) {
-                let item = e.target.querySelector('.MemberButtonGroup.ProfileButtonGroup.HoverCard-buttons'),
-                    item1 = item.parentNode.parentNode.querySelector('a.UserLink-link'),
-                    name = item1.innerText,
-                    userid = item1.href.split('/')[4];
-                item.insertAdjacentHTML('beforeend', `<button type="button" data-name="${item1.innerText}" data-userid="${userid}" class="Button FollowButton Button--primary Button--red" style="width: 100%;margin: 7px 0 0 0;"><span style="display: inline-flex; align-items: center;">​<svg class="Zi Zi--Plus FollowButton-icon" fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M18.376 5.624c-3.498-3.499-9.254-3.499-12.752 0-3.499 3.498-3.499 9.254 0 12.752 3.498 3.499 9.254 3.499 12.752 0 3.499-3.498 3.499-9.14 0-12.752zm-1.693 1.693c2.37 2.37 2.596 6.094.678 8.69l-9.367-9.48c2.708-1.919 6.32-1.58 8.69.79zm-9.48 9.48c-2.37-2.37-2.595-6.095-.676-8.69l9.48 9.48c-2.822 1.918-6.433 1.58-8.803-.79z" fill-rule="evenodd"></path></svg></span>屏蔽用户</button>`);
-                item.lastElementChild.onclick = function(){blockUsers_button_add(this.dataset.name, this.dataset.userid, false)}
+        const callback = (mutationsList, observer) => {
+            for (const mutation of mutationsList) {
+                for (const target of mutation.addedNodes) {
+                    if (target.nodeType != 1) return
+                    if (target.className.indexOf('Popover-content Popover-content--top HoverCard-popoverTarget') > -1 || target.className.indexOf('Popover-content Popover-content--bottom HoverCard-popoverTarget') > -1 || target.querySelector('.Popover-content.Popover-content--top.HoverCard-popoverTarget') || target.querySelector('.Popover-content.Popover-content--bottom.HoverCard-popoverTarget')) {
+                        let item = target.querySelector('.MemberButtonGroup.ProfileButtonGroup.HoverCard-buttons'),
+                            item1 = target.querySelector('a.UserLink-link'),
+                            name = item1.textContent,
+                            userid = item1.href.split('/')[4];
+                        item.insertAdjacentHTML('beforeend', `<button type="button" data-name="${name}" data-userid="${userid}" class="Button FollowButton Button--primary Button--red" style="width: 100%;margin: 7px 0 0 0;"><span style="display: inline-flex; align-items: center;">​<svg class="Zi Zi--Plus FollowButton-icon" fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em"><path d="M18.376 5.624c-3.498-3.499-9.254-3.499-12.752 0-3.499 3.498-3.499 9.254 0 12.752 3.498 3.499 9.254 3.499 12.752 0 3.499-3.498 3.499-9.14 0-12.752zm-1.693 1.693c2.37 2.37 2.596 6.094.678 8.69l-9.367-9.48c2.708-1.919 6.32-1.58 8.69.79zm-9.48 9.48c-2.37-2.37-2.595-6.095-.676-8.69l9.48 9.48c-2.822 1.918-6.433 1.58-8.803-.79z" fill-rule="evenodd"></path></svg></span>屏蔽用户</button>`);
+                        item.lastElementChild.onclick = function(){blockUsers_button_add(this.dataset.name, this.dataset.userid, false)}
+                    }
+                }
             }
-        }
-        document.addEventListener('DOMNodeInserted', blockUsers); // 监听插入事件
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(document, { childList: true, subtree: true });
     }
 
     // 添加屏蔽用户按钮（用户主页）
@@ -453,7 +546,7 @@ function blockUsers(type) {
 function customBlockKeywords() {
     let nowBlockKeywords = '';
     menu_value('menu_customBlockKeywords').forEach(function(item){nowBlockKeywords += '|' + item})
-    let newBlockKeywords = prompt('编辑 [自定义屏蔽关键词]\n（不同关键词之间使用 "|" 分隔，例如：关键词A|关键词B|关键词C \n（关键词不区分大小写', nowBlockKeywords.replace('|',''));
+    let newBlockKeywords = prompt('编辑 [自定义屏蔽关键词]\n（不同关键词之间使用 "|" 分隔，例如：关键词A|关键词B|关键词C \n（关键词不区分大小写，支持表情如：[捂脸]|[飙泪笑]', nowBlockKeywords.replace('|',''));
     if (newBlockKeywords === '') {
         GM_setValue('menu_customBlockKeywords', []);
         registerMenuCommand(); // 重新注册脚本菜单
@@ -464,171 +557,160 @@ function customBlockKeywords() {
 };
 
 
-// 屏蔽指定关键词（标题）
+// 屏蔽指定关键词
 function blockKeywords(type) {
     if (!menu_value('menu_blockKeywords')) return
     if (!menu_value('menu_customBlockKeywords') || menu_value('menu_customBlockKeywords').length < 1) return
     switch(type) {
         case 'index':
-            blockKeywords_index_();
-            blockKeywords_index();
+            blockKeywords_('.Card.TopstoryItem.TopstoryItem--old.TopstoryItem-isRecommend', 'Card TopstoryItem TopstoryItem--old TopstoryItem-isRecommend');
             break;
         case 'topic':
-            blockKeywords_topic();
-            blockKeywords_people();
+            blockKeywords_('.List-item.TopicFeedItem', 'List-item TopicFeedItem');
             break;
         case 'people':
-            blockKeywords_people();
+            blockKeywords_('.List-item', 'List-item');
             break;
         case 'search':
             blockKeywords_search();
             break;
+        case 'comment':
+            blockKeywords_comment();
+            break;
     }
 
-    function blockKeywords_index_() {
-        let item = document.querySelectorAll('h2.ContentItem-title meta[itemprop="name"]'); // 标题所在元素
-        if (item.length > 0) {
-            item.forEach(function(item2){
-                //console.log(item2)
-                menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                    if (item2.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
-                        console.log(item2.content);
-                        if (item2.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'Feed') {
-                            item2.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
-                        } else {
-                            item2.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
-                        }
-                    }
-                })
-            })
-        }
-        // 如果是文章标题
-        item = document.querySelectorAll('.ContentItem.ArticleItem meta[itemprop="headline"]'); // 标题所在元素
-        if (item.length > 0) {
-            item.forEach(function(item2){
-                //console.log(item2)
-                menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                    if (item2.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
-                        console.log('文章',item2.content);
-                        item2.parentNode.parentNode.parentNode.remove();
-                    }
-                })
-            })
-        }
-    }
 
-    function blockKeywords_index() {
-        let blockKeywords = e => {
-            if (e.target.innerHTML && e.target.getElementsByClassName('ContentItem-title').length > 0) {
-                let item = e.target.querySelector('h2.ContentItem-title meta[itemprop="name"]'); // 标题所在元素
+    function blockKeywords_(className1, className2) {
+        // 前几条因为是直接加载的，而不是动态插入网页的，所以需要单独判断
+        function blockKeywords_now() {
+            document.querySelectorAll(className1).forEach(function(item1){
+                let item = item1.querySelector('h2.ContentItem-title meta[itemprop="name"], meta[itemprop="headline"]'); // 标题所在元素
                 if (item) {
-                    //console.log(item)
-                    menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                        if (item.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
+                    for (const keyword of menu_value('menu_customBlockKeywords')) { // 遍历关键词黑名单
+                        if (item.content.toLowerCase().indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该信息流
                             console.log(item.content);
-                            if (item.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'Feed') {
-                                item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
-                            } else {
-                                item.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                            item1.hidden = true;
+                            break;
+                        }
+                    }
+                }
+            })
+        }
+
+        blockKeywords_now();
+        addLocationchange();
+        window.addEventListener('locationchange', function(){
+            setTimeout(blockKeywords_now, 500); // 网页 URL 变化后再次执行
+        })
+
+        // 这个是监听网页插入事件，用来判断后续网页动态插入的元素
+        const callback = (mutationsList, observer) => {
+            for (const mutation of mutationsList) {
+                for (const target of mutation.addedNodes) {
+                    if (target.nodeType != 1) return
+                    if (target.className === className2) {
+                        let item = target.querySelector('h2.ContentItem-title meta[itemprop="name"], meta[itemprop="headline"]'); // 标题所在元素
+                        if (item) {
+                            for (const keyword of menu_value('menu_customBlockKeywords')) { // 遍历关键词黑名单
+                                if (item.content.toLowerCase().indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该信息流
+                                    console.log(item.content);
+                                    target.hidden = true;
+                                    break;
+                                }
                             }
                         }
-                    })
-                } else { // 如果是文章标题
-                    item = e.target.querySelector('.ContentItem.ArticleItem meta[itemprop="headline"]'); // 标题所在元素
-                    if (item) {
-                        //console.log(item)
-                        menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                            if (item.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
-                                console.log('文章',item.content);
-                                item.parentNode.parentNode.parentNode.remove();
-                            }
-                        })
                     }
                 }
             }
-        }
-        document.addEventListener('DOMNodeInserted', blockKeywords); // 监听插入事件
-    }
-
-
-    function blockKeywords_topic() {
-        let item = document.querySelectorAll('h2.ContentItem-title meta[itemprop="name"]'); // 标题所在元素
-        if (item.length > 0) {
-            //console.log(item)
-            item.forEach(function(item2){
-                menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                    if (item2.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
-                        console.log(item2.content);
-                        item2.parentNode.parentNode.parentNode.parentNode.remove();
-                    }
-                })
-            })
-        }
-        // 如果是文章标题
-        item = document.querySelectorAll('.ContentItem.ArticleItem meta[itemprop="headline"]'); // 标题所在元素
-        if (item.length > 0) {
-            //console.log(item)
-            item.forEach(function(item2){
-                menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                    if (item2.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
-                        console.log('文章',item2.content);
-                        item2.parentNode.parentNode.remove();
-                    }
-                })
-            })
-        }
-    }
-
-
-    function blockKeywords_people() {
-        let blockKeywords = e => {
-            if (e.target.innerHTML && e.target.getElementsByClassName('ContentItem-title').length > 0) {
-                let item = e.target.querySelector('h2.ContentItem-title meta[itemprop="name"]'); // 标题所在元素
-                if (item) {
-                    console.log(item)
-                    menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                        if (item.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
-                            console.log(item.content);
-                            item.parentNode.parentNode.parentNode.parentNode.remove();
-                        }
-                    })
-                } else { // 如果是文章标题
-                    item = e.target.querySelector('.ContentItem.ArticleItem meta[itemprop="headline"]'); // 标题所在元素
-                    if (item) {
-                        console.log(item)
-                        menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                            if (item.content.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
-                                console.log('文章',item.content);
-                                item.parentNode.parentNode.remove();
-                            }
-                        })
-                    }
-                }
-            }
-        }
-        document.addEventListener('DOMNodeInserted', blockKeywords); // 监听插入事件
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(document, { childList: true, subtree: true });
     }
 
 
     function blockKeywords_search() {
-        let blockKeywords = e => {
-            if (location.search.indexOf('&type=content') === -1) return
-            //if (e.target.innerHTML) console.log(e.target.innerHTML)
-            if (e.target.innerHTML && e.target.getElementsByClassName('ContentItem-title').length > 0) {
-                //console.log(e.target.innerHTML)
-                let item = e.target.querySelector('h2.ContentItem-title a[data-za-detail-view-id]'); // 标题所在元素
+        function blockKeywords_now() {
+            if (location.search.indexOf('type=content') === -1) return // 目前只支持搜索页的 [综合]
+            document.querySelectorAll('.Card.SearchResult-Card[data-za-detail-view-path-module="AnswerItem"], .Card.SearchResult-Card[data-za-detail-view-path-module="PostItem"]').forEach(function(item1){
+                let item = item1.querySelector('a[data-za-detail-view-id]'); // 标题所在元素
                 if (item) {
-                    //console.log(item)
-                    menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词黑名单
-                        if (item.innerText.toLowerCase().indexOf(item1.toLowerCase()) > -1) { // 找到就删除该信息流
-                            console.log(item.innerText);
-                            item.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                    for (const keyword of menu_value('menu_customBlockKeywords')) { // 遍历关键词黑名单
+                        if (item.textContent.toLowerCase().indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该信息流
+                            console.log(item.textContent);
+                            item1.hidden = true;
+                            break;
                         }
-                    })
+                    }
+                }
+            })
+        }
+
+        setTimeout(blockKeywords_now, 500);
+        addLocationchange();
+        window.addEventListener('locationchange', function(){
+            setTimeout(blockKeywords_now, 500); // 网页 URL 变化后再次执行
+        })
+
+        const callback = (mutationsList, observer) => {
+            if (location.search.indexOf('type=content') === -1) return // 目前只支持搜索页的 [综合]
+            for (const mutation of mutationsList) {
+                for (const target of mutation.addedNodes) {
+                    if (target.nodeType != 1) return
+                    if (target.className === 'Card SearchResult-Card' && (target.dataset.zaDetailViewPathModule === 'AnswerItem' || target.dataset.zaDetailViewPathModule === 'PostItem')) {
+                        let item = target.querySelector('a[data-za-detail-view-id]'); // 标题所在元素
+                        if (item) {
+                            for (const keyword of menu_value('menu_customBlockKeywords')) { // 遍历关键词黑名单
+                                if (item.textContent.toLowerCase().indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该信息流
+                                    console.log(item.textContent);
+                                    target.remove();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(document, { childList: true, subtree: true });
+    }
+
+
+    function blockKeywords_comment() {
+        function filterComment(comment) {
+            let content = comment.querySelector('.RichText'); // 寻找评论文字所在元素
+            let texts = [content.textContent.toLowerCase()]; // 因为要针对评论中的表情，所以需要整个数组并全部转为小写（用来不区分大小写）
+            for (let i = 0; i < content.children.length; i++) { // 该条针对的是评论中的表情
+                let emoticonValue = content.children[i].getAttribute('data-zhihu-emoticon'); // 确定是表情就将其添加到稍后遍历的数组中
+                if (emoticonValue) {
+                    texts.push(emoticonValue)
+                }
+            }
+
+            let keywords = menu_value('menu_customBlockKeywords');
+            for (const text of texts) {
+                for (const keyword of keywords) { // 遍历关键词黑名单
+                    if (text.indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该评论
+                        console.log(text);
+                        content.textContent = '[该评论已屏蔽]';
+                        break;
+                    }
                 }
             }
         }
-        document.addEventListener('DOMNodeInserted', blockKeywords); // 监听插入事件
+
+        const callback = (mutationsList, observer) => {
+            for (const mutation of mutationsList) {
+                for (const target of mutation.addedNodes) {
+                    if (target.nodeType != 1) return
+                    for (const node of target.querySelectorAll('*')) {
+                        if (node.className === 'CommentItemV2-metaSibling') filterComment(node);
+                    }
+                }
+            }
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(document, { childList: true, subtree: true });
     }
 }
 
@@ -636,17 +718,43 @@ function blockKeywords(type) {
 // 屏蔽盐选内容
 function blockYanXuan() {
     if (!menu_value('menu_blockYanXuan')) return
-    let blockYanXuan = e => {
-        if (e.target.innerHTML && e.target.getElementsByClassName('KfeCollection-PurchaseBtn-mask').length > 0) {
-            let item = e.target.getElementsByClassName('KfeCollection-PurchaseBtn-mask')[0];
-            item.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+    const blockYanXuan_question = (mutationsList, observer) => {
+        for (const mutation of mutationsList) {
+            for (const target of mutation.addedNodes) {
+                if (target.nodeType != 1) return
+                if (target.className === 'List-item' || target.className === 'Card AnswerCard') {
+                    if (target.querySelector('.KfeCollection-AnswerTopCard-Container, .KfeCollection-PurchaseBtn')) {
+                        target.remove();
+                    }
+                }
+            }
         }
-    }
-    document.addEventListener('DOMNodeInserted', blockYanXuan); // 监听插入事件
+    };
 
-    let listItem = document.getElementsByClassName('List-item');
-    Array.from(listItem).forEach(function(item){
-        if (item.getElementsByClassName('KfeCollection-PurchaseBtn-mask').length > 0) {
+    const blockYanXuan_question_answer = (mutationsList, observer) => {
+        for (const mutation of mutationsList) {
+            for (const target of mutation.addedNodes) {
+                if (target.nodeType != 1) return
+                target.querySelectorAll('.List-item, .Card.AnswerCard').forEach(function(item){
+                    if (item.querySelector('.KfeCollection-AnswerTopCard-Container, .KfeCollection-PurchaseBtn')) {
+                        item.remove();
+                    }
+                })
+            }
+        }
+    };
+
+    if (location.pathname.indexOf('/answer/') > -1) { // 回答页（就是只有三个回答的页面）
+        const observer = new MutationObserver(blockYanXuan_question_answer);
+        observer.observe(document, { childList: true, subtree: true });
+    } else { // 问题页（可以显示所有回答的页面）
+        const observer = new MutationObserver(blockYanXuan_question);
+        observer.observe(document, { childList: true, subtree: true });
+    }
+
+    // 针对的是打开网页后直接加载的前面几个回答（上面哪些是针对动态加载的回答）
+    document.querySelectorAll('.List-item, .Card.AnswerCard').forEach(function(item){
+        if (item.querySelector('.KfeCollection-AnswerTopCard-Container, .KfeCollection-PurchaseBtn')) {
             item.remove();
         }
     })
@@ -693,52 +801,38 @@ function addTypeTips() {
 function questionRichTextMore() {
     if (!menu_value('menu_questionRichTextMore')) return
     let button = document.querySelector('button.QuestionRichText-more');
-    if (button) {
-        button.click()
-    }
+    if (button) button.click()
 }
 
 
-// 监听 网页插入元素 事件
-function addEventListener_DOMNodeInserted() {
-    // 知乎免登录，修改自：https://greasyfork.org/zh-CN/scripts/417126
-    let removeLoginModal = e => {
-        if (e.target.innerHTML && e.target.getElementsByClassName('Modal-wrapper').length > 0) {
-            if (e.target.getElementsByClassName('Modal-wrapper')[0].querySelector('.signFlowModal')){
-                let button = e.target.getElementsByClassName('Button Modal-closeButton Button--plain')[0];
-                if (button)button.click();
-            }
-        }
-    }
-
-    // 收起当前评论（监听点击事件，点击网页两侧空白处）
-    let collapseNowComment = e => {
-        if (e.target.innerHTML && e.target.getElementsByClassName('Modal-wrapper Modal-enter').length > 0) {
-            document.getElementsByClassName('Modal-backdrop')[0].onclick = function(event){
-                if (event.target==this) {
-                    let closeButton = document.getElementsByClassName('Modal-closeButton')[0]
-                    if(closeButton) {
-                        closeButton.click();
-                    }
+// 知乎免登录
+function removeLogin() {
+    const removeLoginModal = (mutationsList, observer) => {
+        for (const mutation of mutationsList) {
+            for (const target of mutation.addedNodes) {
+                if (target.nodeType != 1) return
+                if (target.querySelector('.signFlowModal')) {
+                    let button = target.getElementsByClassName('Button Modal-closeButton Button--plain')[0];
+                    if (button) button.click();
                 }
             }
         }
-    }
+    };
 
     // 未登录时才会监听并移除登录弹窗
-    if(window.location.href.indexOf("zhuanlan") > -1) { // 如果是文章页
-        if (!document.querySelector('button.ColumnPageHeader-MenuToggler')) { // 判断不存在，则已登录
-            document.addEventListener('DOMNodeInserted', removeLoginModal);
+    if(window.location.href.indexOf('zhuanlan') > -1) { // 如果是文章页
+        if (!document.querySelector('button.ColumnPageHeader-MenuToggler')) { // 如果不存在，则代表已登录
+            const observer = new MutationObserver(removeLoginModal);
+            observer.observe(document, { childList: true, subtree: true });
         }
     } else { // 不是文章页
-        if (document.querySelector('button.AppHeader-login')) { // 如果存在，则未登录
-            document.addEventListener('DOMNodeInserted', removeLoginModal);
+        if (document.querySelector('button.AppHeader-login')) { // 如果存在，则代表未登录
+            const observer = new MutationObserver(removeLoginModal);
+            observer.observe(document, { childList: true, subtree: true });
             document.querySelector('button.AppHeader-login').onclick=function(){location.href='https://www.zhihu.com/signin';} // [登录] 按钮跳转至登录页面
             document.querySelector('.AppHeader-profile button.Button--primary').onclick=function(){location.href='https://www.zhihu.com/signin';} // [加入知乎] 按钮跳转至注册页面（实际上是同一个页面）
         }
     }
-
-    document.addEventListener('DOMNodeInserted', collapseNowComment); // 收起当前评论（监听点击事件，点击网页两侧空白处）
 }
 
 
@@ -992,12 +1086,33 @@ function questionInvitation(){
     });
 }
 
+// 自定义 locationchange 事件（用来监听 URL 变化）
+function addLocationchange() {
+    history.pushState = ( f => function pushState(){
+        var ret = f.apply(this, arguments);
+        window.dispatchEvent(new Event('pushstate'));
+        window.dispatchEvent(new Event('locationchange'));
+        return ret;
+    })(history.pushState);
+
+    history.replaceState = ( f => function replaceState(){
+        var ret = f.apply(this, arguments);
+        window.dispatchEvent(new Event('replacestate'));
+        window.dispatchEvent(new Event('locationchange'));
+        return ret;
+    })(history.replaceState);
+
+    window.addEventListener('popstate',()=>{
+        window.dispatchEvent(new Event('locationchange'))
+    });
+}
 
 (function() {
-    addEventListener_DOMNodeInserted(); //                                 监听 网页插入元素 事件
+    removeLogin(); //                                                      移除登录弹窗
     questionInvitation(); //                                               默认折叠邀请
     setInterval(originalPic,100); //                                       默认高清原图
     if (menu_value('menu_directLink')) setInterval(directLink, 100); //    默认站外直链
+    blockKeywords('comment'); //                                           屏蔽指定关键词（评论）
 
     if (window.location.href.indexOf("question") > -1) { //       回答页 //
         if (window.location.href.indexOf("waiting") == -1) {
@@ -1024,7 +1139,7 @@ function questionInvitation(){
             collapsedNowAnswer(".ContentLayout"); //                       收起当前回答 + 快捷返回顶部
             setInterval(topTime_people, 300); //                           置顶显示时间
             EventXMLHttpRequest(); //                                      区分问题文章
-            blockUsers(); //                                               屏蔽指定用户
+            blockUsers('topic'); //                                               屏蔽指定用户
             blockKeywords('topic'); //                                     屏蔽指定关键词
         }
     } else if (window.location.href.indexOf("zhuanlan") > -1){ //   文章 //
@@ -1042,7 +1157,7 @@ function questionInvitation(){
         collapsedNowAnswer("main div"); //                                 收起当前回答 + 快捷返回顶部
         collapsedNowAnswer(".Profile-main"); //                            收起当前回答 + 快捷返回顶部
         setInterval(topTime_people, 300); //                               置顶显示时间
-        blockUsers('people'); //                                                   屏蔽指定用户
+        blockUsers('people'); //                                           屏蔽指定用户
         blockKeywords('people'); //                                        屏蔽指定关键词
     } else { //                                                     首页 //
         collapsedAnswer(); //                                              一键收起回答
