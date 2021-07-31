@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.3.0
+// @version      1.3.1
 // @author       X.I.U
 // @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
@@ -92,6 +92,8 @@
     var loginStatus = false;
     if (document.getElementById('um')){
         loginStatus = true;
+    } else {
+        loginStatus = getLoginStatus();
     }
 
     // 默认 ID 为 0
@@ -252,7 +254,7 @@
     // 自定义屏蔽用户
     function customBlockUsers() {
         let nowBlockUsers = '';
-        GM_getValue('menu_customBlockUsers').forEach(function(item){nowBlockUsers = nowBlockUsers + '|' + item})
+        GM_getValue('menu_customBlockUsers').forEach(function(item){nowBlockUsers += '|' + item})
         let newBlockUsers = prompt('编辑 [自定义屏蔽用户]，刷新网页后生效\n（不同用户名之间使用 "|" 分隔，\n（例如：用户A|用户B|用户C，如果只有一个就不需要 "|" 了。', nowBlockUsers.replace('|',''));
         if (newBlockUsers === '') {
             GM_setValue('menu_customBlockUsers', []);
@@ -305,7 +307,7 @@
         function blockUsers_vfastpost() {
             let vfastpost = e => {
                 if (e.target.innerHTML && e.target.innerHTML.indexOf('id="vfastpost"') > -1) {
-                    let listItem = e.target.querySelectorAll('[id^="post_"]');
+                    let listItem = e.target.querySelectorAll('.bm_c > [id^="post_"]');
                     if (listItem.length < 1) return
                     listItem.forEach(function(item){ // 遍历所有回复
                         menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
@@ -326,7 +328,7 @@
     // 自定义屏蔽关键词（帖子标题）
     function customBlockKeywords() {
         let nowBlockKeywords = '';
-        GM_getValue('menu_customBlockKeywords').forEach(function(item){nowBlockKeywords = nowBlockKeywords + '|' + item})
+        GM_getValue('menu_customBlockKeywords').forEach(function(item){nowBlockKeywords += '|' + item})
         let newBlockKeywords = prompt('编辑 [自定义屏蔽关键词]，刷新网页后生效\n（不同关键词之间使用 "|" 分隔，\n（例如：助力|互助|互点，如果只有一个就不需要 "|" 了。', nowBlockKeywords.replace('|',''));
         if (newBlockKeywords === '') {
             GM_setValue('menu_customBlockKeywords', []);
@@ -706,5 +708,13 @@
                 return o;
             }
         }(i);
+    }
+
+
+    // 通过 Cookie 来判断是否登录
+    function getLoginStatus() {
+        let cookie = document.cookie.split(';');
+        for (let i=0; i<cookie.length; i++) {if (cookie[i].trim().indexOf('hkCM_2132_lip=') === 0) return true;}
+        return false;
     }
 })();
