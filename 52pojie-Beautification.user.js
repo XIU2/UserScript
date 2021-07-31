@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛美化
-// @version      1.0.1
+// @version      1.0.8
 // @author       X.I.U
 // @description  精简多余内容、样式优化
 // @match        *://www.52pojie.cn/*
