@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.3.1
+// @version      1.3.2
 // @author       X.I.U
 // @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
@@ -20,8 +20,8 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
-'use strict';
 (function() {
+    'use strict';
     var menu_ALL = [
         ['menu_autoSignIn', '自动签到', '自动签到', true],
         ['menu_reAutoSignIn', '重新签到', '重新签到', ''],
@@ -418,7 +418,9 @@
                 if (e.target.innerHTML && e.target.innerHTML.indexOf('id="vfastpost"') > -1) {
                     let message = e.target.querySelector('input[name="message"]'), id = message.id.match(/\d+/g)[0];
                     message.parentNode.innerHTML = `<textarea type="text" name="message" id="vmessage_${id}" style="width: 99.8%;height: 30px;border: none;outline: none;font-size: 14px;overflow-y: hidden;"></textarea>`
-                    document.getElementById(`vreplysubmit_${id}`).onclick = function(){document.getElementById(`vmessage_${id}`).value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');}
+                    document.getElementById(`vreplysubmit_${id}`).onclick = function(){
+                        if (GM_getValue('menu_customLittleTail')) document.getElementById(`vmessage_${id}`).value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');
+                    }
                 }
             }
             document.addEventListener('DOMNodeInserted', vfastpost); // 监听插入事件
@@ -427,20 +429,26 @@
         function littleTail_1() {
             let floatlayout_reply = e => {
                 if (e.target.innerHTML && e.target.innerHTML.indexOf('id="floatlayout_reply"') > -1) {
-                    document.getElementById('postsubmit').onclick = function(){document.getElementById('postmessage').value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');}
+                    document.getElementById('postsubmit').onclick = function(){
+                        if (GM_getValue('menu_customLittleTail')) document.getElementById('postmessage').value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');
+                    }
                 }
             }
             document.addEventListener('DOMNodeInserted', floatlayout_reply); // 监听插入事件
         }
 
         function littleTail_2() { // 帖子底部的回复框
-            document.getElementById('fastpostsubmit').onclick = function(){document.getElementById('fastpostmessage').value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');}
+            document.getElementById('fastpostsubmit').onclick = function(){
+                if (GM_getValue('menu_customLittleTail')) document.getElementById('fastpostmessage').value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');
+            }
         }
 
         function littleTail_3() {
             let postsubmit = document.getElementById('postsubmit');
             if (postsubmit && postsubmit.innerText === '\n参与/回复主题\n' || postsubmit && postsubmit.innerText === '\n发表帖子\n') {
-                postsubmit.onclick = function(){document.getElementById('e_textarea').value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');}
+                postsubmit.onclick = function(){
+                    if (GM_getValue('menu_customLittleTail')) document.getElementById('e_textarea').value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');
+                }
             }
         }
     }
