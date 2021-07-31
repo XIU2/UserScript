@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.2.3
+// @version      1.2.4
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -24,8 +24,8 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
-'use strict';
 (function() {
+    'use strict';
     var menu_ALL = [
         ['menu_disable', '✅ 已启用 (点击对当前网站禁用)', '❎ 已禁用 (点击对当前网站启用)', []],
         ['menu_runDuringTheDay', '白天保持开启 (比晚上亮一点点)', '白天保持开启', true],
@@ -272,8 +272,8 @@
             style_21_firefox = `html {filter: brightness(${style_20[0]}%) sepia(${style_20[1]}%) !important; background-image: url();}`,
             style_22 = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important;}`,
             style_22_firefox = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important; background-image: url();}`,
-            style_31 = `html {filter: invert(${style_30[0]}%) !important;} img, video {filter: invert(1) !important;} .mode-fullscreen video {filter: none !important;}`,
-            style_31_firefox = `html {filter: invert(${style_30[0]}%) !important; background-image: url();} img, video {filter: invert(1) !important;}`;
+            style_31 = `html {filter: invert(${style_30[0]}%) !important;} img, video {filter: invert(1) !important;}.mode-fullscreen video, img[alt="[公式]"] {filter: none !important;}`,
+            style_31_firefox = `html {filter: invert(${style_30[0]}%) !important; background-image: url();} img, video {filter: invert(1) !important;} .mode-fullscreen video, img[alt="[公式]"] {filter: none !important;}`;
 
         // Firefox 浏览器需要特殊对待
         if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {

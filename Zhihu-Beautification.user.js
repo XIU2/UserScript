@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.2.7
+// @version      1.2.8
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -19,8 +19,8 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
-'use strict';
 (function() {
+    'use strict';
     var menu_ALL = [
         ['menu_widescreenDisplay', '宽屏显示', '宽屏显示', true],
         ['menu_darkMode', '暗黑模式', '暗黑模式', true],
@@ -278,7 +278,7 @@ html[data-theme=dark] div#zh-hovercard a {color: #353535 !important;}
 html {filter: invert(80%) !important;}
 img, .ZVideoItem-video, .ZVideo-video {filter: invert(1) !important;}
 .GifPlayer img, .GifPlayer.isPlaying video {filter: invert(1) !important;}
-.GifPlayer.isPlaying img.ztext-gif.GifPlayer-gif2mp4Image {filter: none !important;}
+.GifPlayer.isPlaying img.ztext-gif.GifPlayer-gif2mp4Image, img[alt="[公式]"] {filter: none !important;}
 `,
             style_darkMode_2_firefox = `/* 暗黑模式（方案 2） */
 html {filter: invert(80%) !important; background-image: url();}
