@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         3DM论坛增强
-// @version      1.0.8
+// @version      1.0.9
 // @author       X.I.U
 // @description  自动回复、自动无缝翻页、清理置顶帖子、自动滚动至隐藏内容
 // @match        *://bbs.3dmgame.com/*
