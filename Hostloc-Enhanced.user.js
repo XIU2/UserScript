@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.3.2
+// @version      1.3.3
 // @author       X.I.U
 // @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
@@ -113,17 +113,8 @@
                 replaceE: 'css;div.pg',
             }
         },
-        guide: {
-            SiteTypeID: 3,
-            pager: {
-                nextLink: '//a[@class="nxt"][@href]',
-                pageElement: 'css;div#threadlist div.bm_c table > tbody[id^="normalthread_"]',
-                HT_insert: ['css;div#threadlist div.bm_c table', 2],
-                replaceE: 'css;div.pg',
-            }
-        },
         search: {
-            SiteTypeID: 4,
+            SiteTypeID: 3,
             pager: {
                 nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;div#threadlist > ul',
@@ -131,10 +122,10 @@
                 replaceE: 'css;div.pg'
             }
         },
-        myreply: {
+        guide: {
             SiteTypeID: 4,
             pager: {
-                nextLink: '(//a[@class="nxt"])[1][@href]',
+                nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;div#threadlist div.bm_c table > tbody',
                 HT_insert: ['css;div#threadlist div.bm_c table', 2],
                 replaceE: 'css;div.pg',
@@ -144,7 +135,7 @@
             SiteTypeID: 5,
             pager: {
                 nextLink: '//a[@class="nxt"][@href]',
-                pageElement: 'css;tbody > tr',
+                pageElement: 'css;tbody > tr:not(.th)',
                 HT_insert: ['css;tbody', 2],
                 replaceE: 'css;div.pg',
             }
@@ -161,8 +152,7 @@
 
     // URL 匹配正则表达式
     let patt_thread = /\/thread-\d+-\d+\-\d+.html/,
-        patt_forum = /\/forum-\d+-\d+\.html/,
-        patt_guide = /mod\=guide\&view\=(hot|digest)/
+        patt_forum = /\/forum-\d+-\d+\.html/
 
     // URL 判断
     if (patt_thread.test(location.pathname) || location.search.indexOf('mod=viewthread') > -1) { // 帖子内
@@ -183,7 +173,7 @@
         vfastpostDOMNodeInserted(); //                                    监听插入事件（预览快速回复带签名）
         littleTail('forum'); //                                           小尾巴
         if (patt_forum.test(location.pathname)) blockDOMNodeInserted(); //监听插入事件（有新的回复主题，点击查看）
-     }else if (patt_guide.test(location.search)) { //                     导读帖子列表
+     }else if (location.search.indexOf('mod=guide') > -1) { //            导读帖子列表
         curSite = DBSite.guide;
     } else if(location.pathname === '/search.php') { //                   搜索结果列表
         curSite = DBSite.search;
@@ -192,9 +182,7 @@
         blockUsers('notice'); //                                          屏蔽用户（黑名单）
     } else if(location.pathname === '/home.php' && location.search.indexOf('mod=space&do=pm') > -1) { // 消息(私人聊天)
         blockUsers('pm'); //                                              屏蔽用户（黑名单）
-    } else if(location.pathname === '/forum.php' && location.search.indexOf('mod=guide&view=my&type=reply') > -1) { // 我的帖子：回复
-        curSite = DBSite.myreply;
-    } else if(location.pathname === '/home.php' && location.search.indexOf('&do=thread&view=me') > -1) { // 别人的帖子：回复
+    } else if(location.search.indexOf('mod=space') > -1 && location.search.indexOf('&view=me') > -1) { // 别人的主题/回复
         curSite = DBSite.youreply;
     } else if(location.pathname === '/forum.php' && location.search.indexOf('mod=post&action=reply') > -1 || location.pathname === '/forum.php' && location.search.indexOf('mod=post&action=newthread') > -1) { // 回复：高级回复
         littleTail('reply'); //                                           小尾巴

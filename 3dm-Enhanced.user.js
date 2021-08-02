@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         3DM论坛增强
-// @version      1.0.9
+// @version      1.1.0
 // @author       X.I.U
 // @description  自动回复、自动无缝翻页、清理置顶帖子、自动滚动至隐藏内容
 // @match        *://bbs.3dmgame.com/*
@@ -105,19 +105,37 @@
         thread: {
             SiteTypeID: 2,
             pager: {
-                nextLink: '//div[@id="pgt"]//a[contains(text(),"下一页")][@href]',
+                nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;div#postlist > div[id^="post_"]',
                 HT_insert: ['css;div#postlist', 2],
-                replaceE: '//div[@class="pg"] | //div[@class="pgbtn"]',
+                replaceE: 'css;div.pg'
+            }
+        },
+        search: {
+            SiteTypeID: 3,
+            pager: {
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;div#threadlist > ul',
+                HT_insert: ['css;div#threadlist', 2],
+                replaceE: 'css;div.pg'
             }
         },
         guide: {
-            SiteTypeID: 3,
+            SiteTypeID: 4,
             pager: {
-                nextLink: '//div[@id="pgt"]//a[contains(text(),"下一页")][@href]',
-                pageElement: 'css;div#threadlist div.bm_c table > tbody[id^="normalthread_"]',
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;div#threadlist div.bm_c table > tbody',
                 HT_insert: ['css;div#threadlist div.bm_c table', 2],
-                replaceE: 'css;div.pg',
+                replaceE: 'css;div.pg'
+            }
+        },
+        youspace: {
+            SiteTypeID: 5,
+            pager: {
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;tbody > tr:not(.th)',
+                HT_insert: ['css;tbody', 2],
+                replaceE: 'css;div.pg'
             }
         }
     };
@@ -134,22 +152,30 @@
 
     // URL 匹配正则表达式
     let patt_thread = /\/thread-\d+-\d+\-\d+.html/,
-        patt_forum = /\/forum-\d+-\d+\.html/,
-        patt_guide = /mod\=guide\&view\=(hot|digest)/
+        patt_forum = /\/forum-\d+-\d+\.html/
 
     // URL 判断
     if (patt_thread.test(location.pathname) || location.search.indexOf('mod=viewthread') > -1){
         // 帖子内
+        hidePgbtn(); //                  隐藏帖子内的 [下一页] 按钮
         if(menu_value('menu_thread_pageLoading'))curSite = DBSite.thread;
         if(menu_value('menu_autoReply'))autoReply(); //       如果有隐藏内容，则自动回复
         if(menu_value('menu_scrollToShowhide'))setTimeout(function(){window.scrollTo(0,document.querySelector('.showhide').offsetTop)}, 500); // 滚动至隐藏内容
-    }else if (patt_forum.test(location.pathname) || location.search.indexOf('mod=forumdisplay') > -1){
+    } else if (patt_forum.test(location.pathname) || location.search.indexOf('mod=forumdisplay') > -1){
         // 各板块帖子列表
         curSite = DBSite.forum;
         if(menu_value('menu_cleanTopPost'))cleanTopPost(); // 清理置顶帖子
-    }else if (patt_guide.test(location.search)){
+    } else if (location.search.indexOf('mod=guide') > -1){
         // 导读帖子列表
         curSite = DBSite.guide;
+    } else if (location.pathname === '/search.php') {
+        // 搜索结果列表
+        curSite = DBSite.search;
+    } else if(location.search.indexOf('mod=space') > -1 && location.search.indexOf('&view=me') > -1) {
+        // 别人的主题/回复
+        curSite = DBSite.youspace;
+    } else {
+        curSite = DBSite.forum;
     }
 
     pageLoading(); //                       自动翻页
@@ -234,6 +260,14 @@
         if (showhide.length > 0){
             showhide.forEach(el=>el.click());
         }
+    }
+
+
+    // 隐藏帖子内的 [下一页] 按钮
+    function hidePgbtn() {
+        let style_hidePgbtn = document.createElement('style');
+        style_hidePgbtn.innerHTML = `.pgbtn {display: none;}`;
+        document.head.appendChild(style_hidePgbtn);
     }
 
 

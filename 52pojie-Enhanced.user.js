@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.3.0
+// @version      1.3.1
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页、屏蔽导读悬赏贴（最新发表页）
 // @match        *://www.52pojie.cn/*
@@ -90,48 +90,15 @@
             SiteTypeID: 2,
             pager: {
                 type: 1,
-                nextLink: '//div[@id="pgt"]//a[contains(text(),"下一页")][@href]',
+                nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;div#postlist > div[id^="post_"]',
                 HT_insert: ['css;div#postlist', 2],
                 replaceE: 'css;div.pg',
                 scrollDelta: 766
             }
         },
-        guide: {
-            SiteTypeID: 3,
-            pager: {
-                type: 1,
-                nextLink: '//div[@id="pgt"]//a[contains(text(),"下一页")][@href]',
-                pageElement: 'css;div#threadlist div.bm_c table > tbody[id^="normalthread_"]',
-                HT_insert: ['css;div#threadlist div.bm_c table', 2],
-                replaceE: 'css;div.pg',
-                scrollDelta: 766
-            }
-        },
-        collection: {
-            SiteTypeID: 4,
-            pager: {
-                type: 1,
-                nextLink: '//div[@class="pg"]//a[contains(text(),"下一页")][@href]',
-                pageElement: 'css;div#ct div.bm_c table > tbody',
-                HT_insert: ['css;div#ct div.bm_c table', 2],
-                replaceE: 'css;div.pg',
-                scrollDelta: 899
-            }
-        },
-        favorite: {
-            SiteTypeID: 5,
-            pager: {
-                type: 1,
-                nextLink: '//a[@class="nxt"][@href]',
-                pageElement: 'css;ul#favorite_ul > li',
-                HT_insert: ['css;ul#favorite_ul', 2],
-                replaceE: 'css;div.pg',
-                scrollDelta: 899
-            }
-        },
         search: {
-            SiteTypeID: 6,
+            SiteTypeID: 3,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="nxt"][@href]',
@@ -140,13 +107,56 @@
                 replaceE: 'css;div.pg',
                 scrollDelta: 766
             }
+        },
+        guide: {
+            SiteTypeID: 4,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;div#threadlist div.bm_c table > tbody',
+                HT_insert: ['css;div#threadlist div.bm_c table', 2],
+                replaceE: 'css;div.pg',
+                scrollDelta: 766
+            }
+        },
+        youspace: {
+            SiteTypeID: 5,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;tbody > tr:not(.th)',
+                HT_insert: ['css;tbody', 2],
+                replaceE: 'css;div.pg',
+                scrollDelta: 1000
+            }
+        },
+        collection: {
+            SiteTypeID: 6,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;div#ct div.bm_c table > tbody',
+                HT_insert: ['css;div#ct div.bm_c table', 2],
+                replaceE: 'css;div.pg',
+                scrollDelta: 899
+            }
+        },
+        favorite: {
+            SiteTypeID: 7,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nxt"][@href]',
+                pageElement: 'css;ul#favorite_ul > li',
+                HT_insert: ['css;ul#favorite_ul', 2],
+                replaceE: 'css;div.pg',
+                scrollDelta: 899
+            }
         }
     };
 
     // URL 匹配正则表达式
     let patt_thread = /\/thread-\d+-\d+\-\d+.html/,
-        patt_forum = /\/forum-\d+-\d+\.html/,
-        patt_guide = /mod\=guide\&view\=(hot|digest|new|newthread|my|tech|help)/
+        patt_forum = /\/forum-\d+-\d+\.html/
 
     // URL 判断
     if (patt_thread.test(location.pathname) || location.search.indexOf('mod=viewthread') > -1) {
@@ -156,7 +166,7 @@
         }
     } else if (patt_forum.test(location.pathname) || location.search.indexOf('mod=forumdisplay') > -1) {
         curSite = DBSite.forum; //           各板块帖子列表
-    } else if (patt_guide.test(location.search)) {
+    } else if (location.search.indexOf('mod=guide') > -1) {
         curSite = DBSite.guide; //           导读帖子列表
         delateReward(); //                   屏蔽导读悬赏贴（最新发表）
     } else if (location.search.indexOf('mod=collection') > -1) {
@@ -165,6 +175,8 @@
         curSite = DBSite.favorite; //        收藏列表
     } else if (location.pathname === '/search.php') {
         curSite = DBSite.search; //          搜索结果列表
+    } else if(location.search.indexOf('mod=space') > -1 && location.search.indexOf('&view=me') > -1) { // 别人的主题/回复
+        curSite = DBSite.youspace;
     }
     curSite.pageUrl = ""; // 下一页URL
 
