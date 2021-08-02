@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.3.3
+// @version      1.3.4
 // @author       X.I.U
 // @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
@@ -710,7 +710,7 @@
     // 通过 Cookie 来判断是否登录
     function getLoginStatus() {
         let cookie = document.cookie.split(';');
-        for (let i=0; i<cookie.length; i++) {if (cookie[i].trim().indexOf('hkCM_2132_lip=') === 0) return true;}
+        for (let i=0; i<cookie.length; i++) {if (cookie[i].trim().indexOf('hkCM_2132_checkpm=') === 0) return true;}
         return false;
     }
 })();
