@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.3.7
+// @version      1.3.8
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有 Discuz!论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、微博评论、3DM游戏网、游侠网、游民星空、千图网、阿里小站、RARBG、FitGirl Repacks、AlphaCoders、PubMed、AfreecaTV...
+// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、微博评论、3DM游戏网、游侠网、游民星空、千图网、阿里小站、RARBG、FitGirl Repacks、AlphaCoders、PubMed、AfreecaTV...
 // @match        *://*/*
 // @exclude      *://www.423down.com/*.html
 // @exclude      *://apphot.cc/*.html
@@ -33,7 +33,6 @@
                        'rarbgprx.org',
                        'fitgirl-repacks.site',
                        'www.yxssp.com',
-                       'pan.yuankongjian.com',
                        'weibo.com',
                        'www.afreecatv.com'];
 
@@ -43,7 +42,10 @@
         GM_registerMenuCommand('❎ 已禁用 (点击对当前网站启用)', function(){menu_disable('del')});
         return
     } else {
-        if (websiteList.indexOf(location.host) > -1 || document.querySelector('meta[name="author"][content*="Discuz!"], meta[name="generator"][content*="Discuz!"]')) {
+        if (websiteList.indexOf(location.host) > -1 // 其他网站列表
+            || document.querySelector('meta[name="author"][content*="Discuz!"], meta[name="generator"][content*="Discuz!"]') // 所有 Discuz! 论坛
+            || document.getElementById('flarum-loading') // 所有 Flarum 论坛
+           ) {
             GM_registerMenuCommand('✅ 已启用 (点击对当前网站禁用)', function(){menu_disable('add')});
         } else {
             GM_registerMenuCommand('❌ 当前网站暂不支持 [点击申请支持]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
@@ -137,8 +139,16 @@
                 scrollDelta: 1000
             }
         },
-        _423down_postslist: {
+        flarum: {
             SiteTypeID: 7,
+            pager: {
+                type: 2,
+                nextLink: '.DiscussionList-loadMore > button[title]',
+                scrollDelta: 1000
+            }
+        },
+        _423down_postslist: {
+            SiteTypeID: 8,
             pager: {
                 type: 1,
                 nextLink: '//div[@class="paging"]//a[contains(text(),"下一页")][@href]',
@@ -149,7 +159,7 @@
             }
         },
         apphot_postslist: {
-            SiteTypeID: 8,
+            SiteTypeID: 9,
             pager: {
                 type: 1,
                 nextLink: '//div[@class="pagination"]//a[contains(text(),"下一页")][@href]',
@@ -160,7 +170,7 @@
             }
         },
         iao_su_postslist: {
-            SiteTypeID: 9,
+            SiteTypeID: 10,
             pager: {
                 type: 1,
                 nextLink: '//li[@class="btn btn-primary next"]//a[@href]',
@@ -174,7 +184,7 @@
             }
         },
         appinn_postslist: {
-            SiteTypeID: 10,
+            SiteTypeID: 11,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="next page-numbers"][@href]',
@@ -185,7 +195,7 @@
             }
         },
         iplaysoft_postslist: {
-            SiteTypeID: 11,
+            SiteTypeID: 12,
             pager: {
                 type: 1,
                 nextLink: '//div[@class="pagenavi"]//a[@title="下一页"][@href]',
@@ -199,7 +209,7 @@
             }
         },
         iplaysoft_postcomments: {
-            SiteTypeID: 12,
+            SiteTypeID: 13,
             pager: {
                 type: 2,
                 nextLink: '#loadHistoryComments',
@@ -208,7 +218,7 @@
             }
         },
         pubmed_postslist: {
-            SiteTypeID: 13,
+            SiteTypeID: 14,
             pager: {
                 type: 2,
                 nextLink: 'button.load-button.next-page',
@@ -217,7 +227,7 @@
             }
         },
         wall_alphacoders: {
-            SiteTypeID: 14,
+            SiteTypeID: 15,
             pager: {
                 type: 1,
                 nextLink: '//a[@id="next_page"][@href]',
@@ -228,7 +238,7 @@
             }
         },
         art_alphacoders: {
-            SiteTypeID: 15,
+            SiteTypeID: 16,
             pager: {
                 type: 1,
                 nextLink: '//a[@id="next_page"][@href]',
@@ -242,7 +252,7 @@
             }
         },
         fitgirl: {
-            SiteTypeID: 16,
+            SiteTypeID: 17,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="next page-numbers"][@href]',
@@ -253,7 +263,7 @@
             }
         },
         weidown: {
-            SiteTypeID: 17,
+            SiteTypeID: 18,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="nextpage"][@href]',
@@ -264,7 +274,7 @@
             }
         },
         weidown_search: {
-            SiteTypeID: 18,
+            SiteTypeID: 19,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="nextpage"][@href]',
@@ -275,7 +285,7 @@
             }
         },
         weidown_special: {
-            SiteTypeID: 19,
+            SiteTypeID: 20,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="nextpage"][@href]',
@@ -286,7 +296,7 @@
             }
         },
         douban_subject_comments: {
-            SiteTypeID: 20,
+            SiteTypeID: 21,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="next"][@href]',
@@ -297,7 +307,7 @@
             }
         },
         douban_subject_reviews: {
-            SiteTypeID: 21,
+            SiteTypeID: 22,
             pager: {
                 type: 1,
                 nextLink: '//link[@rel="next"][@href]',
@@ -308,7 +318,7 @@
             }
         },
         douban_subject_episode: {
-            SiteTypeID: 22,
+            SiteTypeID: 23,
             pager: {
                 type: 1,
                 nextLink: '//link[@rel="next"][@href]',
@@ -319,7 +329,7 @@
             }
         },
         douban_search: {
-            SiteTypeID: 23,
+            SiteTypeID: 24,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="next"][@href]',
@@ -330,7 +340,7 @@
             }
         },
         _3dmgame: {
-            SiteTypeID: 24,
+            SiteTypeID: 25,
             pager: {
                 type: 3,
                 nextLink: '//li[@class="next"]/a[@href]',
@@ -342,7 +352,7 @@
             }
         },
         gamersky_ent: {
-            SiteTypeID: 25,
+            SiteTypeID: 26,
             pager: {
                 type: 3,
                 nextLink: '//div[@class="page_css"]/a[text()="下一页"][@href]',
@@ -354,7 +364,7 @@
             }
         },
         gamersky_gl: {
-            SiteTypeID: 26,
+            SiteTypeID: 27,
             pager: {
                 type: 3,
                 nextLink: '//div[@class="page_css"]/a[text()="下一页"][@href]',
@@ -366,7 +376,7 @@
             }
         },
         ali213_www: {
-            SiteTypeID: 27,
+            SiteTypeID: 28,
             pager: {
                 type: 3,
                 nextLink: '//a[@id="after_this_page"][@href]',
@@ -378,7 +388,7 @@
             }
         },
         ali213_gl: {
-            SiteTypeID: 28,
+            SiteTypeID: 29,
             pager: {
                 type: 3,
                 nextLink: '//a[@class="next n"][@href]',
@@ -390,7 +400,7 @@
             }
         },
         _58pic: {
-            SiteTypeID: 29,
+            SiteTypeID: 30,
             pager: {
                 type: 1,
                 nextLink: '//div[contains(@class,"page-box")]//a[text()="下一页"][@href]',
@@ -404,7 +414,7 @@
             }
         },
         _58pic_c: {
-            SiteTypeID: 30,
+            SiteTypeID: 31,
             pager: {
                 type: 1,
                 nextLink: '//div[contains(@class,"page-box")]//a[text()="下一页"][@href]',
@@ -418,7 +428,7 @@
             }
         },
         rarbgprx: {
-            SiteTypeID: 31,
+            SiteTypeID: 32,
             pager: {
                 type: 1,
                 nextLink: '(//a[@title="next page"])[1][@href]',
@@ -429,7 +439,7 @@
             }
         },
         yxssp: {
-            SiteTypeID: 32,
+            SiteTypeID: 33,
             pager: {
                 type: 1,
                 nextLink: '//div[@class="page-nav td-pb-padding-side"]/a[last()][@href]',
@@ -437,15 +447,6 @@
                 HT_insert: ['css;.td-modules-container.td-module-number4', 3],
                 replaceE: 'css;.page-nav.td-pb-padding-side',
                 scrollDelta: 900
-            }
-        },
-        yuankongjian: {
-            SiteTypeID: 33,
-            pager: {
-                type: 2,
-                nextLink: 'button[title="加载更多"]',
-                nextText: '加载更多',
-                scrollDelta: 500
             }
         },
         weibo_comment: {
@@ -556,44 +557,45 @@
         case "rarbgprx.org":
             curSite = DBSite.rarbgprx;
             break;
-        case "pan.yuankongjian.com":
-            if (location.pathname.indexOf('/d/') === -1) {
-                curSite = DBSite.yuankongjian;
-            }
-            break;
         case "weibo.com":
             curSite = DBSite.weibo_comment;
             break;
         case "www.afreecatv.com":
             curSite = DBSite.afreecatv;
             break;
-        default: // < Discuz! 论坛专用 >
-            if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
-                if (location.pathname.indexOf('forum') > -1) { //               各版块帖子列表
-                    curSite = DBSite.discuz_forum;
-                } else if (location.pathname.indexOf('thread') > -1) { //       帖子内
-                    curSite = DBSite.discuz_thread;
-                    hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
-                }else if(location.pathname.indexOf('search') > -1) { //         搜索结果
-                    curSite = DBSite.discuz_search;
+        default:
+            if (document.querySelector('meta[name="author"][content*="Discuz!"], meta[name="generator"][content*="Discuz!"]')) {
+                // < 所有 Discuz!论坛 >
+                if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
+                    if (location.pathname.indexOf('forum') > -1) { //               各版块帖子列表
+                        curSite = DBSite.discuz_forum;
+                    } else if (location.pathname.indexOf('thread') > -1) { //       帖子内
+                        curSite = DBSite.discuz_thread;
+                        hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
+                    }else if(location.pathname.indexOf('search') > -1) { //         搜索结果
+                        curSite = DBSite.discuz_search;
+                    }
+                } else {
+                    if (location.search.indexOf('mod=forumdisplay') > -1) { //      各版块帖子列表
+                        curSite = DBSite.discuz_forum;
+                    } else if (location.search.indexOf('mod=viewthread') > -1) { // 帖子内
+                        curSite = DBSite.discuz_thread;
+                        hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
+                    } else if (location.search.indexOf('mod=guide') > -1) { //      导读帖子列表
+                        curSite = DBSite.discuz_guide;
+                    } else if(location.search.indexOf('mod=space') > -1 && location.search.indexOf('&view=me') > -1) { // 别人的主题/回复
+                        curSite = DBSite.discuz_youspace;
+                    } else if (location.search.indexOf('mod=collection') > -1) { // 淘贴列表
+                        curSite = DBSite.discuz_collection;
+                    } else if (location.pathname.indexOf('search') > -1) { //       搜索结果
+                        curSite = DBSite.discuz_search;
+                    } else { // 考虑到部分论坛的部分板块帖子列表 URL 是自定义的
+                        curSite = DBSite.discuz_forum;
+                    }
                 }
-            } else {
-                if (location.search.indexOf('mod=forumdisplay') > -1) { //      各版块帖子列表
-                    curSite = DBSite.discuz_forum;
-                } else if (location.search.indexOf('mod=viewthread') > -1) { // 帖子内
-                    curSite = DBSite.discuz_thread;
-                    hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
-                } else if (location.search.indexOf('mod=guide') > -1) { //      导读帖子列表
-                    curSite = DBSite.discuz_guide;
-                } else if(location.search.indexOf('mod=space') > -1 && location.search.indexOf('&view=me') > -1) { // 别人的主题/回复
-                    curSite = DBSite.discuz_youspace;
-                } else if (location.search.indexOf('mod=collection') > -1) { // 淘贴列表
-                    curSite = DBSite.discuz_collection;
-                } else if (location.pathname.indexOf('search') > -1) { //       搜索结果
-                    curSite = DBSite.discuz_search;
-                } else { // 考虑到部分论坛的部分板块帖子列表 URL 是自定义的
-                    curSite = DBSite.discuz_forum;
-                }
+            } else if (document.getElementById('flarum-loading') && location.pathname.indexOf('/d/') === -1) {
+                // < 所有 Flarum 论坛 >
+                curSite = DBSite.flarum;
             }
     }
     curSite.pageUrl = ""; // 下一页URL
