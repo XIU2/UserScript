@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.3.6
+// @version      1.3.7
 // @author       X.I.U
 // @description  自动无缝翻页，目前支持：所有 Discuz!论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、微博评论、3DM游戏网、游侠网、游民星空、千图网、阿里小站、RARBG、FitGirl Repacks、AlphaCoders、PubMed、AfreecaTV...
 // @match        *://*/*
@@ -656,11 +656,11 @@
     // iplaysoft 的插入前函数
     function iplaysoft_postslist_beforeFunction(pageElems) {
         pageElems.forEach(function (one) {
-            let now = one.querySelector("img.lazyload")
+            let now = one.querySelector('img.lazyload')
             if (now && !now.getAttribute('src')) {
-                now.setAttribute("src",now.getAttribute('data-src'))
-                now.setAttribute("srcset",now.getAttribute('data-src'))
-                now.setAttribute("class","lazyloaded")
+                now.setAttribute('src',now.getAttribute('data-src'))
+                now.setAttribute('srcset',now.getAttribute('data-src'))
+                now.setAttribute('class','lazyloaded')
             }
         });
         return pageElems
@@ -670,9 +670,9 @@
     // iao.su 的插入前函数
     function iao_su_postslist_beforeFunction(pageElems) {
         pageElems.forEach(function (one) {
-            let now = one.getElementsByClassName("post-card")[0]
+            let now = one.getElementsByClassName('post-card')[0]
             if (now) {
-                now.getElementsByClassName("blog-background")[0].style.backgroundImage = 'url("' + RegExp("(?<=loadBannerDirect\\(').*(?=', '',)").exec(now.getElementsByTagName("script")[0].innerText)[0]; + '")';
+                now.getElementsByClassName('blog-background')[0].style.backgroundImage = 'url("' + RegExp("(?<=loadBannerDirect\\(').*(?=', '',)").exec(now.getElementsByTagName("script")[0].innerText)[0]; + '")';
             }
         });
         return pageElems
@@ -681,10 +681,10 @@
 
     // art_alphacoders
     function art_alphacoders_beforeFunction_0() {
-        let pageElems1 = document.querySelectorAll(".container-masonry > div")
-        document.querySelector(".container-masonry").style.height = "auto"
+        let pageElems1 = document.querySelectorAll('.container-masonry > div')
+        document.querySelector('.container-masonry').style.height = 'auto'
         pageElems1.forEach(function (one) {
-            one.setAttribute("style","float: left");
+            one.setAttribute('style','float: left');
         });
     }
 
@@ -692,23 +692,23 @@
     // art_alphacoders 的插入前函数
     function art_alphacoders_beforeFunction(pageElems) {
         pageElems.forEach(function (one) {
-            one.setAttribute("style","float: left");
+            one.setAttribute('style','float: left');
         });
         return pageElems
     }
 
 
-    // iplaysoft 的插入前函数
+    // 58pic 的插入前函数
     function _58pic_beforeFunction(pageElems) {
-        let is_one = document.querySelector(".qtw-card.place-box.is-one");
-        if (is_one && is_one.style.display != "none") {
-            is_one.setAttribute("style", "display: none;")
+        let is_one = document.querySelector('.qtw-card.place-box.is-one');
+        if (is_one && is_one.style.display != 'none') {
+            is_one.setAttribute('style', 'display: none;')
         }
         pageElems.forEach(function (one) {
-            let now = one.querySelector("img.lazy")
-            if (now && now.getAttribute('src') === "//icon.qiantucdn.com/static/images/qtw-card/card-place.png") {
-                now.setAttribute("src", now.dataset.original)
-                now.setAttribute("style", "display: block;")
+            let now = one.querySelector('img.lazy')
+            if (now && now.getAttribute('src') != now.dataset.original) {
+                now.setAttribute('src', now.dataset.original)
+                now.setAttribute('style', 'display: block;')
             }
         });
         return pageElems
