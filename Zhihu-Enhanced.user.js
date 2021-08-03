@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.5.1
+// @version      1.5.2
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽盐选内容、展开问题描述、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -109,27 +109,25 @@ function collapsedNowAnswer(selectors) {
     if (!menu_value('menu_collapsedNowAnswer')) return
     document.querySelector(selectors).onclick = function(event){
         if (event.target==this) {
+            // 下面这段主要是 [收起回答]，顺便 [收起评论]（如果展开了的话）
             let rightButton = document.querySelector('.ContentItem-actions.Sticky.RichContent-actions.is-fixed.is-bottom')
-            if (rightButton) { // 悬浮的 [收起回答]（此时正在浏览回答内容 [头部区域 + 中间区域]）
+            // 悬浮在底部的 [收起回答]（此时正在浏览回答内容 [头部区域 + 中间区域]）
+            if (rightButton) {
                 // 固定的 [收起评论]（先看看是否展开评论）
                 let commentCollapseButton = rightButton.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
-                if (commentCollapseButton && commentCollapseButton.innerText.indexOf('收起评论') > -1) {
-                    commentCollapseButton.click();
-                }
+                if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) commentCollapseButton.click();
                 // 再去收起回答
                 rightButton = rightButton.querySelector('.ContentItem-rightButton')
-                if (rightButton && rightButton.hasAttribute('data-zop-retract-question')) {
-                    rightButton.click();
-                }
-            } else { // 固定的 [收起回答]（此时正在浏览回答内容 [尾部区域]）
-                for (let el of document.querySelectorAll('.ContentItem-rightButton')) {
+                if (rightButton && rightButton.hasAttribute('data-zop-retract-question')) rightButton.click();
+            // 固定在回答底部的 [收起回答]（此时正在浏览回答内容 [尾部区域]）
+            } else {
+                for (let el of document.querySelectorAll('.ContentItem-rightButton')) { // 遍历所有回答底部的 [收起] 按钮
                     if (el.hasAttribute('data-zop-retract-question')) {
-                        if (isElementInViewport(el)) {
-                            // 固定的 [收起评论]（先看看是否展开评论）
+                        if (isElementInViewport(el)) { // 判断该 [收起] 按钮是否在可视区域内
+                            // 固定的 [收起评论]（先看看是否展开评论，即存在 [收起评论] 按钮）
                             let commentCollapseButton = el.parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
-                            if (commentCollapseButton && commentCollapseButton.innerText.indexOf('收起评论') > -1) {
-                                commentCollapseButton.click(); // 如果展开了评论，就收起评论
-                            }
+                            // 如果展开了评论，就收起评论
+                            if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) commentCollapseButton.click();
                             el.click() // 再去收起回答
                             break
                         }
@@ -137,6 +135,7 @@ function collapsedNowAnswer(selectors) {
                 }
             }
 
+            // 下面这段只针对 [收起评论]（如果展开了的话）
             var commentCollapseButton_ = false, commentCollapseButton__ = false;
             // 悬浮的 [收起评论]（此时正在浏览评论内容 [中间区域]）
             let commentCollapseButton = document.querySelector('.CommentCollapseButton')
@@ -146,7 +145,7 @@ function collapsedNowAnswer(selectors) {
                 let commentCollapseButton_1 = document.querySelectorAll('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type, .ContentItem-action > button.Button.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                 if (commentCollapseButton_1.length > 0) {
                     for (let el of commentCollapseButton_1) {
-                        if (el.innerText.indexOf('收起评论') > -1) {
+                        if (el.textContent.indexOf('收起评论') > -1) {
                             if (isElementInViewport(el)) {
                                 el.click()
                                 commentCollapseButton_ = true // 如果找到并点击了，就没必要执行下面的代码了（可视区域中没有 [收起评论] 时）
@@ -161,7 +160,7 @@ function collapsedNowAnswer(selectors) {
                         for (let el of commentCollapseButton_1) {
                             if (isElementInViewport(el)) {
                                 let commentCollapseButton = el.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
-                                if (commentCollapseButton.innerText.indexOf('收起评论') > -1) {
+                                if (commentCollapseButton.textContent.indexOf('收起评论') > -1) {
                                     commentCollapseButton.click()
                                     commentCollapseButton__ = true // 如果找到并点击了，就没必要执行下面的代码了（可视区域中没有 评论元素 时）
                                     break
@@ -176,7 +175,7 @@ function collapsedNowAnswer(selectors) {
                                 if (isElementInViewport(el)) {
                                     let commentCollapseButton = el.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                                     console.log(commentCollapseButton)
-                                    if (commentCollapseButton.innerText.indexOf('收起评论') > -1) {
+                                    if (commentCollapseButton.textContent.indexOf('收起评论') > -1) {
                                         commentCollapseButton.click()
                                         break
                                     }
@@ -836,6 +835,28 @@ function removeLogin() {
 }
 
 
+// 快捷关闭悬浮评论（监听点击事件，点击网页两侧空白处）
+function closeFloatingComments() {
+    const closeFloatingCommentsModal = (mutationsList, observer) => {
+        for (const mutation of mutationsList) {
+            for (const target of mutation.addedNodes) {
+                if (target.nodeType != 1) return
+                if (target.querySelector('.Modal-backdrop')) {
+                    document.querySelector('.Modal-backdrop').onclick = function(event){
+                        if (event.target == this) {
+                            let button = document.getElementsByClassName('Button Modal-closeButton Button--plain')[0];
+                            if (button) button.click();
+                        }
+                    }
+                }
+            }
+        }
+    };
+    const observer = new MutationObserver(closeFloatingCommentsModal);
+    observer.observe(document, { childList: true, subtree: true });
+}
+
+
 // 监听 XMLHttpRequest 事件
 function EventXMLHttpRequest() {
     var _send = window.XMLHttpRequest.prototype.send
@@ -845,7 +866,6 @@ function EventXMLHttpRequest() {
     }
     window.XMLHttpRequest.prototype.send = sendReplacement;
 }
-
 
 
 // [完整显示时间 + 置顶显示时间] 功能修改自：https://greasyfork.org/scripts/402808（从 JQuery 改为原生 JavaScript，且优化了代码）
@@ -1109,6 +1129,7 @@ function addLocationchange() {
 
 (function() {
     removeLogin(); //                                                      移除登录弹窗
+    closeFloatingComments(); //                                            快捷关闭悬浮评论（监听点击事件，点击网页两侧空白处）
     questionInvitation(); //                                               默认折叠邀请
     setInterval(originalPic,100); //                                       默认高清原图
     if (menu_value('menu_directLink')) setInterval(directLink, 100); //    默认站外直链
