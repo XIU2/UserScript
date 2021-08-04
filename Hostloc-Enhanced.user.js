@@ -2,7 +2,7 @@
 // @name         全球主机交流论坛增强
 // @version      1.3.4
 // @author       X.I.U
-// @description  自动签到（访问空间）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
+// @description  自动签到（访问空间 +22 积分）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
 // @match        *://91ai.net/*
 // @icon         https://www.hostloc.com/favicon.ico
@@ -23,7 +23,7 @@
 (function() {
     'use strict';
     var menu_ALL = [
-        ['menu_autoSignIn', '自动签到', '自动签到', true],
+        ['menu_autoSignIn', '自动签到（22 积分）', '自动签到', true],
         ['menu_reAutoSignIn', '重新签到', '重新签到', ''],
         ['menu_blockUsers', '屏蔽用户', '屏蔽用户', false],
         ['menu_customBlockUsers', '自定义屏蔽用户', '自定义屏蔽用户', []],
@@ -195,10 +195,9 @@
     //replyIntervalDOMNodeInserted(); //                 监听插入事件（回帖间隔）
 
 
-    // 自动签到（访问空间 10 次 = 20 积分）
+    // 自动签到（访问空间 10 次 = 20 积分 + 当天首次访问论坛 2 积分）
     function autoSignIn() {
         if (!loginStatus) return
-        //if (GM_getValue('menu_signingIn')) return
         let timeNow = new Date().getFullYear() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getDate(),
             timeOld = GM_getValue('menu_signInTime');
         if (!timeOld || timeOld != timeNow) { // 是新的一天
@@ -208,33 +207,27 @@
                 url = 0;
             // 随机生成 12 个空间地址（2 个冗余）
             for(let i = 0;i < 12;i++){url_list[i] = "https://" + location.host + "/space-uid-" + Math.floor(Math.random()*(50000-10000+1)+10000) + ".html";}
-            // 每 5 秒访问一次（避免触发网站防御机制）
-            //GM_setValue('menu_signingIn', true);
+            // 每 5 秒访问一次（避免触发网站防御机制，而且还可以适当浏览论坛）
             let signIn = setInterval(function(){
                 GM_xmlhttpRequest({
                     url: url_list[url++],
                     method: "GET",
                     timeout: 4000
                 });
-                console.log(`[全球主机交流论坛 增强] 金钱 +2 (${url_list[url]})`);
+                console.log(`[全球主机交流论坛 增强] 积分 +2 (${url_list[url]})`);
                 if (url === 11) { // 次数够了就取消定时循环
                     clearInterval(signIn);
-                    //GM_setValue('menu_signingIn', false);
-                    //GM_setValue('menu_signInTime', timeNow); //      写入签到时间以供后续比较
                     console.log('[全球主机交流论坛 增强] 签到完成！');
-                    GM_notification({text: '签到完成！金钱 +20 ~', timeout: 3500});
+                    GM_notification({text: '签到完成！积分 +22 ~', timeout: 3500});
                 }
             }, 5000);
-        }/* else { //                                                  新旧签到时间一致
-            console.info('[全球主机交流论坛 增强] 已经签过到了。')
-        }*/
+        }
     }
 
 
     // 重新签到
     function reAutoSignIn() {
-        //GM_setValue('menu_signingIn', false);
-        GM_setValue('menu_signInTime', '1970/1/1');
+        GM_setValue('menu_signInTime', '1970/1/1'); // 设置为比当前日期更早
         location.reload(); // 刷新网页
     }
 
