@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.3.9
+// @version      1.4.0
 // @author       X.I.U
 // @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、微博评论、3DM游戏网、游侠网、游民星空、千图网、阿里小站、RARBG、FitGirl Repacks、AlphaCoders、PubMed、AfreecaTV...
 // @match        *://*/*
@@ -20,21 +20,22 @@
 
 (function() {
     'use strict';
+    var webType, curSite = {SiteTypeID: 0};
     // 目前支持的网站
-    var websiteList = ['www.423down.com', 'apphot.cc', 'iao.su', 'www.appinn.com', 'www.iplaysoft.com', 'www.weidown.com',
+    const websiteList = ['www.423down.com', 'apphot.cc', 'iao.su', 'www.appinn.com', 'www.iplaysoft.com', 'www.weidown.com',
                        'art.alphacoders.com', 'wall.alphacoders.com', 'avatars.alphacoders.com', 'mobile.alphacoders.com',
                        'pubmed.ncbi.nlm.nih.gov',
-                       'movie.douban.com',
-                       'search.douban.com',
+                       'movie.douban.com', 'search.douban.com',
                        'www.3dmgame.com', 'www.gamersky.com', 'www.ali213.net', 'gl.ali213.net',
                        'www.58pic.com',
                        'rarbgprx.org',
                        'fitgirl-repacks.site',
                        'www.yxssp.com',
                        'weibo.com',
-                       'www.afreecatv.com'], webType, curSite = {SiteTypeID: 0};
+                       'www.afreecatv.com'];
 
     if (GM_getValue('menu_disable') == null){GM_setValue('menu_disable', [])};
+    if (GM_getValue('menu_discuz_thread_page') == null){GM_setValue('menu_discuz_thread_page', true)};
     // 注册脚本菜单
     if (menu_disable('check')) { // 当前网站是否已存在禁用列表中
         GM_registerMenuCommand('❎ 已禁用 (点击对当前网站启用)', function(){menu_disable('del')});
@@ -51,21 +52,27 @@
             return
         }
         GM_registerMenuCommand('✅ 已启用 (点击对当前网站禁用)', function(){menu_disable('add')});
+        if (webType === 2) {
+            GM_registerMenuCommand(`${GM_getValue('menu_discuz_thread_page')?'✅':'❎'} 帖子内自动翻页 (仅 Discuz! 论坛)`, function(){menu_switch(GM_getValue('menu_discuz_thread_page'), 'menu_discuz_thread_page', 'Discuz! 论坛帖子内翻页')});
+        }
     }
     GM_registerMenuCommand('💬 反馈 & 欢迎申请支持', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
+
 
     /*
     自动翻页规则
     type：
       1 = 脚本实现自动无缝翻页
-      2 = 网站自带了自动无缝翻页功能，只需要点击下一页按钮即可，这时 nextText 为按钮文本，避免一瞬间加载太多次下一页
+      2 = 网站自带了自动无缝翻页功能，只需要点击下一页按钮即可
+          nextText: 按钮文本，只有按钮文本为该文本时才会点击按钮加载下一页，避免一瞬间加载太多次下一页
+          intervals: 点击间隔时间，对于没有按钮文字变化的按钮，可以手动指定间隔时间，单位：ms
       3 = 依靠元素距离可视区域底部的距离来触发翻页
     HT_insert：
       1 = 插入该元素本身的前面；
       2 = 插入该元素当中，第一个子元素前面；
       3 = 插入该元素当中，最后一个子元素后面；
       4 = 插入该元素本身的后面；
-    scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大
+    scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大（如果 Type = 3，则相反）
     function：
       before = 插入前执行函数；
       after = 插入后执行函数；
@@ -370,6 +377,9 @@
                 replaceE: 'css;.page_css',
                 scrollElement: '.pagecss',
                 scrollDelta: -1000
+            },
+            function: {
+                before: gamersky_gl_beforeFunction
             }
         },
         ali213_www: {
@@ -443,7 +453,7 @@
                 pageElement: 'css;.td-modules-container.td-module-number4 > div',
                 HT_insert: ['css;.td-modules-container.td-module-number4', 3],
                 replaceE: 'css;.page-nav.td-pb-padding-side',
-                scrollDelta: 900
+                scrollDelta: 1000
             }
         },
         weibo_comment: {
@@ -460,7 +470,7 @@
             pager: {
                 type: 2,
                 nextLink: '.btn-more > button',
-                nextText: '查看更多',
+                intervals: 2000,
                 scrollDelta: 1000
             }
         }
@@ -570,8 +580,10 @@
                     curSite = DBSite.discuz_guide;
                 }
             } else if (location.pathname.indexOf('thread') > -1) { //       帖子内
-                curSite = DBSite.discuz_thread;
-                hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
+                if (GM_getValue('menu_discuz_thread_page')) {
+                    curSite = DBSite.discuz_thread;
+                    hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
+                }
             }else if(location.pathname.indexOf('search') > -1) { //         搜索结果
                 curSite = DBSite.discuz_search;
             }
@@ -583,8 +595,10 @@
                     curSite = DBSite.discuz_guide;
                 }
             } else if (location.search.indexOf('mod=viewthread') > -1) { // 帖子内
-                curSite = DBSite.discuz_thread;
-                hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
+                if (GM_getValue('menu_discuz_thread_page')) {
+                    curSite = DBSite.discuz_thread;
+                    hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
+                }
             } else if (location.search.indexOf('mod=guide') > -1) { //      导读帖子列表
                 curSite = DBSite.discuz_guide;
             } else if(location.search.indexOf('mod=space') > -1 && location.search.indexOf('&view=me') > -1) { // 别人的主题/回复
@@ -618,21 +632,29 @@
                         let scrollElement = document.querySelector(curSite.pager.scrollElement);
                         //console.log(scrollElement.offsetTop - (scrollTop + scrollHeight), scrollDelta, curSite.SiteTypeID)
                         if (scrollElement.offsetTop - (scrollTop + scrollHeight) <= scrollDelta) {
-                            if (curSite.SiteTypeID === 25) curSite.pager.scrollDelta -= 800 // 游民星空的比较奇葩，需要特殊处理下
+                            if (curSite.SiteTypeID === 27) curSite.pager.scrollDelta -= 800 // 游民星空 gl 的比较奇葩，需要特殊处理下
                             ShowPager.loadMorePage();
                         }
                     } else {
                         if (document.documentElement.scrollHeight <= scrollHeight + scrollTop + scrollDelta) {
                             if (curSite.pager.type === 2) { // 翻页类型 2
-                                let autopbn = document.querySelector(curSite.pager.nextLink);
-                                if (autopbn) { // 如果正在加载，就不再点击
-                                    if (!curSite.pager.nextText) { // 如果没有指定 nextText 就直接点击
-                                        autopbn.click();
-                                    } else if (autopbn.innerText.indexOf(curSite.pager.nextText) > -1){ // 如果指定了 nextText 就需要判断后再点击（避免已经在加载了，还重复点击）
-                                        autopbn.click();
+                                if (curSite.SiteTypeID > 0) { // 如果指定了间隔时间，那么就依靠这个判断时间到了没有~
+                                    let autopbn = document.querySelector(curSite.pager.nextLink);
+                                    if (autopbn) { // 寻找下一页链接
+                                        if (!curSite.pager.nextText) { // 如果没有指定 nextText 就直接点击
+                                            autopbn.click();
+                                        } else if (autopbn.textContent.indexOf(curSite.pager.nextText) > -1){ // 如果指定了 nextText 就需要判断后再点击（避免已经在加载了，还重复点击）
+                                            autopbn.click();
+                                        }
+                                        // 对于没有按钮文字变化的按钮，可以手动指定间隔时间
+                                        if (curSite.pager.intervals) {
+                                            let _SiteTypeID = curSite.SiteTypeID;
+                                            curSite.SiteTypeID = 0;
+                                            setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
+                                        }
                                     }
                                 }
-                            } else {
+                            } else { // 翻页类型 1
                                 ShowPager.loadMorePage();
                             }
                         }
@@ -643,15 +665,15 @@
     }
 
 
-    function getElementToPageTop(el) {
+    /*function getElementToPageTop(el) {
         if(el.parentElement) {
             return getElementToPageTop(el.parentElement) + el.offsetTop
         }
         return el.offsetTop
-    }
+    }*/
 
 
-    // 隐藏帖子内的 [下一页] 按钮
+    // 隐藏帖子内的 [下一页] 按钮（Discuz! 论坛）
     function hidePgbtn() {
         let style_hidePgbtn = document.createElement('style');
         style_hidePgbtn.innerHTML = `.pgbtn {display: none;}`;
@@ -659,7 +681,7 @@
     }
 
 
-    // iplaysoft 的插入前函数
+    // iplaysoft 的插入前函数（加载图片）
     function iplaysoft_postslist_beforeFunction(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.querySelector('img.lazyload')
@@ -673,19 +695,20 @@
     }
 
 
-    // iao.su 的插入前函数
+    // iao.su 的插入前函数（加载图片）
     function iao_su_postslist_beforeFunction(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.getElementsByClassName('post-card')[0]
             if (now) {
-                now.getElementsByClassName('blog-background')[0].style.backgroundImage = 'url("' + RegExp("(?<=loadBannerDirect\\(').*(?=', '',)").exec(now.getElementsByTagName("script")[0].innerText)[0]; + '")';
+                now.getElementsByClassName('blog-background')[0].style.backgroundImage = 'url("' + now.getElementsByTagName('script')[0].textContent.split("'")[1] + '")';
+                //now.getElementsByClassName('blog-background')[0].style.backgroundImage = 'url("' + RegExp("(?<=loadBannerDirect\\(').*(?=', '',)").exec(now.getElementsByTagName('script')[0].textContent)[0]; + '")';
             }
         });
         return pageElems
     }
 
 
-    // art_alphacoders
+    // art_alphacoders（图片结构调整）
     function art_alphacoders_beforeFunction_0() {
         let pageElems1 = document.querySelectorAll('.container-masonry > div')
         document.querySelector('.container-masonry').style.height = 'auto'
@@ -695,7 +718,7 @@
     }
 
 
-    // art_alphacoders 的插入前函数
+    // art_alphacoders 的插入前函数（图片结构调整）
     function art_alphacoders_beforeFunction(pageElems) {
         pageElems.forEach(function (one) {
             one.setAttribute('style','float: left');
@@ -704,7 +727,7 @@
     }
 
 
-    // 58pic 的插入前函数
+    // 58pic 的插入前函数（加载图片）
     function _58pic_beforeFunction(pageElems) {
         let is_one = document.querySelector('.qtw-card.place-box.is-one');
         if (is_one && is_one.style.display != 'none') {
@@ -715,6 +738,17 @@
             if (now && now.getAttribute('src') != now.dataset.original) {
                 now.setAttribute('src', now.dataset.original)
                 now.setAttribute('style', 'display: block;')
+            }
+        });
+        return pageElems
+    }
+
+
+    // 游民星空攻略 的插入前函数（移除下一页底部的 "更多相关内容请关注：xxx" 文字）
+    function gamersky_gl_beforeFunction(pageElems) {
+        pageElems.forEach(function (one) {
+            if (one.tagName === 'P' && one.textContent.indexOf('更多相关内容请关注') > -1) {
+                one.style.display = 'none';
             }
         });
         return pageElems
@@ -759,6 +793,17 @@
             location.reload(); // 刷新网页
         }
     }
+
+
+    // 菜单开关
+    function menu_switch(menu_status, Name, Tips) {
+        if (menu_status === true){
+            GM_setValue(`${Name}`, false);
+        }else{
+            GM_setValue(`${Name}`, true);
+        }
+        location.reload();
+    };
 
 
     // 滚动条事件
