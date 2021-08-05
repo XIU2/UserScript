@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.4.0
+// @version      1.4.1
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、Apphot、不死鸟、小众软件、微当下载、异次元软件、异星软件空间、RARBG、FitGirl Repacks、AlphaCoders、PubMed、AfreecaTV...
+// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、Apphot、不死鸟、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、RARBG、PubMed、AfreecaTV、AlphaCoders、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -22,17 +22,14 @@
     'use strict';
     var webType, curSite = {SiteTypeID: 0};
     // 目前支持的网站
-    const websiteList = ['www.423down.com', 'apphot.cc', 'iao.su', 'www.appinn.com', 'www.iplaysoft.com', 'www.weidown.com',
-                       'art.alphacoders.com', 'wall.alphacoders.com', 'avatars.alphacoders.com', 'mobile.alphacoders.com',
-                       'pubmed.ncbi.nlm.nih.gov',
-                       'movie.douban.com', 'search.douban.com',
-                       'www.3dmgame.com', 'www.gamersky.com', 'www.ali213.net', 'gl.ali213.net',
-                       'www.58pic.com',
-                       'rarbgprx.org',
-                       'fitgirl-repacks.site',
-                       'www.yxssp.com',
-                       'weibo.com',
-                       'www.afreecatv.com'];
+    const websiteList = ['movie.douban.com', 'weibo.com', 'www.58pic.com',
+                         'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com',
+                         'www.423down.com', 'apphot.cc', 'iao.su', 'www.appinn.com', 'www.weidown.com', 'www.luochenzhimu.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
+                         'rarbgprx.org',
+                         'pubmed.ncbi.nlm.nih.gov',
+                         'www.afreecatv.com',
+                         'art.alphacoders.com', 'wall.alphacoders.com', 'avatars.alphacoders.com', 'mobile.alphacoders.com',
+                         'fitgirl-repacks.site'];
 
     if (GM_getValue('menu_disable') == null){GM_setValue('menu_disable', [])};
     if (GM_getValue('menu_discuz_thread_page') == null){GM_setValue('menu_discuz_thread_page', true)};
@@ -78,9 +75,9 @@
       after = 插入后执行函数；
       parameter = 参数
     */
-    const DBSite = {
+    let DBSite = {
         discuz_forum: {
-            SiteTypeID: 1,
+            SiteTypeID: 0,
             pager: {
                 type: 2,
                 nextLink: '#autopbn',
@@ -89,7 +86,7 @@
             }
         },
         discuz_thread: {
-            SiteTypeID: 2,
+            SiteTypeID: 0,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="nxt"][@href]',
@@ -100,7 +97,7 @@
             }
         },
         discuz_search: {
-            SiteTypeID: 3,
+            SiteTypeID: 0,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="nxt"][@href]',
@@ -111,7 +108,7 @@
             }
         },
         discuz_guide: {
-            SiteTypeID: 4,
+            SiteTypeID: 0,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="nxt"][@href]',
@@ -122,7 +119,7 @@
             }
         },
         discuz_youspace: {
-            SiteTypeID: 5,
+            SiteTypeID: 0,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="nxt"][@href]',
@@ -133,7 +130,7 @@
             }
         },
         discuz_collection: {
-            SiteTypeID: 6,
+            SiteTypeID: 0,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="nxt"][@href]',
@@ -144,270 +141,57 @@
             }
         },
         flarum: {
-            SiteTypeID: 7,
+            SiteTypeID: 0,
             pager: {
                 type: 2,
                 nextLink: '.DiscussionList-loadMore > button[title]',
                 scrollDelta: 1000
             }
         },
-        _423down_postslist: {
-            SiteTypeID: 8,
-            pager: {
-                type: 1,
-                nextLink: '//div[@class="paging"]//a[contains(text(),"下一页")][@href]',
-                pageElement: 'css;div.content-wrap ul.excerpt > li',
-                HT_insert: ['css;div.content-wrap ul.excerpt', 3],
-                replaceE: 'css;div.paging',
-                scrollDelta: 1500
-            }
-        },
-        apphot_postslist: {
-            SiteTypeID: 9,
-            pager: {
-                type: 1,
-                nextLink: '//div[@class="pagination"]//a[contains(text(),"下一页")][@href]',
-                pageElement: 'css;div.content > article.excerpt',
-                HT_insert: ['css;div.pagination', 1],
-                replaceE: 'css;div.pagination',
-                scrollDelta: 1500
-            }
-        },
-        iao_su_postslist: {
-            SiteTypeID: 10,
-            pager: {
-                type: 1,
-                nextLink: '//li[@class="btn btn-primary next"]//a[@href]',
-                pageElement: 'css;#index > article, #archive > article',
-                HT_insert: ['css;ol.page-navigator', 1],
-                replaceE: 'css;ol.page-navigator',
-                scrollDelta: 800
-            },
-            function: {
-                before: iao_su_postslist_beforeFunction
-            }
-        },
-        appinn_postslist: {
-            SiteTypeID: 11,
-            pager: {
-                type: 1,
-                nextLink: '//a[@class="next page-numbers"][@href]',
-                pageElement: 'css;section#latest-posts > article',
-                HT_insert: ['css;nav.navigation.pagination', 1],
-                replaceE: 'css;div.nav-links',
-                scrollDelta: 1500
-            }
-        },
-        iplaysoft_postslist: {
-            SiteTypeID: 12,
-            pager: {
-                type: 1,
-                nextLink: '//div[@class="pagenavi"]//a[@title="下一页"][@href]',
-                pageElement: 'css;#postlist > div.entry',
-                HT_insert: ['css;#postlist > .pagenavi-button', 1],
-                replaceE: 'css;.pagenavi-button, .pagenavi',
-                scrollDelta: 1200
-            },
-            function: {
-                before: iplaysoft_postslist_beforeFunction
-            }
-        },
-        iplaysoft_postcomments: {
-            SiteTypeID: 13,
-            pager: {
-                type: 2,
-                nextLink: '#loadHistoryComments',
-                nextText: '展开后面',
-                scrollDelta: 1200
-            }
-        },
-        pubmed_postslist: {
-            SiteTypeID: 14,
-            pager: {
-                type: 2,
-                nextLink: 'button.load-button.next-page',
-                nextText: 'Show more',
-                scrollDelta: 1500
-            }
-        },
-        wall_alphacoders: {
-            SiteTypeID: 15,
-            pager: {
-                type: 1,
-                nextLink: '//a[@id="next_page"][@href]',
-                pageElement: 'css;.thumb-container-big, .avatar-thumb, .thumb-element',
-                HT_insert: ['css;.thumb-container-big:nth-last-child(1), .avatar-thumb:nth-last-child(1), .thumb-element:nth-last-child(1)', 4],
-                replaceE: '//div[@class="hidden-xs hidden-sm"]/..',
-                scrollDelta: 1000
-            }
-        },
-        art_alphacoders: {
-            SiteTypeID: 16,
-            pager: {
-                type: 1,
-                nextLink: '//a[@id="next_page"][@href]',
-                pageElement: 'css;.container-masonry > div',
-                HT_insert: ['css;.container-masonry', 3],
-                replaceE: '//div[@class="hidden-xs hidden-sm"]/..',
-                scrollDelta: 1000
-            },
-            function: {
-                before: art_alphacoders_beforeFunction
-            }
-        },
-        fitgirl: {
-            SiteTypeID: 17,
-            pager: {
-                type: 1,
-                nextLink: '//a[@class="next page-numbers"][@href]',
-                pageElement: 'css;article[id^="post-"]',
-                HT_insert: ['css;nav.navigation.paging-navigation', 1],
-                replaceE: 'css;nav.navigation.paging-navigation',
-                scrollDelta: 2000
-            }
-        },
-        weidown: {
-            SiteTypeID: 18,
-            pager: {
-                type: 1,
-                nextLink: '//a[@class="nextpage"][@href]',
-                pageElement: 'css;.articleWrapper > .itemArticle, .articleWrapper > .richTextItem.search',
-                HT_insert: ['css;.articleWrapper', 3],
-                replaceE: 'css;#pageGroup',
-                scrollDelta: 1500
-            }
-        },
-        weidown_search: {
-            SiteTypeID: 19,
-            pager: {
-                type: 1,
-                nextLink: '//a[@class="nextpage"][@href]',
-                pageElement: 'css;.articleListWrapper > .richTextItem.search',
-                HT_insert: ['css;#pageGroup', 1],
-                replaceE: 'css;#pageGroup',
-                scrollDelta: 700
-            }
-        },
-        weidown_special: {
-            SiteTypeID: 20,
-            pager: {
-                type: 1,
-                nextLink: '//a[@class="nextpage"][@href]',
-                pageElement: 'css;.special > .item',
-                HT_insert: ['css;.special', 3],
-                replaceE: 'css;#pageGroup',
-                scrollDelta: 700
-            }
-        },
         douban_subject_comments: {
-            SiteTypeID: 21,
+            SiteTypeID: 0,
             pager: {
                 type: 1,
                 nextLink: '//a[@class="next"][@href]',
                 pageElement: 'css;#comments > .comment-item',
                 HT_insert: ['css;#paginator', 1],
                 replaceE: 'css;#paginator',
-                scrollDelta: 700
+                scrollDelta: 1000
             }
         },
         douban_subject_reviews: {
-            SiteTypeID: 22,
+            SiteTypeID: 0,
             pager: {
                 type: 1,
                 nextLink: '//link[@rel="next"][@href]',
                 pageElement: 'css;.review-list > div',
                 HT_insert: ['css;.review-list', 3],
                 replaceE: 'css;.paginator',
-                scrollDelta: 700
+                scrollDelta: 1000
             }
         },
         douban_subject_episode: {
-            SiteTypeID: 23,
+            SiteTypeID: 0,
             pager: {
                 type: 1,
                 nextLink: '//link[@rel="next"][@href]',
                 pageElement: 'css;#comments > div',
                 HT_insert: ['css;#comments', 3],
                 replaceE: 'css;.paginator',
-                scrollDelta: 700
+                scrollDelta: 1000
             }
         },
-        douban_search: {
-            SiteTypeID: 24,
+        weibo_comment: {
+            SiteTypeID: 0,
             pager: {
-                type: 1,
-                nextLink: '//a[@class="next"][@href]',
-                pageElement: 'css;#root [class^="_"] [class^="sc-"]',
-                HT_insert: ['css;.paginator', 1],
-                replaceE: 'css;.paginator',
-                scrollDelta: 700
-            }
-        },
-        _3dmgame: {
-            SiteTypeID: 25,
-            pager: {
-                type: 3,
-                nextLink: '//li[@class="next"]/a[@href]',
-                pageElement: 'css;.news_warp_center > *',
-                HT_insert: ['css;.news_warp_center', 3],
-                replaceE: 'css;.pagewrap',
-                scrollElement: '.pagewrap',
-                scrollDelta: 400
-            }
-        },
-        gamersky_ent: {
-            SiteTypeID: 26,
-            pager: {
-                type: 3,
-                nextLink: '//div[@class="page_css"]/a[text()="下一页"][@href]',
-                pageElement: 'css;.Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.page_css):not(.gs_ccs_solve):not(.post_ding)',
-                HT_insert: ['css;.page_css', 1],
-                replaceE: 'css;.page_css',
-                scrollElement: '.page_css',
-                scrollDelta: 100
-            }
-        },
-        gamersky_gl: {
-            SiteTypeID: 27,
-            pager: {
-                type: 3,
-                nextLink: '//div[@class="page_css"]/a[text()="下一页"][@href]',
-                pageElement: 'css;.Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.gs_ccs_solve):not(.post_ding)',
-                HT_insert: ['css;.gs_nc_editor', 1],
-                replaceE: 'css;.page_css',
-                scrollElement: '.pagecss',
-                scrollDelta: -1000
-            },
-            function: {
-                before: gamersky_gl_beforeFunction
-            }
-        },
-        ali213_www: {
-            SiteTypeID: 28,
-            pager: {
-                type: 3,
-                nextLink: '//a[@id="after_this_page"][@href]',
-                pageElement: 'css;#Content >*:not(.news_ding):not(.page_fenye)',
-                HT_insert: ['css;.page_fenye', 1],
-                replaceE: 'css;.page_fenye',
-                scrollElement: '.page_fenye',
-                scrollDelta: 400
-            }
-        },
-        ali213_gl: {
-            SiteTypeID: 29,
-            pager: {
-                type: 3,
-                nextLink: '//a[@class="next n"][@href]',
-                pageElement: 'css;.c-detail >*',
-                HT_insert: ['css;.c-detail', 3],
-                replaceE: 'css;.page_fenye',
-                scrollElement: '.page_fenye',
-                scrollDelta: 400
+                type: 2,
+                nextLink: 'a[action-type="click_more_comment"]',
+                nextText: '查看更多c',
+                scrollDelta: 1000
             }
         },
         _58pic: {
-            SiteTypeID: 30,
+            SiteTypeID: 0,
             pager: {
                 type: 1,
                 nextLink: '//div[contains(@class,"page-box")]//a[text()="下一页"][@href]',
@@ -421,7 +205,7 @@
             }
         },
         _58pic_c: {
-            SiteTypeID: 31,
+            SiteTypeID: 0,
             pager: {
                 type: 1,
                 nextLink: '//div[contains(@class,"page-box")]//a[text()="下一页"][@href]',
@@ -434,19 +218,210 @@
                 before: _58pic_beforeFunction
             }
         },
-        rarbgprx: {
-            SiteTypeID: 32,
+        _3dmgame: {
+            SiteTypeID: 0,
+            pager: {
+                type: 3,
+                nextLink: '//li[@class="next"]/a[@href]',
+                pageElement: 'css;.news_warp_center > *',
+                HT_insert: ['css;.news_warp_center', 3],
+                replaceE: 'css;.pagewrap',
+                scrollElement: '.pagewrap',
+                scrollDelta: 400
+            }
+        },
+        ali213_www: {
+            SiteTypeID: 0,
+            pager: {
+                type: 3,
+                nextLink: '//a[@id="after_this_page"][@href]',
+                pageElement: 'css;#Content >*:not(.news_ding):not(.page_fenye)',
+                HT_insert: ['css;.page_fenye', 1],
+                replaceE: 'css;.page_fenye',
+                scrollElement: '.page_fenye',
+                scrollDelta: 400
+            }
+        },
+        ali213_gl: {
+            SiteTypeID: 0,
+            pager: {
+                type: 3,
+                nextLink: '//a[@class="next n"][@href]',
+                pageElement: 'css;.c-detail >*',
+                HT_insert: ['css;.c-detail', 3],
+                replaceE: 'css;.page_fenye',
+                scrollElement: '.page_fenye',
+                scrollDelta: 400
+            }
+        },
+        gamersky_ent: {
+            SiteTypeID: 0,
+            pager: {
+                type: 3,
+                nextLink: '//div[@class="page_css"]/a[text()="下一页"][@href]',
+                pageElement: 'css;.Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.page_css):not(.gs_ccs_solve):not(.post_ding)',
+                HT_insert: ['css;.page_css', 1],
+                replaceE: 'css;.page_css',
+                scrollElement: '.page_css',
+                scrollDelta: 100
+            }
+        },
+        gamersky_gl: {
+            SiteTypeID: 0,
+            pager: {
+                type: 3,
+                nextLink: '//div[@class="page_css"]/a[text()="下一页"][@href]',
+                pageElement: 'css;.Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.gs_ccs_solve):not(.post_ding)',
+                HT_insert: ['css;.gs_nc_editor', 1],
+                replaceE: 'css;.page_css',
+                scrollElement: '.pagecss',
+                scrollDelta: -1000
+            },
+            function: {
+                before: gamersky_gl_beforeFunction
+            }
+        },
+        _423down_postslist: {
+            SiteTypeID: 0,
             pager: {
                 type: 1,
-                nextLink: '(//a[@title="next page"])[1][@href]',
-                pageElement: 'css;table.lista2t tr.lista2',
-                HT_insert: ['css;table.lista2t > tbody', 3],
-                replaceE: 'css;#pager_links',
-                scrollDelta: 900
+                nextLink: '//div[@class="paging"]//a[contains(text(),"下一页")][@href]',
+                pageElement: 'css;div.content-wrap ul.excerpt > li',
+                HT_insert: ['css;div.content-wrap ul.excerpt', 3],
+                replaceE: 'css;div.paging',
+                scrollDelta: 1500
+            }
+        },
+        apphot_postslist: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//div[@class="pagination"]//a[contains(text(),"下一页")][@href]',
+                pageElement: 'css;div.content > article.excerpt',
+                HT_insert: ['css;div.pagination', 1],
+                replaceE: 'css;div.pagination',
+                scrollDelta: 1500
+            }
+        },
+        iao_su_postslist: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//li[@class="btn btn-primary next"]//a[@href]',
+                pageElement: 'css;#index > article, #archive > article',
+                HT_insert: ['css;ol.page-navigator', 1],
+                replaceE: 'css;ol.page-navigator',
+                scrollDelta: 800
+            },
+            function: {
+                before: iao_su_postslist_beforeFunction
+            }
+        },
+        appinn_postslist: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="next page-numbers"][@href]',
+                pageElement: 'css;section#latest-posts > article',
+                HT_insert: ['css;nav.navigation.pagination', 1],
+                replaceE: 'css;div.nav-links',
+                scrollDelta: 1500
+            }
+        },
+        weidown: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nextpage"][@href]',
+                pageElement: 'css;.articleWrapper > .itemArticle, .articleWrapper > .richTextItem.search',
+                HT_insert: ['css;.articleWrapper', 3],
+                replaceE: 'css;#pageGroup',
+                scrollDelta: 1500
+            }
+        },
+        weidown_search: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nextpage"][@href]',
+                pageElement: 'css;.articleListWrapper > .richTextItem.search',
+                HT_insert: ['css;#pageGroup', 1],
+                replaceE: 'css;#pageGroup',
+                scrollDelta: 700
+            }
+        },
+        weidown_special: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="nextpage"][@href]',
+                pageElement: 'css;.special > .item',
+                HT_insert: ['css;.special', 3],
+                replaceE: 'css;#pageGroup',
+                scrollDelta: 700
+            }
+        },
+        luochenzhimu: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//li[@class="next-page"]/a[@href]',
+                pageElement: 'css;.content > article',
+                HT_insert: ['css;.content > .pagination', 1],
+                replaceE: 'css;.content > .pagination',
+                scrollDelta: 1000
+            },
+            function: {
+                before: luochenzhimu_beforeFunction
+            }
+        },
+        iplaysoft_postslist: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//div[@class="pagenavi"]//a[@title="下一页"][@href]',
+                pageElement: 'css;#postlist > div.entry',
+                HT_insert: ['css;#postlist > .pagenavi-button', 1],
+                replaceE: 'css;.pagenavi-button, .pagenavi',
+                scrollDelta: 1200
+            },
+            function: {
+                before: iplaysoft_postslist_beforeFunction
+            }
+        },
+        iplaysoft_postcomments: {
+            SiteTypeID: 0,
+            pager: {
+                type: 2,
+                nextLink: '#loadHistoryComments',
+                nextText: '展开后面',
+                scrollDelta: 1200
+            }
+        },
+        mpyit: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="page-numbers"][@title="下一页"][@href]',
+                pageElement: 'css;#post > div[id^="post-"]',
+                HT_insert: ['css;#post > #pagenavi', 1],
+                replaceE: 'css;#post > #pagenavi',
+                scrollDelta: 1700
+            }
+        },
+        mpyit_category: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="page-numbers"][@title="下一页"][@href]',
+                pageElement: 'css;#content > div[class^="entry_box"]',
+                HT_insert: ['css;#content > #pagenavi', 1],
+                replaceE: 'css;#content > #pagenavi',
+                scrollDelta: 1700
             }
         },
         yxssp: {
-            SiteTypeID: 33,
+            SiteTypeID: 0,
             pager: {
                 type: 1,
                 nextLink: '//div[@class="page-nav td-pb-padding-side"]/a[last()][@href]',
@@ -456,29 +431,119 @@
                 scrollDelta: 1000
             }
         },
-        weibo_comment: {
-            SiteTypeID: 34,
+        rarbgprx: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '(//a[@title="next page"])[1][@href]',
+                pageElement: 'css;table.lista2t tr.lista2',
+                HT_insert: ['css;table.lista2t > tbody', 3],
+                replaceE: 'css;#pager_links',
+                scrollDelta: 900
+            }
+        },
+        pubmed_postslist: {
+            SiteTypeID: 0,
             pager: {
                 type: 2,
-                nextLink: 'a[action-type="click_more_comment"]',
-                nextText: '查看更多c',
-                scrollDelta: 1000
+                nextLink: 'button.load-button.next-page',
+                nextText: 'Show more',
+                scrollDelta: 1500
             }
         },
         afreecatv: {
-            SiteTypeID: 35,
+            SiteTypeID: 0,
             pager: {
                 type: 2,
                 nextLink: '.btn-more > button',
                 intervals: 2000,
                 scrollDelta: 1000
             }
+        },
+        alphacoders_art: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@id="next_page"][@href]',
+                pageElement: 'css;.container-masonry > div',
+                HT_insert: ['css;.container-masonry', 3],
+                replaceE: '//div[@class="hidden-xs hidden-sm"]/..',
+                scrollDelta: 1000
+            },
+            function: {
+                before: alphacoders_art_beforeFunction
+            }
+        },
+        alphacoders_wall: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@id="next_page"][@href]',
+                pageElement: 'css;.thumb-container-big, .avatar-thumb, .thumb-element',
+                HT_insert: ['css;.thumb-container-big:nth-last-child(1), .avatar-thumb:nth-last-child(1), .thumb-element:nth-last-child(1)', 4],
+                replaceE: '//div[@class="hidden-xs hidden-sm"]/..',
+                scrollDelta: 1000
+            }
+        },
+        fitgirl: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="next page-numbers"][@href]',
+                pageElement: 'css;article[id^="post-"]',
+                HT_insert: ['css;nav.navigation.paging-navigation', 1],
+                replaceE: 'css;nav.navigation.paging-navigation',
+                scrollDelta: 2000
+            }
         }
+    };
+    // 生成 ID
+    generateID();
+
+    // 用于脚本判断
+    const SiteType = {
+        GAMERSKY_GL: DBSite.gamersky_gl.SiteTypeID
     };
 
 
     if (webType === 1) { // < 其他网站 >
         switch (location.host) {
+            case 'movie.douban.com':
+                if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/comments') > -1) { //               短评
+                    curSite = DBSite.douban_subject_comments;
+                } else if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/reviews') > -1) { //       影评
+                    curSite = DBSite.douban_subject_reviews;
+                } else if(location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/episode') > -1) { //         电视剧每集评论
+                    curSite = DBSite.douban_subject_episode;
+                }
+                break;
+            case 'weibo.com':
+                curSite = DBSite.weibo_comment;
+                break;
+            case 'www.58pic.com':
+                if (location.pathname.indexOf('/tupian/') > -1) {
+                    curSite = DBSite._58pic;
+                } else if (location.pathname.indexOf('/c/') > -1) {
+                    curSite = DBSite._58pic_c;
+                }
+                break;
+            case 'www.3dmgame.com':
+                curSite = DBSite._3dmgame;
+                break;
+            case 'www.ali213.net':
+                curSite = DBSite.ali213_www;
+                break;
+            case 'gl.ali213.net':
+                curSite = DBSite.ali213_gl;
+                document.lastElementChild.appendChild(document.createElement('style')).textContent = `.n_show_b {display: none !important;}` // 隐藏部分碍事元素
+                break;
+            case 'www.gamersky.com':
+                if (location.pathname.indexOf('/ent/') > -1) {
+                    curSite = DBSite.gamersky_ent;
+                } else {
+                    curSite = DBSite.gamersky_gl;
+                }
+                break;
             case 'www.423down.com':
                 if (location.pathname.indexOf('.html') === -1) curSite = DBSite._423down_postslist;
                 break;
@@ -491,13 +556,6 @@
             case 'www.appinn.com':
                 curSite = DBSite.appinn_postslist;
                 break;
-            case 'www.iplaysoft.com':
-                if (location.pathname.indexOf('.html') > -1 || location.pathname.indexOf('/p/') > -1) { // 文章内
-                    curSite = DBSite.iplaysoft_postcomments;
-                } else { // 其他页面
-                    curSite = DBSite.iplaysoft_postslist;
-                }
-                break;
             case 'www.weidown.com':
                 if (location.pathname.indexOf('/search/') > -1) {
                     curSite = DBSite.weidown_search;
@@ -507,68 +565,47 @@
                     curSite = DBSite.weidown;
                 }
                 break;
+            case 'www.luochenzhimu.com':
+                curSite = DBSite.luochenzhimu;
+                break;
+            case 'www.iplaysoft.com':
+                if (location.pathname.indexOf('.html') > -1 || location.pathname.indexOf('/p/') > -1) { // 文章内
+                    curSite = DBSite.iplaysoft_postcomments;
+                } else { // 其他页面
+                    curSite = DBSite.iplaysoft_postslist;
+                }
+                break;
+            case 'www.mpyit.com':
+                if (location.pathname === '/' && !location.search) {
+                    curSite = DBSite.mpyit;
+                } else if (location.pathname.indexOf('/category/') > -1 || location.search.indexOf('?s=') > -1) {
+                    curSite = DBSite.mpyit_category;
+                }
+                break;
             case 'www.yxssp.com':
                 curSite = DBSite.yxssp;
-                break;
-            case 'fitgirl-repacks.site':
-                curSite = DBSite.fitgirl;
-                break;
-            case 'art.alphacoders.com':
-                curSite = DBSite.art_alphacoders;
-                setTimeout(art_alphacoders_beforeFunction_0, 1000);
-                break;
-            case 'wall.alphacoders.com':
-            case 'avatars.alphacoders.com':
-            case 'mobile.alphacoders.com':
-                curSite = DBSite.wall_alphacoders;
-                break;
-            case 'pubmed.ncbi.nlm.nih.gov':
-                curSite = DBSite.pubmed_postslist;
-                break;
-            case 'movie.douban.com':
-                if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/comments') > -1) { //               短评
-                    curSite = DBSite.douban_subject_comments;
-                } else if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/reviews') > -1) { //       影评
-                    curSite = DBSite.douban_subject_reviews;
-                } else if(location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/episode') > -1) { //         电视剧每集评论
-                    curSite = DBSite.douban_subject_episode;
-                }
-                break;
-            case 'search.douban.com':
-                curSite = DBSite.douban_search;
-                break;
-            case 'www.3dmgame.com':
-                curSite = DBSite._3dmgame;
-                break;
-            case 'www.gamersky.com':
-                if (location.pathname.indexOf('/ent/') > -1) {
-                    curSite = DBSite.gamersky_ent;
-                } else {
-                    curSite = DBSite.gamersky_gl;
-                }
-                break;
-            case 'www.ali213.net':
-                curSite = DBSite.ali213_www;
-                break;
-            case 'gl.ali213.net':
-                curSite = DBSite.ali213_gl;
-                document.lastElementChild.appendChild(document.createElement('style')).textContent = `.n_show_b {display: none !important;}` // 隐藏部分碍事元素
-                break;
-            case 'www.58pic.com':
-                if (location.pathname.indexOf('/tupian/') > -1) {
-                    curSite = DBSite._58pic;
-                } else if (location.pathname.indexOf('/c/') > -1) {
-                    curSite = DBSite._58pic_c;
-                }
                 break;
             case 'rarbgprx.org':
                 curSite = DBSite.rarbgprx;
                 break;
-            case 'weibo.com':
-                curSite = DBSite.weibo_comment;
+            case 'pubmed.ncbi.nlm.nih.gov':
+                curSite = DBSite.pubmed_postslist;
                 break;
+
             case 'www.afreecatv.com':
                 curSite = DBSite.afreecatv;
+                break;
+            case 'art.alphacoders.com':
+                curSite = DBSite.alphacoders_art;
+                setTimeout(alphacoders_art_beforeFunction_0, 1000);
+                break;
+            case 'wall.alphacoders.com':
+            case 'avatars.alphacoders.com':
+            case 'mobile.alphacoders.com':
+                curSite = DBSite.alphacoders_wall;
+                break;
+            case 'fitgirl-repacks.site':
+                curSite = DBSite.fitgirl;
                 break;
         }
     } else if (webType === 2) { // < 所有 Discuz!论坛 >
@@ -632,7 +669,7 @@
                         let scrollElement = document.querySelector(curSite.pager.scrollElement);
                         //console.log(scrollElement.offsetTop - (scrollTop + scrollHeight), scrollDelta, curSite.SiteTypeID)
                         if (scrollElement.offsetTop - (scrollTop + scrollHeight) <= scrollDelta) {
-                            if (curSite.SiteTypeID === 27) curSite.pager.scrollDelta -= 800 // 游民星空 gl 的比较奇葩，需要特殊处理下
+                            if (curSite.SiteTypeID === SiteType.GAMERSKY_GL) curSite.pager.scrollDelta -= 800 // 游民星空 gl 的比较奇葩，需要特殊处理下
                             ShowPager.loadMorePage();
                         }
                     } else {
@@ -681,52 +718,6 @@
     }
 
 
-    // iplaysoft 的插入前函数（加载图片）
-    function iplaysoft_postslist_beforeFunction(pageElems) {
-        pageElems.forEach(function (one) {
-            let now = one.querySelector('img.lazyload')
-            if (now && !now.getAttribute('src')) {
-                now.setAttribute('src',now.getAttribute('data-src'))
-                now.setAttribute('srcset',now.getAttribute('data-src'))
-                now.setAttribute('class','lazyloaded')
-            }
-        });
-        return pageElems
-    }
-
-
-    // iao.su 的插入前函数（加载图片）
-    function iao_su_postslist_beforeFunction(pageElems) {
-        pageElems.forEach(function (one) {
-            let now = one.getElementsByClassName('post-card')[0]
-            if (now) {
-                now.getElementsByClassName('blog-background')[0].style.backgroundImage = 'url("' + now.getElementsByTagName('script')[0].textContent.split("'")[1] + '")';
-                //now.getElementsByClassName('blog-background')[0].style.backgroundImage = 'url("' + RegExp("(?<=loadBannerDirect\\(').*(?=', '',)").exec(now.getElementsByTagName('script')[0].textContent)[0]; + '")';
-            }
-        });
-        return pageElems
-    }
-
-
-    // art_alphacoders（图片结构调整）
-    function art_alphacoders_beforeFunction_0() {
-        let pageElems1 = document.querySelectorAll('.container-masonry > div')
-        document.querySelector('.container-masonry').style.height = 'auto'
-        pageElems1.forEach(function (one) {
-            one.setAttribute('style','float: left');
-        });
-    }
-
-
-    // art_alphacoders 的插入前函数（图片结构调整）
-    function art_alphacoders_beforeFunction(pageElems) {
-        pageElems.forEach(function (one) {
-            one.setAttribute('style','float: left');
-        });
-        return pageElems
-    }
-
-
     // 58pic 的插入前函数（加载图片）
     function _58pic_beforeFunction(pageElems) {
         let is_one = document.querySelector('.qtw-card.place-box.is-one');
@@ -752,6 +743,62 @@
             }
         });
         return pageElems
+    }
+
+
+    // iao.su 的插入前函数（加载图片）
+    function iao_su_postslist_beforeFunction(pageElems) {
+        pageElems.forEach(function (one) {
+            let now = one.getElementsByClassName('post-card')[0]
+            if (now) {
+                now.getElementsByClassName('blog-background')[0].style.backgroundImage = 'url("' + now.getElementsByTagName('script')[0].textContent.split("'")[1] + '")';
+                //now.getElementsByClassName('blog-background')[0].style.backgroundImage = 'url("' + RegExp("(?<=loadBannerDirect\\(').*(?=', '',)").exec(now.getElementsByTagName('script')[0].textContent)[0]; + '")';
+            }
+        });
+        return pageElems
+    }
+
+
+    // luochenzhimu 的插入前函数（加载图片）
+    function luochenzhimu_beforeFunction(pageElems) {
+        pageElems.forEach(function (one) {
+            let now = one.querySelector('img.thumb')
+            if (now) {
+                now.setAttribute('src', now.dataset.src)
+            }
+        });
+        return pageElems
+    }
+
+
+    // iplaysoft 的插入前函数（加载图片）
+    function iplaysoft_postslist_beforeFunction(pageElems) {
+        pageElems.forEach(function (one) {
+            let now = one.querySelector('img.lazyload')
+            if (now && !now.src) {
+                now.setAttribute('src', now.dataset.src)
+                now.setAttribute('srcset', now.dataset.src)
+                now.setAttribute('class', 'lazyloaded')
+            }
+        });
+        return pageElems
+    }
+
+
+    // alphacoders_art 的插入前函数（图片结构调整）
+    function alphacoders_art_beforeFunction(pageElems) {
+        pageElems.forEach(function (one) {
+            one.setAttribute('style','float: left');
+        });
+        return pageElems
+    }
+    // alphacoders_art（图片结构调整）
+    function alphacoders_art_beforeFunction_0() {
+        let pageElems1 = document.querySelectorAll('.container-masonry > div')
+        document.querySelector('.container-masonry').style.height = 'auto'
+        pageElems1.forEach(function (one) {
+            one.setAttribute('style','float: left');
+        });
     }
 
 
@@ -804,6 +851,15 @@
         }
         location.reload();
     };
+
+
+    // 生成 ID
+    function generateID() {
+        let num = 0
+        for (let val in DBSite) {
+            DBSite[val].SiteTypeID = num = num + 1;
+        }
+    }
 
 
     // 滚动条事件
@@ -871,7 +927,7 @@
                 curSite.pager.startFilter && curSite.pager.startFilter();
                 GM_xmlhttpRequest({
                     url: url,
-                    method: "GET",
+                    method: 'GET',
                     timeout: 5000,
                     onload: function (response) {
                         try {
@@ -884,7 +940,7 @@
                                 if (curSite.function && curSite.function.before) {
                                     if (curSite.function.parameter) { // 如果指定了参数
                                         pageElems = curSite.function.before(curSite.function.parameter);
-                                    }else{
+                                    } else {
                                         pageElems = curSite.function.before(pageElems);
                                     }
                                 }
