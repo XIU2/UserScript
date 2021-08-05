@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.4.2
+// @version      1.4.3
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、RARBG、PubMed、AfreecaTV、AlphaCoders、FitGirl Repacks...
+// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、RARBG、PubMed、AfreecaTV、AlphaCoders、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -25,6 +25,7 @@
     const websiteList = ['movie.douban.com', 'weibo.com', 'www.58pic.com',
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com',
                          'www.423down.com', 'apphot.cc', 'iao.su', 'www.ypojie.com', 'www.appinn.com', 'www.weidown.com', 'www.luochenzhimu.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
+                         'www.gufengmh8.com',
                          'rarbgprx.org',
                          'pubmed.ncbi.nlm.nih.gov',
                          'www.afreecatv.com',
@@ -64,6 +65,7 @@
           nextText: 按钮文本，只有按钮文本为该文本时才会点击按钮加载下一页，避免一瞬间加载太多次下一页
           intervals: 点击间隔时间，对于没有按钮文字变化的按钮，可以手动指定间隔时间，单位：ms
       3 = 依靠元素距离可视区域底部的距离来触发翻页
+      4 = 针对部分简单动态加载的网站
     HT_insert：
       1 = 插入该元素本身的前面；
       2 = 插入该元素当中，第一个子元素前面；
@@ -484,6 +486,18 @@
                 replaceE: 'css;nav.navigation.paging-navigation',
                 scrollDelta: 2000
             }
+        },
+        gufengmh8: {
+            SiteTypeID: 0,
+            pager: {
+                type: 4,
+                pageElement: 'css;body > script:first-child',
+                HT_insert: ['css;#images', 3],
+                intervals: 5000,
+                functionNext: gufengmh8_functionNext,
+                functionAdd: gufengmh8_functionAdd,
+                scrollDelta: 2333
+            }
         }
     };
     // 生成 SiteTypeID
@@ -576,6 +590,9 @@
             case 'www.yxssp.com': //              < 异星软件空间 >
                 curSite = DBSite.yxssp;
                 break;
+            case 'www.gufengmh8.com': //          < 古风漫画网 >
+                curSite = DBSite.gufengmh8;
+                break;
             case 'rarbgprx.org': //               < RARBG >
                 curSite = DBSite.rarbgprx;
                 break;
@@ -653,7 +670,7 @@
     function pageLoading() {
         if (curSite.SiteTypeID > 0) {
             windowScroll(function (direction, e) {
-                if (direction === "down") { // 下滑才准备翻页
+                if (direction === 'down') { // 下滑才准备翻页
                     let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
                         scrollHeight = window.innerHeight || document.documentElement.clientHeight,
                         scrollDelta = curSite.pager.scrollDelta;
@@ -683,8 +700,17 @@
                                         }
                                     }
                                 }
-                            } else { // 翻页类型 1
+                            } else if (curSite.pager.type === 1) { // 翻页类型 1
                                 ShowPager.loadMorePage();
+                            } else if (curSite.pager.type === 4) { // 翻页类型 4
+                                if (curSite.SiteTypeID > 0) {
+                                    curSite.pager.functionNext();
+                                    if (curSite.pager.intervals) {
+                                        let _SiteTypeID = curSite.SiteTypeID;
+                                        curSite.SiteTypeID = 0;
+                                        setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
+                                    }
+                                }
                             }
                         }
                     }
@@ -794,6 +820,63 @@
     }
 
 
+    // gufengmh8
+    function gufengmh8_functionNext() {
+        if (curSite.pageUrl) { // 如果已经有下一页的 URL 则直接获取
+            getPageElems(curSite.pageUrl)
+        } else {
+            let pageElems = document.querySelector(curSite.pager.pageElement.replace('css;', '')); // 寻找数据所在元素
+            if (pageElems) {
+                let comicUrl, nextId;
+                pageElems.textContent.split(';').forEach(function (one){ // 分号 ; 分割为数组并遍历
+                    //console.log(one)
+                    if (one.indexOf('comicUrl') > -1) { // 下一页 URL 前半部分
+                        comicUrl = one.split('"')[1];
+                    } else if (one.indexOf('nextChapterData') > -1) { // 下一页 URL 的后半部分 ID
+                        nextId = one.split('"id":')[1].split(',')[0];
+                    }
+                })
+                if (comicUrl && nextId && nextId != 'null') { // 组合到一起就是下一页 URL
+                    curSite.pageUrl = comicUrl + nextId + '.html'
+                    //console.log(curSite.pageUrl)
+                    getPageElems(curSite.pageUrl); // 访问下一页 URL 获取
+                }
+            }
+        }
+    }
+
+    // gufengmh8
+    function gufengmh8_functionAdd(pageElems) {
+        if (pageElems) {
+            curSite.pageUrl = ''; // 留空后，下一页 URL 依然交给 gufengmh8_function 函数获取（方便点）
+            pageElems = pageElems[0];
+            //console.log(pageElems)
+            let chapterImages, chapterPath;
+            //console.log(pageElems.textContent)
+            document.querySelector(curSite.pager.pageElement.replace('css;', '')).innerText = pageElems.textContent; // 将当前网页内的数据所在元素内容改为刚刚获取的下一页数据内容，以便循环获取下一页 URL（gufengmh8_function 函数）
+            pageElems.textContent.split(';').forEach(function (one){ // 分号 ; 分割为数组并遍历
+                //console.log(one)
+                if (one.indexOf('chapterImages') > -1) { // 图片文件名数组
+                    chapterImages = one.replace(/^.+\[/, '').replace(']', '').replaceAll('"', '').split(',')
+                } else if (one.indexOf('chapterPath') > -1) { // 图片文件路径
+                    chapterPath = one.split('"')[1];
+                } else if (one.indexOf('pageTitle') > -1) { // 网页标题
+                    window.document.title = one.split('"')[1]; // 修改当前网页标题为下一页的标题
+                }
+            })
+            if (chapterImages && chapterPath) {
+                let _img = '';
+                chapterImages.forEach(function (one2){ // 遍历图片文件名数组，组合为 img 标签
+                    _img += '<img src="https://res.xiaoqinre.com/' + chapterPath + one2 + '" data-index="0" style="display: inline-block;">'
+                    //console.log('https://res.xiaoqinre.com/' + chapterPath + one2)
+                })
+                document.querySelector(curSite.pager.HT_insert[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.HT_insert[1]), _img); // 将 img 标签插入到网页中
+
+            }
+        }
+    }
+
+
     // 启用/禁用 (当前网站)
     function menu_disable(type) {
         switch(type) {
@@ -850,6 +933,47 @@
         let num = 0
         for (let val in DBSite) {
             DBSite[val].SiteTypeID = num = num + 1;
+        }
+    }
+
+
+    // 类型 4 专用
+    function getPageElems(url) {
+        GM_xmlhttpRequest({
+                    url: url,
+                    method: 'GET',
+                    timeout: 5000,
+                    onload: function (response) {
+                        try {
+                            //console.log(`${response.responseText}`)
+                            var newBody = ShowPager.createDocumentByString(response.responseText);
+                            let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody);
+                            if (pageElems.length >= 0) {
+                                curSite.pager.functionAdd(pageElems)
+                            }
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+                });
+    }
+
+
+    // 插入位置
+    function addTo(num) {
+        switch (num) {
+            case 1:
+                return 'beforebegin'
+                break;
+            case 2:
+                return 'afterbegin'
+                break;
+            case 3:
+                return 'beforeend'
+                break;
+            case 4:
+                return 'afterend'
+                break;
         }
     }
 
@@ -937,21 +1061,7 @@
                                     }
                                 }
                                 // 插入位置
-                                let addTo;
-                                switch (curSite.pager.HT_insert[1]) {
-                                    case 1:
-                                        addTo = "beforebegin"
-                                        break;
-                                    case 2:
-                                        addTo = "afterbegin"
-                                        break;
-                                    case 3:
-                                        addTo = "beforeend"
-                                        break;
-                                    case 4:
-                                        addTo = "afterend"
-                                        break;
-                                }
+                                let addTo = addTo(curSite.pager.HT_insert[1]);
                                 // 插入新页面元素
                                 pageElems.forEach(function (one) {
                                     toElement.insertAdjacentElement(addTo, one);
