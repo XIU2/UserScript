@@ -2,7 +2,7 @@
 // @name         自动无缝翻页
 // @version      1.4.2
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、Apphot、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、RARBG、PubMed、AfreecaTV、AlphaCoders、FitGirl Repacks...
+// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、RARBG、PubMed、AfreecaTV、AlphaCoders、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -148,6 +148,20 @@
                 scrollDelta: 1000
             }
         },
+        dux: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//li[@class="next-page"]/a[@href]',
+                pageElement: 'css;.content > article',
+                HT_insert: ['css;.content > .pagination', 1],
+                replaceE: 'css;.content > .pagination',
+                scrollDelta: 1000
+            },
+            function: {
+                before: dux_beforeFunction
+            }
+        },
         douban_subject_comments: {
             SiteTypeID: 0,
             pager: {
@@ -281,7 +295,7 @@
                 before: gamersky_gl_beforeFunction
             }
         },
-        _423down_postslist: {
+        _423down: {
             SiteTypeID: 0,
             pager: {
                 type: 1,
@@ -292,18 +306,7 @@
                 scrollDelta: 1500
             }
         },
-        apphot_postslist: {
-            SiteTypeID: 0,
-            pager: {
-                type: 1,
-                nextLink: '//div[@class="pagination"]//a[contains(text(),"下一页")][@href]',
-                pageElement: 'css;div.content > article.excerpt',
-                HT_insert: ['css;div.pagination', 1],
-                replaceE: 'css;div.pagination',
-                scrollDelta: 1500
-            }
-        },
-        iao_su_postslist: {
+        iao_su: {
             SiteTypeID: 0,
             pager: {
                 type: 1,
@@ -314,10 +317,10 @@
                 scrollDelta: 800
             },
             function: {
-                before: iao_su_postslist_beforeFunction
+                before: iao_su_beforeFunction
             }
         },
-        appinn_postslist: {
+        appinn: {
             SiteTypeID: 0,
             pager: {
                 type: 1,
@@ -359,20 +362,6 @@
                 HT_insert: ['css;.special', 3],
                 replaceE: 'css;#pageGroup',
                 scrollDelta: 700
-            }
-        },
-        luochenzhimu: {
-            SiteTypeID: 0,
-            pager: {
-                type: 1,
-                nextLink: '//li[@class="next-page"]/a[@href]',
-                pageElement: 'css;.content > article',
-                HT_insert: ['css;.content > .pagination', 1],
-                replaceE: 'css;.content > .pagination',
-                scrollDelta: 1000
-            },
-            function: {
-                before: luochenzhimu_beforeFunction
             }
         },
         iplaysoft_postslist: {
@@ -497,66 +486,71 @@
             }
         }
     };
-    // 生成 ID
+    // 生成 SiteTypeID
     generateID();
 
-    // 用于脚本判断
+    // 用于脚本判断（针对部分特殊的网站）
     const SiteType = {
         GAMERSKY_GL: DBSite.gamersky_gl.SiteTypeID
     };
 
 
-    if (webType === 1) { // < 其他网站 >
+    // < 其他网站 >
+    if (webType === 1) {
         switch (location.host) {
-            case 'movie.douban.com':
-                if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/comments') > -1) { //               短评
+            case 'apphot.cc': //                  < APPHOT >
+            case 'www.ypojie.com': //             < 亿破姐 >
+            case 'www.luochenzhimu.com': //       < 落尘之木 >
+                if (location.pathname.indexOf('.html') === -1) curSite = DBSite.dux;
+                if (location.host === 'apphot.cc') curSite.pager.scrollDelta = 1600; // 对于速度慢的网站，需要增加翻页敏感度
+                break;
+                // 以上几个都是 WordPress 的 DUX 主题
+            case 'movie.douban.com': //           < 豆瓣评论 >
+                if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/comments') > -1) { //        短评
                     curSite = DBSite.douban_subject_comments;
-                } else if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/reviews') > -1) { //       影评
+                } else if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/reviews') > -1) { //  影评
                     curSite = DBSite.douban_subject_reviews;
-                } else if(location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/episode') > -1) { //         电视剧每集评论
+                } else if(location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/episode') > -1) { //   电视剧每集评论
                     curSite = DBSite.douban_subject_episode;
                 }
                 break;
-            case 'weibo.com':
+            case 'weibo.com': //                  < 微博评论 >
                 curSite = DBSite.weibo_comment;
                 break;
-            case 'www.58pic.com':
+            case 'www.58pic.com': //              < 千图网 >
                 if (location.pathname.indexOf('/tupian/') > -1) {
                     curSite = DBSite._58pic;
                 } else if (location.pathname.indexOf('/c/') > -1) {
                     curSite = DBSite._58pic_c;
                 }
                 break;
-            case 'www.3dmgame.com':
+            case 'www.3dmgame.com': //            < 3DM >
                 curSite = DBSite._3dmgame;
                 break;
-            case 'www.ali213.net':
+            case 'www.ali213.net': //             < 游侠网 >
                 curSite = DBSite.ali213_www;
                 break;
-            case 'gl.ali213.net':
+            case 'gl.ali213.net': //              < 游侠网 - 攻略页 >
                 curSite = DBSite.ali213_gl;
                 document.lastElementChild.appendChild(document.createElement('style')).textContent = `.n_show_b {display: none !important;}` // 隐藏部分碍事元素
                 break;
-            case 'www.gamersky.com':
+            case 'www.gamersky.com': //           < 游民星空 >
                 if (location.pathname.indexOf('/ent/') > -1) {
                     curSite = DBSite.gamersky_ent;
                 } else {
                     curSite = DBSite.gamersky_gl;
                 }
                 break;
-            case 'www.423down.com':
-                if (location.pathname.indexOf('.html') === -1) curSite = DBSite._423down_postslist;
+            case 'www.423down.com': //            < 423down >
+                if (location.pathname.indexOf('.html') === -1) curSite = DBSite._423down;
                 break;
-            case 'apphot.cc':
-                if (location.pathname.indexOf('.html') === -1) curSite = DBSite.apphot_postslist;
+            case 'iao.su': //                     < 不死鸟 >
+                curSite = DBSite.iao_su;
                 break;
-            case 'iao.su':
-                curSite = DBSite.iao_su_postslist;
+            case 'www.appinn.com': //             < 小众软件 >
+                curSite = DBSite.appinn;
                 break;
-            case 'www.appinn.com':
-                curSite = DBSite.appinn_postslist;
-                break;
-            case 'www.weidown.com':
+            case 'www.weidown.com': //            < 微当下载 >
                 if (location.pathname.indexOf('/search/') > -1) {
                     curSite = DBSite.weidown_search;
                 } else if (location.pathname.indexOf('/special/') > -1) {
@@ -565,38 +559,33 @@
                     curSite = DBSite.weidown;
                 }
                 break;
-            case 'www.ypojie.com':
-            case 'www.luochenzhimu.com':
-                curSite = DBSite.luochenzhimu;
-                break;
-            case 'www.iplaysoft.com':
+            case 'www.iplaysoft.com': //          < 异次元软件 >
                 if (location.pathname.indexOf('.html') > -1 || location.pathname.indexOf('/p/') > -1) { // 文章内
                     curSite = DBSite.iplaysoft_postcomments;
                 } else { // 其他页面
                     curSite = DBSite.iplaysoft_postslist;
                 }
                 break;
-            case 'www.mpyit.com':
+            case 'www.mpyit.com': //              < 老殁殁漂遥 >
                 if (location.pathname === '/' && !location.search) {
                     curSite = DBSite.mpyit;
                 } else if (location.pathname.indexOf('/category/') > -1 || location.search.indexOf('?s=') > -1) {
                     curSite = DBSite.mpyit_category;
                 }
                 break;
-            case 'www.yxssp.com':
+            case 'www.yxssp.com': //              < 异星软件空间 >
                 curSite = DBSite.yxssp;
                 break;
-            case 'rarbgprx.org':
+            case 'rarbgprx.org': //               < RARBG >
                 curSite = DBSite.rarbgprx;
                 break;
-            case 'pubmed.ncbi.nlm.nih.gov':
+            case 'pubmed.ncbi.nlm.nih.gov': //    < 国外学术网站 >
                 curSite = DBSite.pubmed_postslist;
                 break;
-
-            case 'www.afreecatv.com':
+            case 'www.afreecatv.com': //          < 直播网站 >
                 curSite = DBSite.afreecatv;
                 break;
-            case 'art.alphacoders.com':
+            case 'art.alphacoders.com': //        < 壁纸网站 >
                 curSite = DBSite.alphacoders_art;
                 setTimeout(alphacoders_art_beforeFunction_0, 1000);
                 break;
@@ -605,11 +594,12 @@
             case 'mobile.alphacoders.com':
                 curSite = DBSite.alphacoders_wall;
                 break;
-            case 'fitgirl-repacks.site':
+            case 'fitgirl-repacks.site': //       < 游戏下载网站 >
                 curSite = DBSite.fitgirl;
                 break;
         }
-    } else if (webType === 2) { // < 所有 Discuz!论坛 >
+        // < 所有 Discuz!论坛 >
+    } else if (webType === 2) {
         if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
             if (location.pathname.indexOf('forum') > -1) { //               各版块帖子列表
                 if (document.getElementById('autopbn')) { //                判断是否有 [下一页] 按钮
@@ -620,9 +610,9 @@
             } else if (location.pathname.indexOf('thread') > -1) { //       帖子内
                 if (GM_getValue('menu_discuz_thread_page')) {
                     curSite = DBSite.discuz_thread;
-                    hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
+                    hidePgbtn(); //                                         隐藏帖子内的 [下一页] 按钮
                 }
-            }else if(location.pathname.indexOf('search') > -1) { //         搜索结果
+            } else if(location.pathname.indexOf('search') > -1) { //        搜索结果
                 curSite = DBSite.discuz_search;
             }
         } else {
@@ -635,7 +625,7 @@
             } else if (location.search.indexOf('mod=viewthread') > -1) { // 帖子内
                 if (GM_getValue('menu_discuz_thread_page')) {
                     curSite = DBSite.discuz_thread;
-                    hidePgbtn(); //                                             隐藏帖子内的 [下一页] 按钮
+                    hidePgbtn(); //                                         隐藏帖子内的 [下一页] 按钮
                 }
             } else if (location.search.indexOf('mod=guide') > -1) { //      导读帖子列表
                 curSite = DBSite.discuz_guide;
@@ -645,11 +635,12 @@
                 curSite = DBSite.discuz_collection;
             } else if (location.pathname.indexOf('search') > -1) { //       搜索结果
                 curSite = DBSite.discuz_search;
-            } else { // 考虑到部分论坛的部分板块帖子列表 URL 是自定义的
+            } else { //                                                     考虑到部分论坛的部分板块帖子列表 URL 是自定义的
                 curSite = DBSite.discuz_forum;
             }
         }
-    } else if (webType === 3) { // < 所有 Flarum 论坛 >
+        // < 所有 Flarum 论坛 >
+    } else if (webType === 3) {
         curSite = DBSite.flarum;
     }
 
@@ -719,6 +710,18 @@
     }
 
 
+    // dux 的插入前函数（加载图片）
+    function dux_beforeFunction(pageElems) {
+        pageElems.forEach(function (one) {
+            let now = one.querySelector('img.thumb[data-src]')
+            if (now) {
+                now.setAttribute('src', now.dataset.src)
+            }
+        });
+        return pageElems
+    }
+
+
     // 58pic 的插入前函数（加载图片）
     function _58pic_beforeFunction(pageElems) {
         let is_one = document.querySelector('.qtw-card.place-box.is-one');
@@ -748,24 +751,12 @@
 
 
     // iao.su 的插入前函数（加载图片）
-    function iao_su_postslist_beforeFunction(pageElems) {
+    function iao_su_beforeFunction(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.getElementsByClassName('post-card')[0]
             if (now) {
                 now.getElementsByClassName('blog-background')[0].style.backgroundImage = 'url("' + now.getElementsByTagName('script')[0].textContent.split("'")[1] + '")';
                 //now.getElementsByClassName('blog-background')[0].style.backgroundImage = 'url("' + RegExp("(?<=loadBannerDirect\\(').*(?=', '',)").exec(now.getElementsByTagName('script')[0].textContent)[0]; + '")';
-            }
-        });
-        return pageElems
-    }
-
-
-    // luochenzhimu 的插入前函数（加载图片）
-    function luochenzhimu_beforeFunction(pageElems) {
-        pageElems.forEach(function (one) {
-            let now = one.querySelector('img.thumb')
-            if (now) {
-                now.setAttribute('src', now.dataset.src)
             }
         });
         return pageElems
