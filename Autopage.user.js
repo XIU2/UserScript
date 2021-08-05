@@ -2,7 +2,7 @@
 // @name         自动无缝翻页
 // @version      1.4.0
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、423Down、Apphot、不死鸟、小众软件、异次元软件、微当下载、异星软件空间、豆瓣电影、微博评论、3DM游戏网、游侠网、游民星空、千图网、阿里小站、RARBG、FitGirl Repacks、AlphaCoders、PubMed、AfreecaTV...
+// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、Apphot、不死鸟、小众软件、微当下载、异次元软件、异星软件空间、RARBG、FitGirl Repacks、AlphaCoders、PubMed、AfreecaTV...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
