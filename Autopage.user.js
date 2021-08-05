@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.4.1
+// @version      1.4.2
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、Apphot、不死鸟、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、RARBG、PubMed、AfreecaTV、AlphaCoders、FitGirl Repacks...
+// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、Apphot、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、RARBG、PubMed、AfreecaTV、AlphaCoders、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -24,7 +24,7 @@
     // 目前支持的网站
     const websiteList = ['movie.douban.com', 'weibo.com', 'www.58pic.com',
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com',
-                         'www.423down.com', 'apphot.cc', 'iao.su', 'www.appinn.com', 'www.weidown.com', 'www.luochenzhimu.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
+                         'www.423down.com', 'apphot.cc', 'iao.su', 'www.ypojie.com', 'www.appinn.com', 'www.weidown.com', 'www.luochenzhimu.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
                          'rarbgprx.org',
                          'pubmed.ncbi.nlm.nih.gov',
                          'www.afreecatv.com',
@@ -565,6 +565,7 @@
                     curSite = DBSite.weidown;
                 }
                 break;
+            case 'www.ypojie.com':
             case 'www.luochenzhimu.com':
                 curSite = DBSite.luochenzhimu;
                 break;
