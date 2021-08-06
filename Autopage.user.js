@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.4.3
+// @version      1.4.4
 // @author       X.I.U
 // @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、RARBG、PubMed、AfreecaTV、AlphaCoders、FitGirl Repacks...
 // @match        *://*/*
@@ -1061,10 +1061,10 @@
                                     }
                                 }
                                 // 插入位置
-                                let addTo = addTo(curSite.pager.HT_insert[1]);
+                                let addTo1 = addTo(curSite.pager.HT_insert[1]);
                                 // 插入新页面元素
                                 pageElems.forEach(function (one) {
-                                    toElement.insertAdjacentElement(addTo, one);
+                                    toElement.insertAdjacentElement(addTo1, one);
                                 });
                                 // 替换待替换元素
                                 try {
