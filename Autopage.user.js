@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.4.4
+// @version      1.4.5
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、RARBG、PubMed、AfreecaTV、AlphaCoders、FitGirl Repacks...
+// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、百度、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、RARBG、PubMed、AfreecaTV、AlphaCoders、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -22,7 +22,7 @@
     'use strict';
     var webType, curSite = {SiteTypeID: 0};
     // 目前支持的网站
-    const websiteList = ['movie.douban.com', 'weibo.com', 'www.58pic.com',
+    const websiteList = ['www.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com',
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com',
                          'www.423down.com', 'apphot.cc', 'iao.su', 'www.ypojie.com', 'www.appinn.com', 'www.weidown.com', 'www.luochenzhimu.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
                          'www.gufengmh8.com',
@@ -162,6 +162,17 @@
             },
             function: {
                 before: dux_beforeFunction
+            }
+        },
+        baidu: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//div[@id="page"]//a[contains(text(),"下一页")][@href]',
+                pageElement: 'css;#content_left > *',
+                HT_insert: ['css;#content_left', 3],
+                replaceE: 'css;#page',
+                scrollDelta: 1200
             }
         },
         douban_subject_comments: {
@@ -519,6 +530,9 @@
                 if (location.host === 'apphot.cc') curSite.pager.scrollDelta = 1600; // 对于速度慢的网站，需要增加翻页敏感度
                 break;
                 // 以上几个都是 WordPress 的 DUX 主题
+            case 'www.baidu.com': //              < 百度搜索 >
+                if (location.pathname === '/s') curSite = DBSite.baidu;
+                break;
             case 'movie.douban.com': //           < 豆瓣评论 >
                 if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/comments') > -1) { //        短评
                     curSite = DBSite.douban_subject_comments;
@@ -945,7 +959,7 @@
                     timeout: 5000,
                     onload: function (response) {
                         try {
-                            //console.log(`${response.responseText}`)
+                            //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody);
                             if (pageElems.length >= 0) {
@@ -1035,7 +1049,7 @@
             if (curSite.pager) {
                 let curPageEle = getElementByXpath(curSite.pager.nextLink);
                 var url = this.getFullHref(curPageEle);
-                //console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
+                console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
                 if (url === '') return;
                 if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
@@ -1047,7 +1061,7 @@
                     timeout: 5000,
                     onload: function (response) {
                         try {
-                            //console.log(`${response.responseText}`)
+                            //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody);
                             let toElement = getAllElements(curSite.pager.HT_insert[0])[0];
