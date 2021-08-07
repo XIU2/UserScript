@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.4.7
+// @version      1.4.8
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、百度、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、FitGirl Repacks...
+// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、百度、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -23,7 +23,7 @@
     var webType, curSite = {SiteTypeID: 0};
     // 目前支持的网站
     const websiteList = ['www.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com',
-                         'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com',
+                         'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com',
                          'www.423down.com', 'apphot.cc', 'iao.su', 'www.ypojie.com', 'www.appinn.com', 'www.weidown.com', 'www.luochenzhimu.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
                          'www.gufengmh8.com',
                          'rarbgprx.org', 'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org',
@@ -306,6 +306,17 @@
                 before: gamersky_gl_beforeFunction
             }
         },
+        steamcommunity: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="pagebtn"][last()][@href]',
+                pageElement: 'css;.workshopBrowseItems > *',
+                HT_insert: ['css;.workshopBrowseItems', 3],
+                replaceE: 'css;.workshopBrowsePaging',
+                scrollDelta: 1000
+            }
+        },
         _423down: {
             SiteTypeID: 0,
             pager: {
@@ -547,7 +558,8 @@
 
     // 用于脚本判断（针对部分特殊的网站）
     const SiteType = {
-        GAMERSKY_GL: DBSite.gamersky_gl.SiteTypeID
+        GAMERSKY_GL: DBSite.gamersky_gl.SiteTypeID,
+        STEAMCOMMUNITY: DBSite.steamcommunity.SiteTypeID
     };
 
 
@@ -599,6 +611,9 @@
                 } else {
                     curSite = DBSite.gamersky_gl;
                 }
+                break;
+            case 'steamcommunity.com': //         < Steam 创意工坊 >
+                curSite = DBSite.steamcommunity;
                 break;
             case 'www.423down.com': //            < 423down >
                 if (location.pathname.indexOf('.html') === -1) curSite = DBSite._423down;
@@ -1089,7 +1104,7 @@
                     timeout: 5000,
                     onload: function (response) {
                         try {
-                            console.log('最终 URL：' + response.finalUrl, '返回内容：' + newBody)
+                            //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody),
                                 toElement = getAllElements(curSite.pager.HT_insert[0])[0];
@@ -1108,9 +1123,19 @@
                                 // 插入位置
                                 let addTo1 = addTo(curSite.pager.HT_insert[1]);
                                 // 插入新页面元素
-                                pageElems.forEach(function (one) {
-                                    toElement.insertAdjacentElement(addTo1, one);
-                                });
+                                if (curSite.SiteTypeID === SiteType.STEAMCOMMUNITY) {
+                                    pageElems.forEach(function (one) {
+                                        if (one.tagName === 'SCRIPT') { // 对于 <script> 需要用另一种方式插入网页，以便正常运行
+                                            toElement.appendChild(document.createElement('script')).textContent = one.textContent;
+                                        } else {
+                                            toElement.insertAdjacentElement(addTo1, one);
+                                        }
+                                    });
+                                } else {
+                                    pageElems.forEach(function (one) {
+                                        toElement.insertAdjacentElement(addTo1, one);
+                                    });
+                                }
 
                                 // 替换待替换元素
                                 try {
