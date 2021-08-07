@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.4.6
+// @version      1.4.7
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、百度、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、RARBG、PubMed、AfreecaTV、AlphaCoders、FitGirl Repacks...
+// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、百度、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -26,9 +26,7 @@
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com',
                          'www.423down.com', 'apphot.cc', 'iao.su', 'www.ypojie.com', 'www.appinn.com', 'www.weidown.com', 'www.luochenzhimu.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
                          'www.gufengmh8.com',
-                         'rarbgprx.org',
-                         'pubmed.ncbi.nlm.nih.gov',
-                         'www.afreecatv.com',
+                         'rarbgprx.org', 'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org',
                          'art.alphacoders.com', 'wall.alphacoders.com', 'avatars.alphacoders.com', 'mobile.alphacoders.com',
                          'fitgirl-repacks.site'];
 
@@ -433,6 +431,18 @@
                 scrollDelta: 1000
             }
         },
+        gufengmh8: {
+            SiteTypeID: 0,
+            pager: {
+                type: 4,
+                pageElement: 'css;body > script:first-child',
+                HT_insert: ['css;#images', 3],
+                intervals: 5000,
+                functionNext: gufengmh8_functionNext,
+                functionAdd: gufengmh8_functionAdd,
+                scrollDelta: 2333
+            }
+        },
         rarbgprx: {
             SiteTypeID: 0,
             pager: {
@@ -459,6 +469,39 @@
                 type: 2,
                 nextLink: '.btn-more > button',
                 intervals: 2000,
+                scrollDelta: 1000
+            }
+        },
+        greasyfork: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="next_page"][@href]',
+                pageElement: 'css;ol#browse-script-list > li',
+                HT_insert: ['css;ol#browse-script-list', 3],
+                replaceE: 'css;.pagination',
+                scrollDelta: 1000
+            }
+        },
+        greasyfork_feedback: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="next_page"][@href]',
+                pageElement: 'css;.script-discussion-list > div',
+                HT_insert: ['css;.script-discussion-list', 3],
+                replaceE: 'css;.pagination',
+                scrollDelta: 1500
+            }
+        },
+        greasyfork_discussions: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="next_page"][@href]',
+                pageElement: 'css;.discussion-list > div',
+                HT_insert: ['css;.discussion-list', 3],
+                replaceE: 'css;.pagination',
                 scrollDelta: 1000
             }
         },
@@ -497,18 +540,6 @@
                 replaceE: 'css;nav.navigation.paging-navigation',
                 scrollDelta: 2000
             }
-        },
-        gufengmh8: {
-            SiteTypeID: 0,
-            pager: {
-                type: 4,
-                pageElement: 'css;body > script:first-child',
-                HT_insert: ['css;#images', 3],
-                intervals: 5000,
-                functionNext: gufengmh8_functionNext,
-                functionAdd: gufengmh8_functionAdd,
-                scrollDelta: 2333
-            }
         }
     };
     // 生成 SiteTypeID
@@ -534,9 +565,9 @@
                 if (location.pathname === '/s') curSite = DBSite.baidu;
                 break;
             case 'movie.douban.com': //           < 豆瓣评论 >
-                if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/comments') > -1) { //        短评
+                if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/comments') > -1) { //        短评列表
                     curSite = DBSite.douban_subject_comments;
-                } else if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/reviews') > -1) { //  影评
+                } else if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/reviews') > -1) { //  影评列表
                     curSite = DBSite.douban_subject_reviews;
                 } else if(location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/episode') > -1) { //   电视剧每集评论
                     curSite = DBSite.douban_subject_episode;
@@ -615,6 +646,15 @@
                 break;
             case 'www.afreecatv.com': //          < 直播网站 >
                 curSite = DBSite.afreecatv;
+                break;
+            case 'greasyfork.org': //             < GreasyFork >
+                if (location.pathname.indexOf('/scripts') + 8 === location.pathname.length) {
+                    curSite = DBSite.greasyfork;
+                } else if (location.pathname.lastIndexOf('/feedback') + 9 === location.pathname.length) {
+                    curSite = DBSite.greasyfork_feedback;
+                } else if (location.pathname.lastIndexOf('/discussions') + 12 === location.pathname.length) {
+                    curSite = DBSite.greasyfork_discussions;
+                }
                 break;
             case 'art.alphacoders.com': //        < 壁纸网站 >
                 curSite = DBSite.alphacoders_art;
@@ -1049,10 +1089,11 @@
                     timeout: 5000,
                     onload: function (response) {
                         try {
-                            //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
+                            console.log('最终 URL：' + response.finalUrl, '返回内容：' + newBody)
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody),
                                 toElement = getAllElements(curSite.pager.HT_insert[0])[0];
+                            //console.log(curSite.pager.pageElement, pageElems)
 
                             if (pageElems.length >= 0) {
                                 // 如果有插入前函数就执行函数
