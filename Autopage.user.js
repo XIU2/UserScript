@@ -314,7 +314,7 @@
                 pageElement: 'css;.workshopBrowseItems > *',
                 HT_insert: ['css;.workshopBrowseItems', 3],
                 replaceE: 'css;.workshopBrowsePaging',
-                scrollDelta: 1000
+                scrollDelta: 1500
             }
         },
         _423down: {
