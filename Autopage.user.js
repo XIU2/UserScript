@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.4.5
+// @version      1.4.6
 // @author       X.I.U
 // @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、百度、豆瓣、微博、千图网、3DM、游侠网、游民星空、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、RARBG、PubMed、AfreecaTV、AlphaCoders、FitGirl Repacks...
 // @match        *://*/*
@@ -674,79 +674,13 @@
     } else if (webType === 3) {
         curSite = DBSite.flarum;
     }
-
-
     curSite.pageUrl = ''; // 下一页URL
     pageLoading(); // 自动无缝翻页
 
 
-    // 自动无缝翻页
-    function pageLoading() {
-        if (curSite.SiteTypeID > 0) {
-            windowScroll(function (direction, e) {
-                if (direction === 'down') { // 下滑才准备翻页
-                    let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
-                        scrollHeight = window.innerHeight || document.documentElement.clientHeight,
-                        scrollDelta = curSite.pager.scrollDelta;
-                    if (curSite.pager.type === 3) { // 翻页类型 3
-                        let scrollElement = document.querySelector(curSite.pager.scrollElement);
-                        //console.log(scrollElement.offsetTop - (scrollTop + scrollHeight), scrollDelta, curSite.SiteTypeID)
-                        if (scrollElement.offsetTop - (scrollTop + scrollHeight) <= scrollDelta) {
-                            if (curSite.SiteTypeID === SiteType.GAMERSKY_GL) curSite.pager.scrollDelta -= 800 // 游民星空 gl 的比较奇葩，需要特殊处理下
-                            ShowPager.loadMorePage();
-                        }
-                    } else {
-                        if (document.documentElement.scrollHeight <= scrollHeight + scrollTop + scrollDelta) {
-                            if (curSite.pager.type === 2) { // 翻页类型 2
-                                if (curSite.SiteTypeID > 0) { // 如果指定了间隔时间，那么就依靠这个判断时间到了没有~
-                                    let autopbn = document.querySelector(curSite.pager.nextLink);
-                                    if (autopbn) { // 寻找下一页链接
-                                        if (!curSite.pager.nextText) { // 如果没有指定 nextText 就直接点击
-                                            autopbn.click();
-                                        } else if (autopbn.textContent.indexOf(curSite.pager.nextText) > -1){ // 如果指定了 nextText 就需要判断后再点击（避免已经在加载了，还重复点击）
-                                            autopbn.click();
-                                        }
-                                        // 对于没有按钮文字变化的按钮，可以手动指定间隔时间
-                                        if (curSite.pager.intervals) {
-                                            let _SiteTypeID = curSite.SiteTypeID;
-                                            curSite.SiteTypeID = 0;
-                                            setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
-                                        }
-                                    }
-                                }
-                            } else if (curSite.pager.type === 1) { // 翻页类型 1
-                                ShowPager.loadMorePage();
-                            } else if (curSite.pager.type === 4) { // 翻页类型 4
-                                if (curSite.SiteTypeID > 0) {
-                                    curSite.pager.functionNext();
-                                    if (curSite.pager.intervals) {
-                                        let _SiteTypeID = curSite.SiteTypeID;
-                                        curSite.SiteTypeID = 0;
-                                        setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-
-    /*function getElementToPageTop(el) {
-        if(el.parentElement) {
-            return getElementToPageTop(el.parentElement) + el.offsetTop
-        }
-        return el.offsetTop
-    }*/
-
-
     // 隐藏帖子内的 [下一页] 按钮（Discuz! 论坛）
     function hidePgbtn() {
-        let style_hidePgbtn = document.createElement('style');
-        style_hidePgbtn.innerHTML = `.pgbtn {display: none;}`;
-        document.head.appendChild(style_hidePgbtn);
+        document.lastChild.appendChild(document.createElement('style')).textContent = '.pgbtn {display: none;}';
     }
 
 
@@ -891,6 +825,68 @@
     }
 
 
+    // 自动无缝翻页
+    function pageLoading() {
+        if (curSite.SiteTypeID > 0) {
+            windowScroll(function (direction, e) {
+                if (direction === 'down') { // 下滑才准备翻页
+                    let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
+                        scrollHeight = window.innerHeight || document.documentElement.clientHeight,
+                        scrollDelta = curSite.pager.scrollDelta;
+                    if (curSite.pager.type === 3) { // 翻页类型 3
+                        let scrollElement = document.querySelector(curSite.pager.scrollElement);
+                        //console.log(scrollElement.offsetTop - (scrollTop + scrollHeight), scrollDelta, curSite.SiteTypeID)
+                        if (scrollElement.offsetTop - (scrollTop + scrollHeight) <= scrollDelta) {
+                            if (curSite.SiteTypeID === SiteType.GAMERSKY_GL) curSite.pager.scrollDelta -= 800 // 游民星空 gl 的比较奇葩，需要特殊处理下
+                            ShowPager.loadMorePage();
+                        }
+                    } else {
+                        if (document.documentElement.scrollHeight <= scrollHeight + scrollTop + scrollDelta) {
+                            if (curSite.pager.type === 2) { // 翻页类型 2
+                                if (curSite.SiteTypeID > 0) { // 如果指定了间隔时间，那么就依靠这个判断时间到了没有~
+                                    let autopbn = document.querySelector(curSite.pager.nextLink);
+                                    if (autopbn) { // 寻找下一页链接
+                                        if (!curSite.pager.nextText) { // 如果没有指定 nextText 就直接点击
+                                            autopbn.click();
+                                        } else if (autopbn.textContent.indexOf(curSite.pager.nextText) > -1){ // 如果指定了 nextText 就需要判断后再点击（避免已经在加载了，还重复点击）
+                                            autopbn.click();
+                                        }
+                                        // 对于没有按钮文字变化的按钮，可以手动指定间隔时间
+                                        if (curSite.pager.intervals) {
+                                            let _SiteTypeID = curSite.SiteTypeID;
+                                            curSite.SiteTypeID = 0;
+                                            setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
+                                        }
+                                    }
+                                }
+                            } else if (curSite.pager.type === 1) { // 翻页类型 1
+                                ShowPager.loadMorePage();
+                            } else if (curSite.pager.type === 4) { // 翻页类型 4
+                                if (curSite.SiteTypeID > 0) {
+                                    curSite.pager.functionNext();
+                                    if (curSite.pager.intervals) {
+                                        let _SiteTypeID = curSite.SiteTypeID;
+                                        curSite.SiteTypeID = 0;
+                                        setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+
+    /*function getElementToPageTop(el) {
+        if(el.parentElement) {
+            return getElementToPageTop(el.parentElement) + el.offsetTop
+        }
+        return el.offsetTop
+    }*/
+
+
     // 启用/禁用 (当前网站)
     function menu_disable(type) {
         switch(type) {
@@ -1014,10 +1010,7 @@
             if(e == null) return '';
             'string' != typeof e && (e = e.getAttribute('href'));
             var t = this.getFullHref.a;
-            if (t) {return t}
-            ((this.getFullHref.a = t = document.createElement('a')), t.href = e, t.href)
-            if (t.href) {return t.href}
-            //return t || ((this.getFullHref.a = t = document.createElement('a')), t.href = e, t.href);
+            return t || (this.getFullHref.a = t = document.createElement('a')), (t.href = e), t.href;
         },
         createDocumentByString: function (e) {
             if (e) {
