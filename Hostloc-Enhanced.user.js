@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.3.4
+// @version      1.3.5
 // @author       X.I.U
 // @description  自动签到（访问空间 +22 积分）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
@@ -29,7 +29,7 @@
         ['menu_customBlockUsers', '自定义屏蔽用户', '自定义屏蔽用户', []],
         ['menu_blockKeywords', '屏蔽关键词（帖子标题）', '屏蔽关键词（帖子标题）', false],
         ['menu_customBlockKeywords', '自定义屏蔽关键词', '自定义屏蔽关键词', []],
-        ['menu_customLittleTail', '自定义小尾巴内容', '自定义小尾巴内容', []],
+        ['menu_customLittleTail', '自定义小尾巴内容', '自定义小尾巴内容', ''],
         ['menu_pageLoading', '自动无缝翻页（总开关）', '自动无缝翻页', true],
         ['menu_thread_pageLoading', '帖子内自动翻页', '帖子内自动翻页', true],
         ['menu_backToTop', '快捷回到顶部（右键点击两侧空白处）', '快捷回到顶部', true],
@@ -59,6 +59,7 @@
             } else if (menu_ALL[i][0] === 'menu_customBlockKeywords') {
                 menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockKeywords()});
             } else if (menu_ALL[i][0] === 'menu_customLittleTail') {
+                if (menu_value(menu_ALL[i][0]).length === 0) {GM_setValue(menu_ALL[i][0], '')} // 修改旧版类型
                 menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customLittleTail()});
             } else {
                 menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❎'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
@@ -163,7 +164,7 @@
         showPosts(); //                                                   自动显示帖子内被隐藏的回复
         blockUsers('thread'); //                                          屏蔽用户（黑名单）
         if (menu_value('menu_onlineStatus')) onlineStatus(); //           显示是否在线
-        littleTail('thread'); //                                          小尾巴
+        replyCustom('thread'); //                                         回复自定义
     } else if (patt_forum.test(location.pathname) || location.search.indexOf('mod=forumdisplay') > -1) { // 各板块帖子列表
         curSite = DBSite.forum;
         if (menu_value('menu_collapsedNowPost')) collapsedNowPost(); //   收起当前帖子预览（左键左右两侧空白处）
@@ -171,7 +172,7 @@
         blockUsers('forum'); //                                           屏蔽用户（黑名单）
         blockKeywords(); //                                               屏蔽关键词（帖子标题）
         vfastpostDOMNodeInserted(); //                                    监听插入事件（预览快速回复带签名）
-        littleTail('forum'); //                                           小尾巴
+        replyCustom('forum'); //                                          回复自定义
         if (patt_forum.test(location.pathname)) blockDOMNodeInserted(); //监听插入事件（有新的回复主题，点击查看）
      }else if (location.search.indexOf('mod=guide') > -1) { //            导读帖子列表
         curSite = DBSite.guide;
@@ -185,7 +186,7 @@
     } else if(location.search.indexOf('mod=space') > -1 && location.search.indexOf('&view=me') > -1) { // 别人的主题/回复
         curSite = DBSite.youreply;
     } else if(location.pathname === '/forum.php' && location.search.indexOf('mod=post&action=reply') > -1 || location.pathname === '/forum.php' && location.search.indexOf('mod=post&action=newthread') > -1) { // 回复：高级回复
-        littleTail('reply'); //                                           小尾巴
+        replyCustom('reply'); //                                          回复自定义
     }
 
     curSite.pageUrl = ""; // 下一页URL
@@ -368,7 +369,7 @@
     function customLittleTail() {
         let newLittleTail = prompt('编辑 [自定义小尾巴内容]，刷新网页后生效（换行请使用 \\n\n提示①：记得在小尾巴前面加上几个 \\n 换行，用来分隔开回帖内容~\n提示②：建议使用 [align=right] 标签来使小尾巴居右~\n提示③：支持论坛富文本标签（建议先找个回复编辑预览好~\n示例：\\n\\n\\n\\n[align=right]第一行内容~\\n第二行内容~[/align]', GM_getValue('menu_customLittleTail'));
         if (newLittleTail === '') {
-            GM_setValue('menu_customLittleTail', []);
+            GM_setValue('menu_customLittleTail', '');
             registerMenuCommand(); // 重新注册脚本菜单
         } else if (newLittleTail != null) {
             GM_setValue('menu_customLittleTail', newLittleTail);
@@ -377,24 +378,23 @@
     };
 
 
-    // 小尾巴
-    function littleTail(type) {
-        if (!menu_value('menu_customLittleTail')) return
+    // 回复自定义
+    function replyCustom(type) {
         switch(type) {
             case 'forum': // 各版块帖子列表的预览帖子
-                littleTail_0(); // 预览帖子 快速回复（底部）
-                littleTail_1(); // 预览帖子 回复（悬浮）
+                replyCustom_0(); // 预览帖子 快速回复（底部）
+                replyCustom_1(); // 预览帖子 回复（悬浮）
                 break;
             case 'thread': // 帖子内
-                littleTail_1(); // 快速回复（悬浮）
-                littleTail_2(); // 回复框（底部）
+                replyCustom_1(); // 快速回复（悬浮）
+                replyCustom_2(); // 回复框（底部）
                 break;
             case 'reply': // 高级回复
-                littleTail_3();
+                replyCustom_3();
                 break;
         }
 
-        function littleTail_0() {
+        function replyCustom_0() {
             let vfastpost = e => {
                 if (e.target.innerHTML && e.target.innerHTML.indexOf('id="vfastpost"') > -1) {
                     let message = e.target.querySelector('input[name="message"]'), id = message.id.match(/\d+/g)[0];
@@ -407,7 +407,7 @@
             document.addEventListener('DOMNodeInserted', vfastpost); // 监听插入事件
         }
 
-        function littleTail_1() {
+        function replyCustom_1() {
             let floatlayout_reply = e => {
                 if (e.target.innerHTML && e.target.innerHTML.indexOf('id="floatlayout_reply"') > -1) {
                     document.getElementById('postsubmit').onclick = function(){
@@ -418,13 +418,13 @@
             document.addEventListener('DOMNodeInserted', floatlayout_reply); // 监听插入事件
         }
 
-        function littleTail_2() { // 帖子底部的回复框
+        function replyCustom_2() { // 帖子底部的回复框
             document.getElementById('fastpostsubmit').onclick = function(){
                 if (GM_getValue('menu_customLittleTail')) document.getElementById('fastpostmessage').value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');
             }
         }
 
-        function littleTail_3() {
+        function replyCustom_3() {
             let postsubmit = document.getElementById('postsubmit');
             if (postsubmit && postsubmit.innerText === '\n参与/回复主题\n' || postsubmit && postsubmit.innerText === '\n发表帖子\n') {
                 postsubmit.onclick = function(){
