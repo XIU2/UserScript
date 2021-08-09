@@ -135,7 +135,7 @@ function collapsedNowAnswer(selectors) {
                 }
                 // 针对完全看不到 [收起回答] 按钮时（如 [头部区域]，以及部分明明很长却不显示悬浮横条的回答）
                 if (!answerCollapseButton_) {
-                    for (let el of document.querySelectorAll('.List-item')) { // 遍历所有回答主体元素
+                    for (let el of document.querySelectorAll('.List-item, .Card.AnswerCard')) { // 遍历所有回答主体元素
                         if (isElementInViewport_(el)) { // 判断该回答是否在可视区域内
                             // 固定的 [收起评论]（先看看是否展开评论，即存在 [收起评论] 按钮）
                             let commentCollapseButton = el.parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
