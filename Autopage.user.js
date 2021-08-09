@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.4.8
+// @version      1.4.9
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、百度、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、FitGirl Repacks...
+// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、百度、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -28,7 +28,7 @@
                          'www.gufengmh8.com',
                          'rarbgprx.org', 'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org',
                          'art.alphacoders.com', 'wall.alphacoders.com', 'avatars.alphacoders.com', 'mobile.alphacoders.com',
-                         'fitgirl-repacks.site'];
+                         'crackhub.site', 'fitgirl-repacks.site'];
 
     if (GM_getValue('menu_disable') == null){GM_setValue('menu_disable', [])};
     if (GM_getValue('menu_discuz_thread_page') == null){GM_setValue('menu_discuz_thread_page', true)};
@@ -547,8 +547,8 @@
                 type: 1,
                 nextLink: '//a[@class="next page-numbers"][@href]',
                 pageElement: 'css;article[id^="post-"]',
-                HT_insert: ['css;nav.navigation.paging-navigation', 1],
-                replaceE: 'css;nav.navigation.paging-navigation',
+                HT_insert: ['css;nav.paging-navigation', 1],
+                replaceE: 'css;nav.paging-navigation',
                 scrollDelta: 2000
             }
         }
@@ -603,7 +603,7 @@
                 break;
             case 'gl.ali213.net': //              < 游侠网 - 攻略页 >
                 curSite = DBSite.ali213_gl;
-                document.lastElementChild.appendChild(document.createElement('style')).textContent = `.n_show_b {display: none !important;}` // 隐藏部分碍事元素
+                document.lastElementChild.appendChild(document.createElement('style')).textContent = '.n_show_b {display: none !important;}' // 隐藏部分碍事元素
                 break;
             case 'www.gamersky.com': //           < 游民星空 >
                 if (location.pathname.indexOf('/ent/') > -1) {
@@ -679,6 +679,10 @@
             case 'avatars.alphacoders.com':
             case 'mobile.alphacoders.com':
                 curSite = DBSite.alphacoders_wall;
+                break;
+            case 'crackhub.site': //              < 游戏下载网站 >
+                curSite = DBSite.fitgirl;
+                document.lastElementChild.appendChild(document.createElement('style')).textContent = 'html.wp-dark-mode-active .inside-article {background-color: var(--wp-dark-mode-bg);}'
                 break;
             case 'fitgirl-repacks.site': //       < 游戏下载网站 >
                 curSite = DBSite.fitgirl;
