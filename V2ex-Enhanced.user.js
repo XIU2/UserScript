@@ -207,7 +207,7 @@
             }
     }
 
-    curSite.pageUrl = ""; // 下一页URL
+    curSite.pageUrl = ''; // 下一页URL
     if(menu_value('menu_fish'))fish(); // 标签页伪装为 Github（摸鱼）
     if(menu_value('menu_autoClockIn'))setTimeout(qianDao, 1000); // 自动签到（后台），延迟 1 秒执行是为了兼容 [V2ex Plus] 扩展
     if(menu_value('menu_pageLoading'))pageLoading(); // 自动翻页（无缝）
@@ -233,9 +233,9 @@
             let timeOld = GM_getValue('menu_clockInTime')
             if (!timeOld || timeOld != timeNow) {
                 qianDaoStatus_(timeNow) //                               后台获取签到状态（并判断是否需要签到）
-            } else { //                                                  新旧签到时间一致
+            }/* else { //                                                  新旧签到时间一致
                 console.info('[V2EX 增强] 已经签过到了。')
-            }
+            }*/
         }
     }
 
@@ -271,7 +271,7 @@
     function qianDaoStatus_(timeNow) {
         GM_xmlhttpRequest({
             url: 'https://www.v2ex.com/mission/daily',
-            method: "GET",
+            method: 'GET',
             timeout: 5000,
             onload: function (response) {
                 let html = ShowPager.createDocumentByString(response.responseText);
@@ -288,7 +288,7 @@
 
     // 回到顶部（右键左右两侧空白处）
     function backToTop() {
-        document.getElementById("Wrapper").oncontextmenu = document.querySelector("#Wrapper > .content").oncontextmenu = function(event){
+        document.getElementById('Wrapper').oncontextmenu = document.querySelector("#Wrapper > .content").oncontextmenu = function(event){
             if (event.target==this) {
                 event.preventDefault();
                 window.scrollTo(0,0)
@@ -321,7 +321,7 @@
 
     // 快速回复（双击左右两侧空白处）
     function quickReply() {
-        document.getElementById("Wrapper").ondblclick = document.querySelector("#Wrapper > .content").ondblclick = function(event){
+        document.getElementById('Wrapper').ondblclick = document.querySelector('#Wrapper > .content').ondblclick = function(event){
             if (event.target==this) {
                 if (document.querySelector('.box.reply-box-sticky')) {
                     document.getElementById('undock-button').click();

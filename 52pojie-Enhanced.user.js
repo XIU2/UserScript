@@ -178,7 +178,7 @@
     } else if(location.search.indexOf('mod=space') > -1 && location.search.indexOf('&view=me') > -1) { // 别人的主题/回复
         curSite = DBSite.youspace;
     }
-    curSite.pageUrl = ""; // 下一页URL
+    curSite.pageUrl = ''; // 下一页URL
 
     qianDao(); // 自动签到
     pageLoading(); // 自动翻页
