@@ -20,8 +20,8 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
-'use strict';
 (function() {
+    'use strict';
     var menu_ALL = [
         ['menu_autoReply', '自动回复', '自动回复', true],
         ['menu_pageLoading', '自动无缝翻页', '自动无缝翻页', true],

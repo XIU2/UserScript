@@ -20,8 +20,8 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
-'use strict';
 (function() {
+    'use strict';
     var menu_ALL = [
         ['menu_autoClockIn', '自动签到', '自动签到', true],
         ['menu_linksToImgs', '链接转图片', '链接转图片', true],
@@ -245,22 +245,22 @@
         let url = (location.origin + "/mission/daily/redeem?" + RegExp("once\\=(\\d+)").exec(document.querySelector('div#Top .tools').innerHTML)[0]);
         GM_xmlhttpRequest({
             url: url,
-            method: "GET",
+            method: 'GET',
             timeout: 5000,
             onload: function (response) {
                 let html = ShowPager.createDocumentByString(response.responseText);
                 if (html.querySelector('li.fa.fa-ok-sign')) {
-                    html = html.getElementById('Main').innerText.match(/已连续登录 (\d+?) 天/)[0];
+                    html = html.getElementById('Main').textContent.match(/已连续登录 (\d+?) 天/)[0];
                     GM_setValue('menu_clockInTime', timeNow); // 写入签到时间以供后续比较
                     console.info('[V2EX 增强] 自动签到完成！')
                     if (qiandao) {
-                        qiandao.innerText = `自动签到完成！${html}`;
-                        qiandao.href = '#';
+                        qiandao.textContent = `自动签到完成！${html}`;
+                        qiandao.href = 'javascript:void(0);';
                     }
                 } else {
                     GM_notification({text: '自动签到失败！请联系作者解决！', timeout: 4000, onclick() {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/424246/feedback', {active: true,insert: true,setParent: true});}});
                     console.warn('[V2EX 增强] 自动签到失败！请联系作者解决！')
-                    if (qiandao) qiandao.innerText = '自动签到失败！请尝试手动签到！';
+                    if (qiandao) qiandao.textContent = '自动签到失败！请尝试手动签到！';
                 }
             }
         });

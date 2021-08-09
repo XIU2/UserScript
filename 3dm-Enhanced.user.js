@@ -19,8 +19,8 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
-'use strict';
 (function() {
+    'use strict';
     var menu_ALL = [
         ['menu_autoReply', '自动回复', '自动回复', true],
         ['menu_cleanTopPost', '清理置顶帖子', '清理置顶帖子', true],
@@ -186,7 +186,7 @@
         let checklogin = document.querySelectorAll('.wp.h_menu p a');
         if (checklogin){
             for (let value of checklogin) {
-                if (value.innerHTML == "退出"){
+                if (value.textContent == '退出'){
                     loginStatus = true;
                 }
             }
@@ -220,10 +220,10 @@
 
     // 写入自动回复内容
     function writeReply(){
-        let textarea = document.getElementById("fastpostmessage");
+        let textarea = document.getElementById('fastpostmessage');
         if (textarea){
             textarea.value = textarea.value + replyList[Math.floor((Math.random()*replyList.length))] + replyList[Math.floor((Math.random()*replyList.length))];
-            let fastpostsubmit = document.getElementById("fastpostsubmit");
+            let fastpostsubmit = document.getElementById('fastpostsubmit');
             if (fastpostsubmit){
                 fastpostsubmit.click();
             }
@@ -233,7 +233,7 @@
 
     // 清理置顶帖子
     function cleanTopPost(){
-        let showhide = document.querySelectorAll("a.showhide.y");
+        let showhide = document.querySelectorAll('a.showhide.y');
         if (showhide.length > 0){
             showhide.forEach(el=>el.click());
         }
@@ -242,9 +242,7 @@
 
     // 隐藏帖子内的 [下一页] 按钮
     function hidePgbtn() {
-        let style_hidePgbtn = document.createElement('style');
-        style_hidePgbtn.innerHTML = `.pgbtn {display: none;}`;
-        document.head.appendChild(style_hidePgbtn);
+        document.lastChild.appendChild(document.createElement('style')).textContent = '.pgbtn {display: none;}';
     }
 
 
@@ -258,7 +256,7 @@
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
                         if (curSite.SiteTypeID === SiteType.FORUM) { // 如果是各版块帖子列表则直接点下一页就行了
                             let autopbn = document.querySelector('#autopbn');
-                            if (autopbn && autopbn.innerText == "下一页 »"){ // 如果已经在加载中了，就忽略
+                            if (autopbn && autopbn.textContent == '下一页 »'){ // 如果已经在加载中了，就忽略
                                 autopbn.click();
                             }
                         }else{

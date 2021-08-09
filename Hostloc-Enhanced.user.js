@@ -278,7 +278,7 @@
             listItem.forEach(function(item){ // 遍历所有帖子
                 menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
                     let itemName = item.querySelector(list2); // 寻找用户名
-                    if (itemName && itemName.innerText === item1) {
+                    if (itemName && itemName.textContent === item1) {
                         console.log(`屏蔽用户：${item1}`);
                         item.remove(); // 删除帖子
                     }
@@ -294,7 +294,7 @@
                     listItem.forEach(function(item){ // 遍历所有回复
                         menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
                             let itemName = item.querySelector('a.xi2'); // 寻找用户名
-                            if (itemName && itemName.innerText === item1) {
+                            if (itemName && itemName.textContent === item1) {
                                 console.log(`屏蔽用户：${item1}`);
                                 item.remove(); // 删除回复
                             }
@@ -331,8 +331,8 @@
         listItem.forEach(function(item){ // 遍历所有帖子标题
             menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词
                 let itemName = item.querySelector('a.s.xst'); // 寻找帖子标题
-                if (itemName && itemName.innerText.indexOf(item1) > -1) {
-                    console.log(`屏蔽关键词：[${item1}]`, `，帖子标题：[${itemName.innerText}]`);
+                if (itemName && itemName.textContent.indexOf(item1) > -1) {
+                    console.log(`屏蔽关键词：[${item1}]`, `，帖子标题：[${itemName.textContent}]`);
                     item.remove(); // 删除帖子
                 }
             })
@@ -343,7 +343,7 @@
     // 监听插入事件（有新的回复主题，点击查看）
     function blockDOMNodeInserted() {
         let block = e => {
-            if (e.target.innerText && e.target.innerText.indexOf('newthread') > -1) {
+            if (e.target.textContent && e.target.textContent.indexOf('newthread') > -1) {
                 setTimeout(function () {
                     blockUsers('forum'); //                           屏蔽用户（黑名单）
                     blockKeywords(); //                               屏蔽关键词（帖子标题）
@@ -426,7 +426,7 @@
 
         function replyCustom_3() {
             let postsubmit = document.getElementById('postsubmit');
-            if (postsubmit && postsubmit.innerText === '\n参与/回复主题\n' || postsubmit && postsubmit.innerText === '\n发表帖子\n') {
+            if (postsubmit && postsubmit.textContent === '\n参与/回复主题\n' || postsubmit && postsubmit.textContent === '\n发表帖子\n') {
                 postsubmit.onclick = function(){
                     if (GM_getValue('menu_customLittleTail')) document.getElementById('e_textarea').value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');
                 }
@@ -438,7 +438,7 @@
     // 监听插入事件（回帖间隔）
     /*function replyIntervalDOMNodeInserted() {
         let replyInterval = e => {
-            if (e.target.innerHTML && e.target.innerText.indexOf('发表回复 金钱+1') > -1) {
+            if (e.target.innerHTML && e.target.textContent.indexOf('发表回复 金钱+1') > -1) {
                 setTimeout(function () {GM_notification({text: '过去 60 秒了，可以回帖了~', timeout: 3500});}, 60000)
             }
         }
@@ -459,9 +459,7 @@
 
     // 隐藏帖子内的 [下一页] 按钮
     function hidePgbtn() {
-        let style_hidePgbtn = document.createElement('style');
-        style_hidePgbtn.innerHTML = `.pgbtn {display: none;}`;
-        document.head.appendChild(style_hidePgbtn);
+        document.lastChild.appendChild(document.createElement('style')).textContent = '.pgbtn {display: none;}';
     }
 
 
@@ -496,10 +494,10 @@
     // 显示在线状态
     function onlineStatus() {
         document.querySelectorAll('[id^="favatar"]').forEach(function(item){ // 遍历所有帖子
-            let icon = (item.querySelector('[id^="userinfo"] > .i.y em').innerText === '当前在线') ? '🌝' : '🌚';
+            let icon = (item.querySelector('[id^="userinfo"] > .i.y em').textContent === '当前在线') ? '🌝' : '🌚';
             let divStatus = document.createElement('div');
             divStatus.style = 'position: absolute;margin: -8px 0 0 8px;padding: 0 1px 1.2px;background-color: #ffffff;border-radius: 50%;';
-            divStatus.innerText = icon;
+            divStatus.textContent = icon;
             let mochu = item.querySelector('.avatar');
             mochu.parentNode.insertBefore(divStatus,mochu);
         })
@@ -511,7 +509,7 @@
         if (patt_forum.test(location.pathname) || location.search.indexOf('mod=forumdisplay') > -1){
             let tbody = document.querySelectorAll('tbody[id^="normalthread_"] .xw1');
             Array.from(tbody).forEach(function (_this) {
-                if (_this.innerText === '255') {
+                if (_this.textContent === '255') {
                     _this.parentNode.parentNode.parentNode.remove();
                 }
             })
@@ -529,10 +527,10 @@
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + 999) {
                         if (curSite.SiteTypeID === SiteType.FORUM) { // 如果是各版块帖子列表则直接点下一页就行了
                             let autopbn = document.querySelector('#autopbn');
-                            if (autopbn && autopbn.innerText === "下一页 »"){ // 如果已经在加载中了，就忽略
+                            if (autopbn && autopbn.textContent === "下一页 »"){ // 如果已经在加载中了，就忽略
                                 autopbn.click();
                                 let timer = setInterval(function(){ // 在下一页加载完成后
-                                    if (document.querySelector('#autopbn').innerText === "下一页 »") {
+                                    if (document.querySelector('#autopbn').textContent === "下一页 »") {
                                         if (menu_value('menu_delate255')) delate255(); // 隐藏 255 权限帖子
                                         if (menu_value('menu_blockUsers')) blockUsers('forum'); // 屏蔽用户（黑名单）
                                         if (menu_value('menu_blockKeywords')) blockKeywords(); // 屏蔽关键词（帖子标题）

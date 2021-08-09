@@ -19,8 +19,8 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
-'use strict';
 (function() {
+    'use strict';
     var menu_ALL = [
         ['menu_autoClockIn', '自动签到', '自动签到', true],
         ['menu_pageLoading', '自动无缝翻页', '自动无缝翻页', true],
@@ -191,14 +191,14 @@
         if (qiandao) {
             GM_xmlhttpRequest({
                 url: qiandao.href,
-                method: "GET",
+                method: 'GET',
                 timeout: 5000,
                 onload: function (response) {
                     let html = ShowPager.createDocumentByString(response.responseText);
                     html = html.querySelector('#messagetext p')
-                    if (html && html.innerText.indexOf('任务已完成') > -1 || html && html.innerText.indexOf('已申请过此任务') > -1) {
-                        qiandao.querySelector('.qq_bind').setAttribute('src','https://www.52pojie.cn/static/image/common/wbs.png') // 修改 [打卡签到] 图标为 [签到完毕]
-                        qiandao.href = "#" // 修改 URL 为 #
+                    if (html && html.textContent.indexOf('任务已完成') > -1 || html && html.textContent.indexOf('已申请过此任务') > -1) {
+                        qiandao.querySelector('.qq_bind').src = 'https://www.52pojie.cn/static/image/common/wbs.png'; // 修改 [打卡签到] 图标为 [签到完毕] 图标
+                        qiandao.href = 'javascript:void(0);'
                     } else {
                         GM_notification({text: '自动签到失败！请联系作者解决！', title: '吾爱破解论坛增强', timeout: 3000});
                     }
@@ -229,9 +229,7 @@
 
     // 隐藏帖子内的 [下一页] 按钮
     function hidePgbtn() {
-        let style_hidePgbtn = document.createElement('style');
-        style_hidePgbtn.innerHTML = `.pgbtn {display: none;}`;
-        document.head.appendChild(style_hidePgbtn);
+        document.lastChild.appendChild(document.createElement('style')).textContent = '.pgbtn {display: none;}';
     }
 
 
@@ -248,7 +246,7 @@
                             ShowPager.loadMorePage();
                         } else {
                             let autopbn = document.querySelector(curSite.pager.nextLink);
-                            if (autopbn && autopbn.innerText == curSite.pager.nextText) { // 如果正在加载，就不再点击
+                            if (autopbn && autopbn.textContent == curSite.pager.nextText) { // 如果正在加载，就不再点击
                                 autopbn.click();
                             }
                         }

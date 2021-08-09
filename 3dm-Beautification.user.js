@@ -12,8 +12,8 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
-'use strict';
 (function() {
+    'use strict';
     let style_Add = document.createElement('style');
     style_Add.innerHTML = `
 [url=home.php?mod=space&uid=945662]@media[/url] (min-width:1366px) {
@@ -98,6 +98,6 @@ textarea#fastpostmessage {
                 document.head.appendChild(style_Add);
                 clearInterval(timer);
             }
-        }, 1);
+        });
     }
 })();

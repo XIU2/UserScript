@@ -18,8 +18,8 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
-'use strict';
 (function() {
+    'use strict';
     var menu_ALL = [
         ['menu_rule', '隐藏版规', '隐藏版规', false]
     ], menu_ID = [];
