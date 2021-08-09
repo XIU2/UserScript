@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.2.9
+// @version      1.3.0
 // @author       X.I.U
 // @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @match        *://*.lanzous.com/*
@@ -425,7 +425,7 @@
                     if (target.nodeType != 1) return
                     if (target.className === 'f_view') {
                         let f_viewtop = target.querySelector('.f_viewtop');
-                        if (f_viewtop) {
+                        if (f_viewtop && f_viewtop.textContent === '外链分享地址') {
                             if (menu_value('menu_open_fileSha') && menu_value('menu_copy_fileSha')) {
                                 f_viewtop.textContent = '复制并打开分享链接';
                             } else if (menu_value('menu_open_fileSha')) {
