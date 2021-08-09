@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.5.2
+// @version      1.5.3
 // @author       X.I.U
 // @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽盐选内容、展开问题描述、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -111,24 +111,38 @@ function collapsedNowAnswer(selectors) {
         if (event.target==this) {
             // 下面这段主要是 [收起回答]，顺便 [收起评论]（如果展开了的话）
             let rightButton = document.querySelector('.ContentItem-actions.Sticky.RichContent-actions.is-fixed.is-bottom')
-            // 悬浮在底部的 [收起回答]（此时正在浏览回答内容 [头部区域 + 中间区域]）
+            // 悬浮在底部的 [收起回答]（此时正在浏览回答内容 [中间区域]）
             if (rightButton) {
                 // 固定的 [收起评论]（先看看是否展开评论）
                 let commentCollapseButton = rightButton.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                 if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) commentCollapseButton.click();
                 // 再去收起回答
-                rightButton = rightButton.querySelector('.ContentItem-rightButton')
-                if (rightButton && rightButton.hasAttribute('data-zop-retract-question')) rightButton.click();
-            // 固定在回答底部的 [收起回答]（此时正在浏览回答内容 [尾部区域]）
+                rightButton = rightButton.querySelector('.ContentItem-rightButton[data-zop-retract-question]')
+                if (rightButton) rightButton.click();
+                // 固定在回答底部的 [收起回答]（此时正在浏览回答内容 [尾部区域]）
             } else {
-                for (let el of document.querySelectorAll('.ContentItem-rightButton')) { // 遍历所有回答底部的 [收起] 按钮
-                    if (el.hasAttribute('data-zop-retract-question')) {
-                        if (isElementInViewport(el)) { // 判断该 [收起] 按钮是否在可视区域内
+                let answerCollapseButton_ = false;
+                for (let el of document.querySelectorAll('.ContentItem-rightButton[data-zop-retract-question]')) { // 遍历所有回答底部的 [收起] 按钮
+                    if (isElementInViewport(el)) { // 判断该 [收起] 按钮是否在可视区域内
+                        // 固定的 [收起评论]（先看看是否展开评论，即存在 [收起评论] 按钮）
+                        let commentCollapseButton = el.parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
+                        // 如果展开了评论，就收起评论
+                        if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) commentCollapseButton.click();
+                        el.click() // 再去收起回答
+                        answerCollapseButton_ = true; // 如果找到并点击收起了，就没必要执行下面的代码了（可视区域中没有 [收起回答] 时）
+                        break
+                    }
+                }
+                // 针对完全看不到 [收起回答] 按钮时（如 [头部区域]，以及部分明明很长却不显示悬浮横条的回答）
+                if (!answerCollapseButton_) {
+                    for (let el of document.querySelectorAll('.List-item')) { // 遍历所有回答主体元素
+                        if (isElementInViewport_(el)) { // 判断该回答是否在可视区域内
                             // 固定的 [收起评论]（先看看是否展开评论，即存在 [收起评论] 按钮）
                             let commentCollapseButton = el.parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                             // 如果展开了评论，就收起评论
                             if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) commentCollapseButton.click();
-                            el.click() // 再去收起回答
+                            let answerCollapseButton__ = document.querySelector('.ContentItem-rightButton[data-zop-retract-question]');
+                            if (answerCollapseButton__) answerCollapseButton__.click() // 再去收起回答
                             break
                         }
                     }
@@ -136,7 +150,7 @@ function collapsedNowAnswer(selectors) {
             }
 
             // 下面这段只针对 [收起评论]（如果展开了的话）
-            var commentCollapseButton_ = false, commentCollapseButton__ = false;
+            let commentCollapseButton_ = false, commentCollapseButton__ = false;
             // 悬浮的 [收起评论]（此时正在浏览评论内容 [中间区域]）
             let commentCollapseButton = document.querySelector('.CommentCollapseButton')
             if (commentCollapseButton) {
@@ -202,16 +216,22 @@ function backToTop(selectors) {
 }
 
 
-//获取元素是否在可视区域
+//获取元素是否在可视区域（完全可见）
 function isElementInViewport(el) {
     let rect = el.getBoundingClientRect();
     return (
         rect.top >= 0 &&
         rect.left >= 0 &&
-        rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <=
-        (window.innerWidth || document.documentElement.clientWidth)
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
+//获取元素是否在可视区域（部分可见）
+function isElementInViewport_(el) {
+    let rect = el.getBoundingClientRect();
+    return (
+        rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.left <= (window.innerWidth || document.documentElement.clientWidth)
     );
 }
 
