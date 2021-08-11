@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.5.4
+// @version      1.5.5
 // @author       X.I.U
-// @description  移除登录弹窗、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽盐选内容、展开问题描述、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
+// @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽盐选内容、展开问题描述、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -23,6 +23,7 @@
 
 'use strict';
 var menu_ALL = [
+    ['menu_defaultCollapsedAnswer', '默认收起回答', '默认收起回答', true],
     ['menu_collapsedAnswer', '一键收起回答', '一键收起回答', true],
     ['menu_collapsedNowAnswer', '收起当前回答/评论（点击两侧空白处）', '收起当前回答/评论', true],
     ['menu_backToTop', '快捷回到顶部（右键两侧空白处）', '快捷回到顶部', true],
@@ -82,6 +83,45 @@ function menu_value(menuName) {
         if (menu[0] == menuName) {
             return menu[3]
         }
+    }
+}
+
+
+// 默认收起回答
+function defaultCollapsedAnswer() {
+    if (!menu_value('menu_defaultCollapsedAnswer')) return
+    const callback = (mutationsList, observer) => {
+        for (const mutation of mutationsList) {
+            for (const target of mutation.addedNodes) {
+                if (target.nodeType != 1) return
+                if (target.className === 'List-item' || target.className === 'Card AnswerCard') {
+                    if (target.querySelector('.RichContent-inner').offsetHeight > 300) {
+                        let button = target.querySelector('.ContentItem-rightButton[data-zop-retract-question]');
+                        if (button) {
+                            button.click();
+                        }
+                    }
+                }
+            }
+        }
+    };
+    const observer = new MutationObserver(callback);
+    observer.observe(document, { childList: true, subtree: true });
+    defaultCollapsedAnswer_();
+    window.addEventListener('locationchange', function(){
+        setTimeout(defaultCollapsedAnswer_, 500); // 网页 URL 变化后再次执行
+    })
+
+    // 针对的是打开网页后直接加载的前面几个回答（上面哪些是针对动态加载的回答）
+    function defaultCollapsedAnswer_() {
+        document.querySelectorAll('.List-item, .Card.AnswerCard').forEach(function(item){
+            if (item.querySelector('.RichContent-inner').offsetHeight > 300) {
+                let button = item.querySelector('.ContentItem-rightButton[data-zop-retract-question]');
+                if (button) {
+                    button.click();
+                }
+            }
+        })
     }
 }
 
@@ -293,7 +333,6 @@ function blockUsers(type) {
         }
 
         blockKeywords_now();
-        addLocationchange();
         window.addEventListener('locationchange', function(){
             setTimeout(blockKeywords_now, 500); // 网页 URL 变化后再次执行
         })
@@ -402,7 +441,6 @@ function blockUsers(type) {
         }
 
         setTimeout(blockUsers_now, 500);
-        addLocationchange();
         window.addEventListener('locationchange', function(){
             setTimeout(blockUsers_now, 500); // 网页 URL 变化后再次执行
         })
@@ -619,7 +657,6 @@ function blockKeywords(type) {
         }
 
         blockKeywords_now();
-        addLocationchange();
         window.addEventListener('locationchange', function(){
             setTimeout(blockKeywords_now, 500); // 网页 URL 变化后再次执行
         })
@@ -667,7 +704,6 @@ function blockKeywords(type) {
         }
 
         setTimeout(blockKeywords_now, 500);
-        addLocationchange();
         window.addEventListener('locationchange', function(){
             setTimeout(blockKeywords_now, 500); // 网页 URL 变化后再次执行
         })
@@ -887,6 +923,28 @@ function EventXMLHttpRequest() {
         return _send.apply(this, arguments);
     }
     window.XMLHttpRequest.prototype.send = sendReplacement;
+}
+
+
+// 自定义 locationchange 事件（用来监听 URL 变化）
+function addLocationchange() {
+    history.pushState = ( f => function pushState(){
+        var ret = f.apply(this, arguments);
+        window.dispatchEvent(new Event('pushstate'));
+        window.dispatchEvent(new Event('locationchange'));
+        return ret;
+    })(history.pushState);
+
+    history.replaceState = ( f => function replaceState(){
+        var ret = f.apply(this, arguments);
+        window.dispatchEvent(new Event('replacestate'));
+        window.dispatchEvent(new Event('locationchange'));
+        return ret;
+    })(history.replaceState);
+
+    window.addEventListener('popstate',()=>{
+        window.dispatchEvent(new Event('locationchange'))
+    });
 }
 
 
@@ -1128,32 +1186,12 @@ function questionInvitation(){
     });
 }
 
-// 自定义 locationchange 事件（用来监听 URL 变化）
-function addLocationchange() {
-    history.pushState = ( f => function pushState(){
-        var ret = f.apply(this, arguments);
-        window.dispatchEvent(new Event('pushstate'));
-        window.dispatchEvent(new Event('locationchange'));
-        return ret;
-    })(history.pushState);
-
-    history.replaceState = ( f => function replaceState(){
-        var ret = f.apply(this, arguments);
-        window.dispatchEvent(new Event('replacestate'));
-        window.dispatchEvent(new Event('locationchange'));
-        return ret;
-    })(history.replaceState);
-
-    window.addEventListener('popstate',()=>{
-        window.dispatchEvent(new Event('locationchange'))
-    });
-}
 
 (function() {
+    addLocationchange();
     removeLogin(); //                                                      移除登录弹窗
     setInterval(originalPic,100); //                                       默认高清原图
     if (menu_value('menu_directLink')) setInterval(directLink, 100); //    默认站外直链
-    addLocationchange();
     window.addEventListener('locationchange', function(){ // 针对的是从单个回答页跳转到完整回答页时
         if (window.location.pathname.indexOf('question') > -1 && window.location.pathname.indexOf('waiting') == -1 && window.location.pathname.indexOf('answer') == -1) { //       回答页 //
             setTimeout(function(){
@@ -1166,7 +1204,7 @@ function addLocationchange() {
         }
     })
 
-    if (GM_info.scriptHandler === 'Violentmonkey') {
+    if (GM_info.scriptHandler === 'Violentmonkey') { // Violentmonkey 比 Tampermonkey 加载更早，会导致一些元素还没加载，因此需要延迟一会儿
         setTimeout(start, 300);
     } else {
         start();
@@ -1184,6 +1222,7 @@ function addLocationchange() {
                 questionRichTextMore(); //                                     展开问题描述
                 blockUsers('question'); //                                     屏蔽指定用户
                 blockYanXuan(); //                                             屏蔽盐选内容
+                defaultCollapsedAnswer(); //                                   默认收起回答
             }
             setInterval(topTime_question, 300); //                             置顶显示时间
         } else if (window.location.href.indexOf('search') > -1) { // 搜索结果页 //
