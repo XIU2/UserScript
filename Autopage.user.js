@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.4.9
+// @version      1.5.0
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、百度、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
+// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、百度、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -25,7 +25,7 @@
     const websiteList = ['www.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com',
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com',
                          'www.423down.com', 'apphot.cc', 'iao.su', 'www.ypojie.com', 'www.appinn.com', 'www.weidown.com', 'www.luochenzhimu.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
-                         'www.gufengmh8.com',
+                         'www.gufengmh8.com', 'www.szcdmj.com',
                          'rarbgprx.org', 'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org',
                          'art.alphacoders.com', 'wall.alphacoders.com', 'avatars.alphacoders.com', 'mobile.alphacoders.com',
                          'crackhub.site', 'fitgirl-repacks.site'];
@@ -454,6 +454,20 @@
                 scrollDelta: 2333
             }
         },
+        szcdmj: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//div[@class="fanye"][1]/a[@href][text()="下一页" or text()="下一话"]',
+                pageElement: 'css;.comicpage > div,title',
+                HT_insert: ['css;.comicpage', 3],
+                replaceE: 'css;.fanye,h1.title',
+                scrollDelta: 2000
+            },
+            function: {
+                before: szcdmj_beforeFunction
+            }
+        },
         rarbgprx: {
             SiteTypeID: 0,
             pager: {
@@ -651,7 +665,16 @@
                 curSite = DBSite.yxssp;
                 break;
             case 'www.gufengmh8.com': //          < 古风漫画网 >
-                curSite = DBSite.gufengmh8;
+                if (location.pathname.indexOf('.html') > -1) {
+                    let chapterScroll = document.getElementById('chapter-scroll') // 强制为 [下拉阅读] 模式
+                    if (chapterScroll && chapterScroll.className === '') {
+                        chapterScroll.click();
+                    }
+                    curSite = DBSite.gufengmh8;
+                }
+                break;
+            case 'www.szcdmj.com': //             < 砂之船动漫家 >
+                if (location.pathname.indexOf('/szcchapter/') > -1) curSite = DBSite.szcdmj;
                 break;
             case 'rarbgprx.org': //               < RARBG >
                 curSite = DBSite.rarbgprx;
@@ -855,6 +878,7 @@
     // gufengmh8
     function gufengmh8_functionAdd(pageElems) {
         if (pageElems) {
+            let url = curSite.pageUrl;
             curSite.pageUrl = ''; // 留空后，下一页 URL 依然交给 gufengmh8_function 函数获取（方便点）
             pageElems = pageElems[0];
             //console.log(pageElems)
@@ -868,7 +892,9 @@
                 } else if (one.indexOf('chapterPath') > -1) { // 图片文件路径
                     chapterPath = one.split('"')[1];
                 } else if (one.indexOf('pageTitle') > -1) { // 网页标题
-                    window.document.title = one.split('"')[1]; // 修改当前网页标题为下一页的标题
+                    let title = one.split('"')[1];
+                    window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, title, url); // 添加历史记录
+                    window.document.title = title; // 修改当前网页标题为下一页的标题
                 }
             })
             if (chapterImages && chapterPath) {
@@ -881,6 +907,26 @@
 
             }
         }
+    }
+
+
+    // szcdmj 的插入前函数（加载图片）
+    function szcdmj_beforeFunction(pageElems) {
+        pageElems.forEach(function (one) {
+            if (one.tagName === 'TITLE') {
+                let title = one.textContent;
+                window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, title, curSite.pageUrl); // 添加历史记录
+                window.document.title = title; // 修改当前网页标题为下一页的标题
+                one.style.display = 'none';
+            } else {
+                let now = one.querySelector('img[data-original]')
+                if (now) {
+                    now.setAttribute('src', now.dataset.original)
+                    now.style.display = 'inline';
+                }
+            }
+        });
+        return pageElems
     }
 
 
