@@ -90,39 +90,21 @@ function menu_value(menuName) {
 // 默认收起回答
 function defaultCollapsedAnswer() {
     if (!menu_value('menu_defaultCollapsedAnswer')) return
-    const callback = (mutationsList, observer) => {
-        for (const mutation of mutationsList) {
-            for (const target of mutation.addedNodes) {
-                if (target.nodeType != 1) return
-                if (target.className === 'List-item' || target.className === 'Card AnswerCard') {
-                    if (target.querySelector('.RichContent-inner').offsetHeight > 300) {
-                        let button = target.querySelector('.ContentItem-rightButton[data-zop-retract-question]');
-                        if (button) {
-                            button.click();
-                        }
-                    }
+    (new MutationObserver(mutations => {
+        for (const mutation of mutations) {
+            if (!mutation.target.classList.contains('RichContent')) continue
+            for (const addedNode of mutation.addedNodes) {
+                if (mutation.target._defaultCollapsed) return
+                if (addedNode.nodeType != Node.ELEMENT_NODE) continue
+                const button = addedNode.querySelector('.ContentItem-actions.Sticky [data-zop-retract-question]')
+                if (button) {
+                    mutation.target._defaultCollapsed = true
+                    button.click()
+                    return
                 }
             }
         }
-    };
-    const observer = new MutationObserver(callback);
-    observer.observe(document, { childList: true, subtree: true });
-    defaultCollapsedAnswer_();
-    window.addEventListener('locationchange', function(){
-        setTimeout(defaultCollapsedAnswer_, 500); // 网页 URL 变化后再次执行
-    })
-
-    // 针对的是打开网页后直接加载的前面几个回答（上面哪些是针对动态加载的回答）
-    function defaultCollapsedAnswer_() {
-        document.querySelectorAll('.List-item, .Card.AnswerCard').forEach(function(item){
-            if (item.querySelector('.RichContent-inner').offsetHeight > 300) {
-                let button = item.querySelector('.ContentItem-rightButton[data-zop-retract-question]');
-                if (button) {
-                    button.click();
-                }
-            }
-        })
-    }
+    })).observe(document, { childList: true, subtree: true })
 }
 
 
