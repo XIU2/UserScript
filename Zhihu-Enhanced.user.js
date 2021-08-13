@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.5.6
+// @version      1.5.7
 // @author       X.I.U
 // @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽盐选内容、展开问题描述、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -24,7 +24,7 @@
 'use strict';
 var menu_ALL = [
     ['menu_defaultCollapsedAnswer', '默认收起回答', '默认收起回答', true],
-    ['menu_collapsedAnswer', '一键收起回答', '一键收起回答', false],
+    ['menu_collapsedAnswer', '一键收起回答', '一键收起回答', true],
     ['menu_collapsedNowAnswer', '收起当前回答/评论（点击两侧空白处）', '收起当前回答/评论', true],
     ['menu_backToTop', '快捷回到顶部（右键两侧空白处）', '快捷回到顶部', true],
     ['menu_blockUsers', '屏蔽指定用户', '屏蔽指定用户', true],
@@ -68,10 +68,10 @@ function registerMenuCommand() {
 function menu_switch(menu_status, Name, Tips) {
     if (menu_status == 'true'){
         GM_setValue(`${Name}`, false);
-        GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
+        GM_notification({text: `已关闭 [${Tips}] 功能\n（点击刷新网页后生效）`, timeout: 3500, onclick: function(){location.reload();}});
     }else{
         GM_setValue(`${Name}`, true);
-        GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
+        GM_notification({text: `已开启 [${Tips}] 功能\n（点击刷新网页后生效）`, timeout: 3500, onclick: function(){location.reload();}});
     }
     registerMenuCommand(); // 重新注册脚本菜单
 };
@@ -87,10 +87,10 @@ function menu_value(menuName) {
 }
 
 
-// 添加收器回答观察器
+// 添加收起回答观察器
 function getCollapsedAnswerObserver() {
     if (!window._collapsedAnswerObserver) {
-        const ob = new MutationObserver(mutations => {
+        const observer = new MutationObserver(mutations => {
             for (const mutation of mutations) {
                 if (mutation.target.hasAttribute('script-collapsed')) return
                 if (!mutation.target.classList.contains('RichContent')) continue
@@ -106,22 +106,22 @@ function getCollapsedAnswerObserver() {
             }
         })
 
-        ob.start = function() {
+        observer.start = function() {
             if (!this._active) {
                 this.observe(document, { childList: true, subtree: true })
                 this._active = true
             }
         }
-        ob.end = function() {
+        observer.end = function() {
             if (this._active) {
                 this.disconnect()
             }
         }
 
         window.addEventListener('locationchange', function() {
-            ob[window.location.href.indexOf('answer') == -1 ? 'start' : 'end']()
+            observer[window.location.href.indexOf('/answer/') === -1 ? 'start' : 'end']()
         })
-        window._collapsedAnswerObserver = ob
+        window._collapsedAnswerObserver = observer
     }
     return window._collapsedAnswerObserver
 }
@@ -130,9 +130,9 @@ function getCollapsedAnswerObserver() {
 // 默认收起回答
 function defaultCollapsedAnswer() {
     if (!menu_value('menu_defaultCollapsedAnswer')) return
-    const ob = getCollapsedAnswerObserver()
-    if (window.location.href.indexOf('answer') == -1) {
-        ob.start()
+    const observer = getCollapsedAnswerObserver()
+    if (window.location.href.indexOf('/answer/') === -1) {
+        observer.start()
     }
 }
 
