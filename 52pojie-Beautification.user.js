@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛美化
-// @version      1.0.8
+// @version      1.0.9
 // @author       X.I.U
 // @description  精简多余内容、样式优化
 // @match        *://www.52pojie.cn/*
@@ -20,54 +20,10 @@
 
 (function() {
     'use strict';
-    var menu_ALL = [
-        ['menu_rule', '隐藏版规', '隐藏版规', false]
-    ], menu_ID = [];
-    for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
-        if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
-    }
-    registerMenuCommand();
+    GM_registerMenuCommand('💬 反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/412681/feedback', {active: true,insert: true,setParent: true});});
     addStyle();
-
-    // 注册脚本菜单
-    function registerMenuCommand() {
-        if (menu_ID.length > menu_ALL.length){ // 如果菜单ID数组多于菜单数组，说明不是首次添加菜单，需要卸载所有脚本菜单
-            for (let i=0;i<menu_ID.length;i++){
-                GM_unregisterMenuCommand(menu_ID[i]);
-            }
-        }
-        for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
-            menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
-            menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
-        }
-        menu_ID[menu_ID.length] = GM_registerMenuCommand('💬 反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/412681/feedback', {active: true,insert: true,setParent: true});});
-    }
-
-    // 菜单开关
-    function menu_switch(menu_status, Name, Tips) {
-        if (menu_status == 'true'){
-            GM_setValue(`${Name}`, false);
-            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
-        }else{
-            GM_setValue(`${Name}`, true);
-            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
-        }
-        registerMenuCommand(); // 重新注册脚本菜单
-    };
-
-    // 返回菜单值
-    function menu_value(menuName) {
-        for (let menu of menu_ALL) {
-            if (menu[0] == menuName) {
-                return menu[3]
-            }
-        }
-    }
-
     function addStyle() {
-        let style,
-            style_1 = `.bml {display:none !important;}`,
-            style_2 = `
+        let style = `.bml {display:none !important;}
 #postlist .plc .t_f img, #postlist .plc .tattl img {
     max-height: 500px !important;
     width: auto !important;
@@ -155,20 +111,6 @@ textarea#fastpostmessage {
 .tl th a:visited, .tl td.fn a:visited {
     color: #aaa;
 }`;
-            //style_Add = document.createElement('style');
-        style = style_2
-        if (menu_value('menu_rule')) style += style_1;
-        /*style_Add.innerHTML = style;
-        if (document.head) {
-            document.head.appendChild(style_Add);
-        } else {
-            let timer = setInterval(function(){
-                if (document.head) {
-                    document.head.appendChild(style_Add);
-                    clearInterval(timer);
-                }
-            }, 1);
-        }*/
-        document.lastChild.appendChild(document.createElement("style")).textContent = style;
+        document.lastChild.appendChild(document.createElement('style')).textContent = style;
     }
 })();

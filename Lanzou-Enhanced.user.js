@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.3.0
+// @version      1.3.1
 // @author       X.I.U
 // @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @match        *://*.lanzous.com/*
@@ -65,14 +65,20 @@
 
     // 菜单开关
     function menu_switch(menu_status, Name, Tips) {
-        let RefreshTips = '\n（刷新网页后生效）';
-        if (Name == 'menu_refreshCorrection')RefreshTips = ''
         if (menu_status == 'true') {
             GM_setValue(`${Name}`, false);
-            GM_notification({text: `已关闭 [${Tips}] 功能${RefreshTips}`, timeout: 3500});
+            if (Name == 'menu_refreshCorrection') {
+                GM_notification({text: `已关闭 [${Tips}] 功能`, timeout: 3500});
+            } else {
+                GM_notification({text: `已关闭 [${Tips}] 功能\n（点击刷新网页后生效）`, timeout: 3500, onclick: function(){location.reload();}});
+            }
         } else {
             GM_setValue(`${Name}`, true);
-            GM_notification({text: `已开启 [${Tips}] 功能${RefreshTips}`, timeout: 3500});
+            if (Name == 'menu_refreshCorrection') {
+                GM_notification({text: `已开启 [${Tips}] 功能`, timeout: 3500});
+            } else {
+                GM_notification({text: `已开启 [${Tips}] 功能\n（点击刷新网页后生效）`, timeout: 3500, onclick: function(){location.reload();}});
+            }
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };

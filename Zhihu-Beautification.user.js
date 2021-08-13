@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.2.8
+// @version      1.2.9
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -93,7 +93,7 @@
                 if (getTheme() === 'dark') document.cookie='theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
                 location.reload(); // 刷新网页
             } else {
-                GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
+                GM_notification({text: `已关闭 [${Tips}] 功能\n（点击刷新网页后生效）`, timeout: 3500, onclick: function(){location.reload();}});
             }
         } else {
             GM_setValue(`${Name}`, true);
@@ -106,7 +106,7 @@
                 }
                 location.reload(); // 刷新网页
             } else {
-                GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
+                GM_notification({text: `已开启 [${Tips}] 功能\n（点击刷新网页后生效）`, timeout: 3500, onclick: function(){location.reload();}});
             }
         }
         registerMenuCommand(); // 重新注册脚本菜单

@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         3DM论坛增强
-// @version      1.1.0
+// @version      1.1.1
 // @author       X.I.U
 // @description  自动回复、自动无缝翻页、清理置顶帖子、自动滚动至隐藏内容
 // @match        *://bbs.3dmgame.com/*
@@ -50,10 +50,10 @@
     function menu_switch(menu_status, Name, Tips) {
         if (menu_status == 'true'){
             GM_setValue(`${Name}`, false);
-            GM_notification({text: `已关闭 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
+            GM_notification({text: `已关闭 [${Tips}] 功能\n（点击刷新网页后生效）`, timeout: 3500, onclick: function(){location.reload();}});
         }else{
             GM_setValue(`${Name}`, true);
-            GM_notification({text: `已开启 [${Tips}] 功能\n（刷新网页后生效）`, timeout: 3500});
+            GM_notification({text: `已开启 [${Tips}] 功能\n（点击刷新网页后生效）`, timeout: 3500, onclick: function(){location.reload();}});
         }
         registerMenuCommand(); // 重新注册脚本菜单
     };
