@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.5.0
+// @version      1.5.1
 // @author       X.I.U
 // @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、百度、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
@@ -714,13 +714,13 @@
         // < 所有 Discuz!论坛 >
     } else if (webType === 2) {
         if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
-            if (location.pathname.indexOf('forum') > -1) { //               各版块帖子列表
+            if (location.pathname.indexOf('/forum-') > -1) { //             各版块帖子列表
                 if (document.getElementById('autopbn')) { //                判断是否有 [下一页] 按钮
                     curSite = DBSite.discuz_forum;
                 } else {
                     curSite = DBSite.discuz_guide;
                 }
-            } else if (location.pathname.indexOf('thread') > -1) { //       帖子内
+            } else if (location.pathname.indexOf('/thread-') > -1) { //       帖子内
                 if (GM_getValue('menu_discuz_thread_page')) {
                     curSite = DBSite.discuz_thread;
                     hidePgbtn(); //                                         隐藏帖子内的 [下一页] 按钮
@@ -757,6 +757,7 @@
         curSite = DBSite.flarum;
     }
     curSite.pageUrl = ''; // 下一页URL
+    //console.log(curSite);
     pageLoading(); // 自动无缝翻页
 
 
