@@ -87,24 +87,53 @@ function menu_value(menuName) {
 }
 
 
+// 添加收器回答观察器
+function getCollapsedAnswerObserver() {
+    if (!window._collapsedAnswerObserver) {
+        const ob = new MutationObserver(mutations => {
+            for (const mutation of mutations) {
+                if (mutation.target.hasAttribute('script-collapsed')) return
+                if (!mutation.target.classList.contains('RichContent')) continue
+                for (const addedNode of mutation.addedNodes) {
+                    if (addedNode.nodeType != Node.ELEMENT_NODE) continue
+                    const button = addedNode.querySelector('.ContentItem-actions.Sticky [data-zop-retract-question]')
+                    if (button) {
+                        mutation.target.setAttribute('script-collapsed', '')
+                        button.click()
+                        return
+                    }
+                }
+            }
+        })
+
+        ob.start = function() {
+            if (!this._active) {
+                this.observe(document, { childList: true, subtree: true })
+                this._active = true
+            }
+        }
+        ob.end = function() {
+            if (this._active) {
+                this.disconnect()
+            }
+        }
+
+        window.addEventListener('locationchange', function() {
+            ob[window.location.href.indexOf('answer') == -1 ? 'start' : 'end']()
+        })
+        window._collapsedAnswerObserver = ob
+    }
+    return window._collapsedAnswerObserver
+}
+
+
 // 默认收起回答
 function defaultCollapsedAnswer() {
     if (!menu_value('menu_defaultCollapsedAnswer')) return
-    (new MutationObserver(mutations => {
-        for (const mutation of mutations) {
-            if (!mutation.target.classList.contains('RichContent')) continue
-            for (const addedNode of mutation.addedNodes) {
-                if (mutation.target._defaultCollapsed) return
-                if (addedNode.nodeType != Node.ELEMENT_NODE) continue
-                const button = addedNode.querySelector('.ContentItem-actions.Sticky [data-zop-retract-question]')
-                if (button) {
-                    mutation.target._defaultCollapsed = true
-                    button.click()
-                    return
-                }
-            }
-        }
-    })).observe(document, { childList: true, subtree: true })
+    const ob = getCollapsedAnswerObserver()
+    if (window.location.href.indexOf('answer') == -1) {
+        ob.start()
+    }
 }
 
 
@@ -115,15 +144,30 @@ function collapsedAnswer() {
         document.head.appendChild(document.createElement('style')).textContent = '.CornerButton{margin-bottom:8px !important;}.CornerButtons{bottom:45px !important;}';
         document.querySelector('.CornerAnimayedFlex').insertAdjacentHTML('afterBegin', '<button id="collapsed-button" data-tooltip="收起全部回答" data-tooltip-position="left" data-tooltip-will-hide-on-click="false" aria-label="收起全部回答" type="button" class="Button CornerButton Button--plain"><svg class="ContentItem-arrowIcon is-active" aria-label="收起全部回答" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M16.036 19.59a1 1 0 0 1-.997.995H9.032a.996.996 0 0 1-.997-.996v-7.005H5.03c-1.1 0-1.36-.633-.578-1.416L11.33 4.29a1.003 1.003 0 0 1 1.412 0l6.878 6.88c.782.78.523 1.415-.58 1.415h-3.004v7.005z"></path></svg></button>');
         document.getElementById('collapsed-button').onclick = function () {
-            document.querySelectorAll('.RichContent').forEach(function (el) {
-                if (el.querySelector('.RichContent-inner').offsetHeight > 400) {
-                    const button = el.querySelector('.ContentItem-rightButton[data-zop-retract-question]')
-                    if (button) {
-                        el._defaultCollapsed = true
-                        button.click()
-                    }
+            document.querySelectorAll('[script-collapsed]').forEach(function(scriptCollapsed) {
+                scriptCollapsed.querySelectorAll('.ContentItem-actions [data-zop-retract-question], .ContentItem-actions.Sticky [data-zop-retract-question]').forEach(function(button) {
+                    button.click()
+                })
+            })
+            document.querySelectorAll(':not([script-collapsed]) .ContentItem-actions.Sticky [data-zop-retract-question]').forEach(function(button) {
+                let el = button.parentElement
+                while (!el?.classList.contains('RichContent')) {
+                    el = el.parentElement
                 }
-            });
+                if (el) {
+                    el.setAttribute('script-collapsed', '')
+                }
+                button.click()
+            })
+            const ob = getCollapsedAnswerObserver()
+            ob.start()
+            if (!menu_value('menu_defaultCollapsedAnswer') && !ob._disconnectListener) {
+                window.addEventListener('locationchange', function() {
+                    ob.disconnect()
+                    window._collapsedAnswerObserver = null
+                })
+                ob._disconnectListener = true
+            }
         }
     }
 }
