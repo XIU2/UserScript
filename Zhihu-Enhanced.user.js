@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.5.8
+// @version      1.5.9
 // @author       X.I.U
 // @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽盐选内容、展开问题描述、置顶显示时间、显示问题时间、区分问题文章、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -865,16 +865,20 @@ function addTypeTips() {
             }
         }
     };
+
+    // 一开始加载的信息流
+    if (location.pathname === '/search') {
+        setTimeout(function(){document.querySelectorAll('h2.ContentItem-title a').forEach(function(item){addTypeTips_(item);})}, 2000);
+    } else {
+        document.querySelectorAll('h2.ContentItem-title a').forEach(function(item){addTypeTips_(item);})
+    }
+
     // 后续加载的信息流
     const observer = new MutationObserver(typeTips);
     observer.observe(document, { childList: true, subtree: true });
-    // 一开始加载的信息流
-    document.querySelectorAll('h2.ContentItem-title a').forEach(function(item){
-        addTypeTips_(item);
-    })
 
     function addTypeTips_(titleA) {
-        if (titleA) {
+        if (!titleA) return
             if (!patt_tip.test(titleA.innerHTML)) {
                 if (patt_zhuanlan.test(titleA.href)) { //                 如果是文章
                     titleA.innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #2196F3;display: inline-block;height: 18px;">文章</small> ` + titleA.innerHTML
@@ -890,7 +894,6 @@ function addTypeTips() {
                     titleA.innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #00BCD4;display: inline-block;height: 18px;">视频</small> ` + titleA.innerHTML
                 }
             }
-        }
     }
 }
 
