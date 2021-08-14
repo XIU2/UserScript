@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.5.1
+// @version      1.5.2
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum」论坛、百度、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、APPHOT、不死鸟、亿破姐、小众软件、微当下载、落尘之木、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
+// @description  自动无缝翻页，目前支持：所有「Discuz!、Flarum、DUX(WP)」论坛/主题网站、百度、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、不死鸟、小众软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -11,6 +11,7 @@
 // @grant        GM_openInTab
 // @grant        GM_getValue
 // @grant        GM_setValue
+// @noframes
 // @license      GPL-3.0 License
 // @run-at       document-end
 // @namespace    https://github.com/XIU2/UserScript
@@ -24,7 +25,7 @@
     // 目前支持的网站
     const websiteList = ['www.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com',
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com',
-                         'www.423down.com', 'apphot.cc', 'iao.su', 'www.ypojie.com', 'www.appinn.com', 'www.weidown.com', 'www.luochenzhimu.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
+                         'www.423down.com', 'iao.su', 'www.appinn.com', 'www.weidown.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
                          'www.gufengmh8.com', 'www.szcdmj.com',
                          'rarbgprx.org', 'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org',
                          'art.alphacoders.com', 'wall.alphacoders.com', 'avatars.alphacoders.com', 'mobile.alphacoders.com',
@@ -38,13 +39,16 @@
         return
     } else {
         if (websiteList.indexOf(location.host) > -1) {
-            webType = 1 // 其他网站
+            webType = 1;console.info('[自动无缝翻页] - 其他网站'); // 其他网站
         } else if (document.querySelector('meta[name="author"][content*="Discuz!"], meta[name="generator"][content*="Discuz!"]') || document.getElementById('ft') && document.getElementById('ft').textContent.indexOf('Discuz!') > -1) {
-            webType = 2 // 所有 Discuz! 论坛
+            webType = 2;console.info('[自动无缝翻页] - Discuz! 论坛'); // 所有 Discuz! 论坛
         } else if (document.getElementById('flarum-loading')) {
-            webType = 3 // 所有 Flarum 论坛
+            webType = 3;console.info('[自动无缝翻页] - Flarum 论坛'); // 所有 Flarum 论坛
+        } else if (document.querySelector('link[href*="themes/dux" i], script[src*="themes/dux" i]')) {
+            webType = 4;console.info('[自动无缝翻页] - 使用 WordPress DUX 主题的网站'); // 所有使用 WordPress DUX 主题的网站
         } else {
             GM_registerMenuCommand('❌ 当前网站暂不支持 [点击申请支持]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
+            console.info('[自动无缝翻页] - 不支持当前网站');
             return
         }
         GM_registerMenuCommand('✅ 已启用 (点击对当前网站禁用)', function(){menu_disable('add')});
@@ -156,7 +160,7 @@
                 pageElement: 'css;.content > article',
                 HT_insert: ['css;.content > .pagination', 1],
                 replaceE: 'css;.content > .pagination',
-                scrollDelta: 1000
+                scrollDelta: 1500
             },
             function: {
                 before: dux_beforeFunction
@@ -580,13 +584,6 @@
     // < 其他网站 >
     if (webType === 1) {
         switch (location.host) {
-            case 'apphot.cc': //                  < APPHOT >
-            case 'www.ypojie.com': //             < 亿破姐 >
-            case 'www.luochenzhimu.com': //       < 落尘之木 >
-                if (location.pathname.indexOf('.html') === -1) curSite = DBSite.dux;
-                if (location.host === 'apphot.cc') curSite.pager.scrollDelta = 1600; // 对于速度慢的网站，需要增加翻页敏感度
-                break;
-                // 以上几个都是 WordPress 的 DUX 主题
             case 'www.baidu.com': //              < 百度搜索 >
                 if (location.pathname === '/s') curSite = DBSite.baidu;
                 break;
@@ -755,7 +752,12 @@
         // < 所有 Flarum 论坛 >
     } else if (webType === 3) {
         curSite = DBSite.flarum;
+        // < 所有使用 WordPress DUX 主题的网站 >
+    } else if (webType === 4) {
+        if (location.pathname.indexOf('.html') === -1) curSite = DBSite.dux;
+        if (location.host === 'apphot.cc') curSite.pager.scrollDelta = 2500; // 对于速度慢的网站，需要增加翻页敏感度
     }
+
     curSite.pageUrl = ''; // 下一页URL
     //console.log(curSite);
     pageLoading(); // 自动无缝翻页
