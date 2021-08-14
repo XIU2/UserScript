@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.6.1
+// @version      1.6.2
 // @author       X.I.U
 // @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽盐选内容、展开问题描述、置顶显示时间、显示问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -853,11 +853,14 @@ function blockYanXuan() {
 function addTypeTips() {
     if (!menu_value('menu_typeTips')) return
 
+    // 添加标签样式
+    document.lastChild.appendChild(document.createElement('style')).textContent = `small.zhihu_e_tips {font-weight: bold;font-size: 13px;padding: 0 4px;border-radius: 2px;display: inline-block;height: 20px;}`;
+
     // 一开始加载的信息流
     if (location.pathname === '/search') {
-        setTimeout(function(){document.querySelectorAll('h2.ContentItem-title a').forEach(function(item){addTypeTips_(item);})}, 2000);
-    } else {
-        document.querySelectorAll('h2.ContentItem-title a').forEach(function(item){addTypeTips_(item);})
+        addSetInterval_('h2.ContentItem-title a:not(.zhihu_e_toQuestion)');
+     } else {
+        document.querySelectorAll('h2.ContentItem-title a:not(.zhihu_e_toQuestion)').forEach(function(item){addTypeTips_(item);})
     }
 
     // 后续加载的信息流
@@ -865,7 +868,7 @@ function addTypeTips() {
         for (const mutation of mutationsList) {
             for (const target of mutation.addedNodes) {
                 if (target.nodeType != 1) return
-                addTypeTips_(target.querySelector('h2.ContentItem-title a'));
+                addTypeTips_(target.querySelector('h2.ContentItem-title a:not(.zhihu_e_toQuestion)'));
             }
         }
     });
@@ -874,10 +877,13 @@ function addTypeTips() {
     window.addEventListener('locationchange', function(){
         if (location.pathname.indexOf('/people/') > -1) {
             if (location.pathname.split('/').length === 3) {
+                addSetInterval_('h2.ContentItem-title a:not(.zhihu_e_toQuestion)');
                 observer.observe(document, { childList: true, subtree: true });
             } else {
                 observer.disconnect();
             }
+        } else {
+            addSetInterval_('h2.ContentItem-title a:not(.zhihu_e_toQuestion)');
         }
     })
 
@@ -890,19 +896,28 @@ function addTypeTips() {
             patt_question_answer = /answer\/\d+/,
             patt_video = /\/zvideo\//;
         if (patt_zhuanlan.test(titleA.href)) { //                 如果是文章
-            titleA.innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #2196F3;display: inline-block;height: 18px;">文章</small> ` + titleA.innerHTML
+            titleA.innerHTML = `<small class="zhihu_e_tips" style="color: #2196F3;background-color: #2196F333;">文章</small> ` + titleA.innerHTML
         } else if (patt_question.test(titleA.href)) { //          如果是问题
             if (!titleA.dataset.tooltip) { //                     排除用户名后面的蓝标、黄标等链接
                 if (patt_question_answer.test(titleA.href)) { //  如果是指向回答的问题（而非指向纯问题的链接）
-                    titleA.innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #f68b83;display: inline-block;height: 18px;">问题</small> ` + titleA.innerHTML
+                    titleA.innerHTML = `<small class="zhihu_e_tips" style="color: #f68b83;background-color: #f68b8333;">问题</small> ` + titleA.innerHTML
                 } else {
-                    titleA.innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #ff5a4e;display: inline-block;height: 18px;">问题</small> ` + titleA.innerHTML
+                    titleA.innerHTML = `<small class="zhihu_e_tips" style="color: #ff5a4e;background-color: #ff5a4e33;">问题</small> ` + titleA.innerHTML
                 }
             }
         } else if (patt_video.test(titleA.href)) { //             如果是视频
-            titleA.innerHTML = `<small class="zhihu_e_tips" style="color: #ffffff;font-weight: normal;font-size: 12px;padding: 0 3px;border-radius: 2px;background-color: #00BCD4;display: inline-block;height: 18px;">视频</small> ` + titleA.innerHTML
+            titleA.innerHTML = `<small class="zhihu_e_tips" style="color: #00BCD4;background-color: #00BCD433;">视频</small> ` + titleA.innerHTML
         }
+    }
 
+    function addSetInterval_(A) {
+        let timer = setInterval(function(){
+            let aTag = document.querySelectorAll(A);
+            if (aTag.length > 0) {
+                clearInterval(timer);
+                aTag.forEach(function(item){addTypeTips_(item);})
+            }
+        });
     }
 }
 
@@ -916,9 +931,9 @@ function addToQuestion() {
 
     // 一开始加载的信息流
     if (location.pathname === '/search') {
-        setTimeout(function(){document.querySelectorAll('h2.ContentItem-title a').forEach(function(item){addTypeTips_(item);})}, 2000);
+        addSetInterval_('h2.ContentItem-title a:not(.zhihu_e_tips)');
     } else {
-        document.querySelectorAll('h2.ContentItem-title a').forEach(function(item){addTypeTips_(item);})
+        document.querySelectorAll('h2.ContentItem-title a:not(.zhihu_e_tips)').forEach(function(item){addTypeTips_(item);})
     }
 
     // 后续加载的信息流
@@ -926,11 +941,15 @@ function addToQuestion() {
         for (const mutation of mutationsList) {
             for (const target of mutation.addedNodes) {
                 if (target.nodeType != 1) return
-                addTypeTips_(target.querySelector('h2.ContentItem-title a'));
+                addTypeTips_(target.querySelector('h2.ContentItem-title a:not(.zhihu_e_tips)'));
             }
         }
     });
     observer.observe(document, { childList: true, subtree: true });
+
+    window.addEventListener('locationchange', function(){
+        addSetInterval_('h2.ContentItem-title a:not(.zhihu_e_tips)');
+    })
 
     function addTypeTips_(titleA) {
         if (!titleA) return // 判断是否为真
@@ -938,6 +957,16 @@ function addToQuestion() {
         if (/answer\/\d+/.test(titleA.href)) { //  如果是指向回答的问题（而非指向纯问题的链接）
             titleA.insertAdjacentHTML('afterend', `<a class="zhihu_e_toQuestion VoteButton" href="${titleA.parentElement.querySelector('meta[itemprop="url"]').content}" target="_blank"><span style="display: inline-flex; align-items: center;">​<svg class="Zi Zi--TriangleUp VoteButton-TriangleUp zhihu_e_toQuestion" fill="currentColor" viewBox="0 0 24 24" width="10" height="10"><path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path></svg></span>直达问题</a>`);
         }
+    }
+
+    function addSetInterval_(A) {
+        let timer = setInterval(function(){
+            let aTag = document.querySelectorAll(A);
+            if (aTag.length > 0) {
+                clearInterval(timer);
+                aTag.forEach(function(item){addTypeTips_(item);})
+            }
+        });
     }
 }
 
