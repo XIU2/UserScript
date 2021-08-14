@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.6.0
+// @version      1.6.1
 // @author       X.I.U
 // @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽盐选内容、展开问题描述、置顶显示时间、显示问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -97,10 +97,10 @@ function getCollapsedAnswerObserver() {
                 if (!mutation.target.classList.contains('RichContent')) continue
                 for (const addedNode of mutation.addedNodes) {
                     if (addedNode.nodeType != Node.ELEMENT_NODE) continue
-                    const button = addedNode.querySelector('.ContentItem-actions.Sticky [data-zop-retract-question]')
+                    const button = addedNode.querySelector('.ContentItem-actions.Sticky [data-zop-retract-question]');
                     if (button) {
-                        mutation.target.setAttribute('script-collapsed', '')
-                        button.click()
+                        mutation.target.setAttribute('script-collapsed', '');
+                        button.click();
                         return
                     }
                 }
@@ -109,20 +109,20 @@ function getCollapsedAnswerObserver() {
 
         observer.start = function() {
             if (!this._active) {
-                this.observe(document, { childList: true, subtree: true })
-                this._active = true
+                this.observe(document, { childList: true, subtree: true });
+                this._active = true;
             }
         }
         observer.end = function() {
             if (this._active) {
-                this.disconnect()
+                this.disconnect();
             }
         }
 
         window.addEventListener('locationchange', function() {
-            observer[location.href.indexOf('/answer/') === -1 ? 'start' : 'end']()
+            observer[location.href.indexOf('/answer/') === -1 ? 'start' : 'end']();
         })
-        window._collapsedAnswerObserver = observer
+        window._collapsedAnswerObserver = observer;
     }
     return window._collapsedAnswerObserver
 }
@@ -131,9 +131,9 @@ function getCollapsedAnswerObserver() {
 // 默认收起回答
 function defaultCollapsedAnswer() {
     if (!menu_value('menu_defaultCollapsedAnswer')) return
-    const observer = getCollapsedAnswerObserver()
+    const observer = getCollapsedAnswerObserver();
     if (location.href.indexOf('/answer/') === -1) {
-        observer.start()
+        observer.start();
     }
 }
 
@@ -147,27 +147,27 @@ function collapsedAnswer() {
         document.getElementById('collapsed-button').onclick = function () {
             document.querySelectorAll('[script-collapsed]').forEach(function(scriptCollapsed) {
                 scriptCollapsed.querySelectorAll('.ContentItem-actions [data-zop-retract-question], .ContentItem-actions.Sticky [data-zop-retract-question]').forEach(function(button) {
-                    button.click()
+                    button.click();
                 })
             })
             document.querySelectorAll(':not([script-collapsed]) .ContentItem-actions.Sticky [data-zop-retract-question]').forEach(function(button) {
-                let el = button.parentElement
-                while (!el?.classList.contains('RichContent')) {
-                    el = el.parentElement
+                let el = button.parentElement;
+                while (!el.classList.contains('RichContent')) {
+                    el = el.parentElement;
                 }
                 if (el) {
-                    el.setAttribute('script-collapsed', '')
+                    el.setAttribute('script-collapsed', '');
                 }
-                button.click()
+                button.click();
             })
-            const ob = getCollapsedAnswerObserver()
-            ob.start()
-            if (!menu_value('menu_defaultCollapsedAnswer') && !ob._disconnectListener) {
+            const observer = getCollapsedAnswerObserver();
+            observer.start();
+            if (!menu_value('menu_defaultCollapsedAnswer') && !observer._disconnectListener) {
                 window.addEventListener('locationchange', function() {
-                    ob.end()
-                    window._collapsedAnswerObserver = null
+                    observer.end();
+                    window._collapsedAnswerObserver = null;
                 })
-                ob._disconnectListener = true
+                observer._disconnectListener = true;
             }
         }
     }
@@ -871,6 +871,16 @@ function addTypeTips() {
     });
     observer.observe(document, { childList: true, subtree: true });
 
+    window.addEventListener('locationchange', function(){
+        if (location.pathname.indexOf('/people/') > -1) {
+            if (location.pathname.split('/').length === 3) {
+                observer.observe(document, { childList: true, subtree: true });
+            } else {
+                observer.disconnect();
+            }
+        }
+    })
+
     function addTypeTips_(titleA) {
         if (!titleA) return // 判断是否为真
         if (titleA.querySelector('small.zhihu_e_tips')) return // 判断是否已添加
@@ -947,7 +957,7 @@ function removeLogin() {
             for (const target of mutation.addedNodes) {
                 if (target.nodeType != 1) return
                 if (target.querySelector('.signFlowModal')) {
-                    let button = target.getElementsByClassName('Button Modal-closeButton Button--plain')[0];
+                    let button = target.querySelector('.Button.Modal-closeButton.Button--plain');
                     if (button) button.click();
                 }
             }
@@ -965,7 +975,6 @@ function removeLogin() {
             const observer = new MutationObserver(removeLoginModal);
             observer.observe(document, { childList: true, subtree: true });
             document.querySelector('button.AppHeader-login').onclick=function(){location.href='https://www.zhihu.com/signin';} // [登录] 按钮跳转至登录页面
-            document.querySelector('.AppHeader-profile button.Button--primary').onclick=function(){location.href='https://www.zhihu.com/signin';} // [加入知乎] 按钮跳转至注册页面（实际上是同一个页面）
         }
     }
 }
@@ -980,7 +989,7 @@ function closeFloatingComments() {
                 if (target.querySelector('.Modal-backdrop')) {
                     document.querySelector('.Modal-backdrop').onclick = function(event){
                         if (event.target == this) {
-                            let button = document.getElementsByClassName('Button Modal-closeButton Button--plain')[0];
+                            let button = document.querySelector('.Button.Modal-closeButton.Button--plain');
                             if (button) button.click();
                         }
                     }
@@ -1317,7 +1326,7 @@ function questionInvitation(){
                 collapsedNowAnswer('.ContentLayout'); //                       收起当前回答 + 快捷返回顶部
                 setInterval(topTime_people, 300); //                           置顶显示时间
                 addTypeTips(); //                                              区分问题文章
-                addToQuestion(); //                                                直达问题按钮
+                addToQuestion(); //                                            直达问题按钮
                 blockUsers('topic'); //                                        屏蔽指定用户
                 blockKeywords('topic'); //                                     屏蔽指定关键词
             }
