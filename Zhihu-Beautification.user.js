@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.2.9
+// @version      1.3.0
 // @author       X.I.U
-// @description  宽屏显示、暗黑模式（4种）、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
+// @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -25,6 +25,7 @@
         ['menu_widescreenDisplay', '宽屏显示', '宽屏显示', true],
         ['menu_darkMode', '暗黑模式', '暗黑模式', true],
         ['menu_darkModeType', '暗黑模式切换（1~4）', '暗黑模式切换', 1],
+        ['menu_darkModeAuto', '暗黑模式跟随浏览器', '暗黑模式跟随浏览器', false],
         ['menu_picHeight', '调整图片最大高度', '调整图片最大高度', true],
         ['menu_postimg', '隐藏文章开头大图', '隐藏文章开头大图', true],
         ['menu_hideTitle', '向下翻时自动隐藏顶栏', '向下翻时自动隐藏顶栏', true]
@@ -67,15 +68,13 @@
         }
         GM_setValue(`${Name}`, menu_status);
         if (menu_status === 1) { // 设置 Cookie
-            if (getTheme() === 'light') document.cookie='theme=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';
+            if (getTheme() === 'light') setTheme('dark');
         } else {
-            if (getTheme() === 'dark') document.cookie='theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
-        }
-        if (menu_value('menu_darkMode')) {
-            location.reload(); // 刷新网页
-        } else {
-            GM_notification({text: `已切换暗黑模式为：方案 ${menu_status}\n`, timeout: 3500}); // 提示消息
-            registerMenuCommand(); // 重新注册脚本菜单
+            if (getTheme() === 'dark') {
+                setTheme('light');
+            } else {
+                if (menu_value('menu_darkMode')) {location.reload();} else {registerMenuCommand();}
+            }
         }
     };
 
@@ -90,8 +89,7 @@
             GM_setValue(`${Name}`, false);
 
             if (Name === 'menu_darkMode') { // 暗黑模式
-                if (getTheme() === 'dark') document.cookie='theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
-                location.reload(); // 刷新网页
+                if (getTheme() === 'dark') {setTheme('light');} else {location.reload();}
             } else {
                 GM_notification({text: `已关闭 [${Tips}] 功能\n（点击刷新网页后生效）`, timeout: 3500, onclick: function(){location.reload();}});
             }
@@ -100,11 +98,10 @@
 
             if (Name === 'menu_darkMode') {
                 if (menu_value('menu_darkModeType') === 1) {
-                    if (getTheme() === 'light') document.cookie='theme=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';
+                    if (getTheme() === 'light') setTheme('dark');
                 } else {
-                    if (getTheme() === 'dark') document.cookie='theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+                    if (getTheme() === 'dark') {setTheme('light');} else {location.reload();}
                 }
-                location.reload(); // 刷新网页
             } else {
                 GM_notification({text: `已开启 [${Tips}] 功能\n（点击刷新网页后生效）`, timeout: 3500, onclick: function(){location.reload();}});
             }
@@ -264,7 +261,7 @@ html[data-theme=dark] .CommentItemV2--highlighted {-webkit-animation: nano !impo
 /* 赞赏 */
 html[data-theme=dark] .Reward-TipjarDialog-amountList .Button--red, html[data-theme=dark] .Reward-TipjarDialog-amountList .Button--red, html[data-theme=dark] .Reward-TipjarDialog-amountInput .SimpleInput {color: #d3d3d3 !important; background-color: #353b44 !important; border: none !important;}
 
-/* 点赞 */
+/* 赞同 */
 html[data-theme=dark] .VoteButton.is-active {color: #d6edff !important;}
 `,
             style_darkMode_1_x = `/* 问题日志页 */
@@ -303,52 +300,56 @@ html {filter: brightness(75%) sepia(30%) !important; background-image: url();}
 `
         let style_Add = document.createElement('style');
 
-        // 如果开启了暗黑模式
+
+
+        // 如果开启了 [暗黑模式]
         if (menu_value('menu_darkMode')) {
-            // 如果暗黑模式为 1
-            if (menu_value('menu_darkModeType') === 1) {
-                // 如果当前知乎主题为白天模式，那就是改为暗黑模式
-                if (getTheme() === 'light') {
-                    document.cookie='theme=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';
-                    document.lastChild.setAttribute('data-theme', 'dark');
-                    location.reload(); // 刷新网页
-                }
-                // 如果是问题日志页，则改为暗黑模式
-                if (location.pathname.indexOf('/log') > -1) {
-                    document.documentElement.setAttribute('data-theme', 'dark');
-                    style_darkMode_1 += style_darkMode_1_x;
-                }
-            } else { // 如果是其他暗黑模式，则需要确保为白天模式
+            // 如果开启了 [暗黑模式跟随浏览器] 且 当前浏览器是暗黑模式
+            if (menu_value('menu_darkModeAuto') && !window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                // 如果是暗黑模式，则需要改为白天模式
                 if (getTheme() === 'dark') {
-                    document.cookie='theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
-                    document.lastChild.setAttribute('data-theme', 'light');
-                    location.reload(); // 刷新网页
+                    setTheme('light');
                 }
-                if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-                    style_darkMode_2 = style_darkMode_2_firefox
-                    style_darkMode_3 = style_darkMode_3_firefox
-                    style_darkMode_4 = style_darkMode_4_firefox
+            } else {
+                // 如果暗黑模式为 1
+                if (menu_value('menu_darkModeType') === 1) {
+                    // 如果当前知乎主题为白天模式，那就是改为暗黑模式
+                    if (getTheme() === 'light') {
+                        setTheme('dark');
+                    }
+                    // 如果是问题日志页，则改为暗黑模式
+                    if (location.pathname.indexOf('/log') > -1) {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                        style_darkMode_1 += style_darkMode_1_x;
+                    }
+                } else { // 如果是其他暗黑模式，则需要确保为白天模式
+                    if (getTheme() === 'dark') {
+                        setTheme('light');
+                    }
+                    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+                        style_darkMode_2 = style_darkMode_2_firefox
+                        style_darkMode_3 = style_darkMode_3_firefox
+                        style_darkMode_4 = style_darkMode_4_firefox
+                    }
                 }
-            }
-            switch(menu_value('menu_darkModeType')) {
-                case 1:
-                    style += style_darkMode_1;
-                    break;
-                case 2:
-                    style += style_darkMode_2;
-                    break;
-                case 3:
-                    style += style_darkMode_3;
-                    break;
-                case 4:
-                    style += style_darkMode_4;
-                    break;
+                switch(menu_value('menu_darkModeType')) {
+                    case 1:
+                        style += style_darkMode_1;
+                        break;
+                    case 2:
+                        style += style_darkMode_2;
+                        break;
+                    case 3:
+                        style += style_darkMode_3;
+                        break;
+                    case 4:
+                        style += style_darkMode_4;
+                        break;
+                }
             }
         } else {
             if (getTheme() === 'dark'){
-                document.cookie='theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
-                document.lastChild.setAttribute('data-theme', 'light');
-                location.reload(); // 刷新网页
+                setTheme('light');
             }
         }
 
@@ -379,12 +380,28 @@ html {filter: brightness(75%) sepia(30%) !important; background-image: url();}
 
     // 获取知乎 Cookie 中的主题类型
     function getTheme() {
-        let name = "theme=",
+        let name = 'theme=',
             ca = document.cookie.split(';');
         for (let i=0; i<ca.length; i++) {
             let c = ca[i].trim();
             if (c.indexOf(name)==0) return c.substring(name.length,c.length);
         }
-        return "light";
+        return 'light';
+    }
+
+    // 修改知乎 Cookie 中的主题类型
+    function setTheme(theme) {
+        switch(theme) {
+            case 'light':
+                document.cookie='theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+                document.lastChild.setAttribute('data-theme', 'light');
+                if (menu_value('menu_darkMode')) location.reload(); // 刷新网页
+                break;
+            case 'dark':
+                document.cookie='theme=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';
+                document.lastChild.setAttribute('data-theme', 'dark');
+                if (menu_value('menu_darkMode')) location.reload(); // 刷新网页
+                break;
+        }
     }
 })();
