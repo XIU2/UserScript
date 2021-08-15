@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.3.1
+// @version      1.3.2
 // @author       X.I.U
 // @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @match        *://*.lanzous.com/*
@@ -22,6 +22,7 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_notification
+// @grant        GM_setClipboard
 // @grant        unsafeWindow
 // @noframes
 // @license      GPL-3.0 License
@@ -31,8 +32,8 @@
 // @homepageURL  https://github.com/XIU2/UserScript
 // ==/UserScript==
 
-'use strict';
 (function() {
+    'use strict';
     var menu_ALL = [
         ['menu_open_fileSha', '自动打开分享链接', '自动打开分享链接', true],
         ['menu_copy_fileSha', '自动复制分享链接', '自动复制分享链接', true],
@@ -117,7 +118,7 @@
     // 获取 iframe 框架
     function iframe() {
         mainframe = document.getElementById('mainframe');
-        if (mainframe) { //                                只有找到 iframe 框架时才会继续运行脚本
+        if (mainframe) { //                              只有找到 iframe 框架时才会继续运行脚本
             mainframe = mainframe.contentWindow;
             if(menu_value('menu_refreshCorrection')){
                 refreshCorrection(); //                  刷新不返回根目录（F5）
@@ -202,8 +203,8 @@
         let list_ = mainframe.document.getElementById(list_id_name);
         if (list_) { //                                          文件/文件夹列表
             list_.oncontextmenu = function(e){
-                e.preventDefault(); //                         屏蔽浏览器自身右键菜单
-                let left = e.pageX - 30; //                    右键菜单弹出位置
+                e.preventDefault(); //                           屏蔽浏览器自身右键菜单
+                let left = e.pageX - 30; //                      右键菜单弹出位置
                 let list_ID = e.target.id;
                 if (e.target.nodeName === 'FONT') {
                     list_ID = e.target.parentNode.parentNode.id
@@ -224,8 +225,8 @@
     // 自动显示更多文件（后台页）
     function fileMore() {
         let filemore = mainframe.document.getElementById('filemore'); // 寻找 [显示更多文件] 按钮
-        if (filemore && filemore.style.display === 'block') { //            判断按钮是否存在且可见
-            if (filemore.children[0]) { //                                 判断按钮元素下第一个元素是否存在
+        if (filemore && filemore.style.display === 'block') { //         判断按钮是否存在且可见
+            if (filemore.children[0]) { //                               判断按钮元素下第一个元素是否存在
                 filemore.children[0].click(); //                         点击 [显示更多文件] 按钮
             }
         }
@@ -241,7 +242,7 @@
                 if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
                     let filemore = document.getElementById('filemore'); // 寻找 [显示更多文件] 按钮
                     if (filemore && filemore.style.display != 'none') { // 如果正在加载，就不再点击
-                        if (filemore.textContent.indexOf('更多') > -1){ //   避免已经在加载了，重复点击
+                        if (filemore.textContent.indexOf('更多') > -1){ // 避免已经在加载了，重复点击
                             filemore.click(); //                           点击 [显示更多文件] 按钮
                         }
                     }
@@ -319,41 +320,25 @@
     }
 
 
-    // 自动打开分享链接（点击文件时）
+    // 自动打开分享链接（点击文件时/右键菜单 - [打开分享连接]）
     function fileSha_Open() {
-        if (menu_value('menu_open_fileSha')) { //                                                          脚本菜单开启时才继续
-            let code = mainframe.document.getElementById('code').title; //                 获取分享链接（下载链接）
-            if (code != '') { //                                                             确保分享链接（下载链接）不是空
-                window.GM_openInTab(code, {active: true,insert: true,setParent: true}) //  打开分享链接（下载链接）
+        if (menu_value('menu_open_fileSha')) { //                                                  脚本菜单开启时才继续
+            let code = mainframe.document.getElementById('code'); //                               获取分享链接（下载链接）
+            if (code && code.title != '') { //                                                     确保分享链接（下载链接）不是空
+                window.GM_openInTab(code.title, {active: true,insert: true,setParent: true}) //    打开分享链接（下载链接）
             }
         }
     }
 
 
-    // 自动复制分享链接（点击文件时）
+    // 自动复制分享链接（点击文件时/右键菜单 - [复制分享连接]）
     function fileSha_Copy() {
-        if (menu_value('menu_copy_fileSha')) { //                                                  脚本菜单开启时才继续
-            let f_sha1 = mainframe.document.getElementById('f_sha1').textContent; // 获取分享链接（下载链接）
-            if (f_sha1 != '') { //                                                      确保分享链接（下载链接）不是空
-                copyToClipboard(f_sha1); //                                          复制到剪切板
+        if (menu_value('menu_copy_fileSha')) { //                                       脚本菜单开启时才继续
+            let f_sha1 = mainframe.document.getElementById('f_sha1'); //                获取分享链接（下载链接）
+            if (f_sha1 && f_sha1.textContent != '') { //                                确保分享链接（下载链接）不是空
+                GM_setClipboard(f_sha1.textContent, 'text'); //                         复制到剪切板
+                GM_notification({text: '已复制分享链接~', timeout: 2000}); //           已复制提示
             }
-        }
-    }
-
-
-    // 复制到剪切板
-    function copyToClipboard(s){
-        if (window.clipboardData) {
-            window.clipboardData.setData('text',s);
-        } else {
-            (function(s){
-                document.oncopy=function(e){
-                    e.clipboardData.setData('text',s);
-                    e.preventDefault();
-                    document.oncopy=null;
-                }
-            })(s);
-            document.execCommand('Copy');
         }
     }
 
@@ -392,9 +377,9 @@
     // 获取上个文件夹 ID（用于浏览器后退事件）
     function getLastFolderID() {
         lastFolderID = null
-        let f_tpspan = mainframe.document.querySelectorAll("span.f_tpspan");
+        let f_tpspan = mainframe.document.querySelectorAll('span.f_tpspan');
         if (f_tpspan.length > 1) {
-            lastFolderID = /-?\d+/.exec(f_tpspan[f_tpspan.length - 2].getAttribute("onclick"))[0];
+            lastFolderID = /-?\d+/.exec(f_tpspan[f_tpspan.length - 2].getAttribute('onclick'))[0];
         }
     }
 
@@ -409,7 +394,7 @@
     }
 
 
-    // 监听 XMLHttpRequest 事件并执行（新方法，只有在产生事件时才会执行 [自动显示更多文件]，平时不会执行，更优雅~）
+    // 监听 XMLHttpRequest 事件并执行
     function EventXMLHttpRequest() {
         var _send = mainframe.XMLHttpRequest.prototype.send
         function sendReplacement(data) {
@@ -447,16 +432,4 @@
         const observer = new MutationObserver(callback);
         observer.observe(mainframe.document, { childList: true, subtree: true });
     }
-
-
-    /*(function (open) {
-        mainframe.XMLHttpRequest.prototype.open = function () {
-            this.addEventListener("readystatechange", function () {
-                if(this.responseURL != "") {
-                    console.log(this.responseURL);
-                }
-            }, false);
-            open.apply(this, arguments);
-        };
-    })(mainframe.XMLHttpRequest.prototype.open);*/
 })();
