@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.3.2
+// @version      1.3.3
 // @author       X.I.U
-// @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、自动显示更多文件、自动打开分享链接、自动复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
+// @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、自动显示更多文件、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @match        *://*.lanzous.com/*
 // @match        *://*.lanzoux.com/*
 // @match        *://*.lanzoui.com/*
@@ -35,6 +35,7 @@
 (function() {
     'use strict';
     var menu_ALL = [
+        ['menu_customFileSha', '自定义分享链接域名', '自定义分享链接域名', ''],
         ['menu_open_fileSha', '自动打开分享链接', '自动打开分享链接', true],
         ['menu_copy_fileSha', '自动复制分享链接', '自动复制分享链接', true],
         ['menu_refreshCorrection', '刷新不返回根目录', '刷新不返回根目录', true],
@@ -57,6 +58,8 @@
             menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
             if (menu_ALL[i][0] == 'menu_refreshCorrection') {
                 menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){if(menu_value('menu_refreshCorrection')){UNrefreshCorrection();}else{refreshCorrection();};menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+            } else if (menu_ALL[i][0] === 'menu_customFileSha') {
+                menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customFileSha()});
             } else {
                 menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
             }
@@ -120,11 +123,9 @@
         mainframe = document.getElementById('mainframe');
         if (mainframe) { //                              只有找到 iframe 框架时才会继续运行脚本
             mainframe = mainframe.contentWindow;
-            if(menu_value('menu_refreshCorrection')){
-                refreshCorrection(); //                  刷新不返回根目录（F5）
-            }
-            setTimeout(folderDescdes, 200); //           调整话说编辑框初始大小
-            setTimeout(hideSha, 200); //                 隐藏分享链接窗口（这样自动打开/复制分享链接时，不会一闪而过）
+            if (menu_value('menu_refreshCorrection')) refreshCorrection(); // 刷新不返回根目录（F5）
+            setTimeout(folderDescdes, 500); //           调整话说编辑框初始大小
+            setTimeout(hideSha, 500); //                 隐藏分享链接窗口（这样自动打开/复制分享链接时，不会一闪而过）
             fobiddenBack(); //                           禁止浏览器返回（并绑定新的返回事件）
             EventXMLHttpRequest(); //                    监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
 
@@ -191,10 +192,9 @@
 
     // 右键文件显示菜单
     function rightClickMenu() {
-        if (menu_value('menu_rightClickMenu')) { //                                脚本菜单开启时才继续
-            rightClickMenu_('sub_folder_list', 'fols', 'folse') // 文件夹
-            rightClickMenu_('filelist', 'fs', 'fse') //            文件
-        }
+        if (!menu_value('menu_rightClickMenu')) return
+        rightClickMenu_('sub_folder_list', 'fols', 'folse') // 文件夹
+        rightClickMenu_('filelist', 'fs', 'fse') //            文件
     }
 
 
@@ -270,19 +270,18 @@
 
     // 调整话说编辑框初始大小
     function folderDescdes() {
-        if (menu_value('menu_folderDescdesMenu')) {
-            let folderdescdes = mainframe.document.getElementById('folder_descdes'); //   寻找话说（描述）编辑框
-            if (folderdescdes) { //                                                       判断话说（描述）元素是否存在
-                folderdescdes.style.cssText='margin: 15px 0px; width: 550px; height: 125px;'
-            }
-            let folderdescdes2 = mainframe.document.getElementById('fol_credes'); //      寻找话说（描述）编辑框
-            if (folderdescdes2) { //                                                      判断话说（描述）元素是否存在
-                folderdescdes2.style.cssText='margin: 15px 0px; width: 550px; height: 125px;'
-            }
-            let folderdescdes3 = mainframe.document.getElementById('file_desc'); //       寻找话说（描述）编辑框
-            if (folderdescdes3) { //                                                      判断话说（描述）元素是否存在
-                folderdescdes3.style.cssText='margin: 15px 0px; width: 550px; height: 125px;'
-            }
+        if (!menu_value('menu_folderDescdesMenu')) return
+        let folderdescdes = mainframe.document.getElementById('folder_descdes'); //   寻找话说（描述）编辑框
+        if (folderdescdes) { //                                                       判断话说（描述）元素是否存在
+            folderdescdes.style.cssText='margin: 15px 0px; width: 550px; height: 125px;'
+        }
+        let folderdescdes2 = mainframe.document.getElementById('fol_credes'); //      寻找话说（描述）编辑框
+        if (folderdescdes2) { //                                                      判断话说（描述）元素是否存在
+            folderdescdes2.style.cssText='margin: 15px 0px; width: 550px; height: 125px;'
+        }
+        let folderdescdes3 = mainframe.document.getElementById('file_desc'); //       寻找话说（描述）编辑框
+        if (folderdescdes3) { //                                                      判断话说（描述）元素是否存在
+            folderdescdes3.style.cssText='margin: 15px 0px; width: 550px; height: 125px;'
         }
     }
 
@@ -301,7 +300,6 @@
         mainframe.addEventListener('drop', function (e) {
             e.preventDefault();
             //e.stopPropagation();
-            //console.log('111111')
             //console.log(e.dataTransfer.files)
         });
     }
@@ -309,36 +307,30 @@
 
     // 分享链接相关（点击文件时）
     function fileSha() {
-        var f_sha = mainframe.document.getElementById('f_sha'); //    寻找分享链接（下载链接）信息框
-        if (f_sha && f_sha.style.display === 'block') { //            判断信息框是否存在且可见
-            fileSha_Open(); //                                        自动打开分享链接（点击文件时）
-            fileSha_Copy(); //                                        自动复制分享链接（点击文件时）
-            if (menu_value('menu_open_fileSha') || menu_value('menu_copy_fileSha')) {
-                f_sha.style.display = 'none'; //                      隐藏分享链接（下载链接）信息框
-            }
-        }
-    }
-
-
-    // 自动打开分享链接（点击文件时/右键菜单 - [打开分享连接]）
-    function fileSha_Open() {
-        if (menu_value('menu_open_fileSha')) { //                                                  脚本菜单开启时才继续
-            let code = mainframe.document.getElementById('code'); //                               获取分享链接（下载链接）
-            if (code && code.title != '') { //                                                     确保分享链接（下载链接）不是空
-                window.GM_openInTab(code.title, {active: true,insert: true,setParent: true}) //    打开分享链接（下载链接）
-            }
-        }
-    }
-
-
-    // 自动复制分享链接（点击文件时/右键菜单 - [复制分享连接]）
-    function fileSha_Copy() {
-        if (menu_value('menu_copy_fileSha')) { //                                       脚本菜单开启时才继续
+        var f_sha = mainframe.document.getElementById('f_sha'); //                      寻找分享链接（下载链接）信息框
+        if (f_sha && f_sha.style.display === 'block') { //                              判断信息框是否存在且可见
             let f_sha1 = mainframe.document.getElementById('f_sha1'); //                获取分享链接（下载链接）
             if (f_sha1 && f_sha1.textContent != '') { //                                确保分享链接（下载链接）不是空
-                GM_setClipboard(f_sha1.textContent, 'text'); //                         复制到剪切板
-                GM_notification({text: '已复制分享链接~', timeout: 2000}); //           已复制提示
+                // 自定义分享链接域名
+                if (menu_value('menu_customFileSha')) {f_sha1.innerText = f_sha1.innerText.replace(/\/\/.+\//i, '//' + menu_value('menu_customFileSha') + '/');}
+                // 打开分享链接
+                if (menu_value('menu_open_fileSha')) {f_sha.style.display = 'none';GM_openInTab(f_sha1.textContent, {active: true,insert: true,setParent: true});}
+                // 复制分享链接（并已复制的提示信息）
+                if (menu_value('menu_copy_fileSha')) {f_sha.style.display = 'none';GM_setClipboard(f_sha1.textContent, 'text');GM_notification({text: '已复制分享链接~', timeout: 2000});}
             }
+        }
+    }
+
+
+    // 自定义分享链接域名
+    function customFileSha() {
+        let newDomain = prompt('请输入 [自定义分享链接域名]，点击确定后立即生效\n蓝奏云分享链接末尾的 ID 是唯一的，而前面的域名用谁的都一样\n示例：pan.lanzoui.com 或 wwe.lanzoui.com 或 xiu.lanzoui.com', GM_getValue('menu_customFileSha'));
+        if (newDomain === '') {
+            GM_setValue('menu_customFileSha', '');
+            registerMenuCommand(); // 重新注册脚本菜单
+        } else if (newDomain != null) {
+            GM_setValue('menu_customFileSha', newDomain);
+            registerMenuCommand(); // 重新注册脚本菜单
         }
     }
 
