@@ -150,7 +150,7 @@ function collapsedAnswer() {
                     button.click();
                 })
             })
-            document.querySelectorAll(':not([script-collapsed]) .ContentItem-actions.Sticky [data-zop-retract-question]').forEach(function(button) {
+            document.querySelectorAll('.RichContent:not([script-collapsed]) .ContentItem-actions.Sticky [data-zop-retract-question]').forEach(function(button) {
                 let el = button.parentElement;
                 while (!el.classList.contains('RichContent')) {
                     el = el.parentElement;
