@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.2.5
+// @version      1.2.6
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
@@ -29,6 +29,7 @@
     var menu_ALL = [
         ['menu_disable', '✅ 已启用 (点击对当前网站禁用)', '❌ 已禁用 (点击对当前网站启用)', []],
         ['menu_runDuringTheDay', '白天保持开启 (比晚上亮一点点)', '白天保持开启', true],
+        ['menu_darkModeAuto', '护眼模式跟随浏览器', '护眼模式跟随浏览器', false],
         ['menu_autoRecognition', '智能排除自带暗黑模式的网页 (beta)', '智能排除自带暗黑模式的网页 (beta)', true],
         ['menu_forcedToEnable', '✅ 已强制当前网站启用护眼模式 (👆)', '❌ 未强制当前网站启用护眼模式 (👆)', []],
         ['menu_darkModeType', '点击切换模式', '点击切换模式', 1],
@@ -56,6 +57,10 @@
                     menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][2]}`, function(){menu_disable('del')});
                     return
                 } else {
+                    if (GM_getValue('menu_darkModeAuto') && !window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        menu_ID[i] = GM_registerMenuCommand(`❌ 当前浏览器为白天模式 (点击关闭 [护眼模式跟随浏览器])`, function(){GM_setValue('menu_darkModeAuto', false);location.reload();});
+                        return
+                    }
                     menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][1]}`, function(){menu_disable('add')});
                 }
             }
@@ -327,9 +332,9 @@
         // 为了避免 body 还没加载导致无法检查是否设置背景颜色
         let timer = setInterval(function(){ // 每 5 毫秒检查一下 body 是否已存在
             if (document.body) {
-                clearInterval(timer); // 取消定时器（每 10 毫秒一次的）
+                clearInterval(timer); // 取消定时器（每 5 毫秒一次的）
                 setTimeout(function(){ // 为了避免太快 body 的 CSS 还没加载上，先延迟 150 毫秒（缺点就是可能会出现短暂一闪而过的暗黑滤镜）
-                    console.log('html:', window.getComputedStyle(document.lastChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
+                    console.log('[护眼模式] html:', window.getComputedStyle(document.lastChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
                     if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastChild).backgroundColor === 'rgba(0, 0, 0, 0)') {
                         // 如果 body 没有 CSS 背景颜色，那就需要添加一个背景颜色，否则影响滤镜效果
                         let style_Add2 = document.createElement('style');
@@ -341,7 +346,7 @@
                             for (let i=0;i<websiteList.length;i++){ // 这些网站强制启用护眼模式滤镜
                                 if (websiteList[i] === location.host) return
                             }
-                            console.log('检测到当前网页自带暗黑模式，停用本脚本滤镜...')
+                            console.log('[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜...')
                             document.getElementById('XIU2DarkMode').remove();
                             remove = true;
                         }
@@ -350,7 +355,7 @@
 
                 // 用来解决一些 CSS 加载缓慢的网站，可能会出现没有正确排除的问题，在没有找到更好的办法之前，先这样凑活着用
                 setTimeout(function(){
-                    console.log('html:', window.getComputedStyle(document.lastChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
+                    console.log('[护眼模式] html:', window.getComputedStyle(document.lastChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
                     if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || getColorValue(document.body) > 0 && getColorValue(document.body) < 898989 || getColorValue(document.lastChild) > 0 && getColorValue(document.lastChild) < 898989 || window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastChild).backgroundColor === 'rgb(0, 0, 0)') {
                         // 如果是黑色 (等于0,0,0) 或深色 (小于 89,89,89)，就停用本脚本滤镜
                         if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
@@ -358,7 +363,7 @@
                                 if (websiteList[i] === location.host) return
                             }
                             if (remove) return
-                            console.log('检测到当前网页自带暗黑模式，停用本脚本滤镜...')
+                            console.log('[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜...')
                             if (document.getElementById('XIU2DarkMode')) document.getElementById('XIU2DarkMode').remove();
                             if (document.getElementById('XIU2DarkMode2')) document.getElementById('XIU2DarkMode2').remove();
                         }
@@ -369,7 +374,7 @@
 
         // 用来解决一些 CSS 加载缓慢的网站，可能会出现没有正确排除的问题，在没有找到更好的办法之前，先这样凑活着用
         /*setTimeout(function(){
-            console.log('html:', window.getComputedStyle(document.lastChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
+            console.log('[护眼模式] html:', window.getComputedStyle(document.lastChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
             if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || getColorValue(document.body) > 0 && getColorValue(document.body) < 898989 || getColorValue(document.lastChild) > 0 && getColorValue(document.lastChild) < 898989) {
                 // 如果是黑色 (等于0,0,0) 或深色 (小于 89,89,89)，就停用本脚本滤镜
                 if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
@@ -377,7 +382,7 @@
                         if (websiteList[i] === location.host) return
                     }
                     if (remove) return
-                    console.log('检测到当前网页自带暗黑模式，停用本脚本滤镜...')
+                    console.log('[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜...')
                     if (document.getElementById('XIU2DarkMode')) document.getElementById('XIU2DarkMode').remove();
                     if (document.getElementById('XIU2DarkMode2')) document.getElementById('XIU2DarkMode2').remove();
                 }
