@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.6.4
+// @version      1.6.5
 // @author       X.I.U
 // @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽盐选内容、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -854,13 +854,12 @@ function blockYanXuan() {
 function addTypeTips() {
     if (!menu_value('menu_typeTips')) return
 
-    // 添加标签样式
-    document.lastChild.appendChild(document.createElement('style')).textContent = `small.zhihu_e_tips {font-weight: bold;font-size: 13px;padding: 0 4px;border-radius: 2px;display: inline-block;height: 20px;}`;
-
-    // 一开始加载的信息流
+    // 一开始加载的信息流 + 添加标签样式
     if (location.pathname === '/search') {
+        document.lastChild.appendChild(document.createElement('style')).textContent = `small.zhihu_e_tips {font-weight: bold;font-size: 13px;padding: 1px 4px 0;border-radius: 2px;display: inline-block;vertical-align: top;margin-top: 2px;}`;
         addSetInterval_('h2.ContentItem-title a:not(.zhihu_e_toQuestion)');
      } else {
+         document.lastChild.appendChild(document.createElement('style')).textContent = `small.zhihu_e_tips {font-weight: bold;font-size: 13px;padding: 1px 4px 0;border-radius: 2px;display: inline-block;vertical-align: top;margin-top: 4px;}`;
         document.querySelectorAll('h2.ContentItem-title a:not(.zhihu_e_toQuestion)').forEach(function(item){addTypeTips_(item);})
     }
 
@@ -929,10 +928,10 @@ function addToQuestion() {
 
     // 一开始加载的信息流 + 添加按钮样式
     if (location.pathname === '/search') {
-        document.lastChild.appendChild(document.createElement('style')).textContent = `a.zhihu_e_toQuestion {font-size: 14px !important;font-weight: normal !important;padding: 0 6px 2px !important;border-radius: 3px !important;display: inline-block !important;vertical-align: top !important;height: 23px !important;}`;
+        document.lastChild.appendChild(document.createElement('style')).textContent = `a.zhihu_e_toQuestion {font-size: 13px !important;font-weight: normal !important;padding: 1px 6px 0 !important;border-radius: 2px !important;display: inline-block !important;vertical-align: top !important;height: 21px !important;line-height: 21px !important;margin-top: 1.9px !important;}`;
         addSetInterval_('h2.ContentItem-title a:not(.zhihu_e_tips)');
     } else {
-        document.lastChild.appendChild(document.createElement('style')).textContent = `a.zhihu_e_toQuestion {font-size: 14px !important;font-weight: normal !important;padding: 2px 6px !important;border-radius: 3px !important;display: inline-block !important;vertical-align: top !important;}`;
+        document.lastChild.appendChild(document.createElement('style')).textContent = `a.zhihu_e_toQuestion {font-size: 13px !important;font-weight: normal !important;padding: 1px 6px 0 !important;border-radius: 2px !important;display: inline-block !important;vertical-align: top !important;margin-top: 4px !important;}`;
         document.querySelectorAll('h2.ContentItem-title a:not(.zhihu_e_tips)').forEach(function(item){addTypeTips_(item);})
     }
 
