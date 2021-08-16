@@ -16,6 +16,7 @@
 // @grant        GM_info
 // @license      GPL-3.0 License
 // @run-at       document-end
+// @incompatible safari
 // @namespace    https://greasyfork.org/scripts/4122051
 // @supportURL   https://github.com/XIU2/UserScript
 // @homepageURL  https://github.com/XIU2/UserScript
