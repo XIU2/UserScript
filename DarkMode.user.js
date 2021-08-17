@@ -4,11 +4,8 @@
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式、夜间模式、暗黑模式
 // @match        *://*/*
-// @exclude      *://v.qq.com/*
 // @exclude      *://*.iqiyi.com/*
 // @exclude      *://*.youku.com/*
-// @exclude      *://*.mgtv.com/*
-// @exclude      *://tv.cctv.com/*
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
