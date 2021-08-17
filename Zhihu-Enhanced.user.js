@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.6.5
+// @version      1.6.6
 // @author       X.I.U
 // @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽盐选内容、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -1329,9 +1329,9 @@ function questionInvitation(){
     }
 
     function start(){
-        collapsedAnswer(); //                                                  一键收起回答
+        if (location.hostname != 'zhuanlan.zhihu.com') collapsedAnswer(); //   一键收起回答
+        if (location.hostname != 'zhuanlan.zhihu.com') questionInvitation(); //默认折叠邀请
         closeFloatingComments(); //                                            快捷关闭悬浮评论（监听点击事件，点击网页两侧空白处）
-        questionInvitation(); //                                               默认折叠邀请
         blockKeywords('comment'); //                                           屏蔽指定关键词（评论）
         if (location.pathname.indexOf('question') > -1) { //       回答页 //
             if (location.pathname.indexOf('waiting') == -1) {
