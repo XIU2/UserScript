@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.5.3
+// @version      1.5.4
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、不死鸟、小众软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
+// @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、贴吧、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、不死鸟、小众软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -23,7 +23,7 @@
     'use strict';
     var webType, curSite = {SiteTypeID: 0};
     // 目前支持的网站
-    const websiteList = ['www.baidu.com', 'www.google.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com',
+    const websiteList = ['www.baidu.com', 'www.google.com', 'tieba.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com',
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com',
                          'www.423down.com', 'iao.su', 'www.appinn.com', 'www.weidown.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
                          'www.gufengmh8.com', 'www.szcdmj.com',
@@ -186,6 +186,20 @@
                 HT_insert: ['css;#res', 3],
                 replaceE: '//div[@id="navcnt"] | //div[@id="rcnt"]//div[@role="navigation"]',
                 scrollDelta: 1500
+            }
+        },
+        baidu_tieba: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="next pagination-item "][@href]',
+                pageElement: 'css;#thread_list > li',
+                HT_insert: ['css;#thread_list', 3],
+                replaceE: 'css;#frs_list_pager',
+                scrollDelta: 1500
+            },
+            function: {
+                before: baidu_tieba_beforeFunction
             }
         },
         douban_subject_comments: {
@@ -564,8 +578,8 @@
             pager: {
                 type: 1,
                 nextLink: '//a[@id="next_page"][@href]',
-                pageElement: 'css;.thumb-container-big, .avatar-thumb, .thumb-element',
-                HT_insert: ['css;.thumb-container-big:nth-last-child(1), .avatar-thumb:nth-last-child(1), .thumb-element:nth-last-child(1)', 4],
+                pageElement: 'css;.page_container > .center > div',
+                HT_insert: ['css;.page_container > .center', 3],
                 replaceE: '//div[@class="hidden-xs hidden-sm"]/..',
                 scrollDelta: 1000
             }
@@ -588,6 +602,7 @@
     // 用于脚本判断（针对部分特殊的网站）
     const SiteType = {
         GOOGLE: DBSite.google.SiteTypeID,
+        BAIDU_TIEBA: DBSite.baidu_tieba.SiteTypeID,
         GAMERSKY_GL: DBSite.gamersky_gl.SiteTypeID,
         STEAMCOMMUNITY: DBSite.steamcommunity.SiteTypeID
     };
@@ -601,6 +616,13 @@
                 break;
             case 'www.google.com': //             < 谷歌搜索 >
                 if (location.pathname === '/search') curSite = DBSite.google;
+                break;
+            case 'tieba.baidu.com': //            < 百度贴吧 >
+                if (location.pathname === '/f') {
+                    // 修复帖子列表中预览图片，在切换下一个/上一个图片时，多出来的图片上下边距
+                    document.lastElementChild.appendChild(document.createElement('style')).textContent = 'img.j_retract {margin-top: 0 !important;margin-bottom: 0 !important;}';
+                    curSite = DBSite.baidu_tieba;
+                }
                 break;
             case 'movie.douban.com': //           < 豆瓣评论 >
                 if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/comments') > -1) { //        短评列表
@@ -616,6 +638,8 @@
                 break;
             case 'www.58pic.com': //              < 千图网 >
                 if (location.pathname.indexOf('/tupian/') > -1) {
+                    // 隐藏末尾很大的 [下一页] 按钮
+                    document.lastElementChild.appendChild(document.createElement('style')).textContent = '.qtw-card.place-box.is-two {display: none !important;}';
                     curSite = DBSite._58pic;
                 } else if (location.pathname.indexOf('/c/') > -1) {
                     curSite = DBSite._58pic_c;
@@ -628,8 +652,9 @@
                 curSite = DBSite.ali213_www;
                 break;
             case 'gl.ali213.net': //              < 游侠网 - 攻略页 >
+                // 隐藏部分碍事元素
+                document.lastElementChild.appendChild(document.createElement('style')).textContent = '.n_show_b {display: none !important;}';
                 curSite = DBSite.ali213_gl;
-                document.lastElementChild.appendChild(document.createElement('style')).textContent = '.n_show_b {display: none !important;}' // 隐藏部分碍事元素
                 break;
             case 'www.gamersky.com': //           < 游民星空 >
                 if (location.pathname.indexOf('/ent/') > -1) {
@@ -710,11 +735,11 @@
                 curSite = DBSite.alphacoders_art;
                 setTimeout(alphacoders_art_beforeFunction_0, 1000);
                 break;
-            case 'wall.alphacoders.com':
+            /*case 'wall.alphacoders.com': // 已经原生支持自动无缝翻页了
             case 'avatars.alphacoders.com':
             case 'mobile.alphacoders.com':
                 curSite = DBSite.alphacoders_wall;
-                break;
+                break;*/
             case 'crackhub.site': //              < 游戏下载网站 >
                 curSite = DBSite.fitgirl;
                 document.lastElementChild.appendChild(document.createElement('style')).textContent = 'html.wp-dark-mode-active .inside-article {background-color: var(--wp-dark-mode-bg);}'
@@ -788,9 +813,19 @@
     function dux_beforeFunction(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.querySelector('img.thumb[data-src]')
-            if (now) {
-                now.setAttribute('src', now.dataset.src)
-            }
+            if (now) {now.src = now.dataset.src;}
+        });
+        return pageElems
+    }
+
+
+    // 百度贴吧 的插入前函数（加载图片）
+    function baidu_tieba_beforeFunction(pageElems) {
+        pageElems.forEach(function (one) {
+            one.querySelectorAll('img.threadlist_pic[data-original]').forEach(function (now) {
+                now.src = now.dataset.original;
+                now.style.display = 'inline';
+            })
         });
         return pageElems
     }
@@ -799,14 +834,12 @@
     // 58pic 的插入前函数（加载图片）
     function _58pic_beforeFunction(pageElems) {
         let is_one = document.querySelector('.qtw-card.place-box.is-one');
-        if (is_one && is_one.style.display != 'none') {
-            is_one.setAttribute('style', 'display: none;')
-        }
+        if (is_one && is_one.style.display != 'none') {is_one.style.display = 'none';}
         pageElems.forEach(function (one) {
             let now = one.querySelector('img.lazy')
             if (now && now.getAttribute('src') != now.dataset.original) {
-                now.setAttribute('src', now.dataset.original)
-                now.setAttribute('style', 'display: block;')
+                now.src = now.dataset.original;
+                now.style.display = 'block';
             }
         });
         return pageElems
@@ -816,9 +849,7 @@
     // 游民星空攻略 的插入前函数（移除下一页底部的 "更多相关内容请关注：xxx" 文字）
     function gamersky_gl_beforeFunction(pageElems) {
         pageElems.forEach(function (one) {
-            if (one.tagName === 'P' && one.textContent.indexOf('更多相关内容请关注') > -1) {
-                one.style.display = 'none';
-            }
+            if (one.tagName === 'P' && one.textContent.indexOf('更多相关内容请关注') > -1) {one.style.display = 'none';}
         });
         return pageElems
     }
@@ -842,7 +873,7 @@
         pageElems.forEach(function (one) {
             let now = one.querySelector('img.lazyload')
             if (now && !now.src) {
-                now.setAttribute('src', now.dataset.src)
+                now.src = now.dataset.src;
                 now.setAttribute('srcset', now.dataset.src)
                 now.setAttribute('class', 'lazyloaded')
             }
@@ -854,7 +885,7 @@
     // alphacoders_art 的插入前函数（图片结构调整）
     function alphacoders_art_beforeFunction(pageElems) {
         pageElems.forEach(function (one) {
-            one.setAttribute('style','float: left');
+            one.style.float = 'left';
         });
         return pageElems
     }
@@ -863,7 +894,7 @@
         let pageElems1 = document.querySelectorAll('.container-masonry > div')
         document.querySelector('.container-masonry').style.height = 'auto'
         pageElems1.forEach(function (one) {
-            one.setAttribute('style','float: left');
+            one.style.float = 'left';
         });
     }
 
@@ -939,7 +970,7 @@
             } else {
                 let now = one.querySelector('img[data-original]')
                 if (now) {
-                    now.setAttribute('src', now.dataset.original)
+                    now.src = now.dataset.original;
                     now.style.display = 'inline';
                 }
             }
@@ -1160,12 +1191,14 @@
             if (curSite.pager) {
                 let curPageEle = getElementByXpath(curSite.pager.nextLink);
                 var url = this.getFullHref(curPageEle);
-                console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
+                //console.log(url, curPageEle, curSite.pageUrl);
                 if (url === '') return;
                 if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
+                if (curSite.SiteTypeID === SiteType.BAIDU_TIEBA) {
+                    url = url + '&pagelets=frs-list%2Fpagelet%2Fthread&pagelets_stamp=' + new Date().getTime();
+                }
                 // 读取下一页的数据
-                curSite.pager.startFilter && curSite.pager.startFilter();
                 GM_xmlhttpRequest({
                     url: url,
                     method: 'GET',
@@ -1176,7 +1209,7 @@
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody),
                                 toElement = getAllElements(curSite.pager.HT_insert[0])[0];
-                            console.log(curSite.pager.pageElement, pageElems)
+                            //console.log(curSite.pager.pageElement, pageElems)
 
                             if (pageElems.length >= 0) {
                                 // 如果有插入前函数就执行函数
@@ -1190,6 +1223,7 @@
 
                                 // 插入位置
                                 let addTo1 = addTo(curSite.pager.HT_insert[1]);
+
                                 // 插入新页面元素
                                 if (curSite.SiteTypeID === SiteType.STEAMCOMMUNITY) {
                                     pageElems.forEach(function (one) {
@@ -1199,23 +1233,48 @@
                                             toElement.insertAdjacentElement(addTo1, one); // 继续插入网页主体元素
                                         }
                                     });
-                                } else {
+                                } else if (curSite.SiteTypeID != SiteType.BAIDU_TIEBA) {
                                     pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);});
                                 }
+
                                 // 对于 <script> 需要用另一种方式插入网页，以便正常运行
-                                if(curSite.SiteTypeID === SiteType.GOOGLE) {
+                                if (curSite.SiteTypeID === SiteType.GOOGLE) {
                                     const scriptElems = getAllElements('//script', newBody, newBody);
                                     let scriptText = '';
                                     scriptElems.forEach(function (one) {scriptText += one.innerHTML;});
                                     toElement.appendChild(document.createElement('script')).innerHTML = scriptText;
                                 }
 
+                                // 对于百度贴吧这种动态加载内容的网站需要单独处理
+                                if (curSite.SiteTypeID === SiteType.BAIDU_TIEBA) {
+                                    const scriptElems = getAllElements('//script', newBody, newBody);
+                                    let scriptText = '';
+                                    for (let i = 0; i < scriptElems.length; i++) {
+                                        if (scriptElems[i].textContent.indexOf('Bigpipe.register("frs-list/pagelet/thread_list"') > -1) {
+                                            scriptText = scriptElems[i].textContent.replace('Bigpipe.register("frs-list/pagelet/thread_list", ','');
+                                            break
+                                        }
+                                    }
+                                    if (scriptText) {
+                                        scriptText = scriptText.slice(0, scriptText.indexOf(').')) // 获取主体内容
+                                        let scriptJSON = JSON.parse(scriptText).content; // 字符串转 JSON
+                                        var temp_baidu_tieba = document.createElement('div'); temp_baidu_tieba.innerHTML = scriptJSON; // 字符串转 Element 元素
+                                        pageElems = curSite.function.before(getAllElements(curSite.pager.pageElement, temp_baidu_tieba, temp_baidu_tieba)); // 插入前执行函数
+                                        pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);}); // 插入元素
+                                    }
+                                    //toElement.appendChild(document.createElement('script')).innerHTML = scriptText;
+                                }
+
                                 // 替换待替换元素
                                 try {
-                                    let oriE = getAllElements(curSite.pager.replaceE);
-                                    let repE = getAllElements(curSite.pager.replaceE, newBody, newBody);
+                                    let oriE = getAllElements(curSite.pager.replaceE), repE;
+                                    if (curSite.SiteTypeID === SiteType.BAIDU_TIEBA) {
+                                        repE = getAllElements(curSite.pager.replaceE, temp_baidu_tieba, temp_baidu_tieba);
+                                    } else {
+                                        repE = getAllElements(curSite.pager.replaceE, newBody, newBody);
+                                    }
                                     if (oriE.length === repE.length) {
-                                        for (var i = 0; i < oriE.length; i++) {
+                                        for (let i = 0; i < oriE.length; i++) {
                                             oriE[i].outerHTML = repE[i].outerHTML;
                                         }
                                     }
