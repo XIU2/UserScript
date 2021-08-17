@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.5.4
+// @version      1.5.5
 // @author       X.I.U
 // @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、贴吧、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、不死鸟、小众软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
@@ -39,16 +39,16 @@
         return
     } else {
         if (websiteList.indexOf(location.host) > -1) {
-            webType = 1;console.info('[自动无缝翻页] - 其他网站'); // 其他网站
+            webType = 1; console.info('[自动无缝翻页] - 其他网站'); // 其他网站
         } else if (document.querySelector('meta[name="author"][content*="Discuz!"], meta[name="generator"][content*="Discuz!"]') || document.getElementById('ft') && document.getElementById('ft').textContent.indexOf('Discuz!') > -1) {
-            webType = 2;console.info('[自动无缝翻页] - Discuz! 论坛'); // 所有 Discuz! 论坛
+            webType = 2; console.info('[自动无缝翻页] - Discuz! 论坛'); // 所有 Discuz! 论坛
         } else if (document.getElementById('flarum-loading')) {
-            webType = 3;console.info('[自动无缝翻页] - Flarum 论坛'); // 所有 Flarum 论坛
+            webType = 3; console.info('[自动无缝翻页] - Flarum 论坛'); // 所有 Flarum 论坛
         } else if (document.querySelector('link[href*="themes/dux" i], script[src*="themes/dux" i]')) {
-            webType = 4;console.info('[自动无缝翻页] - 使用 WordPress DUX 主题的网站'); // 所有使用 WordPress DUX 主题的网站
+            webType = 4; console.info('[自动无缝翻页] - 使用 WordPress DUX 主题的网站'); // 所有使用 WordPress DUX 主题的网站
         } else {
             GM_registerMenuCommand('❌ 当前网站暂不支持 [点击申请支持]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
-            console.info('[自动无缝翻页] - 不支持当前网站');
+            console.info('[自动无缝翻页] - 不支持当前网站，欢迎申请支持：https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/419215/feedback');
             return
         }
         GM_registerMenuCommand('✅ 已启用 (点击对当前网站禁用)', function(){menu_disable('add')});
@@ -621,6 +621,7 @@
                 if (location.pathname === '/f') {
                     // 修复帖子列表中预览图片，在切换下一个/上一个图片时，多出来的图片上下边距
                     document.lastElementChild.appendChild(document.createElement('style')).textContent = 'img.j_retract {margin-top: 0 !important;margin-bottom: 0 !important;}';
+                    baidu_tieba_1(); // 右侧悬浮发帖按钮点击事件（解决自动翻页导致无法发帖的问题）
                     curSite = DBSite.baidu_tieba;
                 }
                 break;
@@ -819,6 +820,26 @@
     }
 
 
+    // 百度贴吧（发帖按钮点击事件）
+    function baidu_tieba_1() {
+        let button = document.querySelector('.tbui_aside_fbar_button.tbui_fbar_post > a');
+        if (button) {
+            button.remove();
+            document.querySelector('li.tbui_aside_fbar_button.tbui_fbar_down').insertAdjacentHTML(addTo(4), '<li class="tbui_aside_fbar_button tbui_fbar_post"><a href="javascript:void(0);" title="因为 [自动无缝翻页] 的原因，请点击该按钮发帖！"></a></li>')
+            button = document.querySelector('.tbui_aside_fbar_button.tbui_fbar_post > a');
+            if (button) {
+                button.onclick = function(){
+                    let button2 = document.querySelector('div.edui-btn.edui-btn-fullscreen.edui-btn-name-portrait');
+                    if (button2) {
+                        button2.click();
+                    }
+                    return false;
+                }
+            }
+        }
+    }
+
+
     // 百度贴吧 的插入前函数（加载图片）
     function baidu_tieba_beforeFunction(pageElems) {
         pageElems.forEach(function (one) {
@@ -1014,7 +1035,10 @@
                                     }
                                 }
                             } else if (curSite.pager.type === 1) { // 翻页类型 1
-                                ShowPager.loadMorePage();
+                                // 为百度贴吧的发帖考虑...
+                                if (!(document.documentElement.scrollHeight <= scrollHeight + scrollTop + 200 && curSite.SiteTypeID === SiteType.BAIDU_TIEBA)) {
+                                    ShowPager.loadMorePage();
+                                }
                             } else if (curSite.pager.type === 4) { // 翻页类型 4
                                 if (curSite.SiteTypeID > 0) {
                                     curSite.pager.functionNext();
