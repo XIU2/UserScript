@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.5.6
+// @version      1.5.7
 // @author       X.I.U
 // @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、贴吧、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、不死鸟、小众软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
@@ -11,6 +11,7 @@
 // @grant        GM_openInTab
 // @grant        GM_getValue
 // @grant        GM_setValue
+// @grant        GM_notification
 // @noframes
 // @license      GPL-3.0 License
 // @run-at       document-end
@@ -21,7 +22,7 @@
 
 (function() {
     'use strict';
-    var webType, curSite = {SiteTypeID: 0};
+    var webType, curSite = {SiteTypeID: 0}, pausePage = true;
     // 目前支持的网站
     const websiteList = ['www.baidu.com', 'www.google.com', 'tieba.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com',
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com',
@@ -33,6 +34,7 @@
 
     if (GM_getValue('menu_disable') == null){GM_setValue('menu_disable', [])};
     if (GM_getValue('menu_discuz_thread_page') == null){GM_setValue('menu_discuz_thread_page', true)};
+    if (GM_getValue('menu_pause_page') == null){GM_setValue('menu_pause_page', true)};
     // 注册脚本菜单
     if (menu_disable('check')) { // 当前网站是否已存在禁用列表中
         GM_registerMenuCommand('❌ 已禁用 (点击对当前网站启用)', function(){menu_disable('del')});
@@ -55,6 +57,7 @@
         if (webType === 2) {
             GM_registerMenuCommand(`${GM_getValue('menu_discuz_thread_page')?'✅':'❌'} 帖子内自动翻页 (仅 Discuz! 论坛)`, function(){menu_switch(GM_getValue('menu_discuz_thread_page'), 'menu_discuz_thread_page', 'Discuz! 论坛帖子内翻页')});
         }
+        GM_registerMenuCommand(`${GM_getValue('menu_pause_page')?'✅':'❌'} 左键双击网页空白处暂停翻页`, function(){menu_switch(GM_getValue('menu_pause_page'), 'menu_pause_page', '左键双击网页空白处暂停翻页')});
     }
     GM_registerMenuCommand('💬 反馈 & 欢迎申请支持', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
 
@@ -200,6 +203,17 @@
             },
             function: {
                 before: baidu_tieba_beforeFunction
+            }
+        },
+        baidu_tieba_post: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//li[contains(@class,"pb_list_pager")]/a[contains(text(),"下一页")][@href]',
+                pageElement: 'css;#j_p_postlist > div',
+                HT_insert: ['css;#j_p_postlist', 3],
+                replaceE: 'css;li.pb_list_pager',
+                scrollDelta: 1000
             }
         },
         baidu_tieba_search: {
@@ -634,8 +648,10 @@
                     document.lastElementChild.appendChild(document.createElement('style')).textContent = 'img.j_retract {margin-top: 0 !important;margin-bottom: 0 !important;}';
                     baidu_tieba_1(); // 右侧悬浮发帖按钮点击事件（解决自动翻页导致无法发帖的问题）
                     curSite = DBSite.baidu_tieba;
+                //} else if (location.pathname.indexOf('/p/') > -1) { // 帖子内
+                //    curSite = DBSite.baidu_tieba_post;
                 } else if (location.pathname === '/f/search/res') { // 吧内搜索/全吧搜索
-                    curSite = DBSite.baidu_tieba_search
+                    curSite = DBSite.baidu_tieba_search;
                 }
                 break;
             case 'movie.douban.com': //           < 豆瓣评论 >
@@ -812,6 +828,7 @@
         if (location.host === 'apphot.cc') curSite.pager.scrollDelta = 2500; // 对于速度慢的网站，需要增加翻页敏感度
     }
 
+    pausePageEvent(); // 左键双击网页空白处暂停翻页
     curSite.pageUrl = ''; // 下一页URL
     //console.log(curSite);
     pageLoading(); // 自动无缝翻页
@@ -1019,7 +1036,7 @@
     function pageLoading() {
         if (curSite.SiteTypeID > 0) {
             windowScroll(function (direction, e) {
-                if (direction === 'down') { // 下滑才准备翻页
+                if (direction === 'down' && pausePage === true) { // 下滑/没有暂停翻页时，才准备翻页
                     let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
                         scrollHeight = window.innerHeight || document.documentElement.clientHeight,
                         scrollDelta = curSite.pager.scrollDelta;
@@ -1120,11 +1137,26 @@
     }
 
 
+    // 左键双击网页空白处暂停翻页
+    function pausePageEvent() {
+        if (!GM_getValue('menu_pause_page')) return
+        document.body.addEventListener('dblclick', function (e) {
+            if (pausePage) {
+                pausePage = false;
+                GM_notification({text: `已暂停本页 [自动无缝翻页]\n（再次双击可恢复）`, timeout: 2500});
+            } else {
+                pausePage = true;
+                GM_notification({text: `已恢复本页 [自动无缝翻页]\n（再次双击可暂停）`, timeout: 2500});
+            }
+        });
+    }
+
+
     // 菜单开关
     function menu_switch(menu_status, Name, Tips) {
         if (menu_status === true){
             GM_setValue(`${Name}`, false);
-        }else{
+        } else {
             GM_setValue(`${Name}`, true);
         }
         location.reload();
