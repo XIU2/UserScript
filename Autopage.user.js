@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.5.2
+// @version      1.5.3
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、不死鸟、小众软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
+// @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、不死鸟、小众软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -23,7 +23,7 @@
     'use strict';
     var webType, curSite = {SiteTypeID: 0};
     // 目前支持的网站
-    const websiteList = ['www.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com',
+    const websiteList = ['www.baidu.com', 'www.google.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com',
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com',
                          'www.423down.com', 'iao.su', 'www.appinn.com', 'www.weidown.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
                          'www.gufengmh8.com', 'www.szcdmj.com',
@@ -175,6 +175,17 @@
                 HT_insert: ['css;#content_left', 3],
                 replaceE: 'css;#page',
                 scrollDelta: 1200
+            }
+        },
+        google: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@id="pnnext"][@href]',
+                pageElement: 'css;#res > *',
+                HT_insert: ['css;#res', 3],
+                replaceE: '//div[@id="navcnt"] | //div[@id="rcnt"]//div[@role="navigation"]',
+                scrollDelta: 1500
             }
         },
         douban_subject_comments: {
@@ -576,6 +587,7 @@
 
     // 用于脚本判断（针对部分特殊的网站）
     const SiteType = {
+        GOOGLE: DBSite.google.SiteTypeID,
         GAMERSKY_GL: DBSite.gamersky_gl.SiteTypeID,
         STEAMCOMMUNITY: DBSite.steamcommunity.SiteTypeID
     };
@@ -586,6 +598,9 @@
         switch (location.host) {
             case 'www.baidu.com': //              < 百度搜索 >
                 if (location.pathname === '/s') curSite = DBSite.baidu;
+                break;
+            case 'www.google.com': //             < 谷歌搜索 >
+                if (location.pathname === '/search') curSite = DBSite.google;
                 break;
             case 'movie.douban.com': //           < 豆瓣评论 >
                 if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/comments') > -1) { //        短评列表
@@ -1145,7 +1160,7 @@
             if (curSite.pager) {
                 let curPageEle = getElementByXpath(curSite.pager.nextLink);
                 var url = this.getFullHref(curPageEle);
-                //console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
+                console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
                 if (url === '') return;
                 if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
@@ -1161,7 +1176,7 @@
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody),
                                 toElement = getAllElements(curSite.pager.HT_insert[0])[0];
-                            //console.log(curSite.pager.pageElement, pageElems)
+                            console.log(curSite.pager.pageElement, pageElems)
 
                             if (pageElems.length >= 0) {
                                 // 如果有插入前函数就执行函数
@@ -1179,15 +1194,20 @@
                                 if (curSite.SiteTypeID === SiteType.STEAMCOMMUNITY) {
                                     pageElems.forEach(function (one) {
                                         if (one.tagName === 'SCRIPT') { // 对于 <script> 需要用另一种方式插入网页，以便正常运行
-                                            toElement.appendChild(document.createElement('script')).textContent = one.textContent;
+                                            toElement.appendChild(document.createElement('script')).innerHTML = one.textContent;
                                         } else {
-                                            toElement.insertAdjacentElement(addTo1, one);
+                                            toElement.insertAdjacentElement(addTo1, one); // 继续插入网页主体元素
                                         }
                                     });
                                 } else {
-                                    pageElems.forEach(function (one) {
-                                        toElement.insertAdjacentElement(addTo1, one);
-                                    });
+                                    pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);});
+                                }
+                                // 对于 <script> 需要用另一种方式插入网页，以便正常运行
+                                if(curSite.SiteTypeID === SiteType.GOOGLE) {
+                                    const scriptElems = getAllElements('//script', newBody, newBody);
+                                    let scriptText = '';
+                                    scriptElems.forEach(function (one) {scriptText += one.innerHTML;});
+                                    toElement.appendChild(document.createElement('script')).innerHTML = scriptText;
                                 }
 
                                 // 替换待替换元素
