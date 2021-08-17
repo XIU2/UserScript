@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.5.7
+// @version      1.5.8
 // @author       X.I.U
 // @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、贴吧、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、不死鸟、小众软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
@@ -637,7 +637,7 @@
     if (webType === 1) {
         switch (location.host) {
             case 'www.baidu.com': //              < 百度搜索 >
-                if (location.pathname === '/s') curSite = DBSite.baidu;
+                curSite = DBSite.baidu;
                 break;
             case 'www.google.com': //             < 谷歌搜索 >
                 if (location.pathname === '/search') curSite = DBSite.google;
@@ -787,7 +787,7 @@
                 } else {
                     curSite = DBSite.discuz_guide;
                 }
-            } else if (location.pathname.indexOf('/thread-') > -1) { //       帖子内
+            } else if (location.pathname.indexOf('/thread-') > -1) { //     帖子内
                 if (GM_getValue('menu_discuz_thread_page')) {
                     curSite = DBSite.discuz_thread;
                     hidePgbtn(); //                                         隐藏帖子内的 [下一页] 按钮
@@ -1101,15 +1101,11 @@
     function menu_disable(type) {
         switch(type) {
             case 'check':
-                if(check()) return true
-                return false
-                break;
+                if(check()) {return true;} else {return false;}; break;
             case 'add':
-                add();
-                break;
+                add(); break;
             case 'del':
-                del();
-                break;
+                del(); break;
         }
 
         function check() { // 存在返回真，不存在返回假
@@ -1198,17 +1194,13 @@
     function addTo(num) {
         switch (num) {
             case 1:
-                return 'beforebegin'
-                break;
+                return 'beforebegin'; break;
             case 2:
-                return 'afterbegin'
-                break;
+                return 'afterbegin'; break;
             case 3:
-                return 'beforeend'
-                break;
+                return 'beforeend'; break;
             case 4:
-                return 'afterend'
-                break;
+                return 'afterend'; break;
         }
     }
 
@@ -1217,7 +1209,7 @@
     function windowScroll(fn1) {
         var beforeScrollTop = document.documentElement.scrollTop,
             fn = fn1 || function () {};
-        setTimeout(function () { // 延时执行，避免刚载入到页面就触发翻页事件
+        setTimeout(function () { // 延时 1 秒执行，避免刚载入到页面就触发翻页事件
             window.addEventListener('scroll', function (e) {
                 var afterScrollTop = document.documentElement.scrollTop,
                     delta = afterScrollTop - beforeScrollTop;
@@ -1232,10 +1224,8 @@
     // 修改自 https://greasyfork.org/scripts/14178 , https://github.com/machsix/Super-preloader
     var ShowPager = {
         getFullHref: function (e) {
-            if(e == null) return '';
-            'string' != typeof e && (e = e.getAttribute('href'));
-            var t = this.getFullHref.a;
-            return t || (this.getFullHref.a = t = document.createElement('a')), (t.href = e), t.href;
+            if (e != null && e.nodeType === 1 && e.href && e.href.slice(0,4) === 'http') return e.href;
+            return '';
         },
         createDocumentByString: function (e) {
             if (e) {
