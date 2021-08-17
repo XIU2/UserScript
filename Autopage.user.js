@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.5.5
+// @version      1.5.6
 // @author       X.I.U
 // @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、贴吧、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、不死鸟、小众软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
@@ -200,6 +200,17 @@
             },
             function: {
                 before: baidu_tieba_beforeFunction
+            }
+        },
+        baidu_tieba_search: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="next"][@href]',
+                pageElement: 'css;.s_post_list > .s_post',
+                HT_insert: ['css;.s_post_list', 3],
+                replaceE: 'css;.pager.pager-search',
+                scrollDelta: 1000
             }
         },
         douban_subject_comments: {
@@ -618,11 +629,13 @@
                 if (location.pathname === '/search') curSite = DBSite.google;
                 break;
             case 'tieba.baidu.com': //            < 百度贴吧 >
-                if (location.pathname === '/f') {
+                if (location.pathname === '/f') { // 帖子列表
                     // 修复帖子列表中预览图片，在切换下一个/上一个图片时，多出来的图片上下边距
                     document.lastElementChild.appendChild(document.createElement('style')).textContent = 'img.j_retract {margin-top: 0 !important;margin-bottom: 0 !important;}';
                     baidu_tieba_1(); // 右侧悬浮发帖按钮点击事件（解决自动翻页导致无法发帖的问题）
                     curSite = DBSite.baidu_tieba;
+                } else if (location.pathname === '/f/search/res') { // 吧内搜索/全吧搜索
+                    curSite = DBSite.baidu_tieba_search
                 }
                 break;
             case 'movie.douban.com': //           < 豆瓣评论 >
@@ -832,6 +845,8 @@
                     let button2 = document.querySelector('div.edui-btn.edui-btn-fullscreen.edui-btn-name-portrait');
                     if (button2) {
                         button2.click();
+                    } else {
+                        alert('提示：登录后才能发帖！');
                     }
                     return false;
                 }
