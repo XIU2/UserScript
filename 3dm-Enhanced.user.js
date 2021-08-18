@@ -288,10 +288,8 @@
     // 修改自 https://greasyfork.org/scripts/14178 , https://github.com/machsix/Super-preloader
     var ShowPager = {
         getFullHref: function (e) {
-            if(e == null) return '';
-            'string' != typeof e && (e = e.getAttribute('href'));
-            var t = this.getFullHref.a;
-            return t || (this.getFullHref.a = t = document.createElement('a')), (t.href = e), t.href;
+            if (e != null && e.nodeType === 1 && e.href && e.href.slice(0,4) === 'http') return e.href;
+            return '';
         },
         createDocumentByString: function (e) {
             if (e) {

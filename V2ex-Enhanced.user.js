@@ -325,7 +325,7 @@
             if (event.target==this) {
                 if (document.querySelector('.box.reply-box-sticky')) {
                     document.getElementById('undock-button').click();
-                }else{
+                } else {
                     let _top = document.body.scrollTop + document.documentElement.scrollTop;
                     document.getElementById('reply_content').focus();
                     window.scrollTo(0,_top);console.log(_top);
@@ -336,7 +336,7 @@
         /*document.getElementById('reply_233').onclick = function () {
             if (document.querySelector('.box.reply-box-sticky')) {
                 document.getElementById('undock-button').click();
-            }else{
+            } else {
                 let _top = document.body.scrollTop + document.documentElement.scrollTop;
                 document.getElementById('reply_content').focus();
                 window.scrollTo(0,_top);console.log(_top);
@@ -405,10 +405,8 @@
     // 修改自 https://greasyfork.org/scripts/14178 , https://github.com/machsix/Super-preloader
     var ShowPager = {
         getFullHref: function (e) {
-            if(e == null) return '';
-            'string' != typeof e && (e = e.getAttribute('href'));
-            var t = this.getFullHref.a;
-            return t || (this.getFullHref.a = t = document.createElement('a')), (t.href = e), t.href;
+            if (e != null && e.nodeType === 1 && e.href && e.href.slice(0,4) === 'http') return e.href;
+            return '';
         },
         createDocumentByString: function (e) {
             if (e) {
