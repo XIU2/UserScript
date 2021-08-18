@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.5.8
+// @version      1.5.9
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、贴吧、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、不死鸟、小众软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
+// @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、贴吧、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -26,7 +26,7 @@
     // 目前支持的网站
     const websiteList = ['www.baidu.com', 'www.google.com', 'tieba.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com',
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com',
-                         'www.423down.com', 'iao.su', 'www.appinn.com', 'www.weidown.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
+                         'www.423down.com', 'iao.su', 'www.appinn.com', 'www.sixyin.com', 'www.weidown.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
                          'www.gufengmh8.com', 'www.szcdmj.com',
                          'rarbgprx.org', 'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org',
                          'art.alphacoders.com', 'wall.alphacoders.com', 'avatars.alphacoders.com', 'mobile.alphacoders.com',
@@ -65,12 +65,14 @@
     /*
     自动翻页规则
     type：
-      1 = 脚本实现自动无缝翻页
+      1 = 由脚本实现自动无缝翻页
       2 = 网站自带了自动无缝翻页功能，只需要点击下一页按钮即可
-          nextText: 按钮文本，只有按钮文本为该文本时才会点击按钮加载下一页，避免一瞬间加载太多次下一页
+          nextText: 按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页（避免一瞬间加载太多次下一页）
+          nextTextOf: 按钮文本的一部分，当按钮文本包含该文本时，才会点击按钮加载下一页（避免一瞬间加载太多次下一页）
+          nextHTML: 按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页（避免一瞬间加载太多次下一页）
           intervals: 点击间隔时间，对于没有按钮文字变化的按钮，可以手动指定间隔时间，单位：ms
       3 = 依靠元素距离可视区域底部的距离来触发翻页
-      4 = 针对部分简单动态加载的网站
+      4 = 部分简单的动态加载类网站（暂时）
     HT_insert：
       1 = 插入该元素本身的前面；
       2 = 插入该元素当中，第一个子元素前面；
@@ -407,6 +409,26 @@
                 scrollDelta: 1500
             }
         },
+        sixyin: {
+            SiteTypeID: 0,
+            pager: {
+                type: 2,
+                nextLink: '.load-more',
+                nextHTML: '点击查看更多',
+                scrollDelta: 1500
+            }
+        },
+        sixyin_postlist: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="next"][@href]',
+                pageElement: 'css;ul.post-loop > li',
+                HT_insert: ['css;ul.post-loop', 3],
+                replaceE: 'css;ul.pagination',
+                scrollDelta: 1500
+            }
+        },
         weidown: {
             SiteTypeID: 0,
             pager: {
@@ -459,7 +481,7 @@
             pager: {
                 type: 2,
                 nextLink: '#loadHistoryComments',
-                nextText: '展开后面',
+                nextTextOf: '展开后面',
                 scrollDelta: 1200
             }
         },
@@ -704,6 +726,13 @@
                 break;
             case 'www.appinn.com': //             < 小众软件 >
                 curSite = DBSite.appinn;
+                break;
+            case 'www.sixyin.com': //             < 六音软件 >
+                if (location.pathname === '/') { // 首页
+                    curSite = DBSite.sixyin;
+                } else if (location.pathname.indexOf('.html') === -1) { // 分类页
+                    curSite = DBSite.sixyin_postlist;
+                }
                 break;
             case 'www.weidown.com': //            < 微当下载 >
                 if (location.pathname.indexOf('/search/') > -1) {
@@ -1040,7 +1069,7 @@
                     let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
                         scrollHeight = window.innerHeight || document.documentElement.clientHeight,
                         scrollDelta = curSite.pager.scrollDelta;
-                    if (curSite.pager.type === 3) { // 翻页类型 3
+                    if (curSite.pager.type === 3) { // <<<<< 翻页类型 3（依靠元素距离可视区域底部的距离来触发翻页）>>>>>
                         let scrollElement = document.querySelector(curSite.pager.scrollElement);
                         //console.log(scrollElement.offsetTop - (scrollTop + scrollHeight), scrollDelta, curSite.SiteTypeID)
                         if (scrollElement.offsetTop - (scrollTop + scrollHeight) <= scrollDelta) {
@@ -1049,29 +1078,34 @@
                         }
                     } else {
                         if (document.documentElement.scrollHeight <= scrollHeight + scrollTop + scrollDelta) {
-                            if (curSite.pager.type === 2) { // 翻页类型 2
+                            if (curSite.pager.type === 2) { // <<<<< 翻页类型 2（网站自带了自动无缝翻页功能，只需要点击下一页按钮即可）>>>>>
                                 if (curSite.SiteTypeID > 0) { // 如果指定了间隔时间，那么就依靠这个判断时间到了没有~
                                     let autopbn = document.querySelector(curSite.pager.nextLink);
                                     if (autopbn) { // 寻找下一页链接
-                                        if (!curSite.pager.nextText) { // 如果没有指定 nextText 就直接点击
+                                        if (!curSite.pager.nextText && !curSite.pager.nextTextOf && !curSite.pager.nextHTML) { // 如果没有指定按钮文字就直接点击
                                             autopbn.click();
-                                        } else if (autopbn.textContent.indexOf(curSite.pager.nextText) > -1){ // 如果指定了 nextText 就需要判断后再点击（避免已经在加载了，还重复点击）
-                                            autopbn.click();
-                                        }
-                                        // 对于没有按钮文字变化的按钮，可以手动指定间隔时间
-                                        if (curSite.pager.intervals) {
-                                            let _SiteTypeID = curSite.SiteTypeID;
-                                            curSite.SiteTypeID = 0;
-                                            setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
+                                            // 对于没有按钮文字变化的按钮，可以手动指定间隔时间
+                                            if (curSite.pager.intervals) {
+                                                let _SiteTypeID = curSite.SiteTypeID; curSite.SiteTypeID = 0;
+                                                setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
+                                            }
+                                        } else { // 避免重复点击翻页按钮
+                                            if (curSite.pager.nextText) { // 按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页
+                                                if (autopbn.innerText === curSite.pager.nextText) autopbn.click();
+                                            } else if (curSite.pager.nextTextOf) { // 按钮文本的一部分，当按钮文本包含该文本时，才会点击按钮加载下一页
+                                                if (autopbn.innerText.indexOf(curSite.pager.nextTextOf) > -1) autopbn.click();
+                                            } else if (curSite.pager.nextHTML) { // 按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页
+                                                if (autopbn.innerHTML === curSite.pager.nextHTML) autopbn.click();
+                                            }
                                         }
                                     }
                                 }
-                            } else if (curSite.pager.type === 1) { // 翻页类型 1
+                            } else if (curSite.pager.type === 1) { // <<<<< 翻页类型 1（由脚本实现自动无缝翻页）>>>>>
                                 // 为百度贴吧的发帖考虑...
                                 if (!(document.documentElement.scrollHeight <= scrollHeight + scrollTop + 200 && curSite.SiteTypeID === SiteType.BAIDU_TIEBA)) {
                                     ShowPager.loadMorePage();
                                 }
-                            } else if (curSite.pager.type === 4) { // 翻页类型 4
+                            } else if (curSite.pager.type === 4) { // <<<<< 翻页类型 4（部分简单的动态加载类网站）>>>>>
                                 if (curSite.SiteTypeID > 0) {
                                     curSite.pager.functionNext();
                                     if (curSite.pager.intervals) {
