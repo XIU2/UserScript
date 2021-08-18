@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.6.6
+// @version      1.6.7
 // @author       X.I.U
-// @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽盐选内容、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
+// @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽指定类别（视频/文章等）、屏蔽盐选内容、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -26,12 +26,17 @@
 var menu_ALL = [
     ['menu_defaultCollapsedAnswer', '默认收起回答', '默认收起回答', true],
     ['menu_collapsedAnswer', '一键收起回答', '一键收起回答', true],
-    ['menu_collapsedNowAnswer', '收起当前回答/评论（点击两侧空白处）', '收起当前回答/评论', true],
-    ['menu_backToTop', '快捷回到顶部（右键两侧空白处）', '快捷回到顶部', true],
+    ['menu_collapsedNowAnswer', '收起当前回答/评论 (点击两侧空白处)', '收起当前回答/评论', true],
+    ['menu_backToTop', '快捷回到顶部 (右键两侧空白处)', '快捷回到顶部', true],
     ['menu_blockUsers', '屏蔽指定用户', '屏蔽指定用户', true],
     ['menu_customBlockUsers', '自定义屏蔽用户', '自定义屏蔽用户', ['故事档案局', '盐选推荐', '盐选科普', '盐选成长计划', '知乎盐选会员', '知乎盐选创作者', '盐选心理', '盐选健康必修课', '盐选奇妙物语', '盐选生活馆', '盐选职场', '盐选文学甄选', '盐选作者小管家', '盐选博物馆', '盐选点金', '盐选测评室', '盐选科技前沿', '盐选会员精品']],
     ['menu_blockKeywords', '屏蔽指定关键词', '屏蔽指定关键词', true],
     ['menu_customBlockKeywords', '自定义屏蔽关键词', '自定义屏蔽关键词', []],
+    ['menu_blockType', '屏蔽指定类别 (视频/文章等)', '取消勾选 = 屏蔽该类别的信息流', ''],
+    ['menu_blockTypeVideo', '视频 [首页、搜索页]', '视频（首页、搜索页）', false],
+    ['menu_blockTypeArticle', '文章 [首页、搜索页]', '文章（首页、搜索页）', false],
+    ['menu_blockTypeTopic', '话题 [搜索页]', '话题（搜索页）', false],
+    ['menu_blockTypeSearch', '杂志文章、相关搜索等 [搜索页]', '相关搜索、杂志等（搜索页）', false],
     ['menu_blockYanXuan', '屏蔽盐选内容', '屏蔽盐选内容', false],
     ['menu_questionRichTextMore', '展开问题描述', '展开问题描述', false],
     ['menu_publishTop', '置顶显示时间', '置顶显示时间', true],
@@ -55,10 +60,12 @@ function registerMenuCommand() {
     for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
         menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
         if (menu_ALL[i][0] === 'menu_customBlockUsers') {
-            menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockUsers()});
+            if (menu_value('menu_blockUsers')) menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockUsers()});
         } else if (menu_ALL[i][0] === 'menu_customBlockKeywords') {
-            menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockKeywords()});
-        } else {
+            if (menu_value('menu_blockKeywords')) menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockKeywords()});
+        } else if (menu_ALL[i][0] === 'menu_blockType') {
+            menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_setting('checkbox', menu_ALL[i][1], menu_ALL[i][2], true, [menu_ALL[i+1], menu_ALL[i+2], menu_ALL[i+3], menu_ALL[i+4]])});
+        } else if (menu_ALL[i][0] != 'menu_blockTypeVideo' && menu_ALL[i][0] != 'menu_blockTypeArticle' && menu_ALL[i][0] != 'menu_blockTypeTopic' && menu_ALL[i][0] != 'menu_blockTypeSearch') {
             menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
         }
     }
@@ -86,6 +93,46 @@ function menu_value(menuName) {
             return menu[3]
         }
     }
+}
+
+
+// 脚本设置
+function menu_setting(type, title, tips, line, menu) {
+    let _br = '', _html = `<style class="zhihuE_SettingStyle">.zhihuE_SettingRoot {position: absolute;top: 50%;left: 50%;-webkit-transform: translate(-50%, -50%);-moz-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);-o-transform: translate(-50%, -50%);transform: translate(-50%, -50%);width: auto;min-width: 400px;max-width: 600px;height: auto;min-height: 150px;max-height: 400px;color: #535353;background-color: #fff;border-radius: 3px;}
+.zhihuE_SettingBackdrop_1 {position: fixed;top: 0;right: 0;bottom: 0;left: 0;z-index: 203;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;overflow-x: hidden;overflow-y: auto;-webkit-transition: opacity .3s ease-out;transition: opacity .3s ease-out;}
+.zhihuE_SettingBackdrop_2 {position: absolute;top: 0;right: 0;bottom: 0;left: 0;z-index: 0;background-color: rgba(18,18,18,.65);-webkit-transition: background-color .3s ease-out;transition: background-color .3s ease-out;}
+.zhihuE_SettingRoot .zhihuE_SettingHeader {padding: 10px 20px;color: #fff;font-weight: bold;background-color: #3994ff;border-radius: 3px 3px 0 0;}
+.zhihuE_SettingRoot .zhihuE_SettingMain {padding: 10px 20px;border-radius: 0 0 3px 3px;}
+.zhihuE_SettingHeader span {float: right;cursor: pointer;}
+.zhihuE_SettingMain input {margin: 10px 6px 10px 0;cursor: pointer;vertical-align:middle}
+.zhihuE_SettingMain label {margin-right: 20px;user-select: none;cursor: pointer;vertical-align:middle}
+.zhihuE_SettingMain hr {border: 0.5px solid #f4f4f4;}
+[data-theme="dark"] .zhihuE_SettingRoot {color: #adbac7;background-color: #343A44;}
+[data-theme="dark"] .zhihuE_SettingHeader {color: #d0d0d0;background-color: #2D333B;}
+[data-theme="dark"] .zhihuE_SettingMain hr {border: 0.5px solid #2d333b;}</style>
+        <div class="zhihuE_SettingBackdrop_1"><div class="zhihuE_SettingBackdrop_2"></div><div class="zhihuE_SettingRoot">
+            <div class="zhihuE_SettingHeader">${title}<span class="zhihuE_SettingClose" title="点击关闭"><svg class="Zi Zi--Close Modal-closeIcon" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M13.486 12l5.208-5.207a1.048 1.048 0 0 0-.006-1.483 1.046 1.046 0 0 0-1.482-.005L12 10.514 6.793 5.305a1.048 1.048 0 0 0-1.483.005 1.046 1.046 0 0 0-.005 1.483L10.514 12l-5.208 5.207a1.048 1.048 0 0 0 .006 1.483 1.046 1.046 0 0 0 1.482.005L12 13.486l5.207 5.208a1.048 1.048 0 0 0 1.483-.006 1.046 1.046 0 0 0 .005-1.482L13.486 12z" fill-rule="evenodd"></path></svg></span></div>
+            <div class="zhihuE_SettingMain"><p>${tips}</p><hr>`
+    if (line) _br = '<br>'
+    for (let i=0; i<menu.length; i++) {
+        if (GM_getValue(menu[i][0])) {
+            _html += `<input name="zhihuE_Setting" id="${menu[i][0]}" type="checkbox" value="${menu[i][0]}" checked="checked"><label for="${menu[i][0]}">${menu[i][1]}</label>${_br}`
+        } else {
+            _html += `<input name="zhihuE_Setting" id="${menu[i][0]}" type="checkbox" value="${menu[i][0]}"><label for="${menu[i][0]}">${menu[i][1]}</label>${_br}`
+        }
+    }
+    _html += `</div></div></div>`
+    document.body.insertAdjacentHTML('beforeend', _html); // 插入网页末尾
+    setTimeout(function() { // 延迟 100 毫秒
+        // 关闭按钮 点击事件
+        document.querySelector('.zhihuE_SettingClose').onclick = function(){this.parentElement.parentElement.parentElement.remove();document.querySelector('.zhihuE_SettingStyle').remove();}
+        // 复选框 点击事件
+        document.getElementsByName('zhihuE_Setting').forEach(function (checkBox) {
+            checkBox.addEventListener('click', function(){
+                if (this.checked) {GM_setValue(this.id, true);} else {GM_setValue(this.id, false);}
+            });
+        })
+    }, 100)
 }
 
 
@@ -245,7 +292,7 @@ function collapsedNowAnswer(selectors) {
                     if (commentCollapseButton_1.length > 0) {
                         for (let el of commentCollapseButton_1) {
                             if (isElementInViewport(el)) {
-                                let commentCollapseButton = el.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
+                                let commentCollapseButton = findParentElement(el, 'ContentItem AnswerItem').querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                                 if (commentCollapseButton.textContent.indexOf('收起评论') > -1) {
                                     commentCollapseButton.click()
                                     commentCollapseButton__ = true // 如果找到并点击了，就没必要执行下面的代码了（可视区域中没有 评论元素 时）
@@ -259,7 +306,7 @@ function collapsedNowAnswer(selectors) {
                         if (commentCollapseButton_2.length > 0) {
                             for (let el of commentCollapseButton_2) {
                                 if (isElementInViewport(el)) {
-                                    let commentCollapseButton = el.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
+                                    let commentCollapseButton = findParentElement(el, 'ContentItem AnswerItem').querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                                     console.log(commentCollapseButton)
                                     if (commentCollapseButton.textContent.indexOf('收起评论') > -1) {
                                         commentCollapseButton.click()
@@ -510,27 +557,24 @@ function blockUsers(type) {
                     if (item) {
                         menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
                             if (item.alt === item1) { // 找到就删除该搜索结果
-                                // 试了多种方案，感觉还是这个简单粗暴，缺点就是一旦知乎框架改了就失效了，但好在知乎也不会天天改~
-                                if (item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootCommentNoChild' || item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootComment') {
-                                    item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
-                                } else if (item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootCommentNoChild' || item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--rootComment') {
-                                    item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
-                                } else if (item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--child') {
-                                    item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
-                                } else if (item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment--child') {
-                                    item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
-                                } else if (item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'NestComment') {
-                                    item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
-                                } else if (item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.className === 'CommentItemV2') {
-                                    item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+                                if (findParentElement(item, 'NestComment--rootComment', true)) {
+                                    findParentElement(item, 'NestComment--rootComment', true).remove();
+                                } else if (findParentElement(item, 'NestComment--child', true)){
+                                    findParentElement(item, 'NestComment--child', true).remove();
+                                } else if (findParentElement(item, 'NestComment', true)){
+                                    findParentElement(item, 'NestComment', true).remove();
+                                } else if (findParentElement(item, 'CommentItemV2', true)){
+                                    findParentElement(item, 'CommentItemV2', true).remove();
+                                } else if (findParentElement(item, 'CommentItemV2 CommentItemV2--highlighted', true)){
+                                    findParentElement(item, 'CommentItemV2 CommentItemV2--highlighted', true).remove();
                                 }
                             }
                         })
 
                         // 添加屏蔽用户按钮（点赞、回复等按钮后面）
                         if (item) {
-                            let footer = item.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.querySelector('.CommentItemV2-metaSibling > .CommentItemV2-footer'),
-                                userid = item.parentNode;
+                            let footer = findParentElement(item, 'CommentItemV2-meta', true).parentElement.querySelector('.CommentItemV2-metaSibling > .CommentItemV2-footer'),
+                                userid = item.parentElement;
                             if (userid && footer && !footer.lastElementChild.dataset.name) {
                                 userid = userid.href.split('/')[4];
                                 footer.insertAdjacentHTML('beforeend',`<button type="button" data-name="${item.alt}" data-userid="${userid}" class="Button CommentItemV2-hoverBtn Button--plain"><span style="display: inline-flex; align-items: center;">&#8203;<svg class="Zi Zi--Like" fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="transform: rotate(180deg); margin-right: 5px;"><path d="M18.376 5.624c-3.498-3.499-9.254-3.499-12.752 0-3.499 3.498-3.499 9.254 0 12.752 3.498 3.499 9.254 3.499 12.752 0 3.499-3.498 3.499-9.14 0-12.752zm-1.693 1.693c2.37 2.37 2.596 6.094.678 8.69l-9.367-9.48c2.708-1.919 6.32-1.58 8.69.79zm-9.48 9.48c-2.37-2.37-2.595-6.095-.676-8.69l9.48 9.48c-2.822 1.918-6.433 1.58-8.803-.79z" fill-rule="evenodd"></path></svg></span>屏蔽用户</button>`);
@@ -804,6 +848,99 @@ function blockKeywords(type) {
 }
 
 
+// 屏蔽指定类别（视频/文章等）
+function blockType(type) {
+    let name;
+    // 一开始加载的信息流 + 添加标签样式
+    if (type === 'search') {
+        if (!menu_value('menu_blockTypeVideo') && !menu_value('menu_blockTypeArticle') && !menu_value('menu_blockTypeTopic') && !menu_value('menu_blockTypeSearch')) return
+        if (menu_value('menu_blockTypeSearch') && location.pathname === '/search') setTimeout(function(){document.querySelector('.RelevantQuery').parentElement.parentElement.remove();}, 1000)
+        name = 'h2.ContentItem-title a, a.KfeCollection-PcCollegeCard-link, h2.SearchTopicHeader-Title a'
+        addSetInterval_(name);
+    } else {
+        if (!menu_value('menu_blockTypeVideo') && !menu_value('menu_blockTypeArticle')) return
+        // 移除相关搜索
+        if (menu_value('menu_blockTypeVideo')) document.lastChild.appendChild(document.createElement('style')).textContent = `nav.TopstoryTabs > a[aria-controls="Topstory-zvideo"] {display: none;}`;
+        name = 'h2.ContentItem-title a'
+        document.querySelectorAll(name).forEach(function(item){blockType_(item);})
+    }
+
+    // 后续加载的信息流
+    const observer = new MutationObserver(mutationsList => {
+        for (const mutation of mutationsList) {
+            for (const target of mutation.addedNodes) {
+                if (target.nodeType != 1) return
+                blockType_(target.querySelector(name));
+            }
+        }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+
+    window.addEventListener('locationchange', function(){
+        addSetInterval_(name);
+        // 移除相关搜索
+        if (menu_value('menu_blockTypeSearch') && location.pathname === '/search' && location.search.indexOf('type=content') > -1) setTimeout(function(){document.querySelector('.RelevantQuery').parentElement.parentElement.remove();}, 1500)
+    })
+
+    function blockType_(titleA) {
+        if (!titleA) return // 判断是否为真
+        if (location.pathname === '/search') { // 搜索页
+            if (location.search.indexOf('type=content') === -1) return //   仅限搜索页的 [综合]
+            if (titleA.href.indexOf('/zvideo/') > -1) { //                  如果是视频
+                if (menu_value('menu_blockTypeVideo')) findParentElement(titleA, 'Card').remove();
+            } else if (titleA.href.indexOf('zhuanlan.zhihu.com') > -1) { // 如果是文章
+                if (menu_value('menu_blockTypeArticle')) findParentElement(titleA, 'Card SearchResult-Card').remove();
+            } else if (titleA.href.indexOf('/topic/') > -1) { //            如果是话题
+                if (menu_value('menu_blockTypeTopic')) findParentElement(titleA, 'Card SearchResult-Card').remove();
+            } else if (titleA.href.indexOf('/market/') > -1) { //           如果是杂志文章等乱七八糟的
+                if (menu_value('menu_blockTypeArticle')) findParentElement(titleA, 'Card SearchResult-Card').remove();
+            }
+        } else { // 首页
+            if (titleA.href.indexOf('/zvideo/') > -1) { //                  如果是视频
+                if (menu_value('menu_blockTypeVideo')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem--old TopstoryItem-isRecommend').remove();
+            } else if (titleA.href.indexOf('zhuanlan.zhihu.com') > -1) { // 如果是文章
+                if (menu_value('menu_blockTypeArticle')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem--old TopstoryItem-isRecommend').remove();
+            }
+        }
+    }
+
+    function addSetInterval_(A) {
+        let timer = setInterval(function(){
+            let aTag = document.querySelectorAll(A);
+            if (aTag.length > 0) {
+                clearInterval(timer);
+                aTag.forEach(function(item){blockType_(item);})
+            }
+        });
+    }
+}
+
+
+// 寻找父元素
+function findParentElement(item, className, type = false) {
+    if (item.parentElement) {
+        console.log(item.parentElement)
+        if (type) { // true = 完全一致，false = 包含即可
+            if (item.parentElement.className && item.parentElement.className === className) {
+                console.log(item.parentElement.className)
+                return item.parentElement;
+            } else {
+                let temp = findParentElement(item.parentElement, className, true)
+                if (temp) return temp
+            }
+        } else {
+            if (item.parentElement.className && item.parentElement.className.indexOf(className) > -1) {
+                return item.parentElement;
+            } else {
+                let temp = findParentElement(item.parentElement, className)
+                if (temp) return temp
+            }
+        }
+    }
+    return
+}
+
+
 // 屏蔽盐选内容
 function blockYanXuan() {
     if (!menu_value('menu_blockYanXuan')) return
@@ -860,7 +997,7 @@ function addTypeTips() {
         addSetInterval_('h2.ContentItem-title a:not(.zhihu_e_toQuestion)');
      } else {
          document.lastChild.appendChild(document.createElement('style')).textContent = `small.zhihu_e_tips {font-weight: bold;font-size: 13px;padding: 1px 4px 0;border-radius: 2px;display: inline-block;vertical-align: top;margin-top: 4px;}`;
-        document.querySelectorAll('h2.ContentItem-title a:not(.zhihu_e_toQuestion)').forEach(function(item){addTypeTips_(item);})
+         document.querySelectorAll('h2.ContentItem-title a:not(.zhihu_e_toQuestion)').forEach(function(item){addTypeTips_(item);})
     }
 
     // 后续加载的信息流
@@ -1351,6 +1488,7 @@ function questionInvitation(){
             addToQuestion(); //                                                直达问题按钮
             blockUsers('search'); //                                           屏蔽指定用户
             blockKeywords('search'); //                                        屏蔽指定关键词
+            blockType('search'); //                                            屏蔽指定类别（视频/文章等）
         } else if (location.pathname.indexOf('/topic/') > -1) { //   话题页 //
             if (location.pathname.indexOf('/hot') > -1 || location.href.indexOf('/top-answers') > -1) { // 仅限 [讨论] [精华]
                 collapsedNowAnswer('main.App-main'); //                        收起当前回答 + 快捷返回顶部
@@ -1385,6 +1523,7 @@ function questionInvitation(){
             addToQuestion(); //                                                直达问题按钮
             blockUsers('index'); //                                            屏蔽指定用户
             blockKeywords('index'); //                                         屏蔽指定关键词
+            blockType(); //                                                    屏蔽指定类别（视频/文章等）
         }
     }
 })();
