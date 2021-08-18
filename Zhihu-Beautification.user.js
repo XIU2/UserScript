@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.3.1
+// @version      1.3.2
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -23,11 +23,11 @@
 (function() {
     'use strict';
     var menu_ALL = [
-        ['menu_widescreenDisplay', '宽屏显示', '宽屏显示', true],
-        ['menu_widescreenDisplayIndex', '宽屏显示 - 首页', '宽屏显示 - 首页', true],
-        ['menu_widescreenDisplayQuestion', '宽屏显示 - 问题页', '宽屏显示 - 问题页', true],
-        ['menu_widescreenDisplaySearch', '宽屏显示 - 搜索页', '宽屏显示 - 搜索页', true],
-        ['menu_widescreenDisplayCollection', '宽屏显示 - 收藏页', '宽屏显示 - 收藏页', true],
+        ['menu_widescreenDisplay', '宽屏显示', '勾选 = 该页面开启宽屏显示', ''],
+        ['menu_widescreenDisplayIndex', '首页', '宽屏显示', true],
+        ['menu_widescreenDisplayQuestion', '问题页', '宽屏显示', true],
+        ['menu_widescreenDisplaySearch', '搜索页、话题页、圈子', '宽屏显示', true],
+        ['menu_widescreenDisplayCollection', '收藏页', '宽屏显示', true],
         ['menu_darkMode', '暗黑模式', '暗黑模式', true],
         ['menu_darkModeType', '暗黑模式切换（1~4）', '暗黑模式切换', 1],
         ['menu_darkModeAuto', '暗黑模式跟随浏览器', '暗黑模式跟随浏览器', false],
@@ -56,11 +56,9 @@
                     GM_setValue('menu_darkModeType', menu_ALL[i][3]);
                 }
                 menu_ID[i] = GM_registerMenuCommand(`${menu_num(menu_ALL[i][3])} ${menu_ALL[i][1]}`, function(){menu_toggle(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
-            } else if (menu_ALL[i][0] === 'menu_widescreenDisplayIndex' || menu_ALL[i][0] === 'menu_widescreenDisplayQuestion' || menu_ALL[i][0] === 'menu_widescreenDisplaySearch' || menu_ALL[i][0] === 'menu_widescreenDisplayCollection') {
-                if (menu_value('menu_widescreenDisplay')) {
-                    menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
-                }
-            } else {
+            } else if (menu_ALL[i][0] === 'menu_widescreenDisplay'){
+                    GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_setting('checkbox', menu_ALL[i][1], menu_ALL[i][2], false, [menu_ALL[i+1], menu_ALL[i+2], menu_ALL[i+3], menu_ALL[i+4]])});
+            } else if (menu_ALL[i][0] != 'menu_widescreenDisplayIndex' && menu_ALL[i][0] != 'menu_widescreenDisplayQuestion' && menu_ALL[i][0] != 'menu_widescreenDisplaySearch' && menu_ALL[i][0] != 'menu_widescreenDisplayCollection') {
                 menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
             }
         }
@@ -125,6 +123,46 @@
                 return menu[3]
             }
         }
+    }
+
+
+    // 脚本设置
+    function menu_setting(type, title, tips, line, menu) {
+        let _br = '', _html = `<style class="zhihuE_SettingStyle">.zhihuE_SettingRoot {position: absolute;top: 50%;left: 50%;-webkit-transform: translate(-50%, -50%);-moz-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);-o-transform: translate(-50%, -50%);transform: translate(-50%, -50%);width: auto;min-width: 400px;max-width: 600px;height: auto;min-height: 150px;max-height: 400px;color: #535353;background-color: #fff;border-radius: 3px;}
+.zhihuE_SettingBackdrop_1 {position: fixed;top: 0;right: 0;bottom: 0;left: 0;z-index: 203;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;overflow-x: hidden;overflow-y: auto;-webkit-transition: opacity .3s ease-out;transition: opacity .3s ease-out;}
+.zhihuE_SettingBackdrop_2 {position: absolute;top: 0;right: 0;bottom: 0;left: 0;z-index: 0;background-color: rgba(18,18,18,.65);-webkit-transition: background-color .3s ease-out;transition: background-color .3s ease-out;}
+.zhihuE_SettingRoot .zhihuE_SettingHeader {padding: 10px 20px;color: #fff;font-weight: bold;background-color: #3994ff;border-radius: 3px 3px 0 0;}
+.zhihuE_SettingRoot .zhihuE_SettingMain {padding: 10px 20px;border-radius: 0 0 3px 3px;}
+.zhihuE_SettingHeader span {float: right;cursor: pointer;}
+.zhihuE_SettingMain input {margin: 10px 6px 10px 0;cursor: pointer;vertical-align:middle}
+.zhihuE_SettingMain label {margin-right: 20px;user-select: none;cursor: pointer;vertical-align:middle}
+.zhihuE_SettingMain hr {border: 0.5px solid #f4f4f4;}
+[data-theme="dark"] .zhihuE_SettingRoot {color: #adbac7;background-color: #343A44;}
+[data-theme="dark"] .zhihuE_SettingHeader {color: #d0d0d0;background-color: #2D333B;}
+[data-theme="dark"] .zhihuE_SettingMain hr {border: 0.5px solid #2d333b;}</style>
+        <div class="zhihuE_SettingBackdrop_1"><div class="zhihuE_SettingBackdrop_2"></div><div class="zhihuE_SettingRoot">
+            <div class="zhihuE_SettingHeader">${title}<span class="zhihuE_SettingClose" title="点击关闭"><svg class="Zi Zi--Close Modal-closeIcon" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M13.486 12l5.208-5.207a1.048 1.048 0 0 0-.006-1.483 1.046 1.046 0 0 0-1.482-.005L12 10.514 6.793 5.305a1.048 1.048 0 0 0-1.483.005 1.046 1.046 0 0 0-.005 1.483L10.514 12l-5.208 5.207a1.048 1.048 0 0 0 .006 1.483 1.046 1.046 0 0 0 1.482.005L12 13.486l5.207 5.208a1.048 1.048 0 0 0 1.483-.006 1.046 1.046 0 0 0 .005-1.482L13.486 12z" fill-rule="evenodd"></path></svg></span></div>
+            <div class="zhihuE_SettingMain"><p>${tips}</p><hr>`
+        if (line) _br = '<br>'
+        for (let i=0; i<menu.length; i++) {
+            if (GM_getValue(menu[i][0])) {
+                _html += `<input name="zhihuE_Setting" id="${menu[i][0]}" type="checkbox" value="${menu[i][0]}" checked="checked"><label for="${menu[i][0]}">${menu[i][1]}</label>${_br}`
+            } else {
+                _html += `<input name="zhihuE_Setting" id="${menu[i][0]}" type="checkbox" value="${menu[i][0]}"><label for="${menu[i][0]}">${menu[i][1]}</label>${_br}`
+            }
+        }
+        _html += `</div></div></div>`
+        document.body.insertAdjacentHTML('beforeend', _html); // 插入网页末尾
+        setTimeout(function() { // 延迟 100 毫秒
+            // 关闭按钮 点击事件
+            document.querySelector('.zhihuE_SettingClose').onclick = function(){this.parentElement.parentElement.parentElement.remove();document.querySelector('.zhihuE_SettingStyle').remove();}
+            // 复选框 点击事件
+            document.getElementsByName('zhihuE_Setting').forEach(function (checkBox) {
+                checkBox.addEventListener('click', function(){
+                    if (this.checked) {GM_setValue(this.id, true);} else {GM_setValue(this.id, false);}
+                });
+            })
+        }, 100)
     }
 
 
