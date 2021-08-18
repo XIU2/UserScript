@@ -728,7 +728,7 @@
                 curSite = DBSite.appinn;
                 break;
             case 'www.sixyin.com': //             < 六音软件 >
-                if (location.pathname === '/') { // 首页
+                if (location.pathname === '/' && location.search === '') { // 首页
                     curSite = DBSite.sixyin;
                 } else if (location.pathname.indexOf('.html') === -1) { // 分类页
                     curSite = DBSite.sixyin_postlist;
@@ -1173,10 +1173,10 @@
         document.body.addEventListener('dblclick', function (e) {
             if (pausePage) {
                 pausePage = false;
-                GM_notification({text: `已暂停本页 [自动无缝翻页]\n（再次双击可恢复）`, timeout: 2500});
+                GM_notification({text: `❌ 已暂停本页 [自动无缝翻页]\n    （再次双击可恢复）`, timeout: 2500});
             } else {
                 pausePage = true;
-                GM_notification({text: `已恢复本页 [自动无缝翻页]\n（再次双击可暂停）`, timeout: 2500});
+                GM_notification({text: `✅ 已恢复本页 [自动无缝翻页]\n    （再次双击可暂停）`, timeout: 2500});
             }
         });
     }
