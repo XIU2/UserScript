@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.6.7
+// @version      1.6.8
 // @author       X.I.U
 // @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽指定类别（视频/文章等）、屏蔽盐选内容、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -116,21 +116,21 @@ function menu_setting(type, title, tips, line, menu) {
     if (line) _br = '<br>'
     for (let i=0; i<menu.length; i++) {
         if (GM_getValue(menu[i][0])) {
-            _html += `<input name="zhihuE_Setting" id="${menu[i][0]}" type="checkbox" value="${menu[i][0]}" checked="checked"><label for="${menu[i][0]}">${menu[i][1]}</label>${_br}`
+            _html += `<label><input name="zhihuE_Setting" type="checkbox" value="${menu[i][0]}" checked="checked">${menu[i][1]}</label>${_br}`
         } else {
-            _html += `<input name="zhihuE_Setting" id="${menu[i][0]}" type="checkbox" value="${menu[i][0]}"><label for="${menu[i][0]}">${menu[i][1]}</label>${_br}`
+            _html += `<label><input name="zhihuE_Setting" type="checkbox" value="${menu[i][0]}">${menu[i][1]}</label>${_br}`
         }
     }
     _html += `</div></div></div>`
     document.body.insertAdjacentHTML('beforeend', _html); // 插入网页末尾
-    setTimeout(function() { // 延迟 100 毫秒
+    setTimeout(function() { // 延迟 100 毫秒，避免太快
         // 关闭按钮 点击事件
         document.querySelector('.zhihuE_SettingClose').onclick = function(){this.parentElement.parentElement.parentElement.remove();document.querySelector('.zhihuE_SettingStyle').remove();}
+        // 点击周围空白处 = 点击关闭按钮
+        document.querySelector('.zhihuE_SettingBackdrop_2').onclick = function(event){if (event.target == this) {document.querySelector('.zhihuE_SettingClose').click();};}
         // 复选框 点击事件
         document.getElementsByName('zhihuE_Setting').forEach(function (checkBox) {
-            checkBox.addEventListener('click', function(){
-                if (this.checked) {GM_setValue(this.id, true);} else {GM_setValue(this.id, false);}
-            });
+            checkBox.addEventListener('click', function(){if (this.checked) {GM_setValue(this.value, true);} else {GM_setValue(this.value, false);}});
         })
     }, 100)
 }

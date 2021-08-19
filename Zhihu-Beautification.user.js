@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.3.3
+// @version      1.3.4
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -146,21 +146,21 @@
         if (line) _br = '<br>'
         for (let i=0; i<menu.length; i++) {
             if (GM_getValue(menu[i][0])) {
-                _html += `<input name="zhihuE_Setting" id="${menu[i][0]}" type="checkbox" value="${menu[i][0]}" checked="checked"><label for="${menu[i][0]}">${menu[i][1]}</label>${_br}`
+                _html += `<label><input name="zhihuE_Setting" type="checkbox" value="${menu[i][0]}" checked="checked">${menu[i][1]}</label>${_br}`
             } else {
-                _html += `<input name="zhihuE_Setting" id="${menu[i][0]}" type="checkbox" value="${menu[i][0]}"><label for="${menu[i][0]}">${menu[i][1]}</label>${_br}`
+                _html += `<label><input name="zhihuE_Setting" type="checkbox" value="${menu[i][0]}">${menu[i][1]}</label>${_br}`
             }
         }
         _html += `</div></div></div>`
         document.body.insertAdjacentHTML('beforeend', _html); // 插入网页末尾
-        setTimeout(function() { // 延迟 100 毫秒
+        setTimeout(function() { // 延迟 100 毫秒，避免太快
             // 关闭按钮 点击事件
             document.querySelector('.zhihuE_SettingClose').onclick = function(){this.parentElement.parentElement.parentElement.remove();document.querySelector('.zhihuE_SettingStyle').remove();}
+            // 点击周围空白处 = 点击关闭按钮
+            document.querySelector('.zhihuE_SettingBackdrop_2').onclick = function(event){if (event.target == this) {document.querySelector('.zhihuE_SettingClose').click();};}
             // 复选框 点击事件
             document.getElementsByName('zhihuE_Setting').forEach(function (checkBox) {
-                checkBox.addEventListener('click', function(){
-                    if (this.checked) {GM_setValue(this.id, true);} else {GM_setValue(this.id, false);}
-                });
+                checkBox.addEventListener('click', function(){if (this.checked) {GM_setValue(this.value, true);} else {GM_setValue(this.value, false);}});
             })
         }, 100)
     }
