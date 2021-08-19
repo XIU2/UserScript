@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.5.9
+// @version      1.6.0
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、贴吧、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
+// @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、贴吧、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -27,7 +27,7 @@
     const websiteList = ['www.baidu.com', 'www.google.com', 'tieba.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com',
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com',
                          'www.423down.com', 'iao.su', 'www.appinn.com', 'www.sixyin.com', 'www.weidown.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
-                         'www.gufengmh8.com', 'www.szcdmj.com',
+                         'www.hicomic.net', 'www.gufengmh8.com', 'www.szcdmj.com',
                          'rarbgprx.org', 'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org',
                          'art.alphacoders.com', 'wall.alphacoders.com', 'avatars.alphacoders.com', 'mobile.alphacoders.com',
                          'crackhub.site', 'fitgirl-repacks.site'];
@@ -518,6 +518,17 @@
                 scrollDelta: 1000
             }
         },
+        hicomic: {
+            SiteTypeID: 0,
+            pager: {
+                type: 4,
+                HT_insert: ['css;.content', 3],
+                intervals: 5000,
+                functionNext: hicomic_functionNext,
+                functionAdd: hicomic_functionAdd,
+                scrollDelta: 2333
+            }
+        },
         gufengmh8: {
             SiteTypeID: 0,
             pager: {
@@ -760,6 +771,22 @@
             case 'www.yxssp.com': //              < 异星软件空间 >
                 curSite = DBSite.yxssp;
                 break;
+            case 'www.hicomic.net': //            < HiComic(嗨漫画) >
+                if (location.pathname.indexOf('/chapters/') > -1) {
+                    document.lastElementChild.appendChild(document.createElement('style')).textContent = '.content {height: auto !important;} .footer, .left_cursor, .right_cursor, .finish {display: none !important;}';
+                    setTimeout(function(){ // 将本话其余图片插入网页中
+                        let _img = '';
+                        document.querySelectorAll('.chapter > section:not(:first-child) > section[val]').forEach(function (one) {
+                            let src = one.getAttribute('val');
+                            if (src.indexOf('!p_c_c_') === -1) src += '!p_c_c_h'
+                            _img += `<img src="${src}">`
+                        })
+                        document.querySelector(curSite.pager.HT_insert[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.HT_insert[1]), _img); // 将 img 标签插入到网页中
+                        window.document.title = window.document.title.replace(/(\(第.+\))? - HiComic/, `(${document.querySelector('.chapter_name').textContent}) - HiComic`); // 修改网页标题（加上 第 X 话）
+                    }, 100)
+                    curSite = DBSite.hicomic;
+                }
+                break;
             case 'www.gufengmh8.com': //          < 古风漫画网 >
                 if (location.pathname.indexOf('.html') > -1) {
                     let chapterScroll = document.getElementById('chapter-scroll') // 强制为 [下拉阅读] 模式
@@ -981,7 +1008,39 @@
     }
 
 
-    // gufengmh8
+    // hicomic 获取下一页地址
+    function hicomic_functionNext() {
+        let nextId;
+        nextId = document.querySelector('.next_chapter:not(.end)')
+        if (nextId && nextId.id && nextId.id != 'None') {
+            curSite.pageUrl = location.href;
+            getPageElems(`https://www.hicomic.net/api/web/chapter/${nextId.id}/contents`, 'json');
+        }
+    }
+    // hicomic 插入数据
+    function hicomic_functionAdd(pageElems) {
+        if (!pageElems || pageElems.code != 200) return
+        if (pageElems.results.chapter.next) { // 写入下一页的 UUID
+            document.querySelector('.next_chapter').id = pageElems.results.chapter.next;
+        } else {
+            document.querySelector('.next_chapter').id = 'None';
+            document.querySelector('.next_chapter').classList.add('end');
+        }
+        document.querySelector('.chapter_name').textContent = pageElems.results.chapter.name; // 修改漫画标题
+        let title = window.document.title.replace(/(\(第.+\))? - HiComic/, `(${pageElems.results.chapter.name}) - HiComic`)
+        window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, title, curSite.pageUrl); // 添加历史记录
+        window.document.title = title; // 修改当前网页标题为下一话的标题
+        let _img = '';
+        for (let i = 0; i < pageElems.results.chapter.contents.length; i++) { // 遍历图片文件名数组，组合为 img 标签
+            let src = pageElems.results.chapter.contents[i].url;
+            if (src.indexOf('!p_c_c_') === -1) src += '!p_c_c_h';
+            _img += `<img src="${src}">`
+        }
+        document.querySelector(curSite.pager.HT_insert[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.HT_insert[1]), _img); // 将 img 标签插入到网页中
+    }
+
+
+    // gufengmh8 获取下一页地址
     function gufengmh8_functionNext() {
         if (curSite.pageUrl) { // 如果已经有下一页的 URL 则直接获取
             getPageElems(curSite.pageUrl)
@@ -1005,8 +1064,7 @@
             }
         }
     }
-
-    // gufengmh8
+    // gufengmh8 插入数据
     function gufengmh8_functionAdd(pageElems) {
         if (pageElems) {
             let url = curSite.pageUrl;
@@ -1035,7 +1093,6 @@
                     //console.log('https://res.xiaoqinre.com/' + chapterPath + one2)
                 })
                 document.querySelector(curSite.pager.HT_insert[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.HT_insert[1]), _img); // 将 img 标签插入到网页中
-
             }
         }
     }
@@ -1123,14 +1180,6 @@
     }
 
 
-    /*function getElementToPageTop(el) {
-        if(el.parentElement) {
-            return getElementToPageTop(el.parentElement) + el.offsetTop
-        }
-        return el.offsetTop
-    }*/
-
-
     // 启用/禁用 (当前网站)
     function menu_disable(type) {
         switch(type) {
@@ -1203,24 +1252,29 @@
 
 
     // 类型 4 专用
-    function getPageElems(url) {
+    function getPageElems(url, type = 'text') {
         GM_xmlhttpRequest({
-                    url: url,
-                    method: 'GET',
-                    timeout: 5000,
-                    onload: function (response) {
-                        try {
-                            //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
-                            var newBody = ShowPager.createDocumentByString(response.responseText);
-                            let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody);
-                            if (pageElems.length >= 0) {
-                                curSite.pager.functionAdd(pageElems)
-                            }
-                        } catch (e) {
-                            console.log(e);
+            url: url,
+            method: 'GET',
+            timeout: 5000,
+            responseType: type,
+            onload: function (response) {
+                try {
+                    //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
+                    if (type === 'json') {
+                        curSite.pager.functionAdd(response.response)
+                    } else {
+                        var newBody = ShowPager.createDocumentByString(response.responseText);
+                        let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody);
+                        if (pageElems.length >= 0) {
+                            curSite.pager.functionAdd(pageElems)
                         }
                     }
-                });
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+        });
     }
 
 
