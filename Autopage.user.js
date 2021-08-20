@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.6.4
+// @version      1.6.5
 // @author       X.I.U
 // @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
@@ -1298,6 +1298,7 @@
     // 左键双击网页空白处暂停翻页
     function pausePageEvent() {
         if (!GM_getValue('menu_pause_page')) return
+        if (curSite.SiteTypeID === 0) return
         document.body.addEventListener('dblclick', function (e) {
             if (pausePage) {
                 pausePage = false;
