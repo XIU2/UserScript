@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.6.5
+// @version      1.6.6
 // @author       X.I.U
-// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
+// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -24,7 +24,7 @@
     'use strict';
     var webType, curSite = {SiteTypeID: 0}, pausePage = true;
     // 目前支持的网站（仅单独规则的，不包含通用规则的网站）
-    const websiteList = ['www.baidu.com', 'www.google.com', 'www.bing.com', 'cn.bing.com', 'tieba.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com',
+    const websiteList = ['www.baidu.com', 'www.google.com', 'www.bing.com', 'cn.bing.com', 'tieba.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com', 'pixabay.com',
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com',
                          'www.423down.com', 'www.sordum.org', 'iao.su', 'www.appinn.com', 'www.sixyin.com', 'www.weidown.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
                          'www.manhuadb.com', 'www.hicomic.net', 'www.gufengmh8.com', 'www.szcdmj.com',
@@ -197,7 +197,7 @@
             SiteTypeID: 0,
             pager: {
                 type: 1,
-                nextLink: '//a[contains(@class,"sb_pagN ")][@href]',
+                nextLink: '//a[contains(@class,"sb_pagN")][@href]',
                 pageElement: 'css;#b_results > li:not(.b_msg):not(.b_pag):not(#mfa_root)',
                 HT_insert: ['css;#b_results > .b_pag', 1],
                 replaceE: 'css;#b_results > .b_pag',
@@ -308,6 +308,20 @@
             },
             function: {
                 before: _58pic_beforeFunction
+            }
+        },
+        pixabay: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[text()="Next page"][@href]',
+                pageElement: 'css;[class^="results"]  > [class^="container"] > div',
+                HT_insert: ['css;[class^="results"]  > [class^="container"]', 3],
+                replaceE: '//a[text()="Next page"][@href]',
+                scrollDelta: 2000
+            },
+            function: {
+                before: pixabay_beforeFunction
             }
         },
         _3dmgame: {
@@ -742,6 +756,9 @@
                     curSite = DBSite._58pic_c;
                 }
                 break;
+            case 'pixabay.com': //                < Pixabay >
+                curSite = DBSite.pixabay;
+                break;
             case 'www.3dmgame.com': //            < 3DM >
                 curSite = DBSite._3dmgame;
                 break;
@@ -980,6 +997,20 @@
             if (now && now.getAttribute('src') != now.dataset.original) {
                 now.src = now.dataset.original;
                 now.style.display = 'block';
+            }
+        });
+        return pageElems
+    }
+
+
+    // Pixabay 的插入前函数（加载图片）
+    function pixabay_beforeFunction(pageElems) {
+        pageElems.forEach(function (one) {
+            let now = one.querySelector('img[data-lazy-src]')
+            if (now) {
+                now.src = now.dataset.lazySrc;
+                now.removeAttribute('data-lazy-src')
+                now.removeAttribute('data-lazy-srcset')
             }
         });
         return pageElems
