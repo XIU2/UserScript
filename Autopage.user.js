@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.6.3
+// @version      1.6.4
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、贴吧、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
+// @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -24,7 +24,7 @@
     'use strict';
     var webType, curSite = {SiteTypeID: 0}, pausePage = true;
     // 目前支持的网站（仅单独规则的，不包含通用规则的网站）
-    const websiteList = ['www.baidu.com', 'www.google.com', 'tieba.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com',
+    const websiteList = ['www.baidu.com', 'www.google.com', 'www.bing.com', 'cn.bing.com', 'tieba.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com',
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com',
                          'www.423down.com', 'www.sordum.org', 'iao.su', 'www.appinn.com', 'www.sixyin.com', 'www.weidown.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
                          'www.manhuadb.com', 'www.hicomic.net', 'www.gufengmh8.com', 'www.szcdmj.com',
@@ -190,6 +190,17 @@
                 pageElement: 'css;#res > *',
                 HT_insert: ['css;#res', 3],
                 replaceE: '//div[@id="navcnt"] | //div[@id="rcnt"]//div[@role="navigation"]',
+                scrollDelta: 1500
+            }
+        },
+        bing: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[contains(@class,"sb_pagN ")][@href]',
+                pageElement: 'css;#b_results > li:not(.b_msg):not(.b_pag):not(#mfa_root)',
+                HT_insert: ['css;#b_results > .b_pag', 1],
+                replaceE: 'css;#b_results > .b_pag',
                 scrollDelta: 1500
             }
         },
@@ -698,12 +709,14 @@
             case 'www.google.com': //             < 谷歌搜索 >
                 if (location.pathname === '/search') curSite = DBSite.google;
                 break;
+            case 'www.bing.com': //               < 必应搜索 >
+            case 'cn.bing.com':
+                if (location.pathname === '/search') {curSite = DBSite.bing; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.b_imagePair.square_mp > .inner {display: none;}';}
+                break;
             case 'tieba.baidu.com': //            < 百度贴吧 >
                 if (location.pathname === '/f') { // 帖子列表
-                    // 修复帖子列表中预览图片，在切换下一个/上一个图片时，多出来的图片上下边距
-                    document.lastElementChild.appendChild(document.createElement('style')).textContent = 'img.j_retract {margin-top: 0 !important;margin-bottom: 0 !important;}';
                     baidu_tieba_1(); // 右侧悬浮发帖按钮点击事件（解决自动翻页导致无法发帖的问题）
-                    curSite = DBSite.baidu_tieba;
+                    curSite = DBSite.baidu_tieba; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'img.j_retract {margin-top: 0 !important;margin-bottom: 0 !important;}'; // 修复帖子列表中预览图片，在切换下一个/上一个图片时，多出来的图片上下边距
                 //} else if (location.pathname.indexOf('/p/') > -1) { // 帖子内
                 //    curSite = DBSite.baidu_tieba_post;
                 } else if (location.pathname === '/f/search/res') { // 吧内搜索/全吧搜索
@@ -724,9 +737,7 @@
                 break;
             case 'www.58pic.com': //              < 千图网 >
                 if (location.pathname.indexOf('/tupian/') > -1) {
-                    // 隐藏末尾很大的 [下一页] 按钮
-                    document.lastElementChild.appendChild(document.createElement('style')).textContent = '.qtw-card.place-box.is-two {display: none !important;}';
-                    curSite = DBSite._58pic;
+                    curSite = DBSite._58pic; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.qtw-card.place-box.is-two {display: none !important;}'; // 隐藏末尾很大的 [下一页] 按钮
                 } else if (location.pathname.indexOf('/c/') > -1) {
                     curSite = DBSite._58pic_c;
                 }
@@ -738,9 +749,7 @@
                 curSite = DBSite.ali213_www;
                 break;
             case 'gl.ali213.net': //              < 游侠网 - 攻略页 >
-                // 隐藏部分碍事元素
-                document.lastElementChild.appendChild(document.createElement('style')).textContent = '.n_show_b {display: none !important;}';
-                curSite = DBSite.ali213_gl;
+                curSite = DBSite.ali213_gl; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.n_show_b {display: none !important;}'; // 隐藏部分碍事元素
                 break;
             case 'www.gamersky.com': //           < 游民星空 >
                 if (location.pathname.indexOf('/ent/') > -1) {
@@ -816,8 +825,7 @@
                 if (location.pathname.indexOf('.html') > -1) {
                     let chapterScroll = document.getElementById('chapter-scroll') // 强制为 [下拉阅读] 模式
                     if (chapterScroll && chapterScroll.className === '') {chapterScroll.click();}
-                    document.lastElementChild.appendChild(document.createElement('style')).textContent = 'p.img_info {display: none !important;}'; // 隐藏中间的页数信息
-                    curSite = DBSite.gufengmh8;
+                    curSite = DBSite.gufengmh8; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'p.img_info {display: none !important;}'; // 隐藏中间的页数信息
                 }
                 break;
             case 'www.szcdmj.com': //             < 砂之船动漫家 >
@@ -851,8 +859,7 @@
                 curSite = DBSite.alphacoders_wall;
                 break;*/
             case 'crackhub.site': //              < 游戏下载网站 >
-                curSite = DBSite.fitgirl;
-                document.lastElementChild.appendChild(document.createElement('style')).textContent = 'html.wp-dark-mode-active .inside-article {background-color: var(--wp-dark-mode-bg);}'
+                curSite = DBSite.fitgirl; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'html.wp-dark-mode-active .inside-article {background-color: var(--wp-dark-mode-bg);}'
                 break;
             case 'fitgirl-repacks.site': //       < 游戏下载网站 >
                 curSite = DBSite.fitgirl;
