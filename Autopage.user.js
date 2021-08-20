@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.6.2
+// @version      1.6.3
 // @author       X.I.U
-// @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、贴吧、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
+// @description  自动无缝翻页，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、贴吧、豆瓣、微博、千图网、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -23,10 +23,10 @@
 (function() {
     'use strict';
     var webType, curSite = {SiteTypeID: 0}, pausePage = true;
-    // 目前支持的网站
+    // 目前支持的网站（仅单独规则的，不包含通用规则的网站）
     const websiteList = ['www.baidu.com', 'www.google.com', 'tieba.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com',
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com',
-                         'www.423down.com', 'iao.su', 'www.appinn.com', 'www.sixyin.com', 'www.weidown.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
+                         'www.423down.com', 'www.sordum.org', 'iao.su', 'www.appinn.com', 'www.sixyin.com', 'www.weidown.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
                          'www.manhuadb.com', 'www.hicomic.net', 'www.gufengmh8.com', 'www.szcdmj.com',
                          'rarbgprx.org', 'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org',
                          'art.alphacoders.com', 'wall.alphacoders.com', 'avatars.alphacoders.com', 'mobile.alphacoders.com',
@@ -381,6 +381,17 @@
                 pageElement: 'css;div.content-wrap ul.excerpt > li',
                 HT_insert: ['css;div.content-wrap ul.excerpt', 3],
                 replaceE: 'css;div.paging',
+                scrollDelta: 1500
+            }
+        },
+        sordum: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="next page-numbers"][@href]',
+                pageElement: 'css;.article > article',
+                HT_insert: ['css;nav.navigation.posts-navigation', 1],
+                replaceE: 'css;nav.navigation.posts-navigation',
                 scrollDelta: 1500
             }
         },
@@ -743,6 +754,9 @@
                 break;
             case 'www.423down.com': //            < 423down >
                 if (location.pathname.indexOf('.html') === -1) curSite = DBSite._423down;
+                break;
+            case 'www.sordum.org': //             < Sordum >
+                curSite = DBSite.sordum;
                 break;
             case 'iao.su': //                     < 不死鸟 >
                 curSite = DBSite.iao_su;
