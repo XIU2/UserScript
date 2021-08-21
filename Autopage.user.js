@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.6.6
+// @version      1.6.7
 // @author       X.I.U
-// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、Crackhub213、FitGirl Repacks...
+// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、AlphaCoders、CS.RIN.RU、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -30,7 +30,7 @@
                          'www.manhuadb.com', 'www.hicomic.net', 'www.gufengmh8.com', 'www.szcdmj.com',
                          'rarbgprx.org', 'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org',
                          'art.alphacoders.com', 'wall.alphacoders.com', 'avatars.alphacoders.com', 'mobile.alphacoders.com',
-                         'crackhub.site', 'fitgirl-repacks.site'];
+                         'cs.rin.ru', 'crackhub.site', 'fitgirl-repacks.site'];
 
     if (GM_getValue('menu_disable') == null){GM_setValue('menu_disable', [])};
     if (GM_getValue('menu_discuz_thread_page') == null){GM_setValue('menu_discuz_thread_page', true)};
@@ -55,7 +55,7 @@
         }
         GM_registerMenuCommand('✅ 已启用 (点击对当前网站禁用)', function(){menu_disable('add')});
         if (webType === 2) {
-            GM_registerMenuCommand(`${GM_getValue('menu_discuz_thread_page')?'✅':'❌'} 帖子内自动翻页 (仅 Discuz! 论坛)`, function(){menu_switch(GM_getValue('menu_discuz_thread_page'), 'menu_discuz_thread_page', 'Discuz! 论坛帖子内翻页')});
+            GM_registerMenuCommand(`${GM_getValue('menu_discuz_thread_page')?'✅':'❌'} 帖子内自动翻页 (仅论坛)`, function(){menu_switch(GM_getValue('menu_discuz_thread_page'), 'menu_discuz_thread_page', 'Discuz! 论坛帖子内翻页')});
         }
         GM_registerMenuCommand(`${GM_getValue('menu_pause_page')?'✅':'❌'} 左键双击网页空白处暂停翻页`, function(){menu_switch(GM_getValue('menu_pause_page'), 'menu_pause_page', '左键双击网页空白处暂停翻页')});
     }
@@ -690,6 +690,31 @@
                 scrollDelta: 1000
             }
         },
+        cs_rin_ru: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//td[@class="gensmall"][@align="right"]//a[text()="Next"][@href]',
+                pageElement: 'css;#pagecontent > table.tablebg > tbody > tr:not([align])',
+                HT_insert: ['css;#pagecontent > table.tablebg > tbody > tr[align]', 1],
+                replaceE: 'css;#pagecontent > table:first-child',
+                scrollDelta: 1500
+            },
+            function: {
+                before: cs_rin_ru_beforeFunction
+            }
+        },
+        cs_rin_ru_viewtopic: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: 'id("pageheader")/p[@class="gensmall"]//a[text()="Next"][@href]',
+                pageElement: 'css;#pagecontent > table.tablebg:not(:nth-last-child(2)):not(:nth-child(2))',
+                HT_insert: ['css;#pagecontent > table.tablebg:nth-last-child(2)', 1],
+                replaceE: 'css;#pagecontent >table:not(.tablebg), #pageheader p.gensmall',
+                scrollDelta: 1500
+            }
+        },
         fitgirl: {
             SiteTypeID: 0,
             pager: {
@@ -875,6 +900,13 @@
             case 'mobile.alphacoders.com':
                 curSite = DBSite.alphacoders_wall;
                 break;*/
+            case 'cs.rin.ru': //                  < cs_rin_ru >
+                if (location.pathname === '/forum/viewforum.php') { // 版块帖子列表
+                    curSite = DBSite.cs_rin_ru;
+                } else if (location.pathname === '/forum/viewtopic.php') { // 帖子内
+                    if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.cs_rin_ru_viewtopic;
+                }
+                break;
             case 'crackhub.site': //              < 游戏下载网站 >
                 curSite = DBSite.fitgirl; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'html.wp-dark-mode-active .inside-article {background-color: var(--wp-dark-mode-bg);}'
                 break;
@@ -1067,6 +1099,18 @@
         pageElems1.forEach(function (one) {
             one.style.float = 'left';
         });
+    }
+
+
+    // cs_rin_ru 的插入前函数（过滤置顶帖子）
+    function cs_rin_ru_beforeFunction(pageElems) {
+        for (let i = 0; i < pageElems.length; i++) {
+            if (pageElems[i].textContent.replace(/\n|	/g,'') === 'Topics') {
+                pageElems.splice(0,i+1);
+                break;
+            }
+        }
+        return pageElems
     }
 
 
