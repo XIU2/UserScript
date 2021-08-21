@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.6.9
+// @version      1.7.0
 // @author       X.I.U
 // @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、高清电台、RARBG、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
@@ -98,10 +98,10 @@
             SiteTypeID: 0,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="nxt"][@href]',
-                pageElement: 'css;div#postlist > div[id^="post_"]',
-                insertPosition: ['css;div#postlist', 3],
-                replaceE: 'css;div.pg',
+                nextLink: '//a[@class="nxt"][@href] | //a[@class="next"][@href]',
+                pageElement: 'css;#postlist > div[id^="post_"]',
+                insertPosition: ['css;#postlist', 3],
+                replaceE: 'css;.pg, .pages',
                 scrollDelta: 1000
             }
         },
@@ -109,10 +109,10 @@
             SiteTypeID: 0,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="nxt"][@href]',
-                pageElement: 'css;div#threadlist > ul',
-                insertPosition: ['css;div#threadlist', 3],
-                replaceE: 'css;div.pg',
+                nextLink: '//a[@class="nxt"][@href] | //a[@class="next"][@href]',
+                pageElement: 'css;#threadlist > ul',
+                insertPosition: ['css;#threadlist', 3],
+                replaceE: 'css;.pg, .pages',
                 scrollDelta: 1000
             }
         },
@@ -120,10 +120,10 @@
             SiteTypeID: 0,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="nxt"][@href]',
-                pageElement: 'css;div#threadlist div.bm_c table > tbody',
-                insertPosition: ['css;div#threadlist div.bm_c table', 3],
-                replaceE: 'css;div.pg',
+                nextLink: '//a[@class="nxt"][@href] | //a[@class="next"][@href]',
+                pageElement: 'css;#threadlist table > tbody[id^="normalthread_"]',
+                insertPosition: ['id("threadlist")//table/tbody[starts-with(@id, "normalthread_")]/parent::table', 3],
+                replaceE: 'css;.pg, .pages',
                 scrollDelta: 1000
             }
         },
@@ -131,10 +131,10 @@
             SiteTypeID: 0,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="nxt"][@href]',
+                nextLink: '//a[@class="nxt"][@href] | //a[@class="next"][@href]',
                 pageElement: 'css;tbody > tr:not(.th)',
                 insertPosition: ['css;tbody', 3],
-                replaceE: 'css;div.pg',
+                replaceE: 'css;.pg, .pages',
                 scrollDelta: 1000
             }
         },
@@ -142,10 +142,10 @@
             SiteTypeID: 0,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="nxt"][@href]',
-                pageElement: 'css;div#ct div.bm_c table > tbody',
-                insertPosition: ['css;div#ct div.bm_c table', 3],
-                replaceE: 'css;div.pg',
+                nextLink: '//a[@class="nxt"][@href] | //a[@class="next"][@href]',
+                pageElement: 'css;#ct .bm_c table > tbody',
+                insertPosition: ['css;#ct .bm_c table', 3],
+                replaceE: 'css;.pg, .pages',
                 scrollDelta: 1000
             }
         },
@@ -942,13 +942,13 @@
                 curSite = DBSite.discuz_search;
             }
         } else {
-            if (location.search.indexOf('mod=forumdisplay') > -1) { //      各版块帖子列表
+            if (location.search.indexOf('mod=forumdisplay') > -1 || location.pathname.indexOf('forumdisplay.php') > -1) { //      各版块帖子列表
                 if (document.getElementById('autopbn')) { //                判断是否有 [下一页] 按钮
                     curSite = DBSite.discuz_forum;
                 } else {
                     curSite = DBSite.discuz_guide;
                 }
-            } else if (location.search.indexOf('mod=viewthread') > -1) { // 帖子内
+            } else if (location.search.indexOf('mod=viewthread') > -1 || location.pathname.indexOf('viewthread.php') > -1) { // 帖子内
                 if (GM_getValue('menu_discuz_thread_page')) {
                     curSite = DBSite.discuz_thread;
                     hidePgbtn(); //                                         隐藏帖子内的 [下一页] 按钮
@@ -976,7 +976,7 @@
 
     pausePageEvent(); // 左键双击网页空白处暂停翻页
     curSite.pageUrl = ''; // 下一页URL
-    //console.log(curSite);
+    console.log(curSite);
     pageLoading(); // 自动无缝翻页
 
 
@@ -1514,7 +1514,7 @@
                 }
                 //let curPageEle = getElementByXpath(curSite.pager.nextLink);
                 //var url = this.getFullHref(curPageEle);
-                //console.log(url, curPageEle, curSite.pageUrl);
+                console.log(url, curSite.pageUrl);
                 if (url === '') return;
                 if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
@@ -1531,11 +1531,11 @@
                     timeout: 5000,
                     onload: function (response) {
                         try {
-                            //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
+                            console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody),
                                 toElement = getAllElements(curSite.pager.insertPosition[0])[0];
-                            //console.log(curSite.pager.pageElement, pageElems)
+                            console.log(curSite.pager.pageElement, pageElems)
 
                             if (pageElems.length >= 0) {
                                 // 如果有插入前函数就执行函数
