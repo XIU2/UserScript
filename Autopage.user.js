@@ -54,7 +54,7 @@
             return
         }
         GM_registerMenuCommand('✅ 已启用 (点击对当前网站禁用)', function(){menu_disable('add')});
-        if (webType === 2) {
+        if (webType === 2 || location.host === 'cs.rin.ru') {
             GM_registerMenuCommand(`${GM_getValue('menu_discuz_thread_page')?'✅':'❌'} 帖子内自动翻页 (仅论坛)`, function(){menu_switch(GM_getValue('menu_discuz_thread_page'), 'menu_discuz_thread_page', 'Discuz! 论坛帖子内翻页')});
         }
         GM_registerMenuCommand(`${GM_getValue('menu_pause_page')?'✅':'❌'} 左键双击网页空白处暂停翻页`, function(){menu_switch(GM_getValue('menu_pause_page'), 'menu_pause_page', '左键双击网页空白处暂停翻页')});
