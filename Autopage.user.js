@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.7.1
+// @version      1.7.2
 // @author       X.I.U
-// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、高清电台、宝书网、RARBG、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
+// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、高清电台、宝书网、SrkBT、RARBG、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -28,8 +28,8 @@
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com',
                          'www.423down.com', 'www.sordum.org', 'iao.su', 'www.appinn.com', 'www.sixyin.com', 'www.weidown.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
                          'www.cartoonmad.com', 'www.cartoonmad.cc', 'www.manhuadb.com', 'www.hicomic.net', 'www.gufengmh8.com', 'www.szcdmj.com',
-                         'gaoqing.fm', 'www.baoshuu.com', 'm.baoshuu.com',
-                         'rarbgprx.org', 'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org',
+                         'gaoqing.fm', 'www.baoshuu.com', 'm.baoshuu.com', 'skrbtba.xyz','rarbgprx.org',
+                         'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org',
                          'cs.rin.ru', 'crackhub.site', 'fitgirl-repacks.site'];
 
     if (GM_getValue('menu_disable') == null){GM_setValue('menu_disable', [])};
@@ -648,6 +648,17 @@
                 scrollDelta: 900
             }
         },
+        skrbtba: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@aria-label="Next"]',
+                pageElement: 'css;div[class="row"] > .col-md-6 > ul',
+                insertPosition: ['css;nav[aria-label*="Page"]', 1],
+                replaceE: 'css;ul.pagination',
+                scrollDelta: 900
+            }
+        },
         rarbgprx: {
             SiteTypeID: 0,
             pager: {
@@ -919,7 +930,10 @@
                 if (location.pathname.indexOf('/TXT/list') > -1) curSite = DBSite.baoshuu;
                 break;
             case 'm.baoshuu.com': //              < 宝书网 - 手机版 >
-                if (location.pathname.indexOf('/TXT/list') > -1)curSite = DBSite.baoshuu_m;
+                if (location.pathname.indexOf('/TXT/list') > -1) curSite = DBSite.baoshuu_m;
+                break;
+            case 'skrbtba.xyz': //                < SkrBt >
+                if (location.pathname === '/search') curSite = DBSite.skrbtba;
                 break;
             case 'rarbgprx.org': //               < RARBG >
                 curSite = DBSite.rarbgprx;
@@ -1007,7 +1021,7 @@
 
     pausePageEvent(); // 左键双击网页空白处暂停翻页
     curSite.pageUrl = ''; // 下一页URL
-    console.log(curSite);
+    //console.log(curSite);
     pageLoading(); // 自动无缝翻页
 
 
@@ -1545,7 +1559,7 @@
                 }
                 //let curPageEle = getElementByXpath(curSite.pager.nextLink);
                 //var url = this.getFullHref(curPageEle);
-                //console.log(url, curSite.pageUrl);
+                console.log(url, curSite.pageUrl);
                 if (url === '') return;
                 if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
@@ -1559,14 +1573,17 @@
                     url: url,
                     method: 'GET',
                     overrideMimeType: mimeType,
+                    headers: {
+                        "Referer": location.href
+                    },
                     timeout: 5000,
                     onload: function (response) {
                         try {
-                            //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
+                            console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody),
                                 toElement = getAllElements(curSite.pager.insertPosition[0])[0];
-                            //console.log(curSite.pager.pageElement, pageElems)
+                            console.log(curSite.pager.pageElement, pageElems)
 
                             if (pageElems.length >= 0) {
                                 // 如果有插入前函数就执行函数
