@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.7.0
+// @version      1.7.1
 // @author       X.I.U
-// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、高清电台、RARBG、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
+// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、高清电台、宝书网、RARBG、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -27,8 +27,8 @@
     const websiteList = ['www.baidu.com', 'www.google.com', 'www.bing.com', 'cn.bing.com', 'tieba.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com', 'pixabay.com',
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com',
                          'www.423down.com', 'www.sordum.org', 'iao.su', 'www.appinn.com', 'www.sixyin.com', 'www.weidown.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
-                         'www.cartoonmad.cc', 'www.manhuadb.com', 'www.hicomic.net', 'www.gufengmh8.com', 'www.szcdmj.com',
-                         'gaoqing.fm',
+                         'www.cartoonmad.com', 'www.cartoonmad.cc', 'www.manhuadb.com', 'www.hicomic.net', 'www.gufengmh8.com', 'www.szcdmj.com',
+                         'gaoqing.fm', 'www.baoshuu.com', 'm.baoshuu.com',
                          'rarbgprx.org', 'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org',
                          'cs.rin.ru', 'crackhub.site', 'fitgirl-repacks.site'];
 
@@ -562,6 +562,7 @@
                 pageElement: 'css;body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img',
                 insertPosition: ['css;body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child > a', 3],
                 replaceE: 'css;body > table > tbody > tr:nth-child(2), body > table > tbody > tr:nth-child(5)',
+                mimeType: 'text/html; charset=big5',
                 scrollDelta: 2000
             }
         },
@@ -621,6 +622,30 @@
                 nextLink: '.col-md-12 > a[href], #loadmore > a[href]',
                 intervals: 1500,
                 scrollDelta: 1000
+            }
+        },
+        baoshuu: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//div[@class="listl2"]//a[@href][text()="下一页"]',
+                pageElement: 'css;.listl2 > ul > li',
+                insertPosition: ['css;.listl2 > ul', 3],
+                replaceE: 'css;listl2 > dl',
+                mimeType: 'text/html; charset=gb2312',
+                scrollDelta: 900
+            }
+        },
+        baoshuu_m: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//div[@class="man_first"]//a[@href][text()="下一页"]',
+                pageElement: 'css;.man_first > ul > li',
+                insertPosition: ['css;.man_first > ul', 3],
+                replaceE: 'css;.man_first > dl',
+                mimeType: 'text/html; charset=gb2312',
+                scrollDelta: 900
             }
         },
         rarbgprx: {
@@ -741,8 +766,7 @@
         GOOGLE: DBSite.google.SiteTypeID,
         BAIDU_TIEBA: DBSite.baidu_tieba.SiteTypeID,
         GAMERSKY_GL: DBSite.gamersky_gl.SiteTypeID,
-        STEAMCOMMUNITY: DBSite.steamcommunity.SiteTypeID,
-        CARTONNMAD: DBSite.cartoonmad.SiteTypeID
+        STEAMCOMMUNITY: DBSite.steamcommunity.SiteTypeID
     };
 
 
@@ -855,7 +879,8 @@
             case 'www.yxssp.com': //              < 异星软件空间 >
                 curSite = DBSite.yxssp;
                 break;
-            case 'www.cartoonmad.cc': //          < 漫画狂 >
+            case 'www.cartoonmad.com': //         < 漫画狂 >
+            case 'www.cartoonmad.cc':
                 if (location.pathname.indexOf('/comic/') > -1) {
                     document.lastElementChild.appendChild(document.createElement('style')).textContent = 'body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:not(:first-child) {display: none !important;} body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img {max-width: 100%;height: auto;display: block !important;margin: 0 auto !important;}';
                     document.querySelector('body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child > a').href = 'javascript:void(0);'; // 清理图片上的链接
@@ -889,6 +914,12 @@
                 break;
             case 'gaoqing.fm': //                 < 高清电台 >
                 curSite = DBSite.gaoqing_fm;
+                break;
+            case 'www.baoshuu.com': //            < 宝书网 >
+                if (location.pathname.indexOf('/TXT/list') > -1) curSite = DBSite.baoshuu;
+                break;
+            case 'm.baoshuu.com': //              < 宝书网 - 手机版 >
+                if (location.pathname.indexOf('/TXT/list') > -1)curSite = DBSite.baoshuu_m;
                 break;
             case 'rarbgprx.org': //               < RARBG >
                 curSite = DBSite.rarbgprx;
@@ -1514,28 +1545,28 @@
                 }
                 //let curPageEle = getElementByXpath(curSite.pager.nextLink);
                 //var url = this.getFullHref(curPageEle);
-                console.log(url, curSite.pageUrl);
+                //console.log(url, curSite.pageUrl);
                 if (url === '') return;
                 if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
                 if (curSite.SiteTypeID === SiteType.BAIDU_TIEBA) {
                     url = url + '&pagelets=frs-list%2Fpagelet%2Fthread&pagelets_stamp=' + new Date().getTime();
                 }
-                let overrideMimeType = '';
-                if (curSite.SiteTypeID === SiteType.CARTONNMAD) overrideMimeType = 'text/html; charset=big5';
+                let mimeType = '';
+                if (curSite.pager.mimeType) mimeType = curSite.pager.mimeType;
                 // 读取下一页的数据
                 GM_xmlhttpRequest({
                     url: url,
                     method: 'GET',
-                    overrideMimeType: overrideMimeType,
+                    overrideMimeType: mimeType,
                     timeout: 5000,
                     onload: function (response) {
                         try {
-                            console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
+                            //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody),
                                 toElement = getAllElements(curSite.pager.insertPosition[0])[0];
-                            console.log(curSite.pager.pageElement, pageElems)
+                            //console.log(curSite.pager.pageElement, pageElems)
 
                             if (pageElems.length >= 0) {
                                 // 如果有插入前函数就执行函数
