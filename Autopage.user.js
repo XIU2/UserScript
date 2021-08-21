@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.6.8
+// @version      1.6.9
 // @author       X.I.U
-// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、RARBG、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
+// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、高清电台、RARBG、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -27,7 +27,8 @@
     const websiteList = ['www.baidu.com', 'www.google.com', 'www.bing.com', 'cn.bing.com', 'tieba.baidu.com', 'movie.douban.com', 'weibo.com', 'www.58pic.com', 'pixabay.com',
                          'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com',
                          'www.423down.com', 'www.sordum.org', 'iao.su', 'www.appinn.com', 'www.sixyin.com', 'www.weidown.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
-                         'www.manhuadb.com', 'www.hicomic.net', 'www.gufengmh8.com', 'www.szcdmj.com',
+                         'www.cartoonmad.cc', 'www.manhuadb.com', 'www.hicomic.net', 'www.gufengmh8.com', 'www.szcdmj.com',
+                         'gaoqing.fm',
                          'rarbgprx.org', 'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org',
                          'cs.rin.ru', 'crackhub.site', 'fitgirl-repacks.site'];
 
@@ -72,7 +73,7 @@
           intervals: 点击间隔时间，对于没有按钮文字变化的按钮，可以手动指定间隔时间，单位：ms
       3 = 依靠元素距离可视区域底部的距离来触发翻页
       4 = 部分简单的动态加载类网站（暂时）
-    HT_insert：
+    insertPosition：
       1 = 插入该元素本身的前面；
       2 = 插入该元素当中，第一个子元素前面；
       3 = 插入该元素当中，最后一个子元素后面；
@@ -99,7 +100,7 @@
                 type: 1,
                 nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;div#postlist > div[id^="post_"]',
-                HT_insert: ['css;div#postlist', 3],
+                insertPosition: ['css;div#postlist', 3],
                 replaceE: 'css;div.pg',
                 scrollDelta: 1000
             }
@@ -110,7 +111,7 @@
                 type: 1,
                 nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;div#threadlist > ul',
-                HT_insert: ['css;div#threadlist', 3],
+                insertPosition: ['css;div#threadlist', 3],
                 replaceE: 'css;div.pg',
                 scrollDelta: 1000
             }
@@ -121,7 +122,7 @@
                 type: 1,
                 nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;div#threadlist div.bm_c table > tbody',
-                HT_insert: ['css;div#threadlist div.bm_c table', 3],
+                insertPosition: ['css;div#threadlist div.bm_c table', 3],
                 replaceE: 'css;div.pg',
                 scrollDelta: 1000
             }
@@ -132,7 +133,7 @@
                 type: 1,
                 nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;tbody > tr:not(.th)',
-                HT_insert: ['css;tbody', 3],
+                insertPosition: ['css;tbody', 3],
                 replaceE: 'css;div.pg',
                 scrollDelta: 1000
             }
@@ -143,7 +144,7 @@
                 type: 1,
                 nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;div#ct div.bm_c table > tbody',
-                HT_insert: ['css;div#ct div.bm_c table', 3],
+                insertPosition: ['css;div#ct div.bm_c table', 3],
                 replaceE: 'css;div.pg',
                 scrollDelta: 1000
             }
@@ -162,12 +163,12 @@
                 type: 1,
                 nextLink: '//li[@class="next-page"]/a[@href]',
                 pageElement: 'css;.content > article',
-                HT_insert: ['css;.content > .pagination', 1],
+                insertPosition: ['css;.content > .pagination', 1],
                 replaceE: 'css;.content > .pagination',
                 scrollDelta: 1500
             },
             function: {
-                before: dux_beforeFunction
+                before: dux_functionBefore
             }
         },
         baidu: {
@@ -176,7 +177,7 @@
                 type: 1,
                 nextLink: 'id("page")//a[contains(text(),"下一页")][@href]',
                 pageElement: 'css;#content_left > *',
-                HT_insert: ['css;#content_left', 3],
+                insertPosition: ['css;#content_left', 3],
                 replaceE: 'css;#page',
                 scrollDelta: 1200
             }
@@ -187,7 +188,7 @@
                 type: 1,
                 nextLink: 'id("pnnext")[@href]',
                 pageElement: 'css;#res > *',
-                HT_insert: ['css;#res', 3],
+                insertPosition: ['css;#res', 3],
                 replaceE: 'id("navcnt") | id("rcnt")//div[@role="navigation"]',
                 scrollDelta: 2000
             }
@@ -198,7 +199,7 @@
                 type: 1,
                 nextLink: '//a[contains(@class,"sb_pagN")][@href]',
                 pageElement: 'css;#b_results > li:not(.b_msg):not(.b_pag):not(#mfa_root)',
-                HT_insert: ['css;#b_results > .b_pag', 1],
+                insertPosition: ['css;#b_results > .b_pag', 1],
                 replaceE: 'css;#b_results > .b_pag',
                 scrollDelta: 1500
             }
@@ -209,12 +210,12 @@
                 type: 1,
                 nextLink: '//a[@class="next pagination-item "][@href]',
                 pageElement: 'css;#thread_list > li',
-                HT_insert: ['css;#thread_list', 3],
+                insertPosition: ['css;#thread_list', 3],
                 replaceE: 'css;#frs_list_pager',
                 scrollDelta: 1500
             },
             function: {
-                before: baidu_tieba_beforeFunction
+                before: baidu_tieba_functionBefore
             }
         },
         baidu_tieba_post: {
@@ -223,7 +224,7 @@
                 type: 1,
                 nextLink: '//li[contains(@class,"pb_list_pager")]/a[contains(text(),"下一页")][@href]',
                 pageElement: 'css;#j_p_postlist > div',
-                HT_insert: ['css;#j_p_postlist', 3],
+                insertPosition: ['css;#j_p_postlist', 3],
                 replaceE: 'css;li.pb_list_pager',
                 scrollDelta: 1000
             }
@@ -234,7 +235,7 @@
                 type: 1,
                 nextLink: '//a[@class="next"][@href]',
                 pageElement: 'css;.s_post_list > .s_post',
-                HT_insert: ['css;.s_post_list', 3],
+                insertPosition: ['css;.s_post_list', 3],
                 replaceE: 'css;.pager.pager-search',
                 scrollDelta: 1000
             }
@@ -245,7 +246,7 @@
                 type: 1,
                 nextLink: '//a[@class="next"][@href]',
                 pageElement: 'css;#comments > .comment-item',
-                HT_insert: ['css;#paginator', 1],
+                insertPosition: ['css;#paginator', 1],
                 replaceE: 'css;#paginator',
                 scrollDelta: 1000
             }
@@ -256,7 +257,7 @@
                 type: 1,
                 nextLink: '//link[@rel="next"][@href]',
                 pageElement: 'css;.review-list > div',
-                HT_insert: ['css;.review-list', 3],
+                insertPosition: ['css;.review-list', 3],
                 replaceE: 'css;.paginator',
                 scrollDelta: 1000
             }
@@ -267,7 +268,7 @@
                 type: 1,
                 nextLink: '//link[@rel="next"][@href]',
                 pageElement: 'css;#comments > div',
-                HT_insert: ['css;#comments', 3],
+                insertPosition: ['css;#comments', 3],
                 replaceE: 'css;.paginator',
                 scrollDelta: 1000
             }
@@ -287,12 +288,12 @@
                 type: 1,
                 nextLink: '//div[contains(@class,"page-box")]//a[text()="下一页"][@href]',
                 pageElement: 'css;.pic-box > .qtw-card',
-                HT_insert: ['css;.pic-box', 3],
+                insertPosition: ['css;.pic-box', 3],
                 replaceE: 'css;.page-box',
                 scrollDelta: 2000
             },
             function: {
-                before: _58pic_beforeFunction
+                before: _58pic_functionBefore
             }
         },
         _58pic_c: {
@@ -301,12 +302,12 @@
                 type: 1,
                 nextLink: '//div[contains(@class,"page-box")]//a[text()="下一页"][@href]',
                 pageElement: 'css;.list-box > .qtw-card',
-                HT_insert: ['css;.list-box', 3],
+                insertPosition: ['css;.list-box', 3],
                 replaceE: 'css;.page-box',
                 scrollDelta: 4000
             },
             function: {
-                before: _58pic_beforeFunction
+                before: _58pic_functionBefore
             }
         },
         pixabay: {
@@ -315,12 +316,12 @@
                 type: 1,
                 nextLink: '//a[text()="Next page"][@href]',
                 pageElement: 'css;[class^="results"]  > [class^="container"] > div',
-                HT_insert: ['css;[class^="results"]  > [class^="container"]', 3],
+                insertPosition: ['css;[class^="results"]  > [class^="container"]', 3],
                 replaceE: '//a[text()="Next page"][@href]',
                 scrollDelta: 2000
             },
             function: {
-                before: pixabay_beforeFunction
+                before: pixabay_functionBefore
             }
         },
         _3dmgame: {
@@ -329,7 +330,7 @@
                 type: 3,
                 nextLink: '//li[@class="next"]/a[@href]',
                 pageElement: 'css;.news_warp_center > *',
-                HT_insert: ['css;.news_warp_center', 3],
+                insertPosition: ['css;.news_warp_center', 3],
                 replaceE: 'css;.pagewrap',
                 scrollElement: '.pagewrap',
                 scrollDelta: 400
@@ -341,7 +342,7 @@
                 type: 3,
                 nextLink: 'id("after_this_page")[@href]',
                 pageElement: 'css;#Content >*:not(.news_ding):not(.page_fenye)',
-                HT_insert: ['css;.page_fenye', 1],
+                insertPosition: ['css;.page_fenye', 1],
                 replaceE: 'css;.page_fenye',
                 scrollElement: '.page_fenye',
                 scrollDelta: 400
@@ -353,7 +354,7 @@
                 type: 3,
                 nextLink: '//a[@class="next n"][@href]',
                 pageElement: 'css;.c-detail >*',
-                HT_insert: ['css;.c-detail', 3],
+                insertPosition: ['css;.c-detail', 3],
                 replaceE: 'css;.page_fenye',
                 scrollElement: '.page_fenye',
                 scrollDelta: 400
@@ -365,7 +366,7 @@
                 type: 3,
                 nextLink: '//div[@class="page_css"]/a[text()="下一页"][@href]',
                 pageElement: 'css;.Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.page_css):not(.gs_ccs_solve):not(.post_ding)',
-                HT_insert: ['css;.page_css', 1],
+                insertPosition: ['css;.page_css', 1],
                 replaceE: 'css;.page_css',
                 scrollElement: '.page_css',
                 scrollDelta: 100
@@ -377,13 +378,13 @@
                 type: 3,
                 nextLink: '//div[@class="page_css"]/a[text()="下一页"][@href]',
                 pageElement: 'css;.Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.gs_ccs_solve):not(.post_ding)',
-                HT_insert: ['css;.gs_nc_editor', 1],
+                insertPosition: ['css;.gs_nc_editor', 1],
                 replaceE: 'css;.page_css',
                 scrollElement: '.pagecss',
                 scrollDelta: -1000
             },
             function: {
-                before: gamersky_gl_beforeFunction
+                before: gamersky_gl_functionBefore
             }
         },
         steamcommunity: {
@@ -392,7 +393,7 @@
                 type: 1,
                 nextLink: '//a[@class="pagebtn"][last()][@href]',
                 pageElement: 'css;.workshopBrowseItems > *',
-                HT_insert: ['css;.workshopBrowseItems', 3],
+                insertPosition: ['css;.workshopBrowseItems', 3],
                 replaceE: 'css;.workshopBrowsePaging',
                 scrollDelta: 1500
             }
@@ -403,7 +404,7 @@
                 type: 1,
                 nextLink: '//div[@class="paging"]//a[contains(text(),"下一页")][@href]',
                 pageElement: 'css;div.content-wrap ul.excerpt > li',
-                HT_insert: ['css;div.content-wrap ul.excerpt', 3],
+                insertPosition: ['css;div.content-wrap ul.excerpt', 3],
                 replaceE: 'css;div.paging',
                 scrollDelta: 1500
             }
@@ -414,7 +415,7 @@
                 type: 1,
                 nextLink: '//a[@class="next page-numbers"][@href]',
                 pageElement: 'css;.article > article',
-                HT_insert: ['css;nav.navigation.posts-navigation', 1],
+                insertPosition: ['css;nav.navigation.posts-navigation', 1],
                 replaceE: 'css;nav.navigation.posts-navigation',
                 scrollDelta: 1500
             }
@@ -425,12 +426,12 @@
                 type: 1,
                 nextLink: '//li[@class="btn btn-primary next"]//a[@href]',
                 pageElement: 'css;#index > article, #archive > article',
-                HT_insert: ['css;ol.page-navigator', 1],
+                insertPosition: ['css;ol.page-navigator', 1],
                 replaceE: 'css;ol.page-navigator',
                 scrollDelta: 800
             },
             function: {
-                before: iao_su_beforeFunction
+                before: iao_su_functionBefore
             }
         },
         appinn: {
@@ -439,7 +440,7 @@
                 type: 1,
                 nextLink: '//a[@class="next page-numbers"][@href]',
                 pageElement: 'css;section#latest-posts > article',
-                HT_insert: ['css;nav.navigation.pagination', 1],
+                insertPosition: ['css;nav.navigation.pagination', 1],
                 replaceE: 'css;div.nav-links',
                 scrollDelta: 1500
             }
@@ -459,7 +460,7 @@
                 type: 1,
                 nextLink: '//a[@class="next"][@href]',
                 pageElement: 'css;ul.post-loop > li',
-                HT_insert: ['css;ul.post-loop', 3],
+                insertPosition: ['css;ul.post-loop', 3],
                 replaceE: 'css;ul.pagination',
                 scrollDelta: 1500
             }
@@ -470,7 +471,7 @@
                 type: 1,
                 nextLink: '//a[@class="nextpage"][@href]',
                 pageElement: 'css;.articleWrapper > .itemArticle, .articleWrapper > .richTextItem.search',
-                HT_insert: ['css;.articleWrapper', 3],
+                insertPosition: ['css;.articleWrapper', 3],
                 replaceE: 'css;#pageGroup',
                 scrollDelta: 1500
             }
@@ -481,7 +482,7 @@
                 type: 1,
                 nextLink: '//a[@class="nextpage"][@href]',
                 pageElement: 'css;.articleListWrapper > .richTextItem.search',
-                HT_insert: ['css;#pageGroup', 1],
+                insertPosition: ['css;#pageGroup', 1],
                 replaceE: 'css;#pageGroup',
                 scrollDelta: 700
             }
@@ -492,7 +493,7 @@
                 type: 1,
                 nextLink: '//a[@class="nextpage"][@href]',
                 pageElement: 'css;.special > .item',
-                HT_insert: ['css;.special', 3],
+                insertPosition: ['css;.special', 3],
                 replaceE: 'css;#pageGroup',
                 scrollDelta: 700
             }
@@ -503,12 +504,12 @@
                 type: 1,
                 nextLink: '//div[@class="pagenavi"]//a[@title="下一页"][@href]',
                 pageElement: 'css;#postlist > div.entry',
-                HT_insert: ['css;#postlist > .pagenavi-button', 1],
+                insertPosition: ['css;#postlist > .pagenavi-button', 1],
                 replaceE: 'css;.pagenavi-button, .pagenavi',
                 scrollDelta: 1200
             },
             function: {
-                before: iplaysoft_postslist_beforeFunction
+                before: iplaysoft_postslist_functionBefore
             }
         },
         iplaysoft_postcomments: {
@@ -526,7 +527,7 @@
                 type: 1,
                 nextLink: '//a[@class="page-numbers"][@title="下一页"][@href]',
                 pageElement: 'css;#post > div[id^="post-"]',
-                HT_insert: ['css;#post > #pagenavi', 1],
+                insertPosition: ['css;#post > #pagenavi', 1],
                 replaceE: 'css;#post > #pagenavi',
                 scrollDelta: 1700
             }
@@ -537,7 +538,7 @@
                 type: 1,
                 nextLink: '//a[@class="page-numbers"][@title="下一页"][@href]',
                 pageElement: 'css;#content > div[class^="entry_box"]',
-                HT_insert: ['css;#content > #pagenavi', 1],
+                insertPosition: ['css;#content > #pagenavi', 1],
                 replaceE: 'css;#content > #pagenavi',
                 scrollDelta: 1700
             }
@@ -548,20 +549,31 @@
                 type: 1,
                 nextLink: '//div[@class="page-nav td-pb-padding-side"]/a[last()][@href]',
                 pageElement: 'css;.td-modules-container.td-module-number4 > div',
-                HT_insert: ['css;.td-modules-container.td-module-number4', 3],
+                insertPosition: ['css;.td-modules-container.td-module-number4', 3],
                 replaceE: 'css;.page-nav.td-pb-padding-side',
                 scrollDelta: 1000
+            }
+        },
+        cartoonmad: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: cartoonmad_functionNext,
+                pageElement: 'css;body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img',
+                insertPosition: ['css;body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child > a', 3],
+                replaceE: 'css;body > table > tbody > tr:nth-child(2), body > table > tbody > tr:nth-child(5)',
+                scrollDelta: 2000
             }
         },
         manhuadb: {
             SiteTypeID: 0,
             pager: {
                 type: 4,
+                nextLink: manhuadb_functionNext,
                 pageElement: 'css;body > script:not([type]):not([src]), .vg-r-data, ol.links-of-books.num_div',
-                HT_insert: ['css;.pjax-container', 3],
+                insertPosition: ['css;.pjax-container', 3],
+                insertElement: manhuadb_insertElement,
                 intervals: 5000,
-                functionNext: manhuadb_functionNext,
-                functionAdd: manhuadb_functionAdd,
                 scrollDelta: 3000
             }
         },
@@ -569,10 +581,10 @@
             SiteTypeID: 0,
             pager: {
                 type: 4,
-                HT_insert: ['css;.content', 3],
+                nextLink: hicomic_functionNext,
+                insertPosition: ['css;.content', 3],
+                insertElement: hicomic_insertElement,
                 intervals: 5000,
-                functionNext: hicomic_functionNext,
-                functionAdd: hicomic_functionAdd,
                 scrollDelta: 3000
             }
         },
@@ -580,11 +592,11 @@
             SiteTypeID: 0,
             pager: {
                 type: 4,
+                nextLink: gufengmh8_functionNext,
                 pageElement: 'css;body > script:first-child',
-                HT_insert: ['css;#images', 3],
+                insertPosition: ['css;#images', 3],
+                insertElement: gufengmh8_insertElement,
                 intervals: 5000,
-                functionNext: gufengmh8_functionNext,
-                functionAdd: gufengmh8_functionAdd,
                 scrollDelta: 4000
             }
         },
@@ -594,12 +606,21 @@
                 type: 1,
                 nextLink: '//div[@class="fanye"][1]/a[@href][text()="下一页" or text()="下一话"]',
                 pageElement: 'css;.comicpage > div,title',
-                HT_insert: ['css;.comicpage', 3],
+                insertPosition: ['css;.comicpage', 3],
                 replaceE: 'css;.fanye,h1.title',
                 scrollDelta: 2000
             },
             function: {
-                before: szcdmj_beforeFunction
+                before: szcdmj_functionBefore
+            }
+        },
+        gaoqing_fm: {
+            SiteTypeID: 0,
+            pager: {
+                type: 2,
+                nextLink: '.col-md-12 > a[href], #loadmore > a[href]',
+                intervals: 1500,
+                scrollDelta: 1000
             }
         },
         rarbgprx: {
@@ -608,7 +629,7 @@
                 type: 1,
                 nextLink: '(//a[@title="next page"])[1][@href]',
                 pageElement: 'css;table.lista2t tr.lista2',
-                HT_insert: ['css;table.lista2t > tbody', 3],
+                insertPosition: ['css;table.lista2t > tbody', 3],
                 replaceE: 'css;#pager_links',
                 scrollDelta: 900
             }
@@ -637,7 +658,7 @@
                 type: 1,
                 nextLink: '//a[@class="next_page"][@href]',
                 pageElement: 'css;ol#browse-script-list > li',
-                HT_insert: ['css;ol#browse-script-list', 3],
+                insertPosition: ['css;ol#browse-script-list', 3],
                 replaceE: 'css;.pagination',
                 scrollDelta: 1000
             }
@@ -648,7 +669,7 @@
                 type: 1,
                 nextLink: '//a[@class="next_page"][@href]',
                 pageElement: 'css;.script-discussion-list > div',
-                HT_insert: ['css;.script-discussion-list', 3],
+                insertPosition: ['css;.script-discussion-list', 3],
                 replaceE: 'css;.pagination',
                 scrollDelta: 1500
             }
@@ -659,7 +680,7 @@
                 type: 1,
                 nextLink: '//a[@class="next_page"][@href]',
                 pageElement: 'css;.discussion-list > div',
-                HT_insert: ['css;.discussion-list', 3],
+                insertPosition: ['css;.discussion-list', 3],
                 replaceE: 'css;.pagination',
                 scrollDelta: 1000
             }
@@ -670,12 +691,12 @@
                 type: 1,
                 nextLink: '//td[@class="gensmall"][@align="right"]//a[text()="Next"][@href]',
                 pageElement: 'css;#pagecontent > table.tablebg > tbody > tr:not([align])',
-                HT_insert: ['css;#pagecontent > table.tablebg > tbody > tr[align]', 1],
+                insertPosition: ['css;#pagecontent > table.tablebg > tbody > tr[align]', 1],
                 replaceE: 'css;#pagecontent > table:first-child',
                 scrollDelta: 1500
             },
             function: {
-                before: cs_rin_ru_beforeFunction
+                before: cs_rin_ru_functionBefore
             }
         },
         cs_rin_ru_viewtopic: {
@@ -684,7 +705,7 @@
                 type: 1,
                 nextLink: 'id("pageheader")/p[@class="gensmall"]//a[text()="Next"][@href]',
                 pageElement: 'css;#pagecontent > table.tablebg:not(:nth-last-child(2)):not(:nth-child(2))',
-                HT_insert: ['css;#pagecontent > table.tablebg:nth-last-child(2)', 1],
+                insertPosition: ['css;#pagecontent > table.tablebg:nth-last-child(2)', 1],
                 replaceE: 'css;#pagecontent >table:not(.tablebg), #pageheader p.gensmall',
                 scrollDelta: 1500
             }
@@ -695,7 +716,7 @@
                 type: 1,
                 nextLink: 'id("wrapcentre")/div[@class="nav"]//a[text()="Next"]',
                 pageElement: 'css;#wrapcentre > form > table.tablebg > tbody > tr[valign]',
-                HT_insert: ['css;#wrapcentre > form > table.tablebg > tbody > tr:last-child', 1],
+                insertPosition: ['css;#wrapcentre > form > table.tablebg > tbody > tr:last-child', 1],
                 replaceE: 'css;#wrapcentre > div',
                 scrollDelta: 1500
             }
@@ -706,7 +727,7 @@
                 type: 1,
                 nextLink: '//a[@class="next page-numbers"][@href]',
                 pageElement: 'css;article[id^="post-"]',
-                HT_insert: ['css;nav.paging-navigation', 1],
+                insertPosition: ['css;nav.paging-navigation', 1],
                 replaceE: 'css;nav.paging-navigation',
                 scrollDelta: 2000
             }
@@ -720,7 +741,8 @@
         GOOGLE: DBSite.google.SiteTypeID,
         BAIDU_TIEBA: DBSite.baidu_tieba.SiteTypeID,
         GAMERSKY_GL: DBSite.gamersky_gl.SiteTypeID,
-        STEAMCOMMUNITY: DBSite.steamcommunity.SiteTypeID
+        STEAMCOMMUNITY: DBSite.steamcommunity.SiteTypeID,
+        CARTONNMAD: DBSite.cartoonmad.SiteTypeID
     };
 
 
@@ -833,6 +855,13 @@
             case 'www.yxssp.com': //              < 异星软件空间 >
                 curSite = DBSite.yxssp;
                 break;
+            case 'www.cartoonmad.cc': //          < 漫画狂 >
+                if (location.pathname.indexOf('/comic/') > -1) {
+                    document.lastElementChild.appendChild(document.createElement('style')).textContent = 'body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:not(:first-child) {display: none !important;} body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img {max-width: 100%;height: auto;display: block !important;margin: 0 auto !important;}';
+                    document.querySelector('body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child > a').href = 'javascript:void(0);'; // 清理图片上的链接
+                    curSite = DBSite.cartoonmad;
+                }
+                break;
             case 'www.manhuadb.com': //           < 漫画DB >
                 if (location.pathname.indexOf('/manhua/') > -1 && location.pathname.indexOf('.html') > -1) {
                     document.lastElementChild.appendChild(document.createElement('style')).textContent = '.row.m-0.pt-3.ad_2_wrap, .row.m-0.ad_1_wrap, .pagination.justify-content-center, #left, #right {display: none !important;}';
@@ -857,6 +886,9 @@
                 break;
             case 'www.szcdmj.com': //             < 砂之船动漫家 >
                 if (location.pathname.indexOf('/szcchapter/') > -1) curSite = DBSite.szcdmj;
+                break;
+            case 'gaoqing.fm': //                 < 高清电台 >
+                curSite = DBSite.gaoqing_fm;
                 break;
             case 'rarbgprx.org': //               < RARBG >
                 curSite = DBSite.rarbgprx;
@@ -955,7 +987,7 @@
 
 
     // dux 的插入前函数（加载图片）
-    function dux_beforeFunction(pageElems) {
+    function dux_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.querySelector('img.thumb[data-src]')
             if (now) {now.src = now.dataset.src;}
@@ -987,7 +1019,7 @@
 
 
     // 百度贴吧 的插入前函数（加载图片）
-    function baidu_tieba_beforeFunction(pageElems) {
+    function baidu_tieba_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             one.querySelectorAll('img.threadlist_pic[data-original]').forEach(function (now) {
                 now.src = now.dataset.original;
@@ -999,7 +1031,7 @@
 
 
     // 58pic 的插入前函数（加载图片）
-    function _58pic_beforeFunction(pageElems) {
+    function _58pic_functionBefore(pageElems) {
         let is_one = document.querySelector('.qtw-card.place-box.is-one');
         if (is_one && is_one.style.display != 'none') {is_one.style.display = 'none';}
         pageElems.forEach(function (one) {
@@ -1014,7 +1046,7 @@
 
 
     // Pixabay 的插入前函数（加载图片）
-    function pixabay_beforeFunction(pageElems) {
+    function pixabay_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.querySelector('img[data-lazy-src]')
             if (now) {
@@ -1028,7 +1060,7 @@
 
 
     // 游民星空攻略 的插入前函数（移除下一页底部的 "更多相关内容请关注：xxx" 文字）
-    function gamersky_gl_beforeFunction(pageElems) {
+    function gamersky_gl_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             if (one.tagName === 'P' && one.textContent.indexOf('更多相关内容请关注') > -1) {one.style.display = 'none';}
         });
@@ -1037,7 +1069,7 @@
 
 
     // iao.su 的插入前函数（加载图片）
-    function iao_su_beforeFunction(pageElems) {
+    function iao_su_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.getElementsByClassName('post-card')[0]
             if (now) {
@@ -1050,7 +1082,7 @@
 
 
     // iplaysoft 的插入前函数（加载图片）
-    function iplaysoft_postslist_beforeFunction(pageElems) {
+    function iplaysoft_postslist_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.querySelector('img.lazyload')
             if (now && !now.src) {
@@ -1064,7 +1096,7 @@
 
 
     // cs_rin_ru 各版块帖子列表的插入前函数（过滤置顶帖子）
-    function cs_rin_ru_beforeFunction(pageElems) {
+    function cs_rin_ru_functionBefore(pageElems) {
         for (let i = 0; i < pageElems.length; i++) {
             if (pageElems[i].textContent.replace(/\n|	/g,'') === 'Topics') {
                 pageElems.splice(0,i+1);
@@ -1072,6 +1104,22 @@
             }
         }
         return pageElems
+    }
+
+
+    // 漫画狂 获取下一页地址
+    function cartoonmad_functionNext() {
+        let nextXPAHT = '//a[@class="pages"][contains(text(),"下一頁")]',
+            nextPXPATH = '//a[@class="pages"][contains(string(),"下一話")]'
+        let url = getElementByXpath(nextXPAHT);
+        if (url) {
+            if (url.getAttribute('href') === 'thend.asp') {
+                return getElementByXpath(nextPXPATH).href;
+            } else {
+                return url.href;
+            }
+        }
+        return '';
     }
 
 
@@ -1089,7 +1137,7 @@
                         let src = data.dataset.host + data.dataset.img_pre + json[i].img;
                         _img += `<img class="img-fluid show-pic" src="${src}">`
                     }
-                    document.querySelector(curSite.pager.HT_insert[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.HT_insert[1]), _img); // 将 img 标签插入到网页中
+                    document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
                 }
             }
         })
@@ -1108,7 +1156,7 @@
         if (curSite.pageUrl) getPageElems(curSite.pageUrl);
     }
     // manhuadb 插入数据
-    function manhuadb_functionAdd(pageElems, type) {
+    function manhuadb_insertElement(pageElems, type) {
         if (!pageElems) return
         let oriE = document.querySelectorAll(curSite.pager.pageElement.replace('css;', '')),
             repE = getAllElements(curSite.pager.pageElement, pageElems, pageElems);
@@ -1129,7 +1177,7 @@
             if (src.indexOf('!p_c_c_') === -1) src += '!p_c_c_h'
             _img += `<img src="${src}">`
         })
-        document.querySelector(curSite.pager.HT_insert[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.HT_insert[1]), _img); // 将 img 标签插入到网页中
+        document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
         window.document.title = window.document.title.replace(/(\(第.+\))? - HiComic/, `(${document.querySelector('.chapter_name').textContent}) - HiComic`); // 修改网页标题（加上 第 X 话）
     }
     // hicomic 获取下一页地址
@@ -1142,7 +1190,7 @@
         }
     }
     // hicomic 插入数据
-    function hicomic_functionAdd(pageElems, type) {
+    function hicomic_insertElement(pageElems, type) {
         if (!pageElems || pageElems.code != 200) return
         if (pageElems.results.chapter.next) { // 写入下一页的 UUID
             document.querySelector('.next_chapter').id = pageElems.results.chapter.next;
@@ -1160,7 +1208,7 @@
             if (src.indexOf('!p_c_c_') === -1) src += '!p_c_c_h';
             _img += `<img src="${src}">`
         }
-        document.querySelector(curSite.pager.HT_insert[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.HT_insert[1]), _img); // 将 img 标签插入到网页中
+        document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
     }
 
 
@@ -1184,7 +1232,7 @@
         }
     }
     // gufengmh8 插入数据
-    function gufengmh8_functionAdd(pageElems, type) {
+    function gufengmh8_insertElement(pageElems, type) {
         if (pageElems) {
             let url = curSite.pageUrl;
             pageElems = getAllElements(curSite.pager.pageElement, pageElems, pageElems)[0];
@@ -1207,14 +1255,14 @@
                 chapterImages.forEach(function (one2){ // 遍历图片文件名数组，组合为 img 标签
                     _img += '<img src="https://res.xiaoqinre.com/' + chapterPath + one2 + '" data-index="0" style="display: inline-block;">'
                 })
-                document.querySelector(curSite.pager.HT_insert[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.HT_insert[1]), _img); // 将 img 标签插入到网页中
+                document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
             }
         }
     }
 
 
     // szcdmj 的插入前函数（加载图片）
-    function szcdmj_beforeFunction(pageElems) {
+    function szcdmj_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             if (one.tagName === 'TITLE') {
                 let title = one.textContent;
@@ -1279,7 +1327,7 @@
                                 }
                             } else if (curSite.pager.type === 4) { // <<<<< 翻页类型 4（部分简单的动态加载类网站）>>>>>
                                 if (curSite.SiteTypeID > 0) {
-                                    curSite.pager.functionNext();
+                                    curSite.pager.nextLink();
                                     if (curSite.pager.intervals) {
                                         let _SiteTypeID = curSite.SiteTypeID;
                                         curSite.SiteTypeID = 0;
@@ -1384,10 +1432,10 @@
                     //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
                     switch (type) {
                         case 'json':
-                            curSite.pager.functionAdd(response.response, type2);
+                            curSite.pager.insertElement(response.response, type2);
                             break;
                         default:
-                            curSite.pager.functionAdd(ShowPager.createDocumentByString(response.responseText), type2)
+                            curSite.pager.insertElement(ShowPager.createDocumentByString(response.responseText), type2)
                     }
                 } catch (e) {
                     console.log(e);
@@ -1414,11 +1462,11 @@
 
     // 滚动条事件
     function windowScroll(fn1) {
-        var beforeScrollTop = document.documentElement.scrollTop,
+        var beforeScrollTop = document.documentElement.scrollTop || document.body.scrollTop,
             fn = fn1 || function () {};
         setTimeout(function () { // 延时 1 秒执行，避免刚载入到页面就触发翻页事件
             window.addEventListener('scroll', function (e) {
-                var afterScrollTop = document.documentElement.scrollTop,
+                var afterScrollTop = document.documentElement.scrollTop || document.body.scrollTop,
                     delta = afterScrollTop - beforeScrollTop;
                 if (delta == 0) return false;
                 fn(delta > 0 ? 'down' : 'up', e);
@@ -1457,8 +1505,15 @@
         },
         loadMorePage: function () {
             if (curSite.pager) {
-                let curPageEle = getElementByXpath(curSite.pager.nextLink);
-                var url = this.getFullHref(curPageEle);
+                var url;
+                if (typeof curSite.pager.nextLink == 'function') {
+                    url = curSite.pager.nextLink();
+                } else {
+                    let curPageEle = getElementByXpath(curSite.pager.nextLink);
+                    url = this.getFullHref(curPageEle);
+                }
+                //let curPageEle = getElementByXpath(curSite.pager.nextLink);
+                //var url = this.getFullHref(curPageEle);
                 //console.log(url, curPageEle, curSite.pageUrl);
                 if (url === '') return;
                 if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
@@ -1466,17 +1521,20 @@
                 if (curSite.SiteTypeID === SiteType.BAIDU_TIEBA) {
                     url = url + '&pagelets=frs-list%2Fpagelet%2Fthread&pagelets_stamp=' + new Date().getTime();
                 }
+                let overrideMimeType = '';
+                if (curSite.SiteTypeID === SiteType.CARTONNMAD) overrideMimeType = 'text/html; charset=big5';
                 // 读取下一页的数据
                 GM_xmlhttpRequest({
                     url: url,
                     method: 'GET',
+                    overrideMimeType: overrideMimeType,
                     timeout: 5000,
                     onload: function (response) {
                         try {
                             //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody),
-                                toElement = getAllElements(curSite.pager.HT_insert[0])[0];
+                                toElement = getAllElements(curSite.pager.insertPosition[0])[0];
                             //console.log(curSite.pager.pageElement, pageElems)
 
                             if (pageElems.length >= 0) {
@@ -1490,7 +1548,7 @@
                                 }
 
                                 // 插入位置
-                                let addTo1 = addTo(curSite.pager.HT_insert[1]);
+                                let addTo1 = addTo(curSite.pager.insertPosition[1]);
 
                                 // 插入新页面元素
                                 if (curSite.SiteTypeID === SiteType.STEAMCOMMUNITY) {
@@ -1553,7 +1611,7 @@
                                 if (curSite.function && curSite.function.after) {
                                     if (curSite.function.parameter) { // 如果指定了参数
                                         curSite.function.after(curSite.function.parameter);
-                                    }else{
+                                    } else {
                                         curSite.function.after();
                                     }
                                 }
