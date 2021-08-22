@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.7.4
+// @version      1.7.5
 // @author       X.I.U
 // @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、V2EX、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、高清电台、宝书网、SrkBT、RARBG、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
@@ -48,6 +48,8 @@
             webType = 3; console.info('[自动无缝翻页] - Flarum 论坛'); // 所有 Flarum 论坛
         } else if (document.querySelector('link[href*="themes/dux" i], script[src*="themes/dux" i]')) {
             webType = 4; console.info('[自动无缝翻页] - 使用 WordPress DUX 主题的网站'); // 所有使用 WordPress DUX 主题的网站
+        } else if (location.host === 'www.flyert.com') {
+            webType = 2; console.info('[自动无缝翻页] - 部分內嵌的 Discuz! 论坛'); // 部分內嵌的 Discuz! 论坛
         } else {
             GM_registerMenuCommand('❌ 当前网站暂不支持 [点击申请支持]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
             console.info('[自动无缝翻页] - 不支持当前网站，欢迎申请支持：https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/419215/feedback');
@@ -91,14 +93,14 @@
                 type: 2,
                 nextLink: '#autopbn',
                 nextText: '下一页 »',
-                scrollDelta: 1000
+                scrollDelta: 1500
             }
         },
         discuz_thread: { // 帖子内
             SiteTypeID: 0,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="nxt"][@href] | //a[@class="next"][@href]',
+                nextLink: '//a[@class="nxt"][@href][not(contains(@href, "javascript"))] | //a[@class="next"][@href][not(contains(@href, "javascript"))]',
                 pageElement: 'css;#postlist > div[id^="post_"]',
                 insertPosition: ['css;#postlist', 3],
                 replaceE: 'css;.pg, .pages',
@@ -109,7 +111,7 @@
             SiteTypeID: 0,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="nxt"][@href] | //a[@class="next"][@href]',
+                nextLink: '//a[@class="nxt"][@href][not(contains(@href, "javascript"))] | //a[@class="next"][@href][not(contains(@href, "javascript"))]',
                 pageElement: 'css;#threadlist > ul',
                 insertPosition: ['css;#threadlist', 3],
                 replaceE: 'css;.pg, .pages',
@@ -120,7 +122,7 @@
             SiteTypeID: 0,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="nxt"][@href] | //a[@class="next"][@href]',
+                nextLink: '//a[@class="nxt"][@href][not(contains(@href, "javascript"))] | //a[@class="next"][@href][not(contains(@href, "javascript"))]',
                 pageElement: 'css;#threadlist table > tbody[id^="normalthread_"]',
                 insertPosition: ['id("threadlist")//table/tbody[starts-with(@id, "normalthread_")]/parent::table', 3],
                 replaceE: 'css;.pg, .pages',
@@ -131,7 +133,7 @@
             SiteTypeID: 0,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="nxt"][@href] | //a[@class="next"][@href]',
+                nextLink: '//a[@class="nxt"][@href][not(contains(@href, "javascript"))] | //a[@class="next"][@href][not(contains(@href, "javascript"))]',
                 pageElement: 'css;tbody > tr:not(.th)',
                 insertPosition: ['css;tbody', 3],
                 replaceE: 'css;.pg, .pages',
@@ -142,7 +144,7 @@
             SiteTypeID: 0,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="nxt"][@href] | //a[@class="next"][@href]',
+                nextLink: '//a[@class="nxt"][@href][not(contains(@href, "javascript"))] | //a[@class="next"][@href][not(contains(@href, "javascript"))]',
                 pageElement: 'css;#ct .bm_c table > tbody',
                 insertPosition: ['css;#ct .bm_c table', 3],
                 replaceE: 'css;.pg, .pages',
@@ -1660,7 +1662,7 @@
                 }
                 //let curPageEle = getElementByXpath(curSite.pager.nextLink);
                 //var url = this.getFullHref(curPageEle);
-                console.log(url, curSite.pageUrl);
+                //console.log(url, curSite.pageUrl);
                 if (url === '') return;
                 if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
@@ -1680,11 +1682,11 @@
                     timeout: 5000,
                     onload: function (response) {
                         try {
-                            console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
+                            //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
                             var newBody = ShowPager.createDocumentByString(response.responseText);
                             let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody),
                                 toElement = getAllElements(curSite.pager.insertPosition[0])[0];
-                            console.log(curSite.pager.pageElement, pageElems)
+                            //console.log(curSite.pager.pageElement, pageElems)
 
                             if (pageElems.length >= 0) {
                                 // 如果有插入前函数就执行函数
