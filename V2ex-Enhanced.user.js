@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.1.1
+// @version      1.1.2
 // @author       X.I.U
 // @description  自动签到、链接转图片、自动无缝翻页、回到顶部（右键点击两侧空白处）、快速回复（左键双击两侧空白处）、新标签页打开链接、标签页伪装为 Github（摸鱼）
 // @match        *://v2ex.com/*
@@ -167,9 +167,9 @@
             SiteTypeID: 7,
             pager: {
                 type: 1,
-                nextLink: '//div[@id="Main"]//div[@class="cell"][last()]//a[@class="page_current"]/following-sibling::a[1][@href]',
-                pageElement: '//div[@id="Main"]//div[@class="cell"][last()]/preceding-sibling::div[1]//tr[position()>1]',
-                HT_insert: ['//div[@id="Main"]//div[@class="cell"][last()]/preceding-sibling::div[1]//tr[last()]', 4],
+                nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
+                pageElement: 'css;#Main .box > div:not(.cell) > table > tbody > tr:not(:first-child)',
+                HT_insert: ['css;#Main .box > div:not(.cell) > table > tbody', 3],
                 replaceE: 'css;#Main > .box > .cell[style] > table',
                 scrollDelta: 1000
             }
