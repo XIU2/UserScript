@@ -1162,7 +1162,7 @@
                 url = getElementByXpath(nextPXPATH)
                 if (url) return url.href;
                 pausePage = false;
-                GM_notification({text: `注意：该网站早期漫画（如海贼王、柯南）因为网站自身问题而无法翻至下一话！\n（仅限于显示为 [第 X 卷]/[下一卷] 的，而 [第 X 话]/[下一话] 的都正常）`, timeout: 10000});
+                GM_notification({text: `注意：该网站早期漫画（如海贼王、柯南）因为网站自身问题而无法翻至下一话（仅限于显示为 [第 X 卷]/[下一卷] 的）。\n因此需要手动去 [目录页] 进入下一卷！`, timeout: 10000});
             } else {
                 return url.href;
             }
