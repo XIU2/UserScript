@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.7.2
+// @version      1.7.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、高清电台、宝书网、SrkBT、RARBG、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
@@ -1159,7 +1159,10 @@
         let url = getElementByXpath(nextXPAHT);
         if (url) {
             if (url.getAttribute('href') === 'thend.asp') {
-                return getElementByXpath(nextPXPATH).href;
+                url = getElementByXpath(nextPXPATH)
+                if (url) return url.href;
+                pausePage = false;
+                GM_notification({text: `注意：该网站早期漫画（如海贼王、柯南）因为网站自身问题而无法翻至下一话！\n（仅限于显示为 [第 X 卷]/[下一卷] 的，而 [第 X 话]/[下一话] 的都正常）`, timeout: 10000});
             } else {
                 return url.href;
             }
