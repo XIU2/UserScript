@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.7.5
+// @version      1.7.6
 // @author       X.I.U
-// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、V2EX、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、423Down、Sordum、不死鸟、小众软件、六音软件、微当下载、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、高清电台、宝书网、SrkBT、RARBG、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
+// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、小霸王其乐无穷、片库、音范丝、爱恋动漫、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、乐软博客、不忘初心、果核剥壳、六音软件、微当下载、th-sjy汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -24,13 +24,12 @@
     'use strict';
     var webType, curSite = {SiteTypeID: 0}, pausePage = true;
     // 目前支持的网站（仅单独规则的，不包含通用规则的网站）
-    const websiteList = ['www.baidu.com', 'www.google.com', 'www.bing.com', 'cn.bing.com', 'tieba.baidu.com', 'movie.douban.com', 'weibo.com', 'v2ex.com', 'www.v2ex.com', 'www.58pic.com', 'pixabay.com',
-                         'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com',
-                         'www.423down.com', 'www.sordum.org', 'iao.su', 'www.appinn.com', 'www.sixyin.com', 'www.weidown.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com',
+    const websiteList = ['www.baidu.com', 'www.google.com', 'www.bing.com', 'cn.bing.com', 'tieba.baidu.com', 'movie.douban.com', 'weibo.com', 'v2ex.com', 'www.v2ex.com', 'www.expreview.com', 'www.ithome.com', 'www.58pic.com', 'pixabay.com',
+                         'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com', 'www.yikm.net', 'cs.rin.ru', 'crackhub.site', 'fitgirl-repacks.site',
+                         'www.mypianku.net', 'www.yinfans.net', 'www.kisssub.org', 'gaoqing.fm', 'skrbtba.xyz','rarbgprx.org', 'www.baoshuu.com', 'm.baoshuu.com',
+                         'www.423down.com', 'iao.su', 'www.appinn.com', 'chrome.zzzmh.cn', 'www.isharepc.com', 'www.pc521.net', 'www.ghxi.com', 'www.sixyin.com', 'www.weidown.com', 'www.th-sjy.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com', 'www.sordum.org', 'winaero.com', 'www.thewindowsclub.com',
                          'www.cartoonmad.com', 'www.cartoonmad.cc', 'www.manhuadb.com', 'www.hicomic.net', 'www.gufengmh8.com', 'www.szcdmj.com',
-                         'gaoqing.fm', 'www.baoshuu.com', 'm.baoshuu.com', 'skrbtba.xyz','rarbgprx.org',
-                         'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org',
-                         'cs.rin.ru', 'crackhub.site', 'fitgirl-repacks.site'];
+                         'pic.netbian.com', 'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org'];
 
     if (GM_getValue('menu_disable') == null){GM_setValue('menu_disable', [])};
     if (GM_getValue('menu_discuz_thread_page') == null){GM_setValue('menu_discuz_thread_page', true)};
@@ -80,6 +79,7 @@
       2 = 插入该元素当中，第一个子元素前面；
       3 = 插入该元素当中，最后一个子元素后面；
       4 = 插入该元素本身的后面；
+    mimeType: 网站编码
     scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大（如果 Type = 3，则相反）
     function：
       before = 插入前执行函数；
@@ -355,6 +355,24 @@
                 scrollDelta: 1000
             }
         },
+        expreview: { // 超能网
+            SiteTypeID: 0,
+            pager: {
+                type: 2,
+                nextLink: '#show_article_red_1SHOW',
+                intervals: 1500,
+                scrollDelta: 1500
+            }
+        },
+        ithome: { // IT 之家
+            SiteTypeID: 0,
+            pager: {
+                type: 2,
+                nextLink: 'a.more',
+                intervals: 1500,
+                scrollDelta: 1500
+            }
+        },
         _58pic: { // 千图网 - 分类/搜索页
             SiteTypeID: 0,
             pager: {
@@ -471,6 +489,108 @@
                 scrollDelta: 1500
             }
         },
+        yikm: { // 小霸王其乐无穷
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//ul[@class="pager"]//a[text()="下一页"]',
+                pageElement: '//h2[contains(text(), "所有游戏") or contains(text(), "搜索结果")]/following-sibling::div[1]/div',
+                insertPosition: ['//h2[contains(text(), "所有游戏") or contains(text(), "搜索结果")]/following-sibling::div[1]', 3],
+                replaceE: 'css;ul.pager',
+                scrollDelta: 1500
+            }
+        },
+        mypianku: { // 片库（影视）
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: 'css;a.a1[href]',
+                pageElement: 'css;.content-list > li',
+                insertPosition: ['css;.content-list', 3],
+                replaceE: 'css;.pages',
+                scrollDelta: 1500
+            },
+            function: {
+                before: mypianku_functionBefore
+            }
+        },
+        yinfans: { // 音范丝（影视）
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: 'css;a.next[href]',
+                pageElement: 'css;#post_container > li',
+                insertPosition: ['css;#post_container', 3],
+                replaceE: 'css;.pagination',
+                scrollDelta: 1500
+            }
+        },
+        kisssub: { // 爱恋动漫（影视）
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: 'css;a.nextprev',
+                pageElement: 'css;#data_list > tr',
+                insertPosition: ['css;#data_list', 3],
+                replaceE: 'css;.pages',
+                scrollDelta: 2500
+            }
+        },
+        gaoqing_fm: { // 高清电台（影视）
+            SiteTypeID: 0,
+            pager: {
+                type: 2,
+                nextLink: '.col-md-12 > a[href], #loadmore > a[href]',
+                intervals: 1500,
+                scrollDelta: 1000
+            }
+        },
+        skrbtba: { // SkrBT（BT）
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@aria-label="Next"]',
+                pageElement: 'css;div[class="row"] > .col-md-6 > ul',
+                insertPosition: ['css;nav[aria-label*="Page"]', 1],
+                replaceE: 'css;ul.pagination',
+                scrollDelta: 900
+            }
+        },
+        rarbgprx: { // RARBG
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '(//a[@title="next page"])[1][@href]',
+                pageElement: 'css;table.lista2t tr.lista2',
+                insertPosition: ['css;table.lista2t > tbody', 3],
+                replaceE: 'css;#pager_links',
+                scrollDelta: 900
+            }
+        },
+        baoshuu: { // 宝书网（小说）
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//div[@class="listl2"]//a[@href][text()="下一页"]',
+                pageElement: 'css;.listl2 > ul > li',
+                insertPosition: ['css;.listl2 > ul', 3],
+                replaceE: 'css;listl2 > dl',
+                mimeType: 'text/html; charset=gb2312',
+                scrollDelta: 900
+            }
+        },
+        baoshuu_m: { // 宝书网（小说）- 手机版
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//div[@class="man_first"]//a[@href][text()="下一页"]',
+                pageElement: 'css;.man_first > ul > li',
+                insertPosition: ['css;.man_first > ul', 3],
+                replaceE: 'css;.man_first > dl',
+                mimeType: 'text/html; charset=gb2312',
+                scrollDelta: 900
+            }
+        },
         _423down: {
             SiteTypeID: 0,
             pager: {
@@ -479,17 +599,6 @@
                 pageElement: 'css;div.content-wrap ul.excerpt > li',
                 insertPosition: ['css;div.content-wrap ul.excerpt', 3],
                 replaceE: 'css;div.paging',
-                scrollDelta: 1500
-            }
-        },
-        sordum: {
-            SiteTypeID: 0,
-            pager: {
-                type: 1,
-                nextLink: '//a[@class="next page-numbers"][@href]',
-                pageElement: 'css;.article > article',
-                insertPosition: ['css;nav.navigation.posts-navigation', 1],
-                replaceE: 'css;nav.navigation.posts-navigation',
                 scrollDelta: 1500
             }
         },
@@ -516,6 +625,69 @@
                 insertPosition: ['css;nav.navigation.pagination', 1],
                 replaceE: 'css;div.nav-links',
                 scrollDelta: 1500
+            }
+        },
+        chrome_zzzmh: { // 极简插件
+            SiteTypeID: 0,
+            pager: {
+                type: 2,
+                nextLink: 'button.more-btn',
+                intervals: 1000,
+                scrollDelta: 1500
+            }
+        },
+        isharepc: { // 乐软博客
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: 'css;a.next[href]',
+                pageElement: 'css;.content > div',
+                insertPosition: ['css;nav.pagination', 1],
+                replaceE: 'css;nav.pagination',
+                scrollDelta: 1000
+            }
+        },
+        pc521: { // 不忘初心
+            SiteTypeID: 0,
+            pager: {
+                type: 2,
+                nextLink: 'div[id^="ias_trigger_"]',
+                intervals: 1000,
+                scrollDelta: 1000
+            }
+        },
+        pc521_search: { // 不忘初心 - 搜索页
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: 'css;a.next[href]',
+                pageElement: 'css;#main > ul > li',
+                insertPosition: ['css;#main > ul', 3],
+                replaceE: 'css;nav.pagination',
+                scrollDelta: 1500
+            }
+        },
+        ghxi: { // 果核剥壳 - 首页
+            SiteTypeID: 0,
+            pager: {
+                type: 2,
+                nextLink: '.load-more',
+                intervals: 1000,
+                scrollDelta: 5000
+            }
+        },
+        ghxi_postlist: { // 果核剥壳
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: 'css;a.next[href]',
+                pageElement: 'css;ul.post-loop > li',
+                insertPosition: ['css;ul.post-loop', 3],
+                replaceE: 'css;ul.pagination',
+                scrollDelta: 1500
+            },
+            function: {
+                before: ghxi_postlist_functionBefore
             }
         },
         sixyin: { // 六音软件 - 首页
@@ -569,6 +741,17 @@
                 insertPosition: ['css;.special', 3],
                 replaceE: 'css;#pageGroup',
                 scrollDelta: 700
+            }
+        },
+        th_sjy: { // th-sjy 汉化
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: 'css;li.next-page > a',
+                pageElement: 'css;.content > article',
+                insertPosition: ['css;.pagination', 1],
+                replaceE: 'css;.pagination',
+                scrollDelta: 2000
             }
         },
         iplaysoft_postslist: { // 异次元软件世界
@@ -625,6 +808,39 @@
                 insertPosition: ['css;.td-modules-container.td-module-number4', 3],
                 replaceE: 'css;.page-nav.td-pb-padding-side',
                 scrollDelta: 1000
+            }
+        },
+        sordum: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: '//a[@class="next page-numbers"][@href]',
+                pageElement: 'css;.article > article',
+                insertPosition: ['css;nav.navigation.posts-navigation', 1],
+                replaceE: 'css;nav.navigation.posts-navigation',
+                scrollDelta: 1500
+            }
+        },
+        winaero: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: 'css;.nav-previous > a',
+                pageElement: 'css;#content > article',
+                insertPosition: ['css;#nav-below', 1],
+                replaceE: 'css;#nav-below',
+                scrollDelta: 1500
+            }
+        },
+        thewindowsclub: {
+            SiteTypeID: 0,
+            pager: {
+                type: 1,
+                nextLink: 'css;li.pagination-next > a',
+                pageElement: 'css;#genesis-content > article',
+                insertPosition: ['css;.pagination', 1],
+                replaceE: 'css;.pagination',
+                scrollDelta: 1500
             }
         },
         cartoonmad: { // 动漫狂
@@ -688,59 +904,16 @@
                 before: szcdmj_functionBefore
             }
         },
-        gaoqing_fm: { // 高清电台（影视）
+        netbian: { // 彼岸图网
             SiteTypeID: 0,
             pager: {
-                type: 2,
-                nextLink: '.col-md-12 > a[href], #loadmore > a[href]',
-                intervals: 1500,
+                type: 1,
+                nextLink: '//div[@class="page"]/a[contains(text(),"下一页")]',
+                pageElement: 'css;.slist ul > li:not(.nextpage)',
+                insertPosition: ['css;.slist ul', 3],
+                replaceE: 'css;.page',
+                mimeType: 'text/html; charset=gbk',
                 scrollDelta: 1000
-            }
-        },
-        baoshuu: { // 宝书网（小说）
-            SiteTypeID: 0,
-            pager: {
-                type: 1,
-                nextLink: '//div[@class="listl2"]//a[@href][text()="下一页"]',
-                pageElement: 'css;.listl2 > ul > li',
-                insertPosition: ['css;.listl2 > ul', 3],
-                replaceE: 'css;listl2 > dl',
-                mimeType: 'text/html; charset=gb2312',
-                scrollDelta: 900
-            }
-        },
-        baoshuu_m: { // 宝书网（小说）- 手机版
-            SiteTypeID: 0,
-            pager: {
-                type: 1,
-                nextLink: '//div[@class="man_first"]//a[@href][text()="下一页"]',
-                pageElement: 'css;.man_first > ul > li',
-                insertPosition: ['css;.man_first > ul', 3],
-                replaceE: 'css;.man_first > dl',
-                mimeType: 'text/html; charset=gb2312',
-                scrollDelta: 900
-            }
-        },
-        skrbtba: { // SkrBT（BT）
-            SiteTypeID: 0,
-            pager: {
-                type: 1,
-                nextLink: '//a[@aria-label="Next"]',
-                pageElement: 'css;div[class="row"] > .col-md-6 > ul',
-                insertPosition: ['css;nav[aria-label*="Page"]', 1],
-                replaceE: 'css;ul.pagination',
-                scrollDelta: 900
-            }
-        },
-        rarbgprx: { // RARBG
-            SiteTypeID: 0,
-            pager: {
-                type: 1,
-                nextLink: '(//a[@title="next page"])[1][@href]',
-                pageElement: 'css;table.lista2t tr.lista2',
-                insertPosition: ['css;table.lista2t > tbody', 3],
-                replaceE: 'css;#pager_links',
-                scrollDelta: 900
             }
         },
         pubmed_postslist: { // 学术
@@ -909,6 +1082,12 @@
                     v2ex_functionAfter('#Main a[href^="/t/"]:not([target])');
                 }
                 break;
+            case 'www.expreview.com': //          < 超能网 >
+                curSite = DBSite.expreview;
+                break;
+            case 'www.ithome.com': //             < IT 之家 >
+                curSite = DBSite.ithome;
+                break;
             case 'www.58pic.com': //              < 千图网 >
                 if (location.pathname.indexOf('/tupian/') > -1) {
                     curSite = DBSite._58pic; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.qtw-card.place-box.is-two {display: none !important;}'; // 隐藏末尾很大的 [下一页] 按钮
@@ -938,17 +1117,53 @@
             case 'steamcommunity.com': //         < Steam 创意工坊 >
                 curSite = DBSite.steamcommunity;
                 break;
+            case 'www.yikm.net': //               < 小霸王其乐无穷 >
+                curSite = DBSite.yikm;
+                break;
+            case 'www.mypianku.net': //            < 片库 >
+                curSite = DBSite.mypianku;
+                break;
+            case 'www.yinfans.net': //            < 音范丝 >
+                curSite = DBSite.yinfans;
+                break;
+            case 'www.kisssub.org': //            < 爱恋动漫 >
+                curSite = DBSite.kisssub;
+                break;
+            case 'gaoqing.fm': //                 < 高清电台 >
+                curSite = DBSite.gaoqing_fm;
+                break;
+            case 'skrbtba.xyz': //                < SkrBt >
+                if (location.pathname === '/search') curSite = DBSite.skrbtba;
+                break;
+            case 'rarbgprx.org': //               < RARBG >
+                curSite = DBSite.rarbgprx;
+                break;
+            case 'www.baoshuu.com': //            < 宝书网 >
+                if (location.pathname.indexOf('/TXT/list') > -1) curSite = DBSite.baoshuu;
+                break;
+            case 'm.baoshuu.com': //              < 宝书网 - 手机版 >
+                if (location.pathname.indexOf('/TXT/list') > -1) curSite = DBSite.baoshuu_m;
+                break;
             case 'www.423down.com': //            < 423down >
                 if (location.pathname.indexOf('.html') === -1) curSite = DBSite._423down;
-                break;
-            case 'www.sordum.org': //             < Sordum >
-                curSite = DBSite.sordum;
                 break;
             case 'iao.su': //                     < 不死鸟 >
                 curSite = DBSite.iao_su;
                 break;
             case 'www.appinn.com': //             < 小众软件 >
                 curSite = DBSite.appinn;
+                break;
+            case 'chrome.zzzmh.cn': //            < 极简插件 >
+                curSite = DBSite.chrome_zzzmh;
+                break;
+            case 'www.isharepc.com': //           < 乐软博客 >
+                curSite = DBSite.isharepc;
+                break;
+            case 'www.pc521.net': //              < 不忘初心 >
+                if (location.search.slice(0,3) === '?s=') {curSite = DBSite.pc521_search;} else {curSite = DBSite.pc521;}
+                break;
+            case 'www.ghxi.com': //              < 不忘初心 >
+                if (location.pathname === '/' && !location.search) {curSite = DBSite.ghxi;} else {curSite = DBSite.ghxi_postlist;}
                 break;
             case 'www.sixyin.com': //             < 六音软件 >
                 if (location.pathname === '/' && location.search === '') { // 首页
@@ -966,6 +1181,9 @@
                     curSite = DBSite.weidown;
                 }
                 break;
+            case 'www.th-sjy.com': //             < th-sjy 汉化 >
+                curSite = DBSite.th_sjy;
+                break;
             case 'www.iplaysoft.com': //          < 异次元软件 >
                 if (location.pathname.indexOf('.html') > -1 || location.pathname.indexOf('/p/') > -1) { // 文章内
                     curSite = DBSite.iplaysoft_postcomments;
@@ -982,6 +1200,16 @@
                 break;
             case 'www.yxssp.com': //              < 异星软件空间 >
                 curSite = DBSite.yxssp;
+                break;
+            case 'www.sordum.org': //             < Sordum >
+                curSite = DBSite.sordum;
+                break;
+            case 'winaero.com': //                < Winaero >
+                if (location.pathname === '/blog/' || location.pathname.indexOf('/category/') > -1) curSite = DBSite.winaero;
+                break;
+            case 'www.thewindowsclub.com': //     < TheWindowsClub >
+                curSite = DBSite.thewindowsclub;
+                if (location.pathname === '/') curSite.pager.scrollDelta = 2000;
                 break;
             case 'www.cartoonmad.com': //         < 漫画狂 >
             case 'www.cartoonmad.cc':
@@ -1016,20 +1244,8 @@
             case 'www.szcdmj.com': //             < 砂之船动漫家 >
                 if (location.pathname.indexOf('/szcchapter/') > -1) curSite = DBSite.szcdmj;
                 break;
-            case 'gaoqing.fm': //                 < 高清电台 >
-                curSite = DBSite.gaoqing_fm;
-                break;
-            case 'www.baoshuu.com': //            < 宝书网 >
-                if (location.pathname.indexOf('/TXT/list') > -1) curSite = DBSite.baoshuu;
-                break;
-            case 'm.baoshuu.com': //              < 宝书网 - 手机版 >
-                if (location.pathname.indexOf('/TXT/list') > -1) curSite = DBSite.baoshuu_m;
-                break;
-            case 'skrbtba.xyz': //                < SkrBt >
-                if (location.pathname === '/search') curSite = DBSite.skrbtba;
-                break;
-            case 'rarbgprx.org': //               < RARBG >
-                curSite = DBSite.rarbgprx;
+            case 'pic.netbian.com': //            < 彼岸图网 >
+                curSite = DBSite.netbian; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'li.nextpage {display: none !important;}'; // 隐藏 [下一页] 大按钮
                 break;
             case 'pubmed.ncbi.nlm.nih.gov': //    < 国外学术网站 >
                 curSite = DBSite.pubmed_postslist;
@@ -1213,6 +1429,18 @@
     }
 
 
+    // 片库 的插入前函数（加载图片）
+    function mypianku_functionBefore(pageElems) {
+        pageElems.forEach(function (one) {
+            let now = one.querySelector('img')
+            if (now) {
+                now.src = now.dataset.src;
+            }
+        });
+        return pageElems
+    }
+
+
     // iao.su 的插入前函数（加载图片）
     function iao_su_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
@@ -1220,6 +1448,18 @@
             if (now) {
                 now.getElementsByClassName('blog-background')[0].style.backgroundImage = 'url("' + now.getElementsByTagName('script')[0].textContent.split("'")[1] + '")';
                 //now.getElementsByClassName('blog-background')[0].style.backgroundImage = 'url("' + RegExp("(?<=loadBannerDirect\\(').*(?=', '',)").exec(now.getElementsByTagName('script')[0].textContent)[0]; + '")';
+            }
+        });
+        return pageElems
+    }
+
+
+    // 果核剥壳 的插入前函数（加载图片）
+    function ghxi_postlist_functionBefore(pageElems) {
+        pageElems.forEach(function (one) {
+            let now = one.querySelector('img')
+            if (now) {
+                now.src = now.dataset.original;
             }
         });
         return pageElems
@@ -1450,20 +1690,19 @@
                                 if (curSite.SiteTypeID > 0) { // 如果指定了间隔时间，那么就依靠这个判断时间到了没有~
                                     let autopbn = document.querySelector(curSite.pager.nextLink);
                                     if (autopbn) { // 寻找下一页链接
-                                        if (!curSite.pager.nextText && !curSite.pager.nextTextOf && !curSite.pager.nextHTML) { // 如果没有指定按钮文字就直接点击
+                                        // 避免重复点击翻页按钮
+                                        if (curSite.pager.nextText) { //          按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页
+                                            if (autopbn.innerText === curSite.pager.nextText) autopbn.click();
+                                        } else if (curSite.pager.nextTextOf) { // 按钮文本的一部分，当按钮文本包含该文本时，才会点击按钮加载下一页
+                                            if (autopbn.innerText.indexOf(curSite.pager.nextTextOf) > -1) autopbn.click();
+                                        } else if (curSite.pager.nextHTML) { //   按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页
+                                            if (autopbn.innerHTML === curSite.pager.nextHTML) autopbn.click();
+                                        } else { // 如果没有指定按钮文字就直接点击
                                             autopbn.click();
                                             // 对于没有按钮文字变化的按钮，可以手动指定间隔时间
                                             if (curSite.pager.intervals) {
                                                 let _SiteTypeID = curSite.SiteTypeID; curSite.SiteTypeID = 0;
                                                 setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
-                                            }
-                                        } else { // 避免重复点击翻页按钮
-                                            if (curSite.pager.nextText) { // 按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页
-                                                if (autopbn.innerText === curSite.pager.nextText) autopbn.click();
-                                            } else if (curSite.pager.nextTextOf) { // 按钮文本的一部分，当按钮文本包含该文本时，才会点击按钮加载下一页
-                                                if (autopbn.innerText.indexOf(curSite.pager.nextTextOf) > -1) autopbn.click();
-                                            } else if (curSite.pager.nextHTML) { // 按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页
-                                                if (autopbn.innerHTML === curSite.pager.nextHTML) autopbn.click();
                                             }
                                         }
                                     }
@@ -1657,11 +1896,12 @@
                 if (typeof curSite.pager.nextLink == 'function') {
                     url = curSite.pager.nextLink();
                 } else {
-                    let curPageEle = getElementByXpath(curSite.pager.nextLink);
-                    url = this.getFullHref(curPageEle);
+                    if (curSite.pager.nextLink.slice(0,4) === 'css;') {
+                        url = this.getFullHref(getElementByCSS(curSite.pager.nextLink.slice(4)));
+                    } else {
+                        url = this.getFullHref(getElementByXpath(curSite.pager.nextLink));
+                    }
                 }
-                //let curPageEle = getElementByXpath(curSite.pager.nextLink);
-                //var url = this.getFullHref(curPageEle);
                 //console.log(url, curSite.pageUrl);
                 if (url === '') return;
                 if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
