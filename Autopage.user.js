@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.8.0
+// @version      1.8.1
 // @author       X.I.U
-// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、小霸王其乐无穷、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、乐软博客、不忘初心、果核剥壳、六音软件、微当下载、th-sjy汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
+// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA玩家社区、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、小霸王其乐无穷、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、乐软博客、不忘初心、果核剥壳、六音软件、微当下载、th-sjy汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -283,6 +283,37 @@
                     type: 2,
                     nextLink: 'a[action-type="click_more_comment"]',
                     nextText: '查看更多c',
+                    scrollDelta: 1000
+                }
+            },
+            nga_thread: { // NGA - 各版块帖子列表
+                SiteTypeID: 0,
+                host: 'bbs.nga.cn',
+                functionStart: function() {if (location.pathname === '/thread.php') { // 帖子列表
+                    curSite = DBSite.nga_thread;
+                } else if (location.pathname === '/read.php') { // 帖子内
+                    curSite = DBSite.nga_read;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;#pagebbtm a[title="下一页"][href]',
+                    pageElement: 'css;#topicrows > tbody, #topicrows > script',
+                    insertPosition: ['css;#topicrows', 3],
+                    replaceE: 'css;div[name="pageball"]',
+                    scrollDelta: 1000
+                },
+                function: {
+                    after: nga_thread_functionAfter
+                }
+            },
+            nga_read: { // NGA - 帖子内
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;#pagebbtm a[title="下一页"][href]',
+                    pageElement: 'id("m_posts_c")/table | id("m_posts_c")/script | //script[contains(text(), "commonui.userInfo.setAll")]',
+                    insertPosition: ['css;#m_posts_c', 3],
+                    replaceE: 'css;div[name="pageball"]',
                     scrollDelta: 1000
                 }
             },
@@ -1211,7 +1242,9 @@
             GOOGLE: DBSite.google.SiteTypeID,
             BAIDU_TIEBA: DBSite.baidu_tieba.SiteTypeID,
             GAMERSKY_GL: DBSite.gamersky_gl.SiteTypeID,
-            STEAMCOMMUNITY: DBSite.steamcommunity.SiteTypeID
+            STEAMCOMMUNITY: DBSite.steamcommunity.SiteTypeID,
+            NGA_THREAD: DBSite.nga_thread.SiteTypeID,
+            NGA_READ: DBSite.nga_read.SiteTypeID
         };
     }
 
@@ -1323,6 +1356,11 @@
         return pageElems
     }
 
+
+    // NGA 的插入后函数（加载各版块帖子列表样式）
+    function nga_thread_functionAfter() {
+        document.body.appendChild(document.createElement('script')).textContent = 'commonui.topicArg.loadAll();';
+    }
 
     // V2EX 的插入后函数（新标签页打开链接）
     function v2ex_functionAfter(css) {
@@ -1933,7 +1971,7 @@
                                 let addTo1 = addTo(curSite.pager.insertPosition[1]);
 
                                 // 插入新页面元素
-                                if (curSite.SiteTypeID === SiteType.STEAMCOMMUNITY) {
+                                if (curSite.SiteTypeID === SiteType.STEAMCOMMUNITY || curSite.SiteTypeID === SiteType.NGA_THREAD || curSite.SiteTypeID === SiteType.NGA_READ) {
                                     pageElems.forEach(function (one) {
                                         if (one.tagName === 'SCRIPT') { // 对于 <script> 需要用另一种方式插入网页，以便正常运行
                                             toElement.appendChild(document.createElement('script')).innerHTML = one.textContent;
