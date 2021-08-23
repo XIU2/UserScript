@@ -416,7 +416,7 @@
                     pageElement: 'css;.table-section > dl:not(.table_head)',
                     insertPosition: ['css;.table-section', 3],
                     replaceE: 'css;.forumList_page',
-                    scrollDelta: 1000
+                    scrollDelta: 2000
                 }
             },
             expreview: { // 超能网
