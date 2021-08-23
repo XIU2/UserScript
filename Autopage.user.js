@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.7.7
+// @version      1.7.8
 // @author       X.I.U
-// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、小霸王其乐无穷、片库、音范丝、爱恋动漫、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、乐软博客、不忘初心、果核剥壳、六音软件、微当下载、th-sjy汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
+// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、小霸王其乐无穷、片库、音范丝、BT之家、爱恋动漫、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、乐软博客、不忘初心、果核剥壳、六音软件、微当下载、th-sjy汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -593,6 +593,18 @@
                     pageElement: 'css;#post_container > li',
                     insertPosition: ['css;#post_container', 3],
                     replaceE: 'css;.pagination',
+                    scrollDelta: 1500
+                }
+            },
+            btbtt: { // BT 之家
+                SiteTypeID: 0,
+                host: 'btbtt',
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="page"]/a[contains(text(), "▶")]',
+                    pageElement: 'css;#threadlist > table, #threadlist > hr',
+                    insertPosition: ['css;#threadlist', 3],
+                    replaceE: 'css;.page',
                     scrollDelta: 1500
                 }
             },
@@ -1335,6 +1347,10 @@
                     curSite = DBSite.greasyfork_discussions;
                 }
                 break;
+            default:
+                if (location.host.indexOf(DBSite.btbtt.host) > -1) { //   < BT 之家 >
+                    curSite = DBSite.btbtt;
+                }
         }
         // < 所有 Discuz!论坛 >
     } else if (webType === 2) {
@@ -1876,6 +1892,12 @@
                 }
             } else if (DBSite[now].host === location.host) {
                 support = true; break; // 如果找到了就退出循环
+            }
+        }
+
+        if (!support) { // 部分域名额外判断一下
+            if (location.host.indexOf(DBSite.btbtt.host) > -1) { //   < BT 之家 >
+                support = true;
             }
         }
 
