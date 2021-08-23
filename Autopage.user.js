@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.7.8
+// @version      1.7.9
 // @author       X.I.U
-// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、小霸王其乐无穷、片库、音范丝、BT之家、爱恋动漫、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、乐软博客、不忘初心、果核剥壳、六音软件、微当下载、th-sjy汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
+// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、小霸王其乐无穷、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、乐软博客、不忘初心、果核剥壳、六音软件、微当下载、th-sjy汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -23,23 +23,13 @@
 (function() {
     'use strict';
     var webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true;
-    // 目前支持的网站（仅单独规则的，不包含通用规则的网站）
-    const websiteList = ['www.baidu.com', 'www.google.com', 'www.bing.com', 'cn.bing.com', 'tieba.baidu.com', 'movie.douban.com', 'weibo.com', 'v2ex.com', 'www.v2ex.com', 'www.expreview.com', 'www.ithome.com', 'www.58pic.com', 'pixabay.com',
-                         'www.3dmgame.com', 'www.ali213.net', 'gl.ali213.net', 'www.gamersky.com', 'steamcommunity.com', 'www.yikm.net', 'cs.rin.ru', 'crackhub.site', 'fitgirl-repacks.site',
-                         'www.mypianku.net', 'www.yinfans.net', 'www.kisssub.org', 'gaoqing.fm', 'skrbtba.xyz','rarbgprx.org', 'www.baoshuu.com', 'm.baoshuu.com',
-                         'www.423down.com', 'iao.su', 'www.appinn.com', 'chrome.zzzmh.cn', 'www.isharepc.com', 'www.pc521.net', 'www.ghxi.com', 'www.sixyin.com', 'www.weidown.com', 'www.th-sjy.com', 'www.iplaysoft.com', 'www.mpyit.com', 'www.yxssp.com', 'www.sordum.org', 'winaero.com', 'www.thewindowsclub.com',
-                         'www.cartoonmad.com', 'www.cartoonmad.cc', 'www.manhuadb.com', 'www.hicomic.net', 'www.gufengmh8.com', 'www.szcdmj.com',
-                         'pic.netbian.com', 'pubmed.ncbi.nlm.nih.gov', 'www.afreecatv.com', 'greasyfork.org'];
-
-    if (GM_getValue('menu_disable') == null){GM_setValue('menu_disable', [])};
-    if (GM_getValue('menu_discuz_thread_page') == null){GM_setValue('menu_discuz_thread_page', true)};
-    if (GM_getValue('menu_pause_page') == null){GM_setValue('menu_pause_page', true)};
+    if (GM_getValue('menu_disable') == null){GM_setValue('menu_disable', [])}; if (GM_getValue('menu_discuz_thread_page') == null){GM_setValue('menu_discuz_thread_page', true)}; if (GM_getValue('menu_pause_page') == null){GM_setValue('menu_pause_page', true)};
     // 注册脚本菜单
     if (menu_disable('check')) { // 当前网站是否已存在禁用列表中
         GM_registerMenuCommand('❌ 已禁用 (点击对当前网站启用)', function(){menu_disable('del')});
         return
     } else {
-        webType = doesItSupport(); // 判断网站类型（即是否支持）
+        webType = doesItSupport(); // 判断网站类型（即是否支持），顺便直接赋值
         if (webType === 0) {
             GM_registerMenuCommand('❌ 当前网站暂不支持 [点击申请支持]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
             console.info('[自动无缝翻页] - 不支持当前网站，欢迎申请支持：https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/419215/feedback');
@@ -179,6 +169,7 @@
             google: { // 谷歌搜索
                 SiteTypeID: 0,
                 host: 'www.google.com',
+                functionStart: function() {if (location.pathname === '/search') curSite = DBSite.google;},
                 pager: {
                     type: 1,
                     nextLink: 'id("pnnext")[@href]',
@@ -191,6 +182,7 @@
             bing: { // 必应搜索
                 SiteTypeID: 0,
                 host: ['www.bing.com','cn.bing.com'],
+                functionStart: function() {if (location.pathname === '/search') {curSite = DBSite.bing; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.b_imagePair.square_mp > .inner {display: none;}';}},
                 pager: {
                     type: 1,
                     nextLink: '//a[contains(@class,"sb_pagN")][@href]',
@@ -203,6 +195,12 @@
             baidu_tieba: { // 百度贴吧 - 帖子列表
                 SiteTypeID: 0,
                 host: 'tieba.baidu.com',
+                functionStart: function() {if (location.pathname === '/f') { // 帖子列表
+                    baidu_tieba_1(); // 右侧悬浮发帖按钮点击事件（解决自动翻页导致无法发帖的问题）
+                    curSite = DBSite.baidu_tieba; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'img.j_retract {margin-top: 0 !important;margin-bottom: 0 !important;}'; // 修复帖子列表中预览图片，在切换下一个/上一个图片时，多出来的图片上下边距
+                } else if (location.pathname === '/f/search/res') { // 吧内搜索/全吧搜索
+                    curSite = DBSite.baidu_tieba_search;
+                }},
                 pager: {
                     type: 1,
                     nextLink: '//a[@class="next pagination-item "][@href]',
@@ -240,6 +238,13 @@
             douban_subject_comments: { // 豆瓣 - 短评
                 SiteTypeID: 0,
                 host: 'movie.douban.com',
+                functionStart: function() {if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/comments') > -1) { // 短评列表
+                    curSite = DBSite.douban_subject_comments;
+                } else if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/reviews') > -1) { // 影评列表
+                    curSite = DBSite.douban_subject_reviews;
+                } else if(location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/episode') > -1) { // 电视剧每集评论
+                    curSite = DBSite.douban_subject_episode;
+                }},
                 pager: {
                     type: 1,
                     nextLink: '//a[@class="next"][@href]',
@@ -284,6 +289,23 @@
             v2ex_recent: { // V2EX - 最近主题页
                 SiteTypeID: 0,
                 host: ['v2ex.com', 'www.v2ex.com'],
+                functionStart: function() {if (location.pathname === '/') { //                          首页
+                    v2ex_functionAfter('#Main a.topic-link:not([target])');
+                } else if (location.pathname === '/recent') { //             最近主题页
+                    curSite = DBSite.v2ex_recent;
+                    v2ex_functionAfter('#Main a.topic-link:not([target])');
+                } else if (location.pathname === '/notifications') { //      提醒消息页
+                    curSite = DBSite.v2ex_notifications;
+                    v2ex_functionAfter('#Main a[href^="/t/"]:not([target])');
+                } else if (location.pathname === '/balance') { //            账户余额页
+                    curSite = DBSite.v2ex_balance;
+                } else if (location.pathname.indexOf('/go/') > -1) { //      分类主题页
+                    curSite = DBSite.v2ex_go;
+                    v2ex_functionAfter('#Main a.topic-link:not([target])');
+                } else if (location.pathname.indexOf('/replies') > -1) { //  用户回复页
+                    curSite = DBSite.v2ex_replies;
+                    v2ex_functionAfter('#Main a[href^="/t/"]:not([target])');
+                }},
                 pager: {
                     type: 1,
                     nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
@@ -376,6 +398,11 @@
             _58pic: { // 千图网 - 分类/搜索页
                 SiteTypeID: 0,
                 host: 'www.58pic.com',
+                functionStart: function() {if (location.pathname.indexOf('/tupian/') > -1) {
+                    curSite = DBSite._58pic; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.qtw-card.place-box.is-two {display: none !important;}'; // 隐藏末尾很大的 [下一页] 按钮
+                } else if (location.pathname.indexOf('/c/') > -1) {
+                    curSite = DBSite._58pic_c;
+                }},
                 pager: {
                     type: 1,
                     nextLink: '//div[contains(@class,"page-box")]//a[text()="下一页"][@href]',
@@ -446,6 +473,7 @@
             ali213_gl: { // 游侠网 - 攻略
                 SiteTypeID: 0,
                 host: 'gl.ali213.net',
+                functionStart: function() {curSite = DBSite.ali213_gl; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.n_show_b {display: none !important;}';},
                 pager: {
                     type: 3,
                     nextLink: '//a[@class="next n"][@href]',
@@ -459,6 +487,7 @@
             ali213_pic: { // 游侠网 - 图库
                 SiteTypeID: 0,
                 host: 'pic.ali213.net',
+                functionStart: function() {curSite = DBSite.ali213_pic; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'a.prev, a.next {display: none !important;}';},
                 pager: {
                     type: 1,
                     nextLink: 'css;a.next[href]',
@@ -471,6 +500,7 @@
             gamersky_ent: { // 游民星空
                 SiteTypeID: 0,
                 host: 'www.gamersky.com',
+                functionStart: function() {if (location.pathname.indexOf('/ent/') > -1) {curSite = DBSite.gamersky_ent;} else {curSite = DBSite.gamersky_gl;}},
                 pager: {
                     type: 3,
                     nextLink: '//div[@class="page_css"]/a[text()="下一页"][@href]',
@@ -523,6 +553,13 @@
             cs_rin_ru: { // 各版块帖子列表
                 SiteTypeID: 0,
                 host: 'cs.rin.ru',
+                functionStart: function() {if (location.pathname === '/forum/viewforum.php') { // 版块帖子列表
+                    curSite = DBSite.cs_rin_ru;
+                } else if (location.pathname === '/forum/viewtopic.php') { // 帖子内
+                    if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.cs_rin_ru_viewtopic;
+                } else if (location.pathname === '/forum/search.php') { // 搜索结果
+                    curSite = DBSite.cs_rin_ru_search;
+                }},
                 pager: {
                     type: 1,
                     nextLink: '//td[@class="gensmall"][@align="right"]//a[text()="Next"][@href]',
@@ -557,9 +594,22 @@
                     scrollDelta: 1500
                 }
             },
+            crackhub: {
+                SiteTypeID: 0,
+                host: 'crackhub.site',
+                functionStart: function() {curSite = DBSite.crackhub; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'html.wp-dark-mode-active .inside-article {background-color: var(--wp-dark-mode-bg);}';},
+                pager: {
+                    type: 1,
+                    nextLink: '//a[@class="next page-numbers"][@href]',
+                    pageElement: 'css;article[id^="post-"]',
+                    insertPosition: ['css;nav.paging-navigation', 1],
+                    replaceE: 'css;nav.paging-navigation',
+                    scrollDelta: 2000
+                }
+            },
             fitgirl: {
                 SiteTypeID: 0,
-                host: ['crackhub.site', 'fitgirl-repacks.site'],
+                host: 'fitgirl-repacks.site',
                 pager: {
                     type: 1,
                     nextLink: '//a[@class="next page-numbers"][@href]',
@@ -630,9 +680,22 @@
                     scrollDelta: 2500
                 }
             },
+            nyaa: { // Nyaa
+                SiteTypeID: 0,
+                host: 'nyaa.si',
+                pager: {
+                    type: 1,
+                    nextLink: '//a[@rel="next"][@href] | //li[@class="next"]/a[@href]',
+                    pageElement: 'css;table.torrent-list > tbody > tr',
+                    insertPosition: ['css;table.torrent-list > tbody', 3],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 2000
+                }
+            },
             skrbtba: { // SkrBT
                 SiteTypeID: 0,
                 host: 'skrbtba.xyz',
+                functionStart: function() {if (location.pathname === '/search') curSite = DBSite.skrbtba;},
                 pager: {
                     type: 1,
                     nextLink: '//a[@aria-label="Next"]',
@@ -657,6 +720,7 @@
             baoshuu: { // 宝书网（小说）
                 SiteTypeID: 0,
                 host: 'www.baoshuu.com',
+                functionStart: function() {if (location.pathname.indexOf('/TXT/list') > -1) curSite = DBSite.baoshuu;},
                 pager: {
                     type: 1,
                     nextLink: '//div[@class="listl2"]//a[@href][text()="下一页"]',
@@ -670,6 +734,7 @@
             baoshuu_m: { // 宝书网（小说）- 手机版
                 SiteTypeID: 0,
                 host: 'm.baoshuu.com',
+                functionStart: function() {if (location.pathname.indexOf('/TXT/list') > -1) curSite = DBSite.baoshuu_m;},
                 pager: {
                     type: 1,
                     nextLink: '//div[@class="man_first"]//a[@href][text()="下一页"]',
@@ -683,6 +748,7 @@
             _423down: {
                 SiteTypeID: 0,
                 host: 'www.423down.com',
+                functionStart: function() {if (location.pathname.indexOf('.html') === -1) curSite = DBSite._423down;},
                 pager: {
                     type: 1,
                     nextLink: '//div[@class="paging"]//a[contains(text(),"下一页")][@href]',
@@ -701,7 +767,7 @@
                     pageElement: 'css;#index > article, #archive > article',
                     insertPosition: ['css;ol.page-navigator', 1],
                     replaceE: 'css;ol.page-navigator',
-                    scrollDelta: 800
+                    scrollDelta: 1000
                 },
                 function: {
                     before: iao_su_functionBefore
@@ -744,6 +810,7 @@
             pc521: { // 不忘初心
                 SiteTypeID: 0,
                 host: 'www.pc521.net',
+                functionStart: function() {if (location.search.slice(0,3) === '?s=') {curSite = DBSite.pc521_search;} else {curSite = DBSite.pc521;}},
                 pager: {
                     type: 2,
                     nextLink: 'div[id^="ias_trigger_"]',
@@ -765,6 +832,7 @@
             ghxi: { // 果核剥壳 - 首页
                 SiteTypeID: 0,
                 host: 'www.ghxi.com',
+                functionStart: function() {if (location.pathname === '/' && !location.search) {curSite = DBSite.ghxi;} else {curSite = DBSite.ghxi_postlist;}},
                 pager: {
                     type: 2,
                     nextLink: '.load-more',
@@ -789,6 +857,11 @@
             sixyin: { // 六音软件 - 首页
                 SiteTypeID: 0,
                 host: 'www.sixyin.com',
+                functionStart: function() {if (location.pathname === '/' && location.search === '') { // 首页
+                    curSite = DBSite.sixyin;
+                } else if (location.pathname.indexOf('.html') === -1) { //    分类页
+                    curSite = DBSite.sixyin_postlist;
+                }},
                 pager: {
                     type: 2,
                     nextLink: '.load-more',
@@ -810,6 +883,13 @@
             weidown: { // 微当下载
                 SiteTypeID: 0,
                 host: 'www.weidown.com',
+                functionStart: function() {if (location.pathname.indexOf('/search/') > -1) { //搜索页
+                    curSite = DBSite.weidown_search;
+                } else if (location.pathname.indexOf('/special/') > -1) { // 专题页
+                    curSite = DBSite.weidown_special;
+                } else {
+                    curSite = DBSite.weidown;
+                }},
                 pager: {
                     type: 1,
                     nextLink: '//a[@class="nextpage"][@href]',
@@ -856,6 +936,11 @@
             iplaysoft_postslist: { // 异次元软件世界
                 SiteTypeID: 0,
                 host: 'www.iplaysoft.com',
+                functionStart: function() {if (location.pathname.indexOf('.html') > -1 || location.pathname.indexOf('/p/') > -1) { // 文章内
+                    curSite = DBSite.iplaysoft_postcomments;
+                } else { // 其他页面
+                    curSite = DBSite.iplaysoft_postslist;
+                }},
                 pager: {
                     type: 1,
                     nextLink: '//div[@class="pagenavi"]//a[@title="下一页"][@href]',
@@ -880,6 +965,11 @@
             mpyit: { // 老殁 | 殁漂遥
                 SiteTypeID: 0,
                 host: 'www.mpyit.com',
+                functionStart: function() {if (location.pathname === '/' && !location.search) {
+                    curSite = DBSite.mpyit;
+                } else if (location.pathname.indexOf('/category/') > -1 || location.search.indexOf('?s=') > -1) { // 搜索页 / 分类页
+                    curSite = DBSite.mpyit_category;
+                }},
                 pager: {
                     type: 1,
                     nextLink: '//a[@class="page-numbers"][@title="下一页"][@href]',
@@ -927,6 +1017,7 @@
             winaero: {
                 SiteTypeID: 0,
                 host: 'winaero.com',
+                functionStart: function() {if (location.pathname === '/blog/' || location.pathname.indexOf('/category/') > -1) curSite = DBSite.winaero;},
                 pager: {
                     type: 1,
                     nextLink: 'css;.nav-previous > a',
@@ -939,6 +1030,7 @@
             thewindowsclub: {
                 SiteTypeID: 0,
                 host: 'www.thewindowsclub.com',
+                functionStart: function() {curSite = DBSite.thewindowsclub; if (location.pathname === '/') {curSite.pager.scrollDelta = 2000;}},
                 pager: {
                     type: 1,
                     nextLink: 'css;li.pagination-next > a',
@@ -951,6 +1043,11 @@
             cartoonmad: { // 动漫狂
                 SiteTypeID: 0,
                 host: ['www.cartoonmad.com','www.cartoonmad.cc'],
+                functionStart: function() {if (location.pathname.indexOf('/comic/') > -1) {
+                    document.lastElementChild.appendChild(document.createElement('style')).textContent = 'body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:not(:first-child) {display: none !important;} body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img {max-width: 100%;height: auto;display: block !important;margin: 0 auto !important;}';
+                    document.querySelector('body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child > a').href = 'javascript:void(0);'; // 清理图片上的链接
+                    curSite = DBSite.cartoonmad;
+                }},
                 pager: {
                     type: 1,
                     nextLink: cartoonmad_functionNext,
@@ -964,6 +1061,12 @@
             manhuadb: { // 漫画 DB
                 SiteTypeID: 0,
                 host: 'www.manhuadb.com',
+                functionStart: function() {if (location.pathname.indexOf('/manhua/') > -1 && location.pathname.indexOf('.html') > -1) {
+                    document.lastElementChild.appendChild(document.createElement('style')).textContent = '.row.m-0.pt-3.ad_2_wrap, .row.m-0.ad_1_wrap, .pagination.justify-content-center, #left, #right {display: none !important;}';
+                    document.querySelector('img.img-fluid.show-pic').style.display = 'none'; // 隐藏第一个图片（避免重复）
+                    setTimeout(manhuadb_init, 100);
+                    curSite = DBSite.manhuadb;
+                }},
                 pager: {
                     type: 4,
                     nextLink: manhuadb_functionNext,
@@ -977,6 +1080,11 @@
             hicomic: { // 嗨漫画
                 SiteTypeID: 0,
                 host: 'www.hicomic.net',
+                functionStart: function() {if (location.pathname.indexOf('/chapters/') > -1) {
+                    document.lastElementChild.appendChild(document.createElement('style')).textContent = '.content {height: auto !important;} .footer, .left_cursor, .right_cursor, .finish {display: none !important;} .content > img {display: block !important;margin: 0 auto !important;}';
+                    setTimeout(hicomic_init, 100);
+                    curSite = DBSite.hicomic;
+                }},
                 pager: {
                     type: 4,
                     nextLink: hicomic_functionNext,
@@ -989,6 +1097,11 @@
             gufengmh8: { // 古风漫画网
                 SiteTypeID: 0,
                 host: 'www.gufengmh8.com',
+                functionStart: function() {if (location.pathname.indexOf('.html') > -1) {
+                    let chapterScroll = document.getElementById('chapter-scroll') // 强制为 [下拉阅读] 模式
+                    if (chapterScroll && chapterScroll.className === '') {chapterScroll.click();}
+                    curSite = DBSite.gufengmh8; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'p.img_info {display: none !important;}'; // 隐藏中间的页数信息
+                }},
                 pager: {
                     type: 4,
                     nextLink: gufengmh8_functionNext,
@@ -1002,6 +1115,7 @@
             szcdmj: { // 砂之船动漫家
                 SiteTypeID: 0,
                 host: 'www.szcdmj.com',
+                functionStart: function() {if (location.pathname.indexOf('/szcchapter/') > -1) {curSite = DBSite.szcdmj; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.header {opacity: 0.3 !important;}';}},
                 pager: {
                     type: 1,
                     nextLink: '//div[@class="fanye"][1]/a[@href][text()="下一页" or text()="下一话"]',
@@ -1017,6 +1131,7 @@
             netbian: { // 彼岸图网
                 SiteTypeID: 0,
                 host: 'pic.netbian.com',
+                functionStart: function() {curSite = DBSite.netbian; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'li.nextpage {display: none !important;}';},
                 pager: {
                     type: 1,
                     nextLink: '//div[@class="page"]/a[contains(text(),"下一页")]',
@@ -1050,6 +1165,13 @@
             greasyfork: { // 脚本
                 SiteTypeID: 0,
                 host: 'greasyfork.org',
+                functionStart: function() {if (location.pathname.indexOf('/scripts') + 8 === location.pathname.length) {
+                    curSite = DBSite.greasyfork;
+                } else if (location.pathname.lastIndexOf('/feedback') + 9 === location.pathname.length) {
+                    curSite = DBSite.greasyfork_feedback;
+                } else if (location.pathname.lastIndexOf('/discussions') + 12 === location.pathname.length) {
+                    curSite = DBSite.greasyfork_discussions;
+                }},
                 pager: {
                     type: 1,
                     nextLink: '//a[@class="next_page"][@href]',
@@ -1094,312 +1216,56 @@
     }
 
 
-    // < 其他网站 >
-    if (webType === 1) {
-        switch (location.host) {
-            case DBSite.baidu.host: //                   < 百度搜索 >
-                curSite = DBSite.baidu;
-                break;
-            case DBSite.google.host: //                  < 谷歌搜索 >
-                if (location.pathname === '/search') curSite = DBSite.google;
-                break;
-            case DBSite.bing.host[0]: //                 < 必应搜索 >
-            case DBSite.bing.host[1]:
-                if (location.pathname === '/search') {curSite = DBSite.bing; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.b_imagePair.square_mp > .inner {display: none;}';}
-                break;
-            case DBSite.baidu_tieba.host: //             < 百度贴吧 >
-                if (location.pathname === '/f') { //                     帖子列表
-                    baidu_tieba_1(); //                                  右侧悬浮发帖按钮点击事件（解决自动翻页导致无法发帖的问题）
-                    curSite = DBSite.baidu_tieba; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'img.j_retract {margin-top: 0 !important;margin-bottom: 0 !important;}'; // 修复帖子列表中预览图片，在切换下一个/上一个图片时，多出来的图片上下边距
-                //} else if (location.pathname.indexOf('/p/') > -1) { // 帖子内
-                //    curSite = DBSite.baidu_tieba_post;
-                } else if (location.pathname === '/f/search/res') { //   吧内搜索/全吧搜索
-                    curSite = DBSite.baidu_tieba_search;
+    // < 所有 Discuz!论坛 >
+    if (webType != 1) {
+        if (webType === 2) {
+            if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
+                if (location.pathname.indexOf('/forum-') > -1) { //             < 各版块帖子列表 >
+                    if (document.getElementById('autopbn')) { //                判断是否有 [下一页] 按钮
+                        curSite = DBSite.discuz_forum;
+                    } else {
+                        curSite = DBSite.discuz_guide;
+                    }
+                } else if (location.pathname.indexOf('/thread-') > -1) { //     < 帖子内 >
+                    if (GM_getValue('menu_discuz_thread_page')) {
+                        curSite = DBSite.discuz_thread;
+                        hidePgbtn(); //                                         隐藏帖子内的 [下一页] 按钮
+                    }
+                } else if(location.pathname.indexOf('search') > -1) { //        < 搜索结果 >
+                    curSite = DBSite.discuz_search;
                 }
-                break;
-            case DBSite.douban_subject_comments.host: // < 豆瓣评论 >
-                if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/comments') > -1) { //        短评列表
-                    curSite = DBSite.douban_subject_comments;
-                } else if (location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/reviews') > -1) { //  影评列表
-                    curSite = DBSite.douban_subject_reviews;
-                } else if(location.pathname.indexOf('/subject') > -1 && location.pathname.indexOf('/episode') > -1) { //   电视剧每集评论
-                    curSite = DBSite.douban_subject_episode;
-                }
-                break;
-            case DBSite.weibo_comment.host: //           < 微博评论 >
-                curSite = DBSite.weibo_comment;
-                break;
-            case DBSite.v2ex_recent.host[0]: //          < V2EX >
-            case DBSite.v2ex_recent.host[1]:
-                if (location.pathname === '/') { //                          首页
-                    v2ex_functionAfter('#Main a.topic-link:not([target])');
-                } else if (location.pathname === '/recent') { //             最近主题页
-                    curSite = DBSite.v2ex_recent;
-                    v2ex_functionAfter('#Main a.topic-link:not([target])');
-                } else if (location.pathname === '/notifications') { //      提醒消息页
-                    curSite = DBSite.v2ex_notifications;
-                    v2ex_functionAfter('#Main a[href^="/t/"]:not([target])');
-                } else if (location.pathname === '/balance') { //            账户余额页
-                    curSite = DBSite.v2ex_balance;
-                } else if (location.pathname.indexOf('/go/') > -1) { //      分类主题页
-                    curSite = DBSite.v2ex_go;
-                    v2ex_functionAfter('#Main a.topic-link:not([target])');
-                } else if (location.pathname.indexOf('/replies') > -1) { //  用户回复页
-                    curSite = DBSite.v2ex_replies;
-                    v2ex_functionAfter('#Main a[href^="/t/"]:not([target])');
-                }
-                break;
-            case DBSite.expreview.host: //               < 超能网 >
-                curSite = DBSite.expreview;
-                break;
-            case DBSite.ithome.host: //                  < IT 之家 >
-                curSite = DBSite.ithome;
-                break;
-            case DBSite._58pic.host: //                  < 千图网 >
-                if (location.pathname.indexOf('/tupian/') > -1) {
-                    curSite = DBSite._58pic; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.qtw-card.place-box.is-two {display: none !important;}'; // 隐藏末尾很大的 [下一页] 按钮
-                } else if (location.pathname.indexOf('/c/') > -1) {
-                    curSite = DBSite._58pic_c;
-                }
-                break;
-            case DBSite.pixabay.host: //                 < Pixabay >
-                curSite = DBSite.pixabay;
-                break;
-            case DBSite._3dmgame.host: //                < 3DM >
-                curSite = DBSite._3dmgame;
-                break;
-            case DBSite.ali213_www.host: //              < 游侠网 >
-                curSite = DBSite.ali213_www;
-                break;
-            case DBSite.ali213_gl.host: //               < 游侠网 - 攻略 >
-                curSite = DBSite.ali213_gl; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.n_show_b {display: none !important;}'; // 隐藏部分碍事元素
-                break;
-            case DBSite.ali213_pic.host: //              < 游侠网 - 图库 >
-                curSite = DBSite.ali213_pic; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'a.prev, a.next {display: none !important;}'; // 隐藏图片上的上一页、下一页
-                break;
-            case DBSite.gamersky_ent.host: //            < 游民星空 >
-                if (location.pathname.indexOf('/ent/') > -1) {
-                    curSite = DBSite.gamersky_ent;
-                } else {
-                    curSite = DBSite.gamersky_gl; // 攻略
-                }
-                break;
-            case DBSite.steamcommunity.host: //          < Steam 创意工坊 >
-                curSite = DBSite.steamcommunity;
-                break;
-            case DBSite.yikm.host: //                    < 小霸王其乐无穷 >
-                curSite = DBSite.yikm;
-                break;
-            case DBSite.cs_rin_ru.host: //               < 游戏下载论坛 >
-                if (location.pathname === '/forum/viewforum.php') { //         版块帖子列表
-                    curSite = DBSite.cs_rin_ru;
-                } else if (location.pathname === '/forum/viewtopic.php') { //  帖子内
-                    if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.cs_rin_ru_viewtopic;
-                } else if (location.pathname === '/forum/search.php') { //     搜索结果
-                    curSite = DBSite.cs_rin_ru_search;
-                }
-                break;
-            case DBSite.fitgirl.host[0]: //              < 游戏下载网站 >
-                curSite = DBSite.fitgirl; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'html.wp-dark-mode-active .inside-article {background-color: var(--wp-dark-mode-bg);}'
-                break;
-            case DBSite.fitgirl.host[1]: //              < 游戏下载网站 >
-                curSite = DBSite.fitgirl;
-                break;
-            case DBSite.mypianku.host: //                < 片库 >
-                curSite = DBSite.mypianku;
-                break;
-            case DBSite.yinfans.host: //                 < 音范丝 >
-                curSite = DBSite.yinfans;
-                break;
-            case DBSite.gaoqing_fm.host: //              < 高清电台 >
-                curSite = DBSite.gaoqing_fm;
-                break;
-            case DBSite.kisssub.host: //                 < 爱恋动漫 >
-                curSite = DBSite.kisssub;
-                break;
-            case DBSite.skrbtba.host: //                 < SkrBt >
-                if (location.pathname === '/search') curSite = DBSite.skrbtba;
-                break;
-            case DBSite.rarbgprx.host: //                < RARBG >
-                curSite = DBSite.rarbgprx;
-                break;
-            case DBSite.baoshuu.host: //                 < 宝书网 >
-                if (location.pathname.indexOf('/TXT/list') > -1) curSite = DBSite.baoshuu;
-                break;
-            case DBSite.baoshuu_m.host: //               < 宝书网 - 手机版 >
-                if (location.pathname.indexOf('/TXT/list') > -1) curSite = DBSite.baoshuu_m;
-                break;
-            case DBSite._423down.host: //                < 423down >
-                if (location.pathname.indexOf('.html') === -1) curSite = DBSite._423down;
-                break;
-            case DBSite.iao_su.host: //                  < 不死鸟 >
-                curSite = DBSite.iao_su;
-                break;
-            case DBSite.appinn.host: //                  < 小众软件 >
-                curSite = DBSite.appinn;
-                break;
-            case DBSite.chrome_zzzmh.host: //            < 极简插件 >
-                curSite = DBSite.chrome_zzzmh;
-                break;
-            case DBSite.isharepc.host: //                < 乐软博客 >
-                curSite = DBSite.isharepc;
-                break;
-            case DBSite.pc521.host: //                   < 不忘初心 >
-                if (location.search.slice(0,3) === '?s=') {curSite = DBSite.pc521_search;} else {curSite = DBSite.pc521;}
-                break;
-            case DBSite.ghxi.host: //                    < 果核剥壳 >
-                if (location.pathname === '/' && !location.search) {curSite = DBSite.ghxi;} else {curSite = DBSite.ghxi_postlist;}
-                break;
-            case DBSite.sixyin.host: //                  < 六音软件 >
-                if (location.pathname === '/' && location.search === '') { // 首页
-                    curSite = DBSite.sixyin;
-                } else if (location.pathname.indexOf('.html') === -1) { //    分类页
-                    curSite = DBSite.sixyin_postlist;
-                }
-                break;
-            case DBSite.weidown.host: //                 < 微当下载 >
-                if (location.pathname.indexOf('/search/') > -1) { //         搜索页
-                    curSite = DBSite.weidown_search;
-                } else if (location.pathname.indexOf('/special/') > -1) { // 专题页
-                    curSite = DBSite.weidown_special;
-                } else {
-                    curSite = DBSite.weidown;
-                }
-                break;
-            case DBSite.th_sjy.host: //                  < th-sjy 汉化 >
-                curSite = DBSite.th_sjy;
-                break;
-            case DBSite.iplaysoft_postslist.host: //     < 异次元软件 >
-                if (location.pathname.indexOf('.html') > -1 || location.pathname.indexOf('/p/') > -1) { // 文章内
-                    curSite = DBSite.iplaysoft_postcomments;
-                } else { // 其他页面
-                    curSite = DBSite.iplaysoft_postslist;
-                }
-                break;
-            case DBSite.mpyit.host: //                   < 老殁殁漂遥 >
-                if (location.pathname === '/' && !location.search) {
-                    curSite = DBSite.mpyit;
-                } else if (location.pathname.indexOf('/category/') > -1 || location.search.indexOf('?s=') > -1) { // 搜索页 / 分类页
-                    curSite = DBSite.mpyit_category;
-                }
-                break;
-            case DBSite.yxssp.host: //                   < 异星软件空间 >
-                curSite = DBSite.yxssp;
-                break;
-            case DBSite.sordum.host: //                  < Sordum >
-                curSite = DBSite.sordum;
-                break;
-            case DBSite.winaero.host: //                 < Winaero >
-                if (location.pathname === '/blog/' || location.pathname.indexOf('/category/') > -1) curSite = DBSite.winaero;
-                break;
-            case DBSite.thewindowsclub.host: //          < TheWindowsClub >
-                curSite = DBSite.thewindowsclub;
-                if (location.pathname === '/') curSite.pager.scrollDelta = 2000;
-                break;
-            case DBSite.cartoonmad.host[0]: //           < 漫画狂 >
-            case DBSite.cartoonmad.host[1]:
-                if (location.pathname.indexOf('/comic/') > -1) {
-                    document.lastElementChild.appendChild(document.createElement('style')).textContent = 'body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:not(:first-child) {display: none !important;} body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img {max-width: 100%;height: auto;display: block !important;margin: 0 auto !important;}';
-                    document.querySelector('body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child > a').href = 'javascript:void(0);'; // 清理图片上的链接
-                    curSite = DBSite.cartoonmad;
-                }
-                break;
-            case DBSite.manhuadb.host: //                < 漫画DB >
-                if (location.pathname.indexOf('/manhua/') > -1 && location.pathname.indexOf('.html') > -1) {
-                    document.lastElementChild.appendChild(document.createElement('style')).textContent = '.row.m-0.pt-3.ad_2_wrap, .row.m-0.ad_1_wrap, .pagination.justify-content-center, #left, #right {display: none !important;}';
-                    document.querySelector('img.img-fluid.show-pic').style.display = 'none'; // 隐藏第一个图片（避免重复）
-                    setTimeout(manhuadb_init, 100);
-                    curSite = DBSite.manhuadb;
-                }
-                break;
-            case DBSite.hicomic.host: //                 < HiComic(嗨漫画) >
-                if (location.pathname.indexOf('/chapters/') > -1) {
-                    document.lastElementChild.appendChild(document.createElement('style')).textContent = '.content {height: auto !important;} .footer, .left_cursor, .right_cursor, .finish {display: none !important;} .content > img {display: block !important;margin: 0 auto !important;}';
-                    setTimeout(hicomic_init, 100);
-                    curSite = DBSite.hicomic;
-                }
-                break;
-            case DBSite.gufengmh8.host: //               < 古风漫画网 >
-                if (location.pathname.indexOf('.html') > -1) {
-                    let chapterScroll = document.getElementById('chapter-scroll') // 强制为 [下拉阅读] 模式
-                    if (chapterScroll && chapterScroll.className === '') {chapterScroll.click();}
-                    curSite = DBSite.gufengmh8; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'p.img_info {display: none !important;}'; // 隐藏中间的页数信息
-                }
-                break;
-            case DBSite.szcdmj.host: //                  < 砂之船动漫家 >
-                if (location.pathname.indexOf('/szcchapter/') > -1) curSite = DBSite.szcdmj;
-                break;
-            case DBSite.netbian.host: //                 < 彼岸图网 >
-                curSite = DBSite.netbian; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'li.nextpage {display: none !important;}'; // 隐藏 [下一页] 大按钮
-                break;
-            case DBSite.pubmed.host: //                  < 国外学术网站 >
-                curSite = DBSite.pubmed;
-                break;
-            case DBSite.afreecatv.host: //               < 直播网站 >
-                curSite = DBSite.afreecatv;
-                break;
-            case DBSite.greasyfork.host: //              < GreasyFork >
-                if (location.pathname.indexOf('/scripts') + 8 === location.pathname.length) {
-                    curSite = DBSite.greasyfork;
-                } else if (location.pathname.lastIndexOf('/feedback') + 9 === location.pathname.length) {
-                    curSite = DBSite.greasyfork_feedback;
-                } else if (location.pathname.lastIndexOf('/discussions') + 12 === location.pathname.length) {
-                    curSite = DBSite.greasyfork_discussions;
-                }
-                break;
-            default:
-                if (location.host.indexOf(DBSite.btbtt.host) > -1) { //   < BT 之家 >
-                    curSite = DBSite.btbtt;
-                }
-        }
-        // < 所有 Discuz!论坛 >
-    } else if (webType === 2) {
-        if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
-            if (location.pathname.indexOf('/forum-') > -1) { //             各版块帖子列表
-                if (document.getElementById('autopbn')) { //                判断是否有 [下一页] 按钮
-                    curSite = DBSite.discuz_forum;
-                } else {
+            } else {
+                if (location.search.indexOf('mod=forumdisplay') > -1 || location.pathname.indexOf('forumdisplay.php') > -1) { //      < 各版块帖子列表 >
+                    if (document.getElementById('autopbn')) { //                判断是否有 [下一页] 按钮
+                        curSite = DBSite.discuz_forum;
+                    } else {
+                        curSite = DBSite.discuz_guide;
+                    }
+                } else if (location.search.indexOf('mod=viewthread') > -1 || location.pathname.indexOf('viewthread.php') > -1) { // < 帖子内 >
+                    if (GM_getValue('menu_discuz_thread_page')) {
+                        curSite = DBSite.discuz_thread;
+                        hidePgbtn(); //                                         隐藏帖子内的 [下一页] 按钮
+                    }
+                } else if (location.search.indexOf('mod=guide') > -1) { //      < 导读帖子列表 >
                     curSite = DBSite.discuz_guide;
-                }
-            } else if (location.pathname.indexOf('/thread-') > -1) { //     帖子内
-                if (GM_getValue('menu_discuz_thread_page')) {
-                    curSite = DBSite.discuz_thread;
-                    hidePgbtn(); //                                         隐藏帖子内的 [下一页] 按钮
-                }
-            } else if(location.pathname.indexOf('search') > -1) { //        搜索结果
-                curSite = DBSite.discuz_search;
-            }
-        } else {
-            if (location.search.indexOf('mod=forumdisplay') > -1 || location.pathname.indexOf('forumdisplay.php') > -1) { //      各版块帖子列表
-                if (document.getElementById('autopbn')) { //                判断是否有 [下一页] 按钮
+                } else if(location.search.indexOf('mod=space') > -1 && location.search.indexOf('&view=me') > -1) { // 别人的主题/回复
+                    curSite = DBSite.discuz_youspace;
+                } else if (location.search.indexOf('mod=collection') > -1) { // < 淘贴列表 >
+                    curSite = DBSite.discuz_collection;
+                } else if (location.pathname.indexOf('search') > -1) { //       < 搜索结果 >
+                    curSite = DBSite.discuz_search;
+                } else { //                                                     < 考虑到部分论坛的部分板块帖子列表 URL 是自定义的 >
                     curSite = DBSite.discuz_forum;
-                } else {
-                    curSite = DBSite.discuz_guide;
                 }
-            } else if (location.search.indexOf('mod=viewthread') > -1 || location.pathname.indexOf('viewthread.php') > -1) { // 帖子内
-                if (GM_getValue('menu_discuz_thread_page')) {
-                    curSite = DBSite.discuz_thread;
-                    hidePgbtn(); //                                         隐藏帖子内的 [下一页] 按钮
-                }
-            } else if (location.search.indexOf('mod=guide') > -1) { //      导读帖子列表
-                curSite = DBSite.discuz_guide;
-            } else if(location.search.indexOf('mod=space') > -1 && location.search.indexOf('&view=me') > -1) { // 别人的主题/回复
-                curSite = DBSite.discuz_youspace;
-            } else if (location.search.indexOf('mod=collection') > -1) { // 淘贴列表
-                curSite = DBSite.discuz_collection;
-            } else if (location.pathname.indexOf('search') > -1) { //       搜索结果
-                curSite = DBSite.discuz_search;
-            } else { //                                                     考虑到部分论坛的部分板块帖子列表 URL 是自定义的
-                curSite = DBSite.discuz_forum;
             }
+            // < 所有 Flarum 论坛 >
+        } else if (webType === 3) {
+            curSite = DBSite.flarum;
+            // < 所有使用 WordPress DUX 主题的网站 >
+        } else if (webType === 4) {
+            if (location.pathname.indexOf('.html') === -1) curSite = DBSite.dux;
+            if (location.host === 'apphot.cc') curSite.pager.scrollDelta = 2500; // 对于速度慢的网站，需要增加翻页敏感度
         }
-        // < 所有 Flarum 论坛 >
-    } else if (webType === 3) {
-        curSite = DBSite.flarum;
-        // < 所有使用 WordPress DUX 主题的网站 >
-    } else if (webType === 4) {
-        if (location.pathname.indexOf('.html') === -1) curSite = DBSite.dux;
-        if (location.host === 'apphot.cc') curSite.pager.scrollDelta = 2500; // 对于速度慢的网站，需要增加翻页敏感度
     }
 
     pausePageEvent(); // 左键双击网页空白处暂停翻页
@@ -1880,23 +1746,34 @@
     function doesItSupport() {
         setDBSite(); // 配置 DBSite 变量对象
 
-        // 遍历判断是否是某个已支持的网站
+        // 遍历判断是否是某个已支持的网站，顺便直接赋值
         let support = false;
         for (let now in DBSite) { // 遍历对象
             if (!DBSite[now].host) continue; // 如果不存在则继续下一个循环
             if (Array.isArray(DBSite[now].host)) { // 如果是数组
                 for (let i of DBSite[now].host) { // 遍历数组
                     if (i === location.host) {
+                        if (DBSite[now].functionStart) {
+                            DBSite[now].functionStart();
+                        } else {
+                            curSite = DBSite[now];
+                        }
                         support = true; break; // 如果找到了就退出循环
                     }
                 }
             } else if (DBSite[now].host === location.host) {
+                if (DBSite[now].functionStart) {
+                    DBSite[now].functionStart();
+                } else {
+                    curSite = DBSite[now];
+                }
                 support = true; break; // 如果找到了就退出循环
             }
         }
 
         if (!support) { // 部分域名额外判断一下
             if (location.host.indexOf(DBSite.btbtt.host) > -1) { //   < BT 之家 >
+                curSite = DBSite.btbtt;
                 support = true;
             }
         }
@@ -1914,6 +1791,7 @@
         }
         return 0;
     }
+
 
     // 类型 4 专用
     function getPageElems(url, type = 'text', method = 'GET', data = '', type2) {
