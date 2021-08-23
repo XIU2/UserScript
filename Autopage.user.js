@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.8.1
+// @version      1.8.2
 // @author       X.I.U
 // @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA玩家社区、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、小霸王其乐无穷、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、乐软博客、不忘初心、果核剥壳、六音软件、微当下载、th-sjy汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
@@ -403,6 +403,19 @@
                     pageElement: 'css;#Main .box > div:not(.cell) > table > tbody > tr:not(:first-child)',
                     insertPosition: ['css;#Main .box > div:not(.cell) > table > tbody', 3],
                     replaceE: 'css;#Main > .box > .cell[style] > table',
+                    scrollDelta: 1000
+                }
+            },
+            xcar_forumdisplay: { // 爱卡汽车网论坛 - 各版块帖子列表
+                SiteTypeID: 0,
+                host: 'www.xcar.com.cn',
+                functionStart: function() {if (location.pathname === '/bbs/forumdisplay.php') {curSite = DBSite.xcar_forumdisplay}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.page_down',
+                    pageElement: 'css;.table-section > dl:not(.table_head)',
+                    insertPosition: ['css;.table-section', 3],
+                    replaceE: 'css;.forumList_page',
                     scrollDelta: 1000
                 }
             },
@@ -1777,6 +1790,7 @@
         for (let val in DBSite) {
             DBSite[val].SiteTypeID = num = num + 1;
         }
+        console.log(num)
     }
 
 
