@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.8.2
+// @version      1.8.3
 // @author       X.I.U
-// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA玩家社区、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、Steam 创意工坊、小霸王其乐无穷、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、乐软博客、不忘初心、果核剥壳、六音软件、微当下载、th-sjy汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
+// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA玩家社区、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、乐软博客、不忘初心、果核剥壳、六音软件、微当下载、th-sjy汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -12,6 +12,7 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_notification
+// @grant        unsafeWindow
 // @noframes
 // @license      GPL-3.0 License
 // @run-at       document-end
@@ -568,6 +569,19 @@
                 },
                 function: {
                     before: gamersky_gl_functionBefore
+                }
+            },
+            nexusmods: { // NexusMods
+                SiteTypeID: 0,
+                host: 'www.nexusmods.com',
+                pager: {
+                    type: 4,
+                    nextLink: nexusmods_functionNext,
+                    pageElement: 'css;#mod-list > ul.tiles > li',
+                    insertPosition: ['css;#mod-list > ul.tiles', 3],
+                    insertElement: nexusmods_insertElement,
+                    replaceE: 'css;#mod-list .pagination',
+                    scrollDelta: 3000
                 }
             },
             steamcommunity: { // 创意工坊 - 项目列表
@@ -1420,6 +1434,66 @@
     }
 
 
+    // NexusMods 获取下一页地址
+    function nexusmods_functionNext() {
+        if (document.querySelector('.nexus-ui-blocker')) return
+        let out_items = JSON.stringify(RH_ModList.out_items).replace(/{|}|"/g,''),
+            nextNum = getElementByXpath('id("mod-list")/div[contains(@class, "pagenav")][1]//a[contains(@class, "page-selected")]/parent::li/following-sibling::li/a'),
+            categories = RH_ModList.out_items.categories, categoriesUrl = '';
+        var url = '';
+        if (nextNum && nextNum.innerText) {
+            nextNum = nextNum.innerText;
+            if (out_items.indexOf('page:') > -1) {
+                out_items = out_items.replace(/page:\d+/, `page:${nextNum}`)
+            } else {
+                out_items += `,page:${nextNum}`;
+            }
+            if (categories && categories != []) {
+                for (let i = 0; i < categories.length; i++) {
+                    categoriesUrl += `,categories[]:${categories[i]}`
+                }
+                categoriesUrl = categoriesUrl.replace(/,/,'');
+                if (out_items.indexOf('categories:') > -1) {
+                    out_items = out_items.replace(/categories:\[.*\]/, categoriesUrl)
+                }
+            }
+            url = 'https://www.nexusmods.com' + RH_ModList.uri + '?RH_ModList=' + out_items
+            //console.log(nextNum, url, curSite.pageUrl, out_items)
+            if (url === curSite.pageUrl) return
+            curSite.pageUrl = url;
+            //console.log(nextNum, curSite.pageUrl, out_items)
+            getPageElems(curSite.pageUrl)
+        }
+    }
+    // NexusMods 插入数据
+    function nexusmods_insertElement(newBody, type) {
+        if (!newBody) return
+        let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody), // 主体元素
+            toElement = getAllElements(curSite.pager.insertPosition[0])[0], // 插入位置的元素
+            addTo1 = addTo(curSite.pager.insertPosition[1]); // 插入位置
+        // 添加下载数据
+        pageElems.forEach(function (one) {
+            let now = one.querySelector('.mod-tile-left');
+            if (now) {
+                let downloadCount = now.querySelector('.downloadcount > span.flex-label');
+                if (downloadCount) {
+                    downloadCount.textContent = shortFormat(parseInt(GlobalModStats[now.dataset.gameId][now.dataset.modId].total));
+                }
+            }
+        });
+        // 插入网页
+        pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);});
+        // 替换元素
+        let oriE = document.querySelectorAll(curSite.pager.replaceE.replace('css;', '')),
+            repE = getAllElements(curSite.pager.replaceE, newBody, newBody);
+        if (oriE.length === repE.length) {
+            for (let i = 0; i < oriE.length; i++) {
+                oriE[i].outerHTML = repE[i].outerHTML;
+            }
+        }
+    }
+
+
     // 片库 的插入前函数（加载图片）
     function mypianku_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
@@ -1524,15 +1598,17 @@
     // manhuadb 获取下一页地址
     function manhuadb_functionNext() {
         let nextArr = document.querySelectorAll('a.fixed-a-es'), next;
+        var url = '';
         if (nextArr.length == 0) return
-        curSite.pageUrl = '';
         for (let i = 0; i < nextArr.length; i++) {
             if (nextArr[i].className.indexOf('active') > -1) {
-                if (nextArr[i+1]) curSite.pageUrl = nextArr[i+1].href;
+                if (nextArr[i+1]) url = nextArr[i+1].href;
                 break;
             }
         }
-        if (curSite.pageUrl) getPageElems(curSite.pageUrl);
+        if (url === curSite.pageUrl) return
+        curSite.pageUrl = url
+        getPageElems(curSite.pageUrl);
     }
     // manhuadb 插入数据
     function manhuadb_insertElement(pageElems, type) {
@@ -1596,6 +1672,7 @@
         let pageElems = document.querySelector(curSite.pager.pageElement.replace('css;', '')); // 寻找数据所在元素
         if (pageElems) {
             let comicUrl, nextId;
+            var url = '';
             pageElems.textContent.split(';').forEach(function (one){ // 分号 ; 分割为数组并遍历
                 //console.log(one)
                 if (one.indexOf('comicUrl') > -1) { // 下一页 URL 前半部分
@@ -1605,7 +1682,9 @@
                 }
             })
             if (comicUrl && nextId && nextId != 'null') { // 组合到一起就是下一页 URL
-                curSite.pageUrl = comicUrl + nextId + '.html'
+                url = comicUrl + nextId + '.html'
+                if (url === curSite.pageUrl) return
+                curSite.pageUrl = url
                 getPageElems(curSite.pageUrl); // 访问下一页 URL 获取
             }
         }
@@ -1790,7 +1869,6 @@
         for (let val in DBSite) {
             DBSite[val].SiteTypeID = num = num + 1;
         }
-        console.log(num)
     }
 
 
