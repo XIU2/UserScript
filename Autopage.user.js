@@ -601,11 +601,11 @@
                 host: 'btbtt',
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="page"]/a[contains(text(), "▶")]',
+                    nextLink: '//div[@class="page"]/a[contains(text(), "▶") or contains(text(), "下一页")]',
                     pageElement: 'css;#threadlist > table, #threadlist > hr',
                     insertPosition: ['css;#threadlist', 3],
                     replaceE: 'css;.page',
-                    scrollDelta: 1500
+                    scrollDelta: 2000
                 }
             },
             gaoqing_fm: { // 高清电台
