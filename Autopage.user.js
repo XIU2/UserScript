@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.8.8
+// @version      1.8.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl...
 // @match        *://*/*
@@ -8,6 +8,7 @@
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
+// @grant        GM_unregisterMenuCommand
 // @grant        GM_openInTab
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -23,26 +24,53 @@
 
 (function() {
     'use strict';
-    var webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true;
-    if (GM_getValue('menu_disable') == null){GM_setValue('menu_disable', [])}; if (GM_getValue('menu_discuz_thread_page') == null){GM_setValue('menu_discuz_thread_page', true)}; if (GM_getValue('menu_pause_page') == null){GM_setValue('menu_pause_page', true)};
-    // 注册脚本菜单
-    if (menu_disable('check')) { // 当前网站是否已存在禁用列表中
-        GM_registerMenuCommand('❌ 已禁用 (点击对当前网站启用)', function(){menu_disable('del')});
-        return
-    } else {
-        webType = doesItSupport(); // 判断网站类型（即是否支持），顺便直接赋值
-        if (webType === 0) {
-            GM_registerMenuCommand('❌ 当前网站暂不支持 [点击申请支持]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
-            console.info('[自动无缝翻页] - 不支持当前网站，欢迎申请支持：https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/419215/feedback');
-            return
-        }
-        GM_registerMenuCommand('✅ 已启用 (点击对当前网站禁用)', function(){menu_disable('add')});
-        if (webType === 2 || location.host === 'cs.rin.ru') {
-            GM_registerMenuCommand(`${GM_getValue('menu_discuz_thread_page')?'✅':'❌'} 帖子内自动翻页 (仅论坛)`, function(){menu_switch(GM_getValue('menu_discuz_thread_page'), 'menu_discuz_thread_page', 'Discuz! 论坛帖子内翻页')});
-        }
-        GM_registerMenuCommand(`${GM_getValue('menu_pause_page')?'✅':'❌'} 左键双击网页空白处暂停翻页`, function(){menu_switch(GM_getValue('menu_pause_page'), 'menu_pause_page', '左键双击网页空白处暂停翻页')});
+    var menuAll = [
+        ['menu_disable', '✅ 已启用 (点击对当前网站禁用)', '❌ 已禁用 (点击对当前网站启用)', []],
+        ['menu_discuz_thread_page', '帖子内自动翻页 (仅论坛)', '帖子内自动翻页 (仅论坛)', true],
+        ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', true],
+        ['menu_page_number', '显示当前页码 (左下角)', '显示当前页码 (左下角)', true]
+    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1};
+    for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
+        if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
     }
-    GM_registerMenuCommand('💬 反馈 & 欢迎申请支持', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
+    registerMenuCommand();
+    if (menuId.length < 2) {return}
+    // 注册脚本菜单
+    function registerMenuCommand() {
+        if (menuId.length != []){
+            for (let i=0;i<menuId.length;i++){
+                GM_unregisterMenuCommand(menuId[i]);
+            }
+        }
+        for (let i=0;i<menuAll.length;i++) { // 循环注册脚本菜单
+            menuAll[i][3] = GM_getValue(menuAll[i][0]);
+            if (menuAll[i][0] === 'menu_disable') { // 启用/禁用
+
+                if (menu_disable('check')) { // 当前网站在禁用列表中
+                    menuId[i] = GM_registerMenuCommand(`${menuAll[i][2]}`, function(){menu_disable('del')});
+                    return
+                } else { // // 不在禁用列表中
+                    webType = doesItSupport(); // 判断网站类型（即是否支持），顺便直接赋值
+                    if (webType === 0) {
+                        GM_registerMenuCommand('❌ 当前网站暂不支持 [点击申请支持]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
+                        console.info('[自动无缝翻页] - 不支持当前网站，欢迎申请支持：https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/419215/feedback');
+                        return
+                    }
+                    menuId[i] = GM_registerMenuCommand(`${menuAll[i][1]}`, function(){menu_disable('add')});
+                }
+
+            } else if (menuAll[i][0] === 'menu_discuz_thread_page') { // 帖子内自动翻页 (仅论坛)
+
+                if (webType === 2 || location.host === 'cs.rin.ru') {
+                    menuId[i] = GM_registerMenuCommand(`${menuAll[i][3]?'✅':'❌'} ${menuAll[i][1]}`, function(){menu_switch(menuAll[i][3], menuAll[i][0], menuAll[i][2])});
+                }
+
+            } else {
+                menuId[i] = GM_registerMenuCommand(`${menuAll[i][3]?'✅':'❌'} ${menuAll[i][1]}`, function(){menu_switch(menuAll[i][3], menuAll[i][0], menuAll[i][2])});
+            }
+        }
+        menuId[menuId.length] = GM_registerMenuCommand('💬 反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/412212/feedback', {active: true,insert: true,setParent: true});});
+    }
 
     function setDBSite() {
     /*
@@ -1522,6 +1550,7 @@
         }
     }
 
+    if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
     pausePageEvent(); // 左键双击网页空白处暂停翻页
     curSite.pageUrl = ''; // 下一页URL
     //console.log(curSite);
@@ -1621,6 +1650,8 @@
                 var temp_baidu_tieba = document.createElement('div'); temp_baidu_tieba.innerHTML = scriptJSON; // 字符串转 Element 元素
                 pageElems = curSite.function.before(getAllElements(curSite.pager.pageElement, temp_baidu_tieba, temp_baidu_tieba)); // 插入前执行函数
                 pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);}); // 插入元素
+                // 当前页码 + 1
+                pageNum.now = pageNum._now + 1
                 // 替换元素
                 let oriE = document.querySelectorAll(curSite.pager.pageElement.replace('css;', '')),
                     repE = getAllElements(curSite.pager.replaceE, temp_baidu_tieba, temp_baidu_tieba);
@@ -1733,6 +1764,8 @@
         });
         // 插入网页
         pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);});
+        // 当前页码 + 1
+        pageNum.now = pageNum._now + 1
         // 替换元素
         let oriE = document.querySelectorAll(curSite.pager.replaceE.replace('css;', '')),
             repE = getAllElements(curSite.pager.replaceE, newBody, newBody);
@@ -1869,6 +1902,8 @@
             for (let i = 0; i < oriE.length; i++) {
                 oriE[i].outerHTML = repE[i].outerHTML;
             }
+            // 当前页码 + 1
+            pageNum.now = pageNum._now + 1
             manhuadb_init(); // 将刚刚替换的图片插入网页中
         }
     }
@@ -1914,6 +1949,8 @@
             _img += `<img src="${src}">`
         }
         document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
+        // 当前页码 + 1
+        pageNum.now = pageNum._now + 1
     }
 
 
@@ -1964,6 +2001,8 @@
                     _img += '<img src="https://res.xiaoqinre.com/' + chapterPath + one2 + '" data-index="0" style="display: inline-block;">'
                 })
                 document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
+                // 当前页码 + 1
+                pageNum.now = pageNum._now + 1
             }
         }
     }
@@ -2012,13 +2051,13 @@
                                     if (autopbn) { // 寻找下一页链接
                                         // 避免重复点击翻页按钮
                                         if (curSite.pager.nextText) { //          按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页
-                                            if (autopbn.innerText === curSite.pager.nextText) autopbn.click();
+                                            if (autopbn.innerText === curSite.pager.nextText) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
                                         } else if (curSite.pager.nextTextOf) { // 按钮文本的一部分，当按钮文本包含该文本时，才会点击按钮加载下一页
-                                            if (autopbn.innerText.indexOf(curSite.pager.nextTextOf) > -1) autopbn.click();
+                                            if (autopbn.innerText.indexOf(curSite.pager.nextTextOf) > -1) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
                                         } else if (curSite.pager.nextHTML) { //   按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页
-                                            if (autopbn.innerHTML === curSite.pager.nextHTML) autopbn.click();
+                                            if (autopbn.innerHTML === curSite.pager.nextHTML) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
                                         } else { // 如果没有指定按钮文字就直接点击
-                                            autopbn.click();
+                                            autopbn.click(); pageNum.now = pageNum._now + 1; // 当前页码 + 1
                                             // 对于没有按钮文字变化的按钮，可以手动指定间隔时间
                                             if (curSite.pager.intervals) {
                                                 let _SiteTypeID = curSite.SiteTypeID; curSite.SiteTypeID = 0;
@@ -2102,14 +2141,58 @@
     }
 
 
+    // 显示页码
+    function pageNumber(type) {
+        if (curSite.SiteTypeID === 0) return
+        let status = document.getElementById('Autopage_number');
+        switch (type) {
+            case 'add':
+                add(); break;
+            case 'del':
+                del(); break;
+            case 'set':
+                set(); break;
+        }
+
+        function add(){
+            if (status) {
+                if (status.style.display === 'none') {status.style.display = 'flex';}
+                return
+            }
+            // 插入网页
+            let _html = `<style>#Autopage_number {top: calc(75vh) !important;left: 0 !important;width: 32px;height: 32px;padding: 6px !important;display: flex;position: fixed !important;opacity: 0.5;transition: .2s;z-index: 1000 !important;cursor: pointer;user-select: none !important;flex-direction: column;align-items: center;justify-content: center;box-sizing: content-box;border-radius: 0 50% 50% 0;transform-origin: center !important;transform: translateX(-8px);background-color: #eeec;-webkit-tap-highlight-color: transparent;box-shadow: 1px 1px 3px 0px #989898 !important;color: #000 !important;} #Autopage_number:hover {opacity: 1;transform: translateX(0);}</style>
+<div id="Autopage_number" title="当前页码&#10;&#10;(可在 [自动无缝翻页] 脚本菜单中关闭)">${pageNum._now}</div>`
+            document.body.insertAdjacentHTML('beforeend', _html);
+            set();
+        }
+        // 监听储存当前页码的对象值的变化
+        function set(){
+            Object.defineProperty(pageNum, 'now', {
+                set: function(value) {
+                    this._now = value;
+                    document.getElementById('Autopage_number').textContent = value;
+                }
+            });
+        }
+        function del(){
+            if (!status) return
+            status.style.display = 'none';
+        }
+    }
+
+
     // 菜单开关
     function menu_switch(menu_status, Name, Tips) {
         if (menu_status === true){
-            GM_setValue(`${Name}`, false);
+            GM_setValue(Name, false);
         } else {
-            GM_setValue(`${Name}`, true);
+            GM_setValue(Name, true);
         }
-        location.reload();
+        if (Name === 'menu_page_number') {
+            if (menu_status === true){pageNumber('del');} else {pageNumber('add');}
+            registerMenuCommand(); // 重新注册脚本菜单
+        } else {
+            location.reload();}
     };
 
 
@@ -2315,6 +2398,9 @@
 
                                 // 插入新页面元素
                                 pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);});
+
+                                // 当前页码 + 1
+                                pageNum.now = pageNum._now + 1
 
                                 // 插入 <script> 标签
                                 if (curSite.pager.scriptType) {
