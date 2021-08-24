@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.8.5
+// @version      1.8.6
 // @author       X.I.U
-// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA玩家社区、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、乐软博客、不忘初心、果核剥壳、六音软件、微当下载、th-sjy汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、wikiHow、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
+// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、wikiHow、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -713,6 +713,54 @@
                     insertPosition: ['css;nav.paging-navigation', 1],
                     replaceE: 'css;nav.paging-navigation',
                     scrollDelta: 2000
+                }
+            },
+            nfmovies: { // 奈菲影视
+                SiteTypeID: 0,
+                host: 'www.nfmovies.com',
+                functionStart: function() {if (location.pathname === '/search.php' || location.pathname.indexOf('/list/') > -1) {curSite = DBSite.nfmovies;}},
+                pager: {
+                    type: 1,
+                    nextLink: '//ul[contains(@class, "myui-page")]/li/a[contains(text(), "下一页")]',
+                    pageElement: 'css;ul.myui-vodlist > li',
+                    insertPosition: ['css;ul.myui-vodlist', 3],
+                    replaceE: 'css;ul.myui-page',
+                    scrollDelta: 1500
+                },
+                function: {
+                    before: nfmovies_functionBefore
+                }
+            },
+            zhenbuka: { // 真不卡影院
+                SiteTypeID: 0,
+                host: ['www.zhenbuka3.com', 'www.zhenbuka5.com'],
+                functionStart: function() {if (location.pathname.indexOf('/vodtype/') > -1) {curSite = DBSite.zhenbuka;}},
+                pager: {
+                    type: 1,
+                    nextLink: '//ul[contains(@class, "stui-page")]/li/a[contains(text(), "下一页")]',
+                    pageElement: 'css;ul.stui-vodlist > li',
+                    insertPosition: ['css;ul.stui-vodlist', 3],
+                    replaceE: 'css;ul.stui-page',
+                    scrollDelta: 1500
+                },
+                function: {
+                    before: nfmovies_functionBefore
+                }
+            },
+            _91mjw: { // 91 美剧网
+                SiteTypeID: 0,
+                host: '91mjw.com',
+                functionStart: function() {if (location.pathname.indexOf('/video/') === -1 || location.pathname.indexOf('/vplay/') === -1) {curSite = DBSite._91mjw;}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;.next-page > a',
+                    pageElement: 'css;.m-movies > article',
+                    insertPosition: ['css;.pagination', 1],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1500
+                },
+                function: {
+                    before: _91mjw_functionBefore
                 }
             },
             mypianku: { // 片库
@@ -1649,6 +1697,30 @@
             let now = one.querySelector('img')
             if (now) {
                 now.src = now.dataset.src;
+            }
+        });
+        return pageElems
+    }
+
+
+    // 奈菲影视/真不卡影院 的插入前函数（加载图片）
+    function nfmovies_functionBefore(pageElems) {
+        pageElems.forEach(function (one) {
+            let now = one.querySelector('a.lazyload')
+            if (now) {
+                now.style.backgroundImage = 'url("' + now.dataset.original + '")';
+            }
+        });
+        return pageElems
+    }
+
+
+    // 91 美剧网 的插入前函数（加载图片）
+    function _91mjw_functionBefore(pageElems) {
+        pageElems.forEach(function (one) {
+            let now = one.querySelector('img.thumb')
+            if (now) {
+                now.src = now.dataset.original;
             }
         });
         return pageElems
