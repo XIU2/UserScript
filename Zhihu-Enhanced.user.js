@@ -307,7 +307,7 @@ function collapsedNowAnswer(selectors) {
                             for (let el of commentCollapseButton_2) {
                                 if (isElementInViewport(el)) {
                                     let commentCollapseButton = findParentElement(el, 'ContentItem AnswerItem').querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
-                                    console.log(commentCollapseButton)
+                                    //console.log(commentCollapseButton)
                                     if (commentCollapseButton.textContent.indexOf('收起评论') > -1) {
                                         commentCollapseButton.click()
                                         break
@@ -919,10 +919,10 @@ function blockType(type) {
 // 寻找父元素
 function findParentElement(item, className, type = false) {
     if (item.parentElement) {
-        console.log(item.parentElement)
+        //console.log(item.parentElement)
         if (type) { // true = 完全一致，false = 包含即可
             if (item.parentElement.className && item.parentElement.className === className) {
-                console.log(item.parentElement.className)
+                //console.log(item.parentElement.className)
                 return item.parentElement;
             } else {
                 let temp = findParentElement(item.parentElement, className, true)
