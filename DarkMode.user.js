@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.2.6
+// @version      1.2.7
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
 // @match        *://*/*
@@ -41,7 +41,7 @@
 
     // 注册脚本菜单
     function registerMenuCommand() {
-        if (menu_ID.length > menu_ALL.length){ // 如果菜单ID数组多于菜单数组，说明不是首次添加菜单，需要卸载所有脚本菜单
+        if (menu_ID.length != []){
             for (let i=0;i<menu_ID.length;i++){
                 GM_unregisterMenuCommand(menu_ID[i]);
             }
