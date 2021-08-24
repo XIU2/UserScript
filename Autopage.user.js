@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.8.3
+// @version      1.8.4
 // @author       X.I.U
-// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA玩家社区、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、乐软博客、不忘初心、果核剥壳、六音软件、微当下载、th-sjy汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
+// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA玩家社区、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、乐软博客、不忘初心、果核剥壳、六音软件、微当下载、th-sjy汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、wikiHow、AfreecaTV、GreasyFork、CS.RIN.RU、Crackhub213、FitGirl Repacks...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -62,6 +62,10 @@
       3 = 插入该元素当中，最后一个子元素后面；
       4 = 插入该元素本身的后面；
     mimeType: 网站编码
+    scriptType: 单独插入 <script> 标签
+      1 = 下一页的所有 <script> 标签
+      2 = 下一页主体元素同级 <script> 标签
+      3 = 下一页主体元素子元素 <script> 标签
     scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大（如果 Type = 3，则相反）
     function：
       before = 插入前执行函数；
@@ -177,7 +181,8 @@
                     pageElement: 'css;#res > *',
                     insertPosition: ['css;#res', 3],
                     replaceE: 'id("navcnt") | id("rcnt")//div[@role="navigation"]',
-                    scrollDelta: 2000
+                    scriptType: 1,
+                    scrollDelta: 3000
                 }
             },
             bing: { // 必应搜索
@@ -203,12 +208,14 @@
                     curSite = DBSite.baidu_tieba_search;
                 }},
                 pager: {
-                    type: 1,
-                    nextLink: '//a[@class="next pagination-item "][@href]',
+                    type: 4,
+                    nextLink: baidu_tieba_functionNext,
                     pageElement: 'css;#thread_list > li',
                     insertPosition: ['css;#thread_list', 3],
+                    insertElement: baidu_tieba_insertElement,
                     replaceE: 'css;#frs_list_pager',
-                    scrollDelta: 1500
+                    intervals: 3000,
+                    scrollDelta: 2000
                 },
                 function: {
                     before: baidu_tieba_functionBefore
@@ -301,6 +308,7 @@
                     pageElement: 'css;#topicrows > tbody, #topicrows > script',
                     insertPosition: ['css;#topicrows', 3],
                     replaceE: 'css;div[name="pageball"]',
+                    scriptType: 2,
                     scrollDelta: 1000
                 },
                 function: {
@@ -315,6 +323,7 @@
                     pageElement: 'id("m_posts_c")/table | id("m_posts_c")/script | //script[contains(text(), "commonui.userInfo.setAll")]',
                     insertPosition: ['css;#m_posts_c', 3],
                     replaceE: 'css;div[name="pageball"]',
+                    scriptType: 2,
                     scrollDelta: 1000
                 }
             },
@@ -593,6 +602,7 @@
                     pageElement: 'css;.workshopBrowseItems > *',
                     insertPosition: ['css;.workshopBrowseItems', 3],
                     replaceE: 'css;.workshopBrowsePaging',
+                    scriptType: 2,
                     scrollDelta: 1500
                 }
             },
@@ -1210,6 +1220,35 @@
                     scrollDelta: 1500
                 }
             },
+            wikihow: { // 指南
+                SiteTypeID: 0,
+                host: ['www.wikihow.com', 'zh.wikihow.com'],
+                functionStart: function() {if (location.pathname.indexOf('/Category:') > -1) {
+                    curSite = DBSite.wikihow;
+                } else if (location.pathname.indexOf('/wikiHowTo') > -1 && location.search.indexOf('?search=') > -1) {
+                    curSite = DBSite.wikihow_search;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.pag_next',
+                    pageElement: 'css;#cat_all > .cat_grid > div',
+                    insertPosition: ['css;#cat_all > .cat_grid', 3],
+                    replaceE: 'css;#large_pagination',
+                    scriptType: 3,
+                    scrollDelta: 2000
+                }
+            },
+            wikihow_search: { // 指南
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;#searchresults_footer > a.buttonright',
+                    pageElement: 'css;#searchresults_list > a',
+                    insertPosition: ['css;#searchresults_list', 3],
+                    replaceE: 'css;#searchresults_footer',
+                    scrollDelta: 3000
+                }
+            },
             afreecatv: { // 直播
                 SiteTypeID: 0,
                 host: 'www.afreecatv.com',
@@ -1260,18 +1299,56 @@
                     replaceE: 'css;.pagination',
                     scrollDelta: 1000
                 }
+            },
+            ruyile_xuexiao: { // 如意了教育 - 学校名录
+                SiteTypeID: 0,
+                host: 'www.ruyile.com',
+                functionStart: function() {
+                    if (location.pathname === '/xuexiao/') {
+                        curSite = DBSite.ruyile_xuexiao;
+                    } else if (location.pathname === '/data/') {
+                        curSite = DBSite.ruyile_data;
+                    } else if (location.pathname === '/shijuan/') {
+                        curSite = DBSite.ruyile_shijuan;
+                    }},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="fy"]/a[contains(text(), "下一页")][@href]',
+                    pageElement: 'css;.xxlb > .sk',
+                    insertPosition: ['css;.xxlb', 3],
+                    replaceE: 'css;.fy',
+                    scrollDelta: 1000
+                }
+            },
+            ruyile_data: { // 如意了教育 - 数据
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="fy"]/a[contains(text(), "下一页")][@href]',
+                    pageElement: 'css;.m1_z > .lbk',
+                    insertPosition: ['css;.page', 1],
+                    replaceE: 'css;.fy',
+                    scrollDelta: 1000
+                }
+            },
+            ruyile_shijuan: { // 如意了教育 - 试卷
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="fy"]/a[contains(text(), "下一页")][@href]',
+                    pageElement: 'css;.m1_z > .m2_lb',
+                    insertPosition: ['css;.page', 1],
+                    replaceE: 'css;.fy',
+                    scrollDelta: 1000
+                }
             }
         };
         // 生成 SiteTypeID
         generateID();
         // 用于脚本判断（针对部分特殊的网站）
         SiteType = {
-            GOOGLE: DBSite.google.SiteTypeID,
             BAIDU_TIEBA: DBSite.baidu_tieba.SiteTypeID,
-            GAMERSKY_GL: DBSite.gamersky_gl.SiteTypeID,
-            STEAMCOMMUNITY: DBSite.steamcommunity.SiteTypeID,
-            NGA_THREAD: DBSite.nga_thread.SiteTypeID,
-            NGA_READ: DBSite.nga_read.SiteTypeID
+            GAMERSKY_GL: DBSite.gamersky_gl.SiteTypeID
         };
     }
 
@@ -1370,8 +1447,6 @@
             }
         }
     }
-
-
     // 百度贴吧 的插入前函数（加载图片）
     function baidu_tieba_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
@@ -1381,6 +1456,52 @@
             })
         });
         return pageElems
+    }
+    // 百度贴吧 获取下一页地址
+    function baidu_tieba_functionNext() {
+        let next = document.querySelector('a.next.pagination-item[href]');
+        if (next != null && next.nodeType === 1 && next.href && next.href.slice(0,4) === 'http') {
+            var url = next.href + '&pagelets=frs-list%2Fpagelet%2Fthread&pagelets_stamp=' + new Date().getTime();
+            if (url === curSite.pageUrl) return
+            curSite.pageUrl = url;
+            getPageElems(curSite.pageUrl);
+        };
+    }
+    // 百度贴吧 插入数据
+    function baidu_tieba_insertElement(newBody, type) {
+        if (!newBody) return
+        let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody),
+            toElement = getAllElements(curSite.pager.insertPosition[0])[0];
+        if (pageElems.length >= 0) {
+            // 执行插入前函数
+            pageElems = curSite.function.before(pageElems);
+            // 插入位置
+            let addTo1 = addTo(curSite.pager.insertPosition[1]);
+            // 获取 <script> 内容
+            const scriptElems = getAllElements('//script', newBody, newBody);
+            let scriptText = '';
+            for (let i = 0; i < scriptElems.length; i++) {
+                if (scriptElems[i].textContent.indexOf('Bigpipe.register("frs-list/pagelet/thread_list"') > -1) {
+                    scriptText = scriptElems[i].textContent.replace('Bigpipe.register("frs-list/pagelet/thread_list", ','');
+                    break
+                }
+            }
+            if (scriptText) {
+                scriptText = scriptText.slice(0, scriptText.indexOf(').')) // 获取主体内容
+                let scriptJSON = JSON.parse(scriptText).content; //           字符串转 JSON
+                var temp_baidu_tieba = document.createElement('div'); temp_baidu_tieba.innerHTML = scriptJSON; // 字符串转 Element 元素
+                pageElems = curSite.function.before(getAllElements(curSite.pager.pageElement, temp_baidu_tieba, temp_baidu_tieba)); // 插入前执行函数
+                pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);}); // 插入元素
+                // 替换元素
+                let oriE = document.querySelectorAll(curSite.pager.pageElement.replace('css;', '')),
+                    repE = getAllElements(curSite.pager.replaceE, temp_baidu_tieba, temp_baidu_tieba);
+                if (oriE.length === repE.length) {
+                    for (let i = 0; i < oriE.length; i++) {
+                        oriE[i].outerHTML = repE[i].outerHTML;
+                    }
+                }
+            }
+        }
     }
 
 
@@ -1778,13 +1899,13 @@
                                     }
                                 }
                             } else if (curSite.pager.type === 1) { // <<<<< 翻页类型 1（由脚本实现自动无缝翻页）>>>>>
-                                // 为百度贴吧的发帖考虑...
-                                if (!(document.documentElement.scrollHeight <= scrollHeight + scrollTop + 200 && curSite.SiteTypeID === SiteType.BAIDU_TIEBA)) {
                                     ShowPager.loadMorePage();
-                                }
                             } else if (curSite.pager.type === 4) { // <<<<< 翻页类型 4（部分简单的动态加载类网站）>>>>>
                                 if (curSite.SiteTypeID > 0) {
-                                    curSite.pager.nextLink();
+                                    // 为百度贴吧的发帖考虑...
+                                    if (!(document.documentElement.scrollHeight <= scrollHeight + scrollTop + 200 && curSite.SiteTypeID === SiteType.BAIDU_TIEBA)) {
+                                        curSite.pager.nextLink();
+                                    }
                                     if (curSite.pager.intervals) {
                                         let _SiteTypeID = curSite.SiteTypeID;
                                         curSite.SiteTypeID = 0;
@@ -1926,12 +2047,16 @@
     // 类型 4 专用
     function getPageElems(url, type = 'text', method = 'GET', data = '', type2) {
         //console.log(url, data)
+        let mimeType = '';
+        if (curSite.pager.mimeType) mimeType = curSite.pager.mimeType;
         GM_xmlhttpRequest({
             url: url,
             method: method,
             data: data,
             responseType: type,
+            overrideMimeType: mimeType,
             headers: {
+                "Referer": location.href,
                 'Content-Type': (method === 'POST') ? 'application/x-www-form-urlencoded':''
             },
             timeout: 5000,
@@ -2027,9 +2152,6 @@
                 if (url === '') return;
                 if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
-                if (curSite.SiteTypeID === SiteType.BAIDU_TIEBA) {
-                    url = url + '&pagelets=frs-list%2Fpagelet%2Fthread&pagelets_stamp=' + new Date().getTime();
-                }
                 let mimeType = '';
                 if (curSite.pager.mimeType) mimeType = curSite.pager.mimeType;
                 // 读取下一页的数据
@@ -2063,54 +2185,31 @@
                                 let addTo1 = addTo(curSite.pager.insertPosition[1]);
 
                                 // 插入新页面元素
-                                if (curSite.SiteTypeID === SiteType.STEAMCOMMUNITY || curSite.SiteTypeID === SiteType.NGA_THREAD || curSite.SiteTypeID === SiteType.NGA_READ) {
-                                    pageElems.forEach(function (one) {
-                                        if (one.tagName === 'SCRIPT') { // 对于 <script> 需要用另一种方式插入网页，以便正常运行
-                                            toElement.appendChild(document.createElement('script')).innerHTML = one.textContent;
-                                        } else {
-                                            toElement.insertAdjacentElement(addTo1, one); // 继续插入网页主体元素
-                                        }
-                                    });
-                                } else if (curSite.SiteTypeID != SiteType.BAIDU_TIEBA) {
-                                    pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);});
-                                }
+                                pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);});
 
-                                // 对于 <script> 需要用另一种方式插入网页，以便正常运行
-                                if (curSite.SiteTypeID === SiteType.GOOGLE) {
-                                    const scriptElems = getAllElements('//script', newBody, newBody);
+                                // 插入 <script> 标签
+                                if (curSite.pager.scriptType) {
                                     let scriptText = '';
-                                    scriptElems.forEach(function (one) {scriptText += one.innerHTML;});
-                                    toElement.appendChild(document.createElement('script')).innerHTML = scriptText;
-                                }
-
-                                // 对于百度贴吧这种动态加载内容的网站需要单独处理
-                                if (curSite.SiteTypeID === SiteType.BAIDU_TIEBA) {
-                                    const scriptElems = getAllElements('//script', newBody, newBody);
-                                    let scriptText = '';
-                                    for (let i = 0; i < scriptElems.length; i++) {
-                                        if (scriptElems[i].textContent.indexOf('Bigpipe.register("frs-list/pagelet/thread_list"') > -1) {
-                                            scriptText = scriptElems[i].textContent.replace('Bigpipe.register("frs-list/pagelet/thread_list", ','');
-                                            break
-                                        }
+                                    if (curSite.pager.scriptType === 1) { //         下一页的所有 <script> 标签
+                                        const scriptElems = getAllElements('//script', newBody, newBody);
+                                        scriptElems.forEach(function (one) {scriptText += ';' + one.textContent;});
+                                        toElement.appendChild(document.createElement('script')).textContent = scriptText;
+                                    } else if (curSite.pager.scriptType === 2) { //  下一页主体元素同级 <script> 标签
+                                        pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
+                                        if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
+                                    } else if (curSite.pager.scriptType === 3) { //  下一页主体元素子元素 <script> 标签
+                                        pageElems.forEach(function (one) {
+                                            const scriptElems = one.querySelectorAll('script');
+                                            scriptElems.forEach(function (script) {scriptText += ';' + script.textContent;});
+                                        });
+                                        if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
                                     }
-                                    if (scriptText) {
-                                        scriptText = scriptText.slice(0, scriptText.indexOf(').')) // 获取主体内容
-                                        let scriptJSON = JSON.parse(scriptText).content; // 字符串转 JSON
-                                        var temp_baidu_tieba = document.createElement('div'); temp_baidu_tieba.innerHTML = scriptJSON; // 字符串转 Element 元素
-                                        pageElems = curSite.function.before(getAllElements(curSite.pager.pageElement, temp_baidu_tieba, temp_baidu_tieba)); // 插入前执行函数
-                                        pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);}); // 插入元素
-                                    }
-                                    //toElement.appendChild(document.createElement('script')).innerHTML = scriptText;
                                 }
 
                                 // 替换待替换元素
                                 try {
-                                    let oriE = getAllElements(curSite.pager.replaceE), repE;
-                                    if (curSite.SiteTypeID === SiteType.BAIDU_TIEBA) {
-                                        repE = getAllElements(curSite.pager.replaceE, temp_baidu_tieba, temp_baidu_tieba);
-                                    } else {
+                                    let oriE = getAllElements(curSite.pager.replaceE),
                                         repE = getAllElements(curSite.pager.replaceE, newBody, newBody);
-                                    }
                                     if (oriE.length === repE.length) {
                                         for (let i = 0; i < oriE.length; i++) {
                                             oriE[i].outerHTML = repE[i].outerHTML;
@@ -2136,7 +2235,6 @@
             }
         },
     };
-
     function getElementByCSS(css, contextNode = document) {
         return contextNode.querySelector(css);
     }
