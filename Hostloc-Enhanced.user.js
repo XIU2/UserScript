@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.3.7
+// @version      1.3.8
 // @author       X.I.U
 // @description  自动签到（访问空间 +22 积分）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
@@ -408,6 +408,7 @@
 
         function replyCustom_1() {
             let floatlayout_reply = e => {
+                console.log()
                 if (e.target.innerHTML && e.target.innerHTML.indexOf('id="floatlayout_reply"') > -1) {
                     document.getElementById('postsubmit').onclick = function(){
                         if (GM_getValue('menu_customLittleTail')) document.getElementById('postmessage').value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');
@@ -465,7 +466,7 @@
     // 快捷回到顶部（右键左右两侧空白处）
     function backToTop() {
         document.body.oncontextmenu = function(event){
-            if (event.target==this) {
+            if (event.target == this) {
                 event.preventDefault();
                 window.scrollTo(0,0)
             }
@@ -476,10 +477,10 @@
     // 收起帖子预览（左键左右两侧空白处）
     function collapsedNowPost() {
         document.body.onclick = function(event){
-            if (event.target==this) {
-                document.querySelectorAll('[id^="threadPreviewTR_"] .showhide').forEach(function (el) {
-                    if (!el.parentNode.querySelector('[name="message"]') || el.parentNode.querySelector('[name="message"]').value === '' && !document.getElementById('fwin_reply')) { // 避免快速回复过程中误点收起了
-                        let parentElement = el.parentNode.parentNode.parentNode.parentNode.parentNode,
+            if (event.target == this) {
+                document.querySelectorAll('[id^="threadPreviewTR_"] .closeprev').forEach(function (el) {
+                    if (!el.parentElement.querySelector('[name="message"]') || el.parentElement.querySelector('[name="message"]').value === '' && !document.getElementById('fwin_reply')) { // 避免快速回复过程中误点收起了
+                        let parentElement = el.parentElement.parentElement.parentElement.parentElement.parentElement,
                             top = parentElement.offsetTop + parentElement.offsetParent.offsetTop + parentElement.offsetParent.offsetParent.offsetTop; // 元素距离顶部的高度
                         if (top < document.documentElement.scrollTop) window.scrollTo(0,top) // 帖子标题在上面时才会滚动到该帖子处
                         el.click()
