@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.9.1
+// @version      1.9.2
 // @author       X.I.U
 // @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl...
 // @match        *://*/*
@@ -2192,6 +2192,7 @@
             let _html = `<style>#Autopage_number {top: calc(75vh) !important;left: 0 !important;width: 32px;height: 32px;padding: 6px !important;display: flex;position: fixed !important;opacity: 0.5;transition: .2s;z-index: 1000 !important;cursor: pointer;user-select: none !important;flex-direction: column;align-items: center;justify-content: center;box-sizing: content-box;border-radius: 0 50% 50% 0;transform-origin: center !important;transform: translateX(-8px);background-color: #eeec;-webkit-tap-highlight-color: transparent;box-shadow: 1px 1px 3px 0px #989898 !important;color: #000 !important;} #Autopage_number:hover {opacity: 1;transform: translateX(0);}</style>
 <div id="Autopage_number" title="当前页码&#10;&#10;(可在 [自动无缝翻页] 脚本菜单中关闭)">${pageNum._now}</div>`
             document.body.insertAdjacentHTML('beforeend', _html);
+            status = document.getElementById('Autopage_number');
             set();
         }
         // 监听储存当前页码的对象值的变化
@@ -2199,7 +2200,7 @@
             Object.defineProperty(pageNum, 'now', {
                 set: function(value) {
                     this._now = value;
-                    document.getElementById('Autopage_number').textContent = value;
+                    if (status) status.textContent = value;
                 }
             });
         }
