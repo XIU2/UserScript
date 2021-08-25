@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.8.9
+// @version      1.9.0
 // @author       X.I.U
 // @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl...
 // @match        *://*/*
@@ -61,7 +61,7 @@
 
             } else if (menuAll[i][0] === 'menu_discuz_thread_page') { // 帖子内自动翻页 (仅论坛)
 
-                if (webType === 2 || location.host === 'cs.rin.ru') {
+                if (webType === 2 || location.host === 'cs.rin.ru' || location.host === 'www.flyert.com') {
                     menuId[i] = GM_registerMenuCommand(`${menuAll[i][3]?'✅':'❌'} ${menuAll[i][1]}`, function(){menu_switch(menuAll[i][3], menuAll[i][0], menuAll[i][2])});
                 }
 
@@ -72,6 +72,7 @@
         menuId[menuId.length] = GM_registerMenuCommand('💬 反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/412212/feedback', {active: true,insert: true,setParent: true});});
     }
 
+    // 网站规则
     function setDBSite() {
     /*
     自动翻页规则
@@ -350,7 +351,7 @@
                     nextText: '查看更多c',
                     scrollDelta: 1000
                 }
-            }, //      微博评论
+            }, //       微博评论
             nga_thread: {
                 SiteTypeID: 0,
                 host: 'bbs.nga.cn',
@@ -371,7 +372,7 @@
                 function: {
                     after: nga_thread_functionAfter
                 }
-            }, //         NGA - 各版块帖子列表
+            }, //          NGA - 各版块帖子列表
             nga_read: {
                 SiteTypeID: 0,
                 pager: {
@@ -383,7 +384,7 @@
                     scriptType: 2,
                     scrollDelta: 1000
                 }
-            }, //           NGA - 帖子内
+            }, //            NGA - 帖子内
             v2ex_recent: {
                 SiteTypeID: 0,
                 host: ['v2ex.com', 'www.v2ex.com'],
@@ -416,7 +417,7 @@
                     after: v2ex_functionAfter,
                     parameter: '#Main a.topic-link:not([target])'
                 }
-            }, //        V2EX - 最近主题页
+            }, //         V2EX - 最近主题页
             v2ex_notifications: {
                 SiteTypeID: 0,
                 pager: {
@@ -431,7 +432,7 @@
                     after: v2ex_functionAfter,
                     parameter: '#Main a[href^="/t/"]:not([target])'
                 }
-            }, // V2EX - 提醒消息页
+            }, //  V2EX - 提醒消息页
             v2ex_replies: {
                 SiteTypeID: 0,
                 pager: {
@@ -446,7 +447,7 @@
                     after: v2ex_functionAfter,
                     parameter: '#Main a[href^="/t/"]:not([target])'
                 }
-            }, //       V2EX - 用户回复页
+            }, //        V2EX - 用户回复页
             v2ex_go: {
                 SiteTypeID: 0,
                 pager: {
@@ -461,7 +462,7 @@
                     after: v2ex_functionAfter,
                     parameter: '#Main a.topic-link:not([target])'
                 }
-            }, //            V2EX - 分类主题页
+            }, //             V2EX - 分类主题页
             v2ex_balance: {
                 SiteTypeID: 0,
                 pager: {
@@ -472,7 +473,7 @@
                     replaceE: 'css;#Main > .box > .cell[style] > table',
                     scrollDelta: 1000
                 }
-            }, //       V2EX - 账户余额页
+            }, //        V2EX - 账户余额页
             xcar_forumdisplay: {
                 SiteTypeID: 0,
                 host: 'www.xcar.com.cn',
@@ -485,7 +486,35 @@
                     replaceE: 'css;.forumList_page',
                     scrollDelta: 2000
                 }
-            }, //  爱卡汽车网论坛 - 各版块帖子列表
+            }, //   爱卡汽车网论坛 - 各版块帖子列表
+            flyert_forumdisplay: {
+                SiteTypeID: 0,
+                host: 'www.flyert.com',
+                functionStart: function() {if (location.search.indexOf('mod=forumdisplay') > -1) {
+                    curSite = DBSite.flyert_forumdisplay;
+                } else if (location.search.indexOf('mod=viewthread') > -1) {
+                    if (GM_getValue('menu_discuz_thread_page')) {curSite = DBSite.flyert_viewthread;}
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: '//a[@class="nxt"][@href][not(contains(@href, "javascript"))]',
+                    pageElement: 'css;#threadlist table > tbody[id^="normalthread_"]',
+                    insertPosition: ['id("threadlist")//table/tbody[starts-with(@id, "normalthread_")]/parent::table', 3],
+                    replaceE: 'css;.pg',
+                    scrollDelta: 2500
+                }
+            }, // 飞客网论坛 - 各版块帖子列表
+            flyert_viewthread: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//a[@class="nxt"][@href][not(contains(@href, "javascript"))]',
+                    pageElement: 'css;#postlist > .comiis_viewbox',
+                    insertPosition: ['css;#postlist', 3],
+                    replaceE: 'css;.comiis_pgs > .pg',
+                    scrollDelta: 3000
+                }
+            }, //   飞客网论坛 - 帖子内
             expreview: {
                 SiteTypeID: 0,
                 host: 'www.expreview.com',
@@ -495,7 +524,7 @@
                     intervals: 1500,
                     scrollDelta: 1500
                 }
-            }, //          超能网
+            }, //           超能网
             ithome: {
                 SiteTypeID: 0,
                 host: 'www.ithome.com',
@@ -505,7 +534,7 @@
                     intervals: 1500,
                     scrollDelta: 1500
                 }
-            }, //             IT 之家
+            }, //              IT 之家
             _58pic: {
                 SiteTypeID: 0,
                 host: 'www.58pic.com',
@@ -525,7 +554,7 @@
                 function: {
                     before: _58pic_functionBefore
                 }
-            }, //             千图网 - 分类/搜索页
+            }, //              千图网 - 分类/搜索页
             _58pic_c: {
                 SiteTypeID: 0,
                 pager: {
@@ -539,7 +568,7 @@
                 function: {
                     before: _58pic_functionBefore
                 }
-            }, //           千图网 - 专题/收藏夹
+            }, //            千图网 - 专题/收藏夹
             pixabay: {
                 SiteTypeID: 0,
                 host: 'pixabay.com',
@@ -2249,8 +2278,6 @@
             console.info('[自动无缝翻页] - Flarum 论坛'); return 3;
         } else if (document.querySelector('link[href*="themes/dux" i], script[src*="themes/dux" i]')) {
             console.info('[自动无缝翻页] - 使用 WordPress DUX 主题的网站'); return 4;
-        } else if (location.host === 'www.flyert.com') {
-            console.info('[自动无缝翻页] - 部分內嵌的 Discuz! 论坛'); return 2;
         }
         return 0;
     }
@@ -2425,6 +2452,7 @@
                                 try {
                                     let oriE = getAllElements(curSite.pager.replaceE),
                                         repE = getAllElements(curSite.pager.replaceE, newBody, newBody);
+                                    //console.log(oriE, repE);
                                     if (oriE.length === repE.length) {
                                         for (let i = 0; i < oriE.length; i++) {
                                             oriE[i].outerHTML = repE[i].outerHTML;
