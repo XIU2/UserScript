@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.9.4
+// @version      1.9.5
 // @author       X.I.U
-// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl...
+// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -29,7 +29,7 @@
         ['menu_discuz_thread_page', '帖子内自动翻页 (仅论坛)', '帖子内自动翻页 (仅论坛)', true],
         ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', true],
         ['menu_page_number', '显示当前页码 (左下角)', '显示当前页码 (左下角)', true]
-    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1};
+    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, forumWebsite = ['cs.rin.ru', 'www.flyert.com', 'bbs.pediy.com'];
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
     }
@@ -61,7 +61,7 @@
 
             } else if (menuAll[i][0] === 'menu_discuz_thread_page') { // 帖子内自动翻页 (仅论坛)
 
-                if (webType === 2 || location.host === 'cs.rin.ru' || location.host === 'www.flyert.com') {
+                if (webType === 2 || forumWebsite.indexOf(location.host) > -1) {
                     menuId[i] = GM_registerMenuCommand(`${menuAll[i][3]?'✅':'❌'} ${menuAll[i][1]}`, function(){menu_switch(menuAll[i][3], menuAll[i][0], menuAll[i][2])});
                 }
 
@@ -94,7 +94,8 @@
     scriptType: 单独插入 <script> 标签
       1 = 下一页的所有 <script> 标签
       2 = 下一页主体元素同级 <script> 标签
-      3 = 下一页主体元素子元素 <script> 标签
+      3 = 下一页主体元素同级 <script> 标签（远程文件）
+      4 = 下一页主体元素子元素 <script> 标签
     scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大（如果 Type = 3，则相反）
     function：
       before = 插入前执行函数；
@@ -474,6 +475,34 @@
                     scrollDelta: 1000
                 }
             }, //        V2EX - 账户余额页
+            pediy_forum: {
+                SiteTypeID: 0,
+                host: 'bbs.pediy.com',
+                functionStart: function() {if (location.pathname.indexOf('/forum-') > -1) {
+                    curSite = DBSite.pediy_forum;
+                } else if (location.pathname.indexOf('/thread-') > -1) {
+                    if (GM_getValue('menu_discuz_thread_page')) {curSite = DBSite.pediy_thread;}
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: '//ul[contains(@class, "pagination")]//a[contains(text(), "▶")]',
+                    pageElement: 'css;table.threadlist > tbody > tr',
+                    insertPosition: ['css;table.threadlist > tbody', 3],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1500
+                }
+            }, //         看雪论坛 - 各版块帖子列表
+            pediy_thread: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//ul[contains(@class, "pagination")]//a[contains(text(), "▶")]',
+                    pageElement: 'css;table.postlist > tbody > tr[data-pid]',
+                    insertPosition: ['css;table.postlist > tbody > tr:not([data-pid])', 1],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1500
+                }
+            }, //        看雪论坛 - 帖子内
             xcar_forumdisplay: {
                 SiteTypeID: 0,
                 host: 'www.xcar.com.cn',
@@ -542,7 +571,50 @@
                     replaceE: 'css;.pagination',
                     scrollDelta: 1500
                 }
-            }, //              致美化 - 文章列表
+            }, //     致美化 - 文章列表
+            jandan: {
+                SiteTypeID: 0,
+                host: 'jandan.net',
+                functionStart: function() {if (location.pathname === '/' || location.pathname.indexOf('/page/') > -1) {
+                    curSite = DBSite.jandan;
+                } else if (location.pathname === '/dzh') {
+                    curSite = DBSite.jandan_dzh;
+                } else {
+                    curSite = DBSite.jandan_comment;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="wp-pagenavi"]/a[contains(text(), "下一页") or contains(text(), "更多文章")]',
+                    pageElement: 'css;#content > .list-post',
+                    insertPosition: ['css;.wp-pagenavi', 1],
+                    replaceE: 'css;.wp-pagenavi, #nav_prev',
+                    scrollDelta: 1500
+                },
+                function: {
+                    before: src_original_functionBefore
+                }
+            }, //              煎蛋网
+            jandan_comment: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.previous-comment-page',
+                    pageElement: 'css;ol.commentlist > li[id^="comment-"], script[src^="//cdn.jandan.net/static/min/"]',
+                    insertPosition: ['css;ol.commentlist', 3],
+                    replaceE: 'css;.cp-pagenavi, #nav_prev',
+                    scriptType: 3,
+                    scrollDelta: 1500
+                }
+            }, //      煎蛋网
+            jandan_dzh: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 2,
+                    nextLink: '.show_more',
+                    intervals: 1500,
+                    scrollDelta: 1500
+                }
+            }, //          煎蛋网 - 大杂烩
             expreview: {
                 SiteTypeID: 0,
                 host: 'www.expreview.com',
@@ -1436,7 +1508,7 @@
                     pageElement: 'css;#cat_all > .cat_grid > div',
                     insertPosition: ['css;#cat_all > .cat_grid', 3],
                     replaceE: 'css;#large_pagination',
-                    scriptType: 3,
+                    scriptType: 4,
                     scrollDelta: 2000
                 }
             }, //         指南
@@ -1623,7 +1695,7 @@
     // 通用型插入前函数（加载图片 data-original => src）
     function src_original_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
-            let now = one.querySelector('img')
+            let now = one.querySelector('img[data-original]')
             if (now) {
                 now.src = now.dataset.original;
             }
@@ -2468,7 +2540,9 @@
                                     } else if (curSite.pager.scriptType === 2) { //  下一页主体元素同级 <script> 标签
                                         pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
                                         if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
-                                    } else if (curSite.pager.scriptType === 3) { //  下一页主体元素子元素 <script> 标签
+                                    } else if (curSite.pager.scriptType === 3) { //  下一页主体元素同级 <script> 标签（远程文件）
+                                        pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT' && one.src) {toElement.appendChild(document.createElement('script')).src = one.src;}});
+                                    } else if (curSite.pager.scriptType === 4) { //  下一页主体元素子元素 <script> 标签
                                         pageElems.forEach(function (one) {
                                             const scriptElems = one.querySelectorAll('script');
                                             scriptElems.forEach(function (script) {scriptText += ';' + script.textContent;});
