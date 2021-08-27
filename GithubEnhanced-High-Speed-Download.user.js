@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.5.8
+// @version      1.5.9
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -271,8 +271,7 @@
                 raw_url[1][0] + "/gh" + href.replace('/blob/','@'),
                 raw_url[2][0] + href2,
                 raw_url[3][0] + "/gh" + href.replace('/blob/','/'),
-                raw_url[4][0] + "/" + raw_url[0][0] + href2,
-                raw_url[5][0] + "/" + raw_url[0][0] + href2
+                raw_url[4][0] + "/" + raw_url[0][0] + href2
             ],
             _html = ``;
         for (let i=0;i<url.length;i++) {
@@ -317,26 +316,15 @@
             switch(menu_raw_fast) {
                 case 0:
                 case 2:
-                    url = raw_url[menu_raw_fast][0] + href2;
-                    url_name = raw_url[menu_raw_fast][1];
-                    url_tip = raw_url[menu_raw_fast][2];
-                    break;
+                    url = raw_url[menu_raw_fast][0] + href2; break;
                 case 1:
-                    url = raw_url[menu_raw_fast][0] + '/gh' + href.replace('/blob/','@');
-                    url_name = raw_url[menu_raw_fast][1];
-                    url_tip = raw_url[menu_raw_fast][2];
-                    break;
+                    url = raw_url[menu_raw_fast][0] + '/gh' + href.replace('/blob/','@'); break;
                 case 3:
-                    url = raw_url[menu_raw_fast][0] + '/gh' + href.replace('/blob/','/');
-                    url_name = raw_url[menu_raw_fast][1];
-                    url_tip = raw_url[menu_raw_fast][2];
-                    break;
-                case 4:
+                    url = raw_url[menu_raw_fast][0] + '/gh' + href.replace('/blob/','/'); break;
+                default:
                     url = raw_url[menu_raw_fast][0] + "/" + raw_url[0][0] + href2;
-                    url_name = raw_url[menu_raw_fast][1];
-                    url_tip = raw_url[menu_raw_fast][2];
-                    break;
             }
+            url_name = raw_url[menu_raw_fast][1]; url_tip = raw_url[menu_raw_fast][2];
             let _html = ` <a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url[menu_raw_fast][1]} ] 加速源 (☁) 即可切换。">${svg[2]}</a>`;
             cntElm_svg.insertAdjacentHTML('afterend', _html);
             // 绑定鼠标事件
