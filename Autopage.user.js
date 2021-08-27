@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.9.7
+// @version      1.9.8
 // @author       X.I.U
-// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、动漫之家、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl...
+// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic(嗨漫画)、动漫之家、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -1413,6 +1413,27 @@
                     scrollDelta: 2000
                 }
             }, //      动漫狂
+            manhuacat: {
+                SiteTypeID: 0,
+                host: 'www.manhuacat.com',
+                functionStart: function() {if (location.pathname.split('/').length === 4) {
+                    if (getCookie('is_pull') == 'true') { // 强制关闭 [下拉] 模式
+                        document.cookie='is_pull=false; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; // 写入 Cookie 关闭 [下拉] 模式
+                        location.reload(); // 刷新网页
+                    }
+                    setTimeout(manhuacat_init, 100);
+                    curSite = DBSite.manhuacat; document.lastElementChild.appendChild(document.createElement('style')).textContent = '#left, #right, #pull-load, .loading, .pagination, footer {display: none !important;} .img-content > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}'; // 隐藏不需要的元素，调整图片
+                }},
+                pager: {
+                    type: 4,
+                    nextLink: manhuacat_functionNext,
+                    insertPosition: ['css;.img-content', 3],
+                    insertElement: manhuacat_insertElement,
+                    replaceE: 'css;.comic-detail > .breadcrumb-bar, .comic-detail >h2.h4, title, .vg-r-data, body > script:not([src])',
+                    intervals: 2000,
+                    scrollDelta: 3000
+                }
+            }, //       漫画猫
             manhuadb: {
                 SiteTypeID: 0,
                 host: 'www.manhuadb.com',
@@ -1466,7 +1487,7 @@
                     insertPosition: ['css;.comic_wraCon', 3],
                     insertElement: dmzj_insertElement,
                     replaceE: 'css;.wrap_last_mid, .wrap_last_head, title',
-                    intervals: 5000,
+                    intervals: 2000,
                     scrollDelta: 3000
                 }
             }, //            漫画之家 - 原创
@@ -1485,7 +1506,7 @@
                     insertPosition: ['css;#center_box', 3],
                     insertElement: dmzj_manhua_insertElement,
                     replaceE: 'css;.display_graybg, title',
-                    intervals: 5000,
+                    intervals: 2000,
                     scrollDelta: 3000
                 }
             }, //     漫画之家 - 日漫
@@ -2041,6 +2062,62 @@
     }
 
 
+    // manhuacat 初始化（显示本话所以图片）
+    function manhuacat_init() {
+        let _img = '';
+        for (let now of img_data_arr) {
+            _img += `<img src="${asset_domain}${img_pre}${now}">`;
+        }
+        document.querySelector('.img-content > img').remove();
+        document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
+
+    }
+    // manhuacat 获取下一页地址
+    function manhuacat_functionNext(pageElems, type) {
+        if (type === 'url') {
+            if(pageElems.code == '0000') {
+                curSite.pageUrl = pageElems.url;
+                getPageElems(curSite.pageUrl); // 真正的下一页链接
+            }
+        } else {
+            let vg_r_data = document.querySelector('.vg-r-data');
+            if (vg_r_data) {
+                getPageElems(`https://${location.host}/chapter_num?chapter_id=${vg_r_data.dataset.chapter_num}&ctype=1&type=${vg_r_data.dataset.chapterType};`, 'json', 'GET', '', 'url');
+            }
+        }
+    }
+    // manhuacat 插入数据
+    function manhuacat_insertElement(pageElems, type) {
+        if (!pageElems) return
+        if (type === 'url') { // 获取下一页链接
+            manhuacat_functionNext(pageElems, type); return
+        }
+
+        // 添加历史记录
+        window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
+
+        // 替换元素
+        let oriE = document.querySelectorAll(curSite.pager.replaceE.replace('css;', '')),
+            repE = getAllElements(curSite.pager.replaceE, pageElems, pageElems);
+        if (oriE.length === repE.length) {
+            for (let i = 0; i < oriE.length; i++) {
+                oriE[i].outerHTML = repE[i].outerHTML;
+            }
+        }
+
+        // 插入图片
+        let _img = '', _img_arr = LZString.decompressFromBase64(getElementByXpath('//body/script[not(@src)][contains(text(), "img_data")]').textContent.split('"')[1]).split(','), vg_r_data = document.querySelector('.vg-r-data');;
+        for (let now of _img_arr) {
+            _img += `<img src="${vg_r_data.dataset.chapterDomain}${img_pre}${now}">`;
+        }
+        if (_img) {
+            document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
+            // 当前页码 + 1
+            pageNum.now = pageNum._now + 1
+        }
+    }
+
+
     // manhuadb 初始化（将本话其余图片插入网页中）
     function manhuadb_init() {
         let _img = '',
@@ -2160,7 +2237,7 @@
         if (!pageElems) return
         // 插入并运行 <script>
         let scriptElement = pageElems.querySelectorAll('head > script[type]:not([src])'), scriptText = '';
-        scriptElement.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
+        scriptElement.forEach(function (one) {scriptText += ';' + one.textContent;});
         if (scriptText) document.body.appendChild(document.createElement('script')).textContent = scriptText;
 
         // 插入图片
@@ -2217,7 +2294,7 @@
         if (!pageElems) return
         // 插入并运行 <script>
         let scriptElement = pageElems.querySelectorAll('head > script[type]:not([src])'), scriptText = '';
-        scriptElement.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
+        scriptElement.forEach(function (one) {scriptText += ';' + one.textContent;});
         if (scriptText) document.body.appendChild(document.createElement('script')).textContent = scriptText;
 
         // 插入图片
