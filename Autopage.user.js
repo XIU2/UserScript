@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.9.8
+// @version      1.9.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic(嗨漫画)、动漫之家、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl（更多的写不下了...
 // @match        *://*/*
@@ -1382,6 +1382,22 @@
                     scrollDelta: 1500
                 }
             },
+            lrepacks: {
+                SiteTypeID: 0,
+                host: 'lrepacks.net',
+                functionStart: function() {if (location.pathname.indexOf('.html') === -1) curSite = DBSite.lrepacks;},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;.page_next > a',
+                    pageElement: 'css;#main .post-list article',
+                    insertPosition: ['css;.page_nav', 1],
+                    replaceE: 'css;.page_nav',
+                    scrollDelta: 1500
+                },
+                function: {
+                    before: lrepacks_functionBefore
+                }
+            },
             thewindowsclub: {
                 SiteTypeID: 0,
                 host: 'www.thewindowsclub.com',
@@ -1980,6 +1996,18 @@
     }
 
 
+    // cs_rin_ru 各版块帖子列表的插入前函数（过滤置顶帖子）
+    function cs_rin_ru_functionBefore(pageElems) {
+        for (let i = 0; i < pageElems.length; i++) {
+            if (pageElems[i].textContent.replace(/\n|	/g,'') === 'Topics') {
+                pageElems.splice(0,i+1);
+                break;
+            }
+        }
+        return pageElems
+    }
+
+
     // 片库 的插入前函数（加载图片）
     function mypianku_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
@@ -2031,14 +2059,14 @@
     }
 
 
-    // cs_rin_ru 各版块帖子列表的插入前函数（过滤置顶帖子）
-    function cs_rin_ru_functionBefore(pageElems) {
-        for (let i = 0; i < pageElems.length; i++) {
-            if (pageElems[i].textContent.replace(/\n|	/g,'') === 'Topics') {
-                pageElems.splice(0,i+1);
-                break;
+    // LRepacks 的插入前函数（调整 class）
+    function lrepacks_functionBefore(pageElems) {
+        pageElems.forEach(function (one) {
+            let now = one.querySelector('.slideUp, .elementFade')
+            if (now) {
+                now.className = now.className.replace('slideUp','slideUpRun').replace('elementFade','elementFadeRun');
             }
-        }
+        });
         return pageElems
     }
 
