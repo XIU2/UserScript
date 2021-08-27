@@ -8,7 +8,9 @@
 🔨 自用的一些乱七八糟油猴脚本，**有什么需求、建议、问题直接提 [Issues](https://github.com/XIU2/UserScript/issues/new/choose)**，觉得**好用请点个⭐鼓励一下叭~**   
 
 > 也可以前往 GreasyFork 脚本页向我反馈，如果这两个网站你都没有账号，可以找个[临时邮箱](https://linshiyouxiang.cn/)注册下(用完扔~    
-> _另一个开源项目：[**CloudflareSpeedTest** - 🌩 测试 Cloudflare CDN 延迟和速度，获取最快 IP (IPv4+IPv6)！](https://github.com/XIU2/CloudflareSpeedTest)_
+
+> _分享我的其他开源项目：[**TrackersList.com** - 全网热门 BT Tracker 列表！有效提高 BT 下载速度~](https://github.com/XIU2/TrackersListCollection) <img src="https://img.shields.io/github/stars/XIU2/TrackersListCollection.svg?style=flat-square&label=Star&color=4285dd&logo=github" height="16px" />_   
+> _[**CloudflareSpeedTest** - 🌩 测试 Cloudflare CDN 延迟和速度，获取最快 IP (IPv4+IPv6)！](https://github.com/XIU2/CloudflareSpeedTest) <img src="https://img.shields.io/github/stars/XIU2/CloudflareSpeedTest.svg?style=flat-square&label=Star&color=4285dd&logo=github" height="16px" />_   
 
 ## 脚本列表
 
