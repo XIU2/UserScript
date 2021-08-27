@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      1.9.6
+// @version      1.9.7
 // @author       X.I.U
-// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl...
+// @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画DB、HiComic(嗨漫画)、动漫之家、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -1449,6 +1449,46 @@
                     scrollDelta: 3000
                 }
             }, //         嗨漫画
+            dmzj: {
+                SiteTypeID: 0,
+                host: 'www.dmzj.com',
+                functionStart: function() {if (location.pathname.indexOf('/view/') > -1) {
+                    if (getCookie('display_mode') != '1') { // 强制开启 [上下滚动阅读] 模式
+                        document.cookie='display_mode=1; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; // 写入 Cookie 开启 [上下滚动阅读] 模式
+                        location.reload(); // 刷新网页
+                    }
+                    setTimeout(dmzj_init, 100);
+                    curSite = DBSite.dmzj; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'p.mh_curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} .comic_wraCon > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}'; // 隐藏中间的页数信息
+                }},
+                pager: {
+                    type: 4,
+                    nextLink: dmzj_functionNext,
+                    insertPosition: ['css;.comic_wraCon', 3],
+                    insertElement: dmzj_insertElement,
+                    replaceE: 'css;.wrap_last_mid, .wrap_last_head, title',
+                    intervals: 5000,
+                    scrollDelta: 3000
+                }
+            }, //            漫画之家 - 原创
+            dmzj_manhua: {
+                SiteTypeID: 0,
+                host: 'manhua.dmzj.com',
+                functionStart: function() {if (location.pathname.indexOf('.shtml') > -1) {
+                    let chapterScroll = document.getElementById('qiehuan_txt') // 强制为 [上下滚动阅读] 模式
+                    if (chapterScroll && chapterScroll.textContent === '切换到上下滚动阅读') {chapterScroll.click();}
+                    setTimeout(dmzj_manhua_init, 100);
+                    curSite = DBSite.dmzj_manhua; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'p.curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} #center_box > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}'; // 隐藏中间的页数信息
+                }},
+                pager: {
+                    type: 4,
+                    nextLink: dmzj_manhua_functionNext,
+                    insertPosition: ['css;#center_box', 3],
+                    insertElement: dmzj_manhua_insertElement,
+                    replaceE: 'css;.display_graybg, title',
+                    intervals: 5000,
+                    scrollDelta: 3000
+                }
+            }, //     漫画之家 - 日漫
             gufengmh8: {
                 SiteTypeID: 0,
                 host: 'www.gufengmh8.com',
@@ -2096,6 +2136,115 @@
     }
 
 
+    // dmzj 初始化（调整本话其余图片）
+    function dmzj_init() {
+        let _img = '';
+        document.querySelectorAll('.comic_wraCon > a > img').forEach(function (one) {
+            _img += `<img src="${one.dataset.original}">`;
+            one.parentElement.remove();
+        })
+        document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
+
+    }
+    // dmzj 获取下一页地址
+    function dmzj_functionNext() {
+        let next;
+        next = document.querySelector('span.next > a[href]')
+        if (next) {
+            curSite.pageUrl = next.href;
+            getPageElems(curSite.pageUrl);
+        }
+    }
+    // dmzj 插入数据
+    function dmzj_insertElement(pageElems, type) {
+        if (!pageElems) return
+        // 插入并运行 <script>
+        let scriptElement = pageElems.querySelectorAll('head > script[type]:not([src])'), scriptText = '';
+        scriptElement.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
+        if (scriptText) document.body.appendChild(document.createElement('script')).textContent = scriptText;
+
+        // 插入图片
+        let _img = '', _img_arr;
+        if (pages.indexOf('|') === -1) {
+            _img_arr = JSON.parse(pages.replace(/\r\n/g,'|')).page_url.split('|');
+        } else {
+            _img_arr = JSON.parse(pages).page_url.split('|');
+        }
+        for (let now of _img_arr) {
+            _img += `<img src="${img_prefix}${now}">`;
+        }
+        if (_img) {
+            document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
+
+            // 添加历史记录
+            window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
+
+            // 替换元素
+            let oriE = document.querySelectorAll(curSite.pager.replaceE.replace('css;', '')),
+                repE = getAllElements(curSite.pager.replaceE, pageElems, pageElems);
+            if (oriE.length === repE.length) {
+                for (let i = 0; i < oriE.length; i++) {
+                    oriE[i].outerHTML = repE[i].outerHTML;
+                }
+                // 当前页码 + 1
+                pageNum.now = pageNum._now + 1
+            }
+        }
+    }
+
+
+    // dmzj_manhua 初始化（调整本话其余图片）
+    function dmzj_manhua_init() {
+        let _img = '';
+        document.querySelectorAll('#center_box > .inner_img img[src]').forEach(function (one) {
+            _img += `<img src="${one.dataset.original}">`;
+            one.parentElement.parentElement.remove();
+        })
+        document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
+
+    }
+    // dmzj_manhua 获取下一页地址
+    function dmzj_manhua_functionNext() {
+        let next;
+        next = document.getElementById('next_chapter')
+        if (next) {
+            curSite.pageUrl = next.href;
+            getPageElems(curSite.pageUrl);
+        }
+    }
+    // dmzj_manhua 插入数据
+    function dmzj_manhua_insertElement(pageElems, type) {
+        if (!pageElems) return
+        // 插入并运行 <script>
+        let scriptElement = pageElems.querySelectorAll('head > script[type]:not([src])'), scriptText = '';
+        scriptElement.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
+        if (scriptText) document.body.appendChild(document.createElement('script')).textContent = scriptText;
+
+        // 插入图片
+        let _img = '';
+        for (let now of arr_pages) {
+            _img += `<img src="${img_prefix}${now}">`;
+        }
+        if (_img) {
+            document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
+
+            // 添加历史记录
+            window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
+
+            // 替换元素
+            let oriE = document.querySelectorAll(curSite.pager.replaceE.replace('css;', '')),
+                repE = getAllElements(curSite.pager.replaceE, pageElems, pageElems);
+            if (oriE.length === repE.length) {
+                for (let i = 0; i < oriE.length; i++) {
+                    oriE[i].outerHTML = repE[i].outerHTML;
+                }
+                // 当前页码 + 1
+                pageNum.now = pageNum._now + 1
+            }
+        }
+    }
+
+
     // gufengmh8 获取下一页地址
     function gufengmh8_functionNext() {
         let pageElems = document.querySelector(curSite.pager.pageElement.replace('css;', '')); // 寻找数据所在元素
@@ -2394,6 +2543,19 @@
             console.info('[自动无缝翻页] - 使用 WordPress DUX 主题的网站'); return 4;
         }
         return 0;
+    }
+
+
+    // 获取 Cookie
+    function getCookie(name) {
+        if (!name) return ''
+        let arr = document.cookie.split(';');
+        name += '='
+        for (let i=0; i<arr.length; i++) {
+            let now = arr[i].trim();
+            if (now.indexOf(name) == 0) return now.substring(name.length, now.length);
+        }
+        return '';
     }
 
 
