@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         新标签页打开链接
-// @version      1.0.1
+// @version      1.0.2
 // @author       X.I.U
 // @description  将网页中所有链接改为新标签页打开~
 // @match        *://*/*
@@ -28,7 +28,9 @@
      // 修改为新标签页打开
     function targetBlank() {
         Array.from(document.links).forEach(function (_this) {
-            _this.target = '_blank'
+            if (_this.href && _this.href.slice(0,4) === 'http') {
+                _this.target = '_blank'
+            }
         })
     }
 })();
