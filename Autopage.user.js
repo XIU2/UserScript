@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.0.0
+// @version      2.0.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容，目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic(嗨漫画)、动漫之家、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl（更多的写不下了...
 // @match        *://*/*
@@ -648,6 +648,36 @@
                     scrollDelta: 1500
                 }
             }, //              IT 之家
+            puxiang: {
+                SiteTypeID: 0,
+                host: 'www.puxiang.com',
+                functionStart: function() {if (location.pathname === '/search/favorite') {
+                    curSite = DBSite.puxiang_collect;
+                } else if (location.pathname === '/search/puxiang' || location.pathname === '/list' || location.pathname === '/galleries' || location.pathname === '/articles') {
+                    curSite = DBSite.puxiang;
+                } else if (location.pathname === '/') {
+                    curSite = DBSite.puxiang; curSite.pager.scrollDelta = 4000;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;li.next > a[href]',
+                    pageElement: 'css;.work-list > div',
+                    insertPosition: ['css;.work-list', 3],
+                    replaceE: 'css;.pagerbar',
+                    scrollDelta: 1500
+                }
+            }, //             普象网 - 作品集/搜索页
+            puxiang_collect: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;li.next > a[href]',
+                    pageElement: 'css;.collect-list > div',
+                    insertPosition: ['css;.collect-list', 3],
+                    replaceE: 'css;.pagerbar',
+                    scrollDelta: 1500
+                }
+            }, //     普象网 - 收藏夹
             _58pic: {
                 SiteTypeID: 0,
                 host: 'www.58pic.com',
@@ -1749,7 +1779,19 @@
                     replaceE: 'css;.fy',
                     scrollDelta: 1000
                 }
-            } //  如意了教育 - 试卷
+            }, //  如意了教育 - 试卷
+            kdslife: {
+                SiteTypeID: 0,
+                host: 'club.kdslife.com',
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="fr i3_r"]/a[@href][contains(text(), "后一页")]',
+                    pageElement: 'css;ul.main_List > li.i2:not(.h_bg)',
+                    insertPosition: ['css;ul.main_List > li.i3', 1],
+                    replaceE: 'css;ul.main_List > li.i3',
+                    scrollDelta: 1000
+                }
+            } //  宽带山论坛
         };
         // 生成 SiteTypeID
         generateID();
@@ -2148,6 +2190,7 @@
     function manhuacat_functionNext(pageElems, type) {
         if (type === 'url') {
             if(pageElems.code == '0000') {
+                if (pageElems.url === curSite.pageUrl) return
                 curSite.pageUrl = pageElems.url;
                 getPageElems(curSite.pageUrl); // 真正的下一页链接
             }
@@ -2300,6 +2343,7 @@
         let next;
         next = document.querySelector('span.next > a[href]')
         if (next) {
+            if (next.href === curSite.pageUrl) return
             curSite.pageUrl = next.href;
             getPageElems(curSite.pageUrl);
         }
@@ -2357,6 +2401,7 @@
         let next;
         next = document.getElementById('next_chapter')
         if (next) {
+            if (next.href === curSite.pageUrl) return
             curSite.pageUrl = next.href;
             getPageElems(curSite.pageUrl);
         }
@@ -2399,6 +2444,7 @@
         let next;
         next = document.querySelector('.comicContent-next > a[href]')
         if (next) {
+            if (next.href === curSite.pageUrl) return
             curSite.pageUrl = next.href;
             getPageElems(curSite.pageUrl);
         }
