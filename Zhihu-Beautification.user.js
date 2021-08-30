@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.3.6
+// @version      1.3.7
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致、屏蔽登录提示
 // @match        *://www.zhihu.com/*
@@ -23,11 +23,12 @@
 (function() {
     'use strict';
     var menu_ALL = [
-        ['menu_widescreenDisplay', '宽屏显示', '勾选 = 该页面开启宽屏显示', ''],
+        ['menu_widescreenDisplay', '宽屏显示', '勾选 = 该页面开启宽屏显示（刷新后查看效果）', ''],
         ['menu_widescreenDisplayIndex', '首页', '宽屏显示', true],
         ['menu_widescreenDisplayQuestion', '问题页', '宽屏显示', true],
         ['menu_widescreenDisplaySearch', '搜索页、话题页、圈子', '宽屏显示', true],
         ['menu_widescreenDisplayCollection', '收藏页', '宽屏显示', true],
+        ['menu_widescreenDisplayWidth', '宽屏宽度', '宽屏宽度 (100~1000)', '1000'],
         ['menu_darkMode', '暗黑模式', '暗黑模式', true],
         ['menu_darkModeType', '暗黑模式切换（1~4）', '暗黑模式切换', 1],
         ['menu_darkModeAuto', '暗黑模式跟随浏览器', '暗黑模式跟随浏览器', false],
@@ -57,8 +58,8 @@
                 }
                 menu_ID[i] = GM_registerMenuCommand(`${menu_num(menu_ALL[i][3])} ${menu_ALL[i][1]}`, function(){menu_toggle(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
             } else if (menu_ALL[i][0] === 'menu_widescreenDisplay'){
-                    GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_setting('checkbox', menu_ALL[i][1], menu_ALL[i][2], false, [menu_ALL[i+1], menu_ALL[i+2], menu_ALL[i+3], menu_ALL[i+4]])});
-            } else if (menu_ALL[i][0] != 'menu_widescreenDisplayIndex' && menu_ALL[i][0] != 'menu_widescreenDisplayQuestion' && menu_ALL[i][0] != 'menu_widescreenDisplaySearch' && menu_ALL[i][0] != 'menu_widescreenDisplayCollection') {
+                    GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_setting('checkbox', menu_ALL[i][1], menu_ALL[i][2], true, [menu_ALL[i+1], menu_ALL[i+2], menu_ALL[i+3], menu_ALL[i+4], menu_ALL[i+5]])});
+            } else if (menu_ALL[i][0] != 'menu_widescreenDisplayIndex' && menu_ALL[i][0] != 'menu_widescreenDisplayQuestion' && menu_ALL[i][0] != 'menu_widescreenDisplaySearch' && menu_ALL[i][0] != 'menu_widescreenDisplayCollection' && menu_ALL[i][0] != 'menu_widescreenDisplayWidth') {
                 menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
             }
         }
@@ -145,10 +146,12 @@
             <div class="zhihuE_SettingMain"><p>${tips}</p><hr>`
         if (line) _br = '<br>'
         for (let i=0; i<menu.length; i++) {
-            if (GM_getValue(menu[i][0])) {
-                _html += `<label><input name="zhihuE_Setting" type="checkbox" value="${menu[i][0]}" checked="checked">${menu[i][1]}</label>${_br}`
+            if (menu[i][0] === 'menu_widescreenDisplayWidth') {
+                _html += `<label>${menu[i][2]}：<input name="${menu[i][0]}" type="text" value="${GM_getValue(menu[i][0])}" style="width: 40px;"></label>${_br}`
+            } else if (GM_getValue(menu[i][0])) {
+                _html += `<label><input name="zhihuE_Setting_Checkbox" type="checkbox" value="${menu[i][0]}" checked="checked">${menu[i][1]}</label>${_br}`
             } else {
-                _html += `<label><input name="zhihuE_Setting" type="checkbox" value="${menu[i][0]}">${menu[i][1]}</label>${_br}`
+                _html += `<label><input name="zhihuE_Setting_Checkbox" type="checkbox" value="${menu[i][0]}">${menu[i][1]}</label>${_br}`
             }
         }
         _html += `</div></div></div>`
@@ -159,9 +162,10 @@
             // 点击周围空白处 = 点击关闭按钮
             document.querySelector('.zhihuE_SettingBackdrop_2').onclick = function(event){if (event.target == this) {document.querySelector('.zhihuE_SettingClose').click();};}
             // 复选框 点击事件
-            document.getElementsByName('zhihuE_Setting').forEach(function (checkBox) {
+            document.getElementsByName('zhihuE_Setting_Checkbox').forEach(function (checkBox) {
                 checkBox.addEventListener('click', function(){if (this.checked) {GM_setValue(this.value, true);} else {GM_setValue(this.value, false);}});
             })
+            document.getElementsByName('menu_widescreenDisplayWidth')[0].onchange = function(){GM_setValue(this.name, this.value);};
         }, 100)
     }
 
@@ -178,21 +182,25 @@
 .Recommendations-Main {display: none !important;}
 `,
             style_widescreenDisplayIndex = `/* 宽屏显示 - 首页 */
-.Topstory-mainColumn, .QuestionWaiting-mainColumn {width: 1000px !important;}
+.Topstory-mainColumn, .QuestionWaiting-mainColumn {width: inherit !important;}
 .GlobalSideBar {display: none !important;}
+.Topstory-container {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
 `,
             style_widescreenDisplayQuestion = `/* 宽屏显示 - 问题页 */
-.Question-mainColumn, .ListShortcut, .QuestionWaiting-mainColumn {width: 1000px !important;}
+.Question-mainColumn, .ListShortcut, .QuestionWaiting-mainColumn {width: inherit !important;}
 .Question-sideColumn, .GlobalSideBar {display: none !important;}
 .QuestionWaiting-mainColumn {margin-right: 0 !important;}
+.Question-main {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
 `,
             style_widescreenDisplaySearch = `/* 宽屏显示 - 搜索页 */
-.SearchMain, .ContentLayout-mainColumn, .Club-mainColumn, .Post-mainColumn {width: 1000px !important;}
+.SearchMain, .ContentLayout-mainColumn, .Club-mainColumn, .Post-mainColumn {width: inherit !important;}
 .SearchSideBar, .ContentLayout-sideColumn, .Card.QuestionHeaderTopicMeta, .ClubSideBar {display: none !important;}
+.Search-container, .ContentLayout, .Club-container, .Post-container {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
 `,
             style_widescreenDisplayCollection = `/* 宽屏显示 - 收藏页 */
-.CollectionsDetailPage-mainColumn {width: 1000px !important;}
+.CollectionsDetailPage-mainColumn {width: inherit !important;}
 .CollectionDetailPageSideBar {display: none !important;}
+.CollectionsDetailPage {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
 `,
             style_2 = `/* 隐藏在各列表中查看文章时开头显示的大图，不影响文章、专栏页面 */
 .RichContent img.ArticleItem-image {display: none !important;}
@@ -225,7 +233,7 @@ html[data-theme=dark] .Highlight em {color: #c33c39 !important;}
 /* 背景颜色 - 网页 */
 html[data-theme=dark] body, html[data-theme=dark] .Select-option:focus {background: #22272E !important;}
 /* 背景颜色 - 问题 */
-html[data-theme=dark] .AppHeader, html[data-theme=dark] .QuestionHeader, html[data-theme=dark] .QuestionHeader-footer, html[data-theme=dark] .EmoticonsFooter-item--selected, html[data-theme=dark] .Card, html[data-theme=dark] .Question-mainColumn .Card .Sticky.is-bottom, html[data-theme=dark] .ContentItem-actions, html[data-theme=dark] .MoreAnswers .List-headerText, html[data-theme=dark] .CommentsV2-withPagination, html[data-theme=dark] .Topbar, html[data-theme=dark] .CommentsV2-footer, html[data-theme=dark] .CommentEditorV2-inputWrap--active, html[data-theme=dark] .InputLike, html[data-theme=dark] .InputLike + div div, html[data-theme=dark] .Popover-content, html[data-theme=dark] .Notifications-footer, html[data-theme=dark] .Messages-footer, html[data-theme=dark] .Modal-inner, html[data-theme=dark] .Emoticons, html[data-theme=dark] .EmoticonsFooter, html[data-theme=dark] .SearchTabs, html[data-theme=dark] .Popover-arrow:after, html[data-theme=dark] .CommentEditorV2-inputWrap, html[data-theme=dark] .ProfileHeader-wrapper, html[data-theme=dark] .UserCover, html[data-theme=dark] .AnswerForm-footer, html[data-theme=dark] .Editable-toolbar, html[data-theme=dark] .AnswerForm-fullscreenContent .Editable-toolbar, html[data-theme=dark] .KfeCollection-PcCollegeCard-wrapper, html[data-theme=dark] .KfeCollection-PcCollegeCard-root, html[data-theme=dark] .HotItem, html[data-theme=dark] .HotList, html[data-theme=dark] .HotListNavEditPad, html[data-theme=dark] .QuestionWaiting-typesTopper, html[data-theme=dark] .QuestionWaiting-types, html[data-theme=dark] .PostItem, html[data-theme=dark] .ClubSideBar section, html[data-theme=dark] .SearchSubTabs, html[data-theme=dark] .Club-SearchPosts-Content, html[data-theme=dark] .Club-content, html[data-theme=dark] .ClubJoinOrCheckinButton, html[data-theme=dark] .ClubEdit, html[data-theme=dark] .CornerButton, html[data-theme=dark] .Notifications-Section-header, html[data-theme=dark] .NotificationList, .NotificationList-Item.NotificationList-Item:after, .NotificationList-DateSplit.NotificationList-DateSplit:after, html[data-theme=dark] .Chat, .ChatUserListItem:after, .ChatListGroup-SectionTitle--bottomBorder:after, html[data-theme=dark] .ActionMenu, .ChatSideBar-Search--active, html[data-theme=dark] .ChatSideBar-Search-ResultListWrap, html[data-theme=dark] .QuestionMainDivider-inner, html[data-theme=dark] .Topic-bar, html[data-theme=dark] .AnnotationTag, html[data-theme=dark] .HoverCard, html[data-theme=dark] .HoverCard-loading, html[data-theme=dark] .ExploreSpecialCard, html[data-theme=dark] .ExploreHomePage-ContentSection-moreButton a, html[data-theme=dark] .ExploreRoundtableCard, html[data-theme=dark] .ExploreCollectionCard, html[data-theme=dark] .ExploreColumnCard, html[data-theme=dark] .RichText .lazy[data-lazy-status], html[data-theme=dark] #TopstoryContent > div:first-child, html[data-theme=dark] .Topstory-newUserFollowCountPanel, html[data-theme=dark] .AnswerForm-fullscreenContent .RichText {background: #2D333B !important;}
+html[data-theme=dark] .AppHeader, html[data-theme=dark] .QuestionHeader, html[data-theme=dark] .QuestionHeader-footer, html[data-theme=dark] .EmoticonsFooter-item--selected, html[data-theme=dark] .Card, html[data-theme=dark] .Question-mainColumn .Card .Sticky.is-bottom, html[data-theme=dark] .ContentItem-actions, html[data-theme=dark] .MoreAnswers .List-headerText, html[data-theme=dark] .CommentsV2-withPagination, html[data-theme=dark] .Topbar, html[data-theme=dark] .CommentsV2-footer, html[data-theme=dark] .CommentEditorV2-inputWrap--active, html[data-theme=dark] .InputLike, html[data-theme=dark] .InputLike + div div, html[data-theme=dark] .Popover-content, html[data-theme=dark] .Notifications-footer, html[data-theme=dark] .Messages-footer, html[data-theme=dark] .Modal-inner, html[data-theme=dark] .Emoticons, html[data-theme=dark] .EmoticonsFooter, html[data-theme=dark] .SearchTabs, html[data-theme=dark] .Popover-arrow:after, html[data-theme=dark] .CommentEditorV2-inputWrap, html[data-theme=dark] .ProfileHeader-wrapper, html[data-theme=dark] .UserCover, html[data-theme=dark] .AnswerForm-footer, html[data-theme=dark] .Editable-toolbar, html[data-theme=dark] .AnswerForm-fullscreenContent .Editable-toolbar, html[data-theme=dark] .KfeCollection-PcCollegeCard-wrapper, html[data-theme=dark] .KfeCollection-PcCollegeCard-root, html[data-theme=dark] .HotItem, html[data-theme=dark] .HotList, html[data-theme=dark] .HotListNavEditPad, html[data-theme=dark] .QuestionWaiting-typesTopper, html[data-theme=dark] .QuestionWaiting-types, html[data-theme=dark] .PostItem, html[data-theme=dark] .ClubSideBar section, html[data-theme=dark] .SearchSubTabs, html[data-theme=dark] .Club-SearchPosts-Content, html[data-theme=dark] .Club-content, html[data-theme=dark] .ClubJoinOrCheckinButton, html[data-theme=dark] .ClubEdit, html[data-theme=dark] .CornerButton, html[data-theme=dark] .Notifications-Section-header, html[data-theme=dark] .NotificationList, .NotificationList-Item.NotificationList-Item:after, .NotificationList-DateSplit.NotificationList-DateSplit:after, html[data-theme=dark] .Chat, .ChatUserListItem:after, .ChatListGroup-SectionTitle--bottomBorder:after, html[data-theme=dark] .ActionMenu, .ChatSideBar-Search--active, html[data-theme=dark] .ChatSideBar-Search-ResultListWrap, html[data-theme=dark] .QuestionMainDivider-inner, html[data-theme=dark] .Topic-bar, html[data-theme=dark] .AnnotationTag, html[data-theme=dark] .HoverCard, html[data-theme=dark] .HoverCard-loading, html[data-theme=dark] .ExploreSpecialCard, html[data-theme=dark] .ExploreHomePage-ContentSection-moreButton a, html[data-theme=dark] .ExploreRoundtableCard, html[data-theme=dark] .ExploreCollectionCard, html[data-theme=dark] .ExploreColumnCard, html[data-theme=dark] .RichText .lazy[data-lazy-status], html[data-theme=dark] #TopstoryContent > div:first-child, html[data-theme=dark] .Topstory-newUserFollowCountPanel, html[data-theme=dark] .AnswerForm-fullscreenContent .RichText, html[data-theme=dark] .Club-Search-Content {background: #2D333B !important;}
 html[data-theme=dark] .CommentListV2-header-divider, html[data-theme=dark] .CommentsV2-openComment-divider, html[data-theme=dark] .AnswerForm-fullscreenScroller, html[data-theme=dark] .HotListNav-item, html[data-theme=dark] .AutoInviteItem-wrapper--desktop, html[data-theme=dark] .ExploreSpecialCard-contentTag, html[data-theme=dark] .ExploreCollectionCard-contentTypeTag, html[data-theme=dark] .Reward-TipjarDialog-tagLine, html[data-theme=dark] .AnswerForm-footer.useNewEditorSetting > div, html[data-theme=dark] .AnswerForm-fullscreenContent > div:first-child, html[data-theme=dark] .Editable-toolbar button:hover, html[data-theme=dark] .AuthorInfo.AnswerAdd-info + div {background-color: #222933 !important;}
 html[data-theme=dark] .CornerButton:hover {background: #3f4752 !important;} /* 右下角按钮 */
 
