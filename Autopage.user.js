@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.0.4
+// @version      2.0.5
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic(嗨漫画)、动漫之家、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl（更多的写不下了...
 // @match        *://*/*
@@ -108,10 +108,32 @@
                 pager: {
                     type: 2,
                     nextLink: '#autopbn',
-                    nextText: '下一页 »',
+                    nextTextOf: '下一页',
                     scrollDelta: 1500
                 }
             }, //      Discuz! - 各版块帖子列表（自带无缝加载下一页按钮的）
+            discuz_guide: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//a[@class="nxt"][@href][not(contains(@href, "javascript"))] | //a[@class="next"][@href][not(contains(@href, "javascript"))]',
+                    pageElement: 'css;#threadlist table > tbody[id^="normalthread_"]',
+                    insertPosition: ['id("threadlist")//table/tbody[starts-with(@id, "normalthread_")]/parent::table', 3],
+                    replaceE: 'css;.pg, .pages',
+                    scrollDelta: 1000
+                }
+            }, //      Discuz! - 导读页 及 各版块帖子列表（不带无缝加载下一页按钮的）
+            discuz_waterfall: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//a[@class="nxt"][@href][not(contains(@href, "javascript"))] | //a[@class="next"][@href][not(contains(@href, "javascript"))]',
+                    pageElement: 'css;#waterfall > li',
+                    insertPosition: ['css;#waterfall', 3],
+                    replaceE: 'css;.pg, .pages',
+                    scrollDelta: 1000
+                }
+            }, //  Discuz! - 图片模式的各版块帖子列表（不带无缝加载下一页按钮的）
             discuz_thread: {
                 SiteTypeID: 0,
                 pager: {
@@ -134,17 +156,6 @@
                     scrollDelta: 1000
                 }
             }, //     Discuz! - 搜索页
-            discuz_guide: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//a[@class="nxt"][@href][not(contains(@href, "javascript"))] | //a[@class="next"][@href][not(contains(@href, "javascript"))]',
-                    pageElement: 'css;#threadlist table > tbody[id^="normalthread_"]',
-                    insertPosition: ['id("threadlist")//table/tbody[starts-with(@id, "normalthread_")]/parent::table', 3],
-                    replaceE: 'css;.pg, .pages',
-                    scrollDelta: 1000
-                }
-            }, //      Discuz! - 导读页 及 各版块帖子列表（不带无缝加载下一页按钮的）
             discuz_youspace: {
                 SiteTypeID: 0,
                 pager: {
@@ -1847,6 +1858,8 @@
                 if (location.pathname.indexOf('/forum-') > -1) { //             < 各版块帖子列表 >
                     if (document.getElementById('autopbn')) { //                判断是否有 [下一页] 按钮
                         curSite = DBSite.discuz_forum;
+                    } else if (document.getElementById('waterfall')) { //       判断是否为图片模式
+                        curSite = DBSite.discuz_waterfall; waterfallStyle(); // 图片模式列表样式预处理
                     } else {
                         curSite = DBSite.discuz_guide;
                     }
@@ -1862,6 +1875,8 @@
                 if (location.search.indexOf('mod=forumdisplay') > -1 || location.pathname.indexOf('forumdisplay.php') > -1) { //      < 各版块帖子列表 >
                     if (document.getElementById('autopbn')) { //                判断是否有 [下一页] 按钮
                         curSite = DBSite.discuz_forum;
+                    } else if (document.getElementById('waterfall')) { //       判断是否为图片模式
+                        curSite = DBSite.discuz_waterfall; waterfallStyle(); // 图片模式列表样式预处理
                     } else {
                         curSite = DBSite.discuz_guide;
                     }
@@ -1902,6 +1917,13 @@
     // [Discuz! 论坛] 隐藏帖子内的 [下一页] 按钮
     function hidePgbtn() {
         document.lastChild.appendChild(document.createElement('style')).textContent = '.pgbtn {display: none;}';
+    }
+
+    // [Discuz! 论坛] 图片模式列表样式预处理
+    function waterfallStyle() {
+        let width = document.querySelector('#waterfall > li:first-child').style.width;
+        document.lastChild.appendChild(document.createElement('style')).textContent = `#waterfall {height: auto !important; width: 100% !important;}
+        #waterfall > li {width: ${width} !important; float: left !important; position: inherit !important; left: auto !important; top: auto !important;}`;
     }
 
 
