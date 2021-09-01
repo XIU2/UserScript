@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.0.3
+// @version      2.0.4
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic(嗨漫画)、动漫之家、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl（更多的写不下了...
 // @match        *://*/*
@@ -1601,7 +1601,7 @@
                     intervals: 2000,
                     scrollDelta: 3000
                 }
-            }, //            漫画之家 - 原创
+            }, //            动漫之家 - 原创
             dmzj_manhua: {
                 SiteTypeID: 0,
                 host: 'manhua.dmzj.com',
@@ -1620,20 +1620,20 @@
                     intervals: 2000,
                     scrollDelta: 3000
                 }
-            }, //     漫画之家 - 日漫
+            }, //     动漫之家 - 日漫
             copymanga: {
                 SiteTypeID: 0,
-                host: 'www.copymanga.com1',
+                host: 'www.copymanga.com',
                 functionStart: function() {if (location.pathname.indexOf('/chapter/') > -1) {
-                    curSite = DBSite.copymanga; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.footer {display: none !important;}';
+                    curSite = DBSite.copymanga; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.upMember, .comicContainerAds, .footer {display: none !important;}';
                 }},
                 pager: {
                     type: 4,
                     nextLink: copymanga_functionNext,
-                    insertPosition: ['css;ul.comicContent-image-list', 3],
+                    insertPosition: ['css;ul.comicContent-image-list > li:first-child', 1],
                     insertElement: copymanga_insertElement,
                     replaceE: 'css;.disposableData, .disposablePass, .disposableUrlPrefix, .disposableUrlSuffix, .footer, h4.header, title',
-                    intervals: 2000,
+                    intervals: 5000,
                     scrollDelta: 3000
                 }
             }, //       拷贝漫画
@@ -1899,7 +1899,7 @@
     pageLoading(); // 自动无缝翻页
 
 
-    // 隐藏帖子内的 [下一页] 按钮（Discuz! 论坛）
+    // [Discuz! 论坛] 隐藏帖子内的 [下一页] 按钮
     function hidePgbtn() {
         document.lastChild.appendChild(document.createElement('style')).textContent = '.pgbtn {display: none;}';
     }
@@ -1917,7 +1917,7 @@
     }
 
 
-    // dux 的插入前函数（加载图片）
+    // [DUX] 的插入前函数（加载图片）
     function dux_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.querySelector('img.thumb[data-src]')
@@ -1927,7 +1927,7 @@
     }
 
 
-    // 百度贴吧（发帖按钮点击事件）
+    // [百度贴吧]（发帖按钮点击事件）
     function baidu_tieba_1() {
         let button = document.querySelector('.tbui_aside_fbar_button.tbui_fbar_post > a');
         if (button) {
@@ -1947,7 +1947,7 @@
             }
         }
     }
-    // 百度贴吧 的插入前函数（加载图片）
+    // [百度贴吧] 的插入前函数（加载图片）
     function baidu_tieba_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             one.querySelectorAll('img.threadlist_pic[data-original]').forEach(function (now) {
@@ -1957,7 +1957,7 @@
         });
         return pageElems
     }
-    // 百度贴吧 获取下一页地址
+    // [百度贴吧] 获取下一页地址
     function baidu_tieba_functionNext() {
         let next = document.querySelector('a.next.pagination-item[href]');
         if (next != null && next.nodeType === 1 && next.href && next.href.slice(0,4) === 'http') {
@@ -1967,7 +1967,7 @@
             getPageElems(curSite.pageUrl);
         };
     }
-    // 百度贴吧 插入数据
+    // [百度贴吧] 插入数据
     function baidu_tieba_insertElement(newBody, type) {
         if (!newBody) return
         let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody),
@@ -2007,19 +2007,19 @@
     }
 
 
-    // NGA 的插入后函数（加载各版块帖子列表样式）
+    // [NGA(玩家社区)] 的插入后函数（加载各版块帖子列表样式）
     function nga_thread_functionAfter() {
         document.body.appendChild(document.createElement('script')).textContent = 'commonui.topicArg.loadAll();';
     }
 
-    // V2EX 的插入后函数（新标签页打开链接）
+    // [V2EX] 的插入后函数（新标签页打开链接）
     function v2ex_functionAfter(css) {
         let links = document.querySelectorAll(css);if (!links) return
         links.forEach(function (_this) {_this.target = '_blank';});
     }
 
 
-    // 58pic 的插入前函数（加载图片）
+    // [千图网] 的插入前函数（加载图片）
     function _58pic_functionBefore(pageElems) {
         let is_one = document.querySelector('.qtw-card.place-box.is-one');
         if (is_one && is_one.style.display != 'none') {is_one.style.display = 'none';}
@@ -2034,7 +2034,7 @@
     }
 
 
-    // Pixabay 的插入前函数（加载图片）
+    // [Pixabay] 的插入前函数（加载图片）
     function pixabay_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.querySelector('img[data-lazy-src]')
@@ -2048,7 +2048,7 @@
     }
 
 
-    // 游民星空攻略 的插入前函数（移除下一页底部的 "更多相关内容请关注：xxx" 文字）
+    // [游民星空-攻略] 的插入前函数（移除下一页底部的 "更多相关内容请关注：xxx" 文字）
     function gamersky_gl_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             if (one.tagName === 'P' && one.textContent.indexOf('更多相关内容请关注') > -1) {one.style.display = 'none';}
@@ -2057,7 +2057,7 @@
     }
 
 
-    // NexusMods 获取下一页地址
+    // [NexusMods] 获取下一页地址
     function nexusmods_functionNext() {
         if (document.querySelector('.nexus-ui-blocker')) return
         let out_items = JSON.stringify(RH_ModList.out_items).replace(/{|}|"/g,''),
@@ -2088,7 +2088,7 @@
             getPageElems(curSite.pageUrl)
         }
     }
-    // NexusMods 插入数据
+    // [NexusMods] 插入数据
     function nexusmods_insertElement(newBody, type) {
         if (!newBody) return
         let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody), // 主体元素
@@ -2119,7 +2119,7 @@
     }
 
 
-    // cs_rin_ru 各版块帖子列表的插入前函数（过滤置顶帖子）
+    // [cs_rin_ru] 各版块帖子列表的插入前函数（过滤置顶帖子）
     function cs_rin_ru_functionBefore(pageElems) {
         for (let i = 0; i < pageElems.length; i++) {
             if (pageElems[i].textContent.replace(/\n|	/g,'') === 'Topics') {
@@ -2131,7 +2131,7 @@
     }
 
 
-    // 片库 的插入前函数（加载图片）
+    // [片库] 的插入前函数（加载图片）
     function mypianku_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.querySelector('img')
@@ -2143,7 +2143,7 @@
     }
 
 
-    // 奈菲影视/真不卡影院 的插入前函数（加载图片）
+    // [奈菲影视/真不卡影院] 的插入前函数（加载图片）
     function nfmovies_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.querySelector('a.lazyload')
@@ -2155,7 +2155,7 @@
     }
 
 
-    // iao.su 的插入前函数（加载图片）
+    // [不死鸟] 的插入前函数（加载图片）
     function iao_su_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.getElementsByClassName('post-card')[0]
@@ -2168,7 +2168,7 @@
     }
 
 
-    // iplaysoft 的插入前函数（加载图片）
+    // [异次元软件世界] 的插入前函数（加载图片）
     function iplaysoft_postslist_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.querySelector('img.lazyload')
@@ -2182,7 +2182,7 @@
     }
 
 
-    // LRepacks 的插入前函数（调整 class）
+    // [LRepacks] 的插入前函数（调整 class）
     function lrepacks_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.querySelector('.slideUp, .elementFade')
@@ -2194,7 +2194,7 @@
     }
 
 
-    // 漫画狂 获取下一页地址
+    // [漫画狂] 获取下一页地址
     function cartoonmad_functionNext() {
         let nextXPAHT = '//a[@class="pages"][contains(text(),"下一頁")]',
             nextPXPATH = '//a[@class="pages"][contains(string(),"下一話")]'
@@ -2213,7 +2213,7 @@
     }
 
 
-    // manhuacat 初始化（显示本话所以图片）
+    // [漫画猫] 初始化（显示本话所以图片）
     function manhuacat_init() {
         let _img = '';
         for (let now of img_data_arr) {
@@ -2223,7 +2223,7 @@
         document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
 
     }
-    // manhuacat 获取下一页地址
+    // [漫画猫] 获取下一页地址
     function manhuacat_functionNext(pageElems, type) {
         if (type === 'url') {
             if(pageElems.code == '0000') {
@@ -2238,7 +2238,7 @@
             }
         }
     }
-    // manhuacat 插入数据
+    // [漫画猫] 插入数据
     function manhuacat_insertElement(pageElems, type) {
         if (!pageElems) return
         if (type === 'url') { // 获取下一页链接
@@ -2270,7 +2270,7 @@
     }
 
 
-    // manhuadb 初始化（将本话其余图片插入网页中）
+    // [漫画DB] 初始化（将本话其余图片插入网页中）
     function manhuadb_init() {
         let _img = '',
             data = document.querySelector('.vg-r-data'), imgDate;
@@ -2289,7 +2289,7 @@
             }
         })
     }
-    // manhuadb 获取下一页地址
+    // [漫画DB] 获取下一页地址
     function manhuadb_functionNext() {
         let nextArr = document.querySelectorAll('a.fixed-a-es'), next;
         var url = '';
@@ -2304,7 +2304,7 @@
         curSite.pageUrl = url
         getPageElems(curSite.pageUrl);
     }
-    // manhuadb 插入数据
+    // [漫画DB] 插入数据
     function manhuadb_insertElement(pageElems, type) {
         if (!pageElems) return
         let oriE = document.querySelectorAll(curSite.pager.pageElement.replace('css;', '')),
@@ -2320,7 +2320,7 @@
     }
 
 
-    // hicomic 初始化（将本话其余图片插入网页中）
+    // [HiComic(嗨漫画)] 初始化（将本话其余图片插入网页中）
     function hicomic_init() {
         let _img = '';
         document.querySelectorAll('.chapter > section:not(:first-child) > section[val]').forEach(function (one) {
@@ -2331,7 +2331,7 @@
         document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
         window.document.title = window.document.title.replace(/(\(第.+\))? - HiComic/, `(${document.querySelector('.chapter_name').textContent}) - HiComic`); // 修改网页标题（加上 第 X 话）
     }
-    // hicomic 获取下一页地址
+    // [HiComic(嗨漫画)] 获取下一页地址
     function hicomic_functionNext() {
         let nextId;
         nextId = document.querySelector('.next_chapter:not(.end)')
@@ -2340,7 +2340,7 @@
             getPageElems(`https://www.hicomic.net/api/web/chapter/${nextId.id}/contents`, 'json');
         }
     }
-    // hicomic 插入数据
+    // [HiComic(嗨漫画)] 插入数据
     function hicomic_insertElement(pageElems, type) {
         if (!pageElems || pageElems.code != 200) return
         if (pageElems.results.chapter.next) { // 写入下一页的 UUID
@@ -2365,7 +2365,7 @@
     }
 
 
-    // dmzj 初始化（调整本话其余图片）
+    // [动漫之家] 初始化（调整本话其余图片）
     function dmzj_init() {
         let _img = '';
         document.querySelectorAll('.comic_wraCon > a > img').forEach(function (one) {
@@ -2375,7 +2375,7 @@
         document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
 
     }
-    // dmzj 获取下一页地址
+    // [动漫之家] 获取下一页地址
     function dmzj_functionNext() {
         let next;
         next = document.querySelector('span.next > a[href]')
@@ -2385,7 +2385,7 @@
             getPageElems(curSite.pageUrl);
         }
     }
-    // dmzj 插入数据
+    // [动漫之家] 插入数据
     function dmzj_insertElement(pageElems, type) {
         if (!pageElems) return
         // 插入并运行 <script>
@@ -2423,7 +2423,7 @@
     }
 
 
-    // dmzj_manhua 初始化（调整本话其余图片）
+    // [动漫之家-漫画] 初始化（调整本话其余图片）
     function dmzj_manhua_init() {
         let _img = '';
         document.querySelectorAll('#center_box > .inner_img img[src]').forEach(function (one) {
@@ -2433,7 +2433,7 @@
         document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
 
     }
-    // dmzj_manhua 获取下一页地址
+    // [动漫之家-漫画] 获取下一页地址
     function dmzj_manhua_functionNext() {
         let next;
         next = document.getElementById('next_chapter')
@@ -2443,7 +2443,7 @@
             getPageElems(curSite.pageUrl);
         }
     }
-    // dmzj_manhua 插入数据
+    // [动漫之家-漫画] 插入数据
     function dmzj_manhua_insertElement(pageElems, type) {
         if (!pageElems) return
         // 插入并运行 <script>
@@ -2476,7 +2476,7 @@
     }
 
 
-    // copymanga 获取下一页地址
+    // [拷贝漫画] 获取下一页地址
     function copymanga_functionNext() {
         let next;
         next = document.querySelector('.comicContent-next > a[href]')
@@ -2486,11 +2486,12 @@
             getPageElems(curSite.pageUrl);
         }
     }
-    // copymanga 插入数据
+    // [拷贝漫画] 插入数据
     function copymanga_insertElement(pageElems, type) {
         if (!pageElems) return
         // 添加历史记录
         window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
+        let oldImg = document.querySelector('.comicContent-image-list').innerHTML;
 
         // 替换元素
         let oriE = document.querySelectorAll(curSite.pager.replaceE.replace('css;', '')),
@@ -2501,13 +2502,16 @@
             }
             // 插入并运行 <script>
             document.body.appendChild(document.createElement('script')).src = document.querySelector('body > script[async][src*="comic_content_pass"]').src;
+            setTimeout(function(){
+                document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), oldImg); // 将 img 标签插入到网页中
+            }, 100);
             // 当前页码 + 1
             pageNum.now = pageNum._now + 1
         }
     }
 
 
-    // gufengmh8 获取下一页地址
+    // [古风漫画网] 获取下一页地址
     function gufengmh8_functionNext() {
         let pageElems = document.querySelector(curSite.pager.pageElement.replace('css;', '')); // 寻找数据所在元素
         if (pageElems) {
@@ -2529,7 +2533,7 @@
             }
         }
     }
-    // gufengmh8 插入数据
+    // [古风漫画网] 插入数据
     function gufengmh8_insertElement(pageElems, type) {
         if (pageElems) {
             let url = curSite.pageUrl;
@@ -2561,7 +2565,7 @@
     }
 
 
-    // szcdmj 的插入前函数（加载图片）
+    // [砂之船动漫家] 的插入前函数（加载图片）
     function szcdmj_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             if (one.tagName === 'TITLE') {
