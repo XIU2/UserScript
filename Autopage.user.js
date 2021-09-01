@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.0.2
+// @version      2.0.3
 // @author       X.I.U
-// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic(嗨漫画)、动漫之家、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl（更多的写不下了...
+// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic(嗨漫画)、动漫之家、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl（更多的写不下了...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -1168,6 +1168,33 @@
                     scrollDelta: 900
                 }
             }, //   宝书网（小说）- 手机版
+            qidian: {
+                SiteTypeID: 0,
+                host: 'www.qidian.com',
+                functionStart: function() {if (location.pathname.indexOf('/all/') > -1) {curSite = DBSite.qidian;}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a[class*="pagination-next"][href]',
+                    pageElement: 'css;ul.all-img-list > li',
+                    insertPosition: ['css;ul.all-img-list', 3],
+                    replaceE: 'css;#page-container',
+                    scrollDelta: 900
+                }
+            }, //      起点小说
+            qidian_read: {
+                SiteTypeID: 0,
+                host: 'read.qidian.com',
+                functionStart: function() {if (location.pathname.indexOf('/chapter/') > -1) {curSite = DBSite.qidian_read; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.admire-wrap {display: none !important;}';}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a[id$="chapterNext"][href]',
+                    pageElement: 'css;.main-text-wrap > div:not(.admire-wrap)',
+                    insertPosition: ['css;.main-text-wrap', 3],
+                    replaceE: 'css;.chapter-control, title',
+                    history: true,
+                    scrollDelta: 900
+                }
+            }, // 起点小说 - 阅读页
             _423down: {
                 SiteTypeID: 0,
                 host: 'www.423down.com',
@@ -1596,7 +1623,7 @@
             }, //     漫画之家 - 日漫
             copymanga: {
                 SiteTypeID: 0,
-                host: 'www.copymanga.com',
+                host: 'www.copymanga.com1',
                 functionStart: function() {if (location.pathname.indexOf('/chapter/') > -1) {
                     curSite = DBSite.copymanga; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.footer {display: none !important;}';
                 }},
@@ -1609,7 +1636,7 @@
                     intervals: 2000,
                     scrollDelta: 3000
                 }
-            }, //            拷贝漫画
+            }, //       拷贝漫画
             gufengmh8: {
                 SiteTypeID: 0,
                 host: 'www.gufengmh8.com',
@@ -1767,7 +1794,7 @@
                     replaceE: 'css;.fy',
                     scrollDelta: 1000
                 }
-            }, // 如意了教育 - 学校
+            }, //  如意了教育 - 学校
             ruyile_data: {
                 SiteTypeID: 0,
                 pager: {
@@ -1778,7 +1805,7 @@
                     replaceE: 'css;.fy',
                     scrollDelta: 1000
                 }
-            }, //    如意了教育 - 数据
+            }, //     如意了教育 - 数据
             ruyile_shijuan: {
                 SiteTypeID: 0,
                 pager: {
@@ -1801,7 +1828,7 @@
                     replaceE: 'css;ul.main_List > li.i3',
                     scrollDelta: 1000
                 }
-            } //  宽带山论坛
+            } //          宽带山论坛
         };
         // 生成 SiteTypeID
         generateID();
@@ -2959,6 +2986,11 @@
                                         });
                                         if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
                                     }
+                                }
+
+                                // 添加历史记录
+                                if (curSite.pager.history && curSite.pager.history == true) {
+                                    window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, newBody.querySelector('title').textContent, curSite.pageUrl);
                                 }
 
                                 // 替换待替换元素
