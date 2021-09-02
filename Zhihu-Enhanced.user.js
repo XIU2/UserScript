@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.6.8
+// @version      1.6.9
 // @author       X.I.U
 // @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽指定类别（视频/文章等）、屏蔽盐选内容、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -403,7 +403,7 @@ function blockUsers(type) {
                     for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
                         if (item.dataset.zop.indexOf('authorName":"' + keyword + '",') > -1) { // 找到就删除该信息流
                             console.log(item.dataset.zop);
-                            item1.remove();
+                            item1.hidden = true;
                             break;
                         }
                     }
@@ -427,7 +427,7 @@ function blockUsers(type) {
                             for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
                                 if (item.dataset.zop.indexOf('authorName":"' + keyword + '",') > -1) { // 找到就删除该信息流
                                     console.log(item.dataset.zop);
-                                    target.remove();
+                                    target.hidden = true;
                                     break;
                                 }
                             }
@@ -452,7 +452,7 @@ function blockUsers(type) {
                             menu_value('menu_customBlockUsers').forEach(function(item2){ // 遍历用户黑名单
                                 if (item1.dataset.zop.indexOf('authorName":"' + item2 + '",') > -1) { // 找到就删除该回答
                                     console.log(item1.dataset.zop)
-                                    target.remove();
+                                    target.hidden = true;
                                 }
                             })
                         }
@@ -471,7 +471,7 @@ function blockUsers(type) {
                             menu_value('menu_customBlockUsers').forEach(function(item2){ // 遍历用户黑名单
                                 if (item1.dataset.zop.indexOf('authorName":"' + item2 + '",') > -1) { // 找到就删除该回答
                                     console.log(item1.dataset.zop)
-                                    item.remove();
+                                    item.hidden = true;
                                 }
                             })
                         }
@@ -495,7 +495,7 @@ function blockUsers(type) {
                 menu_value('menu_customBlockUsers').forEach(function(item2){ // 遍历用户黑名单
                     if (item1.dataset.zop.indexOf('authorName":"' + item2 + '",') > -1) { // 找到就删除该回答
                         console.log(item1.dataset.zop)
-                        item.remove();
+                        item.hidden = true;
                     }
                 })
             }
@@ -511,7 +511,7 @@ function blockUsers(type) {
                     for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历关键词黑名单
                         if (item.textContent === keyword) { // 找到就删除该信息流
                             console.log(item.textContent);
-                            item1.remove();
+                            item1.hidden = true;
                             break;
                         }
                     }
@@ -535,7 +535,7 @@ function blockUsers(type) {
                             for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
                                 if (item.textContent === keyword) { // 找到就删除该信息流
                                     console.log(item.textContent);
-                                    target.remove();
+                                    target.hidden = true;
                                     break;
                                 }
                             }
@@ -558,15 +558,15 @@ function blockUsers(type) {
                         menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
                             if (item.alt === item1) { // 找到就删除该搜索结果
                                 if (findParentElement(item, 'NestComment--rootComment', true)) {
-                                    findParentElement(item, 'NestComment--rootComment', true).remove();
+                                    findParentElement(item, 'NestComment--rootComment', true).hidden = true;;
                                 } else if (findParentElement(item, 'NestComment--child', true)){
-                                    findParentElement(item, 'NestComment--child', true).remove();
+                                    findParentElement(item, 'NestComment--child', true).hidden = true;;
                                 } else if (findParentElement(item, 'NestComment', true)){
-                                    findParentElement(item, 'NestComment', true).remove();
+                                    findParentElement(item, 'NestComment', true).hidden = true;;
                                 } else if (findParentElement(item, 'CommentItemV2', true)){
-                                    findParentElement(item, 'CommentItemV2', true).remove();
+                                    findParentElement(item, 'CommentItemV2', true).hidden = true;;
                                 } else if (findParentElement(item, 'CommentItemV2 CommentItemV2--highlighted', true)){
-                                    findParentElement(item, 'CommentItemV2 CommentItemV2--highlighted', true).remove();
+                                    findParentElement(item, 'CommentItemV2 CommentItemV2--highlighted', true).hidden = true;;
                                 }
                             }
                         })
@@ -795,7 +795,7 @@ function blockKeywords(type) {
                             for (const keyword of menu_value('menu_customBlockKeywords')) { // 遍历关键词黑名单
                                 if (item.textContent.toLowerCase().indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该信息流
                                     console.log(item.textContent);
-                                    target.remove();
+                                    target.hidden = true;
                                     break;
                                 }
                             }
@@ -854,7 +854,7 @@ function blockType(type) {
     // 一开始加载的信息流 + 添加标签样式
     if (type === 'search') {
         if (!menu_value('menu_blockTypeVideo') && !menu_value('menu_blockTypeArticle') && !menu_value('menu_blockTypeTopic') && !menu_value('menu_blockTypeSearch')) return
-        if (menu_value('menu_blockTypeSearch') && location.pathname === '/search') setTimeout(function(){document.querySelector('.RelevantQuery').parentElement.parentElement.remove();}, 1000)
+        if (menu_value('menu_blockTypeSearch') && location.pathname === '/search') setTimeout(function(){document.querySelector('.RelevantQuery').parentElement.parentElement.hidden = true;;}, 1000)
         name = 'h2.ContentItem-title a, a.KfeCollection-PcCollegeCard-link, h2.SearchTopicHeader-Title a'
         addSetInterval_(name);
     } else {
@@ -879,7 +879,7 @@ function blockType(type) {
     window.addEventListener('locationchange', function(){
         addSetInterval_(name);
         // 移除相关搜索
-        if (menu_value('menu_blockTypeSearch') && location.pathname === '/search' && location.search.indexOf('type=content') > -1) setTimeout(function(){document.querySelector('.RelevantQuery').parentElement.parentElement.remove();}, 1500)
+        if (menu_value('menu_blockTypeSearch') && location.pathname === '/search' && location.search.indexOf('type=content') > -1) setTimeout(function(){document.querySelector('.RelevantQuery').parentElement.parentElement.hidden = true;}, 1500)
     })
 
     function blockType_(titleA) {
@@ -887,19 +887,19 @@ function blockType(type) {
         if (location.pathname === '/search') { // 搜索页
             if (location.search.indexOf('type=content') === -1) return //   仅限搜索页的 [综合]
             if (titleA.href.indexOf('/zvideo/') > -1) { //                  如果是视频
-                if (menu_value('menu_blockTypeVideo')) findParentElement(titleA, 'Card').remove();
+                if (menu_value('menu_blockTypeVideo')) findParentElement(titleA, 'Card').hidden = true;
             } else if (titleA.href.indexOf('zhuanlan.zhihu.com') > -1) { // 如果是文章
-                if (menu_value('menu_blockTypeArticle')) findParentElement(titleA, 'Card SearchResult-Card').remove();
+                if (menu_value('menu_blockTypeArticle')) findParentElement(titleA, 'Card SearchResult-Card').hidden = true;
             } else if (titleA.href.indexOf('/topic/') > -1) { //            如果是话题
-                if (menu_value('menu_blockTypeTopic')) findParentElement(titleA, 'Card SearchResult-Card').remove();
+                if (menu_value('menu_blockTypeTopic')) findParentElement(titleA, 'Card SearchResult-Card').hidden = true;
             } else if (titleA.href.indexOf('/market/') > -1) { //           如果是杂志文章等乱七八糟的
-                if (menu_value('menu_blockTypeArticle')) findParentElement(titleA, 'Card SearchResult-Card').remove();
+                if (menu_value('menu_blockTypeArticle')) findParentElement(titleA, 'Card SearchResult-Card').hidden = true;
             }
         } else { // 首页
             if (titleA.href.indexOf('/zvideo/') > -1) { //                  如果是视频
-                if (menu_value('menu_blockTypeVideo')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem--old TopstoryItem-isRecommend').remove();
+                if (menu_value('menu_blockTypeVideo')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem--old TopstoryItem-isRecommend').hidden = true;
             } else if (titleA.href.indexOf('zhuanlan.zhihu.com') > -1) { // 如果是文章
-                if (menu_value('menu_blockTypeArticle')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem--old TopstoryItem-isRecommend').remove();
+                if (menu_value('menu_blockTypeArticle')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem--old TopstoryItem-isRecommend').hidden = true;
             }
         }
     }
@@ -950,7 +950,7 @@ function blockYanXuan() {
                 if (target.nodeType != 1) return
                 if (target.className === 'List-item' || target.className === 'Card AnswerCard') {
                     if (target.querySelector('.KfeCollection-AnswerTopCard-Container, .KfeCollection-PurchaseBtn')) {
-                        target.remove();
+                        target.hidden = true;
                     }
                 }
             }
@@ -963,7 +963,7 @@ function blockYanXuan() {
                 if (target.nodeType != 1) return
                 target.querySelectorAll('.List-item, .Card.AnswerCard').forEach(function(item){
                     if (item.querySelector('.KfeCollection-AnswerTopCard-Container, .KfeCollection-PurchaseBtn')) {
-                        item.remove();
+                        item.hidden = true;
                     }
                 })
             }
@@ -981,7 +981,7 @@ function blockYanXuan() {
     // 针对的是打开网页后直接加载的前面几个回答（上面哪些是针对动态加载的回答）
     document.querySelectorAll('.List-item, .Card.AnswerCard').forEach(function(item){
         if (item.querySelector('.KfeCollection-AnswerTopCard-Container, .KfeCollection-PurchaseBtn')) {
-            item.remove();
+            item.hidden = true;
         }
     })
 }
@@ -1466,10 +1466,10 @@ function questionInvitation(){
     }
 
     function start(){
-        if (location.hostname != 'zhuanlan.zhihu.com') collapsedAnswer(); //   一键收起回答
-        if (location.hostname != 'zhuanlan.zhihu.com') questionInvitation(); //默认折叠邀请
-        closeFloatingComments(); //                                            快捷关闭悬浮评论（监听点击事件，点击网页两侧空白处）
-        blockKeywords('comment'); //                                           屏蔽指定关键词（评论）
+        //if (location.hostname != 'zhuanlan.zhihu.com') collapsedAnswer(); //   一键收起回答
+        //if (location.hostname != 'zhuanlan.zhihu.com') questionInvitation(); //默认折叠邀请
+        //closeFloatingComments(); //                                            快捷关闭悬浮评论（监听点击事件，点击网页两侧空白处）
+        //blockKeywords('comment'); //                                           屏蔽指定关键词（评论）
         if (location.pathname.indexOf('question') > -1) { //       回答页 //
             if (location.pathname.indexOf('waiting') == -1) {
                 collapsedNowAnswer('.QuestionPage'); //                        收起当前回答 + 快捷返回顶部
