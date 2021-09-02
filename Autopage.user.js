@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.0.6
+// @version      2.0.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、微信、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic(嗨漫画)、动漫之家、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl（更多的写不下了...
 // @match        *://*/*
@@ -1944,8 +1944,13 @@
                     curSite = DBSite.discuz_collection;
                 } else if (location.pathname.indexOf('search') > -1) { //       < 搜索结果 >
                     curSite = DBSite.discuz_search;
-                } else { //                                                     < 考虑到部分论坛的部分板块帖子列表 URL 是自定义的 >
+                } else if (document.getElementById('threadlist')) { //          < 部分论坛的各板块 URL 是自定义的 >
                     curSite = DBSite.discuz_forum;
+                } else if (document.getElementById('postlist')) { //            < 部分论坛的帖子内 URL 是自定义的 >
+                    if (GM_getValue('menu_discuz_thread_page')) {
+                        curSite = DBSite.discuz_thread;
+                        hidePgbtn(); //                                         隐藏帖子内的 [下一页] 按钮
+                    }
                 }
             }
             // < 所有 Flarum 论坛 >
