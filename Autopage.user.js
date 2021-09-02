@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.0.5
+// @version      2.0.6
 // @author       X.I.U
-// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic(嗨漫画)、动漫之家、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl（更多的写不下了...
+// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、微信、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic(嗨漫画)、动漫之家、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl（更多的写不下了...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -111,7 +111,7 @@
                     nextTextOf: '下一页',
                     scrollDelta: 1500
                 }
-            }, //      Discuz! - 各版块帖子列表（自带无缝加载下一页按钮的）
+            }, //       Discuz! - 各版块帖子列表（自带无缝加载下一页按钮的）
             discuz_guide: {
                 SiteTypeID: 0,
                 pager: {
@@ -122,7 +122,7 @@
                     replaceE: 'css;.pg, .pages',
                     scrollDelta: 1000
                 }
-            }, //      Discuz! - 导读页 及 各版块帖子列表（不带无缝加载下一页按钮的）
+            }, //       Discuz! - 导读页 及 各版块帖子列表（不带无缝加载下一页按钮的）
             discuz_waterfall: {
                 SiteTypeID: 0,
                 pager: {
@@ -133,7 +133,7 @@
                     replaceE: 'css;.pg, .pages',
                     scrollDelta: 1000
                 }
-            }, //  Discuz! - 图片模式的各版块帖子列表（不带无缝加载下一页按钮的）
+            }, //   Discuz! - 图片模式的各版块帖子列表（不带无缝加载下一页按钮的）
             discuz_thread: {
                 SiteTypeID: 0,
                 pager: {
@@ -144,7 +144,7 @@
                     replaceE: 'css;.pg, .pages',
                     scrollDelta: 1000
                 }
-            }, //     Discuz! - 帖子内
+            }, //      Discuz! - 帖子内
             discuz_search: {
                 SiteTypeID: 0,
                 pager: {
@@ -155,7 +155,7 @@
                     replaceE: 'css;.pg, .pages',
                     scrollDelta: 1000
                 }
-            }, //     Discuz! - 搜索页
+            }, //      Discuz! - 搜索页
             discuz_youspace: {
                 SiteTypeID: 0,
                 pager: {
@@ -166,7 +166,7 @@
                     replaceE: 'css;.pg, .pages',
                     scrollDelta: 1000
                 }
-            }, //   Discuz! - 回复页、主题页（别人的）
+            }, //    Discuz! - 回复页、主题页（别人的）
             discuz_collection: {
                 SiteTypeID: 0,
                 pager: {
@@ -177,7 +177,7 @@
                     replaceE: 'css;.pg, .pages',
                     scrollDelta: 1000
                 }
-            }, // Discuz! - 淘帖页
+            }, //  Discuz! - 淘帖页
             flarum: {
                 SiteTypeID: 0,
                 pager: {
@@ -199,7 +199,7 @@
                 function: {
                     before: dux_functionBefore
                 }
-            }, //    一种 WordPress 主题
+            }, //                一种 WordPress 主题
             baidu: {
                 SiteTypeID: 0,
                 host: 'www.baidu.com',
@@ -212,7 +212,7 @@
                     replaceE: 'css;#page',
                     scrollDelta: 1200
                 }
-            }, //  百度搜素
+            }, //              百度搜素
             google: {
                 SiteTypeID: 0,
                 host: 'www.google.com',
@@ -226,7 +226,7 @@
                     scriptType: 1,
                     scrollDelta: 3000
                 }
-            }, // 谷歌搜索
+            }, //             谷歌搜索
             bing: {
                 SiteTypeID: 0,
                 host: ['www.bing.com','cn.bing.com'],
@@ -239,7 +239,58 @@
                     replaceE: 'css;#b_results > .b_pag',
                     scrollDelta: 1500
                 }
-            }, //   必应搜索
+            }, //               必应搜索
+            sogou: {
+                SiteTypeID: 0,
+                host: 'www.sogou.com',
+                functionStart: function() {if (location.pathname != '/') {curSite = DBSite.sogou;}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;#sogou_next',
+                    pageElement: 'css;.results > *',
+                    insertPosition: ['css;.results', 3],
+                    replaceE: 'css;#pagebar_container',
+                    scriptType: 4,
+                    scrollDelta: 1200
+                }
+            }, //              搜狗搜索
+            sogou_weixin: {
+                SiteTypeID: 0,
+                host: 'weixin.sogou.com',
+                functionStart: function() {if (location.pathname === '/') {
+                    curSite = DBSite.sogou_weixin;
+                } else if (location.pathname === '/weixin') {
+                    curSite = DBSite.sogou_weixin_search;
+                }},
+                pager: {
+                    type: 2,
+                    nextLink: '#look-more',
+                    intervals: 1000,
+                    scrollDelta: 1000
+                }
+            }, //       搜狗微信 - 首页
+            sogou_weixin_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;#sogou_next',
+                    pageElement: 'css;.news-box > ul[class*="news-list"] > li',
+                    insertPosition: ['css;.news-box > ul[class*="news-list"]', 3],
+                    replaceE: 'css;#pagebar_container',
+                    scrollDelta: 1000
+                }
+            }, //搜狗微信 - 搜索
+            magi: {
+                SiteTypeID: 0,
+                host: 'magi.com',
+                functionStart: function() {if (location.pathname === '/search') {curSite = DBSite.magi;}},
+                pager: {
+                    type: 2,
+                    nextLink: '.card[data-type="next"]',
+                    nextText: '加载更多',
+                    scrollDelta: 1500
+                }
+            }, //               Magi 搜索
             baidu_tieba: {
                 SiteTypeID: 0,
                 host: 'tieba.baidu.com',
@@ -1922,8 +1973,7 @@
     // [Discuz! 论坛] 图片模式列表样式预处理
     function waterfallStyle() {
         let width = document.querySelector('#waterfall > li:first-child').style.width;
-        document.lastChild.appendChild(document.createElement('style')).textContent = `#waterfall {height: auto !important; width: 100% !important;}
-        #waterfall > li {width: ${width} !important; float: left !important; position: inherit !important; left: auto !important; top: auto !important;}`;
+        document.lastChild.appendChild(document.createElement('style')).textContent = `#waterfall {height: auto !important; width: 100% !important;} #waterfall > li {width: ${width} !important; float: left !important; position: inherit !important; left: auto !important; top: auto !important;}`;
     }
 
 
@@ -2823,7 +2873,7 @@
 
         if (support) {
             console.info('[自动无缝翻页] - 其他网站（独立规则）'); return 1;
-        } else if (document.querySelector('meta[name="author"][content*="Discuz!"], meta[name="generator"][content*="Discuz!"]') || document.getElementById('ft') && document.getElementById('ft').textContent.indexOf('Discuz!') > -1) {
+        } else if (document.querySelector('meta[name="author"][content*="Discuz!"], meta[name="generator"][content*="Discuz!"]') || document.querySelector('a[href*="www.discuz.net"]') && document.querySelector('a[href*="www.discuz.net"]').textContent.indexOf('Discuz!') > -1) {
             console.info('[自动无缝翻页] - Discuz! 论坛'); return 2;
         } else if (document.getElementById('flarum-loading')) {
             console.info('[自动无缝翻页] - Flarum 论坛'); return 3;
