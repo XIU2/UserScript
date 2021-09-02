@@ -279,7 +279,7 @@
                     let itemName = item.querySelector(list2); // 寻找用户名
                     if (itemName && itemName.textContent === item1) {
                         console.log(`屏蔽用户：${item1}`);
-                        item.remove(); // 删除帖子
+                        item.hidden = true; // 删除帖子
                     }
                 })
             })
@@ -295,7 +295,7 @@
                             let itemName = item.querySelector('a.xi2'); // 寻找用户名
                             if (itemName && itemName.textContent === item1) {
                                 console.log(`屏蔽用户：${item1}`);
-                                item.remove(); // 删除回复
+                                item.hidden = true; // 删除回复
                             }
                         })
                     })
@@ -332,7 +332,7 @@
                 let itemName = item.querySelector('a.s.xst'); // 寻找帖子标题
                 if (itemName && itemName.textContent.indexOf(item1) > -1) {
                     console.log(`屏蔽关键词：[${item1}]`, `，帖子标题：[${itemName.textContent}]`);
-                    item.remove(); // 删除帖子
+                    item.hidden = true; // 删除帖子
                 }
             })
         })
@@ -510,7 +510,7 @@
             let tbody = document.querySelectorAll('tbody[id^="normalthread_"] .xw1');
             Array.from(tbody).forEach(function (_this) {
                 if (_this.textContent === '255') {
-                    _this.parentNode.parentNode.parentNode.remove();
+                    _this.parentNode.parentNode.parentNode.hidden = true;
                 }
             })
         }
