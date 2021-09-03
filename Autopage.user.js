@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.1.2
+// @version      2.1.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、异次元软件、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -1947,6 +1947,12 @@
             kdslife: {
                 SiteTypeID: 0,
                 host: 'club.kdslife.com',
+                functionStart: function() {
+                    if (location.pathname.indexOf('/f_') > -1) {
+                        curSite = DBSite.kdslife;
+                    } else if (location.pathname.indexOf('/t_') > -1) {
+                        curSite = DBSite.kdslife_t;
+                    }},
                 pager: {
                     type: 1,
                     nextLink: '//div[@class="fr i3_r"]/a[@href][contains(text(), "后一页")]',
@@ -1956,6 +1962,18 @@
                     scrollDelta: 1000
                 }
             }, //         宽带山论坛
+            kdslife_t: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="pages"]/a[contains(text(), ">>")]',
+                    pageElement: 'css;#reply_list_panel > *, script[src*="ui/js/kds.js"]',
+                    insertPosition: ['css;#reply_list_panel', 3],
+                    replaceE: 'css;.pages',
+                    scriptType: 3,
+                    scrollDelta: 1000
+                }
+            }, //       宽带山论坛 - 帖子内
             libaclub: {
                 SiteTypeID: 0,
                 host: 'www.libaclub.com',
@@ -2013,7 +2031,7 @@
                     replaceE: 'css;div.ui-paging',
                     scrollDelta: 2000
                 }
-            }, //      篱笆网论坛 - 帖子内 - 打印版
+            }, //    篱笆网论坛 - 帖子内 - 打印版
             libaclub_search: {
                 SiteTypeID: 0,
                 pager: {
@@ -3195,7 +3213,7 @@
                         url = this.getFullHref(getElementByXpath(curSite.pager.nextLink));
                     }
                 }
-                console.log(url, curSite.pageUrl);
+                //console.log(url, curSite.pageUrl);
                 if (url === '') return;
                 if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
