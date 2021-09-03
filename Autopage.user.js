@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.1.0
+// @version      2.1.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、异次元软件、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -143,6 +143,9 @@
                     insertPosition: ['css;#postlist', 3],
                     replaceE: 'css;.pg, .pages',
                     scrollDelta: 1000
+                },
+                function: {
+                    before: discuz_thread_functionBefore
                 }
             }, //      Discuz! - 帖子内
             discuz_search: {
@@ -1952,7 +1955,50 @@
                     replaceE: 'css;ul.main_List > li.i3',
                     scrollDelta: 1000
                 }
-            } //          宽带山论坛
+            }, //         宽带山论坛
+            libaclub: {
+                SiteTypeID: 0,
+                host: 'www.libaclub.com',
+                functionStart: function() {
+                    if (location.pathname === '/' || location.pathname.indexOf('/date_') > -1) {
+                        curSite = DBSite.libaclub;
+                    } else if (location.pathname.indexOf('/f_') > -1) {
+                        curSite = DBSite.libaclub_f;
+                    } else if (location.pathname === '/facade.php') {
+                        curSite = DBSite.libaclub_search;
+                    }
+                    document.lastElementChild.appendChild(document.createElement('style')).textContent = 'li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}';},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="ui-crumbs-more"]/a[@class="fn-link"][1]',
+                    pageElement: 'css;ul.ui-list > li:not(.ui-list-item-head):not(.ui-list-merchant-ad)',
+                    insertPosition: ['css;ul.ui-list', 3],
+                    replaceE: 'css;div.ui-crumbs-more',
+                    scrollDelta: 1000
+                }
+            }, //         篱笆网论坛
+            libaclub_f: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="ui-paging"]/a[@class="ui-paging-next"]',
+                    pageElement: 'css;ul.ui-list > li:not(.ui-list-item-head):not(.ui-list-merchant-ad)',
+                    insertPosition: ['css;ul.ui-list', 3],
+                    replaceE: 'css;div.ui-paging',
+                    scrollDelta: 1000
+                }
+            }, //         篱笆网论坛 - 各版块帖子列表
+            libaclub_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="ui-page"]/a[contains(text(), "下一页")]',
+                    pageElement: 'css;.ui-box-main > ul.ui-list > li',
+                    insertPosition: ['css;.ui-box-main > ul.ui-list', 3],
+                    replaceE: 'css;div.ui-page',
+                    scrollDelta: 1000
+                }
+            } //         篱笆网论坛 - 搜索页
         };
         // 生成 SiteTypeID
         generateID();
@@ -1964,8 +2010,8 @@
     }
 
 
-    // < 所有 Discuz!论坛 >
     if (webType != 1) {
+        // < 所有 Discuz!论坛 >
         if (webType === 2) {
             if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
                 if (location.pathname.indexOf('/forum-') > -1) { //             < 各版块帖子列表 >
@@ -1984,7 +2030,9 @@
                 } else if(location.pathname.indexOf('search') > -1) { //        < 搜索结果 >
                     curSite = DBSite.discuz_search;
                 }
-            } else {
+            }
+            // 如果没有匹配的则继续
+            if (curSite.SiteTypeID === 0) {
                 if (location.search.indexOf('mod=forumdisplay') > -1 || location.pathname.indexOf('forumdisplay.php') > -1) { //      < 各版块帖子列表 >
                     if (document.getElementById('autopbn')) { //                判断是否有 [下一页] 按钮
                         curSite = DBSite.discuz_forum;
@@ -2036,11 +2084,21 @@
     function hidePgbtn() {
         document.lastChild.appendChild(document.createElement('style')).textContent = '.pgbtn {display: none;}';
     }
-
     // [Discuz! 论坛] 图片模式列表样式预处理
     function waterfallStyle() {
         let width = document.querySelector('#waterfall > li:first-child').style.width;
         document.lastChild.appendChild(document.createElement('style')).textContent = `#waterfall {height: auto !important; width: 100% !important;} #waterfall > li {width: ${width} !important; float: left !important; position: inherit !important; left: auto !important; top: auto !important;}`;
+    }
+    // [Discuz! 论坛] 的插入前函数（加载图片，仅部分论坛）
+    function discuz_thread_functionBefore(pageElems) {
+        if (location.hostname === 'bbs.pcbeta.com') { // 仅部分论坛需要处理
+            pageElems.forEach(function (one) {
+                one.querySelectorAll('img[file]').forEach(function (now) {
+                    now.src = now.getAttribute('file');
+                });
+            });
+        }
+        return pageElems
     }
 
 
@@ -2983,7 +3041,7 @@
 
         if (support) {
             console.info('[自动无缝翻页] - 其他网站（独立规则）'); return 1;
-        } else if (document.querySelector('meta[name="author"][content*="Discuz!"], meta[name="generator"][content*="Discuz!"]') || document.querySelector('a[href*="www.discuz.net"]') && document.querySelector('a[href*="www.discuz.net"]').textContent.indexOf('Discuz!') > -1) {
+        } else if (document.querySelector('meta[name="author"][content*="Discuz!"], meta[name="generator"][content*="Discuz!"]') || (document.querySelector('a[href*="www.discuz.net"]') && document.querySelector('a[href*="www.discuz.net"]').textContent.indexOf('Discuz!') > -1) || (document.getElementById('ft') && document.getElementById('ft').textContent.indexOf('Discuz!') > -1)) {
             console.info('[自动无缝翻页] - Discuz! 论坛'); return 2;
         } else if (document.getElementById('flarum-loading')) {
             console.info('[自动无缝翻页] - Flarum 论坛'); return 3;
