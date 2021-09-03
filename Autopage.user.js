@@ -27,8 +27,8 @@
     var menuAll = [
         ['menu_disable', '✅ 已启用 (点击对当前网站禁用)', '❌ 已禁用 (点击对当前网站启用)', []],
         ['menu_discuz_thread_page', '帖子内自动翻页 (仅论坛)', '帖子内自动翻页 (仅论坛)', true],
-        ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false],
-        ['menu_page_number', '显示当前页码及点击暂停翻页', '显示当前页码及点击暂停翻页', true]
+        ['menu_page_number', '显示当前页码及点击暂停翻页', '显示当前页码及点击暂停翻页', true],
+        ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false]
     ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, forumWebsite = ['cs.rin.ru', 'www.flyert.com', 'bbs.pediy.com'];
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
