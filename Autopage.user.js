@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.0.7
+// @version      2.0.8
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、微信、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic(嗨漫画)、动漫之家、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl（更多的写不下了...
 // @match        *://*/*
@@ -290,7 +290,7 @@
                     nextText: '加载更多',
                     scrollDelta: 1500
                 }
-            }, //               Magi 搜索
+            }, //               Magi搜索
             baidu_tieba: {
                 SiteTypeID: 0,
                 host: 'tieba.baidu.com',
@@ -578,6 +578,36 @@
                     scrollDelta: 1500
                 }
             }, //        看雪论坛 - 帖子内
+            lkong: {
+                SiteTypeID: 0,
+                host: 'www.lkong.com',
+                functionStart: function() {if (location.pathname.indexOf('/forum/') > -1) {
+                    curSite = DBSite.lkong;
+                } else if (location.pathname.indexOf('/thread/') > -1) {
+                    curSite = DBSite.lkong_thread;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: lkong_functionNext,
+                    pageElement: '//div[@class="main-title"]/parent::div/parent::div | //head/style[@data-emotion-css]',
+                    insertPosition: ['//div[@class="main-title"][1]/parent::div/parent::div/parent::div', 3],
+                    replaceE: 'css;ul.ant-pagination',
+                    intervals: 500,
+                    scrollDelta: 1200
+                }
+            }, //               龙的天空 - 各版块帖子列表
+            lkong_thread: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: lkong_functionNext,
+                    pageElement: '//div[@class="main-content"]/parent::div | //head/style[@data-emotion-css]',
+                    insertPosition: ['//div[@class="main-content"][1]/parent::div/parent::div', 3],
+                    replaceE: 'css;ul.ant-pagination',
+                    intervals: 500,
+                    scrollDelta: 1200
+                }
+            }, //        龙的天空 - 帖子内
             xcar_forumdisplay: {
                 SiteTypeID: 0,
                 host: 'www.xcar.com.cn',
@@ -2095,6 +2125,21 @@
         links.forEach(function (_this) {_this.target = '_blank';});
     }
 
+    // [龙的天空] 获取下一页地址
+    function lkong_functionNext() {
+        let next = document.querySelector('li.ant-pagination-next'), page;
+        if (next && next.getAttribute('aria-disabled') === 'false') {
+            page = document.querySelector('li.ant-pagination-item-active[title]');
+            if (page && page.title) {
+                if (curSite.pager.intervals) {
+                    let _SiteTypeID = curSite.SiteTypeID; curSite.SiteTypeID = 0;
+                    setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
+                }
+                return (location.origin + location.pathname + '?page=' + ++page.title);
+            }
+        }
+        return '';
+    }
 
     // [千图网] 的插入前函数（加载图片）
     function _58pic_functionBefore(pageElems) {
@@ -2701,7 +2746,7 @@
                                     }
                                 }
                             } else if (curSite.pager.type === 1) { // <<<<< 翻页类型 1（由脚本实现自动无缝翻页）>>>>>
-                                    ShowPager.loadMorePage();
+                                if (curSite.SiteTypeID > 0) ShowPager.loadMorePage();
                             } else if (curSite.pager.type === 4) { // <<<<< 翻页类型 4（部分简单的动态加载类网站）>>>>>
                                 if (curSite.SiteTypeID > 0) {
                                     // 为百度贴吧的发帖考虑...
@@ -3006,7 +3051,7 @@
                         url = this.getFullHref(getElementByXpath(curSite.pager.nextLink));
                     }
                 }
-                //console.log(url, curSite.pageUrl);
+                console.log(url, curSite.pageUrl);
                 if (url === '') return;
                 if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
@@ -3153,4 +3198,19 @@
             }
         }
     }
+
+    /*// 监听 XMLHttpRequest URL
+    var _send = window.XMLHttpRequest.prototype.send
+    function sendReplacement(data) {
+        console.log(data)
+        return _send.apply(this, arguments);
+    }
+    window.XMLHttpRequest.prototype.send = sendReplacement;
+    // 监听 XMLHttpRequest 模式(GET/POST)和数据
+    var _open = window.XMLHttpRequest.prototype.open
+    function openReplacement(data) {
+        console.log(data, arguments)
+        return _open.apply(this, arguments);
+    }
+    window.XMLHttpRequest.prototype.open = openReplacement;*/
 })();
