@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.0.8
+// @version      2.0.9
 // @author       X.I.U
-// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、微信、贴吧、豆瓣、微博、NGA(玩家社区)、V2EX、看雪论坛、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、果核剥壳、六音软件、微当下载、th-sjy 汉化、异次元软件、老殁殁漂遥、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic(嗨漫画)、动漫之家、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl（更多的写不下了...
+// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、异次元软件、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic(嗨漫画)、动漫之家、古风漫画网、砂之船动漫家、PubMed、wikiHow、GreasyFork、CS.RIN.RU、FitGirl（更多的写不下了...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -240,6 +240,22 @@
                     scrollDelta: 1500
                 }
             }, //               必应搜索
+            toutiao: {
+                SiteTypeID: 0,
+                host: ['www.toutiao.com', 'so.toutiao.com'],
+                functionStart: function() {if (location.hostname != 'www.toutiao.com') {if (location.pathname === '/search') {curSite = DBSite.toutiao;}}},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[contains(@class, "-pagination")]/a[contains(string(), "下一页")]',
+                    pageElement: 'css;div[class*="-result-list"] > .result-content[data-i]',
+                    insertPosition: ['css;div[class*="-result-list"] > .result-content:not([data-i]):last-child', 1],
+                    replaceE: 'css;div[class*="-pagination"]',
+                    scrollDelta: 1200
+                },
+                function: {
+                    before: toutiao_functionBefore
+                }
+            }, //            头条搜索
             sogou: {
                 SiteTypeID: 0,
                 host: 'www.sogou.com',
@@ -280,6 +296,22 @@
                     scrollDelta: 1000
                 }
             }, //搜狗微信 - 搜索
+            so: {
+                SiteTypeID: 0,
+                host: 'www.so.com',
+                functionStart: function() {if (location.pathname != '/') {curSite = DBSite.so;}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;#snext[href]',
+                    pageElement: 'css;ul.result > li, style:not(src)',
+                    insertPosition: ['css;ul.result', 3],
+                    replaceE: 'css;#page',
+                    scrollDelta: 1200
+                },
+                function: {
+                    before: so_functionBefore
+                }
+            }, //                 360 搜索
             magi: {
                 SiteTypeID: 0,
                 host: 'magi.com',
@@ -2029,6 +2061,30 @@
         pageElems.forEach(function (one) {
             let now = one.querySelector('img.thumb[data-src]')
             if (now) {now.src = now.dataset.src;}
+        });
+        return pageElems
+    }
+
+
+    // [头条搜索] 的插入前函数（过滤相关搜索）
+    function toutiao_functionBefore(pageElems) {
+        for (let i = 0; i < pageElems.length; i++) {
+            let now = pageElems[i].querySelector('div[class*="-header"]')
+            if (now && now.textContent === '相关搜索') {
+                pageElems.splice(i,1)
+            }
+        }
+        return pageElems
+    }
+
+
+    // [360搜索] 的插入前函数（加载图片）
+    function so_functionBefore(pageElems) {
+        pageElems.forEach(function (one) {
+            one.querySelectorAll('img[data-isrc]').forEach(function (now) {
+                now.src = now.dataset.isrc;
+                now.className = now.className.replace('so-lazyimg','');
+            });
         });
         return pageElems
     }
