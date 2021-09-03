@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.1.1
+// @version      2.1.2
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、异次元软件、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -29,7 +29,7 @@
         ['menu_discuz_thread_page', '帖子内自动翻页 (仅论坛)', '帖子内自动翻页 (仅论坛)', true],
         ['menu_page_number', '显示当前页码及点击暂停翻页', '显示当前页码及点击暂停翻页', true],
         ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false]
-    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, forumWebsite = ['cs.rin.ru', 'www.flyert.com', 'bbs.pediy.com'];
+    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, forumWebsite = ['cs.rin.ru', 'www.flyert.com', 'bbs.pediy.com', 'www.libaclub.com'];
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
     }
@@ -1964,6 +1964,10 @@
                         curSite = DBSite.libaclub;
                     } else if (location.pathname.indexOf('/f_') > -1) {
                         curSite = DBSite.libaclub_f;
+                    } else if (location.pathname.indexOf('/t_') > -1 || location.pathname.indexOf('/reply_') > -1) {
+                        curSite = DBSite.libaclub_t;
+                    } else if (location.pathname.indexOf('/prt_') > -1) {
+                        curSite = DBSite.libaclub_prt;
                     } else if (location.pathname === '/facade.php') {
                         curSite = DBSite.libaclub_search;
                     }
@@ -1974,9 +1978,9 @@
                     pageElement: 'css;ul.ui-list > li:not(.ui-list-item-head):not(.ui-list-merchant-ad)',
                     insertPosition: ['css;ul.ui-list', 3],
                     replaceE: 'css;div.ui-crumbs-more',
-                    scrollDelta: 1000
+                    scrollDelta: 1200
                 }
-            }, //         篱笆网论坛
+            }, //        篱笆网论坛
             libaclub_f: {
                 SiteTypeID: 0,
                 pager: {
@@ -1985,9 +1989,31 @@
                     pageElement: 'css;ul.ui-list > li:not(.ui-list-item-head):not(.ui-list-merchant-ad)',
                     insertPosition: ['css;ul.ui-list', 3],
                     replaceE: 'css;div.ui-paging',
-                    scrollDelta: 1000
+                    scrollDelta: 1200
                 }
-            }, //         篱笆网论坛 - 各版块帖子列表
+            }, //      篱笆网论坛 - 各版块帖子列表
+            libaclub_t: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.ui-paging-next',
+                    pageElement: 'css;.ui-box-content > div.ui-topic, .ui-box-content > a[name]',
+                    insertPosition: ['css;.ui-box-content', 3],
+                    replaceE: 'css;div.ui-paging',
+                    scrollDelta: 1500
+                }
+            }, //      篱笆网论坛 - 帖子内
+            libaclub_prt: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.ui-paging-next',
+                    pageElement: 'css;ul.ui-list > li',
+                    insertPosition: ['css;ul.ui-list', 3],
+                    replaceE: 'css;div.ui-paging',
+                    scrollDelta: 2000
+                }
+            }, //      篱笆网论坛 - 帖子内 - 打印版
             libaclub_search: {
                 SiteTypeID: 0,
                 pager: {
@@ -1996,9 +2022,9 @@
                     pageElement: 'css;.ui-box-main > ul.ui-list > li',
                     insertPosition: ['css;.ui-box-main > ul.ui-list', 3],
                     replaceE: 'css;div.ui-page',
-                    scrollDelta: 1000
+                    scrollDelta: 1200
                 }
-            } //         篱笆网论坛 - 搜索页
+            } //  篱笆网论坛 - 搜索页
         };
         // 生成 SiteTypeID
         generateID();
