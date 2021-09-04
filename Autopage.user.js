@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.1.3
+// @version      2.1.4
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、异次元软件、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -1239,6 +1239,34 @@
                     scrollDelta: 1000
                 }
             }, //    RARBG
+            subdh: {
+                SiteTypeID: 0,
+                host: 'subdh.com',
+                functionStart: function() {if (location.pathname === '/' || location.pathname.indexOf('/list/new') > -1) {
+                        curSite = DBSite.subdh;
+                    } else if (location.pathname.indexOf('/search') > -1) {
+                        curSite = DBSite.subdh_search;
+                    }},
+                pager: {
+                    type: 1,
+                    nextLink: '//a[@class="page-link"][contains(text(), "下一页")]',
+                    pageElement: 'css;.col-lg-9 .bg-white.shadow-sm.rounded-3 > .row.gx-0',
+                    insertPosition: ['css;.col-lg-9 .bg-white.shadow-sm.rounded-3', 3],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1000
+                }
+            }, //       SubDH
+            subdh_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//a[@class="page-link"][contains(text(), "下一页")]',
+                    pageElement: 'css;.col-lg-9 .bg-white.shadow-sm.rounded-3',
+                    insertPosition: ['css;nav[aria-label="pagination"]', 1],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1000
+                }
+            }, //SubDH - 搜索页
             subhd: {
                 SiteTypeID: 0,
                 host: 'subhd.tv',
