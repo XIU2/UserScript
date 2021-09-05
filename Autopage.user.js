@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.1.7
+// @version      2.1.8
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、异次元软件、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -1867,6 +1867,155 @@
                     scrollDelta: 1000
                 }
             }, //         彼岸图网
+            github_star: {
+                SiteTypeID: 0,
+                host: 'github.com',
+                functionStart: function() {
+                    if (location.search.indexOf('tab=stars') > -1) {
+                        curSite = DBSite.github_star;
+                    } else if (location.pathname.indexOf('/issues') > -1) {
+                        curSite = DBSite.github_issues;
+                    } else if (location.pathname === '/search') {
+                        if (!location.search) return
+                        if (location.search.indexOf('type=Repositories') > -1 || location.search.indexOf('type=') === -1) {
+                            curSite = DBSite.github_search;
+                        } else if (location.search.indexOf('type=code') > -1) {
+                            curSite = DBSite.github_search_code;
+                        } else if (location.search.indexOf('type=commits') > -1) {
+                            curSite = DBSite.github_search_commit;
+                        } else if (location.search.indexOf('type=issues') > -1 || location.search.indexOf('type=discussions') > -1) {
+                            curSite = DBSite.github_search_issue;
+                        } else if (location.search.indexOf('type=registrypackages') > -1) {
+                            curSite = DBSite.github_search_package;
+                        } else if (location.search.indexOf('type=marketplace') > -1) {
+                            curSite = DBSite.github_search_marketplace;
+                        } else if (location.search.indexOf('type=topics') > -1) {
+                            curSite = DBSite.github_search_topics;
+                        } else if (location.search.indexOf('type=wikis') > -1) {
+                            curSite = DBSite.github_search_wiki;
+                        } else if (location.search.indexOf('type=users') > -1) {
+                            curSite = DBSite.github_search_user;
+                        }
+                    }},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="paginate-container"]//a[@href][contains(text(), "Next")]',
+                    pageElement: 'css;#js-pjax-container .position-relative .col-lg-12 > div:not(.position-relative):not(.paginate-container)',
+                    insertPosition: ['css;.paginate-container', 1],
+                    replaceE: 'css;.paginate-container',
+                    scrollDelta: 2000
+                }
+            }, //               Github - 用户 Star 列表
+            github_issues: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.next_page',
+                    pageElement: 'css;.js-navigation-container.js-active-navigation-container > div[id^="issue_"]',
+                    insertPosition: ['css;.js-navigation-container.js-active-navigation-container', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1500
+                }
+            }, //             Github - Issues 列表
+            github_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.next_page',
+                    pageElement: 'css;ul.repo-list > li',
+                    insertPosition: ['css;ul.repo-list', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1500
+                }
+            }, //             Github - Search 列表
+            github_search_code: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.next_page',
+                    pageElement: 'css;.code-list > div',
+                    insertPosition: ['css;.code-list', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1500
+                }
+            }, //        Github - Search 列表 - Code
+            github_search_commit: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.next_page',
+                    pageElement: 'css;#commit_search_results > div',
+                    insertPosition: ['css;#commit_search_results', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1500
+                }
+            }, //      Github - Search 列表 - Commit
+            github_search_issue: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.next_page',
+                    pageElement: 'css;.issue-list > div > div',
+                    insertPosition: ['css;.issue-list > div', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1500
+                }
+            }, //       Github - Search 列表 - Issues/Discussions
+            github_search_package: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.next_page',
+                    pageElement: 'css;#package_search_results > div',
+                    insertPosition: ['css;#package_search_results', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1500
+                }
+            }, //     Github - Search 列表 - Package
+            github_search_marketplace: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.next_page',
+                    pageElement: 'css;.issue-list > div',
+                    insertPosition: ['css;.issue-list', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1500
+                }
+            }, // Github - Search 列表 - Marketplace
+            github_search_topics: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.next_page',
+                    pageElement: 'css;.topic-list > div',
+                    insertPosition: ['css;.topic-list', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1500
+                }
+            }, //      Github - Search 列表 - Topics
+            github_search_wiki: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.next_page',
+                    pageElement: 'css;#wiki_search_results > div:first-child > div',
+                    insertPosition: ['css;#wiki_search_results > div:first-child', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1500
+                }
+            }, //        Github - Search 列表 - wiki
+            github_search_user: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.next_page',
+                    pageElement: 'css;#user_search_results > div:first-child > div',
+                    insertPosition: ['css;#user_search_results > div:first-child', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1500
+                }
+            }, //        Github - Search 列表 - user
             pubmed: {
                 SiteTypeID: 0,
                 host: 'pubmed.ncbi.nlm.nih.gov',
@@ -2097,20 +2246,7 @@
                     replaceE: 'css;div.ui-page',
                     scrollDelta: 1200
                 }
-            }, // 篱笆网论坛 - 搜索页
-            github: {
-                SiteTypeID: 0,
-                host: 'github.com',
-                functionStart: function() {if (location.search.indexOf('tab=stars') > -1) {curSite = DBSite.github;}},
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="paginate-container"]//a[@href][contains(text(), "Next")]',
-                    pageElement: 'css;#js-pjax-container .position-relative .col-lg-12 > div:not(.position-relative):not(.paginate-container)',
-                    insertPosition: ['css;.paginate-container', 1],
-                    replaceE: 'css;.paginate-container',
-                    scrollDelta: 2000
-                }
-            } //           Github - 用户 Stars 列表
+            } //  篱笆网论坛 - 搜索页
         };
         // 生成 SiteTypeID
         generateID();
