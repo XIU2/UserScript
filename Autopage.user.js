@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.1.8
+// @version      2.1.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、异次元软件、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -1873,7 +1873,7 @@
                 functionStart: function() {
                     if (location.search.indexOf('tab=stars') > -1) {
                         curSite = DBSite.github_star;
-                    } else if (location.pathname.indexOf('/issues') > -1) {
+                    } else if (location.pathname.indexOf('/issues') > -1 && location.pathname.indexOf('/issues/') === -1) {
                         curSite = DBSite.github_issues;
                     } else if (location.pathname === '/search') {
                         if (!location.search) return
@@ -2068,11 +2068,11 @@
             greasyfork: {
                 SiteTypeID: 0,
                 host: 'greasyfork.org',
-                functionStart: function() {if (location.pathname.indexOf('/scripts') + 8 === location.pathname.length) {
+                functionStart: function() {if (/\/scripts$/.test(location.pathname) || location.pathname.indexOf('/scripts/by-site/') > -1) {
                     curSite = DBSite.greasyfork;
-                } else if (location.pathname.lastIndexOf('/feedback') + 9 === location.pathname.length) {
+                } else if (/\/feedback$/.test(location.pathname)) {
                     curSite = DBSite.greasyfork_feedback;
-                } else if (location.pathname.lastIndexOf('/discussions') + 12 === location.pathname.length) {
+                } else if (location.pathname.indexOf('/discussions') > -1 && !(/\/\d+/.test(location.pathname))) {
                     curSite = DBSite.greasyfork_discussions;
                 }},
                 pager: {
