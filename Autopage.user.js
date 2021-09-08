@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.1.9
+// @version      2.2.0
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、异次元软件、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -1008,7 +1008,7 @@
                 function: {
                     before: cs_rin_ru_functionBefore
                 }
-            }, //           各版块帖子列表
+            }, //           cs.rin.ru - 各版块帖子列表
             cs_rin_ru_viewtopic: {
                 SiteTypeID: 0,
                 pager: {
@@ -1019,7 +1019,7 @@
                     replaceE: 'css;#pagecontent >table:not(.tablebg), #pageheader p.gensmall',
                     scrollDelta: 1500
                 }
-            }, // 帖子内
+            }, // cs.rin.ru - 帖子内
             cs_rin_ru_search: {
                 SiteTypeID: 0,
                 pager: {
@@ -1030,7 +1030,7 @@
                     replaceE: 'css;#wrapcentre > div',
                     scrollDelta: 1500
                 }
-            }, //    搜索页
+            }, //    cs.rin.ru - 搜索页
             crackhub: {
                 SiteTypeID: 0,
                 host: 'crackhub.site',
@@ -1245,10 +1245,10 @@
                 SiteTypeID: 0,
                 host: 'subdh.com',
                 functionStart: function() {if (location.pathname === '/' || location.pathname.indexOf('/list/new') > -1) {
-                        curSite = DBSite.subdh;
-                    } else if (location.pathname.indexOf('/search') > -1) {
-                        curSite = DBSite.subdh_search;
-                    }},
+                    curSite = DBSite.subdh;
+                } else if (location.pathname.indexOf('/search') > -1) {
+                    curSite = DBSite.subdh_search;
+                }},
                 pager: {
                     type: 1,
                     nextLink: '//a[@class="page-link"][contains(text(), "下一页")]',
@@ -1269,6 +1269,45 @@
                     scrollDelta: 1000
                 }
             }, //SubDH - 搜索页
+            mini4k: {
+                SiteTypeID: 0,
+                host: 'www.mini4k.com',
+                functionStart: function() {if (location.pathname != '/' && !(/\/\d{3,}/.test(location.pathname))) {curSite = DBSite.mini4k;};},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.pager__item--next[href]',
+                    pageElement: 'css;div[class*="-item-list"] > ul > li',
+                    insertPosition: ['css;div[class*="-item-list"] > ul', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 2000
+                }
+            }, //      MINI4K
+            a4k: {
+                SiteTypeID: 0,
+                host: 'www.a4k.net',
+                functionStart: function() {if (location.pathname.indexOf('/subtitle/') === -1) {curSite = DBSite.a4k;};},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.pager__item--next[href]',
+                    pageElement: 'css;ul.list > li',
+                    insertPosition: ['css;ul.list', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1000
+                }
+            }, //         A4k 字幕网（字幕）
+            assrt: {
+                SiteTypeID: 0,
+                host: 'assrt.net',
+                functionStart: function() {if (location.pathname != '/') {curSite = DBSite.assrt;};},
+                pager: {
+                    type: 1,
+                    nextLink: assrt_functionNext,
+                    pageElement: 'css;.resultcard > div:not(#top-banner):not(#bottom-banner)',
+                    insertPosition: ['css;.pagelinkcard', 1],
+                    replaceE: 'css;.pagelinkcard',
+                    scrollDelta: 1000
+                }
+            }, //       射手网（字幕）
             subhd: {
                 SiteTypeID: 0,
                 host: 'subhd.tv',
@@ -1285,7 +1324,7 @@
                     replaceE: 'css;nav.clearfix',
                     scrollDelta: 1000
                 }
-            }, //       SubHD
+            }, //       SubHD（字幕）
             subhd_forum: {
                 SiteTypeID: 0,
                 pager: {
@@ -1296,7 +1335,7 @@
                     replaceE: 'css;nav.clearfix',
                     scrollDelta: 800
                 }
-            }, // SubHD - forum
+            }, // SubHD - forum（字幕）
             baoshuu: {
                 SiteTypeID: 0,
                 host: 'www.baoshuu.com',
@@ -1620,7 +1659,7 @@
                     replaceE: 'css;nav.navigation.posts-navigation',
                     scrollDelta: 1500
                 }
-            },
+            }, // 下面这几个都是国外博客网站
             winaero: {
                 SiteTypeID: 0,
                 host: 'winaero.com',
@@ -2636,6 +2675,20 @@
             }
         });
         return pageElems
+    }
+
+
+    // [射手网] 获取下一页地址
+    function assrt_functionNext() {
+        let nextXPAHT = '//a[@id="pl-nav"][@href][contains(text(), ">")]'
+        let url = getElementByXpath(nextXPAHT);
+        if (url) {
+            url = /(?<=\()\d+(?=,)/.exec(url.href)[0]
+            if (url) {
+                return (location.origin + location.pathname + location.search.replace(/(&)?page=\d+$/,'') + '&page=' + url);
+            }
+        }
+        return '';
     }
 
 
