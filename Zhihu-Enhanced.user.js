@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.7.0
+// @version      1.7.1
 // @author       X.I.U
 // @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽指定类别（视频/文章等）、屏蔽盐选内容、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -1142,6 +1142,7 @@ function removeLogin() {
         if (document.querySelector('button.AppHeader-login')) { // 如果存在，则代表未登录
             const observer = new MutationObserver(removeLoginModal);
             observer.observe(document, { childList: true, subtree: true });
+            document.lastElementChild.appendChild(document.createElement('style')).textContent = '.Question-mainColumnLogin {display: none !important;}'; // 屏蔽问题页中间的登录提示
             document.querySelector('button.AppHeader-login').onclick=function(){location.href='https://www.zhihu.com/signin';} // [登录] 按钮跳转至登录页面
         }
     }
