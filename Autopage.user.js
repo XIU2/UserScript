@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.2.0
+// @version      2.2.1
 // @author       X.I.U
-// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、超能网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、异次元软件、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork（以上仅一部分，更多的写不下了...
+// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、异次元软件、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -1419,6 +1419,31 @@
                     before: iao_su_functionBefore
                 }
             }, //                 不死鸟
+            sharerw: {
+                SiteTypeID: 0,
+                host: 'www.sharerw.com',
+                functionStart: function() {if (location.pathname.indexOf('.html') === -1) {
+                    if (location.pathname === '/search.php') {curSite = DBSite.sharerw_search;} else {curSite = DBSite.sharerw;};};},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;span.next > a[href]',
+                    pageElement: 'css;.new-post > article',
+                    insertPosition: ['css;.new-post', 3],
+                    replaceE: 'css;.pagebar',
+                    scrollDelta: 1500
+                }
+            }, //                分享者
+            sharerw_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;span.next > a[href]',
+                    pageElement: 'css;#mainbox > article',
+                    insertPosition: ['css;.pagebar', 1],
+                    replaceE: 'css;.pagebar',
+                    scrollDelta: 1500
+                }
+            }, //         分享者 - 搜索页
             appinn: {
                 SiteTypeID: 0,
                 host: 'www.appinn.com',
@@ -1659,7 +1684,7 @@
                     replaceE: 'css;nav.navigation.posts-navigation',
                     scrollDelta: 1500
                 }
-            }, // 下面这几个都是国外博客网站
+            }, //                 下面这几个都是国外博客网站
             winaero: {
                 SiteTypeID: 0,
                 host: 'winaero.com',
@@ -2055,6 +2080,60 @@
                     scrollDelta: 1500
                 }
             }, //        Github - Search 列表 - user
+            stackoverflow: {
+                SiteTypeID: 0,
+                host: 'stackoverflow.com',
+                functionStart: function() {if (location.pathname.indexOf('/questions') > -1) {
+                    curSite = DBSite.stackoverflow;
+                } else if (location.pathname === '/search') {
+                    curSite = DBSite.stackoverflow_search;
+                } else if (location.pathname === '/tags') {
+                    curSite = DBSite.stackoverflow_tags;
+                } else if (location.pathname === '/users') {
+                    curSite = DBSite.stackoverflow_users;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a[href][rel="next"]',
+                    pageElement: 'css;#questions > div',
+                    insertPosition: ['css;#questions', 3],
+                    replaceE: 'css;.pager',
+                    scrollDelta: 1500
+                }
+            }, //             StackOverflow - Questions
+            stackoverflow_tags: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a[href][rel="next"]',
+                    pageElement: 'css;#tags-browser > div',
+                    insertPosition: ['css;#tags-browser', 3],
+                    replaceE: 'css;.pager',
+                    scrollDelta: 1500
+                }
+            }, //        StackOverflow - Tags
+            stackoverflow_users: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a[href][rel="next"]',
+                    pageElement: 'css;#user-browser > div:first-child > div',
+                    insertPosition: ['css;#user-browser > div:first-child', 3],
+                    replaceE: 'css;.pager',
+                    scrollDelta: 1500
+                }
+            }, //       StackOverflow - Users
+            stackoverflow_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a[href][rel="next"]',
+                    pageElement: 'css;.js-search-results > div:first-child > div',
+                    insertPosition: ['css;.js-search-results > div:first-child', 3],
+                    replaceE: 'css;.pager',
+                    scrollDelta: 1500
+                }
+            }, //      StackOverflow - Search
             pubmed: {
                 SiteTypeID: 0,
                 host: 'pubmed.ncbi.nlm.nih.gov',
