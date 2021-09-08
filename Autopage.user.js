@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.2.1
+// @version      2.2.2
 // @author       X.I.U
-// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、异次元软件、异星软件空间、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
+// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -1111,6 +1111,24 @@
                     scrollDelta: 1500
                 }
             }, //        低端影视
+            zxzj: {
+                SiteTypeID: 0,
+                host: 'www.zxzj.me',
+                functionStart: function() {if (location.pathname != '/' && location.pathname.indexOf('/detail/') === -1) {
+                    curSite = DBSite.zxzj; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'div.stui-page__all {display: none !important;}';
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: '//ul[contains(@class, "stui-page__item")]//a[contains(text(), "下一页")]',
+                    pageElement: 'css;ul.stui-vodlist > li',
+                    insertPosition: ['css;ul.stui-vodlist', 3],
+                    replaceE: 'css;ul.stui-page__item',
+                    scrollDelta: 1000
+                },
+                function: {
+                    before: nfmovies_functionBefore
+                }
+            }, //        在线之家
             zhenbuka: {
                 SiteTypeID: 0,
                 host: ['www.zhenbuka3.com', 'www.zhenbuka5.com'],
@@ -2745,7 +2763,7 @@
     }
 
 
-    // [奈菲影视/真不卡影院] 的插入前函数（加载图片）
+    // [奈菲影视/在线之家/真不卡影院] 的插入前函数（加载图片）
     function nfmovies_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.querySelector('a.lazyload')
