@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.2.3
+// @version      2.2.4
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -2159,6 +2159,8 @@
                 functionStart: function() {locationchange = true;
                     if (location.pathname.indexOf('/questions') > -1) {
                     curSite = DBSite.segmentfault;
+                } else if (location.pathname === '/search') {
+                    curSite = DBSite.segmentfault_search;
                 }},
                 pager: {
                     type: 1,
@@ -2169,6 +2171,17 @@
                     scrollDelta: 1000
                 }
             }, //              SegmentFault - Questions
+            segmentfault_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a[href][rel="next"]',
+                    pageElement: 'css;.search-result > section',
+                    insertPosition: ['css;.search-result > div:last-child', 1],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1000
+                }
+            }, //       SegmentFault - Search
             pubmed: {
                 SiteTypeID: 0,
                 host: 'pubmed.ncbi.nlm.nih.gov',
