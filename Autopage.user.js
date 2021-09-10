@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.2.2
+// @version      2.2.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -29,7 +29,7 @@
         ['menu_discuz_thread_page', '帖子内自动翻页 (仅论坛)', '帖子内自动翻页 (仅论坛)', true],
         ['menu_page_number', '显示当前页码及点击暂停翻页', '显示当前页码及点击暂停翻页', true],
         ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false]
-    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, forumWebsite = ['cs.rin.ru', 'www.flyert.com', 'bbs.pediy.com', 'www.libaclub.com'];
+    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, locationchange = false, nowLocation = '', forumWebsite = ['cs.rin.ru', 'www.flyert.com', 'bbs.pediy.com', 'www.libaclub.com'];
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
     }
@@ -76,6 +76,7 @@
     function setDBSite() {
     /*
     自动翻页规则
+    locationchange: 对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则
     type：
       1 = 由脚本实现自动无缝翻页
       2 = 网站自带了自动无缝翻页功能，只需要点击下一页按钮即可
@@ -1952,7 +1953,7 @@
             github_star: {
                 SiteTypeID: 0,
                 host: 'github.com',
-                functionStart: function() {
+                functionStart: function() {locationchange = true;
                     if (location.search.indexOf('tab=stars') > -1) {
                         curSite = DBSite.github_star;
                     } else if (location.pathname.indexOf('/issues') > -1 && location.pathname.indexOf('/issues/') === -1) {
@@ -1996,7 +1997,7 @@
                     pageElement: 'css;.js-navigation-container.js-active-navigation-container > div[id^="issue_"]',
                     insertPosition: ['css;.js-navigation-container.js-active-navigation-container', 3],
                     replaceE: 'css;.pagination',
-                    scrollDelta: 1500
+                    scrollDelta: 2000
                 }
             }, //             Github - Issues 列表
             github_search: {
@@ -2152,6 +2153,22 @@
                     scrollDelta: 1500
                 }
             }, //      StackOverflow - Search
+            segmentfault: {
+                SiteTypeID: 0,
+                host: 'segmentfault.com',
+                functionStart: function() {locationchange = true;
+                    if (location.pathname.indexOf('/questions') > -1) {
+                    curSite = DBSite.segmentfault;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: '//a[@class="page-link"][contains(text(), "下一页")]',
+                    pageElement: 'css;ul.list-group > li',
+                    insertPosition: ['css;ul.list-group', 3],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1000
+                }
+            }, //              SegmentFault - Questions
             pubmed: {
                 SiteTypeID: 0,
                 host: 'pubmed.ncbi.nlm.nih.gov',
@@ -2459,6 +2476,22 @@
 
     if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
     pausePageEvent(); // 左键双击网页空白处暂停翻页
+
+    if (locationchange) { // 对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则
+        nowLocation = location.href
+        addLocationchange(); // 自定义 locationchange 事件
+        window.addEventListener('locationchange', function(){
+            if (nowLocation != location.href) {
+                nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
+                registerMenuCommand(); // 重新判断规则
+                curSite.pageUrl = ''; // 下一页URL
+
+                if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
+                pausePageEvent(); // 左键双击网页空白处暂停翻页
+            }
+        })
+    }
+
     curSite.pageUrl = ''; // 下一页URL
     //console.log(curSite);
     pageLoading(); // 自动无缝翻页
@@ -3320,7 +3353,7 @@
     function pausePageEvent() {
         if (!GM_getValue('menu_pause_page')) return
         if (curSite.SiteTypeID === 0) return
-        document.body.addEventListener('dblclick', function (e) {
+        document.body.addEventListener('dblclick', function () {
             if (pausePage) {
                 pausePage = false;
                 GM_notification({text: `❌ 已暂停本页 [自动无缝翻页]\n    （再次双击可恢复）`, timeout: 2500});
@@ -3334,7 +3367,7 @@
 
     // 显示页码
     function pageNumber(type) {
-        if (curSite.SiteTypeID === 0) return
+        if (curSite.SiteTypeID === 0) {let status = document.getElementById('Autopage_number');if (status) {status.style.display = 'none';}; return}
         let status = document.getElementById('Autopage_number');
         switch (type) {
             case 'add':
@@ -3719,6 +3752,27 @@
                 return query;
             }
         }
+    }
+
+    // 自定义 locationchange 事件（用来监听 URL 变化）
+    function addLocationchange() {
+        history.pushState = ( f => function pushState(){
+            var ret = f.apply(this, arguments);
+            window.dispatchEvent(new Event('pushstate'));
+            window.dispatchEvent(new Event('locationchange'));
+            return ret;
+        })(history.pushState);
+
+        history.replaceState = ( f => function replaceState(){
+            var ret = f.apply(this, arguments);
+            window.dispatchEvent(new Event('replacestate'));
+            window.dispatchEvent(new Event('locationchange'));
+            return ret;
+        })(history.replaceState);
+
+        window.addEventListener('popstate',()=>{
+            window.dispatchEvent(new Event('locationchange'))
+        });
     }
 
     /*// 监听 XMLHttpRequest URL
