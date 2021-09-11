@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.2.4
+// @version      2.2.5
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -956,10 +956,10 @@
                 pager: {
                     type: 4,
                     nextLink: nexusmods_functionNext,
-                    pageElement: 'css;#mod-list > ul.tiles > li',
-                    insertPosition: ['css;#mod-list > ul.tiles', 3],
+                    pageElement: 'css;ul.tiles > li',
+                    insertPosition: ['css;ul.tiles', 3],
                     insertElement: nexusmods_insertElement,
-                    replaceE: 'css;#mod-list .pagination',
+                    replaceE: 'css;.pagination',
                     scrollDelta: 3000
                 }
             }, //      NexusMods
@@ -2726,9 +2726,11 @@
     // [NexusMods] 获取下一页地址
     function nexusmods_functionNext() {
         if (document.querySelector('.nexus-ui-blocker')) return
-        let out_items = JSON.stringify(RH_ModList.out_items).replace(/{|}|"/g,''),
-            nextNum = getElementByXpath('id("mod-list")/div[contains(@class, "pagenav")][1]//a[contains(@class, "page-selected")]/parent::li/following-sibling::li/a'),
-            categories = RH_ModList.out_items.categories, categoriesUrl = '';
+        let modList;
+        if (location.pathname.indexOf('/news') > -1) {modList = RH_NewsTabContent;} else {modList = RH_ModList;}
+        let out_items = JSON.stringify(modList.out_items).replace(/{|}|"/g,''),
+            nextNum = getElementByXpath('//div[contains(@class, "pagenav")][1]//a[contains(@class, "page-selected")]/parent::li/following-sibling::li/a'),
+            categories = modList.out_items.categories, categoriesUrl = '';
         var url = '';
         if (nextNum && nextNum.innerText) {
             nextNum = nextNum.innerText;
@@ -2746,7 +2748,7 @@
                     out_items = out_items.replace(/categories:\[.*\]/, categoriesUrl)
                 }
             }
-            url = 'https://www.nexusmods.com' + RH_ModList.uri + '?RH_ModList=' + out_items
+            url = `https://www.nexusmods.com${modList.uri}?RH_${modList.id}=${out_items}`
             //console.log(nextNum, url, curSite.pageUrl, out_items)
             if (url === curSite.pageUrl) return
             curSite.pageUrl = url;
@@ -2766,7 +2768,10 @@
             if (now) {
                 let downloadCount = now.querySelector('.downloadcount > span.flex-label');
                 if (downloadCount) {
-                    downloadCount.textContent = shortFormat(parseInt(GlobalModStats[now.dataset.gameId][now.dataset.modId].total));
+                    console.log(now.dataset.gameId, now.dataset.modId)
+                    if (GlobalModStats[now.dataset.gameId] && GlobalModStats[now.dataset.gameId][now.dataset.modId]) {
+                        downloadCount.textContent = shortFormat(parseInt(GlobalModStats[now.dataset.gameId][now.dataset.modId].total));
+                    }
                 }
             }
         });
