@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.2.5
+// @version      2.2.6
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -97,6 +97,7 @@
       2 = 下一页主体元素同级 <script> 标签
       3 = 下一页主体元素同级 <script> 标签（远程文件）
       4 = 下一页主体元素子元素 <script> 标签
+    history: 添加历史记录 并 修改当前 URL
     scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大（如果 Type = 3，则相反）
     function：
       before = 插入前执行函数；
@@ -881,6 +882,19 @@
                     scrollDelta: 400
                 }
             },
+            _3dmgame_mod: {
+                SiteTypeID: 0,
+                host: 'mod.3dmgame.com',
+                pager: {
+                    type: 1,
+                    nextLink: _3dmgame_mod_functionNext,
+                    pageElement: '//div[contains(@class, "game-mod-list") or contains(@class, "search-mod-list")] | //script[not(@src or @type)][contains(text(), ".game-mod-page") or contains(text(), ".search-mod-page")]',
+                    insertPosition: ['//div[contains(@class, "game-mod-wrap") or contains(@class, "search-mod ")]', 3],
+                    scriptType: 2,
+                    history: true,
+                    scrollDelta: 1200
+                }
+            }, //   3DM MOD站
             ali213_www: {
                 SiteTypeID: 0,
                 host: 'www.ali213.net',
@@ -2714,6 +2728,28 @@
     }
 
 
+    // [3DM MOD] 获取下一页地址
+    function _3dmgame_mod_functionNext() {
+        let nextNum = getElementByXpath('//li[@class="page-list active"]/following-sibling::li[contains(@class, "page-list")]/a');
+        var url = '';
+        if (nextNum && nextNum.textContent) {
+            nextNum = 'Page=' + nextNum.textContent;
+            if (location.search) {
+                let search = location.search.replace(/(&)?Page=\d+(&)?/, '');
+                if (search === '?') {
+                    url += location.origin + location.pathname + search + nextNum;
+                } else {
+                    url += location.origin + location.pathname + search + '&' + nextNum;
+                }
+            } else {
+                url += location.origin + location.pathname + '?' + nextNum;
+            }
+        }
+        console.log(url)
+        return url
+    }
+
+
     // [游民星空-攻略] 的插入前函数（移除下一页底部的 "更多相关内容请关注：xxx" 文字）
     function gamersky_gl_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
@@ -3693,17 +3729,19 @@
                                 }
 
                                 // 替换待替换元素
-                                try {
-                                    let oriE = getAllElements(curSite.pager.replaceE),
-                                        repE = getAllElements(curSite.pager.replaceE, newBody, newBody);
-                                    //console.log(oriE, repE);
-                                    if (oriE.length === repE.length) {
-                                        for (let i = 0; i < oriE.length; i++) {
-                                            oriE[i].outerHTML = repE[i].outerHTML;
+                                if (curSite.pager.replaceE) {
+                                    try {
+                                        let oriE = getAllElements(curSite.pager.replaceE),
+                                            repE = getAllElements(curSite.pager.replaceE, newBody, newBody);
+                                        //console.log(oriE, repE);
+                                        if (oriE.length === repE.length) {
+                                            for (let i = 0; i < oriE.length; i++) {
+                                                oriE[i].outerHTML = repE[i].outerHTML;
+                                            }
                                         }
+                                    } catch (e) {
+                                        console.log(e);
                                     }
-                                } catch (e) {
-                                    console.log(e);
                                 }
                                 // 如果有插入后函数就执行函数
                                 if (curSite.function && curSite.function.after) {
