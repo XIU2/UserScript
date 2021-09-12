@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.2.6
+// @version      2.2.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -1637,6 +1637,19 @@
                     scrollDelta: 2000
                 }
             }, //                 th-sjy 汉化
+            fsylr: {
+                SiteTypeID: 0,
+                host: 'fsylr.com',
+                functionStart: function() {if (location.pathname.indexOf('.html') === -1) {curSite = DBSite.fsylr;}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.next.page-numbers[href]',
+                    pageElement: 'css;.posts-con > div:not([class*="posts-"])',
+                    insertPosition: ['css;.posts-con', 3],
+                    replaceE: 'css;nav.pagination',
+                    scrollDelta: 1000
+                }
+            }, //                  发烧友绿软
             iplaysoft_postslist: {
                 SiteTypeID: 0,
                 host: 'www.iplaysoft.com',
@@ -1656,7 +1669,7 @@
                 function: {
                     before: iplaysoft_postslist_functionBefore
                 }
-            }, //    异次元软件世界
+            }, //    异次元软件
             iplaysoft_postcomments: {
                 SiteTypeID: 0,
                 pager: {
@@ -1665,7 +1678,7 @@
                     nextTextOf: '展开后面',
                     scrollDelta: 1200
                 }
-            }, // 异次元软件世界 - 评论
+            }, // 异次元软件 - 评论
             mpyit: {
                 SiteTypeID: 0,
                 host: 'www.mpyit.com',
