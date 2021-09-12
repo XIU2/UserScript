@@ -3539,13 +3539,6 @@
             }
         }
 
-        if (!support) { // 部分域名额外判断一下
-            if (location.host.indexOf(DBSite.btbtt.host) > -1) { //   < BT 之家 >
-                curSite = DBSite.btbtt;
-                support = true;
-            }
-        }
-
         if (support) {
             console.info('[自动无缝翻页] - 其他网站（独立规则）'); return 1;
         } else if (document.querySelector('meta[name="author"][content*="Discuz!"], meta[name="generator"][content*="Discuz!"]') || (document.querySelector('a[href*="www.discuz.net"]') && document.querySelector('a[href*="www.discuz.net"]').textContent.indexOf('Discuz!') > -1) || (document.getElementById('ft') && document.getElementById('ft').textContent.indexOf('Discuz!') > -1)) {
