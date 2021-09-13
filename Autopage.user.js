@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.3.0
+// @version      2.3.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -1990,6 +1990,22 @@
                     scrollDelta: 1000
                 }
             }, //         彼岸图网
+            ioliu: {
+                SiteTypeID: 0,
+                host: 'bing.ioliu.cn',
+                functionStart: function() {if (location.pathname.indexOf('/photo/') === -1 && location.pathname.indexOf('.html') === -1) {curSite = DBSite.ioliu; document.head.appendChild(document.createElement('base')).target = '_blank';}},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="page"]/a[@href][contains(text(), "下一页")]',
+                    pageElement: 'css;body > .container > div.item',
+                    insertPosition: ['css;body > .container', 3],
+                    replaceE: 'css;.page',
+                    scrollDelta: 1000
+                },
+                function: {
+                    before: ioliu_functionBefore
+                }
+            }, //         必应壁纸
             github_star: {
                 SiteTypeID: 0,
                 host: 'github.com',
@@ -2935,6 +2951,18 @@
             let now = one.querySelector('.slideUp, .elementFade')
             if (now) {
                 now.className = now.className.replace('slideUp','slideUpRun').replace('elementFade','elementFadeRun');
+            }
+        });
+        return pageElems
+    }
+
+
+    // [必应壁纸] 的插入前函数（加载图片）
+    function ioliu_functionBefore(pageElems) {
+        pageElems.forEach(function (one) {
+            let now = one.querySelector('img.progressive--not-loaded')
+            if (now) {
+                now.className = now.className.replace('progressive--not-loaded','progressive--is-loaded');
             }
         });
         return pageElems
