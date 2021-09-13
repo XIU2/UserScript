@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.2.9
+// @version      2.3.0
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -3436,10 +3436,10 @@
         document.body.addEventListener('dblclick', function () {
             if (pausePage) {
                 pausePage = false;
-                GM_notification({text: `❌ 已暂停本页 [自动无缝翻页]\n    （再次双击可恢复）`, timeout: 2500});
+                GM_notification({text: `❌ 已暂停本页 [自动无缝翻页]\n    （再次双击可恢复）`, timeout: 2000});
             } else {
                 pausePage = true;
-                GM_notification({text: `✅ 已恢复本页 [自动无缝翻页]\n    （再次双击可暂停）`, timeout: 2500});
+                GM_notification({text: `✅ 已恢复本页 [自动无缝翻页]\n    （再次双击可暂停）`, timeout: 2000});
             }
         });
     }
@@ -3464,12 +3464,16 @@
                 return
             }
             // 插入网页
-            let _html = `<style>#Autopage_number {top: calc(75vh) !important;left: 0 !important;width: 32px;height: 32px;padding: 6px !important;display: flex;position: fixed !important;opacity: 0.5;transition: .2s;z-index: 1000 !important;cursor: pointer;user-select: none !important;flex-direction: column;align-items: center;justify-content: center;box-sizing: content-box;border-radius: 0 50% 50% 0;transform-origin: center !important;transform: translateX(-8px);background-color: #eeec;-webkit-tap-highlight-color: transparent;box-shadow: 1px 1px 3px 0px #989898 !important;color: #000 !important;} #Autopage_number:hover {opacity: 1;transform: translateX(0);}</style>
+            let _html = `<style>#Autopage_number {top: calc(75vh) !important;left: 0 !important;width: 32px;height: 32px;padding: 6px !important;display: flex;position: fixed !important;opacity: 0.5;transition: .2s;z-index: 1000 !important;cursor: pointer;user-select: none !important;flex-direction: column;align-items: center;justify-content: center;box-sizing: content-box;border-radius: 0 50% 50% 0;transform-origin: center !important;transform: translateX(-8px);background-color: #eee;-webkit-tap-highlight-color: transparent;box-shadow: 1px 1px 3px 0px #aaa !important;color: #000 !important;} #Autopage_number:hover {opacity: 0.9;transform: translateX(0);}</style>
 <div id="Autopage_number" title="1. 此处数字为 [当前页码] (可在脚本菜单中关闭)&#10;&#10;2. 鼠标左键点击此处 [临时暂停本页自动无缝翻页]（再次点击可恢复）">${pageNum._now}</div>`
             document.body.insertAdjacentHTML('beforeend', _html);
             // 点击事件（临时暂停翻页）
             document.getElementById('Autopage_number').onclick = function () {
-                if (pausePage) {pausePage = false; GM_notification({text: `❌ 已暂停本页 [自动无缝翻页]\n    （再次点击可恢复）`, timeout: 2500});} else {pausePage = true; GM_notification({text: `✅ 已恢复本页 [自动无缝翻页]\n    （再次点击可暂停）`, timeout: 2500});}
+                if (pausePage) {
+                    pausePage = false; this.style = 'color: #FF5722 !important; font-style: italic !important;';
+                } else {
+                    pausePage = true; this.style = '';
+                }
             };
             status = document.getElementById('Autopage_number');
             set();
