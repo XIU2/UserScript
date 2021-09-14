@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.7.1
+// @version      1.7.2
 // @author       X.I.U
-// @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽指定类别（视频/文章等）、屏蔽盐选内容、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
+// @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽指定类别（视频/文章等）、屏蔽盐选内容、净化标题消息、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -38,6 +38,7 @@ var menu_ALL = [
     ['menu_blockTypeTopic', '话题 [搜索页]', '话题（搜索页）', false],
     ['menu_blockTypeSearch', '杂志文章、相关搜索等 [搜索页]', '相关搜索、杂志等（搜索页）', false],
     ['menu_blockYanXuan', '屏蔽盐选内容', '屏蔽盐选内容', false],
+    ['menu_cleanTitles', '净化标题消息 (标题中的私信/消息)', '净化标题提醒', false],
     ['menu_questionRichTextMore', '展开问题描述', '展开问题描述', false],
     ['menu_publishTop', '置顶显示时间', '置顶显示时间', true],
     ['menu_allTime', '完整显示时间', '完整显示时间', true],
@@ -1134,18 +1135,33 @@ function removeLogin() {
 
     // 未登录时才会监听并移除登录弹窗
     if(location.hostname === 'zhuanlan.zhihu.com') { // 如果是文章页
-        if (!document.querySelector('button.ColumnPageHeader-MenuToggler')) { // 如果不存在，则代表已登录
+        if (!document.querySelector('button.ColumnPageHeader-MenuToggler')) { // 未登录
             const observer = new MutationObserver(removeLoginModal);
             observer.observe(document, { childList: true, subtree: true });
+        } else {
+            cleanTitles(); // 净化标题消息
         }
     } else { // 不是文章页
-        if (document.querySelector('button.AppHeader-login')) { // 如果存在，则代表未登录
+        if (document.querySelector('button.AppHeader-login')) { // 未登录
             const observer = new MutationObserver(removeLoginModal);
             observer.observe(document, { childList: true, subtree: true });
             document.lastElementChild.appendChild(document.createElement('style')).textContent = '.Question-mainColumnLogin {display: none !important;}'; // 屏蔽问题页中间的登录提示
             document.querySelector('button.AppHeader-login').onclick=function(){location.href='https://www.zhihu.com/signin';} // [登录] 按钮跳转至登录页面
+        } else {
+            cleanTitles(); // 净化标题消息
         }
     }
+}
+
+
+// 净化标题消息
+function cleanTitles() {
+    if (!menu_value('menu_cleanTitles')) return
+    Object.defineProperty(document, 'title', {
+        set: function(value) {
+            //console.log(value);
+        }
+    });
 }
 
 
