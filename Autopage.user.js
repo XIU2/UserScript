@@ -2580,12 +2580,12 @@
 
     // [Discuz! 论坛] 隐藏帖子内的 [下一页] 按钮
     function hidePgbtn() {
-        document.lastChild.appendChild(document.createElement('style')).textContent = '.pgbtn {display: none;}';
+        document.lastElementChild.appendChild(document.createElement('style')).textContent = '.pgbtn {display: none;}';
     }
     // [Discuz! 论坛] 图片模式列表样式预处理
     function waterfallStyle() {
         let width = document.querySelector('#waterfall > li:first-child').style.width;
-        document.lastChild.appendChild(document.createElement('style')).textContent = `#waterfall {height: auto !important; width: 100% !important;} #waterfall > li {width: ${width} !important; float: left !important; position: inherit !important; left: auto !important; top: auto !important;}`;
+        document.lastElementChild.appendChild(document.createElement('style')).textContent = `#waterfall {height: auto !important; width: 100% !important;} #waterfall > li {width: ${width} !important; float: left !important; position: inherit !important; left: auto !important; top: auto !important;}`;
     }
     // [Discuz! 论坛] 的插入前函数（加载图片，仅部分论坛）
     function discuz_thread_functionBefore(pageElems) {
@@ -3634,7 +3634,7 @@
             responseType: type,
             overrideMimeType: mimeType,
             headers: {
-                "Referer": location.href,
+                'Referer': location.href,
                 'Content-Type': (method === 'POST') ? 'application/x-www-form-urlencoded':''
             },
             timeout: 5000,
@@ -3738,7 +3738,7 @@
                     method: 'GET',
                     overrideMimeType: mimeType,
                     headers: {
-                        "Referer": location.href
+                        'Referer': location.href
                     },
                     timeout: 5000,
                     onload: function (response) {

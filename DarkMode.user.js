@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.2.7
+// @version      1.2.8
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
 // @match        *://*/*
@@ -29,7 +29,7 @@
         ['menu_darkModeAuto', '护眼模式跟随浏览器', '护眼模式跟随浏览器', false],
         ['menu_autoRecognition', '智能排除自带暗黑模式的网页 (beta)', '智能排除自带暗黑模式的网页 (beta)', true],
         ['menu_forcedToEnable', '✅ 已强制当前网站启用护眼模式 (👆)', '❌ 未强制当前网站启用护眼模式 (👆)', []],
-        ['menu_darkModeType', '点击切换模式', '点击切换模式', 1],
+        ['menu_darkModeType', '点击切换模式', '点击切换模式', 2],
         ['menu_customMode', '自定义当前模式', '自定义当前模式', true], ['menu_customMode1',,,'80|70'], ['menu_customMode2',,,'80|20|70|30'], ['menu_customMode3',,,'80']
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
@@ -309,14 +309,14 @@
         }
         style_Add.id = 'XIU2DarkMode';
         style_Add.type = 'text/css';
-        //console.log(document,document.lastChild,document.querySelector('html'))
-        if (document.lastChild) {
-            document.lastChild.appendChild(style_Add).textContent = style;
+        console.log(document,document.lastElementChild,document.querySelector('html'))
+        if (document.lastElementChild) {
+            document.lastElementChild.appendChild(style_Add).textContent = style;
         } else { // 发现个别网站速度太慢的话，就会出现脚本运行太早，连 html 标签都还没加载。。。
             let timer1 = setInterval(function(){ // 每 5 毫秒检查一下 html 是否已存在
-                if (document.lastChild) {
+                if (document.lastElementChild) {
                     clearInterval(timer1); // 取消定时器
-                    document.lastChild.appendChild(style_Add).textContent = style;
+                    document.lastElementChild.appendChild(style_Add).textContent = style;
                 }
             });
         }
@@ -331,13 +331,13 @@
             if (document.body) {
                 clearInterval(timer); // 取消定时器（每 5 毫秒一次的）
                 setTimeout(function(){ // 为了避免太快 body 的 CSS 还没加载上，先延迟 150 毫秒（缺点就是可能会出现短暂一闪而过的暗黑滤镜）
-                    console.log('[护眼模式] html:', window.getComputedStyle(document.lastChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
-                    if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastChild).backgroundColor === 'rgba(0, 0, 0, 0)') {
+                    console.log('[护眼模式] html:', window.getComputedStyle(document.lastElementChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
+                    if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastElementChild).backgroundColor === 'rgba(0, 0, 0, 0)') {
                         // 如果 body 没有 CSS 背景颜色，那就需要添加一个背景颜色，否则影响滤镜效果
                         let style_Add2 = document.createElement('style');
                         style_Add2.id = 'XIU2DarkMode2';
-                        document.lastChild.appendChild(style_Add2).textContent = style_00;
-                    } else if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || getColorValue(document.body) > 0 && getColorValue(document.body) < 898989 || getColorValue(document.lastChild) > 0 && getColorValue(document.lastChild) < 898989 || window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastChild).backgroundColor === 'rgb(0, 0, 0)') {
+                        document.lastElementChild.appendChild(style_Add2).textContent = style_00;
+                    } else if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || getColorValue(document.body) > 0 && getColorValue(document.body) < 898989 || getColorValue(document.lastElementChild) > 0 && getColorValue(document.lastElementChild) < 898989 || window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastElementChild).backgroundColor === 'rgb(0, 0, 0)') {
                         // 如果是黑色 (等于0,0,0) 或深色 (小于 89,89,89)，就停用本脚本滤镜
                         if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
                             for (let i=0;i<websiteList.length;i++){ // 这些网站强制启用护眼模式滤镜
@@ -352,8 +352,8 @@
 
                 // 用来解决一些 CSS 加载缓慢的网站，可能会出现没有正确排除的问题，在没有找到更好的办法之前，先这样凑活着用
                 setTimeout(function(){
-                    console.log('[护眼模式] html:', window.getComputedStyle(document.lastChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
-                    if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || getColorValue(document.body) > 0 && getColorValue(document.body) < 898989 || getColorValue(document.lastChild) > 0 && getColorValue(document.lastChild) < 898989 || window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastChild).backgroundColor === 'rgb(0, 0, 0)') {
+                    console.log('[护眼模式] html:', window.getComputedStyle(document.lastElementChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
+                    if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || getColorValue(document.body) > 0 && getColorValue(document.body) < 898989 || getColorValue(document.lastElementChild) > 0 && getColorValue(document.lastElementChild) < 898989 || window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastElementChild).backgroundColor === 'rgb(0, 0, 0)') {
                         // 如果是黑色 (等于0,0,0) 或深色 (小于 89,89,89)，就停用本脚本滤镜
                         if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
                             for (let i=0;i<websiteList.length;i++){ // 这些网站强制启用护眼模式滤镜
@@ -371,8 +371,8 @@
 
         // 用来解决一些 CSS 加载缓慢的网站，可能会出现没有正确排除的问题，在没有找到更好的办法之前，先这样凑活着用
         /*setTimeout(function(){
-            console.log('[护眼模式] html:', window.getComputedStyle(document.lastChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
-            if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || getColorValue(document.body) > 0 && getColorValue(document.body) < 898989 || getColorValue(document.lastChild) > 0 && getColorValue(document.lastChild) < 898989) {
+            console.log('[护眼模式] html:', window.getComputedStyle(document.lastElementChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
+            if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || getColorValue(document.body) > 0 && getColorValue(document.body) < 898989 || getColorValue(document.lastElementChild) > 0 && getColorValue(document.lastElementChild) < 898989) {
                 // 如果是黑色 (等于0,0,0) 或深色 (小于 89,89,89)，就停用本脚本滤镜
                 if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
                     for (let i=0;i<websiteList.length;i++){ // 这些网站强制启用护眼模式滤镜
@@ -390,7 +390,7 @@
         if (location.hostname === 'bbs.pcbeta.com') {
             let timer1 = setInterval(function(){
                 if (!document.getElementById('XIU2DarkMode')) {
-                    document.lastChild.appendChild(style_Add).textContent = style;
+                    document.lastElementChild.appendChild(style_Add).textContent = style;
                     clearInterval(timer1);
                 }
             });
