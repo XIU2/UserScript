@@ -1161,11 +1161,34 @@ function removeLogin() {
 // 净化标题消息
 function cleanTitles() {
     if (!menu_value('menu_cleanTitles')) return
-    Object.defineProperty(document, 'title', {
-        set: function(value) {
-            //console.log(value);
+
+    // 方案一
+    const elTitle = document.head.querySelector('title');
+    const original = elTitle.textContent;
+    const observer = new MutationObserver(function() {
+        if (elTitle.textContent != original) { // 避免重复执行
+            elTitle.textContent = original;
         }
     });
+    observer.observe(elTitle, { childList: true });
+
+    // 方案二
+    // if (Reflect.getOwnPropertyDescriptor(document, 'title')) {
+    //     const elTitle = document.head.querySelector('title');
+    //     const original = elTitle.textContent;
+    //     const observer = new MutationObserver(function() {
+    //         if (elTitle.textContent != original) { // 避免重复执行
+    //             elTitle.textContent = original;
+    //         }
+    //     });
+    //     observer.observe(elTitle, { childList: true });
+    // } else {
+    //     const title = document.title;
+    //     Reflect.defineProperty(document, 'title', {
+    //         set: () => {},
+    //         get: () => title,
+    //     });
+    // }
 }
 
 
