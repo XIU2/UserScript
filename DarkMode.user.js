@@ -309,7 +309,7 @@
         }
         style_Add.id = 'XIU2DarkMode';
         style_Add.type = 'text/css';
-        console.log(document,document.lastElementChild,document.querySelector('html'))
+        //console.log(document,document.lastElementChild,document.querySelector('html'))
         if (document.lastElementChild) {
             document.lastElementChild.appendChild(style_Add).textContent = style;
         } else { // 发现个别网站速度太慢的话，就会出现脚本运行太早，连 html 标签都还没加载。。。
