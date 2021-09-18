@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.7.4
+// @version      1.7.5
 // @author       X.I.U
 // @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽指定类别（视频/文章等）、屏蔽盐选内容、净化标题消息、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -33,7 +33,7 @@ var menu_ALL = [
     ['menu_blockKeywords', '屏蔽指定关键词', '屏蔽指定关键词', true],
     ['menu_customBlockKeywords', '自定义屏蔽关键词', '自定义屏蔽关键词', []],
     ['menu_blockType', '屏蔽指定类别 (视频/文章等)', '勾选 = 屏蔽该类别的信息流', ''],
-    ['menu_blockTypeVideo', '视频 [首页、搜索页]', '视频（首页、搜索页）', false],
+    ['menu_blockTypeVideo', '视频 [首页、搜索页]', '视频（首页、搜索页）', true],
     ['menu_blockTypeArticle', '文章 [首页、搜索页]', '文章（首页、搜索页）', false],
     ['menu_blockTypeTopic', '话题 [搜索页]', '话题（搜索页）', false],
     ['menu_blockTypeSearch', '杂志文章、相关搜索等 [搜索页]', '相关搜索、杂志等（搜索页）', false],
