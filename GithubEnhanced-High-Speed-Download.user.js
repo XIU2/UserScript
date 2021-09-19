@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.6.0
+// @version      1.6.1
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -110,19 +110,19 @@
         return ['0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'][num]
     }
 
-    addRelease(); // Release 加速
-    addDownloadZIP(); // Download ZIP 加速
-    addGitClone(); // Git Clone 加速
-    addGitCloneSSH(); // Git Clone SSH 加速
-    addRawFile(); // Raw 加速
+    addRelease(); //                     Release 加速
+    setTimeout(addDownloadZIP, 2000); // Download ZIP 加速
+    setTimeout(addGitClone, 2000); //    Git Clone 加速
+    setTimeout(addGitCloneSSH, 2000); // Git Clone SSH 加速
+    addRawFile(); //                     Raw 加速
     setTimeout(addRawDownLink, 2000); // 添加 Raw 下载链接（☁），延迟 2 秒执行，避免被 pjax 刷掉
 
     document.addEventListener('pjax:success',function(){ // pjax 事件发生后
-        addRelease(); // Release 加速
-        addDownloadZIP(); // Download ZIP 加速
-        addGitClone(); // Git Clone 加速
-        addGitCloneSSH(); // Git Clone SSH 加速
-        addRawFile(); // Raw 加速
+        addRelease(); //                     Release 加速
+        setTimeout(addDownloadZIP, 2000); // Download ZIP 加速
+        setTimeout(addGitClone, 2000); //    Git Clone 加速
+        setTimeout(addGitCloneSSH, 2000); // Git Clone SSH 加速
+        addRawFile(); //                     Raw 加速
         setTimeout(addRawDownLink, 2000); // 添加 Raw 下载链接（☁），延迟 2 秒执行，避免被 pjax 刷掉
     });
 
@@ -195,6 +195,7 @@
 
     // Download ZIP
     function addDownloadZIP() {
+        if (document.querySelector('.XIU2-DZ')) return
         let html = document.querySelector('.dropdown-menu.dropdown-menu-sw.p-0 ul li:last-child');if (!html) return
         let href = html.getElementsByTagName('a')[0].href,
             url = [],
@@ -210,7 +211,7 @@
         }
 
         for (let i=0;i<url.length;i++) {
-            _html += `<li class="Box-row Box-row--hover-gray p-3 mt-0"><a class="d-flex flex-items-center color-text-primary text-bold no-underline" rel="nofollow" href="${url[i]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
+            _html += `<li class="Box-row Box-row--hover-gray p-3 mt-0 XIU2-DZ"><a class="d-flex flex-items-center color-text-primary text-bold no-underline" rel="nofollow" href="${url[i]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
         }
         html.insertAdjacentHTML('afterend', _html);
     }
@@ -218,6 +219,7 @@
 
     // Git Clone
     function addGitClone() {
+        if (document.querySelector('.XIU2-GC')) return
         let html = document.querySelector('[role="tabpanel"]:nth-child(2) div.input-group');if (!html) return
         let href_split = html.getElementsByTagName('input')[0].getAttribute('value').split(location.host),
             url = [],
@@ -232,7 +234,7 @@
         }
 
         for (let i=0;i<url.length;i++) {
-            _html += `<div class="input-group" style="margin-top: 4px;" title="加速源：${clone_url[i][1]} （点击可直接复制）"><input value="${url[i]}" aria-label="${url[i]}" type="text" class="form-control input-monospace input-sm color-bg-secondary" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url[i]}" aria-label="Copy to clipboard" class="btn btn-sm js-clipboard-copy tooltipped-no-delay ClipboardButton" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
+            _html += `<div class="input-group XIU2-GC" style="margin-top: 4px;" title="加速源：${clone_url[i][1]} （点击可直接复制）"><input value="${url[i]}" aria-label="${url[i]}" type="text" class="form-control input-monospace input-sm color-bg-secondary" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url[i]}" aria-label="Copy to clipboard" class="btn btn-sm js-clipboard-copy tooltipped-no-delay ClipboardButton" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
         }
         html.insertAdjacentHTML('afterend', _html);
     }
@@ -240,6 +242,7 @@
 
     // Git Clone SSH
     function addGitCloneSSH() {
+        if (document.querySelector('.XIU2-GCS')) return
         let html = document.querySelector('[role="tabpanel"]:nth-child(3) div.input-group');if (!html) return
         let href_split = html.getElementsByTagName('input')[0].getAttribute('value').split(':'),
             url = [],
@@ -252,7 +255,7 @@
         }
 
         for (let i=0;i<url.length;i++) {
-            _html += `<div class="input-group" style="margin-top: 4px;" title="加速源：${clone_ssh_url[i][1]} （点击可直接复制）"><input value="${url[i]}" aria-label="${url[i]}" type="text" class="form-control input-monospace input-sm color-bg-secondary" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url[i]}" aria-label="Copy to clipboard" class="btn btn-sm js-clipboard-copy tooltipped-no-delay ClipboardButton" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
+            _html += `<div class="input-group XIU2-GCS" style="margin-top: 4px;" title="加速源：${clone_ssh_url[i][1]} （点击可直接复制）"><input value="${url[i]}" aria-label="${url[i]}" type="text" class="form-control input-monospace input-sm color-bg-secondary" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url[i]}" aria-label="Copy to clipboard" class="btn btn-sm js-clipboard-copy tooltipped-no-delay ClipboardButton" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
         }
         html.insertAdjacentHTML('afterend', _html);
     }
@@ -260,6 +263,7 @@
 
     // Raw
     function addRawFile() {
+        if (document.querySelector('.XIU2-RF')) return
         let html = document.getElementById('raw-url');if (!html) return
         let href = location.href.replace(`https://${location.host}`,''),
             href2 = href.replace('/blob/','/'),
@@ -267,12 +271,11 @@
                 raw_url[1][0] + '/gh' + href.replace('/blob/','@'),
                 raw_url[2][0] + href2,
                 raw_url[3][0] + '/gh' + href.replace('/blob/','/'),
-                raw_url[4][0] + '/' + raw_url[0][0] + href2,
-                raw_url[5][0] + '/' + raw_url[0][0] + href2
+                raw_url[4][0] + '/' + raw_url[0][0] + href2
             ],
             _html = ``;
         for (let i=0;i<url.length;i++) {
-            _html += `<a href="${url[i]}" title="${raw_url[i+1][2]}" target="_blank" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item">${raw_url[i+1][1]}</a>`
+            _html += `<a href="${url[i]}" title="${raw_url[i+1][2]}" target="_blank" role="button" rel="noreferrer noopener nofollow" class="btn btn-sm BtnGroup-item XIU2-RF">${raw_url[i+1][1]}</a>`
         }
         html.insertAdjacentHTML('afterend', _html);
     }
