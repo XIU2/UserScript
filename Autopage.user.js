@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.3.4
+// @version      2.3.5
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -1408,7 +1408,7 @@
                     mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 900
                 }
-            }, //     宝书网（小说）
+            }, //         宝书网（小说）
             baoshuu_m: {
                 SiteTypeID: 0,
                 host: 'm.baoshuu.com',
@@ -1422,7 +1422,7 @@
                     mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 900
                 }
-            }, //   宝书网（小说）- 手机版
+            }, //       宝书网（小说）- 手机版
             qidian: {
                 SiteTypeID: 0,
                 host: 'www.qidian.com',
@@ -1435,7 +1435,7 @@
                     replaceE: 'css;#page-container',
                     scrollDelta: 900
                 }
-            }, //      起点小说
+            }, //          起点小说
             qidian_read: {
                 SiteTypeID: 0,
                 host: 'read.qidian.com',
@@ -1449,11 +1449,17 @@
                     history: true,
                     scrollDelta: 900
                 }
-            }, // 起点小说 - 阅读页
+            }, //     起点小说 - 阅读页
             linovelib: {
                 SiteTypeID: 0,
                 host: 'www.linovelib.com',
-                functionStart: function() {if (/\/novel\/\d+\/.+\.html/.test(location.pathname)) {curSite = DBSite.linovelib;}},
+                functionStart: function() {if (/\/novel\/\d+\/.+\.html/.test(location.pathname)) {
+                    curSite = DBSite.linovelib;
+                } else if (location.pathname.indexOf('/wenku/') > -1) {
+                    curSite = DBSite.linovelib_wenku;
+                } else if (location.pathname.indexOf('/top/') > -1 || location.pathname.indexOf('/topfull/') > -1 || location.pathname.indexOf('toplist.php') > -1) {
+                    curSite = DBSite.linovelib_top;
+                }},
                 pager: {
                     type: 1,
                     nextLink: '//p[@class="mlfy_page"]/a[@href][contains(text(), "下一页") or contains(text(), "下一章")]',
@@ -1463,7 +1469,35 @@
                     history: true,
                     scrollDelta: 1000
                 }
-            }, //   哔哩轻小说
+            }, //       哔哩轻小说
+            linovelib_wenku: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;#pagelink > a.next[href]',
+                    pageElement: 'css;.store_collist > div.bookbox',
+                    insertPosition: ['css;.store_collist', 3],
+                    replaceE: 'css;#pagelink',
+                    scrollDelta: 1000
+                },
+                function: {
+                    before: src_original_functionBefore
+                }
+            }, // 哔哩轻小说 - 文库
+            linovelib_top: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;#pagelink > a.next[href]',
+                    pageElement: 'css;.rankpage_box > div.rank_d_list',
+                    insertPosition: ['css;div.pages', 1],
+                    replaceE: 'css;#pagelink',
+                    scrollDelta: 1000
+                },
+                function: {
+                    before: src_original_functionBefore
+                }
+            }, //   哔哩轻小说 - 全本
             _423down: {
                 SiteTypeID: 0,
                 host: 'www.423down.com',
