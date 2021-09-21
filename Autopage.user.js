@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.3.6
+// @version      2.3.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -14,7 +14,6 @@
 // @grant        GM_setValue
 // @grant        GM_notification
 // @grant        unsafeWindow
-// @noframes
 // @license      GPL-3.0 License
 // @run-at       document-end
 // @namespace    https://github.com/XIU2/UserScript
@@ -53,7 +52,9 @@
                     webType = doesItSupport(); // 判断网站类型（即是否支持），顺便直接赋值
                     if (webType === 0) {
                         GM_registerMenuCommand('❌ 当前网站暂不支持 [点击申请支持]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
-                        console.info('[自动无缝翻页] - 不支持当前网站，欢迎申请支持：https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/96880/feedback');
+                        console.info('[自动无缝翻页] - 不支持当前网站 [ ' + location.href + ' ]，欢迎申请支持: https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/96880/feedback');
+                        return
+                    } else if (webType === -1) {
                         return
                     }
                     menuId[i] = GM_registerMenuCommand(`${menuAll[i][1]}`, function(){menu_disable('add')});
@@ -483,7 +484,8 @@
             }, //       微博评论
             nga_thread: {
                 SiteTypeID: 0,
-                host: ['bbs.nga.cn', 'ngabbs.com'],
+                host: ['bbs.nga.cn', 'ngabbs.com', 'nga.178.com', 'g.nga.cn'],
+                iframe: true,
                 functionStart: function() {if (location.pathname === '/thread.php') { // 帖子列表
                     curSite = DBSite.nga_thread;
                 } else if (location.pathname === '/read.php') { // 帖子内
@@ -506,7 +508,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;#pagebbtm a[title="下一页"][href]',
+                    nextLink: 'css;#pagebbtm a[title*="下一页"][href]',
                     pageElement: 'id("m_posts_c")/table | id("m_posts_c")/script | //script[contains(text(), "commonui.userInfo.setAll")]',
                     insertPosition: ['css;#m_posts_c', 3],
                     replaceE: 'css;div[name="pageball"]',
@@ -3628,6 +3630,7 @@
                 }
             } else if (DBSite[now].host instanceof RegExp) {
                 if (DBSite[now].host.test(location.host)) {
+                    if (self != top) {if (!DBSite[now].iframe) break;} // 如果当前位于 iframe 框架下，就需要判断是否需要执行
                     if (DBSite[now].functionStart) {
                         DBSite[now].functionStart();
                     } else {
@@ -3636,6 +3639,7 @@
                     support = true; break; // 如果找到了就退出循环
                 }
             } else if (DBSite[now].host === location.host) {
+                if (self != top) {if (!DBSite[now].iframe) break;} // 如果当前位于 iframe 框架下，就需要判断是否需要执行
                 if (DBSite[now].functionStart) {
                     DBSite[now].functionStart();
                 } else {
@@ -3653,6 +3657,8 @@
             console.info('[自动无缝翻页] - Flarum 论坛'); return 3;
         } else if (document.querySelector('link[href*="themes/dux" i], script[src*="themes/dux" i]')) {
             console.info('[自动无缝翻页] - 使用 WordPress DUX 主题的网站'); return 4;
+        } else if (self != top) {
+            return -1;
         }
         return 0;
     }
