@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.3.9
+// @version      2.4.0
 // @author       X.I.U
-// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
+// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
 // @connect      www.gamersky.com
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
@@ -1088,6 +1088,21 @@
                     scrollDelta: 2000
                 }
             },
+            mypianku: {
+                SiteTypeID: 0,
+                host: 'www.mypianku.net',
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.a1[href]',
+                    pageElement: 'css;.content-list > li',
+                    insertPosition: ['css;.content-list', 3],
+                    replaceE: 'css;.pages',
+                    scrollDelta: 1500
+                },
+                function: {
+                    before: mypianku_functionBefore
+                }
+            }, //    片库
             cupfox: {
                 SiteTypeID: 0,
                 host: 'www.cupfox.com',
@@ -1193,21 +1208,77 @@
                     before: src_original_functionBefore
                 }
             }, //      91 美剧网
-            mypianku: {
+            agefans: {
                 SiteTypeID: 0,
-                host: 'www.mypianku.net',
+                host: 'www.agefans.cc',
+                functionStart: function() {if (location.pathname.indexOf('/catalog/') > -1 || location.pathname === '/search') {
+                    curSite = DBSite.agefans;
+                } else if (location.pathname === '/recommend' || location.pathname === '/update') {
+                    curSite = DBSite.agefans_;
+                } else if (location.pathname === '/rank') {
+                    curSite = DBSite.agefans_rank;
+                }},
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.a1[href]',
-                    pageElement: 'css;.content-list > li',
-                    insertPosition: ['css;.content-list', 3],
-                    replaceE: 'css;.pages',
-                    scrollDelta: 1500
-                },
-                function: {
-                    before: mypianku_functionBefore
+                    nextLink: 'id("container")//div[@class="blockcontent"]/div[@style][not(@class)]/li/a[@href][contains(text(), "下一页")]',
+                    pageElement: 'css;#container .blockcontent1 > div',
+                    insertPosition: ['css;#container .blockcontent1', 3],
+                    replaceE: 'css;#container .blockcontent > div[style]:not([class])',
+                    scrollDelta: 1000
                 }
-            }, //    片库
+            }, //     AGE 动漫 - 全部/搜索
+            agefans_: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'id("container")//div[@class="blockcontent"]/div[@style][not(@class)]/li/a[@href][contains(text(), "下一页")]',
+                    pageElement: 'css;#container .blockcontent > ul > li',
+                    insertPosition: ['css;#container .blockcontent > ul', 3],
+                    replaceE: 'css;#container .blockcontent > div[style]:not([class])',
+                    scrollDelta: 1000
+                }
+            }, //    AGE 动漫 - 其他页
+            agefans_rank: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'id("container")/ul[@style][not(@class)]/li/a[@href][contains(text(), "下一页")]',
+                    pageElement: 'css;#container > .div_right  .blockcontent.div_right_r_3 > ul',
+                    insertPosition: ['css;#container > .div_right  .blockcontent.div_right_r_3', 3],
+                    replaceE: 'css;#container > ul[style]:not([class])',
+                    scrollDelta: 1000
+                }
+            }, //AGE 动漫 - 排行榜
+            yhdm: {
+                SiteTypeID: 0,
+                host: 'www.imomoe.la',
+                functionStart: function() {if (location.pathname.indexOf('/list/') > -1) {
+                    curSite = DBSite.yhdm;
+                } else if (location.pathname === '/so.asp' || location.pathname === '/search.asp') {
+                    curSite = DBSite.yhdm_;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="pages"]/a[@href][contains(text(), "下一页")]',
+                    pageElement: 'css;#contrainer > .img> ul > li',
+                    insertPosition: ['css;#contrainer > .img> ul', 3],
+                    replaceE: 'css;.pages',
+                    mimeType: 'text/html; charset=gb2312',
+                    scrollDelta: 1000
+                }
+            }, //        樱花动漫
+            yhdm_: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="pages"]/a[@href][contains(text(), "下一页")]',
+                    pageElement: 'css;#contrainer .fire .pics > ul > li',
+                    insertPosition: ['css;#contrainer .fire .pics > ul', 3],
+                    replaceE: 'css;.pages',
+                    mimeType: 'text/html; charset=gb2312',
+                    scrollDelta: 1000
+                }
+            }, //       樱花动漫 - 搜索页等
             yinfans: {
                 SiteTypeID: 0,
                 host: 'www.yinfans.net',
@@ -1265,6 +1336,31 @@
                     scrollDelta: 2500
                 }
             }, //     爱恋动漫
+            dmhy: {
+                SiteTypeID: 0,
+                host: 'dmhy.anoneko.com',
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="nav_title"]/a[@href][contains(text(), "下一頁")]',
+                    pageElement: 'css;#topic_list > tbody > tr',
+                    insertPosition: ['css;#topic_list > tbody', 3],
+                    replaceE: 'css;.nav_title',
+                    scrollDelta: 1500
+                },
+                function: {
+                    after: function() {document.body.appendChild(document.createElement('script')).textContent = `$('#topic_list > tbody > tr:even:not(.even):not(.odd)').addClass('even'); $('#topic_list > tbody > tr:odd:not(.even):not(.odd)').addClass('odd');`;}
+                }
+            }, //        动漫花园
+            bangumi: {
+                SiteTypeID: 0,
+                host: 'bangumi.moe',
+                pager: {
+                    type: 2,
+                    nextLink: '[torrent-list="lattorrents"] button[ng-click="loadMore()"] ,[torrent-list="torrents"] button[ng-click="loadMore()"]',
+                    intervals: 1000,
+                    scrollDelta: 1500
+                }
+            }, //     萌番组
             nyaa: {
                 SiteTypeID: 0,
                 host: 'nyaa.si',
@@ -1289,7 +1385,7 @@
                     replaceE: 'css;ul.pagination',
                     scrollDelta: 900
                 }
-            }, //     SkrBT
+            }, //       SkrBT
             rarbgprx: {
                 SiteTypeID: 0,
                 host: /rarbg/,
