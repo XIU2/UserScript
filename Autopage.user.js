@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.3.8
+// @version      2.3.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、爱恋动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、小众软件、极简插件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -1277,13 +1277,13 @@
                     scrollDelta: 2000
                 }
             }, //        Nyaa
-            skrbtba: {
+            skrbt: {
                 SiteTypeID: 0,
-                host: 'skrbtca.xyz',
-                functionStart: function() {if (location.pathname === '/search') curSite = DBSite.skrbtba;},
+                host: /skrbt/,
+                functionStart: function() {if (location.pathname === '/search') curSite = DBSite.skrbt;},
                 pager: {
                     type: 1,
-                    nextLink: '//a[@aria-label="Next"]',
+                    nextLink: skrbt_functionNext,
                     pageElement: 'css;div[class="row"] > .col-md-6 > ul',
                     insertPosition: ['css;nav[aria-label*="Page"]', 1],
                     replaceE: 'css;ul.pagination',
@@ -2965,6 +2965,25 @@
             }
         });
         return pageElems
+    }
+
+
+    // [SkrBT] 获取下一页地址
+    function skrbt_functionNext() {
+        let page = document.querySelector('a[onclick][aria-label="Next"]');
+        if (page) {page = /(?<=\()\d+(?=\))/.exec(page.onclick)[0];} else {return '';} // 获取下一页页码
+        if (page) {
+            let action = document.getElementById('search-form').action, value = ''; // 获取提交表单 URL
+            document.querySelectorAll('#search-form input[name]').forEach(function(input) { // 生成表单参数
+                value += input.name + '=' + input.value + '&'
+            })
+            value = encodeURI(value.replace(/&$/,'').replace(/p=\d+/,'p=' + page)); // 清理最后一个 & 符号，并替换页码
+            if (action && value) {
+                //console.log(action + '?' + value)
+                return (action + '?' + value)
+            }
+        }
+        return '';
     }
 
 
