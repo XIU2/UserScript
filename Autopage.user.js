@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.4.6
+// @version      2.4.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -510,6 +510,65 @@
                     scrollDelta: 1500
                 }
             }, //         天涯社区 - 帖子内
+            adnmb3: {
+                SiteTypeID: 0,
+                host: 'adnmb3.com',
+                functionStart: function() {
+                    if (location.pathname.indexOf('/m/f/') > -1) {
+                        curSite = DBSite.adnmb3_mf;
+                    } else if (location.pathname.indexOf('/m/t/') > -1) {
+                        curSite = DBSite.adnmb3_mt;
+                    } else if (location.pathname.indexOf('/f/') > -1 || location.pathname.indexOf('/Forum/') > -1) {
+                        curSite = DBSite.adnmb3;
+                    } else if (location.pathname.indexOf('/t/') > -1) {
+                        curSite = DBSite.adnmb3_t;
+                    }},
+                pager: {
+                    type: 1,
+                    nextLink: '//ul[contains(@class, "pagination")]//a[contains(text(), "下一页")]',
+                    pageElement: 'css;.h-threads-list > *, script[src$="/h.desktop.js"]',
+                    insertPosition: ['css;.h-threads-list', 3],
+                    replaceE: '//ul[contains(@class, "pagination")]',
+                    scriptType: 3,
+                    scrollDelta: 1500
+                }
+            }, //              A 岛
+            adnmb3_t: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//ul[contains(@class, "pagination")]//a[contains(text(), "下一页")]',
+                    pageElement: 'css;.h-threads-list > .h-threads-item > .h-threads-item-replys, script[src$="/h.desktop.js"]',
+                    insertPosition: ['css;.h-threads-list > .h-threads-item', 3],
+                    replaceE: '//ul[contains(@class, "pagination")]',
+                    scriptType: 3,
+                    scrollDelta: 1500
+                }
+            }, //            A 岛 - 帖子内
+            adnmb3_mf: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//li[contains(@class, "pagination-next")]//a[contains(text(), "下一页")]',
+                    pageElement: 'css;.h-middle > div[id^="threads_"], .h-middle > hr.h-middle > div[id^="threads_"], .h-middle > hr:nth-of-type(n+2), script[src$="/h.mobile.js"]',
+                    insertPosition: ['css;#h-threads-pagination', 1],
+                    replaceE: 'css;#h-threads-pagination',
+                    scriptType: 3,
+                    scrollDelta: 1500
+                }
+            }, //           A 岛 - 帖子列表（手机版）
+            adnmb3_mt: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//li[contains(@class, "pagination-next")]//a[contains(text(), "下一页")]',
+                    pageElement: 'css;.h-threads-replylist > div, script[src$="/h.mobile.js"]',
+                    insertPosition: ['css;.h-threads-replylist', 3],
+                    replaceE: 'css;#h-threads-pagination',
+                    scriptType: 3,
+                    scrollDelta: 1500
+                }
+            }, //           A 岛 - 帖子内（手机版）
             nga_thread: {
                 SiteTypeID: 0,
                 host: ['bbs.nga.cn', 'ngabbs.com', 'nga.178.com', 'g.nga.cn'],
