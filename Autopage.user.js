@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.4.5
+// @version      2.4.6
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -1401,7 +1401,7 @@
             }, //     爱恋动漫
             dmhy: {
                 SiteTypeID: 0,
-                host: 'dmhy.anoneko.com',
+                host: ['share.dmhy.org', 'dmhy.anoneko.com'],
                 pager: {
                     type: 1,
                     nextLink: '//div[@class="nav_title"]/a[@href][contains(text(), "下一頁")]',
@@ -1414,6 +1414,18 @@
                     after: function() {document.body.appendChild(document.createElement('script')).textContent = `$('#topic_list > tbody > tr:even:not(.even):not(.odd)').addClass('even'); $('#topic_list > tbody > tr:odd:not(.even):not(.odd)').addClass('odd');`;}
                 }
             }, //        动漫花园
+            futaacg: {
+                SiteTypeID: 0,
+                host: 'futaacg.com',
+                pager: {
+                    type: 1,
+                    nextLink: 'css;ul.pagination a[rel="next"]',
+                    pageElement: 'css;.topic-list > div',
+                    insertPosition: ['css;.topic-list', 3],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1500
+                }
+            }, //     扶她动漫
             bangumi: {
                 SiteTypeID: 0,
                 host: 'bangumi.moe',
@@ -1632,6 +1644,23 @@
                     scrollDelta: 900
                 }
             }, //     起点小说 - 阅读页
+            linovel: {
+                SiteTypeID: 0,
+                host: 'www.linovel.net',
+                functionStart: function() {if (/\/book\/\d+\/.+\.html/.test(location.pathname)) {
+                    document.lastElementChild.appendChild(document.createElement('style')).textContent = '.reward-section {display: none !important;}';
+                } else if (location.pathname.indexOf('/cat/') > -1) {
+                    curSite = DBSite.linovel;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: '//ul[@class="pagination"]/li/a[contains(text(), "下一页")]',
+                    pageElement: 'css;.rank-book-list > div',
+                    insertPosition: ['css;.rank-book-list', 3],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1000
+                }
+            }, //         轻之文库
             linovelib: {
                 SiteTypeID: 0,
                 host: 'www.linovelib.com',
