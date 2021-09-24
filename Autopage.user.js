@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.4.7
+// @version      2.4.8
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -2358,6 +2358,7 @@
                         curSite = DBSite.github_star;
                     } else if (location.pathname.indexOf('/issues') > -1 && location.pathname.indexOf('/issues/') === -1) {
                         curSite = DBSite.github_issues;
+                        console.log(1111111111)
                     } else if (location.pathname === '/search') {
                         if (!location.search) return
                         if (location.search.indexOf('type=Repositories') > -1 || location.search.indexOf('type=') === -1) {
@@ -2386,7 +2387,7 @@
                     pageElement: 'css;#js-pjax-container .position-relative div[class^="col-lg-"] > div:not(.position-relative):not(.paginate-container)',
                     insertPosition: ['css;.paginate-container', 1],
                     replaceE: 'css;.paginate-container',
-                    scrollDelta: 2500
+                    scrollDelta: 3000
                 }
             }, //               Github - 用户 Star 列表
             github_issues: {
@@ -2397,7 +2398,7 @@
                     pageElement: 'css;.js-navigation-container.js-active-navigation-container > div[id^="issue_"]',
                     insertPosition: ['css;.js-navigation-container.js-active-navigation-container', 3],
                     replaceE: 'css;.pagination',
-                    scrollDelta: 2000
+                    scrollDelta: 3000
                 }
             }, //             Github - Issues 列表
             github_search: {
@@ -2898,6 +2899,7 @@
                 nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
                 registerMenuCommand(); // 重新判断规则
                 curSite.pageUrl = ''; // 下一页URL
+                pageLoading(); // 自动无缝翻页
 
                 if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
                 pausePageEvent(); // 左键双击网页空白处暂停翻页
