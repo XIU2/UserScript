@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.4.0
+// @version      1.4.1
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致
 // @match        *://www.zhihu.com/*
@@ -175,15 +175,26 @@
     function addStyle() {
         let style = `/* 屏蔽登录提示（问题页中间的元素） */
 .Question-mainColumnLogin {display: none !important;}
-/* 屏蔽首页广告 */
-.TopstoryItem--advertCard {display: none !important;}
 /* 屏蔽回答页广告 */
 .Pc-card.Card {display: none !important;}
 /* 屏蔽文章页推荐文章 */
 .Recommendations-Main {display: none !important;}
+`,
+            style_index = `/* 屏蔽首页广告 */
+.TopstoryItem--advertCard {display: none !important;}
 /* 屏蔽首页活动广告 */
 main.App-main > .Topstory > div:not(.Topstory-container) {display: none !important;}
-`,
+html[data-theme="light"] header.AppHeader {background-color: #ffffff !important; -webkit-box-shadow: 0 1px 3px rgba(18,18,18,.1) !important; box-shadow: 0 1px 3px rgba(18,18,18,.1) !important;}
+html[data-theme="light"] header.AppHeader a[aria-label="知乎"] svg {filter: invert(57%) sepia(71%) saturate(949%) hue-rotate(190deg) brightness(86%) contrast(188%) !important;}
+html[data-theme="light"] .AppHeader-TabsLink {color: #8590a6 !important; font-weight: normal !important;}
+html[data-theme="light"] .AppHeader-userInfo Button svg, .SearchBar-searchButton svg {color: inherit !important;}
+html[data-theme="light"] .Input-wrapper.Input-wrapper--grey {background: #f6f6f6 !important;}
+html[data-theme="light"] .AppHeader-SearchBar input.Input {color: #121212 !important;}
+html[data-theme="light"] .AppHeader-SearchBar input::-webkit-input-placeholder {color: #a4a4a4 !important;}
+html[data-theme="light"] .AppHeader-SearchBar input:-moz-placeholder {color: #a4a4a4 !important;}
+html[data-theme="light"] .AppHeader-SearchBar input::-moz-placeholder {color: #a4a4a4 !important;}
+html[data-theme="light"] .Button--primary.Button--blue {color: #fff !important;background-color: #06f !important;}
+            `,
             style_widescreenDisplayIndex = `/* 宽屏显示 - 首页 */
 .Topstory-mainColumn, .QuestionWaiting-mainColumn {width: inherit !important;}
 .GlobalSideBar {display: none !important;}
@@ -418,6 +429,8 @@ html {filter: brightness(75%) sepia(30%) !important; background-image: url();}
                 setTheme('light');
             }
         }
+
+        if (location.pathname === '/' || location.pathname === '/hot' || location.pathname === '/follow') style += style_index;
 
         // 宽屏显示
         if (menu_value('menu_widescreenDisplayIndex')) style += style_widescreenDisplayIndex;
