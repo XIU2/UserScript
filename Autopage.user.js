@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.4.8
+// @version      2.4.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -186,9 +186,11 @@
             }, //  Discuz! - 淘帖页
             flarum: {
                 SiteTypeID: 0,
+                functionStart: function() {locationchange = true;console.log(location.pathname.indexOf('/d/'));if (location.pathname.indexOf('/d/') === -1) {console.log(111);curSite = DBSite.flarum;}},
                 pager: {
                     type: 2,
                     nextLink: '.DiscussionList-loadMore > button[title]',
+                    intervals: 500,
                     scrollDelta: 1000
                 }
             },
@@ -2880,7 +2882,7 @@
             }
             // < 所有 Flarum 论坛 >
         } else if (webType === 3) {
-            curSite = DBSite.flarum;
+            DBSite.flarum.functionStart()
             // < 所有使用 WordPress DUX 主题的网站 >
         } else if (webType === 4) {
             if (location.pathname.indexOf('.html') === -1) curSite = DBSite.dux;
@@ -2894,17 +2896,30 @@
     if (locationchange) { // 对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则
         nowLocation = location.href
         addLocationchange(); // 自定义 locationchange 事件
-        window.addEventListener('locationchange', function(){
-            if (nowLocation != location.href) {
-                nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
-                registerMenuCommand(); // 重新判断规则
-                curSite.pageUrl = ''; // 下一页URL
-                pageLoading(); // 自动无缝翻页
+        if (webType === 1) {
+            window.addEventListener('locationchange', function(){
+                if (nowLocation != location.href) {
+                    nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
+                    registerMenuCommand(); // 重新判断规则
+                    curSite.pageUrl = ''; // 下一页URL
+                    pageLoading(); // 自动无缝翻页
 
-                if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
-                pausePageEvent(); // 左键双击网页空白处暂停翻页
-            }
-        })
+                    if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
+                    pausePageEvent(); // 左键双击网页空白处暂停翻页
+                }
+            })
+        } else if (webType === 3) {
+            window.addEventListener('locationchange', function(){
+                if (nowLocation != location.href) {
+                    nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
+                    DBSite.flarum.functionStart(); // 重新判断规则
+                    pageLoading(); // 自动无缝翻页
+
+                    if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
+                    pausePageEvent(); // 左键双击网页空白处暂停翻页
+                }
+            })
+        }
     }
 
     curSite.pageUrl = ''; // 下一页URL
@@ -3768,11 +3783,10 @@
                                             if (autopbn.innerHTML === curSite.pager.nextHTML) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
                                         } else { // 如果没有指定按钮文字就直接点击
                                             autopbn.click(); pageNum.now = pageNum._now + 1; // 当前页码 + 1
-                                            // 对于没有按钮文字变化的按钮，可以手动指定间隔时间
-                                            if (curSite.pager.intervals) {
-                                                let _SiteTypeID = curSite.SiteTypeID; curSite.SiteTypeID = 0;
-                                                setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
-                                            }
+                                            // 对于没有按钮文字变化的按钮，可以指定间隔时间（默认 300ms）
+                                            if (!curSite.pager.intervals) {curSite.pager.intervals = 300;}
+                                            let _SiteTypeID = curSite.SiteTypeID; curSite.SiteTypeID = 0;
+                                            setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
                                         }
                                     }
                                 }
