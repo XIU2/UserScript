@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.4.9
+// @version      2.5.0
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条、360、微信、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、小霸王其乐无穷、CS.RIN.RU、FitGirl、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、片库、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -220,7 +220,7 @@
                     replaceE: 'css;#page',
                     scrollDelta: 1200
                 }
-            }, //              百度搜素
+            }, //                  百度搜素
             google: {
                 SiteTypeID: 0,
                 host: /.google./,
@@ -234,7 +234,7 @@
                     scriptType: 1,
                     scrollDelta: 3000
                 }
-            }, //             谷歌搜索
+            }, //                 谷歌搜索
             bing: {
                 SiteTypeID: 0,
                 host: ['www.bing.com','cn.bing.com'],
@@ -247,7 +247,7 @@
                     replaceE: 'css;#b_results > .b_pag',
                     scrollDelta: 1500
                 }
-            }, //               必应搜索
+            }, //                   必应搜索
             yandex: {
                 SiteTypeID: 0,
                 host: 'yandex.com',
@@ -260,7 +260,7 @@
                     replaceE: 'css;.pager',
                     scrollDelta: 1500
                 }
-            }, //             Yandex 搜索
+            }, //                 Yandex 搜索
             toutiao: {
                 SiteTypeID: 0,
                 host: ['www.toutiao.com', 'so.toutiao.com'],
@@ -276,7 +276,7 @@
                 function: {
                     before: toutiao_functionBefore
                 }
-            }, //            头条搜索
+            }, //                头条搜索
             sogou: {
                 SiteTypeID: 0,
                 host: 'www.sogou.com',
@@ -290,7 +290,7 @@
                     scriptType: 4,
                     scrollDelta: 1200
                 }
-            }, //              搜狗搜索
+            }, //                  搜狗搜索
             sogou_weixin: {
                 SiteTypeID: 0,
                 host: 'weixin.sogou.com',
@@ -305,7 +305,7 @@
                     intervals: 1000,
                     scrollDelta: 1000
                 }
-            }, //       搜狗微信 - 首页
+            }, //           搜狗微信 - 首页
             sogou_weixin_search: {
                 SiteTypeID: 0,
                 pager: {
@@ -316,7 +316,7 @@
                     replaceE: 'css;#pagebar_container',
                     scrollDelta: 1000
                 }
-            }, //搜狗微信 - 搜索
+            }, //    搜狗微信 - 搜索
             so: {
                 SiteTypeID: 0,
                 host: 'www.so.com',
@@ -332,7 +332,7 @@
                 function: {
                     before: so_functionBefore
                 }
-            }, //                 360 搜索
+            }, //                     360 搜索
             magi: {
                 SiteTypeID: 0,
                 host: 'magi.com',
@@ -343,7 +343,7 @@
                     nextText: '加载更多',
                     scrollDelta: 1500
                 }
-            }, //               Magi搜索
+            }, //                   Magi搜索
             baidu_tieba: {
                 SiteTypeID: 0,
                 host: 'tieba.baidu.com',
@@ -810,7 +810,7 @@
                     replaceE: 'css;.pagination, .b2-pagenav.post-nav',
                     scrollDelta: 1500
                 }
-            }, //              致美化
+            }, //                  致美化
             zhutix_postlist: {
                 SiteTypeID: 0,
                 pager: {
@@ -821,7 +821,7 @@
                     replaceE: 'css;.pagination',
                     scrollDelta: 1500
                 }
-            }, //     致美化 - 文章列表
+            }, //         致美化 - 文章列表
             jandan: {
                 SiteTypeID: 0,
                 host: 'jandan.net',
@@ -843,7 +843,7 @@
                 function: {
                     before: src_original_functionBefore
                 }
-            }, //              煎蛋网
+            }, //                  煎蛋网
             jandan_comment: {
                 SiteTypeID: 0,
                 pager: {
@@ -855,7 +855,7 @@
                     scriptType: 3,
                     scrollDelta: 1500
                 }
-            }, //      煎蛋网
+            }, //          煎蛋网
             jandan_dzh: {
                 SiteTypeID: 0,
                 pager: {
@@ -864,7 +864,7 @@
                     intervals: 1500,
                     scrollDelta: 1500
                 }
-            }, //          煎蛋网 - 大杂烩
+            }, //              煎蛋网 - 大杂烩
             guokr: {
                 SiteTypeID: 0,
                 host: 'www.guokr.com',
@@ -874,7 +874,7 @@
                     intervals: 1500,
                     scrollDelta: 1500
                 }
-            }, //               果壳网
+            }, //                   果壳网
             expreview: {
                 SiteTypeID: 0,
                 host: 'www.expreview.com',
@@ -884,7 +884,7 @@
                     intervals: 1500,
                     scrollDelta: 1500
                 }
-            }, //           超能网
+            }, //               超能网
             landian: {
                 SiteTypeID: 0,
                 host: 'www.landian.vip',
@@ -894,7 +894,7 @@
                     nextText: '加载更多',
                     scrollDelta: 1300
                 }
-            }, //             蓝点网
+            }, //                 蓝点网
             ithome: {
                 SiteTypeID: 0,
                 host: 'www.ithome.com',
@@ -904,7 +904,7 @@
                     intervals: 1500,
                     scrollDelta: 1500
                 }
-            }, //              IT 之家
+            }, //                  IT 之家
             puxiang: {
                 SiteTypeID: 0,
                 host: 'www.puxiang.com',
@@ -923,7 +923,7 @@
                     replaceE: 'css;.pagerbar',
                     scrollDelta: 1500
                 }
-            }, //             普象网 - 作品集/搜索页
+            }, //                 普象网 - 作品集/搜索页
             puxiang_collect: {
                 SiteTypeID: 0,
                 pager: {
@@ -934,7 +934,7 @@
                     replaceE: 'css;.pagerbar',
                     scrollDelta: 1500
                 }
-            }, //     普象网 - 收藏夹
+            }, //         普象网 - 收藏夹
             om: {
                 SiteTypeID: 0,
                 host: 'www.om.cn',
@@ -947,7 +947,7 @@
                     replaceE: 'css;ul.pagination',
                     scrollDelta: 1500
                 }
-            }, //                  欧模网
+            }, //                      欧模网
             _58pic: {
                 SiteTypeID: 0,
                 host: 'www.58pic.com',
@@ -968,7 +968,7 @@
                 function: {
                     before: _58pic_functionBefore
                 }
-            }, //              千图网 - 分类/搜索页
+            }, //                  千图网 - 分类/搜索页
             _58pic_c: {
                 SiteTypeID: 0,
                 pager: {
@@ -982,7 +982,7 @@
                 function: {
                     before: _58pic_functionBefore
                 }
-            }, //            千图网 - 专题/收藏夹
+            }, //                千图网 - 专题/收藏夹
             logosc: {
                 SiteTypeID: 0,
                 host: 'www.logosc.cn',
@@ -993,7 +993,7 @@
                     intervals: 1500,
                     scrollDelta: 1500
                 }
-            }, //              搜图神器 (免费无版权)
+            }, //                  搜图神器 (免费无版权)
             pixabay: {
                 SiteTypeID: 0,
                 host: 'pixabay.com',
@@ -1225,7 +1225,7 @@
                 function: {
                     before: mypianku_functionBefore
                 }
-            }, //    片库
+            }, //        片库
             cupfox: {
                 SiteTypeID: 0,
                 host: 'www.cupfox.com',
@@ -1235,7 +1235,7 @@
                     nextText: '点击加载更多',
                     scrollDelta: 700
                 }
-            }, //      茶杯狐
+            }, //          茶杯狐
             novipnoad: {
                 SiteTypeID: 0,
                 host: 'www.novipnoad.com',
@@ -1251,7 +1251,7 @@
                 function: {
                     before: src_original_functionBefore
                 }
-            }, //   NO视频
+            }, //       NO视频
             nfmovies: {
                 SiteTypeID: 0,
                 host: 'www.nfmovies.com',
@@ -1267,7 +1267,7 @@
                 function: {
                     before: nfmovies_functionBefore
                 }
-            }, //    奈菲影视
+            }, //        奈菲影视
             ddrk: {
                 SiteTypeID: 0,
                 host: 'ddrk.me',
@@ -1280,7 +1280,7 @@
                     replaceE: 'css;.pagination_wrap',
                     scrollDelta: 1500
                 }
-            }, //        低端影视
+            }, //            低端影视
             zxzj: {
                 SiteTypeID: 0,
                 host: 'www.zxzj.me',
@@ -1298,7 +1298,7 @@
                 function: {
                     before: nfmovies_functionBefore
                 }
-            }, //        在线之家
+            }, //            在线之家
             zhenbuka: {
                 SiteTypeID: 0,
                 host: ['www.zhenbuka3.com', 'www.zhenbuka5.com'],
@@ -1314,7 +1314,7 @@
                 function: {
                     before: nfmovies_functionBefore
                 }
-            }, //    真不卡影院
+            }, //        真不卡影院
             _91mjw: {
                 SiteTypeID: 0,
                 host: '91mjw.com',
@@ -1330,7 +1330,7 @@
                 function: {
                     before: src_original_functionBefore
                 }
-            }, //      91 美剧网
+            }, //          91 美剧网
             agefans: {
                 SiteTypeID: 0,
                 host: 'www.agefans.cc',
@@ -1349,7 +1349,7 @@
                     replaceE: 'css;#container .blockcontent > div[style]:not([class])',
                     scrollDelta: 1000
                 }
-            }, //     AGE 动漫 - 全部/搜索
+            }, //         AGE 动漫 - 全部/搜索
             agefans_: {
                 SiteTypeID: 0,
                 pager: {
@@ -1360,7 +1360,7 @@
                     replaceE: 'css;#container .blockcontent > div[style]:not([class])',
                     scrollDelta: 1000
                 }
-            }, //    AGE 动漫 - 其他页
+            }, //        AGE 动漫 - 其他页
             agefans_rank: {
                 SiteTypeID: 0,
                 pager: {
@@ -1371,7 +1371,7 @@
                     replaceE: 'css;#container > ul[style]:not([class])',
                     scrollDelta: 1000
                 }
-            }, //AGE 动漫 - 排行榜
+            }, //    AGE 动漫 - 排行榜
             yhdm: {
                 SiteTypeID: 0,
                 host: 'www.imomoe.la',
@@ -1389,7 +1389,7 @@
                     mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 1000
                 }
-            }, //        樱花动漫
+            }, //            樱花动漫
             yhdm_: {
                 SiteTypeID: 0,
                 pager: {
@@ -1401,7 +1401,42 @@
                     mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 1000
                 }
-            }, //       樱花动漫 - 搜索页等
+            }, //           樱花动漫 - 搜索页等
+            zzzfun: {
+                SiteTypeID: 0,
+                host: 'www.zzzfun.com',
+                functionStart: function() {
+                    if (location.pathname.indexOf('/vod_type') > -1 || location.pathname.indexOf('/vod_show') > -1) {
+                        curSite = DBSite.zzzfun;
+                    } else if (location.pathname.indexOf('/vod_search') > -1) {
+                        curSite = DBSite.zzzfun_search;
+                    }},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;#page a[title="下一页"]',
+                    pageElement: 'css;ul.search-result > a',
+                    insertPosition: ['css;ul.search-result', 3],
+                    replaceE: 'css;#page',
+                    scrollDelta: 1000
+                },
+                function: {
+                    before: src_original_functionBefore
+                }
+            }, //          ZzzFun 动漫
+            zzzfun_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;#page a[title="下一页"]',
+                    pageElement: 'css;ul.show-list > li',
+                    insertPosition: ['css;ul.show-list', 3],
+                    replaceE: 'css;#page',
+                    scrollDelta: 1000
+                },
+                function: {
+                    before: src_original_functionBefore
+                }
+            }, //   ZzzFun 动漫 - 搜索页
             yinfans: {
                 SiteTypeID: 0,
                 host: 'www.yinfans.net',
@@ -1414,7 +1449,7 @@
                     replaceE: 'css;.pagination',
                     scrollDelta: 1500
                 }
-            }, //     音范丝
+            }, //       音范丝
             btbtt: {
                 SiteTypeID: 0,
                 host: /btbtt/,
@@ -1426,7 +1461,7 @@
                     replaceE: 'css;.page',
                     scrollDelta: 2000
                 }
-            }, //       BT 之家
+            }, //         BT 之家
             bdys: {
                 SiteTypeID: 0,
                 host: 'www.bd2020.com',
@@ -1437,7 +1472,7 @@
                     nextText: '加载更多',
                     scrollDelta: 1000
                 }
-            }, //        BD 影视
+            }, //          BD 影视
             gaoqing_fm: {
                 SiteTypeID: 0,
                 host: 'gaoqing.fm',
@@ -1447,7 +1482,23 @@
                     intervals: 1500,
                     scrollDelta: 1000
                 }
-            }, //  高清电台
+            }, //    高清电台
+            yyds: {
+                SiteTypeID: 0,
+                host: 'yyds.fans',
+                functionStart: function() {
+                    if (location.search != '' && location.search.indexOf('p=') === -1) {
+                        curSite = DBSite.yyds;
+                    }},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.next.page-numbers[href]',
+                    pageElement: 'css;.list-grouped > div',
+                    insertPosition: ['css;.list-grouped', 3],
+                    replaceE: 'css;nav.pagination',
+                    scrollDelta: 1100
+                }
+            }, //          YYDS 电影
             kisssub: {
                 SiteTypeID: 0,
                 host: 'www.kisssub.org',
@@ -1459,7 +1510,7 @@
                     replaceE: 'css;.pages',
                     scrollDelta: 2500
                 }
-            }, //     爱恋动漫
+            }, //       爱恋动漫
             dmhy: {
                 SiteTypeID: 0,
                 host: ['share.dmhy.org', 'dmhy.anoneko.com'],
@@ -1474,7 +1525,7 @@
                 function: {
                     after: function() {document.body.appendChild(document.createElement('script')).textContent = `$('#topic_list > tbody > tr:even:not(.even):not(.odd)').addClass('even'); $('#topic_list > tbody > tr:odd:not(.even):not(.odd)').addClass('odd');`;}
                 }
-            }, //        动漫花园
+            }, //          动漫花园
             futaacg: {
                 SiteTypeID: 0,
                 host: 'futaacg.com',
@@ -1486,7 +1537,7 @@
                     replaceE: 'css;ul.pagination',
                     scrollDelta: 1500
                 }
-            }, //     扶她动漫
+            }, //       扶她动漫
             bangumi: {
                 SiteTypeID: 0,
                 host: 'bangumi.moe',
@@ -1496,7 +1547,7 @@
                     intervals: 1000,
                     scrollDelta: 1500
                 }
-            }, //     萌番组
+            }, //       萌番组
             nyaa: {
                 SiteTypeID: 0,
                 host: 'nyaa.si',
@@ -1508,7 +1559,7 @@
                     replaceE: 'css;ul.pagination',
                     scrollDelta: 2000
                 }
-            }, //        Nyaa
+            }, //          Nyaa
             skrbt: {
                 SiteTypeID: 0,
                 host: /skrbt/,
@@ -1521,7 +1572,7 @@
                     replaceE: 'css;ul.pagination',
                     scrollDelta: 900
                 }
-            }, //       SkrBT
+            }, //         SkrBT
             rarbgprx: {
                 SiteTypeID: 0,
                 host: /rarbg/,
@@ -1534,7 +1585,7 @@
                     replaceE: 'css;#pager_links',
                     scrollDelta: 1000
                 }
-            }, //    RARBG
+            }, //      RARBG
             subdh: {
                 SiteTypeID: 0,
                 host: 'subdh.com',
@@ -1551,7 +1602,7 @@
                     replaceE: 'css;ul.pagination',
                     scrollDelta: 1000
                 }
-            }, //       SubDH
+            }, //         SubDH
             subdh_search: {
                 SiteTypeID: 0,
                 pager: {
@@ -1562,7 +1613,7 @@
                     replaceE: 'css;ul.pagination',
                     scrollDelta: 1000
                 }
-            }, //SubDH - 搜索页
+            }, //  SubDH - 搜索页
             mini4k: {
                 SiteTypeID: 0,
                 host: 'www.mini4k.com',
@@ -1575,7 +1626,7 @@
                     replaceE: 'css;.pagination',
                     scrollDelta: 2000
                 }
-            }, //      MINI4K
+            }, //        MINI4K
             bthaha: {
                 SiteTypeID: 0,
                 host: /bthaha/,
@@ -1595,7 +1646,7 @@
                 function: {
                     before: bthaha_functionBefore
                 }
-            }, //      BTHaha
+            }, //        BTHaha
             a4k: {
                 SiteTypeID: 0,
                 host: 'www.a4k.net',
@@ -1608,7 +1659,7 @@
                     replaceE: 'css;.pagination',
                     scrollDelta: 1000
                 }
-            }, //         A4k 字幕网（字幕）
+            }, //           A4k 字幕网（字幕）
             assrt: {
                 SiteTypeID: 0,
                 host: 'assrt.net',
@@ -1621,7 +1672,7 @@
                     replaceE: 'css;.pagelinkcard',
                     scrollDelta: 1000
                 }
-            }, //       射手网（字幕）
+            }, //         射手网（字幕）
             subhd: {
                 SiteTypeID: 0,
                 host: 'subhd.tv',
@@ -1638,7 +1689,7 @@
                     replaceE: 'css;nav.clearfix',
                     scrollDelta: 1000
                 }
-            }, //       SubHD（字幕）
+            }, //         SubHD（字幕）
             subhd_forum: {
                 SiteTypeID: 0,
                 pager: {
@@ -1649,7 +1700,7 @@
                     replaceE: 'css;nav.clearfix',
                     scrollDelta: 800
                 }
-            }, // SubHD - forum（字幕）
+            }, //   SubHD - forum（字幕）
             baoshuu: {
                 SiteTypeID: 0,
                 host: 'www.baoshuu.com',
