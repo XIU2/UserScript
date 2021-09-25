@@ -1213,7 +1213,7 @@
             },
             pianku: {
                 SiteTypeID: 0,
-                host: ['www.pianku.li', 'www.mypianku.net'],
+                host: /pianku/,
                 functionStart: function() {if (location.pathname != '/') {curSite = DBSite.pianku;}},
                 pager: {
                     type: 1,
