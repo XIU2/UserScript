@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.7.5
+// @version      1.7.6
 // @author       X.I.U
 // @description  移除登录弹窗、默认收起回答、一键收起回答、收起当前回答/评论（点击两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽指定类别（视频/文章等）、屏蔽盐选内容、净化标题消息、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -194,29 +194,37 @@ function collapsedAnswer() {
         document.head.appendChild(document.createElement('style')).textContent = '.CornerButton{margin-bottom:8px !important;}.CornerButtons{bottom:45px !important;}';
         document.querySelector('.CornerAnimayedFlex').insertAdjacentHTML('afterBegin', '<button id="collapsed-button" data-tooltip="收起全部回答" data-tooltip-position="left" data-tooltip-will-hide-on-click="false" aria-label="收起全部回答" type="button" class="Button CornerButton Button--plain"><svg class="ContentItem-arrowIcon is-active" aria-label="收起全部回答" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M16.036 19.59a1 1 0 0 1-.997.995H9.032a.996.996 0 0 1-.997-.996v-7.005H5.03c-1.1 0-1.36-.633-.578-1.416L11.33 4.29a1.003 1.003 0 0 1 1.412 0l6.878 6.88c.782.78.523 1.415-.58 1.415h-3.004v7.005z"></path></svg></button>');
         document.getElementById('collapsed-button').onclick = function () {
-            document.querySelectorAll('[script-collapsed]').forEach(function(scriptCollapsed) {
-                scriptCollapsed.querySelectorAll('.ContentItem-actions [data-zop-retract-question], .ContentItem-actions.Sticky [data-zop-retract-question]').forEach(function(button) {
+            if (location.pathname === '/' || location.pathname === '/hot' || location.pathname === '/follow') {
+                document.querySelectorAll('.ContentItem-rightButton').forEach(function (el) {
+                    if (el.hasAttribute('data-zop-retract-question')) {
+                        el.click()
+                    }
+                });
+            } else {
+                document.querySelectorAll('[script-collapsed]').forEach(function(scriptCollapsed) {
+                    scriptCollapsed.querySelectorAll('.ContentItem-actions [data-zop-retract-question], .ContentItem-actions.Sticky [data-zop-retract-question]').forEach(function(button) {
+                        button.click();
+                    })
+                })
+                document.querySelectorAll('.RichContent:not([script-collapsed]) .ContentItem-actions.Sticky [data-zop-retract-question]').forEach(function(button) {
+                    let el = button.parentElement;
+                    while (!el.classList.contains('RichContent')) {
+                        el = el.parentElement;
+                    }
+                    if (el) {
+                        el.setAttribute('script-collapsed', '');
+                    }
                     button.click();
                 })
-            })
-            document.querySelectorAll('.RichContent:not([script-collapsed]) .ContentItem-actions.Sticky [data-zop-retract-question]').forEach(function(button) {
-                let el = button.parentElement;
-                while (!el.classList.contains('RichContent')) {
-                    el = el.parentElement;
+                const observer = getCollapsedAnswerObserver();
+                observer.start();
+                if (!menu_value('menu_defaultCollapsedAnswer') && !observer._disconnectListener) {
+                    window.addEventListener('locationchange', function() {
+                        observer.end();
+                        window._collapsedAnswerObserver = null;
+                    })
+                    observer._disconnectListener = true;
                 }
-                if (el) {
-                    el.setAttribute('script-collapsed', '');
-                }
-                button.click();
-            })
-            const observer = getCollapsedAnswerObserver();
-            observer.start();
-            if (!menu_value('menu_defaultCollapsedAnswer') && !observer._disconnectListener) {
-                window.addEventListener('locationchange', function() {
-                    observer.end();
-                    window._collapsedAnswerObserver = null;
-                })
-                observer._disconnectListener = true;
             }
         }
     }
