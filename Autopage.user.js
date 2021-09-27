@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.5.8
+// @version      2.5.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -2912,7 +2912,63 @@
                     nextText: 'Show more',
                     scrollDelta: 1500
                 }
-            }, //          学术
+            }, //               学术
+            libgen: {
+                SiteTypeID: 0,
+                host: /libgen/,
+                functionStart: function() {if (location.pathname === '/search.php') {curSite = DBSite.libgen;}},
+                pager: {
+                    type: 1,
+                    nextLink: '//font/a[@href][contains(text(), "►")]',
+                    pageElement: 'css;table[rules="rows"] > tbody > tr:nth-of-type(n+2), .paginator+script:not([src])',
+                    insertPosition: ['css;table[rules="rows"] > tbody', 3],
+                    replaceE: '//td[./font/a[@href][contains(text(), "►")]]',
+                    scriptType: 2,
+                    history: true,
+                    scrollDelta: 2000
+                }
+            }, //               学术
+            baidu_xueshu: {
+                SiteTypeID: 0,
+                host: 'xueshu.baidu.com',
+                functionStart: function() {if (location.pathname === '/s') {
+                    curSite = DBSite.baidu_xueshu;
+                    } else if (location.pathname.indexOf('journal/navigation') > -1) {
+                    curSite = DBSite.baidu_xueshu_journal;
+                } else if (location.pathname.indexOf('paper/show') > -1) {
+                    curSite = DBSite.baidu_xueshu_paper;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: 'id("page")/a[./i[@class="c-icon-pager-next"]][@href]',
+                    pageElement: 'css;#bdxs_result_lists > div.result',
+                    insertPosition: ['css;#bdxs_result_lists', 3],
+                    replaceE: 'css;#page',
+                    history: true,
+                    scrollDelta: 1000
+                }
+            }, //         百度学术
+            baidu_xueshu_journal: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.res-page-next[href]',
+                    pageElement: 'css;#journaldetail > div',
+                    insertPosition: ['css;#journaldetail', 3],
+                    replaceE: 'css;.res-page',
+                    history: true,
+                    scrollDelta: 1000
+                }
+            }, // 百度学术
+            baidu_xueshu_paper: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 2,
+                    nextLink: 'div:not([style*="display: none"]) > .more_btn',
+                    nextText: '加载更多',
+                    scrollDelta: 1000
+                }
+            }, //   百度学术
             wikihow: {
                 SiteTypeID: 0,
                 host: ['www.wikihow.com', 'zh.wikihow.com'],
