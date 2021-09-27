@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.5.5
+// @version      2.5.6
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -2441,6 +2441,39 @@
                     before: szcdmj_functionBefore
                 }
             }, //          砂之船动漫家
+            mangabz: {
+                SiteTypeID: 0,
+                host: 'mangabz.com',
+                functionStart: function() {if (/\/m\d+/.test(location.pathname)) {
+                    setTimeout(mangabz_init, 500);
+                    curSite = DBSite.mangabz;
+                    document.lastElementChild.appendChild(document.createElement('style')).textContent = 'body > .container > div:not([id]) {display: none !important;} .top-bar {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}';
+                } else if (/\/\d+bz\//.test(location.pathname)) {
+                    if (document.querySelector('.detail-list-form-more')) document.querySelector('.detail-list-form-more').click();
+                } else if (location.pathname.indexOf('/manga-list') > -1 || location.pathname === '/search') {
+                    curSite = DBSite.mangabz_list;
+                }},
+                pager: {
+                    type: 4,
+                    nextLink: mangabz_functionNext,
+                    insertPosition: ['css;#cp_img', 3],
+                    insertElement: mangabz_insertElement,
+                    replaceE: 'css;p.top-title, body > .container > div:not([id]), title',
+                    intervals: 500,
+                    scrollDelta: 1000
+                }
+            }, //         Mangabz 漫画
+            mangabz_list: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="page-pagination"]//a[@href][contains(text(), ">")]',
+                    pageElement: 'css;ul.mh-list > li',
+                    insertPosition: ['css;ul.mh-list', 3],
+                    replaceE: 'css;.page-pagination',
+                    scrollDelta: 800
+                }
+            }, //    Mangabz 漫画 - 分类/搜索页
             netbian: {
                 SiteTypeID: 0,
                 host: 'pic.netbian.com',
@@ -3884,6 +3917,79 @@
     }
 
 
+    // [Mangabz 漫画] 初始化（调整本话图片）
+    function mangabz_init() {
+        pageNumber('del');
+        let showimage = document.getElementById('showimage'),
+            cp_img = document.getElementById('cp_img'),
+            cp_image = document.getElementById('cp_image');
+        if (showimage) {showimage.removeAttribute('oncontextmenu');}
+        if (cp_img) {cp_img.removeAttribute('oncontextmenu');}
+        if (cp_image) {
+            cp_image.removeAttribute('oncontextmenu');
+            cp_image.removeAttribute('id');
+            cp_image.removeAttribute('style');
+        }
+    }
+    // [Mangabz 漫画] 获取下一页地址
+    function mangabz_functionNext() {
+        var url = '';
+        if (MANGABZ_PAGE === MANGABZ_IMAGE_COUNT) { // 下一话
+            url = getElementByXpath('//a[./img[contains(@src, "icon_xiayizhang")]]')
+            if (url === curSite.pageUrl) return
+            curSite.pageUrl = url
+            //console.log(curSite.pageUrl)
+            getPageElems(curSite.pageUrl); // 访问下一话 URL 获取
+        } else { // 下一页
+            if (!mkey) var mkey = '';
+            url = location.origin + location.pathname + 'chapterimage.ashx' + `?cid=${MANGABZ_CID}&page=${MANGABZ_PAGE + 1}&key=${(mkey)}&_cid=${MANGABZ_CID}&_mid=${MANGABZ_MID}&_dt=${MANGABZ_VIEWSIGN_DT}&_sign=${MANGABZ_VIEWSIGN}`
+            if (url === curSite.pageUrl) return
+            curSite.pageUrl = url
+            //console.log(curSite.pageUrl)
+            getPageElems(curSite.pageUrl, 'text', 'GET', '', 'Next'); // 访问下一页 URL 获取
+        }
+    }
+    // [Mangabz 漫画] 插入数据
+    function mangabz_insertElement(pageElems, type) {
+        if (pageElems) {
+            if (type === 'Next') {
+                let imgArr = eval(pageElems),
+                    _img = '';
+                for (let now of imgArr) {
+                    _img += `<img src="${now}">`;
+                }
+                if (_img) {
+                    document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
+
+                    // 添加历史记录
+                    MANGABZ_PAGE += imgArr.length;
+                    window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, document.title, location.origin + MANGABZ_CURL.substring(0, MANGABZ_CURL.length - 1) + '-p' + MANGABZ_PAGE + '/');
+                }
+            } else {
+                // 插入 <script> 标签
+                let scriptElement = pageElems.querySelectorAll('html:not([dir]) > head > script:not([src])'), scriptText = '';
+                scriptElement.forEach(function (one) {scriptText += ';' + one.textContent;});
+                if (scriptText) {
+                    document.body.appendChild(document.createElement('script')).textContent = scriptText;
+
+                    window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
+
+                    // 替换待替换元素
+                    let oriE = getAllElements(curSite.pager.replaceE),
+                        repE = getAllElements(curSite.pager.replaceE, pageElems, pageElems);
+                    if (oriE.length === repE.length) {
+                        for (let i = 0; i < oriE.length; i++) {
+                            oriE[i].outerHTML = repE[i].outerHTML;
+                        }
+                    }
+                    MANGABZ_PAGE = 0;
+                    mangabz_functionNext();
+                }
+            }
+        }
+    }
+
+
     // 自动无缝翻页
     function pageLoading() {
         if (curSite.SiteTypeID > 0) {
@@ -4138,7 +4244,7 @@
 
 
     // 类型 4 专用
-    function getPageElems(url, type = 'text', method = 'GET', data = '', type2) {
+    function getPageElems(url, type = '', method = 'GET', data = '', type2) {
         //console.log(url, data)
         let mimeType = '';
         if (curSite.pager.mimeType) mimeType = curSite.pager.mimeType;
@@ -4159,6 +4265,9 @@
                     switch (type) {
                         case 'json':
                             curSite.pager.insertElement(response.response, type2);
+                            break;
+                        case 'text':
+                            curSite.pager.insertElement(response.responseText, type2)
                             break;
                         default:
                             curSite.pager.insertElement(ShowPager.createDocumentByString(response.responseText), type2)
