@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.5.7
+// @version      2.5.8
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -2548,24 +2548,37 @@
                     before: src_src_functionBefore
                 }
             }, //    拷贝漫画 - 分类页
-            gufengmh8: {
+            gufengmh: {
                 SiteTypeID: 0,
-                host: 'www.gufengmh8.com',
-                functionStart: function() {if (location.pathname.indexOf('.html') > -1) {
+                host: /gufengmh/,
+                functionStart: function() {if (/\/\d+.+\.html/.test(location.pathname)) {
                     let chapterScroll = document.getElementById('chapter-scroll') // 强制为 [下拉阅读] 模式
                     if (chapterScroll && chapterScroll.className === '') {chapterScroll.click();}
-                    curSite = DBSite.gufengmh8; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'p.img_info {display: none !important;}'; // 隐藏中间的页数信息
+                    curSite = DBSite.gufengmh; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'p.img_info {display: none !important;}'; // 隐藏中间的页数信息
+                } else if (location.pathname.indexOf('/update') > -1 || location.pathname.indexOf('/list') > -1 || location.pathname.indexOf('/search') > -1) {
+                    curSite = DBSite.gufengmh_list;
                 }},
                 pager: {
                     type: 4,
-                    nextLink: gufengmh8_functionNext,
+                    nextLink: gufengmh_functionNext,
                     pageElement: 'css;body > script:first-child',
                     insertPosition: ['css;#images', 3],
-                    insertElement: gufengmh8_insertElement,
+                    insertElement: gufengmh_insertElement,
                     intervals: 5000,
                     scrollDelta: 4000
                 }
-            }, //         古风漫画网
+            }, //          古风漫画网
+            gufengmh_list: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;li.next > a[href]',
+                    pageElement: 'css;ul.book-list > li',
+                    insertPosition: ['css;ul.book-list', 3],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1000
+                }
+            }, //     古风漫画网 - 分类页
             szcdmj: {
                 SiteTypeID: 0,
                 host: 'www.szcdmj.com',
@@ -3995,7 +4008,7 @@
 
 
     // [古风漫画网] 获取下一页地址
-    function gufengmh8_functionNext() {
+    function gufengmh_functionNext() {
         let pageElems = document.querySelector(curSite.pager.pageElement.replace('css;', '')); // 寻找数据所在元素
         if (pageElems) {
             let comicUrl, nextId;
@@ -4017,7 +4030,7 @@
         }
     }
     // [古风漫画网] 插入数据
-    function gufengmh8_insertElement(pageElems, type) {
+    function gufengmh_insertElement(pageElems, type) {
         if (pageElems) {
             let url = curSite.pageUrl;
             pageElems = getAllElements(curSite.pager.pageElement, pageElems, pageElems)[0];
