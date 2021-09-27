@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.5.4
+// @version      2.5.5
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -224,7 +224,11 @@
             google: {
                 SiteTypeID: 0,
                 host: /.google./,
-                functionStart: function() {if (location.pathname === '/search') curSite = DBSite.google;},
+                functionStart: function() {if (location.pathname === '/search') {
+                    curSite = DBSite.google;
+                } else if (location.pathname === '/scholar') {
+                    curSite = DBSite.google_scholar;
+                }},
                 pager: {
                     type: 1,
                     nextLink: 'id("pnnext")[@href]',
@@ -235,6 +239,18 @@
                     scrollDelta: 3000
                 }
             }, //                 谷歌 搜索
+            google_scholar: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//a[./span[@class="gs_ico gs_ico_nav_next"]]',
+                    pageElement: 'css;#gs_res_ccl_mid > *',
+                    insertPosition: ['css;#gs_res_ccl_mid', 3],
+                    replaceE: 'id("gs_n")',
+                    scriptType: 1,
+                    scrollDelta: 2000
+                }
+            }, //         谷歌学术 搜索
             bing: {
                 SiteTypeID: 0,
                 host: ['www.bing.com','cn.bing.com'],
@@ -1236,7 +1252,7 @@
                 function: {
                     before: pianku_functionBefore
                 }
-            }, //        片库
+            }, //          片库
             cupfox: {
                 SiteTypeID: 0,
                 host: 'www.cupfox.com',
@@ -1360,7 +1376,7 @@
                     replaceE: 'css;.pagelist',
                     scrollDelta: 1000
                 }
-            }, //         233 动漫
+            }, //           233 动漫
             dm233_article: {
                 SiteTypeID: 0,
                 pager: {
@@ -1371,7 +1387,7 @@
                     replaceE: 'css;.pagelist',
                     scrollDelta: 1000
                 }
-            }, //         233 动漫 - 动漫情报/资讯
+            }, //   233 动漫 - 动漫情报/资讯
             dm233_rank: {
                 SiteTypeID: 0,
                 pager: {
@@ -1382,7 +1398,7 @@
                     replaceE: 'css;.pagelist',
                     scrollDelta: 1000
                 }
-            }, //         233 动漫 - 排行榜
+            }, //      233 动漫 - 排行榜
             agefans: {
                 SiteTypeID: 0,
                 host: 'www.agefans.cc',
@@ -2465,7 +2481,7 @@
                         curSite = DBSite.github_issues;
                     } else if (location.pathname.indexOf('/discussions') > -1 && !(/\/discussions\/\d+/.test(location.pathname))) {
                         curSite = DBSite.github_discussions;
-                    } else if (location.pathname === '/search') {
+                    } else if (location.pathname.indexOf('/search') > -1) {
                         if (!location.search) return
                         if (location.search.indexOf('type=Repositories') > -1 || location.search.indexOf('type=') === -1) {
                             curSite = DBSite.github_search;
