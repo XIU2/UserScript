@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.6.1
+// @version      1.6.2
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -284,7 +284,7 @@
     // 添加 Raw 下载链接（☁）
     function addRawDownLink() {
         // 如果不是项目文件页面，就返回，如果网页有 Raw 下载链接（☁）就返回
-        let files = document.querySelectorAll('div.Box-row svg.octicon.octicon-file');if(files.length === 0) return;
+        let files = document.querySelectorAll('div.Box-row svg.octicon.octicon-file');if(files.length === 0) return;if (location.pathname.indexOf('/tags') > -1) return
         let files1 = document.querySelectorAll('a.fileDownLink');if(files1.length > 0) return;
 
         // 鼠标指向则显示
