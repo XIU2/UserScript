@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.5.9
+// @version      2.6.0
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -193,7 +193,7 @@
                     intervals: 500,
                     scrollDelta: 1000
                 }
-            },
+            }, //             Flarum
             dux: {
                 SiteTypeID: 0,
                 pager: {
@@ -207,7 +207,7 @@
                 function: {
                     before: dux_functionBefore
                 }
-            }, //                一种 WordPress 主题
+            }, //                WordPress 主题
             baidu: {
                 SiteTypeID: 0,
                 host: 'www.baidu.com',
@@ -239,22 +239,14 @@
                     scrollDelta: 3000
                 }
             }, //                 谷歌 搜索
-            google_scholar: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//a[./span[@class="gs_ico gs_ico_nav_next"]]',
-                    pageElement: 'css;#gs_res_ccl_mid > *',
-                    insertPosition: ['css;#gs_res_ccl_mid', 3],
-                    replaceE: 'id("gs_n")',
-                    scriptType: 1,
-                    scrollDelta: 2000
-                }
-            }, //         谷歌学术 搜索
             bing: {
                 SiteTypeID: 0,
                 host: ['www.bing.com','cn.bing.com'],
-                functionStart: function() {if (location.pathname === '/search') {curSite = DBSite.bing; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.b_imagePair.square_mp > .inner {display: none;}';}},
+                functionStart: function() {if (location.pathname === '/search') {
+                    curSite = DBSite.bing; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.b_imagePair.square_mp > .inner {display: none;}';
+                } else if (location.pathname === '/academic/search') {
+                    curSite = DBSite.bing_academic; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'li.aca_algo_count {display: none !important;}';
+                }},
                 pager: {
                     type: 1,
                     nextLink: '//a[contains(@class,"sb_pagN")][@href]',
@@ -264,35 +256,6 @@
                     scrollDelta: 1500
                 }
             }, //                   必应 搜索
-            yandex: {
-                SiteTypeID: 0,
-                host: 'yandex.com',
-                functionStart: function() {if (location.pathname === '/search/') {curSite = DBSite.yandex;}},
-                pager: {
-                    type: 1,
-                    nextLink: 'css;a.pager__item_kind_next',
-                    pageElement: 'css;#search-result > *, style',
-                    insertPosition: ['css;#search-result', 3],
-                    replaceE: 'css;.pager',
-                    scrollDelta: 1500
-                }
-            }, //                 Yandex 搜索
-            toutiao: {
-                SiteTypeID: 0,
-                host: ['www.toutiao.com', 'so.toutiao.com'],
-                functionStart: function() {if (location.hostname != 'www.toutiao.com') {if (location.pathname === '/search') {curSite = DBSite.toutiao;}}},
-                pager: {
-                    type: 1,
-                    nextLink: '//div[contains(@class, "-pagination")]/a[contains(string(), "下一页")]',
-                    pageElement: 'css;div[class*="-result-list"] > .result-content[data-i]',
-                    insertPosition: ['css;div[class*="-result-list"] > .result-content:not([data-i]):last-child', 1],
-                    replaceE: 'css;div[class*="-pagination"]',
-                    scrollDelta: 1200
-                },
-                function: {
-                    before: toutiao_functionBefore
-                }
-            }, //                头条 搜索
             sogou: {
                 SiteTypeID: 0,
                 host: 'www.sogou.com',
@@ -333,6 +296,22 @@
                     scrollDelta: 1000
                 }
             }, //    搜狗微信 - 搜索
+            toutiao: {
+                SiteTypeID: 0,
+                host: ['www.toutiao.com', 'so.toutiao.com'],
+                functionStart: function() {if (location.hostname != 'www.toutiao.com') {if (location.pathname === '/search') {curSite = DBSite.toutiao;}}},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[contains(@class, "-pagination")]/a[contains(string(), "下一页")]',
+                    pageElement: 'css;div[class*="-result-list"] > .result-content[data-i]',
+                    insertPosition: ['css;div[class*="-result-list"] > .result-content:not([data-i]):last-child', 1],
+                    replaceE: 'css;div[class*="-pagination"]',
+                    scrollDelta: 1200
+                },
+                function: {
+                    before: toutiao_functionBefore
+                }
+            }, //                头条 搜索
             so: {
                 SiteTypeID: 0,
                 host: 'www.so.com',
@@ -349,6 +328,29 @@
                     before: so_functionBefore
                 }
             }, //                     360 搜索
+            duckduckgo: {
+                SiteTypeID: 0,
+                host: 'duckduckgo.com',
+                functionStart: function() {
+                    if (getCookie('av') != '1') {
+                        document.cookie='av=1; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; // 写入 Cookie 强制开启自带的无缝翻页功能
+                        location.reload(); // 刷新网页
+                    }
+                },
+            }, //             DuckDuckGo 搜索
+            yandex: {
+                SiteTypeID: 0,
+                host: 'yandex.com',
+                functionStart: function() {if (location.pathname === '/search/') {curSite = DBSite.yandex;}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.pager__item_kind_next',
+                    pageElement: 'css;#search-result > *, style',
+                    insertPosition: ['css;#search-result', 3],
+                    replaceE: 'css;.pager',
+                    scrollDelta: 1500
+                }
+            }, //                 Yandex 搜索
             magi: {
                 SiteTypeID: 0,
                 host: 'magi.com',
@@ -360,16 +362,6 @@
                     scrollDelta: 1500
                 }
             }, //                   Magi 搜索
-            duckduckgo: {
-                SiteTypeID: 0,
-                host: 'duckduckgo.com',
-                functionStart: function() {
-                    if (getCookie('av') != '1') {
-                        document.cookie='av=1; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; // 写入 Cookie 强制开启自带的无缝翻页功能
-                        location.reload(); // 刷新网页
-                    }
-                },
-            }, //             DuckDuckGo 搜索
             baidu_tieba: {
                 SiteTypeID: 0,
                 host: 'tieba.baidu.com',
@@ -538,65 +530,6 @@
                     scrollDelta: 1500
                 }
             }, //         天涯社区 - 帖子内
-            adnmb3: {
-                SiteTypeID: 0,
-                host: 'adnmb3.com',
-                functionStart: function() {
-                    if (location.pathname.indexOf('/m/f/') > -1) {
-                        curSite = DBSite.adnmb3_mf;
-                    } else if (location.pathname.indexOf('/m/t/') > -1) {
-                        curSite = DBSite.adnmb3_mt;
-                    } else if (location.pathname.indexOf('/f/') > -1 || location.pathname.indexOf('/Forum/') > -1) {
-                        curSite = DBSite.adnmb3;
-                    } else if (location.pathname.indexOf('/t/') > -1) {
-                        curSite = DBSite.adnmb3_t;
-                    }},
-                pager: {
-                    type: 1,
-                    nextLink: '//ul[contains(@class, "pagination")]//a[contains(text(), "下一页")]',
-                    pageElement: 'css;.h-threads-list > *, script[src$="/h.desktop.js"]',
-                    insertPosition: ['css;.h-threads-list', 3],
-                    replaceE: '//ul[contains(@class, "pagination")]',
-                    scriptType: 3,
-                    scrollDelta: 1500
-                }
-            }, //              A 岛
-            adnmb3_t: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//ul[contains(@class, "pagination")]//a[contains(text(), "下一页")]',
-                    pageElement: 'css;.h-threads-list > .h-threads-item > .h-threads-item-replys, script[src$="/h.desktop.js"]',
-                    insertPosition: ['css;.h-threads-list > .h-threads-item', 3],
-                    replaceE: '//ul[contains(@class, "pagination")]',
-                    scriptType: 3,
-                    scrollDelta: 1500
-                }
-            }, //            A 岛 - 帖子内
-            adnmb3_mf: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//li[contains(@class, "pagination-next")]//a[contains(text(), "下一页")]',
-                    pageElement: 'css;.h-middle > div[id^="threads_"], .h-middle > hr.h-middle > div[id^="threads_"], .h-middle > hr:nth-of-type(n+2), script[src$="/h.mobile.js"]',
-                    insertPosition: ['css;#h-threads-pagination', 1],
-                    replaceE: 'css;#h-threads-pagination',
-                    scriptType: 3,
-                    scrollDelta: 1500
-                }
-            }, //           A 岛 - 帖子列表（手机版）
-            adnmb3_mt: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//li[contains(@class, "pagination-next")]//a[contains(text(), "下一页")]',
-                    pageElement: 'css;.h-threads-replylist > div, script[src$="/h.mobile.js"]',
-                    insertPosition: ['css;.h-threads-replylist', 3],
-                    replaceE: 'css;#h-threads-pagination',
-                    scriptType: 3,
-                    scrollDelta: 1500
-                }
-            }, //           A 岛 - 帖子内（手机版）
             nga_thread: {
                 SiteTypeID: 0,
                 host: ['bbs.nga.cn', 'ngabbs.com', 'nga.178.com', 'g.nga.cn'],
@@ -721,34 +654,6 @@
                     scrollDelta: 1000
                 }
             }, //        V2EX - 账户余额页
-            pediy_forum: {
-                SiteTypeID: 0,
-                host: 'bbs.pediy.com',
-                functionStart: function() {if (location.pathname.indexOf('/forum-') > -1) {
-                    curSite = DBSite.pediy_forum;
-                } else if (location.pathname.indexOf('/thread-') > -1) {
-                    if (GM_getValue('menu_discuz_thread_page')) {curSite = DBSite.pediy_thread;}
-                }},
-                pager: {
-                    type: 1,
-                    nextLink: '//ul[contains(@class, "pagination")]//a[contains(text(), "▶")]',
-                    pageElement: 'css;table.threadlist > tbody > tr',
-                    insertPosition: ['css;table.threadlist > tbody', 3],
-                    replaceE: 'css;ul.pagination',
-                    scrollDelta: 1500
-                }
-            }, //         看雪论坛 - 各版块帖子列表
-            pediy_thread: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//ul[contains(@class, "pagination")]//a[contains(text(), "▶")]',
-                    pageElement: 'css;table.postlist > tbody > tr[data-pid]',
-                    insertPosition: ['css;table.postlist > tbody > tr:not([data-pid])', 1],
-                    replaceE: 'css;ul.pagination',
-                    scrollDelta: 1500
-                }
-            }, //        看雪论坛 - 帖子内
             lkong: {
                 SiteTypeID: 0,
                 host: 'www.lkong.com',
@@ -779,6 +684,133 @@
                     scrollDelta: 1200
                 }
             }, //        龙的天空 - 帖子内
+            pediy_forum: {
+                SiteTypeID: 0,
+                host: 'bbs.pediy.com',
+                functionStart: function() {if (location.pathname.indexOf('/forum-') > -1) {
+                    curSite = DBSite.pediy_forum;
+                } else if (location.pathname.indexOf('/thread-') > -1) {
+                    if (GM_getValue('menu_discuz_thread_page')) {curSite = DBSite.pediy_thread;}
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: '//ul[contains(@class, "pagination")]//a[contains(text(), "▶")]',
+                    pageElement: 'css;table.threadlist > tbody > tr',
+                    insertPosition: ['css;table.threadlist > tbody', 3],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1500
+                }
+            }, //         看雪论坛 - 各版块帖子列表
+            pediy_thread: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//ul[contains(@class, "pagination")]//a[contains(text(), "▶")]',
+                    pageElement: 'css;table.postlist > tbody > tr[data-pid]',
+                    insertPosition: ['css;table.postlist > tbody > tr:not([data-pid])', 1],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1500
+                }
+            }, //        看雪论坛 - 帖子内
+            kdslife: {
+                SiteTypeID: 0,
+                host: 'club.kdslife.com',
+                functionStart: function() {
+                    if (location.pathname.indexOf('/f_') > -1) {
+                        curSite = DBSite.kdslife;
+                    } else if (location.pathname.indexOf('/t_') > -1) {
+                        curSite = DBSite.kdslife_t;
+                    }},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="fr i3_r"]/a[@href][contains(text(), "后一页")]',
+                    pageElement: 'css;ul.main_List > li.i2:not(.h_bg)',
+                    insertPosition: ['css;ul.main_List > li.i3', 1],
+                    replaceE: 'css;ul.main_List > li.i3',
+                    scrollDelta: 1000
+                }
+            }, //             宽带山论坛
+            kdslife_t: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="pages"]/a[contains(text(), ">>")]',
+                    pageElement: 'css;#reply_list_panel > *, script[src*="ui/js/kds.js"]',
+                    insertPosition: ['css;#reply_list_panel', 3],
+                    replaceE: 'css;.pages',
+                    scriptType: 3,
+                    scrollDelta: 1000
+                }
+            }, //           宽带山论坛 - 帖子内
+            libaclub: {
+                SiteTypeID: 0,
+                host: 'www.libaclub.com',
+                functionStart: function() {
+                    if (location.pathname === '/' || location.pathname.indexOf('/date_') > -1) {
+                        curSite = DBSite.libaclub;
+                    } else if (location.pathname.indexOf('/f_') > -1) {
+                        curSite = DBSite.libaclub_f;
+                    } else if (location.pathname.indexOf('/t_') > -1 || location.pathname.indexOf('/reply_') > -1) {
+                        curSite = DBSite.libaclub_t;
+                    } else if (location.pathname.indexOf('/prt_') > -1) {
+                        curSite = DBSite.libaclub_prt;
+                    } else if (location.pathname === '/facade.php') {
+                        curSite = DBSite.libaclub_search;
+                    }
+                    document.lastElementChild.appendChild(document.createElement('style')).textContent = 'li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}';},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="ui-crumbs-more"]/a[@class="fn-link"][1]',
+                    pageElement: 'css;ul.ui-list > li:not(.ui-list-item-head):not(.ui-list-merchant-ad)',
+                    insertPosition: ['css;ul.ui-list', 3],
+                    replaceE: 'css;div.ui-crumbs-more',
+                    scrollDelta: 1200
+                }
+            }, //            篱笆网论坛
+            libaclub_f: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="ui-paging"]/a[@class="ui-paging-next"]',
+                    pageElement: 'css;ul.ui-list > li:not(.ui-list-item-head):not(.ui-list-merchant-ad)',
+                    insertPosition: ['css;ul.ui-list', 3],
+                    replaceE: 'css;div.ui-paging',
+                    scrollDelta: 1200
+                }
+            }, //          篱笆网论坛 - 各版块帖子列表
+            libaclub_t: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.ui-paging-next',
+                    pageElement: 'css;.ui-box-content > div.ui-topic, .ui-box-content > a[name]',
+                    insertPosition: ['css;.ui-box-content', 3],
+                    replaceE: 'css;div.ui-paging',
+                    scrollDelta: 1500
+                }
+            }, //          篱笆网论坛 - 帖子内
+            libaclub_prt: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.ui-paging-next',
+                    pageElement: 'css;ul.ui-list > li',
+                    insertPosition: ['css;ul.ui-list', 3],
+                    replaceE: 'css;div.ui-paging',
+                    scrollDelta: 2000
+                }
+            }, //        篱笆网论坛 - 帖子内 - 打印版
+            libaclub_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="ui-page"]/a[contains(text(), "下一页")]',
+                    pageElement: 'css;.ui-box-main > ul.ui-list > li',
+                    insertPosition: ['css;.ui-box-main > ul.ui-list', 3],
+                    replaceE: 'css;div.ui-page',
+                    scrollDelta: 1200
+                }
+            }, //     篱笆网论坛 - 搜索页
             xcar_forumdisplay: {
                 SiteTypeID: 0,
                 host: 'www.xcar.com.cn',
@@ -820,34 +852,65 @@
                     scrollDelta: 3000
                 }
             }, //   飞客网论坛 - 帖子内
-            zhutix: {
+            adnmb3: {
                 SiteTypeID: 0,
-                host: 'zhutix.com',
-                functionStart: function() {if (document.getElementById('primary-home')) {
-                    curSite = DBSite.zhutix_postlist;
-                } else {
-                    curSite = DBSite.zhutix;
-                }},
+                host: 'adnmb3.com',
+                functionStart: function() {
+                    if (location.pathname.indexOf('/m/f/') > -1) {
+                        curSite = DBSite.adnmb3_mf;
+                    } else if (location.pathname.indexOf('/m/t/') > -1) {
+                        curSite = DBSite.adnmb3_mt;
+                    } else if (location.pathname.indexOf('/f/') > -1 || location.pathname.indexOf('/Forum/') > -1) {
+                        curSite = DBSite.adnmb3;
+                    } else if (location.pathname.indexOf('/t/') > -1) {
+                        curSite = DBSite.adnmb3_t;
+                    }},
                 pager: {
                     type: 1,
-                    nextLink: '//li[@class="next-page"]/a | //div[@class="btn-pager"]/a[contains(text(), "❯")]',
-                    pageElement: 'css;#post-list > ul > li',
-                    insertPosition: ['css;#post-list > ul', 3],
-                    replaceE: 'css;.pagination, .b2-pagenav.post-nav',
+                    nextLink: '//ul[contains(@class, "pagination")]//a[contains(text(), "下一页")]',
+                    pageElement: 'css;.h-threads-list > *, script[src$="/h.desktop.js"]',
+                    insertPosition: ['css;.h-threads-list', 3],
+                    replaceE: '//ul[contains(@class, "pagination")]',
+                    scriptType: 3,
                     scrollDelta: 1500
                 }
-            }, //                  致美化
-            zhutix_postlist: {
+            }, //              A 岛
+            adnmb3_t: {
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//li[@class="next-page"]/a',
-                    pageElement: 'css;#primary-home > div:not(.pagination)',
-                    insertPosition: ['css;.pagination', 1],
-                    replaceE: 'css;.pagination',
+                    nextLink: '//ul[contains(@class, "pagination")]//a[contains(text(), "下一页")]',
+                    pageElement: 'css;.h-threads-list > .h-threads-item > .h-threads-item-replys, script[src$="/h.desktop.js"]',
+                    insertPosition: ['css;.h-threads-list > .h-threads-item', 3],
+                    replaceE: '//ul[contains(@class, "pagination")]',
+                    scriptType: 3,
                     scrollDelta: 1500
                 }
-            }, //         致美化 - 文章列表
+            }, //            A 岛 - 帖子内
+            adnmb3_mf: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//li[contains(@class, "pagination-next")]//a[contains(text(), "下一页")]',
+                    pageElement: 'css;.h-middle > div[id^="threads_"], .h-middle > hr.h-middle > div[id^="threads_"], .h-middle > hr:nth-of-type(n+2), script[src$="/h.mobile.js"]',
+                    insertPosition: ['css;#h-threads-pagination', 1],
+                    replaceE: 'css;#h-threads-pagination',
+                    scriptType: 3,
+                    scrollDelta: 1500
+                }
+            }, //           A 岛 - 帖子列表（手机版）
+            adnmb3_mt: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//li[contains(@class, "pagination-next")]//a[contains(text(), "下一页")]',
+                    pageElement: 'css;.h-threads-replylist > div, script[src$="/h.mobile.js"]',
+                    insertPosition: ['css;.h-threads-replylist', 3],
+                    replaceE: 'css;#h-threads-pagination',
+                    scriptType: 3,
+                    scrollDelta: 1500
+                }
+            }, //           A 岛 - 帖子内（手机版）
             jandan: {
                 SiteTypeID: 0,
                 host: 'jandan.net',
@@ -931,49 +994,6 @@
                     scrollDelta: 1500
                 }
             }, //                  IT 之家
-            puxiang: {
-                SiteTypeID: 0,
-                host: 'www.puxiang.com',
-                functionStart: function() {if (location.pathname === '/search/favorite') {
-                    curSite = DBSite.puxiang_collect;
-                } else if (location.pathname === '/search/puxiang' || location.pathname === '/list' || location.pathname === '/galleries' || location.pathname === '/articles') {
-                    curSite = DBSite.puxiang;
-                } else if (location.pathname === '/') {
-                    curSite = DBSite.puxiang; curSite.pager.scrollDelta = 4000;
-                }},
-                pager: {
-                    type: 1,
-                    nextLink: 'css;li.next > a[href]',
-                    pageElement: 'css;.work-list > div',
-                    insertPosition: ['css;.work-list', 3],
-                    replaceE: 'css;.pagerbar',
-                    scrollDelta: 1500
-                }
-            }, //                 普象网 - 作品集/搜索页
-            puxiang_collect: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: 'css;li.next > a[href]',
-                    pageElement: 'css;.collect-list > div',
-                    insertPosition: ['css;.collect-list', 3],
-                    replaceE: 'css;.pagerbar',
-                    scrollDelta: 1500
-                }
-            }, //         普象网 - 收藏夹
-            om: {
-                SiteTypeID: 0,
-                host: 'www.om.cn',
-                functionStart: function() {if (location.pathname != '/') {curSite = DBSite.om;}},
-                pager: {
-                    type: 1,
-                    nextLink: 'css;li.next > a[href]',
-                    pageElement: 'css;.main_content > ul > li',
-                    insertPosition: ['css;.main_content > ul', 3],
-                    replaceE: 'css;ul.pagination',
-                    scrollDelta: 1500
-                }
-            }, //                      欧模网
             _58pic: {
                 SiteTypeID: 0,
                 host: 'www.58pic.com',
@@ -994,7 +1014,7 @@
                 function: {
                     before: _58pic_functionBefore
                 }
-            }, //                  千图网 - 分类/搜索页
+            }, //              千图网 - 分类/搜索页
             _58pic_c: {
                 SiteTypeID: 0,
                 pager: {
@@ -1008,18 +1028,7 @@
                 function: {
                     before: _58pic_functionBefore
                 }
-            }, //                千图网 - 专题/收藏夹
-            logosc: {
-                SiteTypeID: 0,
-                host: 'www.logosc.cn',
-                functionStart: function() {if (location.pathname.indexOf('/so/') > -1) {curSite = DBSite.logosc;}},
-                pager: {
-                    type: 2,
-                    nextLink: 'button.so-pablo-button',
-                    intervals: 1500,
-                    scrollDelta: 1500
-                }
-            }, //                  搜图神器 (免费无版权)
+            }, //            千图网 - 专题/收藏夹
             pixabay: {
                 SiteTypeID: 0,
                 host: 'pixabay.com',
@@ -1034,7 +1043,61 @@
                 function: {
                     before: pixabay_functionBefore
                 }
-            },
+            }, //             Pixabay
+            logosc: {
+                SiteTypeID: 0,
+                host: 'www.logosc.cn',
+                functionStart: function() {if (location.pathname.indexOf('/so/') > -1) {curSite = DBSite.logosc;}},
+                pager: {
+                    type: 2,
+                    nextLink: 'button.so-pablo-button',
+                    intervals: 1500,
+                    scrollDelta: 1500
+                }
+            }, //              搜图神器 (免费无版权)
+            puxiang: {
+                SiteTypeID: 0,
+                host: 'www.puxiang.com',
+                functionStart: function() {if (location.pathname === '/search/favorite') {
+                    curSite = DBSite.puxiang_collect;
+                } else if (location.pathname === '/search/puxiang' || location.pathname === '/list' || location.pathname === '/galleries' || location.pathname === '/articles') {
+                    curSite = DBSite.puxiang;
+                } else if (location.pathname === '/') {
+                    curSite = DBSite.puxiang; curSite.pager.scrollDelta = 4000;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;li.next > a[href]',
+                    pageElement: 'css;.work-list > div',
+                    insertPosition: ['css;.work-list', 3],
+                    replaceE: 'css;.pagerbar',
+                    scrollDelta: 1500
+                }
+            }, //             普象网 - 作品集/搜索页
+            puxiang_collect: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;li.next > a[href]',
+                    pageElement: 'css;.collect-list > div',
+                    insertPosition: ['css;.collect-list', 3],
+                    replaceE: 'css;.pagerbar',
+                    scrollDelta: 1500
+                }
+            }, //     普象网 - 收藏夹
+            om: {
+                SiteTypeID: 0,
+                host: 'www.om.cn',
+                functionStart: function() {if (location.pathname != '/') {curSite = DBSite.om;}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;li.next > a[href]',
+                    pageElement: 'css;.main_content > ul > li',
+                    insertPosition: ['css;.main_content > ul', 3],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1500
+                }
+            }, //                  欧模网
             _3dmgame: {
                 SiteTypeID: 0,
                 host: 'www.3dmgame.com',
@@ -1047,7 +1110,7 @@
                     scrollElement: '.pagewrap',
                     scrollDelta: 400
                 }
-            },
+            }, //                3DM
             _3dmgame_mod: {
                 SiteTypeID: 0,
                 host: 'mod.3dmgame.com',
@@ -1060,7 +1123,7 @@
                     history: true,
                     scrollDelta: 1200
                 }
-            }, //   3DM MOD站
+            }, //            3DM MOD站
             ali213_www: {
                 SiteTypeID: 0,
                 host: 'www.ali213.net',
@@ -1073,7 +1136,7 @@
                     scrollElement: '.page_fenye',
                     scrollDelta: 400
                 }
-            }, //     游侠网
+            }, //              游侠网
             ali213_gl: {
                 SiteTypeID: 0,
                 host: 'gl.ali213.net',
@@ -1087,7 +1150,7 @@
                     scrollElement: '.page_fenye',
                     scrollDelta: 400
                 }
-            }, //      游侠网 - 攻略
+            }, //               游侠网 - 攻略
             ali213_pic: {
                 SiteTypeID: 0,
                 host: 'pic.ali213.net',
@@ -1100,7 +1163,7 @@
                     replaceE: 'css;#image-show > a',
                     scrollDelta: 1200
                 }
-            }, //     游侠网 - 图库
+            }, //              游侠网 - 图库
             gamersky_ent: {
                 SiteTypeID: 0,
                 host: 'www.gamersky.com',
@@ -1114,7 +1177,7 @@
                     scrollElement: '.page_css',
                     scrollDelta: 100
                 }
-            }, //   游民星空
+            }, //            游民星空
             gamersky_gl: {
                 SiteTypeID: 0,
                 pager: {
@@ -1130,7 +1193,7 @@
                 function: {
                     before: gamersky_gl_functionBefore
                 }
-            }, //    游民星空 - 攻略
+            }, //             游民星空 - 攻略
             nexusmods: {
                 SiteTypeID: 0,
                 host: 'www.nexusmods.com',
@@ -1143,7 +1206,7 @@
                     replaceE: 'css;.pagination',
                     scrollDelta: 3000
                 }
-            }, //      NexusMods
+            }, //               NexusMods
             steamcommunity: {
                 SiteTypeID: 0,
                 host: 'steamcommunity.com',
@@ -1156,7 +1219,7 @@
                     scriptType: 2,
                     scrollDelta: 1500
                 }
-            }, // 创意工坊 - 项目列表
+            }, //          创意工坊 - 项目列表
             yikm: {
                 SiteTypeID: 0,
                 host: 'www.yikm.net',
@@ -1168,7 +1231,7 @@
                     replaceE: 'css;ul.pager',
                     scrollDelta: 1500
                 }
-            }, //           小霸王其乐无穷
+            }, //                    小霸王其乐无穷
             cs_rin_ru: {
                 SiteTypeID: 0,
                 host: 'cs.rin.ru',
@@ -1190,7 +1253,7 @@
                 function: {
                     before: cs_rin_ru_functionBefore
                 }
-            }, //           cs.rin.ru - 各版块帖子列表
+            }, //               cs.rin.ru - 各版块帖子列表
             cs_rin_ru_viewtopic: {
                 SiteTypeID: 0,
                 pager: {
@@ -1201,7 +1264,7 @@
                     replaceE: 'css;#pagecontent >table:not(.tablebg), #pageheader p.gensmall',
                     scrollDelta: 1500
                 }
-            }, // cs.rin.ru - 帖子内
+            }, //     cs.rin.ru - 帖子内
             cs_rin_ru_search: {
                 SiteTypeID: 0,
                 pager: {
@@ -1212,7 +1275,7 @@
                     replaceE: 'css;#wrapcentre > div',
                     scrollDelta: 1500
                 }
-            }, //    cs.rin.ru - 搜索页
+            }, //        cs.rin.ru - 搜索页
             crackhub: {
                 SiteTypeID: 0,
                 host: 'crackhub.site',
@@ -1225,7 +1288,7 @@
                     replaceE: 'css;nav.paging-navigation',
                     scrollDelta: 2000
                 }
-            },
+            }, //                Crackhub213
             fitgirl: {
                 SiteTypeID: 0,
                 host: 'fitgirl-repacks.site',
@@ -1237,7 +1300,7 @@
                     replaceE: 'css;nav.paging-navigation',
                     scrollDelta: 2000
                 }
-            },
+            }, //                 FitGirl Repacks
             pianku: {
                 SiteTypeID: 0,
                 host: /pianku/,
@@ -1280,6 +1343,19 @@
                     before: src_original_functionBefore
                 }
             }, //       NO视频
+            ddrk: {
+                SiteTypeID: 0,
+                host: 'ddrk.me',
+                functionStart: function() {if (location.pathname === '/' || location.pathname.indexOf('/category/') > -1 || location.pathname.indexOf('/tag/') > -1) {curSite = DBSite.ddrk;}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.next',
+                    pageElement: 'css;.post-box-list > article',
+                    insertPosition: ['css;.post-box-list', 3],
+                    replaceE: 'css;.pagination_wrap',
+                    scrollDelta: 1500
+                }
+            }, //            低端影视
             nfmovies: {
                 SiteTypeID: 0,
                 host: 'www.nfmovies.com',
@@ -1296,19 +1372,6 @@
                     before: nfmovies_functionBefore
                 }
             }, //        奈菲影视
-            ddrk: {
-                SiteTypeID: 0,
-                host: 'ddrk.me',
-                functionStart: function() {if (location.pathname === '/' || location.pathname.indexOf('/category/') > -1 || location.pathname.indexOf('/tag/') > -1) {curSite = DBSite.ddrk;}},
-                pager: {
-                    type: 1,
-                    nextLink: 'css;a.next',
-                    pageElement: 'css;.post-box-list > article',
-                    insertPosition: ['css;.post-box-list', 3],
-                    replaceE: 'css;.pagination_wrap',
-                    scrollDelta: 1500
-                }
-            }, //            低端影视
             zxzj: {
                 SiteTypeID: 0,
                 host: 'www.zxzj.me',
@@ -1327,22 +1390,6 @@
                     before: nfmovies_functionBefore
                 }
             }, //            在线之家
-            zhenbuka: {
-                SiteTypeID: 0,
-                host: ['www.zhenbuka3.com', 'www.zhenbuka5.com'],
-                functionStart: function() {if (location.pathname.indexOf('/vodtype/') > -1) {curSite = DBSite.zhenbuka;}},
-                pager: {
-                    type: 1,
-                    nextLink: '//ul[contains(@class, "stui-page")]/li/a[contains(text(), "下一页")]',
-                    pageElement: 'css;ul.stui-vodlist > li',
-                    insertPosition: ['css;ul.stui-vodlist', 3],
-                    replaceE: 'css;ul.stui-page',
-                    scrollDelta: 1500
-                },
-                function: {
-                    before: nfmovies_functionBefore
-                }
-            }, //        真不卡影院
             _91mjw: {
                 SiteTypeID: 0,
                 host: '91mjw.com',
@@ -1359,6 +1406,22 @@
                     before: src_original_functionBefore
                 }
             }, //          91 美剧网
+            zhenbuka: {
+                SiteTypeID: 0,
+                host: ['www.zhenbuka3.com', 'www.zhenbuka5.com'],
+                functionStart: function() {if (location.pathname.indexOf('/vodtype/') > -1) {curSite = DBSite.zhenbuka;}},
+                pager: {
+                    type: 1,
+                    nextLink: '//ul[contains(@class, "stui-page")]/li/a[contains(text(), "下一页")]',
+                    pageElement: 'css;ul.stui-vodlist > li',
+                    insertPosition: ['css;ul.stui-vodlist', 3],
+                    replaceE: 'css;ul.stui-page',
+                    scrollDelta: 1500
+                },
+                function: {
+                    before: nfmovies_functionBefore
+                }
+            }, //        真不卡影院
             dm233: {
                 SiteTypeID: 0,
                 host: 'www.dm233.cc',
@@ -1377,7 +1440,7 @@
                     replaceE: 'css;.pagelist',
                     scrollDelta: 1000
                 }
-            }, //           233 动漫
+            }, //         233 动漫
             dm233_article: {
                 SiteTypeID: 0,
                 pager: {
@@ -1388,7 +1451,7 @@
                     replaceE: 'css;.pagelist',
                     scrollDelta: 1000
                 }
-            }, //   233 动漫 - 动漫情报/资讯
+            }, // 233 动漫 - 动漫情报/资讯
             dm233_rank: {
                 SiteTypeID: 0,
                 pager: {
@@ -1399,7 +1462,7 @@
                     replaceE: 'css;.pagelist',
                     scrollDelta: 1000
                 }
-            }, //      233 动漫 - 排行榜
+            }, //    233 动漫 - 排行榜
             agefans: {
                 SiteTypeID: 0,
                 host: 'www.agefans.cc',
@@ -1418,7 +1481,7 @@
                     replaceE: 'css;#container .blockcontent > div[style]:not([class])',
                     scrollDelta: 1000
                 }
-            }, //         AGE 动漫 - 全部/搜索
+            }, //       AGE 动漫 - 全部/搜索
             agefans_: {
                 SiteTypeID: 0,
                 pager: {
@@ -1429,7 +1492,7 @@
                     replaceE: 'css;#container .blockcontent > div[style]:not([class])',
                     scrollDelta: 1000
                 }
-            }, //        AGE 动漫 - 其他页
+            }, //      AGE 动漫 - 其他页
             agefans_rank: {
                 SiteTypeID: 0,
                 pager: {
@@ -1440,7 +1503,7 @@
                     replaceE: 'css;#container > ul[style]:not([class])',
                     scrollDelta: 1000
                 }
-            }, //    AGE 动漫 - 排行榜
+            }, //  AGE 动漫 - 排行榜
             yhdm: {
                 SiteTypeID: 0,
                 host: 'www.imomoe.la',
@@ -1458,7 +1521,7 @@
                     mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 1000
                 }
-            }, //            樱花动漫
+            }, //          樱花动漫
             yhdm_: {
                 SiteTypeID: 0,
                 pager: {
@@ -1470,7 +1533,7 @@
                     mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 1000
                 }
-            }, //           樱花动漫 - 搜索页等
+            }, //         樱花动漫 - 搜索页等
             zzzfun: {
                 SiteTypeID: 0,
                 host: 'www.zzzfun.com',
@@ -1491,7 +1554,7 @@
                 function: {
                     before: src_original_functionBefore
                 }
-            }, //          ZzzFun 动漫
+            }, //        ZzzFun 动漫
             zzzfun_search: {
                 SiteTypeID: 0,
                 pager: {
@@ -1505,7 +1568,7 @@
                 function: {
                     before: src_original_functionBefore
                 }
-            }, //   ZzzFun 动漫 - 搜索页
+            }, // ZzzFun 动漫 - 搜索页
             yinfans: {
                 SiteTypeID: 0,
                 host: 'www.yinfans.net',
@@ -1518,7 +1581,7 @@
                     replaceE: 'css;.pagination',
                     scrollDelta: 1500
                 }
-            }, //       音范丝
+            }, //         音范丝
             btbtt: {
                 SiteTypeID: 0,
                 host: /btbtt/,
@@ -1530,7 +1593,7 @@
                     replaceE: 'css;.page',
                     scrollDelta: 2000
                 }
-            }, //         BT 之家
+            }, //           BT 之家
             bdys: {
                 SiteTypeID: 0,
                 host: 'www.bd2020.com',
@@ -1541,7 +1604,7 @@
                     nextText: '加载更多',
                     scrollDelta: 1000
                 }
-            }, //          BD 影视
+            }, //            BD 影视
             gaoqing_fm: {
                 SiteTypeID: 0,
                 host: 'gaoqing.fm',
@@ -1551,7 +1614,7 @@
                     intervals: 1500,
                     scrollDelta: 1000
                 }
-            }, //    高清电台
+            }, //      高清电台
             yyds: {
                 SiteTypeID: 0,
                 host: 'yyds.fans',
@@ -1567,7 +1630,7 @@
                     replaceE: 'css;nav.pagination',
                     scrollDelta: 1100
                 }
-            }, //          YYDS 电影
+            }, //            YYDS 电影
             kisssub: {
                 SiteTypeID: 0,
                 host: 'www.kisssub.org',
@@ -1641,7 +1704,7 @@
                     replaceE: 'css;ul.pagination',
                     scrollDelta: 900
                 }
-            }, //         SkrBT
+            }, //           SkrBT
             rarbgprx: {
                 SiteTypeID: 0,
                 host: /rarbg/,
@@ -1654,7 +1717,7 @@
                     replaceE: 'css;#pager_links',
                     scrollDelta: 1000
                 }
-            }, //      RARBG
+            }, //        RARBG
             subdh: {
                 SiteTypeID: 0,
                 host: 'subdh.com',
@@ -1671,7 +1734,7 @@
                     replaceE: 'css;ul.pagination',
                     scrollDelta: 1000
                 }
-            }, //         SubDH
+            }, //           SubDH
             subdh_search: {
                 SiteTypeID: 0,
                 pager: {
@@ -1682,7 +1745,7 @@
                     replaceE: 'css;ul.pagination',
                     scrollDelta: 1000
                 }
-            }, //  SubDH - 搜索页
+            }, //    SubDH - 搜索页
             mini4k: {
                 SiteTypeID: 0,
                 host: 'www.mini4k.com',
@@ -1695,7 +1758,7 @@
                     replaceE: 'css;.pagination',
                     scrollDelta: 2000
                 }
-            }, //        MINI4K
+            }, //          MINI4K
             bthaha: {
                 SiteTypeID: 0,
                 host: /bthaha/,
@@ -1715,7 +1778,7 @@
                 function: {
                     before: bthaha_functionBefore
                 }
-            }, //        BTHaha
+            }, //          BTHaha
             a4k: {
                 SiteTypeID: 0,
                 host: 'www.a4k.net',
@@ -1770,6 +1833,33 @@
                     scrollDelta: 800
                 }
             }, //   SubHD - forum（字幕）
+            qidian: {
+                SiteTypeID: 0,
+                host: 'www.qidian.com',
+                functionStart: function() {if (location.pathname.indexOf('/all/') > -1) {curSite = DBSite.qidian;}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a[class*="pagination-next"][href]',
+                    pageElement: 'css;ul.all-img-list > li',
+                    insertPosition: ['css;ul.all-img-list', 3],
+                    replaceE: 'css;#page-container',
+                    scrollDelta: 900
+                }
+            }, //          起点小说
+            qidian_read: {
+                SiteTypeID: 0,
+                host: 'read.qidian.com',
+                functionStart: function() {if (location.pathname.indexOf('/chapter/') > -1) {curSite = DBSite.qidian_read; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.admire-wrap {display: none !important;}';}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a[id$="chapterNext"][href]',
+                    pageElement: 'css;.main-text-wrap > div:not(.admire-wrap)',
+                    insertPosition: ['css;.main-text-wrap', 3],
+                    replaceE: 'css;.chapter-control, title',
+                    history: true,
+                    scrollDelta: 900
+                }
+            }, //     起点小说 - 阅读页
             baoshuu: {
                 SiteTypeID: 0,
                 host: 'www.baoshuu.com',
@@ -1798,33 +1888,6 @@
                     scrollDelta: 900
                 }
             }, //       宝书网（小说）- 手机版
-            qidian: {
-                SiteTypeID: 0,
-                host: 'www.qidian.com',
-                functionStart: function() {if (location.pathname.indexOf('/all/') > -1) {curSite = DBSite.qidian;}},
-                pager: {
-                    type: 1,
-                    nextLink: 'css;a[class*="pagination-next"][href]',
-                    pageElement: 'css;ul.all-img-list > li',
-                    insertPosition: ['css;ul.all-img-list', 3],
-                    replaceE: 'css;#page-container',
-                    scrollDelta: 900
-                }
-            }, //          起点小说
-            qidian_read: {
-                SiteTypeID: 0,
-                host: 'read.qidian.com',
-                functionStart: function() {if (location.pathname.indexOf('/chapter/') > -1) {curSite = DBSite.qidian_read; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.admire-wrap {display: none !important;}';}},
-                pager: {
-                    type: 1,
-                    nextLink: 'css;a[id$="chapterNext"][href]',
-                    pageElement: 'css;.main-text-wrap > div:not(.admire-wrap)',
-                    insertPosition: ['css;.main-text-wrap', 3],
-                    replaceE: 'css;.chapter-control, title',
-                    history: true,
-                    scrollDelta: 900
-                }
-            }, //     起点小说 - 阅读页
             linovel: {
                 SiteTypeID: 0,
                 host: 'www.linovel.net',
@@ -1890,6 +1953,357 @@
                     before: src_original_functionBefore
                 }
             }, //   哔哩轻小说 - 全本
+            cartoonmad: {
+                SiteTypeID: 0,
+                host: ['www.cartoonmad.com','www.cartoonmad.cc'],
+                functionStart: function() {if (location.pathname.indexOf('/comic/') > -1) {
+                    document.lastElementChild.appendChild(document.createElement('style')).textContent = 'body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:not(:first-child) {display: none !important;} body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img {max-width: 100%;height: auto;display: block !important;margin: 0 auto !important;}';
+                    document.querySelector('body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child > a').href = 'javascript:void(0);'; // 清理图片上的链接
+                    curSite = DBSite.cartoonmad;
+                } else if (location.pathname != '/') {
+                    curSite = DBSite.cartoonmad_list;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: cartoonmad_functionNext,
+                    pageElement: 'css;body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img',
+                    insertPosition: ['css;body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child > a', 3],
+                    replaceE: 'css;body > table > tbody > tr:nth-child(2), body > table > tbody > tr:nth-child(5)',
+                    mimeType: 'text/html; charset=big5',
+                    scrollDelta: 2000
+                }
+            }, //        动漫狂
+            cartoonmad_list: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//a[@class="pages"][contains(text(), "下一頁")]',
+                    pageElement: 'css;td[background="/image/content_box4.gif"]+td > table > tbody > tr',
+                    insertPosition: ['css;td[background="/image/content_box4.gif"]+td > table > tbody', 3],
+                    replaceE: '//a[@class="pages"]/parent::td/parent::tr | //font[contains(text(), "目前在第")]',
+                    mimeType: 'text/html; charset=big5',
+                    scrollDelta: 1000
+                }
+            }, //   动漫狂 - 分类/搜索页
+            manhuacat: {
+                SiteTypeID: 0,
+                host: 'www.manhuacat.com',
+                functionStart: function() {if (/\/manga\/\d+\/.+\.html/.test(location.pathname)) {
+                    if (getCookie('is_pull') == 'true') { // 强制关闭 [下拉] 模式
+                        document.cookie='is_pull=false; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; // 写入 Cookie 关闭 [下拉] 模式
+                        location.reload(); // 刷新网页
+                    }
+                    setTimeout(manhuacat_init, 100);
+                    curSite = DBSite.manhuacat; document.lastElementChild.appendChild(document.createElement('style')).textContent = '#left, #right, #pull-load, .loading, .pagination, footer {display: none !important;} .img-content > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}'; // 隐藏不需要的元素，调整图片
+                } else if (location.pathname.indexOf('/list') > -1) {
+                    curSite = DBSite.manhuacat_list;
+                } else if (location.pathname.indexOf('/search') > -1 || location.pathname.indexOf('/update') > -1) {
+                    curSite = DBSite.manhuacat_search;
+                }},
+                pager: {
+                    type: 4,
+                    nextLink: manhuacat_functionNext,
+                    insertPosition: ['css;.img-content', 3],
+                    insertElement: manhuacat_insertElement,
+                    replaceE: 'css;.comic-detail > .breadcrumb-bar, .comic-detail >h2.h4, title, .vg-r-data, body > script:not([src])',
+                    intervals: 2000,
+                    scrollDelta: 3000
+                }
+            }, //         漫画猫
+            manhuacat_list: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[contains(@class, "pagination")]//a[@href][contains(text(), "下一页") or contains(text(), "下页")]',
+                    pageElement: 'css;.comic-main-section > *',
+                    insertPosition: ['css;.comic-main-section', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1000
+                },
+                function: {
+                    before: src_original_functionBefore
+                }
+            }, //    漫画猫 - 分类页
+            manhuacat_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[contains(@class, "pagination")]//a[@href][contains(text(), "下一页") or contains(text(), "下页")]',
+                    pageElement: 'css;.comic-main-section .row > div',
+                    insertPosition: ['css;.comic-main-section .row', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1000
+                }
+            }, //  漫画猫 - 搜索页
+            manhuadb: {
+                SiteTypeID: 0,
+                host: 'www.manhuadb.com',
+                functionStart: function() {if (/\/manhua\/\d+\/.+\.html/.test(location.pathname)) {
+                    document.lastElementChild.appendChild(document.createElement('style')).textContent = '.row.m-0.pt-3.ad_2_wrap, .row.m-0.ad_1_wrap, .pagination.justify-content-center, #left, #right {display: none !important;}';
+                    if (document.querySelector('img.img-fluid.show-pic')) document.querySelector('img.img-fluid.show-pic').style.display = 'none'; // 隐藏第一个图片（避免重复）
+                    setTimeout(manhuadb_init, 100);
+                    curSite = DBSite.manhuadb;
+                } else if (location.pathname.indexOf('/list') > -1) {
+                    curSite = DBSite.manhuacat_list;
+                } else if (location.pathname.indexOf('/search') > -1 || location.pathname.indexOf('/update') > -1) {
+                    curSite = DBSite.manhuacat_search;
+                }},
+                pager: {
+                    type: 4,
+                    nextLink: manhuadb_functionNext,
+                    pageElement: 'css;body > script:not([type]):not([src]), .vg-r-data, ol.links-of-books.num_div',
+                    insertPosition: ['css;.pjax-container', 3],
+                    insertElement: manhuadb_insertElement,
+                    intervals: 5000,
+                    scrollDelta: 3000
+                }
+            }, //          漫画 DB
+            hicomic: {
+                SiteTypeID: 0,
+                host: 'www.hicomic.net',
+                functionStart: function() {if (location.pathname.indexOf('/chapters/') > -1) {
+                    document.lastElementChild.appendChild(document.createElement('style')).textContent = '.content {height: auto !important;} .footer, .left_cursor, .right_cursor, .finish {display: none !important;} .content > img {display: block !important;margin: 0 auto !important;}';
+                    setTimeout(hicomic_init, 100);
+                    curSite = DBSite.hicomic;
+                }},
+                pager: {
+                    type: 4,
+                    nextLink: hicomic_functionNext,
+                    insertPosition: ['css;.content', 3],
+                    insertElement: hicomic_insertElement,
+                    intervals: 5000,
+                    scrollDelta: 3000
+                }
+            }, //           HiComic (嗨漫画)
+            dmzj: {
+                SiteTypeID: 0,
+                host: 'www.dmzj.com',
+                functionStart: function() {if (location.pathname.indexOf('/view/') > -1) {
+                    if (getCookie('display_mode') != '1') { // 强制开启 [上下滚动阅读] 模式
+                        document.cookie='display_mode=1; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; // 写入 Cookie 开启 [上下滚动阅读] 模式
+                        location.reload(); // 刷新网页
+                    }
+                    setTimeout(dmzj_init, 100);
+                    curSite = DBSite.dmzj; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'p.mh_curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} .comic_wraCon > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}'; // 隐藏中间的页数信息
+                } else if (location.pathname.indexOf('/category') > -1 || location.pathname.indexOf('/update') > -1) {
+                    curSite = DBSite.dmzj_list; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.wrap_mhlist_l.con_left, .wrap_list {height: auto!important;}';
+                } else if (location.pathname.indexOf('/rank') > -1) {
+                    curSite = DBSite.dmzj_rank; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.wrap_mhlist_l.con_left {height: auto!important;}';
+                }},
+                pager: {
+                    type: 4,
+                    nextLink: dmzj_functionNext,
+                    insertPosition: ['css;.comic_wraCon', 3],
+                    insertElement: dmzj_insertElement,
+                    replaceE: 'css;.wrap_last_mid, .wrap_last_head, title',
+                    intervals: 2000,
+                    scrollDelta: 3000
+                }
+            }, //              动漫之家 - 原创
+            dmzj_list: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.pg_next[href]',
+                    pageElement: 'css;ul.list_con_li > li',
+                    insertPosition: ['css;ul.list_con_li', 3],
+                    replaceE: 'css;.page',
+                    scrollDelta: 1000
+                }
+            }, //         动漫之家 - 原创 - 分类页
+            dmzj_rank: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.pg_next[href]',
+                    pageElement: 'css;.ph_r_con_li > div:not(.ad_column)',
+                    insertPosition: ['css;.ph_r_con_li', 3],
+                    replaceE: 'css;.page',
+                    scrollDelta: 1000
+                }
+            }, //         动漫之家 - 原创 - 排行榜
+            dmzj_manhua: {
+                SiteTypeID: 0,
+                host: 'manhua.dmzj.com',
+                functionStart: function() {if (/\/\d+\.shtml/.test(location.pathname)) {
+                    let chapterScroll = document.getElementById('qiehuan_txt') // 强制为 [上下滚动阅读] 模式
+                    if (chapterScroll && chapterScroll.textContent === '切换到上下滚动阅读') {chapterScroll.click();}
+                    setTimeout(dmzj_manhua_init, 100);
+                    curSite = DBSite.dmzj_manhua; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'p.curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} #center_box > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}'; // 隐藏中间的页数信息
+                /*} else if (location.pathname.indexOf('/tags/search') > -1) {
+                    curSite = DBSite.dmzj_manhua_search;
+                } else if (location.pathname.indexOf('/tags/') > -1) {
+                    curSite = DBSite.dmzj_manhua_list;*/
+                } else if (location.pathname.indexOf('/update') > -1) {
+                    curSite = DBSite.dmzj_manhua_update;
+                }},
+                pager: {
+                    type: 4,
+                    nextLink: dmzj_manhua_functionNext,
+                    insertPosition: ['css;#center_box', 3],
+                    insertElement: dmzj_manhua_insertElement,
+                    replaceE: 'css;.display_graybg, title',
+                    intervals: 2000,
+                    scrollDelta: 3000
+                }
+            }, //       动漫之家 - 日漫
+            dmzj_manhua_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="pages"]/a[contains(text(), "下一页")]',
+                    forceHTTPS: true,
+                    pageElement: 'css;.tcaricature_block ul',
+                    insertPosition: ['css;.tcaricature_block', 3],
+                    replaceE: 'css;.pages',
+                    scrollDelta: 1000
+                },
+                function: {
+                    after: function() {
+                        document.body.appendChild(document.createElement('script')).src = document.querySelector('head > script[src*="/js/ps.js"]').src;
+                    }
+                }
+            }, //动漫之家 - 日漫 - 搜索页
+            dmzj_manhua_list: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="pages"]/a[contains(text(), "下一页")]',
+                    forceHTTPS: true,
+                    pageElement: 'css;.tcaricature_block ul',
+                    insertPosition: ['css;.pages', 1],
+                    replaceE: 'css;.pages',
+                    scrollDelta: 1000
+                },
+                function: {
+                    after: function() {
+                        document.body.appendChild(document.createElement('script')).src = document.querySelector('head > script[src*="/js/csearch.js"]').src;
+                    }
+                }
+            }, //  动漫之家 - 日漫 - 分类页
+            dmzj_manhua_update: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="pages"]/a[contains(text(), "下一页")]',
+                    pageElement: 'css;.newpic_content > *:not(.pages)',
+                    insertPosition: ['css;.newpic_content', 3],
+                    replaceE: 'css;.pages',
+                    scrollDelta: 1000
+                }
+            }, //动漫之家 - 日漫 - 最新更新
+            copymanga: {
+                SiteTypeID: 0,
+                host: 'www.copymanga.com',
+                functionStart: function() {if (location.pathname.indexOf('/chapter/') > -1) {
+                    curSite = DBSite.copymanga; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.upMember, .comicContainerAds, .footer {display: none !important;}';
+                } else if (location.pathname.indexOf('/comics') > -1) {
+                    curSite = DBSite.copymanga_list;
+                }},
+                pager: {
+                    type: 4,
+                    nextLink: copymanga_functionNext,
+                    insertPosition: ['css;ul.comicContent-image-list > li:first-child', 1],
+                    insertElement: copymanga_insertElement,
+                    replaceE: 'css;.disposableData, .disposablePass, .disposableUrlPrefix, .disposableUrlSuffix, .footer, h4.header, title',
+                    intervals: 5000,
+                    scrollDelta: 3000
+                }
+            }, //         拷贝漫画
+            copymanga_list: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;li.next > a[href]',
+                    pageElement: 'css;.exemptComic-box > div',
+                    insertPosition: ['css;.exemptComic-box', 3],
+                    replaceE: 'css;ul.page-all',
+                    scrollDelta: 1500
+                },
+                function: {
+                    before: src_src_functionBefore
+                }
+            }, //    拷贝漫画 - 分类页
+            gufengmh: {
+                SiteTypeID: 0,
+                host: /gufengmh/,
+                functionStart: function() {if (/\/\d+.+\.html/.test(location.pathname)) {
+                    let chapterScroll = document.getElementById('chapter-scroll') // 强制为 [下拉阅读] 模式
+                    if (chapterScroll && chapterScroll.className === '') {chapterScroll.click();}
+                    curSite = DBSite.gufengmh; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'p.img_info {display: none !important;}'; // 隐藏中间的页数信息
+                } else if (location.pathname.indexOf('/update') > -1 || location.pathname.indexOf('/list') > -1 || location.pathname.indexOf('/search') > -1) {
+                    curSite = DBSite.gufengmh_list;
+                }},
+                pager: {
+                    type: 4,
+                    nextLink: gufengmh_functionNext,
+                    pageElement: 'css;body > script:first-child',
+                    insertPosition: ['css;#images', 3],
+                    insertElement: gufengmh_insertElement,
+                    intervals: 5000,
+                    scrollDelta: 4000
+                }
+            }, //          古风漫画网
+            gufengmh_list: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;li.next > a[href]',
+                    pageElement: 'css;ul.book-list > li',
+                    insertPosition: ['css;ul.book-list', 3],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1000
+                }
+            }, //     古风漫画网 - 分类页
+            szcdmj: {
+                SiteTypeID: 0,
+                host: 'www.szcdmj.com',
+                functionStart: function() {if (location.pathname.indexOf('/szcchapter/') > -1) {curSite = DBSite.szcdmj; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.header {opacity: 0.3 !important;}';}},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="fanye"][1]/a[@href][text()="下一页" or text()="下一话"]',
+                    pageElement: 'css;.comicpage > div,title',
+                    insertPosition: ['css;.comicpage', 3],
+                    replaceE: 'css;.fanye,h1.title',
+                    scrollDelta: 2000
+                },
+                function: {
+                    before: szcdmj_functionBefore
+                }
+            }, //            砂之船动漫家
+            mangabz: {
+                SiteTypeID: 0,
+                host: 'mangabz.com',
+                functionStart: function() {if (/\/m\d+/.test(location.pathname)) {
+                    setTimeout(mangabz_init, 500);
+                    curSite = DBSite.mangabz;
+                    document.lastElementChild.appendChild(document.createElement('style')).textContent = 'body > .container > div:not([id]) {display: none !important;} .top-bar {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}';
+                } else if (/\/\d+bz\//.test(location.pathname)) {
+                    if (document.querySelector('.detail-list-form-more')) document.querySelector('.detail-list-form-more').click();
+                } else if (location.pathname.indexOf('/manga-list') > -1 || location.pathname === '/search') {
+                    curSite = DBSite.mangabz_list;
+                }},
+                pager: {
+                    type: 4,
+                    nextLink: mangabz_functionNext,
+                    insertPosition: ['css;#cp_img', 3],
+                    insertElement: mangabz_insertElement,
+                    replaceE: 'css;p.top-title, body > .container > div:not([id]), title',
+                    intervals: 500,
+                    scrollDelta: 1000
+                }
+            }, //           Mangabz 漫画
+            mangabz_list: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="page-pagination"]//a[@href][contains(text(), ">")]',
+                    pageElement: 'css;ul.mh-list > li',
+                    insertPosition: ['css;ul.mh-list', 3],
+                    replaceE: 'css;.page-pagination',
+                    scrollDelta: 800
+                }
+            }, //      Mangabz 漫画 - 分类/搜索页
             _423down: {
                 SiteTypeID: 0,
                 host: 'www.423down.com',
@@ -1902,7 +2316,7 @@
                     replaceE: 'css;div.paging',
                     scrollDelta: 1500
                 }
-            },
+            }, //               423Down
             iao_su: {
                 SiteTypeID: 0,
                 host: 'iao.su',
@@ -2209,7 +2623,7 @@
                     replaceE: 'css;nav.navigation.posts-navigation',
                     scrollDelta: 1500
                 }
-            }, //                 下面这几个都是国外博客网站
+            }, //                 (下面这几个都是国外博客网站)
             winaero: {
                 SiteTypeID: 0,
                 host: 'winaero.com',
@@ -2277,387 +2691,6 @@
                     scrollDelta: 1500
                 }
             },
-            cartoonmad: {
-                SiteTypeID: 0,
-                host: ['www.cartoonmad.com','www.cartoonmad.cc'],
-                functionStart: function() {if (location.pathname.indexOf('/comic/') > -1) {
-                    document.lastElementChild.appendChild(document.createElement('style')).textContent = 'body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:not(:first-child) {display: none !important;} body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img {max-width: 100%;height: auto;display: block !important;margin: 0 auto !important;}';
-                    document.querySelector('body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child > a').href = 'javascript:void(0);'; // 清理图片上的链接
-                    curSite = DBSite.cartoonmad;
-                } else if (location.pathname != '/') {
-                    curSite = DBSite.cartoonmad_list;
-                }},
-                pager: {
-                    type: 1,
-                    nextLink: cartoonmad_functionNext,
-                    pageElement: 'css;body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img',
-                    insertPosition: ['css;body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child > a', 3],
-                    replaceE: 'css;body > table > tbody > tr:nth-child(2), body > table > tbody > tr:nth-child(5)',
-                    mimeType: 'text/html; charset=big5',
-                    scrollDelta: 2000
-                }
-            }, //        动漫狂
-            cartoonmad_list: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//a[@class="pages"][contains(text(), "下一頁")]',
-                    pageElement: 'css;td[background="/image/content_box4.gif"]+td > table > tbody > tr',
-                    insertPosition: ['css;td[background="/image/content_box4.gif"]+td > table > tbody', 3],
-                    replaceE: '//a[@class="pages"]/parent::td/parent::tr | //font[contains(text(), "目前在第")]',
-                    mimeType: 'text/html; charset=big5',
-                    scrollDelta: 1000
-                }
-            }, //   动漫狂 - 分类/搜索页
-            manhuacat: {
-                SiteTypeID: 0,
-                host: 'www.manhuacat.com',
-                functionStart: function() {if (/\/manga\/\d+\/.+\.html/.test(location.pathname)) {
-                    if (getCookie('is_pull') == 'true') { // 强制关闭 [下拉] 模式
-                        document.cookie='is_pull=false; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; // 写入 Cookie 关闭 [下拉] 模式
-                        location.reload(); // 刷新网页
-                    }
-                    setTimeout(manhuacat_init, 100);
-                    curSite = DBSite.manhuacat; document.lastElementChild.appendChild(document.createElement('style')).textContent = '#left, #right, #pull-load, .loading, .pagination, footer {display: none !important;} .img-content > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}'; // 隐藏不需要的元素，调整图片
-                } else if (location.pathname.indexOf('/list') > -1) {
-                    curSite = DBSite.manhuacat_list;
-                } else if (location.pathname.indexOf('/search') > -1 || location.pathname.indexOf('/update') > -1) {
-                    curSite = DBSite.manhuacat_search;
-                }},
-                pager: {
-                    type: 4,
-                    nextLink: manhuacat_functionNext,
-                    insertPosition: ['css;.img-content', 3],
-                    insertElement: manhuacat_insertElement,
-                    replaceE: 'css;.comic-detail > .breadcrumb-bar, .comic-detail >h2.h4, title, .vg-r-data, body > script:not([src])',
-                    intervals: 2000,
-                    scrollDelta: 3000
-                }
-            }, //         漫画猫
-            manhuacat_list: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//div[contains(@class, "pagination")]//a[@href][contains(text(), "下一页") or contains(text(), "下页")]',
-                    pageElement: 'css;.comic-main-section > *',
-                    insertPosition: ['css;.comic-main-section', 3],
-                    replaceE: 'css;.pagination',
-                    scrollDelta: 1000
-                },
-                function: {
-                    before: src_original_functionBefore
-                }
-            }, //    漫画猫 - 分类页
-            manhuacat_search: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//div[contains(@class, "pagination")]//a[@href][contains(text(), "下一页") or contains(text(), "下页")]',
-                    pageElement: 'css;.comic-main-section .row > div',
-                    insertPosition: ['css;.comic-main-section .row', 3],
-                    replaceE: 'css;.pagination',
-                    scrollDelta: 1000
-                }
-            }, //  漫画猫 - 搜索页
-            manhuadb: {
-                SiteTypeID: 0,
-                host: 'www.manhuadb.com',
-                functionStart: function() {if (/\/manhua\/\d+\/.+\.html/.test(location.pathname)) {
-                    document.lastElementChild.appendChild(document.createElement('style')).textContent = '.row.m-0.pt-3.ad_2_wrap, .row.m-0.ad_1_wrap, .pagination.justify-content-center, #left, #right {display: none !important;}';
-                    if (document.querySelector('img.img-fluid.show-pic')) document.querySelector('img.img-fluid.show-pic').style.display = 'none'; // 隐藏第一个图片（避免重复）
-                    setTimeout(manhuadb_init, 100);
-                    curSite = DBSite.manhuadb;
-                } else if (location.pathname.indexOf('/list') > -1) {
-                    curSite = DBSite.manhuacat_list;
-                } else if (location.pathname.indexOf('/search') > -1 || location.pathname.indexOf('/update') > -1) {
-                    curSite = DBSite.manhuacat_search;
-                }},
-                pager: {
-                    type: 4,
-                    nextLink: manhuadb_functionNext,
-                    pageElement: 'css;body > script:not([type]):not([src]), .vg-r-data, ol.links-of-books.num_div',
-                    insertPosition: ['css;.pjax-container', 3],
-                    insertElement: manhuadb_insertElement,
-                    intervals: 5000,
-                    scrollDelta: 3000
-                }
-            }, //          漫画 DB
-            hicomic: {
-                SiteTypeID: 0,
-                host: 'www.hicomic.net',
-                functionStart: function() {if (location.pathname.indexOf('/chapters/') > -1) {
-                    document.lastElementChild.appendChild(document.createElement('style')).textContent = '.content {height: auto !important;} .footer, .left_cursor, .right_cursor, .finish {display: none !important;} .content > img {display: block !important;margin: 0 auto !important;}';
-                    setTimeout(hicomic_init, 100);
-                    curSite = DBSite.hicomic;
-                }},
-                pager: {
-                    type: 4,
-                    nextLink: hicomic_functionNext,
-                    insertPosition: ['css;.content', 3],
-                    insertElement: hicomic_insertElement,
-                    intervals: 5000,
-                    scrollDelta: 3000
-                }
-            }, //           嗨漫画
-            dmzj: {
-                SiteTypeID: 0,
-                host: 'www.dmzj.com',
-                functionStart: function() {if (location.pathname.indexOf('/view/') > -1) {
-                    if (getCookie('display_mode') != '1') { // 强制开启 [上下滚动阅读] 模式
-                        document.cookie='display_mode=1; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; // 写入 Cookie 开启 [上下滚动阅读] 模式
-                        location.reload(); // 刷新网页
-                    }
-                    setTimeout(dmzj_init, 100);
-                    curSite = DBSite.dmzj; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'p.mh_curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} .comic_wraCon > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}'; // 隐藏中间的页数信息
-                } else if (location.pathname.indexOf('/category') > -1 || location.pathname.indexOf('/update') > -1) {
-                    curSite = DBSite.dmzj_list; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.wrap_mhlist_l.con_left, .wrap_list {height: auto!important;}';
-                } else if (location.pathname.indexOf('/rank') > -1) {
-                    curSite = DBSite.dmzj_rank; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.wrap_mhlist_l.con_left {height: auto!important;}';
-                }},
-                pager: {
-                    type: 4,
-                    nextLink: dmzj_functionNext,
-                    insertPosition: ['css;.comic_wraCon', 3],
-                    insertElement: dmzj_insertElement,
-                    replaceE: 'css;.wrap_last_mid, .wrap_last_head, title',
-                    intervals: 2000,
-                    scrollDelta: 3000
-                }
-            }, //              动漫之家 - 原创
-            dmzj_list: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: 'css;a.pg_next[href]',
-                    pageElement: 'css;ul.list_con_li > li',
-                    insertPosition: ['css;ul.list_con_li', 3],
-                    replaceE: 'css;.page',
-                    scrollDelta: 1000
-                }
-            }, //         动漫之家 - 原创 - 分类页
-            dmzj_rank: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: 'css;a.pg_next[href]',
-                    pageElement: 'css;.ph_r_con_li > div:not(.ad_column)',
-                    insertPosition: ['css;.ph_r_con_li', 3],
-                    replaceE: 'css;.page',
-                    scrollDelta: 1000
-                }
-            }, //         动漫之家 - 原创 - 排行榜
-            dmzj_manhua: {
-                SiteTypeID: 0,
-                host: 'manhua.dmzj.com',
-                functionStart: function() {if (/\/\d+\.shtml/.test(location.pathname)) {
-                    let chapterScroll = document.getElementById('qiehuan_txt') // 强制为 [上下滚动阅读] 模式
-                    if (chapterScroll && chapterScroll.textContent === '切换到上下滚动阅读') {chapterScroll.click();}
-                    setTimeout(dmzj_manhua_init, 100);
-                    curSite = DBSite.dmzj_manhua; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'p.curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} #center_box > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}'; // 隐藏中间的页数信息
-                /*} else if (location.pathname.indexOf('/tags/search') > -1) {
-                    curSite = DBSite.dmzj_manhua_search;
-                } else if (location.pathname.indexOf('/tags/') > -1) {
-                    curSite = DBSite.dmzj_manhua_list;*/
-                } else if (location.pathname.indexOf('/update') > -1) {
-                    curSite = DBSite.dmzj_manhua_update;
-                }},
-                pager: {
-                    type: 4,
-                    nextLink: dmzj_manhua_functionNext,
-                    insertPosition: ['css;#center_box', 3],
-                    insertElement: dmzj_manhua_insertElement,
-                    replaceE: 'css;.display_graybg, title',
-                    intervals: 2000,
-                    scrollDelta: 3000
-                }
-            }, //       动漫之家 - 日漫
-            dmzj_manhua_search: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="pages"]/a[contains(text(), "下一页")]',
-                    forceHTTPS: true,
-                    pageElement: 'css;.tcaricature_block ul',
-                    insertPosition: ['css;.tcaricature_block', 3],
-                    replaceE: 'css;.pages',
-                    scrollDelta: 1000
-                },
-                function: {
-                    after: function() {
-                        document.body.appendChild(document.createElement('script')).src = document.querySelector('head > script[src*="/js/ps.js"]').src;
-                    }
-                }
-            }, //动漫之家 - 日漫 - 搜索页
-            dmzj_manhua_list: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="pages"]/a[contains(text(), "下一页")]',
-                    forceHTTPS: true,
-                    pageElement: 'css;.tcaricature_block ul',
-                    insertPosition: ['css;.pages', 1],
-                    replaceE: 'css;.pages',
-                    scrollDelta: 1000
-                },
-                function: {
-                    after: function() {
-                        document.body.appendChild(document.createElement('script')).src = document.querySelector('head > script[src*="/js/csearch.js"]').src;
-                    }
-                }
-            }, //  动漫之家 - 日漫 - 分类页
-            dmzj_manhua_update: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="pages"]/a[contains(text(), "下一页")]',
-                    pageElement: 'css;.newpic_content > *:not(.pages)',
-                    insertPosition: ['css;.newpic_content', 3],
-                    replaceE: 'css;.pages',
-                    scrollDelta: 1000
-                }
-            }, //动漫之家 - 日漫 - 最新更新
-            copymanga: {
-                SiteTypeID: 0,
-                host: 'www.copymanga.com',
-                functionStart: function() {if (location.pathname.indexOf('/chapter/') > -1) {
-                    curSite = DBSite.copymanga; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.upMember, .comicContainerAds, .footer {display: none !important;}';
-                } else if (location.pathname.indexOf('/comics') > -1) {
-                    curSite = DBSite.copymanga_list;
-                }},
-                pager: {
-                    type: 4,
-                    nextLink: copymanga_functionNext,
-                    insertPosition: ['css;ul.comicContent-image-list > li:first-child', 1],
-                    insertElement: copymanga_insertElement,
-                    replaceE: 'css;.disposableData, .disposablePass, .disposableUrlPrefix, .disposableUrlSuffix, .footer, h4.header, title',
-                    intervals: 5000,
-                    scrollDelta: 3000
-                }
-            }, //         拷贝漫画
-            copymanga_list: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: 'css;li.next > a[href]',
-                    pageElement: 'css;.exemptComic-box > div',
-                    insertPosition: ['css;.exemptComic-box', 3],
-                    replaceE: 'css;ul.page-all',
-                    scrollDelta: 1500
-                },
-                function: {
-                    before: src_src_functionBefore
-                }
-            }, //    拷贝漫画 - 分类页
-            gufengmh: {
-                SiteTypeID: 0,
-                host: /gufengmh/,
-                functionStart: function() {if (/\/\d+.+\.html/.test(location.pathname)) {
-                    let chapterScroll = document.getElementById('chapter-scroll') // 强制为 [下拉阅读] 模式
-                    if (chapterScroll && chapterScroll.className === '') {chapterScroll.click();}
-                    curSite = DBSite.gufengmh; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'p.img_info {display: none !important;}'; // 隐藏中间的页数信息
-                } else if (location.pathname.indexOf('/update') > -1 || location.pathname.indexOf('/list') > -1 || location.pathname.indexOf('/search') > -1) {
-                    curSite = DBSite.gufengmh_list;
-                }},
-                pager: {
-                    type: 4,
-                    nextLink: gufengmh_functionNext,
-                    pageElement: 'css;body > script:first-child',
-                    insertPosition: ['css;#images', 3],
-                    insertElement: gufengmh_insertElement,
-                    intervals: 5000,
-                    scrollDelta: 4000
-                }
-            }, //          古风漫画网
-            gufengmh_list: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: 'css;li.next > a[href]',
-                    pageElement: 'css;ul.book-list > li',
-                    insertPosition: ['css;ul.book-list', 3],
-                    replaceE: 'css;ul.pagination',
-                    scrollDelta: 1000
-                }
-            }, //     古风漫画网 - 分类页
-            szcdmj: {
-                SiteTypeID: 0,
-                host: 'www.szcdmj.com',
-                functionStart: function() {if (location.pathname.indexOf('/szcchapter/') > -1) {curSite = DBSite.szcdmj; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.header {opacity: 0.3 !important;}';}},
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="fanye"][1]/a[@href][text()="下一页" or text()="下一话"]',
-                    pageElement: 'css;.comicpage > div,title',
-                    insertPosition: ['css;.comicpage', 3],
-                    replaceE: 'css;.fanye,h1.title',
-                    scrollDelta: 2000
-                },
-                function: {
-                    before: szcdmj_functionBefore
-                }
-            }, //            砂之船动漫家
-            mangabz: {
-                SiteTypeID: 0,
-                host: 'mangabz.com',
-                functionStart: function() {if (/\/m\d+/.test(location.pathname)) {
-                    setTimeout(mangabz_init, 500);
-                    curSite = DBSite.mangabz;
-                    document.lastElementChild.appendChild(document.createElement('style')).textContent = 'body > .container > div:not([id]) {display: none !important;} .top-bar {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}';
-                } else if (/\/\d+bz\//.test(location.pathname)) {
-                    if (document.querySelector('.detail-list-form-more')) document.querySelector('.detail-list-form-more').click();
-                } else if (location.pathname.indexOf('/manga-list') > -1 || location.pathname === '/search') {
-                    curSite = DBSite.mangabz_list;
-                }},
-                pager: {
-                    type: 4,
-                    nextLink: mangabz_functionNext,
-                    insertPosition: ['css;#cp_img', 3],
-                    insertElement: mangabz_insertElement,
-                    replaceE: 'css;p.top-title, body > .container > div:not([id]), title',
-                    intervals: 500,
-                    scrollDelta: 1000
-                }
-            }, //           Mangabz 漫画
-            mangabz_list: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="page-pagination"]//a[@href][contains(text(), ">")]',
-                    pageElement: 'css;ul.mh-list > li',
-                    insertPosition: ['css;ul.mh-list', 3],
-                    replaceE: 'css;.page-pagination',
-                    scrollDelta: 800
-                }
-            }, //      Mangabz 漫画 - 分类/搜索页
-            netbian: {
-                SiteTypeID: 0,
-                host: 'pic.netbian.com',
-                functionStart: function() {curSite = DBSite.netbian; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'li.nextpage {display: none !important;}';},
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="page"]/a[contains(text(),"下一页")]',
-                    pageElement: 'css;.slist ul > li:not(.nextpage)',
-                    insertPosition: ['css;.slist ul', 3],
-                    replaceE: 'css;.page',
-                    mimeType: 'text/html; charset=gbk',
-                    scrollDelta: 1000
-                }
-            }, //         彼岸图网
-            ioliu: {
-                SiteTypeID: 0,
-                host: 'bing.ioliu.cn',
-                functionStart: function() {if (location.pathname.indexOf('/photo/') === -1 && location.pathname.indexOf('.html') === -1) {curSite = DBSite.ioliu; document.head.appendChild(document.createElement('base')).target = '_blank';}},
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="page"]/a[@href][contains(text(), "下一页")]',
-                    pageElement: 'css;body > .container > div.item',
-                    insertPosition: ['css;body > .container', 3],
-                    replaceE: 'css;.page',
-                    scrollDelta: 1000
-                },
-                function: {
-                    before: ioliu_functionBefore
-                }
-            }, //           必应壁纸
             github_star: {
                 SiteTypeID: 0,
                 host: 'github.com',
@@ -2903,16 +2936,6 @@
                     scrollDelta: 1000
                 }
             }, //       SegmentFault - Search
-            pubmed: {
-                SiteTypeID: 0,
-                host: 'pubmed.ncbi.nlm.nih.gov',
-                pager: {
-                    type: 2,
-                    nextLink: 'button.load-button.next-page',
-                    nextText: 'Show more',
-                    scrollDelta: 1500
-                }
-            }, //               学术
             libgen: {
                 SiteTypeID: 0,
                 host: /libgen/,
@@ -2928,6 +2951,39 @@
                     scrollDelta: 2000
                 }
             }, //               学术
+            pubmed: {
+                SiteTypeID: 0,
+                host: 'pubmed.ncbi.nlm.nih.gov',
+                pager: {
+                    type: 2,
+                    nextLink: 'button.load-button.next-page',
+                    nextText: 'Show more',
+                    scrollDelta: 1500
+                }
+            }, //               学术
+            google_scholar: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//a[./span[@class="gs_ico gs_ico_nav_next"]]',
+                    pageElement: 'css;#gs_res_ccl_mid > *',
+                    insertPosition: ['css;#gs_res_ccl_mid', 3],
+                    replaceE: 'id("gs_n")',
+                    scriptType: 1,
+                    scrollDelta: 2000
+                }
+            }, //       谷歌学术
+            bing_academic: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.sb_pagN[href]',
+                    pageElement: 'css;#b_results > li.aca_algo',
+                    insertPosition: ['css;#b_results .b_pag', 1],
+                    replaceE: 'css;#b_results .b_pag',
+                    scrollDelta: 1000
+                }
+            }, //        必应学术
             baidu_xueshu: {
                 SiteTypeID: 0,
                 host: 'xueshu.baidu.com',
@@ -2969,6 +3025,19 @@
                     scrollDelta: 1000
                 }
             }, //   百度学术
+            so_xueshu: {
+                SiteTypeID: 0,
+                host: 'xueshu.so.com',
+                functionStart: function() {if (location.pathname === '/s') {curSite = DBSite.so_xueshu;}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a#snext[href]',
+                    pageElement: 'css;ul.list > li',
+                    insertPosition: ['css;ul.list', 3],
+                    replaceE: 'css;#page',
+                    scrollDelta: 1000
+                }
+            }, //            360 学术
             wikihow: {
                 SiteTypeID: 0,
                 host: ['www.wikihow.com', 'zh.wikihow.com'],
@@ -3007,7 +3076,7 @@
                     intervals: 2000,
                     scrollDelta: 1000
                 }
-            }, //       直播
+            }, //          直播
             greasyfork: {
                 SiteTypeID: 0,
                 host: 'greasyfork.org',
@@ -3091,105 +3160,64 @@
                     scrollDelta: 1000
                 }
             }, //  如意了教育 - 试卷
-            kdslife: {
+            netbian: {
                 SiteTypeID: 0,
-                host: 'club.kdslife.com',
-                functionStart: function() {
-                    if (location.pathname.indexOf('/f_') > -1) {
-                        curSite = DBSite.kdslife;
-                    } else if (location.pathname.indexOf('/t_') > -1) {
-                        curSite = DBSite.kdslife_t;
-                    }},
+                host: 'pic.netbian.com',
+                functionStart: function() {curSite = DBSite.netbian; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'li.nextpage {display: none !important;}';},
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="fr i3_r"]/a[@href][contains(text(), "后一页")]',
-                    pageElement: 'css;ul.main_List > li.i2:not(.h_bg)',
-                    insertPosition: ['css;ul.main_List > li.i3', 1],
-                    replaceE: 'css;ul.main_List > li.i3',
+                    nextLink: '//div[@class="page"]/a[contains(text(),"下一页")]',
+                    pageElement: 'css;.slist ul > li:not(.nextpage)',
+                    insertPosition: ['css;.slist ul', 3],
+                    replaceE: 'css;.page',
+                    mimeType: 'text/html; charset=gbk',
                     scrollDelta: 1000
                 }
-            }, //         宽带山论坛
-            kdslife_t: {
+            }, //           彼岸图网
+            ioliu: {
                 SiteTypeID: 0,
+                host: 'bing.ioliu.cn',
+                functionStart: function() {if (location.pathname.indexOf('/photo/') === -1 && location.pathname.indexOf('.html') === -1) {curSite = DBSite.ioliu; document.head.appendChild(document.createElement('base')).target = '_blank';}},
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="pages"]/a[contains(text(), ">>")]',
-                    pageElement: 'css;#reply_list_panel > *, script[src*="ui/js/kds.js"]',
-                    insertPosition: ['css;#reply_list_panel', 3],
-                    replaceE: 'css;.pages',
-                    scriptType: 3,
+                    nextLink: '//div[@class="page"]/a[@href][contains(text(), "下一页")]',
+                    pageElement: 'css;body > .container > div.item',
+                    insertPosition: ['css;body > .container', 3],
+                    replaceE: 'css;.page',
                     scrollDelta: 1000
+                },
+                function: {
+                    before: ioliu_functionBefore
                 }
-            }, //       宽带山论坛 - 帖子内
-            libaclub: {
+            }, //             必应壁纸
+            zhutix: {
                 SiteTypeID: 0,
-                host: 'www.libaclub.com',
-                functionStart: function() {
-                    if (location.pathname === '/' || location.pathname.indexOf('/date_') > -1) {
-                        curSite = DBSite.libaclub;
-                    } else if (location.pathname.indexOf('/f_') > -1) {
-                        curSite = DBSite.libaclub_f;
-                    } else if (location.pathname.indexOf('/t_') > -1 || location.pathname.indexOf('/reply_') > -1) {
-                        curSite = DBSite.libaclub_t;
-                    } else if (location.pathname.indexOf('/prt_') > -1) {
-                        curSite = DBSite.libaclub_prt;
-                    } else if (location.pathname === '/facade.php') {
-                        curSite = DBSite.libaclub_search;
-                    }
-                    document.lastElementChild.appendChild(document.createElement('style')).textContent = 'li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}';},
+                host: 'zhutix.com',
+                functionStart: function() {if (document.getElementById('primary-home')) {
+                    curSite = DBSite.zhutix_postlist;
+                } else {
+                    curSite = DBSite.zhutix;
+                }},
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="ui-crumbs-more"]/a[@class="fn-link"][1]',
-                    pageElement: 'css;ul.ui-list > li:not(.ui-list-item-head):not(.ui-list-merchant-ad)',
-                    insertPosition: ['css;ul.ui-list', 3],
-                    replaceE: 'css;div.ui-crumbs-more',
-                    scrollDelta: 1200
-                }
-            }, //        篱笆网论坛
-            libaclub_f: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="ui-paging"]/a[@class="ui-paging-next"]',
-                    pageElement: 'css;ul.ui-list > li:not(.ui-list-item-head):not(.ui-list-merchant-ad)',
-                    insertPosition: ['css;ul.ui-list', 3],
-                    replaceE: 'css;div.ui-paging',
-                    scrollDelta: 1200
-                }
-            }, //      篱笆网论坛 - 各版块帖子列表
-            libaclub_t: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: 'css;a.ui-paging-next',
-                    pageElement: 'css;.ui-box-content > div.ui-topic, .ui-box-content > a[name]',
-                    insertPosition: ['css;.ui-box-content', 3],
-                    replaceE: 'css;div.ui-paging',
+                    nextLink: '//li[@class="next-page"]/a | //div[@class="btn-pager"]/a[contains(text(), "❯")]',
+                    pageElement: 'css;#post-list > ul > li',
+                    insertPosition: ['css;#post-list > ul', 3],
+                    replaceE: 'css;.pagination, .b2-pagenav.post-nav',
                     scrollDelta: 1500
                 }
-            }, //      篱笆网论坛 - 帖子内
-            libaclub_prt: {
+            }, //          致美化
+            zhutix_postlist: {
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.ui-paging-next',
-                    pageElement: 'css;ul.ui-list > li',
-                    insertPosition: ['css;ul.ui-list', 3],
-                    replaceE: 'css;div.ui-paging',
-                    scrollDelta: 2000
+                    nextLink: '//li[@class="next-page"]/a',
+                    pageElement: 'css;#primary-home > div:not(.pagination)',
+                    insertPosition: ['css;.pagination', 1],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1500
                 }
-            }, //    篱笆网论坛 - 帖子内 - 打印版
-            libaclub_search: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="ui-page"]/a[contains(text(), "下一页")]',
-                    pageElement: 'css;.ui-box-main > ul.ui-list > li',
-                    insertPosition: ['css;.ui-box-main > ul.ui-list', 3],
-                    replaceE: 'css;div.ui-page',
-                    scrollDelta: 1200
-                }
-            } //  篱笆网论坛 - 搜索页
+            } //  致美化 - 文章列表
         };
         // 生成 SiteTypeID
         generateID();
