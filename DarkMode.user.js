@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.2.8
+// @version      1.2.9
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
 // @match        *://*/*
@@ -30,7 +30,8 @@
         ['menu_autoRecognition', '智能排除自带暗黑模式的网页 (beta)', '智能排除自带暗黑模式的网页 (beta)', true],
         ['menu_forcedToEnable', '✅ 已强制当前网站启用护眼模式 (👆)', '❌ 未强制当前网站启用护眼模式 (👆)', []],
         ['menu_darkModeType', '点击切换模式', '点击切换模式', 2],
-        ['menu_customMode', '自定义当前模式', '自定义当前模式', true], ['menu_customMode1',,,'80|70'], ['menu_customMode2',,,'80|20|70|30'], ['menu_customMode3',,,'80']
+        ['menu_customMode', '自定义当前模式', '自定义当前模式', true], ['menu_customMode1',,,'80|70'], ['menu_customMode2',,,'80|20|70|30'], ['menu_customMode3',,,'80'],
+        ['menu_autoSwitch', '晚上自动切换模式', '晚上自动切换模式', ''],
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
@@ -67,7 +68,8 @@
                     menu_ALL[i][3] = 1;
                     GM_setValue(menu_ALL[i][0], menu_ALL[i][3]);
                 }
-                menu_ID[i] = GM_registerMenuCommand(`${menu_num(menu_ALL[i][3])} ${menu_ALL[i][1]}`, function(){menu_toggle(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
+                let menu_newMode = getAutoSwitch();
+                menu_ID[i] = GM_registerMenuCommand(`${menu_num(menu_newMode)} ${menu_ALL[i][1]}`, function(){menu_toggle(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
             }
             else if (menu_ALL[i][0] === 'menu_customMode')
             { // 自定义当前模式
@@ -77,6 +79,10 @@
             else if (menu_ALL[i][0] === 'menu_customMode1' || menu_ALL[i][0] === 'menu_customMode2' || menu_ALL[i][0] === 'menu_customMode3')
             { // 当前模式值
                 GM_setValue(menu_ALL[i][0], menu_ALL[i][3]);
+            }
+            else if (menu_ALL[i][0] === 'menu_autoSwitch')
+            { // 晚上自动切换模式
+                menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_customAutoSwitch()});
             }
             else if (menu_ALL[i][0] === 'menu_forcedToEnable')
             { // 强制当前网站启用护眼模式
@@ -103,10 +109,42 @@
     }
 
 
+    // 晚上自动切换模式
+    function menu_customAutoSwitch() {
+        let newAutoSwitch = prompt('白天、晚上使用不同模式，修改后立即生效~\n格式：白天模式|晚上模式\n例如：1|3（即白天模式 1 晚上模式 2）\n默认：留空（即关闭该功能）', GM_getValue('menu_autoSwitch'));
+        if (newAutoSwitch === '') {
+            GM_setValue('menu_autoSwitch', '');
+        } else if (newAutoSwitch != null) {
+            if (newAutoSwitch.split('|').length == 2) {
+                GM_setValue('menu_autoSwitch', newAutoSwitch);
+            } else {
+                alert(`填入内容格式错误...`);
+            }
+        }
+        registerMenuCommand(); // 重新注册脚本菜单
+        if (document.getElementById('XIU2DarkMode')) {
+            document.getElementById('XIU2DarkMode').remove(); // 即时修改样式
+            addStyle();
+        }
+    }
+    // 获取当前模式
+    function getAutoSwitch() {
+        let darkModeType = GM_getValue('menu_darkModeType'), hours = new Date().getHours();
+        if (GM_getValue('menu_autoSwitch') != '') { // 晚上自动切换模式
+            if (hours > 6 && hours < 19) { // 白天
+                darkModeType = GM_getValue('menu_autoSwitch').split('|')[0];
+            } else { // 晚上
+                darkModeType = GM_getValue('menu_autoSwitch').split('|')[1];
+            }
+        }
+        return parseInt(darkModeType)
+    }
+
+
     // 自定义当前模式
     function menu_customMode() {
         let newMods, tip, defaults, name;
-        switch(menu_value('menu_darkModeType')) {
+        switch(getAutoSwitch()) {
             case 1:
                 tip = '自定义 [模式 1]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|亮度 (晚上)\n默认：80|70（均为百分比 1~100，不需要 % 符号）';
                 defaults = '80|70';
@@ -227,7 +265,12 @@
             menu_status += 1;
         }
         GM_setValue(`${Name}`, menu_status);
-        location.reload(); // 刷新网页
+        registerMenuCommand(); // 重新注册脚本菜单
+        if (document.getElementById('XIU2DarkMode')) {
+            document.getElementById('XIU2DarkMode').remove(); // 即时修改样式
+            addStyle();
+        }
+        //location.reload(); // 刷新网页
     };
 
 
@@ -296,7 +339,10 @@
             }
         }
 
-        switch(menu_value('menu_darkModeType')) {
+
+        let darkModeType = getAutoSwitch();
+
+        switch(darkModeType) {
             case 1:
                 style += style_12;
                 break;
