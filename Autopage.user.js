@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.6.2
+// @version      2.6.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -3255,6 +3255,31 @@
                     before: ioliu_functionBefore
                 }
             }, //             必应壁纸
+            nastol: {
+                SiteTypeID: 0,
+                host: 'www.nastol.com.ua',
+                pager: {
+                    type: 1,
+                    nextLink: '//a[./span[@class="nav-next"]]',
+                    pageElement: 'css;#dle-content > div',
+                    insertPosition: ['css;#dle-content > noindex', 1],
+                    replaceE: 'css;.navigation',
+                    mimeType: 'text/html; charset=windows-1251',
+                    scrollDelta: 1000
+                }
+            }, //            壁纸
+            hdqwalls: {
+                SiteTypeID: 0,
+                host: 'hdqwalls.com',
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a#next',
+                    pageElement: 'css;.wallpapers_container > div.wall-resp',
+                    insertPosition: ['css;div.pagination_container, .wallpapers_container > div.wall-resp+div:not(.wall-resp)', 1],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1000
+                }
+            }, //          壁纸
             zhutix: {
                 SiteTypeID: 0,
                 host: 'zhutix.com',
@@ -4697,7 +4722,13 @@
                                 let addTo1 = addTo(curSite.pager.insertPosition[1]);
 
                                 // 插入新页面元素
-                                pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);});
+                                if (addTo1 === 'afterend') { // 插入到目标本身后面，需要合并后一起插入
+                                    let afterend = '';
+                                    pageElems.forEach(function (one) {afterend += one.outerHTML;});
+                                    toElement.insertAdjacentHTML(addTo1, afterend);
+                                } else {
+                                    pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);});
+                                }
 
                                 // 当前页码 + 1
                                 pageNum.now = pageNum._now + 1
@@ -4749,6 +4780,7 @@
                                         console.log(e);
                                     }
                                 }
+
                                 // 如果有插入后函数就执行函数
                                 if (curSite.function && curSite.function.after) {
                                     if (curSite.function.parameter) { // 如果指定了参数
