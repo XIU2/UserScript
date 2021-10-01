@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.6.1
+// @version      2.6.2
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -186,7 +186,7 @@
             }, //  Discuz! - 淘帖页
             flarum: {
                 SiteTypeID: 0,
-                functionStart: function() {locationchange = true;console.log(location.pathname.indexOf('/d/'));if (location.pathname.indexOf('/d/') === -1) {console.log(111);curSite = DBSite.flarum;}},
+                functionStart: function() {locationchange = true;if (location.pathname.indexOf('/d/') === -1) {curSite = DBSite.flarum;}},
                 pager: {
                     type: 2,
                     nextLink: '.DiscussionList-loadMore > button[title]',
@@ -3199,6 +3199,39 @@
                     scrollDelta: 1000
                 }
             }, //  如意了教育 - 试卷
+            runoob: {
+                SiteTypeID: 0,
+                host: 'www.runoob.com',
+                functionStart: function() {if (location.pathname.split('/').length > 2) {
+                    curSite = DBSite.runoob; document.body.appendChild(document.createElement('style')).textContent = '#comments, #postcomments, #respond, #footer {display: none !important;} .article-intro h1:not(:nth-of-type(1)) {margin: 30px 0 10px 0;}';
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: function() { // 过滤部分非本页的参考手册
+                        let next = document.querySelector('#leftcolumn > a[style]~a')
+                        if (next.href.split('/').length === location.href.split('/').length && next.href.split('/')[3] === location.href.split('/')[3]) {
+                            if (curSite.pager.forceHTTPS && location.protocol === 'https:') {return next.href.replace(/^http:/,'https:');} // 替换为 https:// 链接
+                            return next.href;
+                        }
+                        next.href = location.href; curSite = {SiteTypeID: 0}; // 禁用翻页
+                        return ''
+                    },
+                    pageElement: 'css;#content > *',
+                    insertPosition: ['css;#content', 3],
+                    replaceE: 'css;.previous-next-links, #leftcolumn, head > title',
+                    history: true,
+                    forceHTTPS: true,
+                    scrollDelta: 1000
+                },
+                function: {
+                    after: function() { // 左侧栏高亮当前页面标题
+                        let title = document.title.split(' | ');
+                        if (title.length > 1) {
+                            title = title[0]; document.querySelectorAll('#leftcolumn > a').forEach(function(e){if (e.innerText === title) {e.style = 'background-color: rgb(150, 185, 125); font-weight: bold; color: rgb(255, 255, 255);';}})
+                        }
+                    }
+                }
+            }, //          菜鸟教程
             netbian: {
                 SiteTypeID: 0,
                 host: 'pic.netbian.com',
@@ -3661,7 +3694,7 @@
             if (now) {
                 let downloadCount = now.querySelector('.downloadcount > span.flex-label');
                 if (downloadCount) {
-                    console.log(now.dataset.gameId, now.dataset.modId)
+                    //console.log(now.dataset.gameId, now.dataset.modId)
                     if (GlobalModStats[now.dataset.gameId] && GlobalModStats[now.dataset.gameId][now.dataset.modId]) {
                         downloadCount.textContent = shortFormat(parseInt(GlobalModStats[now.dataset.gameId][now.dataset.modId].total));
                     }
@@ -4281,7 +4314,7 @@
     function pageLoading() {
         if (curSite.SiteTypeID > 0) {
             windowScroll(function (direction, e) {
-                if (direction === 'down' && pausePage === true) { // 下滑/没有暂停翻页时，才准备翻页
+                if (direction === 'down' && pausePage === true && curSite.SiteTypeID > 0) { // 下滑 且 未暂停翻页 且 SiteTypeID > 0 时，才准备翻页
                     let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
                         scrollHeight = window.innerHeight || document.documentElement.clientHeight,
                         scrollDelta = curSite.pager.scrollDelta;
@@ -4295,38 +4328,34 @@
                     } else {
                         if (document.documentElement.scrollHeight <= scrollHeight + scrollTop + scrollDelta) {
                             if (curSite.pager.type === 2) { // <<<<< 翻页类型 2（网站自带了自动无缝翻页功能，只需要点击下一页按钮即可）>>>>>
-                                if (curSite.SiteTypeID > 0) { // 如果指定了间隔时间，那么就依靠这个判断时间到了没有~
-                                    let autopbn = document.querySelector(curSite.pager.nextLink);
-                                    if (autopbn) { // 寻找下一页链接
-                                        // 避免重复点击翻页按钮
-                                        if (curSite.pager.nextText) { //          按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页
-                                            if (autopbn.innerText === curSite.pager.nextText) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
-                                        } else if (curSite.pager.nextTextOf) { // 按钮文本的一部分，当按钮文本包含该文本时，才会点击按钮加载下一页
-                                            if (autopbn.innerText.indexOf(curSite.pager.nextTextOf) > -1) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
-                                        } else if (curSite.pager.nextHTML) { //   按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页
-                                            if (autopbn.innerHTML === curSite.pager.nextHTML) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
-                                        } else { // 如果没有指定按钮文字就直接点击
-                                            autopbn.click(); pageNum.now = pageNum._now + 1; // 当前页码 + 1
-                                            // 对于没有按钮文字变化的按钮，可以指定间隔时间（默认 300ms）
-                                            if (!curSite.pager.intervals) {curSite.pager.intervals = 300;}
-                                            let _SiteTypeID = curSite.SiteTypeID; curSite.SiteTypeID = 0;
-                                            setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
-                                        }
+                                let autopbn = document.querySelector(curSite.pager.nextLink);
+                                if (autopbn) { // 寻找下一页链接
+                                    // 避免重复点击翻页按钮
+                                    if (curSite.pager.nextText) { //          按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页
+                                        if (autopbn.innerText === curSite.pager.nextText) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
+                                    } else if (curSite.pager.nextTextOf) { // 按钮文本的一部分，当按钮文本包含该文本时，才会点击按钮加载下一页
+                                        if (autopbn.innerText.indexOf(curSite.pager.nextTextOf) > -1) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
+                                    } else if (curSite.pager.nextHTML) { //   按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页
+                                        if (autopbn.innerHTML === curSite.pager.nextHTML) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
+                                    } else { // 如果没有指定按钮文字就直接点击
+                                        autopbn.click(); pageNum.now = pageNum._now + 1; // 当前页码 + 1
+                                        // 对于没有按钮文字变化的按钮，可以指定间隔时间（默认 300ms）
+                                        if (!curSite.pager.intervals) {curSite.pager.intervals = 300;}
+                                        let _SiteTypeID = curSite.SiteTypeID; curSite.SiteTypeID = 0;
+                                        setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
                                     }
                                 }
                             } else if (curSite.pager.type === 1) { // <<<<< 翻页类型 1（由脚本实现自动无缝翻页）>>>>>
-                                if (curSite.SiteTypeID > 0) ShowPager.loadMorePage();
+                                ShowPager.loadMorePage();
                             } else if (curSite.pager.type === 4) { // <<<<< 翻页类型 4（部分简单的动态加载类网站）>>>>>
-                                if (curSite.SiteTypeID > 0) {
-                                    // 为百度贴吧的发帖考虑...
-                                    if (!(document.documentElement.scrollHeight <= scrollHeight + scrollTop + 200 && curSite.SiteTypeID === SiteType.BAIDU_TIEBA)) {
-                                        curSite.pager.nextLink();
-                                    }
-                                    if (curSite.pager.intervals) {
-                                        let _SiteTypeID = curSite.SiteTypeID;
-                                        curSite.SiteTypeID = 0;
-                                        setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
-                                    }
+                                // 为百度贴吧的发帖考虑...
+                                if (!(document.documentElement.scrollHeight <= scrollHeight + scrollTop + 200 && curSite.SiteTypeID === SiteType.BAIDU_TIEBA)) {
+                                    curSite.pager.nextLink();
+                                }
+                                if (curSite.pager.intervals) {
+                                    let _SiteTypeID = curSite.SiteTypeID;
+                                    curSite.SiteTypeID = 0;
+                                    setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
                                 }
                             }
                         }
