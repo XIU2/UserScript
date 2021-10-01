@@ -3209,12 +3209,8 @@
                     type: 1,
                     nextLink: function() { // 过滤部分非本页的参考手册
                         let next = document.querySelector('#leftcolumn > a[style]~a')
-                        if (next.href.split('/').length === location.href.split('/').length && next.href.split('/')[3] === location.href.split('/')[3]) {
-                            if (curSite.pager.forceHTTPS && location.protocol === 'https:') {return next.href.replace(/^http:/,'https:');} // 替换为 https:// 链接
-                            return next.href;
-                        }
-                        next.href = location.href; curSite = {SiteTypeID: 0}; // 禁用翻页
-                        return ''
+                        if (next.href.split('/').length === location.href.split('/').length && next.href.split('/')[3] === location.href.split('/')[3]) return next.href;
+                        next.href = location.href; curSite = {SiteTypeID: 0}; return ''
                     },
                     pageElement: 'css;#content > *',
                     insertPosition: ['css;#content', 3],
@@ -3225,10 +3221,7 @@
                 },
                 function: {
                     after: function() { // 左侧栏高亮当前页面标题
-                        let title = document.title.split(' | ');
-                        if (title.length > 1) {
-                            title = title[0]; document.querySelectorAll('#leftcolumn > a').forEach(function(e){if (e.innerText === title) {e.style = 'background-color: rgb(150, 185, 125); font-weight: bold; color: rgb(255, 255, 255);';}})
-                        }
+                        let title = document.title.split(' | '); if (title.length > 1) {title = title[0]; document.querySelectorAll('#leftcolumn > a').forEach(function(e){if (e.innerText === title) {e.style = 'background-color: rgb(150, 185, 125); font-weight: bold; color: rgb(255, 255, 255);';}})}
                     }
                 }
             }, //          菜鸟教程
@@ -4630,10 +4623,7 @@
     // 修改自 https://greasyfork.org/scripts/14178 , https://github.com/machsix/Super-preloader
     var ShowPager = {
         getFullHref: function (e) {
-            if (e != null && e.nodeType === 1 && e.href && e.href.slice(0,4) === 'http') {
-                if (curSite.pager.forceHTTPS && location.protocol === 'https:') {return e.href.replace(/^http:/,'https:');}
-                return e.href;
-            }
+            if (e != null && e.nodeType === 1 && e.href && e.href.slice(0,4) === 'http') return e.href;
             return '';
         },
         createDocumentByString: function (e) {
@@ -4671,6 +4661,7 @@
                 }
                 //console.log(url, curSite.pageUrl);
                 if (url === '') return;
+                if (curSite.pager.forceHTTPS && location.protocol === 'https:') {url = url.replace(/^http:/,'https:');}
                 if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
                 let mimeType = '';
