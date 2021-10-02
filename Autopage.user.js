@@ -2762,9 +2762,9 @@
                         curSite = DBSite.github_star;
                     } else if ((location.pathname.indexOf('/issues') > -1 && location.pathname.indexOf('/issues/') === -1) || (location.pathname.indexOf('/pulls') > -1 && location.pathname.indexOf('/pulls/') === -1)) {
                         curSite = DBSite.github_issues;
-                    } else if (location.pathname.indexOf('/discussions') > -1 && !(/\/discussions\/\d+/.test(location.pathname))) {
+                    } else if (location.pathname.indexOf('/discussions') > -1 && !(/\/discussions\/\d+/.test(location.pathname)) && location.pathname.indexOf('new') === -1) {
                         curSite = DBSite.github_discussions;
-                    } else if (location.pathname.indexOf('/releases') > -1 && location.pathname.indexOf('/releases/tag/') === -1) {
+                    } else if (location.pathname.indexOf('/releases') > -1 && location.pathname.indexOf('/releases/tag/') === -1 && location.pathname.indexOf('edit') === -1) {
                         curSite = DBSite.github_releases;
                     } else if (location.pathname.indexOf('/tags') > -1 && location.pathname.indexOf('/tags/') === -1) {
                         curSite = DBSite.github_tags;
