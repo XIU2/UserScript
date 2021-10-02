@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.6.3
+// @version      2.6.4
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -91,6 +91,7 @@
       2 = 插入该元素当中，第一个子元素前面；
       3 = 插入该元素当中，最后一个子元素后面；
       4 = 插入该元素本身的后面；
+      5 = 插入该元素末尾（针对文本）
     mimeType: 网站编码
     scriptType: 单独插入 <script> 标签
       1 = 下一页的所有 <script> 标签
@@ -1873,7 +1874,7 @@
                     mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 900
                 }
-            }, //         宝书网（小说）
+            }, //         宝书网
             baoshuu_m: {
                 SiteTypeID: 0,
                 host: 'm.baoshuu.com',
@@ -1887,7 +1888,38 @@
                     mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 900
                 }
-            }, //       宝书网（小说）- 手机版
+            }, //       宝书网- 手机版
+            xineyby: {
+                SiteTypeID: 0,
+                host: 'www.xineyby.com',
+                functionStart: function() {if (location.pathname.indexOf('/read/') > -1) {
+                    curSite = DBSite.xineyby;
+                } else if (location.pathname.indexOf('/list/') > -1 || location.pathname.indexOf('/quanben/') > -1 || location.pathname.indexOf('/search') > -1) {
+                    curSite = DBSite.xineyby_list;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: 'id("footlink")/a[contains(text(), "下一页")]',
+                    pageElement: 'css;#contents',
+                    insertPosition: ['css;#contents', 5],
+                    replaceE: 'css;#footlink, head > title, #amain dd h1',
+                    mimeType: 'text/html; charset=gbk',
+                    history: true,
+                    scrollDelta: 900
+                }
+            }, //         无错小说网
+            xineyby_list: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;#pagelink a.next[href]',
+                    pageElement: 'css;#content > dd tbody > tr:not(:first-child)',
+                    insertPosition: ['css;#content > dd tbody', 3],
+                    replaceE: 'css;#pagelink',
+                    mimeType: 'text/html; charset=gbk',
+                    scrollDelta: 900
+                }
+            }, //    无错小说网 - 分类/搜索页
             linovel: {
                 SiteTypeID: 0,
                 host: 'www.linovel.net',
@@ -2224,6 +2256,37 @@
                     before: src_src_functionBefore
                 }
             }, //    拷贝漫画 - 分类页
+            mhxqiu: {
+                SiteTypeID: 0,
+                host: 'www.mhxqiu.com',
+                functionStart: function() {if (/\/\d+\.html/.test(location.pathname)) { // 阅读页
+                    curSite = DBSite.mhxqiu; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.imgFloat_1, .imgFloat_2, .main_control {display: none !important;} body {height: auto !important;}';
+                } else if (/\/\d+\/$/.test(location.pathname)) { // 目录页
+                    setTimeout(function(){if (document.getElementById('zhankai')) document.getElementById('zhankai').click();}, 500)
+                } else if (/\/(sort|rank)\//.test(location.pathname)) { // 分类页
+                    curSite = DBSite.mhxqiu_list;
+                }},
+                pager: {
+                    type: 4,
+                    nextLink: mhxqiu_functionNext,
+                    insertPosition: ['css;#comicContain', 3],
+                    insertElement: mhxqiu_insertElement,
+                    replaceE: 'css;#mainControlNext, h1.chaptername_title, title',
+                    intervals: 5000,
+                    scrollDelta: 3000
+                }
+            }, //            漫画星球
+            mhxqiu_list: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="NewPages"]//a[contains(text(), "下一页")]',
+                    pageElement: 'css;.cy_list_mh > ul',
+                    insertPosition: ['css;.cy_list_mh', 3],
+                    replaceE: 'css;.NewPages',
+                    scrollDelta: 1000
+                }
+            }, //       漫画星球 - 分类页
             gufengmh: {
                 SiteTypeID: 0,
                 host: /gufengmh/,
@@ -4181,6 +4244,47 @@
     }
 
 
+    // [漫画星球] 获取下一页地址
+    function mhxqiu_functionNext() {
+        let next = document.querySelector('#mainControlNext');
+        if (next) {
+            if (next.href === curSite.pageUrl) return
+            curSite.pageUrl = next.href;
+            getPageElems(curSite.pageUrl);
+        }
+    }
+    // [漫画星球] 插入数据
+    function mhxqiu_insertElement(pageElems, type) {
+        if (!pageElems) return
+        // 插入并运行 <script>
+        let scriptElement = getElementByXpath('//body/script[@type][not(@src)][contains(text(), "eval(")]', pageElems);
+        if (scriptElement) document.body.appendChild(document.createElement('script')).textContent = scriptElement.textContent;
+
+        // 插入图片
+        let _img = '';
+        for (let now of newImgs) {
+            _img += `<li style="margin:0 auto;"><div style="display: inline-block;zoom: 1;"><img src="${now}" class="loaded lazy" style="opacity: 1;box-shadow:none;"></div></li>`;
+        }
+        if (_img) {
+            document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
+
+            // 添加历史记录
+            window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
+
+            // 替换元素
+            let oriE = document.querySelectorAll(curSite.pager.replaceE.replace('css;', '')),
+                repE = getAllElements(curSite.pager.replaceE, pageElems, pageElems);
+            if (oriE.length === repE.length) {
+                for (let i = 0; i < oriE.length; i++) {
+                    oriE[i].outerHTML = repE[i].outerHTML;
+                }
+                // 当前页码 + 1
+                pageNum.now = pageNum._now + 1
+            }
+        }
+    }
+
+
     // [古风漫画网] 获取下一页地址
     function gufengmh_functionNext() {
         let pageElems = document.querySelector(curSite.pager.pageElement.replace('css;', '')); // 寻找数据所在元素
@@ -4336,6 +4440,7 @@
                     let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
                         scrollHeight = window.innerHeight || document.documentElement.clientHeight,
                         scrollDelta = curSite.pager.scrollDelta;
+
                     if (curSite.pager.type === 3) { // <<<<< 翻页类型 3（依靠元素距离可视区域底部的距离来触发翻页）>>>>>
                         let scrollElement = document.querySelector(curSite.pager.scrollElement);
                         //console.log(scrollElement.offsetTop - (scrollTop + scrollHeight), scrollDelta, curSite.SiteTypeID)
@@ -4343,8 +4448,10 @@
                             if (curSite.SiteTypeID === SiteType.GAMERSKY_GL) curSite.pager.scrollDelta -= 800 // 游民星空 gl 的比较奇葩，需要特殊处理下
                             ShowPager.loadMorePage();
                         }
+
                     } else {
                         if (document.documentElement.scrollHeight <= scrollHeight + scrollTop + scrollDelta) {
+
                             if (curSite.pager.type === 2) { // <<<<< 翻页类型 2（网站自带了自动无缝翻页功能，只需要点击下一页按钮即可）>>>>>
                                 let autopbn = document.querySelector(curSite.pager.nextLink);
                                 if (autopbn) { // 寻找下一页链接
@@ -4363,8 +4470,10 @@
                                         setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
                                     }
                                 }
+
                             } else if (curSite.pager.type === 1) { // <<<<< 翻页类型 1（由脚本实现自动无缝翻页）>>>>>
                                 ShowPager.loadMorePage();
+
                             } else if (curSite.pager.type === 4) { // <<<<< 翻页类型 4（部分简单的动态加载类网站）>>>>>
                                 // 为百度贴吧的发帖考虑...
                                 if (!(document.documentElement.scrollHeight <= scrollHeight + scrollTop + 200 && curSite.SiteTypeID === SiteType.BAIDU_TIEBA)) {
@@ -4625,6 +4734,8 @@
                 return 'beforeend'; break;
             case 4:
                 return 'afterend'; break;
+            case 5:
+                return 'beforeend'; break;
         }
     }
 
@@ -4722,9 +4833,13 @@
                                 let addTo1 = addTo(curSite.pager.insertPosition[1]);
 
                                 // 插入新页面元素
-                                if (addTo1 === 'afterend') { // 插入到目标本身后面，需要合并后一起插入
+                                if (curSite.pager.insertPosition[1] === 4) { // 插入到目标本身后面，需要合并后一起插入
                                     let afterend = '';
                                     pageElems.forEach(function (one) {afterend += one.outerHTML;});
+                                    toElement.insertAdjacentHTML(addTo1, afterend);
+                                } else if (curSite.pager.insertPosition[1] === 5) { // 插入到目标内部末尾（针对文本）
+                                    let afterend = '';
+                                    pageElems.forEach(function (one) {afterend += one.innerHTML;});
                                     toElement.insertAdjacentHTML(addTo1, afterend);
                                 } else {
                                     pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);});
