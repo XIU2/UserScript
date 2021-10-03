@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.6.6
+// @version      2.6.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -339,6 +339,19 @@
                     }
                 },
             }, //             DuckDuckGo 搜索
+            startpage: {
+                SiteTypeID: 0,
+                host: 'www.startpage.com',
+                functionStart: function() {if (location.pathname.indexOf('/search') > -1) {curSite = DBSite.startpage;}},
+                pager: {
+                    type: 1,
+                    nextLink: startpage_functionNext,
+                    pageElement: 'css;section.w-gl--desktop > div',
+                    insertPosition: ['css;section.w-gl--desktop', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1500
+                }
+            }, //              Startpage 搜索
             yandex: {
                 SiteTypeID: 0,
                 host: 'yandex.com',
@@ -352,6 +365,32 @@
                     scrollDelta: 1500
                 }
             }, //                 Yandex 搜索
+            yahoo: {
+                SiteTypeID: 0,
+                host: 'search.yahoo.com',
+                functionStart: function() {if (location.pathname.indexOf('/search') > -1) {curSite = DBSite.yahoo;}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;.pagination a.next[href]',
+                    pageElement: 'css;#web ol > li',
+                    insertPosition: ['css;#web ol', 3],
+                    replaceE: 'css;.pagination',
+                    scrollDelta: 1500
+                }
+            }, //                  Yahoo 搜索
+            yahoo_jp: {
+                SiteTypeID: 0,
+                host: 'search.yahoo.co.jp',
+                functionStart: function() {if (location.pathname.indexOf('/search') > -1) {curSite = DBSite.yahoo_jp;}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;.Pagenation__next > a[href]',
+                    pageElement: 'css;.Contents__innerGroupBody > div',
+                    insertPosition: ['css;.Contents__innerGroupBody', 3],
+                    replaceE: 'css;.Pagenation',
+                    scrollDelta: 1500
+                }
+            }, //               Yahoo 搜索 (JP)
             qwant: {
                 SiteTypeID: 0,
                 host: 'www.qwant.com',
@@ -363,6 +402,19 @@
                     scrollDelta: 1500
                 }
             }, //                  Qwant 搜索
+            ecosia: {
+                SiteTypeID: 0,
+                host: 'www.ecosia.org',
+                functionStart: function() {if (location.pathname === '/search') {curSite = DBSite.ecosia;}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;nav.pagination a[href][aria-label="Next page"]',
+                    pageElement: 'css;section.mainline > div:not(.related-queries)',
+                    insertPosition: ['css;nav.pagination', 1],
+                    replaceE: 'css;nav.pagination',
+                    scrollDelta: 1500
+                }
+            }, //                 Ecosia 搜索
             magi: {
                 SiteTypeID: 0,
                 host: 'magi.com',
@@ -823,6 +875,22 @@
                     scrollDelta: 1200
                 }
             }, //     篱笆网论坛 - 搜索页
+            lieyou: {
+                SiteTypeID: 0,
+                host: 'bbs.lieyou888.com',
+                functionStart: function() {if (location.pathname.indexOf('/forum') > -1) {curSite = DBSite.lieyou888;}},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[contains(@class, "_pageNav")]/a[@href][contains(text(), "下一页")]',
+                    pageElement: 'css;ul.gb-bbs-list > li',
+                    insertPosition: ['css;ul.gb-bbs-list', 3],
+                    replaceE: 'css;._pageNav',
+                    scrollDelta: 1000
+                },
+                function: {
+                    before: src_original_2_functionBefore
+                }
+            }, //              芥子空间论坛
             xcar_forumdisplay: {
                 SiteTypeID: 0,
                 host: 'www.xcar.com.cn',
@@ -3533,20 +3601,27 @@
     // 通用型插入前函数（加载图片 data-original => src）
     function src_original_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
-            let now = one.querySelector('img[data-original]')
-            if (now) {
+            one.querySelectorAll('img[data-original]').forEach(function (now) {
                 now.src = now.dataset.original;
-            }
+            });
+        });
+        return pageElems
+    }
+    // 通用型插入前函数（加载图片 original => src）
+    function src_original_2_functionBefore(pageElems) {
+        pageElems.forEach(function (one) {
+            one.querySelectorAll('img[original]').forEach(function (now) {
+                now.src = now.getAttribute('original');
+            });
         });
         return pageElems
     }
     // 通用型插入前函数（加载图片 data-src => src）
     function src_src_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
-            let now = one.querySelector('img[data-src]')
-            if (now) {
+            let now = one.querySelectorAll('img[data-src]').forEach(function (now) {
                 now.src = now.dataset.src;
-            }
+            });
         });
         return pageElems
     }
@@ -3583,6 +3658,19 @@
             });
         });
         return pageElems
+    }
+
+
+    // [Startpage] 获取下一页地址
+    function startpage_functionNext() {
+        let form = getElementByXpath('//div[contains(@class, "pagination ")]/form[./button[@class="pagination__next-prev-button next"]]');
+        if (form) {
+            let action = form.action, value = ''; // 获取提交表单 URL
+            form.querySelectorAll('input[name]').forEach(function(input) {value += input.name + '=' + input.value + '&';}) // 生成表单参数
+            value = encodeURI(value.replace(/&$/,'')); // 清理最后一个 & 符号，并替换页码
+            if (action && value) return (action + '?' + value)
+        }
+        return '';
     }
 
 
@@ -3865,14 +3953,9 @@
         if (page) {page = /(?<=\()\d+(?=\))/.exec(page.onclick)[0];} else {return '';} // 获取下一页页码
         if (page) {
             let action = document.getElementById('search-form').action, value = ''; // 获取提交表单 URL
-            document.querySelectorAll('#search-form input[name]').forEach(function(input) { // 生成表单参数
-                value += input.name + '=' + input.value + '&'
-            })
+            document.querySelectorAll('#search-form input[name]').forEach(function(input) {value += input.name + '=' + input.value + '&';}) // 生成表单参数
             value = encodeURI(value.replace(/&$/,'').replace(/p=\d+/,'p=' + page)); // 清理最后一个 & 符号，并替换页码
-            if (action && value) {
-                //console.log(action + '?' + value)
-                return (action + '?' + value)
-            }
+            if (action && value) return (action + '?' + value)
         }
         return '';
     }
@@ -4842,98 +4925,7 @@
                     timeout: 5000,
                     onload: function (response) {
                         try {
-                            //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
-                            var newBody = ShowPager.createDocumentByString(response.responseText);
-                            let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody),
-                                toElement = getAllElements(curSite.pager.insertPosition[0])[0];
-                            //console.log(curSite.pager.pageElement, pageElems, curSite.pager.insertPosition, toElement)
-
-                            if (pageElems.length >= 0) {
-                                // 如果有插入前函数就执行函数
-                                if (curSite.function && curSite.function.before) {
-                                    if (curSite.function.parameter) { // 如果指定了参数
-                                        pageElems = curSite.function.before(curSite.function.parameter);
-                                    } else {
-                                        pageElems = curSite.function.before(pageElems);
-                                    }
-                                }
-
-                                // 插入位置
-                                let addTo1 = addTo(curSite.pager.insertPosition[1]);
-
-                                // 插入新页面元素
-                                if (curSite.pager.insertPosition[1] === 4) { // 插入到目标本身后面，需要合并后一起插入
-                                    let afterend = '';
-                                    pageElems.forEach(function (one) {afterend += one.outerHTML;});
-                                    toElement.insertAdjacentHTML(addTo1, afterend);
-                                } else if (curSite.pager.insertPosition[1] === 5) { // 插入到目标内部末尾（针对文本）
-                                    let afterend = '';
-                                    pageElems.forEach(function (one) {afterend += one.innerHTML;});
-                                    toElement.insertAdjacentHTML(addTo1, afterend);
-                                } else {
-                                    pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);});
-                                }
-
-                                // 当前页码 + 1
-                                pageNum.now = pageNum._now + 1
-
-                                // 插入 <script> 标签
-                                if (curSite.pager.scriptType) {
-                                    let scriptText = '';
-                                    if (curSite.pager.scriptType === 1) { //         下一页的所有 <script> 标签
-                                        const scriptElems = getAllElements('//script', newBody, newBody);
-                                        scriptElems.forEach(function (one) {
-                                            if (one.src) {
-                                                toElement.appendChild(document.createElement('script')).src = one.src;
-                                            } else {
-                                                scriptText += ';' + one.textContent;
-                                            }
-                                        });
-                                        toElement.appendChild(document.createElement('script')).textContent = scriptText;
-                                    } else if (curSite.pager.scriptType === 2) { //  下一页主体元素同级 <script> 标签
-                                        pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
-                                        if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
-                                    } else if (curSite.pager.scriptType === 3) { //  下一页主体元素同级 <script> 标签（远程文件）
-                                        pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT' && one.src) {toElement.appendChild(document.createElement('script')).src = one.src;}});
-                                    } else if (curSite.pager.scriptType === 4) { //  下一页主体元素子元素 <script> 标签
-                                        pageElems.forEach(function (one) {
-                                            const scriptElems = one.querySelectorAll('script');
-                                            scriptElems.forEach(function (script) {scriptText += ';' + script.textContent;});
-                                        });
-                                        if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
-                                    }
-                                }
-
-                                // 添加历史记录
-                                if (curSite.pager.history && curSite.pager.history == true) {
-                                    window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, newBody.querySelector('title').textContent, curSite.pageUrl);
-                                }
-
-                                // 替换待替换元素
-                                if (curSite.pager.replaceE) {
-                                    try {
-                                        let oriE = getAllElements(curSite.pager.replaceE),
-                                            repE = getAllElements(curSite.pager.replaceE, newBody, newBody);
-                                        //console.log(oriE, repE);
-                                        if (oriE.length === repE.length) {
-                                            for (let i = 0; i < oriE.length; i++) {
-                                                oriE[i].outerHTML = repE[i].outerHTML;
-                                            }
-                                        }
-                                    } catch (e) {
-                                        console.log(e);
-                                    }
-                                }
-
-                                // 如果有插入后函数就执行函数
-                                if (curSite.function && curSite.function.after) {
-                                    if (curSite.function.parameter) { // 如果指定了参数
-                                        curSite.function.after(curSite.function.parameter);
-                                    } else {
-                                        curSite.function.after();
-                                    }
-                                }
-                            }
+                            processResult(response);
                         } catch (e) {
                             console.log(e);
                         }
@@ -4942,6 +4934,100 @@
             }
         },
     };
+    function processResult(response) {
+        //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
+        var newBody = ShowPager.createDocumentByString(response.responseText);
+        let pageElems = getAllElements(curSite.pager.pageElement, newBody, newBody),
+            toElement = getAllElements(curSite.pager.insertPosition[0])[0];
+        //console.log(curSite.pager.pageElement, pageElems, curSite.pager.insertPosition, toElement)
+
+        if (pageElems.length >= 0) {
+            // 如果有插入前函数就执行函数
+            if (curSite.function && curSite.function.before) {
+                if (curSite.function.parameter) { // 如果指定了参数
+                    pageElems = curSite.function.before(curSite.function.parameter);
+                } else {
+                    pageElems = curSite.function.before(pageElems);
+                }
+            }
+
+            // 插入位置
+            let addTo1 = addTo(curSite.pager.insertPosition[1]);
+
+            // 插入新页面元素
+            if (curSite.pager.insertPosition[1] === 4) { // 插入到目标本身后面，需要合并后一起插入
+                let afterend = '';
+                pageElems.forEach(function (one) {afterend += one.outerHTML;});
+                toElement.insertAdjacentHTML(addTo1, afterend);
+            } else if (curSite.pager.insertPosition[1] === 5) { // 插入到目标内部末尾（针对文本）
+                let afterend = '';
+                pageElems.forEach(function (one) {afterend += one.innerHTML;});
+                toElement.insertAdjacentHTML(addTo1, afterend);
+            } else {
+                pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo1, one);});
+            }
+
+            // 当前页码 + 1
+            pageNum.now = pageNum._now + 1
+
+            // 插入 <script> 标签
+            if (curSite.pager.scriptType) {
+                let scriptText = '';
+                if (curSite.pager.scriptType === 1) { //         下一页的所有 <script> 标签
+                    const scriptElems = getAllElements('//script', newBody, newBody);
+                    scriptElems.forEach(function (one) {
+                        if (one.src) {
+                            toElement.appendChild(document.createElement('script')).src = one.src;
+                        } else {
+                            scriptText += ';' + one.textContent;
+                        }
+                    });
+                    toElement.appendChild(document.createElement('script')).textContent = scriptText;
+                } else if (curSite.pager.scriptType === 2) { //  下一页主体元素同级 <script> 标签
+                    pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
+                    if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
+                } else if (curSite.pager.scriptType === 3) { //  下一页主体元素同级 <script> 标签（远程文件）
+                    pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT' && one.src) {toElement.appendChild(document.createElement('script')).src = one.src;}});
+                } else if (curSite.pager.scriptType === 4) { //  下一页主体元素子元素 <script> 标签
+                    pageElems.forEach(function (one) {
+                        const scriptElems = one.querySelectorAll('script');
+                        scriptElems.forEach(function (script) {scriptText += ';' + script.textContent;});
+                    });
+                    if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
+                }
+            }
+
+            // 添加历史记录
+            if (curSite.pager.history && curSite.pager.history == true) {
+                window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, newBody.querySelector('title').textContent, curSite.pageUrl);
+            }
+
+            // 替换待替换元素
+            if (curSite.pager.replaceE) {
+                try {
+                    let oriE = getAllElements(curSite.pager.replaceE),
+                        repE = getAllElements(curSite.pager.replaceE, newBody, newBody);
+                    //console.log(oriE, repE);
+                    if (oriE.length === repE.length) {
+                        for (let i = 0; i < oriE.length; i++) {
+                            oriE[i].outerHTML = repE[i].outerHTML;
+                        }
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+
+            // 如果有插入后函数就执行函数
+            if (curSite.function && curSite.function.after) {
+                if (curSite.function.parameter) { // 如果指定了参数
+                    curSite.function.after(curSite.function.parameter);
+                } else {
+                    curSite.function.after();
+                }
+            }
+        }
+    }
     function getElementByCSS(css, contextNode = document) {
         return contextNode.querySelector(css);
     }
