@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.6.5
+// @version      2.6.6
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -352,6 +352,17 @@
                     scrollDelta: 1500
                 }
             }, //                 Yandex 搜索
+            qwant: {
+                SiteTypeID: 0,
+                host: 'www.qwant.com',
+                functionStart: function() {locationchange = true; if (location.search.indexOf('q=') > -1 && location.search.indexOf('t=web') > -1) {curSite = DBSite.qwant;}},
+                pager: {
+                    type: 2,
+                    nextLink: 'button[data-testid="buttonShowMore"]',
+                    intervals: 500,
+                    scrollDelta: 1500
+                }
+            }, //                  Qwant 搜索
             magi: {
                 SiteTypeID: 0,
                 host: 'magi.com',
@@ -4473,10 +4484,13 @@
                                     // 避免重复点击翻页按钮
                                     if (curSite.pager.nextText) { //          按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页
                                         if (autopbn.innerText === curSite.pager.nextText) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
+
                                     } else if (curSite.pager.nextTextOf) { // 按钮文本的一部分，当按钮文本包含该文本时，才会点击按钮加载下一页
                                         if (autopbn.innerText.indexOf(curSite.pager.nextTextOf) > -1) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
+
                                     } else if (curSite.pager.nextHTML) { //   按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页
                                         if (autopbn.innerHTML === curSite.pager.nextHTML) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
+
                                     } else { // 如果没有指定按钮文字就直接点击
                                         autopbn.click(); pageNum.now = pageNum._now + 1; // 当前页码 + 1
                                         // 对于没有按钮文字变化的按钮，可以指定间隔时间（默认 300ms）
