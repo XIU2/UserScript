@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.6.7
+// @version      2.6.8
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -149,7 +149,8 @@
                     scrollDelta: 1000
                 },
                 function: {
-                    before: discuz_thread_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[file]', 'file']
                 }
             }, //      Discuz! - 帖子内
             discuz_search: {
@@ -206,7 +207,8 @@
                     scrollDelta: 1500
                 },
                 function: {
-                    before: dux_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img.thumb[data-src]', 'data-src']
                 }
             }, //                WordPress 主题
             baidu: {
@@ -316,7 +318,7 @@
             so: {
                 SiteTypeID: 0,
                 host: 'www.so.com',
-                functionStart: function() {if (location.pathname != '/') {curSite = DBSite.so;}},
+                functionStart: function() {if (location.pathname != '/') {curSite = DBSite.so; document.lastElementChild.appendChild(document.createElement('style')).textContent = 'img {opacity: 1 !important;}'}},
                 pager: {
                     type: 1,
                     nextLink: 'css;#snext[href]',
@@ -326,7 +328,8 @@
                     scrollDelta: 1200
                 },
                 function: {
-                    before: so_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-isrc]', 'data-isrc']
                 }
             }, //                     360 搜索
             duckduckgo: {
@@ -878,7 +881,7 @@
             lieyou: {
                 SiteTypeID: 0,
                 host: 'bbs.lieyou888.com',
-                functionStart: function() {if (location.pathname.indexOf('/forum') > -1) {curSite = DBSite.lieyou888;}},
+                functionStart: function() {if (location.pathname.indexOf('/forum') > -1) {curSite = DBSite.lieyou;}},
                 pager: {
                     type: 1,
                     nextLink: '//div[contains(@class, "_pageNav")]/a[@href][contains(text(), "下一页")]',
@@ -888,7 +891,8 @@
                     scrollDelta: 1000
                 },
                 function: {
-                    before: src_original_2_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[original]', 'original']
                 }
             }, //              芥子空间论坛
             xcar_forumdisplay: {
@@ -1010,7 +1014,8 @@
                     scrollDelta: 1500
                 },
                 function: {
-                    before: src_original_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-original]', 'data-original']
                 }
             }, //                  煎蛋网
             jandan_comment: {
@@ -1077,7 +1082,7 @@
             _58pic: {
                 SiteTypeID: 0,
                 host: 'www.58pic.com',
-                functionStart: function() {document.lastElementChild.appendChild(document.createElement('style')).textContent = '.qt-model-t {display: none !important;}'; // 隐藏登录弹窗
+                functionStart: function() {document.lastElementChild.appendChild(document.createElement('style')).textContent = '.qt-model-t, .qtw-card.place-box.is-one, .search-v3-row .search-v3-back {display: none !important;}'; // 隐藏登录弹窗等
                 if (location.pathname.indexOf('/tupian/') > -1) {
                     curSite = DBSite._58pic; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.qtw-card.place-box.is-two {display: none !important;}'; // 隐藏末尾很大的 [下一页] 按钮
                 } else if (location.pathname.indexOf('/c/') > -1) {
@@ -1089,10 +1094,11 @@
                     pageElement: 'css;.pic-box > .qtw-card',
                     insertPosition: ['css;.pic-box', 3],
                     replaceE: 'css;.page-box',
-                    scrollDelta: 2000
+                    scrollDelta: 2500
                 },
                 function: {
-                    before: _58pic_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-original]', 'data-original']
                 }
             }, //              千图网 - 分类/搜索页
             _58pic_c: {
@@ -1106,7 +1112,8 @@
                     scrollDelta: 4000
                 },
                 function: {
-                    before: _58pic_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-original]', 'data-original']
                 }
             }, //            千图网 - 专题/收藏夹
             pixabay: {
@@ -1114,14 +1121,15 @@
                 host: 'pixabay.com',
                 pager: {
                     type: 1,
-                    nextLink: '//a[text()="Next page"][@href]',
+                    nextLink: '//a[text()="›"][@href]',
                     pageElement: 'css;[class^="results"]  > [class^="container"] > div',
                     insertPosition: ['css;[class^="results"]  > [class^="container"]', 3],
-                    replaceE: '//a[text()="Next page"][@href]',
+                    replaceE: '//a[text()="›"][@href]',
                     scrollDelta: 2000
                 },
                 function: {
-                    before: pixabay_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-lazy-src]', 'data-lazy-src']
                 }
             }, //             Pixabay
             logosc: {
@@ -1394,7 +1402,8 @@
                     scrollDelta: 1500
                 },
                 function: {
-                    before: pianku_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-src]', 'data-src']
                 }
             }, //          片库
             cupfox: {
@@ -1420,7 +1429,8 @@
                     scrollDelta: 1500
                 },
                 function: {
-                    before: src_original_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-original]', 'data-original']
                 }
             }, //       NO视频
             ddrk: {
@@ -1449,7 +1459,8 @@
                     scrollDelta: 1500
                 },
                 function: {
-                    before: nfmovies_functionBefore
+                    before: src_functionBefore,
+                    parameter: [1, 'a[data-original]', 'data-original']
                 }
             }, //        奈菲影视
             zxzj: {
@@ -1467,7 +1478,8 @@
                     scrollDelta: 1000
                 },
                 function: {
-                    before: nfmovies_functionBefore
+                    before: src_functionBefore,
+                    parameter: [1, 'a[data-original]', 'data-original']
                 }
             }, //            在线之家
             _91mjw: {
@@ -1483,7 +1495,8 @@
                     scrollDelta: 1500
                 },
                 function: {
-                    before: src_original_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-original]', 'data-original']
                 }
             }, //          91 美剧网
             zhenbuka: {
@@ -1499,7 +1512,8 @@
                     scrollDelta: 1500
                 },
                 function: {
-                    before: nfmovies_functionBefore
+                    before: src_functionBefore,
+                    parameter: [1, 'a[data-original]', 'data-original']
                 }
             }, //        真不卡影院
             dm233: {
@@ -1632,7 +1646,8 @@
                     scrollDelta: 1000
                 },
                 function: {
-                    before: src_original_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-original]', 'data-original']
                 }
             }, //        ZzzFun 动漫
             zzzfun_search: {
@@ -1646,7 +1661,8 @@
                     scrollDelta: 1000
                 },
                 function: {
-                    before: src_original_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-original]', 'data-original']
                 }
             }, // ZzzFun 动漫 - 搜索页
             yinfans: {
@@ -2062,7 +2078,8 @@
                     scrollDelta: 1000
                 },
                 function: {
-                    before: src_original_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-original]', 'data-original']
                 }
             }, // 哔哩轻小说 - 文库
             linovelib_top: {
@@ -2076,7 +2093,8 @@
                     scrollDelta: 1000
                 },
                 function: {
-                    before: src_original_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-original]', 'data-original']
                 }
             }, //   哔哩轻小说 - 全本
             cartoonmad: {
@@ -2147,7 +2165,8 @@
                     scrollDelta: 1000
                 },
                 function: {
-                    before: src_original_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-original]', 'data-original']
                 }
             }, //    漫画猫 - 分类页
             manhuacat_search: {
@@ -2347,7 +2366,8 @@
                     scrollDelta: 1500
                 },
                 function: {
-                    before: src_src_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-src]', 'data-src']
                 }
             }, //    拷贝漫画 - 分类页
             mhxqiu: {
@@ -2483,10 +2503,8 @@
                     pageElement: 'css;#index > article, #archive > article',
                     insertPosition: ['css;ol.page-navigator', 1],
                     replaceE: 'css;ol.page-navigator',
+                    scriptType: 4,
                     scrollDelta: 1000
-                },
-                function: {
-                    before: iao_su_functionBefore
                 }
             }, //                 不死鸟
             sharerw: {
@@ -2605,7 +2623,7 @@
                     scrollDelta: 1500
                 },
                 function: {
-                    before: src_original_functionBefore
+                    before: src_functionBefore
                 }
             }, //          果核剥壳 - 分类/搜索页
             sixyin: {
@@ -2717,7 +2735,8 @@
                     scrollDelta: 1200
                 },
                 function: {
-                    before: iplaysoft_postslist_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-src]', 'data-src']
                 }
             }, //    异次元软件
             iplaysoft_postcomments: {
@@ -2848,6 +2867,19 @@
                     scrollDelta: 1500
                 }
             },
+            gitee: {
+                SiteTypeID: 0,
+                host: 'search.gitee.com',
+                functionStart: function() {if (location.search) curSite = DBSite.gitee;},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;li.next > a[href]',
+                    pageElement: 'css;#hits-list > div',
+                    insertPosition: ['css;#hits-list', 3],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1000
+                }
+            }, //                     Gitee - 搜索页
             github_star: {
                 SiteTypeID: 0,
                 host: 'github.com',
@@ -3399,7 +3431,7 @@
             ioliu: {
                 SiteTypeID: 0,
                 host: 'bing.ioliu.cn',
-                functionStart: function() {if (location.pathname.indexOf('/photo/') === -1 && location.pathname.indexOf('.html') === -1) {curSite = DBSite.ioliu; document.head.appendChild(document.createElement('base')).target = '_blank';}},
+                functionStart: function() {if (location.pathname.indexOf('/photo/') === -1 && location.pathname.indexOf('.html') === -1) {curSite = DBSite.ioliu; document.head.appendChild(document.createElement('base')).target = '_blank'; document.lastElementChild.appendChild(document.createElement('style')).textContent = '.progressive--not-loaded {filter: none !important;}';}},
                 pager: {
                     type: 1,
                     nextLink: '//div[@class="page"]/a[@href][contains(text(), "下一页")]',
@@ -3407,9 +3439,6 @@
                     insertPosition: ['css;body > .container', 3],
                     replaceE: 'css;.page',
                     scrollDelta: 1000
-                },
-                function: {
-                    before: ioliu_functionBefore
                 }
             }, //             必应壁纸
             nastol: {
@@ -3585,53 +3614,20 @@
         let width = document.querySelector('#waterfall > li:first-child').style.width;
         document.lastElementChild.appendChild(document.createElement('style')).textContent = `#waterfall {height: auto !important; width: 100% !important;} #waterfall > li {width: ${width} !important; float: left !important; position: inherit !important; left: auto !important; top: auto !important;}`;
     }
-    // [Discuz! 论坛] 的插入前函数（加载图片，仅部分论坛）
-    function discuz_thread_functionBefore(pageElems) {
-        if (location.hostname === 'bbs.pcbeta.com') { // 仅部分论坛需要处理
-            pageElems.forEach(function (one) {
-                one.querySelectorAll('img[file]').forEach(function (now) {
-                    now.src = now.getAttribute('file');
+
+
+    // 通用型插入前函数（加载图片）
+    function src_functionBefore(pageElems, css) {
+        pageElems.forEach(function (one) {
+            if (css[0] == 0) { // src 图片
+                one.querySelectorAll(css[1]).forEach(function (now) {
+                    now.src = now.getAttribute(css[2]);
                 });
-            });
-        }
-        return pageElems
-    }
-
-
-    // 通用型插入前函数（加载图片 data-original => src）
-    function src_original_functionBefore(pageElems) {
-        pageElems.forEach(function (one) {
-            one.querySelectorAll('img[data-original]').forEach(function (now) {
-                now.src = now.dataset.original;
-            });
-        });
-        return pageElems
-    }
-    // 通用型插入前函数（加载图片 original => src）
-    function src_original_2_functionBefore(pageElems) {
-        pageElems.forEach(function (one) {
-            one.querySelectorAll('img[original]').forEach(function (now) {
-                now.src = now.getAttribute('original');
-            });
-        });
-        return pageElems
-    }
-    // 通用型插入前函数（加载图片 data-src => src）
-    function src_src_functionBefore(pageElems) {
-        pageElems.forEach(function (one) {
-            let now = one.querySelectorAll('img[data-src]').forEach(function (now) {
-                now.src = now.dataset.src;
-            });
-        });
-        return pageElems
-    }
-
-
-    // [DUX] 的插入前函数（加载图片）
-    function dux_functionBefore(pageElems) {
-        pageElems.forEach(function (one) {
-            let now = one.querySelector('img.thumb[data-src]')
-            if (now) {now.src = now.dataset.src;}
+            } else if (css[0] == 1) { // 背景图片
+                one.querySelectorAll(css[1]).forEach(function (now) {
+                    now.style.backgroundImage = 'url("' + now.getAttribute(css[2]) + '")';
+                });
+            }
         });
         return pageElems
     }
@@ -3645,18 +3641,6 @@
                 pageElems.splice(i,1)
             }
         }
-        return pageElems
-    }
-
-
-    // [360搜索] 的插入前函数（加载图片）
-    function so_functionBefore(pageElems) {
-        pageElems.forEach(function (one) {
-            one.querySelectorAll('img[data-isrc]').forEach(function (now) {
-                now.src = now.dataset.isrc;
-                now.className = now.className.replace('so-lazyimg','');
-            });
-        });
         return pageElems
     }
 
@@ -3784,35 +3768,6 @@
     }
 
 
-    // [千图网] 的插入前函数（加载图片）
-    function _58pic_functionBefore(pageElems) {
-        let is_one = document.querySelector('.qtw-card.place-box.is-one');
-        if (is_one && is_one.style.display != 'none') {is_one.style.display = 'none';}
-        pageElems.forEach(function (one) {
-            let now = one.querySelector('img.lazy')
-            if (now && now.getAttribute('src') != now.dataset.original) {
-                now.src = now.dataset.original;
-                now.style.display = 'block';
-            }
-        });
-        return pageElems
-    }
-
-
-    // [Pixabay] 的插入前函数（加载图片）
-    function pixabay_functionBefore(pageElems) {
-        pageElems.forEach(function (one) {
-            let now = one.querySelector('img[data-lazy-src]')
-            if (now) {
-                now.src = now.dataset.lazySrc;
-                now.removeAttribute('data-lazy-src')
-                now.removeAttribute('data-lazy-srcset')
-            }
-        });
-        return pageElems
-    }
-
-
     // [3DM MOD] 获取下一页地址
     function _3dmgame_mod_functionNext() {
         let nextNum = getElementByXpath('//li[@class="page-list active"]/following-sibling::li[contains(@class, "page-list")]/a');
@@ -3922,31 +3877,6 @@
         return pageElems
     }
 
-
-    // [片库] 的插入前函数（加载图片）
-    function pianku_functionBefore(pageElems) {
-        pageElems.forEach(function (one) {
-            let now = one.querySelector('img')
-            if (now) {
-                now.src = now.dataset.src;
-            }
-        });
-        return pageElems
-    }
-
-
-    // [奈菲影视/在线之家/真不卡影院] 的插入前函数（加载图片）
-    function nfmovies_functionBefore(pageElems) {
-        pageElems.forEach(function (one) {
-            let now = one.querySelector('a.lazyload')
-            if (now) {
-                now.style.backgroundImage = 'url("' + now.dataset.original + '")';
-            }
-        });
-        return pageElems
-    }
-
-
     // [SkrBT] 获取下一页地址
     function skrbt_functionNext() {
         let page = document.querySelector('a[onclick][aria-label="Next"]');
@@ -3961,7 +3891,7 @@
     }
 
 
-    // [BTHaha] 的插入前函数（加载图片）
+    // [BTHaha] 的插入前函数（隐藏底部元素）
     function bthaha_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.querySelector('[id^="list_top"], [id^="list_bottom"]')
@@ -3985,51 +3915,12 @@
     }
 
 
-    // [不死鸟] 的插入前函数（加载图片）
-    function iao_su_functionBefore(pageElems) {
-        pageElems.forEach(function (one) {
-            let now = one.getElementsByClassName('post-card')[0]
-            if (now) {
-                now.getElementsByClassName('blog-background')[0].style.backgroundImage = 'url("' + now.getElementsByTagName('script')[0].textContent.split("'")[1] + '")';
-                //now.getElementsByClassName('blog-background')[0].style.backgroundImage = 'url("' + RegExp("(?<=loadBannerDirect\\(').*(?=', '',)").exec(now.getElementsByTagName('script')[0].textContent)[0]; + '")';
-            }
-        });
-        return pageElems
-    }
-
-
-    // [异次元软件世界] 的插入前函数（加载图片）
-    function iplaysoft_postslist_functionBefore(pageElems) {
-        pageElems.forEach(function (one) {
-            let now = one.querySelector('img.lazyload')
-            if (now && !now.src) {
-                now.src = now.dataset.src;
-                now.setAttribute('srcset', now.dataset.src)
-                now.setAttribute('class', 'lazyloaded')
-            }
-        });
-        return pageElems
-    }
-
-
     // [LRepacks] 的插入前函数（调整 class）
     function lrepacks_functionBefore(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.querySelector('.slideUp, .elementFade')
             if (now) {
                 now.className = now.className.replace('slideUp','slideUpRun').replace('elementFade','elementFadeRun');
-            }
-        });
-        return pageElems
-    }
-
-
-    // [必应壁纸] 的插入前函数（加载图片）
-    function ioliu_functionBefore(pageElems) {
-        pageElems.forEach(function (one) {
-            let now = one.querySelector('img.progressive--not-loaded')
-            if (now) {
-                now.className = now.className.replace('progressive--not-loaded','progressive--is-loaded');
             }
         });
         return pageElems
@@ -4659,6 +4550,7 @@
 
     // 显示页码
     function pageNumber(type) {
+        console.log(curSite)
         if (curSite.SiteTypeID === 0) {let status = document.getElementById('Autopage_number');if (status) {status.style.display = 'none';}; return}
         let status = document.getElementById('Autopage_number');
         switch (type) {
@@ -4945,7 +4837,7 @@
             // 如果有插入前函数就执行函数
             if (curSite.function && curSite.function.before) {
                 if (curSite.function.parameter) { // 如果指定了参数
-                    pageElems = curSite.function.before(curSite.function.parameter);
+                    pageElems = curSite.function.before(pageElems, curSite.function.parameter);
                 } else {
                     pageElems = curSite.function.before(pageElems);
                 }
