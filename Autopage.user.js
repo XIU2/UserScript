@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.7.2
+// @version      2.7.3
 // @author       X.I.U
-// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
+// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
 // @icon         https://i.loli.net/2021/03/07/rdijeYm83pznxWq.png
 // @grant        GM_xmlhttpRequest
@@ -721,6 +721,79 @@
                     scrollDelta: 1000
                 }
             }, //        V2EX - 账户余额页
+            jandan: {
+                SiteTypeID: 0,
+                host: 'jandan.net',
+                functionStart: function() {if (location.pathname === '/' || location.pathname.indexOf('/page/') > -1) {
+                    curSite = DBSite.jandan;
+                } else if (location.pathname === '/dzh') {
+                    curSite = DBSite.jandan_dzh;
+                } else {
+                    curSite = DBSite.jandan_comment;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="wp-pagenavi"]/a[contains(text(), "下一页") or contains(text(), "更多文章")]',
+                    pageElement: 'css;#content > .list-post',
+                    insertPosition: ['css;.wp-pagenavi', 1],
+                    replaceE: 'css;.wp-pagenavi, #nav_prev',
+                    scrollDelta: 1500
+                },
+                function: {
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-original]', 'data-original']
+                }
+            }, //              煎蛋网
+            jandan_comment: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.previous-comment-page',
+                    pageElement: 'css;ol.commentlist > li[id^="comment-"], script[src^="//cdn.jandan.net/static/min/"]',
+                    insertPosition: ['css;ol.commentlist', 3],
+                    replaceE: 'css;.cp-pagenavi, #nav_prev',
+                    scriptType: 3,
+                    scrollDelta: 1500
+                }
+            }, //      煎蛋网
+            jandan_dzh: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 2,
+                    nextLink: '.show_more',
+                    intervals: 1500,
+                    scrollDelta: 1500
+                }
+            }, //          煎蛋网 - 大杂烩
+            qiushibaike: {
+                SiteTypeID: 0,
+                host: 'www.qiushibaike.com',
+                functionStart: function() {document.lastElementChild.appendChild(document.createElement('style')).textContent = '.qrcode-wrap, .qrcode-wrap-img, .index-side-left-AD1 {display: none !important;}';
+                if (location.pathname === '/') {
+                    curSite = DBSite.qiushibaike;
+                } else if (location.pathname.indexOf('/article/') === -1) {
+                    curSite = DBSite.qiushibaike_;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: '//ul[@class="pagination"]//a[./span[@class="next"]]',
+                    pageElement: 'css;.recommend-article > ul > li',
+                    insertPosition: ['css;.recommend-article > ul', 3],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1500
+                }
+            }, //         糗事百科
+            qiushibaike_: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//ul[@class="pagination"]//a[./span[@class="next"]]',
+                    pageElement: 'css;[id^="qiushi_tag_"]',
+                    insertPosition: ['css;ul.pagination', 1],
+                    replaceE: 'css;ul.pagination',
+                    scrollDelta: 1500
+                }
+            }, //        糗事百科 - 分类页
             lkong: {
                 SiteTypeID: 0,
                 host: 'www.lkong.com',
@@ -995,50 +1068,6 @@
                     scrollDelta: 1500
                 }
             }, //           A 岛 - 帖子内（手机版）
-            jandan: {
-                SiteTypeID: 0,
-                host: 'jandan.net',
-                functionStart: function() {if (location.pathname === '/' || location.pathname.indexOf('/page/') > -1) {
-                    curSite = DBSite.jandan;
-                } else if (location.pathname === '/dzh') {
-                    curSite = DBSite.jandan_dzh;
-                } else {
-                    curSite = DBSite.jandan_comment;
-                }},
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="wp-pagenavi"]/a[contains(text(), "下一页") or contains(text(), "更多文章")]',
-                    pageElement: 'css;#content > .list-post',
-                    insertPosition: ['css;.wp-pagenavi', 1],
-                    replaceE: 'css;.wp-pagenavi, #nav_prev',
-                    scrollDelta: 1500
-                },
-                function: {
-                    before: src_functionBefore,
-                    parameter: [0, 'img[data-original]', 'data-original']
-                }
-            }, //                  煎蛋网
-            jandan_comment: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: 'css;a.previous-comment-page',
-                    pageElement: 'css;ol.commentlist > li[id^="comment-"], script[src^="//cdn.jandan.net/static/min/"]',
-                    insertPosition: ['css;ol.commentlist', 3],
-                    replaceE: 'css;.cp-pagenavi, #nav_prev',
-                    scriptType: 3,
-                    scrollDelta: 1500
-                }
-            }, //          煎蛋网
-            jandan_dzh: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 2,
-                    nextLink: '.show_more',
-                    intervals: 1500,
-                    scrollDelta: 1500
-                }
-            }, //              煎蛋网 - 大杂烩
             guokr: {
                 SiteTypeID: 0,
                 host: 'www.guokr.com',
@@ -3438,6 +3467,25 @@
                     scrollDelta: 1000
                 }
             }, //  如意了教育 - 试卷
+            w3school_cn: {
+                SiteTypeID: 0,
+                host: 'www.w3school.com.cn',
+                functionStart: function() {if (location.pathname.split('/').length > 2) {curSite = DBSite.w3school_cn;}},
+                pager: {
+                    type: 1,
+                    nextLink: function() { // 过滤部分非本页的参考手册
+                        let next = document.querySelector('li.next > a')
+                        if (next.href.indexOf('/index.') === -1) return next.href;
+                        curSite = {SiteTypeID: 0}; return ''
+                    },
+                    pageElement: 'css;#maincontent > h1, #maincontent > div:not(#tpn):not(#bpn)',
+                    insertPosition: ['css;#bpn', 1],
+                    replaceE: 'css;ul.prenext, #navsecond, head > title',
+                    history: true,
+                    forceHTTPS: true,
+                    scrollDelta: 2000
+                }
+            }, //     W3school
             runoob: {
                 SiteTypeID: 0,
                 host: 'www.runoob.com',
