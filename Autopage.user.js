@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.6.9
+// @version      2.7.0
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、龙的天空、起点小说、煎蛋网、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -1957,7 +1957,7 @@
                     replaceE: 'css;#page-container',
                     scrollDelta: 900
                 }
-            }, //          起点小说
+            }, //              起点小说
             qidian_read: {
                 SiteTypeID: 0,
                 host: 'read.qidian.com',
@@ -1971,7 +1971,7 @@
                     history: true,
                     scrollDelta: 900
                 }
-            }, //     起点小说 - 阅读页
+            }, //         起点小说 - 阅读页
             baoshuu: {
                 SiteTypeID: 0,
                 host: 'www.baoshuu.com',
@@ -1985,7 +1985,7 @@
                     mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 900
                 }
-            }, //         宝书网
+            }, //             宝书网
             baoshuu_m: {
                 SiteTypeID: 0,
                 host: 'm.baoshuu.com',
@@ -1999,7 +1999,7 @@
                     mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 900
                 }
-            }, //       宝书网- 手机版
+            }, //           宝书网- 手机版
             _23wx: {
                 SiteTypeID: 0,
                 host: 'www.23wx.cc',
@@ -2014,7 +2014,7 @@
                     history: true,
                     scrollDelta: 1500
                 }
-            }, //           顶点小说
+            }, //               顶点小说
             xineyby: {
                 SiteTypeID: 0,
                 host: 'www.xineyby.com',
@@ -2033,7 +2033,7 @@
                     history: true,
                     scrollDelta: 900
                 }
-            }, //         无错小说网
+            }, //             无错小说网
             xineyby_list: {
                 SiteTypeID: 0,
                 pager: {
@@ -2045,7 +2045,7 @@
                     mimeType: 'text/html; charset=gbk',
                     scrollDelta: 900
                 }
-            }, //    无错小说网 - 分类/搜索页
+            }, //        无错小说网 - 分类/搜索页
             linovel: {
                 SiteTypeID: 0,
                 host: 'www.linovel.net',
@@ -2062,7 +2062,7 @@
                     replaceE: 'css;ul.pagination',
                     scrollDelta: 1000
                 }
-            }, //         轻之文库
+            }, //             轻之文库
             linovelib: {
                 SiteTypeID: 0,
                 host: 'www.linovelib.com',
@@ -2082,7 +2082,7 @@
                     history: true,
                     scrollDelta: 1000
                 }
-            }, //       哔哩轻小说
+            }, //           哔哩轻小说
             linovelib_wenku: {
                 SiteTypeID: 0,
                 pager: {
@@ -2097,7 +2097,7 @@
                     before: src_functionBefore,
                     parameter: [0, 'img[data-original]', 'data-original']
                 }
-            }, // 哔哩轻小说 - 文库
+            }, //     哔哩轻小说 - 文库
             linovelib_top: {
                 SiteTypeID: 0,
                 pager: {
@@ -2112,7 +2112,41 @@
                     before: src_functionBefore,
                     parameter: [0, 'img[data-original]', 'data-original']
                 }
-            }, //   哔哩轻小说 - 全本
+            }, //       哔哩轻小说 - 全本
+            linovelib_w: {
+                SiteTypeID: 0,
+                host: 'w.linovelib.com',
+                functionStart: function() {if (/\/novel\/\d+\/.+\.html/.test(location.pathname)) {
+                    curSite = DBSite.linovelib_w;
+                } else if (location.pathname.indexOf('/wenku/') > -1 || location.pathname.indexOf('/sa/') > -1) {
+                    curSite = DBSite.linovelib_w_wenku;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: function() {if (ReadParams) {return ReadParams.url_next}; return ''},
+                    pageElement: '//body/script[contains(text(), "var ReadParams")] | id("apage")/div',
+                    insertPosition: ['css;#apage', 3],
+                    replaceE: 'css;head > title',
+                    history: true,
+                    scriptType: 2,
+                    scrollDelta: 1000
+                }
+            }, //         哔哩轻小说 (手机版)
+            linovelib_w_wenku: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;#pagelink > strong+a[href] ,#pagelink a.next[href]',
+                    pageElement: 'css;ol.book-ol > li',
+                    insertPosition: ['css;ol.book-ol', 3],
+                    replaceE: 'css;#pagelink',
+                    scrollDelta: 1000
+                },
+                function: {
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-original]', 'data-original']
+                }
+            }, //   哔哩轻小说 (手机版) - 文库
             cartoonmad: {
                 SiteTypeID: 0,
                 host: ['www.cartoonmad.com','www.cartoonmad.cc'],
