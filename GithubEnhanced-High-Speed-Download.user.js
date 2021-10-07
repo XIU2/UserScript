@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.6.2
+// @version      1.6.3
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -41,13 +41,13 @@
             fontColor = '#97a0aa';
         }
     }
-    //['https://git.yumenaka.net', '美国'],
     const download_url = [
         ['https://gh.api.99988866.xyz', '美国 1'],
         ['https://github.91chifun.workers.dev', '美国 2'],
         ['https://gh.xiu2.xyz', '美国 3'],
         ['https://gh.argv.cc', '美国 4'],
         ['https://pd.zwc365.com/seturl', '美国 5'],
+        ['https://git.yumenaka.net', '美国 6'],
         ['https://download.fastgit.org', '日本'],
         ['https://ghproxy.com', '韩国']
     ],
