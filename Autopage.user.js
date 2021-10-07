@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.7.5
+// @version      2.7.6
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -1826,7 +1826,7 @@
                     }},
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.nextprev[href]',
+                    nextLink: '//a[@class="nextprev"][contains(text(), "〉") or contains(text(), "下一页") or contains(text(), "»")]',
                     pageElement: 'css;#data_list > tr',
                     insertPosition: ['css;#data_list', 3],
                     replaceE: 'css;.pages',
@@ -2672,15 +2672,15 @@
             }, //               乐软博客
             pc521: {
                 SiteTypeID: 0,
-                host: 'www.pc521.net',
-                functionStart: function() {if (location.search.slice(0,3) === '?s=') {curSite = DBSite.pc521_search;} else {curSite = DBSite.pc521;}},
+                host: ['www.pc521.net', 'www.winos.me'],
+                functionStart: function() {if (location.search.slice(0,3) === '?s=') {curSite = DBSite.pc521_search;} else if (location.pathname.indexOf('.html') === -1) {curSite = DBSite.pc521;}},
                 pager: {
                     type: 2,
                     nextLink: 'div[id^="ias_trigger_"]',
                     intervals: 1000,
                     scrollDelta: 1000
                 }
-            }, //                  不忘初心
+            }, //                  不忘初心 + WINOS
             pc521_search: {
                 SiteTypeID: 0,
                 pager: {
@@ -2748,14 +2748,14 @@
                 host: 'www.weidown.com',
                 functionStart: function() {if (location.pathname.indexOf('/search/') > -1) { //搜索页
                     curSite = DBSite.weidown_search;
-                } else if (location.pathname.indexOf('/special/') > -1) { // 专题页
+                } else if (location.pathname.indexOf('/special') > -1) { // 专题页
                     curSite = DBSite.weidown_special;
                 } else {
                     curSite = DBSite.weidown;
                 }},
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="nextpage"][@href]',
+                    nextLink: 'css;a.nextpage',
                     pageElement: 'css;.articleWrapper > .itemArticle, .articleWrapper > .richTextItem.search',
                     insertPosition: ['css;.articleWrapper', 3],
                     replaceE: 'css;#pageGroup',
@@ -2766,7 +2766,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="nextpage"][@href]',
+                    nextLink: 'css;a.nextpage',
                     pageElement: 'css;.articleListWrapper > .richTextItem.search',
                     insertPosition: ['css;#pageGroup', 1],
                     replaceE: 'css;#pageGroup',
@@ -2777,16 +2777,16 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="nextpage"][@href]',
-                    pageElement: 'css;.special > .item',
-                    insertPosition: ['css;.special', 3],
+                    nextLink: 'css;a.nextpage',
+                    pageElement: 'css;.special > .item, .articleWrapper > div',
+                    insertPosition: ['css;.special, .articleWrapper', 3],
                     replaceE: 'css;#pageGroup',
                     scrollDelta: 700
                 }
             }, //        微当下载 - 专题页
             th_sjy: {
                 SiteTypeID: 0,
-                host: 'www.th-sjy.com',
+                host: ['www.th-sjy.com', 'www.puresys.net'],
                 pager: {
                     type: 1,
                     nextLink: 'css;li.next-page > a',
@@ -2794,8 +2794,12 @@
                     insertPosition: ['css;.pagination', 1],
                     replaceE: 'css;.pagination',
                     scrollDelta: 2000
+                },
+                function: {
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-src]', 'data-src']
                 }
-            }, //                 th-sjy 汉化
+            }, //                 th-sjy 汉化 + Puresys
             fsylr: {
                 SiteTypeID: 0,
                 host: 'fsylr.com',
@@ -2879,6 +2883,40 @@
                     scrollDelta: 1000
                 }
             }, //                  异星软件空间
+            yrxitong: {
+                SiteTypeID: 0,
+                host: 'www.yrxitong.com',
+                functionStart: function() {
+                    if (location.pathname === '/sr.jsp') {
+                        curSite = DBSite.yrxitong_search;
+                    } else if (location.pathname.indexOf('/h-nd-') === -1) {
+                        curSite = DBSite.yrxitong;
+                    }
+                },
+                pager: {
+                    type: 1,
+                    nextLink: 'css;span.pageNext > a',
+                    pageElement: 'css;#containerFormsCenter .m_news_list > div',
+                    insertPosition: ['css;#containerFormsCenter .m_news_list', 3],
+                    replaceE: 'css;.pagenation',
+                    scrollDelta: 1200
+                },
+                function: {
+                    before: src_functionBefore,
+                    parameter: [1, 'a[data-original]', 'data-original']
+                }
+            }, //               小鱼儿 yr 系统
+            yrxitong_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;span.pageNext > a',
+                    pageElement: 'css;#containerFormsCenter .newsList > div',
+                    insertPosition: ['css;#containerFormsCenter .newsList', 3],
+                    replaceE: 'css;.pagenation',
+                    scrollDelta: 2000
+                }
+            }, //        小鱼儿 yr 系统 - 搜索页
             sordum: {
                 SiteTypeID: 0,
                 host: 'www.sordum.org',
@@ -3677,54 +3715,50 @@
     if (webType != 1) {
         // < 所有 Discuz!论坛 >
         if (webType === 2) {
-            if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
-                if (location.pathname.indexOf('/forum-') > -1) { //             < 各版块帖子列表 >
-                    if (document.getElementById('autopbn')) { //                判断是否有 [下一页] 按钮
-                        curSite = DBSite.discuz_forum;
-                    } else if (document.getElementById('waterfall')) { //       判断是否为图片模式
-                        curSite = DBSite.discuz_waterfall; waterfallStyle(); // 图片模式列表样式预处理
-                    } else {
-                        curSite = DBSite.discuz_guide;
-                    }
-                } else if (location.pathname.indexOf('/thread-') > -1) { //     < 帖子内 >
-                    if (GM_getValue('menu_discuz_thread_page')) {
-                        curSite = DBSite.discuz_thread;
-                        hidePgbtn(); //                                         隐藏帖子内的 [下一页] 按钮
-                    }
-                } else if(location.pathname.indexOf('search') > -1) { //        < 搜索结果 >
+            if (document.querySelector('body[id="nv_forum"][class^="pg_"][onkeydown*="27"]')) {
+                switch (document.querySelector('body[id="nv_forum"][class^="pg_"][onkeydown*="27"]').className) {
+                    case 'pg_forumdisplay': // < 各版块帖子列表 >
+                        discuzForum(); break;
+                    case 'pg_viewthread': //   < 帖子内 >
+                        discuzThread(); break;
+                    case 'pg_guide': //        < 导读帖子列表等 >
+                        curSite = DBSite.discuz_guide; break;
+                    case 'pg_collection': //   < 淘贴列表 >
+                        curSite = DBSite.discuz_collection; break;
+                }
+            }
+            // 如果上面没有匹配的则继续                  < 搜索结果 >
+            if (curSite.SiteTypeID === 0) {
+                if (location.pathname.indexOf('search') > -1 || document.querySelector('body[id="nv_search"][onkeydown*="27"]')) {
                     curSite = DBSite.discuz_search;
                 }
             }
-            // 如果没有匹配的则继续
+            // 如果上面没有匹配的则继续
+            if (curSite.SiteTypeID === 0) {
+                if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
+                    if (location.pathname.indexOf('/forum-') > -1) { //             < 各版块帖子列表 >
+                        discuzForum();
+                    } else if (location.pathname.indexOf('/thread-') > -1) { //     < 帖子内 >
+                        discuzThread();
+                    }
+                }
+            }
+            // 如果上面没有匹配的则继续
             if (curSite.SiteTypeID === 0) {
                 if (location.search.indexOf('mod=forumdisplay') > -1 || location.pathname.indexOf('forumdisplay.php') > -1) { //      < 各版块帖子列表 >
-                    if (document.getElementById('autopbn')) { //                判断是否有 [下一页] 按钮
-                        curSite = DBSite.discuz_forum;
-                    } else if (document.getElementById('waterfall')) { //       判断是否为图片模式
-                        curSite = DBSite.discuz_waterfall; waterfallStyle(); // 图片模式列表样式预处理
-                    } else {
-                        curSite = DBSite.discuz_guide;
-                    }
+                    discuzForum();
                 } else if (location.search.indexOf('mod=viewthread') > -1 || location.pathname.indexOf('viewthread.php') > -1) { // < 帖子内 >
-                    if (GM_getValue('menu_discuz_thread_page')) {
-                        curSite = DBSite.discuz_thread;
-                        hidePgbtn(); //                                         隐藏帖子内的 [下一页] 按钮
-                    }
+                    discuzThread();
                 } else if (location.search.indexOf('mod=guide') > -1) { //      < 导读帖子列表 >
                     curSite = DBSite.discuz_guide;
-                } else if(location.search.indexOf('mod=space') > -1 && location.search.indexOf('&view=me') > -1) { // 别人的主题/回复
+                } else if(location.search.indexOf('mod=space') > -1 && location.search.indexOf('do=thread') > -1) { // 别人的主题/回复
                     curSite = DBSite.discuz_youspace;
                 } else if (location.search.indexOf('mod=collection') > -1) { // < 淘贴列表 >
                     curSite = DBSite.discuz_collection;
-                } else if (location.pathname.indexOf('search') > -1) { //       < 搜索结果 >
-                    curSite = DBSite.discuz_search;
                 } else if (document.getElementById('threadlist')) { //          < 部分论坛的各板块 URL 是自定义的 >
-                    curSite = DBSite.discuz_forum;
+                    discuzForum();
                 } else if (document.getElementById('postlist')) { //            < 部分论坛的帖子内 URL 是自定义的 >
-                    if (GM_getValue('menu_discuz_thread_page')) {
-                        curSite = DBSite.discuz_thread;
-                        hidePgbtn(); //                                         隐藏帖子内的 [下一页] 按钮
-                    }
+                    discuzThread();
                 }
             }
             // < 所有 Flarum 论坛 >
@@ -3774,6 +3808,23 @@
     pageLoading(); // 自动无缝翻页
 
 
+    // [Discuz! 论坛] 判断各版块帖子列表类型
+    function discuzForum() {
+        if (document.getElementById('autopbn')) { //                判断是否有 [下一页] 按钮
+            curSite = DBSite.discuz_forum;
+        } else if (document.getElementById('waterfall')) { //       判断是否为图片模式
+            curSite = DBSite.discuz_waterfall; waterfallStyle(); // 图片模式列表样式预处理
+        } else {
+            curSite = DBSite.discuz_guide;
+        }
+    }
+    // [Discuz! 论坛] 判断帖子内
+    function discuzThread() {
+        if (GM_getValue('menu_discuz_thread_page')) {
+            curSite = DBSite.discuz_thread;
+            hidePgbtn(); // 隐藏帖子内的 [下一页] 按钮
+        }
+    }
     // [Discuz! 论坛] 隐藏帖子内的 [下一页] 按钮
     function hidePgbtn() {
         document.lastElementChild.appendChild(document.createElement('style')).textContent = '.pgbtn {display: none;}';
@@ -4832,7 +4883,7 @@
 
         if (support) {
             console.info('[自动无缝翻页] - 其他网站（独立规则）'); return 1;
-        } else if (document.querySelector('meta[name="author"][content*="Discuz!"], meta[name="generator"][content*="Discuz!"]') || (document.querySelector('a[href*="www.discuz.net"]') && document.querySelector('a[href*="www.discuz.net"]').textContent.indexOf('Discuz!') > -1) || (document.getElementById('ft') && document.getElementById('ft').textContent.indexOf('Discuz!') > -1)) {
+        } else if (document.querySelector('meta[name="author"][content*="Discuz!"], meta[name="generator"][content*="Discuz!"]') || document.querySelector('body[id="nv_forum"][class^="pg_"][onkeydown*="27"]') || document.querySelector('body[id="nv_search"][onkeydown*="27"]') || (document.querySelector('a[href*="www.discuz.net"]') && document.querySelector('a[href*="www.discuz.net"]').textContent.indexOf('Discuz!') > -1) || (document.getElementById('ft') && document.getElementById('ft').textContent.indexOf('Discuz!') > -1)) {
             console.info('[自动无缝翻页] - Discuz! 论坛'); return 2;
         } else if (document.getElementById('flarum-loading')) {
             console.info('[自动无缝翻页] - Flarum 论坛'); return 3;
