@@ -326,12 +326,12 @@
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType != 1) return
                     if (target.tagName === 'A') {
-                        if (target.href.slice(0,4) != 'http' || target.href.indexOf('#;') > -1 || target.onclick) {
+                        if (target.onclick || target.href.slice(0,4) != 'http' || target.href.indexOf('#;') > -1 || target.href.indexOf('night/toggle') > -1 || target.href.indexOf('/favorite') > -1) {
                             target.target = '_self'
                         }
                     } else {
                         document.querySelectorAll('a').forEach(function (_this) {
-                            if (_this.href.slice(0,4) != 'http' || _this.href.indexOf('#;') > -1 || _this.onclick) {
+                            if (_this.onclick || _this.href.slice(0,4) != 'http' || _this.href.indexOf('#;') > -1 || _this.href.indexOf('night/toggle') > -1 || _this.href.indexOf('/favorite') > -1) {
                                 _this.target = '_self'
                             }
                         });
