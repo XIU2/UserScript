@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         新标签页打开链接
-// @version      1.0.3
+// @version      1.0.4
 // @author       X.I.U
 // @description  将网页中所有链接改为新标签页打开~
 // @match        *://*/*
@@ -15,23 +15,54 @@
 
 (function() {
     'use strict';
-    targetBlank(); // 修改为新标签页打开
+    targetBlank(); //  修改为新标签页打开
+    targetDiscuz(); // 针对 Discuz! 论坛的帖子
+    aObserver(); //    针对动态加载内容中的 a 标签
+
+
+    // 修改为新标签页打开
+    function targetBlank() {
+        document.head.appendChild(document.createElement('base')).target = '_blank'; // 让所有链接默认以新标签页打开
+        Array.from(document.links).forEach(function (_this) {
+            if (_this.href && _this.href.slice(0,4) != 'http') {
+                _this.target = '_self'
+            }
+        })
+    }
+
 
     // 针对 Discuz! 论坛的帖子
-    if (document.querySelector('meta[name="author"][content*="Discuz!"], meta[name="generator"][content*="Discuz!"]') || document.getElementById('ft') && document.getElementById('ft').textContent.indexOf('Discuz!') > -1) {
-        let atarget = document.getElementById('atarget');
-        if (atarget && atarget.className.indexOf('atarget_1') === -1) { // 强制勾选 [新窗]
-            atarget.click();
+    function targetDiscuz() {
+        if (document.querySelector('meta[name="author"][content*="Discuz!"], meta[name="generator"][content*="Discuz!"]') || document.querySelector('body[id="nv_forum"][class^="pg_"][onkeydown*="27"]') || document.querySelector('body[id="nv_search"][onkeydown*="27"]') || (document.querySelector('a[href*="www.discuz.net"]') && document.querySelector('a[href*="www.discuz.net"]').textContent.indexOf('Discuz!') > -1) || (document.getElementById('ft') && document.getElementById('ft').textContent.indexOf('Discuz!') > -1)) {
+            let atarget = document.getElementById('atarget');
+            if (atarget && atarget.className.indexOf('atarget_1') === -1) { // 强制勾选 [新窗]
+                atarget.click();
+            }
         }
     }
 
-     // 修改为新标签页打开
-    function targetBlank() {
-        document.head.appendChild(document.createElement('base')).target = '_blank';
-        Array.from(document.links).forEach(function (_this) {
-            if (_this.href && _this.href.slice(0,4) === 'http') {
-                _this.target = '_blank'
+
+    // 针对动态加载内容中的 a 标签
+    function aObserver() {
+        const callback = (mutationsList, observer) => {
+            for (const mutation of mutationsList) {
+                for (const target of mutation.addedNodes) {
+                    if (target.nodeType != 1) return
+                    if (target.tagName === 'A') {
+                        if (target.href && target.href.slice(0,4) != 'http') {
+                            target.target = '_self'
+                        }
+                    } else {
+                        document.querySelectorAll('a').forEach(function (_this) {
+                            if (_this.href && _this.href.slice(0,4) != 'http') {
+                                _this.target = '_self'
+                            }
+                        });
+                    }
+                }
             }
-        })
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(document, { childList: true, subtree: true });
     }
 })();
