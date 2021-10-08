@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.8.0
+// @version      2.8.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -1565,137 +1565,6 @@
                     parameter: [1, 'a[data-original]', 'data-original']
                 }
             }, //        真不卡影院
-            dm233: {
-                SiteTypeID: 0,
-                host: 'www.dm233.cc',
-                functionStart: function() {if (location.pathname.indexOf('/catalog/') > -1 || location.pathname === '/recommend/' || location.pathname === '/search') {
-                    curSite = DBSite.dm233;
-                } else if (location.pathname === '/article/') {
-                    curSite = DBSite.dm233_article;
-                } else if (location.pathname === '/rank/') {
-                    curSite = DBSite.dm233_rank;
-                }},
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="pagelist"]//a[contains(text(), "下一页") or contains(text(), "下一頁")]',
-                    pageElement: 'css;.dhnew ul > li',
-                    insertPosition: ['css;.dhnew ul', 3],
-                    replaceE: 'css;.pagelist',
-                    scrollDelta: 1000
-                }
-            }, //         233 动漫
-            dm233_article: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="pagelist"]//a[contains(text(), "下一页") or contains(text(), "下一頁")]',
-                    pageElement: 'css;.xgyd ul > li',
-                    insertPosition: ['css;.xgyd ul', 3],
-                    replaceE: 'css;.pagelist',
-                    scrollDelta: 1000
-                }
-            }, // 233 动漫 - 动漫情报/资讯
-            dm233_rank: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="pagelist"]//a[contains(text(), "下一页") or contains(text(), "下一頁")]',
-                    pageElement: 'css;.side-update.normal-wai > .normal-nei',
-                    insertPosition: ['css;.side-update.normal-wai', 3],
-                    replaceE: 'css;.pagelist',
-                    scrollDelta: 1000
-                }
-            }, //    233 动漫 - 排行榜
-            agefans: {
-                SiteTypeID: 0,
-                host: 'www.agefans.cc',
-                functionStart: function() {if (location.pathname.indexOf('/catalog/') > -1 || location.pathname === '/search') {
-                    curSite = DBSite.agefans;
-                } else if (location.pathname === '/recommend' || location.pathname === '/update') {
-                    curSite = DBSite.agefans_;
-                } else if (location.pathname === '/rank') {
-                    curSite = DBSite.agefans_rank;
-                }},
-                pager: {
-                    type: 1,
-                    nextLink: 'id("container")//div[@class="blockcontent"]/div[@style][not(@class)]/li/a[@href][contains(text(), "下一页")]',
-                    pageElement: 'css;#container .blockcontent1 > div',
-                    insertPosition: ['css;#container .blockcontent1', 3],
-                    replaceE: 'css;#container .blockcontent > div[style]:not([class])',
-                    scrollDelta: 1000
-                }
-            }, //       AGE 动漫 - 全部/搜索
-            agefans_: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: 'id("container")//div[@class="blockcontent"]/div[@style][not(@class)]/li/a[@href][contains(text(), "下一页")]',
-                    pageElement: 'css;#container .blockcontent > ul > li',
-                    insertPosition: ['css;#container .blockcontent > ul', 3],
-                    replaceE: 'css;#container .blockcontent > div[style]:not([class])',
-                    scrollDelta: 1000
-                }
-            }, //      AGE 动漫 - 其他页
-            agefans_rank: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: 'id("container")/ul[@style][not(@class)]/li/a[@href][contains(text(), "下一页")]',
-                    pageElement: 'css;#container > .div_right  .blockcontent.div_right_r_3 > ul',
-                    insertPosition: ['css;#container > .div_right  .blockcontent.div_right_r_3', 3],
-                    replaceE: 'css;#container > ul[style]:not([class])',
-                    scrollDelta: 1000
-                }
-            }, //  AGE 动漫 - 排行榜
-            yhdm: {
-                SiteTypeID: 0,
-                host: 'www.imomoe.la',
-                functionStart: function() {if (location.pathname.indexOf('/list/') > -1) {
-                    curSite = DBSite.yhdm;
-                } else if (location.pathname === '/so.asp' || location.pathname === '/search.asp') {
-                    curSite = DBSite.yhdm_;
-                }},
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="pages"]/a[@href][contains(text(), "下一页")]',
-                    pageElement: 'css;#contrainer > .img> ul > li',
-                    insertPosition: ['css;#contrainer > .img> ul', 3],
-                    replaceE: 'css;.pages',
-                    mimeType: 'text/html; charset=gb2312',
-                    scrollDelta: 1000
-                }
-            }, //          樱花动漫
-            yhdm_: {
-                SiteTypeID: 0,
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="pages"]/a[@href][contains(text(), "下一页")]',
-                    pageElement: 'css;#contrainer .fire .pics > ul > li',
-                    insertPosition: ['css;#contrainer .fire .pics > ul', 3],
-                    replaceE: 'css;.pages',
-                    mimeType: 'text/html; charset=gb2312',
-                    scrollDelta: 1000
-                }
-            }, //         樱花动漫 - 搜索页等
-            mandao: {
-                SiteTypeID: 0,
-                host: 'www.mandao.tv',
-                functionStart: function() {if (location.pathname != '/' && location.pathname.indexOf('/man') === -1) {
-                    curSite = DBSite.mandao;
-                }},
-                pager: {
-                    type: 1,
-                    nextLink: '//div[contains(@class, "page")]/a[contains(text(), ">")]',
-                    pageElement: 'css;.index-tj > ul > li',
-                    insertPosition: ['css;.index-tj > ul', 3],
-                    replaceE: 'css;.page',
-                    scrollDelta: 1000
-                },
-                function: {
-                    before: src_functionBefore,
-                    parameter: [0, 'img[data-original]', 'data-original']
-                }
-            }, //        漫岛动漫
             zzzfun: {
                 SiteTypeID: 0,
                 host: 'www.zzzfun.com',
@@ -1761,6 +1630,163 @@
                     scrollDelta: 1000
                 }
             }, //  吐槽弹幕网 - 搜索页
+            mandao: {
+                SiteTypeID: 0,
+                host: 'www.mandao.tv',
+                functionStart: function() {if (location.pathname != '/' && location.pathname.indexOf('/man') === -1) {
+                    curSite = DBSite.mandao;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[contains(@class, "page")]/a[contains(text(), ">")]',
+                    pageElement: 'css;.index-tj > ul > li',
+                    insertPosition: ['css;.index-tj > ul', 3],
+                    replaceE: 'css;.page',
+                    scrollDelta: 1000
+                },
+                function: {
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-original]', 'data-original']
+                }
+            }, //        漫岛动漫
+            yhdm: {
+                SiteTypeID: 0,
+                host: 'www.imomoe.la',
+                functionStart: function() {if (location.pathname.indexOf('/list/') > -1) {
+                    curSite = DBSite.yhdm;
+                } else if (location.pathname === '/so.asp' || location.pathname === '/search.asp') {
+                    curSite = DBSite.yhdm_;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="pages"]/a[@href][contains(text(), "下一页")]',
+                    pageElement: 'css;#contrainer > .img> ul > li',
+                    insertPosition: ['css;#contrainer > .img> ul', 3],
+                    replaceE: 'css;.pages',
+                    mimeType: 'text/html; charset=gb2312',
+                    scrollDelta: 1000
+                }
+            }, //          樱花动漫
+            yhdm_: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="pages"]/a[@href][contains(text(), "下一页")]',
+                    pageElement: 'css;#contrainer .fire .pics > ul > li',
+                    insertPosition: ['css;#contrainer .fire .pics > ul', 3],
+                    replaceE: 'css;.pages',
+                    mimeType: 'text/html; charset=gb2312',
+                    scrollDelta: 1000
+                }
+            }, //         樱花动漫 - 搜索页等
+            agefans: {
+                SiteTypeID: 0,
+                host: 'www.agefans.cc',
+                functionStart: function() {if (location.pathname.indexOf('/catalog/') > -1 || location.pathname === '/search') {
+                    curSite = DBSite.agefans;
+                } else if (location.pathname === '/recommend' || location.pathname === '/update') {
+                    curSite = DBSite.agefans_;
+                } else if (location.pathname === '/rank') {
+                    curSite = DBSite.agefans_rank;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: 'id("container")//div[@class="blockcontent"]/div[@style][not(@class)]/li/a[@href][contains(text(), "下一页")]',
+                    pageElement: 'css;#container .blockcontent1 > div',
+                    insertPosition: ['css;#container .blockcontent1', 3],
+                    replaceE: 'css;#container .blockcontent > div[style]:not([class])',
+                    scrollDelta: 1000
+                }
+            }, //       AGE 动漫 - 全部/搜索
+            agefans_: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'id("container")//div[@class="blockcontent"]/div[@style][not(@class)]/li/a[@href][contains(text(), "下一页")]',
+                    pageElement: 'css;#container .blockcontent > ul > li',
+                    insertPosition: ['css;#container .blockcontent > ul', 3],
+                    replaceE: 'css;#container .blockcontent > div[style]:not([class])',
+                    scrollDelta: 1000
+                }
+            }, //      AGE 动漫 - 其他页
+            agefans_rank: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'id("container")/ul[@style][not(@class)]/li/a[@href][contains(text(), "下一页")]',
+                    pageElement: 'css;#container > .div_right  .blockcontent.div_right_r_3 > ul',
+                    insertPosition: ['css;#container > .div_right  .blockcontent.div_right_r_3', 3],
+                    replaceE: 'css;#container > ul[style]:not([class])',
+                    scrollDelta: 1000
+                }
+            }, //  AGE 动漫 - 排行榜
+            dm233: {
+                SiteTypeID: 0,
+                host: 'www.dm233.cc',
+                functionStart: function() {if (location.pathname.indexOf('/catalog/') > -1 || location.pathname === '/recommend/' || location.pathname === '/search') {
+                    curSite = DBSite.dm233;
+                } else if (location.pathname === '/article/') {
+                    curSite = DBSite.dm233_article;
+                } else if (location.pathname === '/rank/') {
+                    curSite = DBSite.dm233_rank;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="pagelist"]//a[contains(text(), "下一页") or contains(text(), "下一頁")]',
+                    pageElement: 'css;.dhnew ul > li',
+                    insertPosition: ['css;.dhnew ul', 3],
+                    replaceE: 'css;.pagelist',
+                    scrollDelta: 1000
+                }
+            }, //         233 动漫
+            dm233_article: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="pagelist"]//a[contains(text(), "下一页") or contains(text(), "下一頁")]',
+                    pageElement: 'css;.xgyd ul > li',
+                    insertPosition: ['css;.xgyd ul', 3],
+                    replaceE: 'css;.pagelist',
+                    scrollDelta: 1000
+                }
+            }, // 233 动漫 - 动漫情报/资讯
+            dm233_rank: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="pagelist"]//a[contains(text(), "下一页") or contains(text(), "下一頁")]',
+                    pageElement: 'css;.side-update.normal-wai > .normal-nei',
+                    insertPosition: ['css;.side-update.normal-wai', 3],
+                    replaceE: 'css;.pagelist',
+                    scrollDelta: 1000
+                }
+            }, //    233 动漫 - 排行榜
+            anime1: {
+                SiteTypeID: 0,
+                host: 'anime1.me',
+                functionStart: function() {if (location.search.indexOf('s=') > -1) {
+                        curSite = DBSite.anime1_search;
+                    } else if (location.pathname === '/') {
+                        curSite = DBSite.anime1;
+                }},
+                pager: {
+                    type: 4,
+                    nextLink: anime1_functionNext,
+                    intervals: 500,
+                    scrollDelta: 800
+                }
+            }, //        Anime1
+            anime1_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;.nav-previous > a',
+                    pageElement: 'css;#main > article',
+                    insertPosition: ['css;nav.navigation', 1],
+                    replaceE: 'css;nav.navigation',
+                    scrollDelta: 1200
+                }
+            }, // Anime1 - 搜索页
             yinfans: {
                 SiteTypeID: 0,
                 host: 'www.yinfans.net',
@@ -4170,6 +4196,30 @@
         return pageElems
     }
 
+
+    // [Anime1] 获取下一页地址
+    function anime1_functionNext() {
+        let next = document.getElementById('tablepress-1_next');
+        if (next && next.className.indexOf('disabled') === -1) {
+            let oldList = document.querySelector('tbody.row-hover');
+            if (oldList) {
+                // 将当前列表存为变量
+                oldList = oldList.innerHTML;
+                // 暂停一段时间，避免多次重复点击下一页
+                /*let _SiteTypeID = curSite.SiteTypeID;
+                curSite.SiteTypeID = 0;
+                setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, 400)*/
+                // 点击下一页
+                next.click();
+                // 当前页码 + 1
+                pageNum.now = pageNum._now + 1
+                // 插入到列表头部
+                document.querySelector('tbody.row-hover').insertAdjacentHTML('afterbegin', oldList);
+            }
+        }
+    }
+
+
     // [SkrBT] 获取下一页地址
     function skrbt_functionNext() {
         let page = document.querySelector('a[onclick][aria-label="Next"]');
@@ -5139,7 +5189,7 @@
             let addTo1 = addTo(curSite.pager.insertPosition[1]);
 
             // 插入新页面元素
-            if (curSite.pager.insertPosition[1] === 4) { // 插入到目标本身后面，需要合并后一起插入
+            if (curSite.pager.insertPosition[1] === 2 || curSite.pager.insertPosition[1] === 4) { // 插入到元素内头部、目标本身后面，需要合并后一起插入，否则会顺序相反
                 let afterend = '';
                 pageElems.forEach(function (one) {afterend += one.outerHTML;});
                 toElement.insertAdjacentHTML(addTo1, afterend);
