@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.7.8
+// @version      2.7.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、真不卡影院、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -3272,6 +3272,53 @@
                     scrollDelta: 1000
                 }
             }, //       SegmentFault - Search
+            cnblogs: {
+                SiteTypeID: 0,
+                host: ['www.cnblogs.com', 'zzk.cnblogs.com'],
+                functionStart: function() {
+                    if (location.host === 'zzk.cnblogs.com') {
+                        curSite = DBSite.cnblogs_search;
+                    } else if (document.getElementById('post_list')) {
+                        curSite = DBSite.cnblogs_postlist;
+                    } else if (location.pathname.split('/').length === 3 && document.querySelector('.topicListFooter')) {
+                        curSite = DBSite.cnblogs;
+                        if (!document.getElementById('homepage_top_pager')) {
+                            document.querySelector('.forFlow').insertAdjacentHTML(addTo(2), '<div id="homepage_top_pager" class="topicListFooter"></div>');
+                            document.querySelector('.forFlow').insertAdjacentHTML(addTo(3), '<div id="homepage_bottom_pager" class="topicListFooter"></div>');
+                        }
+                    }
+                },
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="topicListFooter"]//a[contains(text(), "下一页")]',
+                    pageElement: 'css;div.day',
+                    insertPosition: ['css;.topicListFooter:not([id])', 1],
+                    replaceE: 'css;.topicListFooter',
+                    scrollDelta: 1000
+                }
+            }, //                   博客园 - 文章列表（个人）
+            cnblogs_postlist: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="pager"]//a[contains(text(), ">")]',
+                    pageElement: 'css;#post_list > article',
+                    insertPosition: ['css;#post_list', 3],
+                    replaceE: 'css;.pager',
+                    scrollDelta: 1000
+                }
+            }, //          博客园 - 文章列表
+            cnblogs_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="pager"]//a[contains(text(), ">")]',
+                    pageElement: 'css;div.searchItem',
+                    insertPosition: ['css;#paging_block', 1],
+                    replaceE: 'css;.pager',
+                    scrollDelta: 1000
+                }
+            }, //            博客园 - 搜索页
             libgen: {
                 SiteTypeID: 0,
                 host: /libgen/,
