@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.1.2
+// @version      1.1.3
 // @author       X.I.U
 // @description  自动签到、链接转图片、自动无缝翻页、回到顶部（右键点击两侧空白处）、快速回复（左键双击两侧空白处）、新标签页打开链接、标签页伪装为 Github（摸鱼）
 // @match        *://v2ex.com/*
@@ -77,9 +77,6 @@
     var curSite = {SiteTypeID: 0};
 
     // 自动翻页规则
-    // HT_insert：1 = 插入该元素本身的前面；2 = 插入该元素当中，第一个子元素前面；3 = 插入该元素当中，最后一个子元素后面；4 = 插入该元素本身的后面；
-    // scrollDelta：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大
-    // function：before = 插入前执行函数；after = 插入后执行函数；parameter = 参数
     let DBSite = {
         recent: { // 最近主题页
             SiteTypeID: 1,
@@ -90,10 +87,6 @@
                 HT_insert: ['//div[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
                 replaceE: 'css;#Main > .box > .cell[style]:not(.item) > table',
                 scrollDelta: 1500
-            },
-            function: {
-                after: linksBlank,
-                parameter: '#Main a.topic-link:not([target])'
             }
         },
         notifications: { // 提醒消息页
@@ -105,10 +98,6 @@
                 HT_insert: ['css;#notifications', 3],
                 replaceE: 'css;#Main > .box > .cell[style] > table',
                 scrollDelta: 1500
-            },
-            function: {
-                after: linksBlank,
-                parameter: '#Main a[href^="/t/"]:not([target])'
             }
         },
         replies: { // 用户回复页
@@ -120,10 +109,6 @@
                 HT_insert: ['//div[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
                 replaceE: 'css;#Main > .box > .cell[style] > table',
                 scrollDelta: 1500
-            },
-            function: {
-                after: linksBlank,
-                parameter: '#Main a[href^="/t/"]:not([target])'
             }
         },
         go: { // 分类主题页
@@ -135,10 +120,6 @@
                 HT_insert: ['css;#TopicsNode', 3],
                 replaceE: 'css;#Main > .box > .cell[style] > table',
                 scrollDelta: 1500
-            },
-            function: {
-                after: linksBlank,
-                parameter: '#Main a.topic-link:not([target])'
             }
         },
         reply: { // 帖子内容页
@@ -179,16 +160,13 @@
 
     switch (location.pathname) {
         case "/": //              首页
-            linksBlank('#Main a.topic-link:not([target])');
             addChangesLink();
             break;
         case "/recent": //        最近主题页
             curSite = DBSite.recent;
-            linksBlank('#Main a.topic-link:not([target])');
             break;
         case "/notifications": // 提醒消息页
             curSite = DBSite.notifications;
-            linksBlank('#Main a[href^="/t/"]:not([target])');
             break;
         case "/balance": //       账户余额页
             curSite = DBSite.balance;
@@ -196,23 +174,21 @@
         default:
             if (location.pathname.indexOf('/go/') > -1) { // 分类主题页
                 curSite = DBSite.go;
-                linksBlank('#Main a.topic-link:not([target])');
             } else if (location.pathname.indexOf('/t/') > -1) { // 帖子内容页
                 if(menu_value('menu_pageLoading_reply'))curSite = DBSite.reply_positive; // 帖子内自动无缝翻页
                 if(menu_value('menu_quickReply'))quickReply(); // 快速回复（双击左右两侧空白处）
-                linksBlank('#Main .box .topic_content a:not([href^="/member"]):not([target])');
             } else if (location.pathname.indexOf('/replies') > -1) { // 用户回复页
                 curSite = DBSite.replies;
-                linksBlank('#Main a[href^="/t/"]:not([target])');
             }
     }
 
     curSite.pageUrl = ''; // 下一页URL
-    if(menu_value('menu_fish'))fish(); // 标签页伪装为 Github（摸鱼）
-    if(menu_value('menu_autoClockIn'))setTimeout(qianDao, 1000); // 自动签到（后台），延迟 1 秒执行是为了兼容 [V2ex Plus] 扩展
-    if(menu_value('menu_pageLoading'))pageLoading(); // 自动翻页（无缝）
-    if(menu_value('menu_backToTop'))backToTop(); // 回到顶部（右键点击左右两侧空白处）
-    if(menu_value('menu_linksToImgs'))linksToImgs(); // 链接转图片
+    if(menu_value('menu_linksBlank')) linksBlank(); //               新标签页打开链接
+    if(menu_value('menu_fish')) fish(); //                           标签页伪装为 Github（摸鱼）
+    if(menu_value('menu_autoClockIn')) setTimeout(qianDao, 1000); // 自动签到（后台），延迟 1 秒执行是为了兼容 [V2ex Plus] 扩展
+    if(menu_value('menu_pageLoading')) pageLoading(); //             自动翻页（无缝）
+    if(menu_value('menu_backToTop')) backToTop(); //                 回到顶部（右键点击左右两侧空白处）
+    if(menu_value('menu_linksToImgs')) linksToImgs(); //             链接转图片
 
 
     // 自动签到（后台）
@@ -332,26 +308,39 @@
                 }
             }
         }
-        //document.querySelector('div.topic_buttons').insertAdjacentHTML('beforeend', '<a href="javascript:void(0);" id="reply_233" class="tb">快速回复</a>');
-        /*document.getElementById('reply_233').onclick = function () {
-            if (document.querySelector('.box.reply-box-sticky')) {
-                document.getElementById('undock-button').click();
-            } else {
-                let _top = document.body.scrollTop + document.documentElement.scrollTop;
-                document.getElementById('reply_content').focus();
-                window.scrollTo(0,_top);console.log(_top);
-            }
-        }*/
     }
 
 
     // 新标签页打开链接
-    function linksBlank(css) {
-        if (!menu_value('menu_linksBlank')) return
-        let links = document.querySelectorAll(css);if (!links) return
-        links.forEach(function (_this) {
-            _this.target = '_blank'
-        });
+    function linksBlank() {
+        if (location.pathname.indexOf('/settings') > -1) return
+        document.head.appendChild(document.createElement('base')).target = '_blank'; // 让所有链接默认以新标签页打开
+        Array.from(document.links).forEach(function (_this) {
+            if (_this.onclick || _this.href.slice(0,4) != 'http' || _this.href.indexOf('#;') > -1 || _this.href.indexOf('night/toggle') > -1 || _this.href.indexOf('/favorite') > -1) {
+                _this.target = '_self'
+            }
+        })
+
+        const callback = (mutationsList, observer) => {
+            for (const mutation of mutationsList) {
+                for (const target of mutation.addedNodes) {
+                    if (target.nodeType != 1) return
+                    if (target.tagName === 'A') {
+                        if (target.href.slice(0,4) != 'http' || target.href.indexOf('#;') > -1 || target.onclick) {
+                            target.target = '_self'
+                        }
+                    } else {
+                        document.querySelectorAll('a').forEach(function (_this) {
+                            if (_this.href.slice(0,4) != 'http' || _this.href.indexOf('#;') > -1 || _this.onclick) {
+                                _this.target = '_self'
+                            }
+                        });
+                    }
+                }
+            }
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(document, { childList: true, subtree: true });
     }
 
 
