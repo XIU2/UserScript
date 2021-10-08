@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         新标签页打开链接
-// @version      1.0.4
+// @version      1.0.5
 // @author       X.I.U
 // @description  将网页中所有链接改为新标签页打开~
 // @match        *://*/*
@@ -24,7 +24,7 @@
     function targetBlank() {
         document.head.appendChild(document.createElement('base')).target = '_blank'; // 让所有链接默认以新标签页打开
         Array.from(document.links).forEach(function (_this) {
-            if (_this.href && _this.href.slice(0,4) != 'http') {
+            if (_this.onclick || _this.href.slice(0,4) != 'http' || _this.getAttribute('href').slice(0,1) === '#') {
                 _this.target = '_self'
             }
         })
@@ -49,12 +49,12 @@
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType != 1) return
                     if (target.tagName === 'A') {
-                        if (target.href && target.href.slice(0,4) != 'http') {
+                        if (target.onclick || target.href.slice(0,4) != 'http' || target.getAttribute('href').slice(0,1) === '#') {
                             target.target = '_self'
                         }
                     } else {
                         document.querySelectorAll('a').forEach(function (_this) {
-                            if (_this.href && _this.href.slice(0,4) != 'http') {
+                            if (_this.onclick || _this.href.slice(0,4) != 'http' || _this.getAttribute('href').slice(0,1) === '#') {
                                 _this.target = '_self'
                             }
                         });
