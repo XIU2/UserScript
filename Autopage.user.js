@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.8.4
+// @version      2.8.5
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -1552,6 +1552,23 @@
                     parameter: [1, 'a[data-original]', 'data-original']
                 }
             }, //            在线之家
+            enlienli: {
+                SiteTypeID: 0,
+                host: 'enlienli.com',
+                functionStart: function() {if (location.pathname.indexOf('/show/') > -1 || location.pathname.indexOf('/search') > -1) {curSite = DBSite.enlienli;}},
+                pager: {
+                    type: 1,
+                    nextLink: 'css;a.page-number.page-next',
+                    pageElement: 'css;.module-items > *',
+                    insertPosition: ['css;.module-items', 3],
+                    replaceE: 'css;#page',
+                    scrollDelta: 1000
+                },
+                function: {
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-src]', 'data-src']
+                }
+            }, //        嗯哩嗯哩
             _91mjw: {
                 SiteTypeID: 0,
                 host: '91mjw.com',
@@ -2944,6 +2961,33 @@
                     scrollDelta: 1700
                 }
             }, //         老殁 | 殁漂遥 - 搜索页/分类页
+            tenlonstudio: {
+                SiteTypeID: 0,
+                host: 'www.tenlonstudio.com',
+                functionStart: function() {if (location.pathname === '/' && !location.search) {
+                    curSite = DBSite.tenlonstudio;
+                } else {
+                    curSite = DBSite.tenlonstudio_list;
+                }},
+                pager: {
+                    type: 2,
+                    nextLink: '.load-more',
+                    nextText: '加载更多',
+                    intervals: 500,
+                    scrollDelta: 1000
+                }
+            }, //           腾龙工作室
+            tenlonstudio_list: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="btn-pager"]/a[contains(text(), "❯")]',
+                    pageElement: 'css;li.post-list-item',
+                    insertPosition: ['css;li.post-list-item:last-child', 4],
+                    replaceE: 'css;.ajax-pager',
+                    scrollDelta: 1000
+                }
+            }, //      腾龙工作室 - 分类/搜索页
             yxssp: {
                 SiteTypeID: 0,
                 host: 'www.yxssp.com',
@@ -3810,6 +3854,51 @@
                     scrollDelta: 1000
                 }
             }, //     宅男女神 - 文章内
+            xiurenji: {
+                SiteTypeID: 0,
+                host: 'www.xiurenji.vip',
+                functionStart: function() {insStyle('img[src$=".gif"]:not([src*="logo"]) {display: none !important;}');
+                    if (location.pathname.indexOf('.html') > -1 && location.pathname.indexOf('/index') === -1) {
+                        curSite = DBSite.xiurenji;
+                    } else if (location.pathname.indexOf('search') > -1) {
+                        curSite = DBSite.xiurenji_search;
+                    } else {
+                        curSite = DBSite.xiurenji_list;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="page"]/a[contains(text(), "后")]',
+                    pageElement: 'css;div.img > p > *',
+                    insertPosition: ['css;div.img > p', 3],
+                    replaceE: 'css;.page',
+                    mimeType: 'text/html; charset=gb2312',
+                    scrollDelta: 2000
+                }
+            }, //            秀人网
+            xiurenji_list: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="page"]/a[contains(text(), "下页")]',
+                    pageElement: 'css;td >.tp2 > *',
+                    insertPosition: ['css;td >.tp2', 3],
+                    replaceE: 'css;.page',
+                    mimeType: 'text/html; charset=gb2312',
+                    scrollDelta: 1000
+                }
+            }, //       秀人网 - 分类页
+            xiurenji_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'css;.page > a.current+a',
+                    pageElement: 'css;.node > *',
+                    insertPosition: ['css;.node', 3],
+                    replaceE: 'css;.page',
+                    mimeType: 'text/html; charset=gb2312',
+                    scrollDelta: 1000
+                }
+            }, //     秀人网 - 搜索页
             zhutix: {
                 SiteTypeID: 0,
                 host: 'zhutix.com',
