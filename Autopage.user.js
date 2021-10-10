@@ -3695,18 +3695,21 @@
                     scrollDelta: 1000
                 }
             }, //  如意了教育 - 试卷
-            smzdm_search: {
+            smzdm: {
                 SiteTypeID: 0,
-                host: 'search.smzdm.com',
+                host: ['www.smzdm.com', 'search.smzdm.com'],
+                 functionStart: function() {if (location.host === 'search.smzdm.com' || location.pathname.indexOf('/fenlei/') > -1) {
+                    curSite = DBSite.smzdm;
+                 }},
                 pager: {
                     type: 1,
-                    nextLink: '//ul[@class="pagenation-list"]//a[contains(text() ,"下一页")]',
+                    nextLink: '//ul[@class="pagenation-list"]//a[contains(text() ,"下一页")] | //ul[@class="pagenation-list"]/li[contains(@class, "next-page")]/a',
                     pageElement: 'css;#feed-main-list > li',
                     insertPosition: ['css;#feed-main-list', 3],
                     replaceE: 'css;ul.pagenation-list',
                     scrollDelta: 1500
                 }
-            }, //    什么值得买 - 搜索页
+            }, //           什么值得买 - 分类/搜索页
             w3school_cn: {
                 SiteTypeID: 0,
                 host: 'www.w3school.com.cn',
