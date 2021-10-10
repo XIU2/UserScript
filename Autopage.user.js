@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.8.5
+// @version      2.8.6
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -3695,6 +3695,18 @@
                     scrollDelta: 1000
                 }
             }, //  如意了教育 - 试卷
+            smzdm_search: {
+                SiteTypeID: 0,
+                host: 'search.smzdm.com',
+                pager: {
+                    type: 1,
+                    nextLink: '//ul[@class="pagenation-list"]//a[contains(text() ,"下一页")]',
+                    pageElement: 'css;#feed-main-list > li',
+                    insertPosition: ['css;#feed-main-list', 3],
+                    replaceE: 'css;ul.pagenation-list',
+                    scrollDelta: 1500
+                }
+            }, //    什么值得买 - 搜索页
             w3school_cn: {
                 SiteTypeID: 0,
                 host: 'www.w3school.com.cn',
@@ -4951,33 +4963,43 @@
                     } else {
                         if (document.documentElement.scrollHeight <= scrollHeight + scrollTop + scrollDelta) {
 
-                            if (curSite.pager.type === 2) { // <<<<< 翻页类型 2（网站自带了自动无缝翻页功能，只需要点击下一页按钮即可）>>>>>
+                            if (curSite.pager.type === 1) { // <<<<< 翻页类型 1（由脚本实现自动无缝翻页）>>>>>
+                                ShowPager.loadMorePage();
+
+                            } else if (curSite.pager.type === 2) { // <<<<< 翻页类型 2（网站自带了自动无缝翻页功能，只需要点击下一页按钮即可）>>>>>
                                 let autopbn = document.querySelector(curSite.pager.nextLink);
                                 if (autopbn) { // 寻找下一页链接
-                                    // 避免重复点击翻页按钮
-                                    if (curSite.pager.nextText) { //          按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页
-                                        if (autopbn.innerText === curSite.pager.nextText) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
-
-                                    } else if (curSite.pager.nextTextOf) { // 按钮文本的一部分，当按钮文本包含该文本时，才会点击按钮加载下一页
-                                        if (autopbn.innerText.indexOf(curSite.pager.nextTextOf) > -1) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
-
-                                    } else if (curSite.pager.nextHTML) { //   按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页
-                                        if (autopbn.innerHTML === curSite.pager.nextHTML) {autopbn.click(); pageNum.now = pageNum._now + 1;} // 当前页码 + 1
-
-                                    } else { // 如果没有指定按钮文字就直接点击
-                                        autopbn.click(); pageNum.now = pageNum._now + 1; // 当前页码 + 1
+                                    if (curSite.pager.nextText) {
+                                        // 按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页
+                                        if (autopbn.innerText === curSite.pager.nextText) {
+                                            autopbn.click();
+                                            pageNum.now = pageNum._now + 1; // 当前页码 + 1
+                                        }
+                                    } else if (curSite.pager.nextTextOf) {
+                                        // 按钮文本的一部分，当按钮文本包含该文本时，才会点击按钮加载下一页
+                                        if (autopbn.innerText.indexOf(curSite.pager.nextTextOf) > -1) {
+                                            autopbn.click();
+                                            pageNum.now = pageNum._now + 1; // 当前页码 + 1
+                                        }
+                                    } else if (curSite.pager.nextHTML) {
+                                        // 按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页
+                                        if (autopbn.innerHTML === curSite.pager.nextHTML) {
+                                            autopbn.click();
+                                            pageNum.now = pageNum._now + 1; // 当前页码 + 1
+                                        }
+                                    } else {
+                                        // 如果没有指定按钮文字就直接点击
+                                        autopbn.click();
+                                        pageNum.now = pageNum._now + 1; // 当前页码 + 1
                                         // 对于没有按钮文字变化的按钮，可以指定间隔时间（默认 300ms）
-                                        if (!curSite.pager.intervals) {curSite.pager.intervals = 300;}
+                                        if (!curSite.pager.intervals) curSite.pager.intervals = 300;
                                         let _SiteTypeID = curSite.SiteTypeID; curSite.SiteTypeID = 0;
                                         setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.intervals)
                                     }
                                 }
 
-                            } else if (curSite.pager.type === 1) { // <<<<< 翻页类型 1（由脚本实现自动无缝翻页）>>>>>
-                                ShowPager.loadMorePage();
-
                             } else if (curSite.pager.type === 4) { // <<<<< 翻页类型 4（部分简单的动态加载类网站）>>>>>
-                                // 为百度贴吧的发帖考虑...
+                                // 为百度贴吧的发帖考虑，预留底部一小部分...
                                 if (!(document.documentElement.scrollHeight <= scrollHeight + scrollTop + 200 && curSite.SiteTypeID === SiteType.BAIDU_TIEBA)) {
                                     curSite.pager.nextLink();
                                 }
