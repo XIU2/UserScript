@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.8.6
+// @version      2.8.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX(WordPress)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -3653,6 +3653,21 @@
                     scrollDelta: 1000
                 }
             }, // 脚本 - 讨论页
+            smzdm: {
+                SiteTypeID: 0,
+                host: ['www.smzdm.com', 'search.smzdm.com'],
+                 functionStart: function() {if (location.host === 'search.smzdm.com' || location.pathname.indexOf('/fenlei/') > -1) {
+                    curSite = DBSite.smzdm;
+                 }},
+                pager: {
+                    type: 1,
+                    nextLink: '//ul[@class="pagenation-list"]//a[contains(text() ,"下一页")] | //ul[@class="pagenation-list"]/li[contains(@class, "next-page")]/a',
+                    pageElement: 'css;#feed-main-list > li',
+                    insertPosition: ['css;#feed-main-list', 3],
+                    replaceE: 'css;ul.pagenation-list',
+                    scrollDelta: 1500
+                }
+            }, //           什么值得买 - 分类/搜索页
             ruyile_xuexiao: {
                 SiteTypeID: 0,
                 host: 'www.ruyile.com',
@@ -3695,21 +3710,6 @@
                     scrollDelta: 1000
                 }
             }, //  如意了教育 - 试卷
-            smzdm: {
-                SiteTypeID: 0,
-                host: ['www.smzdm.com', 'search.smzdm.com'],
-                 functionStart: function() {if (location.host === 'search.smzdm.com' || location.pathname.indexOf('/fenlei/') > -1) {
-                    curSite = DBSite.smzdm;
-                 }},
-                pager: {
-                    type: 1,
-                    nextLink: '//ul[@class="pagenation-list"]//a[contains(text() ,"下一页")] | //ul[@class="pagenation-list"]/li[contains(@class, "next-page")]/a',
-                    pageElement: 'css;#feed-main-list > li',
-                    insertPosition: ['css;#feed-main-list', 3],
-                    replaceE: 'css;ul.pagenation-list',
-                    scrollDelta: 1500
-                }
-            }, //           什么值得买 - 分类/搜索页
             w3school_cn: {
                 SiteTypeID: 0,
                 host: 'www.w3school.com.cn',
@@ -4054,7 +4054,9 @@
 
     // [Discuz! 论坛] 判断各版块帖子列表类型
     function discuzForum() {
-        if (document.getElementById('autopbn')) { //                判断是否有 [下一页] 按钮
+        if (document.querySelector('#pgbtn, .pgbtn')) { //          如果各版块帖子列表已存在这个元素，说明自带了无缝翻页
+            return
+        } else if (document.getElementById('autopbn')) { //         判断是否有 [下一页] 按钮
             curSite = DBSite.discuz_forum;
         } else if (document.getElementById('waterfall')) { //       判断是否为图片模式
             curSite = DBSite.discuz_waterfall; waterfallStyle(); // 图片模式列表样式预处理
