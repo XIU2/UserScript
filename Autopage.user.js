@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.8.9
+// @version      2.9.0
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX/XIU/D8/Begin(WP主题)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -121,7 +121,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[contains(@class, "nxt") or contains(@class, "next")][@href][not(contains(@href, "javascript"))]',
+                    nextLink: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
                     pageElement: 'css;#threadlist table > tbody[id^="normalthread_"]',
                     insertPosition: ['id("threadlist")//table/tbody[starts-with(@id, "normalthread_")]/parent::table', 3],
                     replaceE: 'css;.pg, .pages',
@@ -132,7 +132,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[contains(@class, "nxt") or contains(@class, "next")][@href][not(contains(@href, "javascript"))]',
+                    nextLink: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
                     pageElement: 'css;#waterfall > li',
                     insertPosition: ['css;#waterfall', 3],
                     replaceE: 'css;.pg, .pages',
@@ -144,7 +144,7 @@
                 insStyle: '.pgbtn {display: none;}',
                 pager: {
                     type: 1,
-                    nextLink: '//a[contains(@class, "nxt") or contains(@class, "next")][@href][not(contains(@href, "javascript"))]',
+                    nextLink: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
                     pageElement: 'css;#postlist > div[id^="post_"]',
                     insertPosition: ['css;#postlist', 3],
                     replaceE: 'css;.pg, .pages',
@@ -159,7 +159,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[contains(@class, "nxt") or contains(@class, "next")][@href][not(contains(@href, "javascript"))]',
+                    nextLink: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
                     pageElement: 'css;#threadlist > ul',
                     insertPosition: ['css;#threadlist', 3],
                     replaceE: 'css;.pg, .pages',
@@ -170,7 +170,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[contains(@class, "nxt") or contains(@class, "next")][@href][not(contains(@href, "javascript"))]',
+                    nextLink: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
                     pageElement: 'css;tbody > tr:not(.th)',
                     insertPosition: ['css;tbody', 3],
                     replaceE: 'css;.pg, .pages',
@@ -181,7 +181,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[contains(@class, "nxt") or contains(@class, "next")][@href][not(contains(@href, "javascript"))]',
+                    nextLink: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
                     pageElement: 'css;#ct .bm_c table > tbody',
                     insertPosition: ['css;#ct .bm_c table', 3],
                     replaceE: 'css;.pg, .pages',
@@ -240,7 +240,7 @@
                 insStyle: '.new-pmd .c-img-border {position: initial !important;} .op-bk-polysemy-video__wrap.c-gap-bottom {display: none !important;}',
                 pager: {
                     type: 1,
-                    nextLink: 'id("page")//a[contains(text(),"下一页")][@href]',
+                    nextLink: 'id("page")//a[contains(text(),"下一页")]',
                     pageElement: 'css;#content_left > *',
                     insertPosition: ['css;#content_left', 3],
                     replaceE: 'css;#page',
@@ -257,7 +257,7 @@
                 }},
                 pager: {
                     type: 1,
-                    nextLink: 'id("pnnext")[@href]',
+                    nextLink: 'css;#pnnext',
                     pageElement: 'css;#res > *',
                     insertPosition: ['css;#res', 3],
                     replaceE: 'id("navcnt") | id("rcnt")//div[@role="navigation"]',
@@ -276,7 +276,7 @@
                 insStyle: '.b_imagePair.square_mp > .inner {display: none !important;}',
                 pager: {
                     type: 1,
-                    nextLink: '//a[contains(@class,"sb_pagN")][@href]',
+                    nextLink: '//a[contains(@class,"sb_pagN")]',
                     pageElement: 'css;#b_results > li:not(.b_msg):not(.b_pag):not(#mfa_root)',
                     insertPosition: ['css;#b_results > .b_pag', 1],
                     replaceE: 'css;#b_results > .b_pag',
@@ -483,7 +483,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//li[contains(@class,"pb_list_pager")]/a[contains(text(),"下一页")][@href]',
+                    nextLink: '//li[contains(@class,"pb_list_pager")]/a[contains(text(),"下一页")]',
                     pageElement: 'css;#j_p_postlist > div',
                     insertPosition: ['css;#j_p_postlist', 3],
                     replaceE: 'css;li.pb_list_pager',
@@ -494,10 +494,10 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="next"][@href]',
-                    pageElement: 'css;#j_p_postlist > *',
-                    insertPosition: ['css;#j_p_postlist', 3],
-                    replaceE: 'css;.pager.pager-search',
+                    nextLink: 'css;a.next',
+                    pageElement: 'css;.s_post_list > div',
+                    insertPosition: ['css;.s_post_list', 3],
+                    replaceE: 'css;.pager',
                     scriptType: 1,
                     scrollDelta: 1000
                 }
@@ -514,7 +514,7 @@
                 }},
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="next"][@href]',
+                    nextLink: 'css;a.next',
                     pageElement: 'css;#comments > .comment-item',
                     insertPosition: ['css;#paginator', 1],
                     replaceE: 'css;#paginator',
@@ -525,7 +525,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//link[@rel="next"][@href]',
+                    nextLink: 'css;link[rel="next"]',
                     pageElement: 'css;.review-list > div',
                     insertPosition: ['css;.review-list', 3],
                     replaceE: 'css;.paginator',
@@ -536,7 +536,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//link[@rel="next"][@href]',
+                    nextLink: 'css;link[rel="next"]',
                     pageElement: 'css;#comments > div',
                     insertPosition: ['css;#comments', 3],
                     replaceE: 'css;.paginator',
@@ -679,7 +679,7 @@
                 }},
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
+                    nextLink: '//a[@class="page_current"]/following-sibling::a[1]',
                     pageElement: 'css;.cell.item',
                     insertPosition: ['//div[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
                     replaceE: 'css;#Main > .box > .cell[style]:not(.item) > table',
@@ -694,7 +694,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
+                    nextLink: '//a[@class="page_current"]/following-sibling::a[1]',
                     pageElement: 'css;#notifications > div',
                     insertPosition: ['css;#notifications', 3],
                     replaceE: 'css;#Main > .box > .cell[style] > table',
@@ -709,7 +709,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
+                    nextLink: '//a[@class="page_current"]/following-sibling::a[1]',
                     pageElement: '//div[@id="Main"]//div[@class="box"]//div[@class="dock_area"] | //*[@id="Main"]//div[@class="box"]//div[@class="inner"] | //*[@id="Main"]//div[@class="box"]//div[@class="dock_area"][last()]/following-sibling::div[@class="cell"][1]',
                     insertPosition: ['//div[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
                     replaceE: 'css;#Main > .box > .cell[style] > table',
@@ -724,7 +724,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
+                    nextLink: '//a[@class="page_current"]/following-sibling::a[1]',
                     pageElement: 'css;#TopicsNode > div',
                     insertPosition: ['css;#TopicsNode', 3],
                     replaceE: 'css;#Main > .box > .cell[style] > table',
@@ -739,7 +739,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
+                    nextLink: '//a[@class="page_current"]/following-sibling::a[1]',
                     pageElement: 'css;#Main .box > div:not(.cell) > table > tbody > tr:not(:first-child)',
                     insertPosition: ['css;#Main .box > div:not(.cell) > table > tbody', 3],
                     replaceE: 'css;#Main > .box > .cell[style] > table',
@@ -888,7 +888,7 @@
                     }},
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="fr i3_r"]/a[@href][contains(text(), "后一页")]',
+                    nextLink: '//div[@class="fr i3_r"]/a[contains(text(), "后一页")]',
                     pageElement: 'css;ul.main_List > li.i2:not(.h_bg)',
                     insertPosition: ['css;ul.main_List > li.i3', 1],
                     replaceE: 'css;ul.main_List > li.i3',
@@ -937,7 +937,7 @@
                 insStyle: 'li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}',
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="ui-paging"]/a[@class="ui-paging-next"]',
+                    nextLink: 'css;a.ui-paging-next',
                     pageElement: 'css;ul.ui-list > li:not(.ui-list-item-head):not(.ui-list-merchant-ad)',
                     insertPosition: ['css;ul.ui-list', 3],
                     replaceE: 'css;div.ui-paging',
@@ -998,7 +998,7 @@
                 functionStart: function() {if (location.pathname.indexOf('/forum') > -1) {curSite = DBSite.lieyou;}},
                 pager: {
                     type: 1,
-                    nextLink: '//div[contains(@class, "_pageNav")]/a[@href][contains(text(), "下一页")]',
+                    nextLink: '//div[contains(@class, "_pageNav")]/a[contains(text(), "下一页")]',
                     pageElement: 'css;ul.gb-bbs-list > li',
                     insertPosition: ['css;ul.gb-bbs-list', 3],
                     replaceE: 'css;._pageNav',
@@ -1025,14 +1025,14 @@
             flyert_forumdisplay: {
                 SiteTypeID: 0,
                 host: 'www.flyert.com',
-                functionStart: function() {if (location.search.indexOf('mod=forumdisplay') > -1) {
+                functionStart: function() {if (location.pathname.indexOf('/forum-') > -1 || location.search.indexOf('mod=forumdisplay') > -1) {
                     curSite = DBSite.flyert_forumdisplay;
-                } else if (location.search.indexOf('mod=viewthread') > -1) {
+                } else if (location.pathname.indexOf('/forum') > -1 || location.search.indexOf('mod=viewthread') > -1) {
                     if (GM_getValue('menu_discuz_thread_page')) {curSite = DBSite.flyert_viewthread;}
                 }},
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="nxt"][@href][not(contains(@href, "javascript"))]',
+                    nextLink: 'css;a.nxt:not([href*="javascript"])',
                     pageElement: 'css;#threadlist table > tbody[id^="normalthread_"]',
                     insertPosition: ['id("threadlist")//table/tbody[starts-with(@id, "normalthread_")]/parent::table', 3],
                     replaceE: 'css;.pg',
@@ -1043,7 +1043,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="nxt"][@href][not(contains(@href, "javascript"))]',
+                    nextLink: 'css;a.nxt:not([href*="javascript"])',
                     pageElement: 'css;#postlist > .comiis_viewbox',
                     insertPosition: ['css;#postlist', 3],
                     replaceE: 'css;.comiis_pgs > .pg',
@@ -1161,7 +1161,7 @@
                 insStyle: '.qtw-card.place-box.is-two {display: none !important;}', // 隐藏登录弹窗、隐藏末尾很大的 [下一页] 按钮
                 pager: {
                     type: 1,
-                    nextLink: '//div[contains(@class,"page-box")]//a[text()="下一页"][@href]',
+                    nextLink: '//div[contains(@class,"page-box")]//a[text()="下一页"]',
                     pageElement: 'css;.pic-box > .qtw-card',
                     insertPosition: ['css;.pic-box', 3],
                     replaceE: 'css;.page-box',
@@ -1176,7 +1176,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//div[contains(@class,"page-box")]//a[text()="下一页"][@href]',
+                    nextLink: '//div[contains(@class,"page-box")]//a[text()="下一页"]',
                     pageElement: 'css;.list-box > .qtw-card',
                     insertPosition: ['css;.list-box', 3],
                     replaceE: 'css;.page-box',
@@ -1192,10 +1192,10 @@
                 host: 'pixabay.com',
                 pager: {
                     type: 1,
-                    nextLink: '//a[text()="›"][@href]',
+                    nextLink: '//a[text()="›"]',
                     pageElement: 'css;[class^="results"]  > [class^="container"] > div',
                     insertPosition: ['css;[class^="results"]  > [class^="container"]', 3],
-                    replaceE: '//a[text()="›"][@href]',
+                    replaceE: '//a[text()="›"]',
                     scrollDelta: 2000
                 },
                 function: {
@@ -1262,7 +1262,7 @@
                 host: 'www.3dmgame.com',
                 pager: {
                     type: 3,
-                    nextLink: '//li[@class="next"]/a[@href]',
+                    nextLink: 'css;li.next > a',
                     pageElement: 'css;.news_warp_center > *',
                     insertPosition: ['css;.news_warp_center', 3],
                     replaceE: 'css;.pagewrap',
@@ -1288,7 +1288,7 @@
                 host: 'www.ali213.net',
                 pager: {
                     type: 3,
-                    nextLink: 'id("after_this_page")[@href]',
+                    nextLink: 'css;#after_this_page',
                     pageElement: 'css;#Content >*:not(.news_ding):not(.page_fenye)',
                     insertPosition: ['css;.page_fenye', 1],
                     replaceE: 'css;.page_fenye',
@@ -1302,7 +1302,7 @@
                 insStyle: '.n_show_b {display: none !important;}',
                 pager: {
                     type: 3,
-                    nextLink: '//a[@class="next n"][@href]',
+                    nextLink: 'css;a.next',
                     pageElement: 'css;.c-detail >*',
                     insertPosition: ['css;.c-detail', 3],
                     replaceE: 'css;.page_fenye',
@@ -1329,7 +1329,7 @@
                 functionStart: function() {if (location.pathname.indexOf('/ent/') > -1) {curSite = DBSite.gamersky_ent;} else {curSite = DBSite.gamersky_gl;}},
                 pager: {
                     type: 3,
-                    nextLink: '//div[@class="page_css"]/a[text()="下一页"][@href]',
+                    nextLink: '//div[@class="page_css"]/a[text()="下一页"]',
                     pageElement: 'css;.Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.page_css):not(.gs_ccs_solve):not(.post_ding)',
                     insertPosition: ['css;.page_css', 1],
                     replaceE: 'css;.page_css',
@@ -1341,7 +1341,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 3,
-                    nextLink: '//div[@class="page_css"]/a[text()="下一页"][@href]',
+                    nextLink: '//div[@class="page_css"]/a[text()="下一页"]',
                     forceHTTPS: true,
                     pageElement: 'css;.Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.gs_ccs_solve):not(.post_ding)',
                     insertPosition: ['css;.gs_nc_editor', 1],
@@ -1371,7 +1371,7 @@
                 host: 'steamcommunity.com',
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="pagebtn"][last()][@href]',
+                    nextLink: '//a[@class="pagebtn"][last()]',
                     pageElement: 'css;.workshopBrowseItems > *',
                     insertPosition: ['css;.workshopBrowseItems', 3],
                     replaceE: 'css;.workshopBrowsePaging',
@@ -1403,7 +1403,7 @@
                 }},
                 pager: {
                     type: 1,
-                    nextLink: '//td[@class="gensmall"][@align="right"]//a[text()="Next"][@href]',
+                    nextLink: '//td[@class="gensmall"][@align="right"]//a[text()="Next"]',
                     pageElement: 'css;#pagecontent > table.tablebg > tbody > tr:not([align])',
                     insertPosition: ['css;#pagecontent > table.tablebg > tbody > tr[align]', 1],
                     replaceE: 'css;#pagecontent > table:first-child',
@@ -1417,7 +1417,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'id("pageheader")/p[@class="gensmall"]//a[text()="Next"][@href]',
+                    nextLink: 'id("pageheader")/p[@class="gensmall"]//a[text()="Next"]',
                     pageElement: 'css;#pagecontent > table.tablebg:not(:nth-last-child(2)):not(:nth-child(2))',
                     insertPosition: ['css;#pagecontent > table.tablebg:nth-last-child(2)', 1],
                     replaceE: 'css;#pagecontent >table:not(.tablebg), #pageheader p.gensmall',
@@ -1441,7 +1441,7 @@
                 insStyle: 'html.wp-dark-mode-active .inside-article {background-color: var(--wp-dark-mode-bg);}',
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="next page-numbers"][@href]',
+                    nextLink: 'css;a.next.page-numbers',
                     pageElement: 'css;article[id^="post-"]',
                     insertPosition: ['css;nav.paging-navigation', 1],
                     replaceE: 'css;nav.paging-navigation',
@@ -1453,11 +1453,11 @@
                 host: 'fitgirl-repacks.site',
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="next page-numbers"][@href]',
+                    nextLink: 'css;a.next.page-numbers',
                     pageElement: 'css;article[id^="post-"]',
                     insertPosition: ['css;nav.paging-navigation', 1],
                     replaceE: 'css;nav.paging-navigation',
-                    scrollDelta: 2000
+                    scrollDelta: 2500
                 }
             }, //                 FitGirl Repacks
             bilibili_search: {
@@ -1718,7 +1718,7 @@
                 }},
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="pages"]/a[@href][contains(text(), "下一页")]',
+                    nextLink: '//div[@class="pages"]/a[contains(text(), "下一页")]',
                     pageElement: 'css;#contrainer > .img> ul > li',
                     insertPosition: ['css;#contrainer > .img> ul', 3],
                     replaceE: 'css;.pages',
@@ -1730,7 +1730,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="pages"]/a[@href][contains(text(), "下一页")]',
+                    nextLink: '//div[@class="pages"]/a[contains(text(), "下一页")]',
                     pageElement: 'css;#contrainer .fire .pics > ul > li',
                     insertPosition: ['css;#contrainer .fire .pics > ul', 3],
                     replaceE: 'css;.pages',
@@ -1750,7 +1750,7 @@
                 }},
                 pager: {
                     type: 1,
-                    nextLink: 'id("container")//div[@class="blockcontent"]/div[@style][not(@class)]/li/a[@href][contains(text(), "下一页")]',
+                    nextLink: 'id("container")//div[@class="blockcontent"]/div[@style][not(@class)]/li/a[contains(text(), "下一页")]',
                     pageElement: 'css;#container .blockcontent1 > div',
                     insertPosition: ['css;#container .blockcontent1', 3],
                     replaceE: 'css;#container .blockcontent > div[style]:not([class])',
@@ -1761,7 +1761,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'id("container")//div[@class="blockcontent"]/div[@style][not(@class)]/li/a[@href][contains(text(), "下一页")]',
+                    nextLink: 'id("container")//div[@class="blockcontent"]/div[@style][not(@class)]/li/a[contains(text(), "下一页")]',
                     pageElement: 'css;#container .blockcontent > ul > li',
                     insertPosition: ['css;#container .blockcontent > ul', 3],
                     replaceE: 'css;#container .blockcontent > div[style]:not([class])',
@@ -1772,7 +1772,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'id("container")/ul[@style][not(@class)]/li/a[@href][contains(text(), "下一页")]',
+                    nextLink: 'id("container")/ul[@style][not(@class)]/li/a[contains(text(), "下一页")]',
                     pageElement: 'css;#container > .div_right  .blockcontent.div_right_r_3 > ul',
                     insertPosition: ['css;#container > .div_right  .blockcontent.div_right_r_3', 3],
                     replaceE: 'css;#container > ul[style]:not([class])',
@@ -1925,7 +1925,7 @@
                 host: ['share.dmhy.org', 'dmhy.anoneko.com'],
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="nav_title"]/a[@href][contains(text(), "下一頁")]',
+                    nextLink: '//div[@class="nav_title"]/a[contains(text(), "下一")]',
                     pageElement: 'css;#topic_list > tbody > tr',
                     insertPosition: ['css;#topic_list > tbody', 3],
                     replaceE: 'css;.nav_title',
@@ -1978,7 +1978,7 @@
                 host: /nyaa\.si/,
                 pager: {
                     type: 1,
-                    nextLink: '//a[@rel="next"][@href] | //li[@class="next"]/a[@href]',
+                    nextLink: 'css;a[rel="next"], li.next > a',
                     pageElement: 'css;table.torrent-list > tbody > tr',
                     insertPosition: ['css;table.torrent-list > tbody', 3],
                     replaceE: 'css;ul.pagination',
@@ -2004,7 +2004,7 @@
                 functionStart: function() {if (location.pathname === '/torrents.php') {curSite = DBSite.rarbgprx;}},
                 pager: {
                     type: 1,
-                    nextLink: '(//a[@title="next page"])[1][@href]',
+                    nextLink: 'css;#pager_links > a[title="next page"]',
                     pageElement: 'css;table.lista2t tr.lista2',
                     insertPosition: ['css;table.lista2t > tbody', 3],
                     replaceE: 'css;#pager_links',
@@ -2159,7 +2159,7 @@
                 functionStart: function() {if (location.pathname.indexOf('/TXT/list') > -1) curSite = DBSite.baoshuu;},
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="listl2"]//a[@href][text()="下一页"]',
+                    nextLink: '//div[@class="listl2"]//a[text()="下一页"]',
                     pageElement: 'css;.listl2 > ul > li',
                     insertPosition: ['css;.listl2 > ul', 3],
                     replaceE: 'css;listl2 > dl',
@@ -2173,7 +2173,7 @@
                 functionStart: function() {if (location.pathname.indexOf('/TXT/list') > -1) curSite = DBSite.baoshuu_m;},
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="man_first"]//a[@href][text()="下一页"]',
+                    nextLink: '//div[@class="man_first"]//a[text()="下一页"]',
                     pageElement: 'css;.man_first > ul > li',
                     insertPosition: ['css;.man_first > ul', 3],
                     replaceE: 'css;.man_first > dl',
@@ -2256,7 +2256,7 @@
                 }},
                 pager: {
                     type: 1,
-                    nextLink: '//p[@class="mlfy_page"]/a[@href][contains(text(), "下一页") or contains(text(), "下一章")]',
+                    nextLink: '//p[@class="mlfy_page"]/a[contains(text(), "下一页") or contains(text(), "下一章")]',
                     pageElement: 'css;#mlfy_main_text > *',
                     insertPosition: ['css;#mlfy_main_text', 3],
                     replaceE: 'css;p.mlfy_page, head > title',
@@ -2390,7 +2390,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//div[contains(@class, "pagination")]//a[@href][contains(text(), "下一页") or contains(text(), "下页")]',
+                    nextLink: '//div[contains(@class, "pagination")]//a[contains(text(), "下一页") or contains(text(), "下页")]',
                     pageElement: 'css;.comic-main-section > *',
                     insertPosition: ['css;.comic-main-section', 3],
                     replaceE: 'css;.pagination',
@@ -2405,7 +2405,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//div[contains(@class, "pagination")]//a[@href][contains(text(), "下一页") or contains(text(), "下页")]',
+                    nextLink: '//div[contains(@class, "pagination")]//a[contains(text(), "下一页") or contains(text(), "下页")]',
                     pageElement: 'css;.comic-main-section .row > div',
                     insertPosition: ['css;.comic-main-section .row', 3],
                     replaceE: 'css;.pagination',
@@ -2640,7 +2640,7 @@
                 insStyle: '.header {opacity: 0.3 !important;}',
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="fanye"][1]/a[@href][text()="下一页" or text()="下一话"]',
+                    nextLink: '//div[@class="fanye"][1]/a[text()="下一页" or text()="下一话"]',
                     pageElement: 'css;.comicpage > div,title',
                     insertPosition: ['css;.comicpage', 3],
                     replaceE: 'css;.fanye,h1.title',
@@ -2676,7 +2676,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="page-pagination"]//a[@href][contains(text(), ">")]',
+                    nextLink: '//div[@class="page-pagination"]//a[contains(text(), ">")]',
                     pageElement: 'css;ul.mh-list > li',
                     insertPosition: ['css;ul.mh-list', 3],
                     replaceE: 'css;.page-pagination',
@@ -2689,7 +2689,7 @@
                 functionStart: function() {if (location.pathname.indexOf('.html') === -1) curSite = DBSite._423down;},
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="paging"]//a[contains(text(),"下一页")][@href]',
+                    nextLink: '//div[@class="paging"]//a[contains(text(),"下一页")]',
                     pageElement: 'css;div.content-wrap ul.excerpt > li',
                     insertPosition: ['css;div.content-wrap ul.excerpt', 3],
                     replaceE: 'css;div.paging',
@@ -2701,7 +2701,7 @@
                 host: 'iao.su',
                 pager: {
                     type: 1,
-                    nextLink: '//li[@class="btn btn-primary next"]//a[@href]',
+                    nextLink: 'css;li.next > a',
                     pageElement: 'css;#index > article, #archive > article',
                     insertPosition: ['css;ol.page-navigator', 1],
                     replaceE: 'css;ol.page-navigator',
@@ -2762,7 +2762,7 @@
                 host: 'www.appinn.com',
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="next page-numbers"][@href]',
+                    nextLink: 'css;a.next.page-numbers',
                     pageElement: 'css;section#latest-posts > article',
                     insertPosition: ['css;nav.navigation.pagination', 1],
                     replaceE: 'css;div.nav-links',
@@ -2825,7 +2825,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="next"][@href]',
+                    nextLink: 'css;a.next',
                     pageElement: 'css;ul.post-loop > li',
                     insertPosition: ['css;ul.post-loop', 3],
                     replaceE: 'css;ul.pagination',
@@ -2896,7 +2896,7 @@
                 }},
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="pagenavi"]//a[@title="下一页"][@href]',
+                    nextLink: 'css;.pagenavi a[title="下一页"]',
                     pageElement: 'css;#postlist > div.entry',
                     insertPosition: ['css;#postlist > .pagenavi-button', 1],
                     replaceE: 'css;.pagenavi-button, .pagenavi',
@@ -2926,7 +2926,7 @@
                 }},
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="page-numbers"][@title="下一页"][@href]',
+                    nextLink: 'css;a.page-numbers[title="下一页"]',
                     pageElement: 'css;#post > div[id^="post-"]',
                     insertPosition: ['css;#post > #pagenavi', 1],
                     replaceE: 'css;#post > #pagenavi',
@@ -2937,7 +2937,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="page-numbers"][@title="下一页"][@href]',
+                    nextLink: 'css;a.page-numbers[title="下一页"]',
                     pageElement: 'css;#content > div[class^="entry_box"]',
                     insertPosition: ['css;#content > #pagenavi', 1],
                     replaceE: 'css;#content > #pagenavi',
@@ -2976,7 +2976,7 @@
                 host: 'www.yxssp.com',
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="page-nav td-pb-padding-side"]/a[last()][@href]',
+                    nextLink: '//div[contains(@class, "page-nav")]/a[last()]',
                     pageElement: 'css;.td-modules-container.td-module-number4 > div',
                     insertPosition: ['css;.td-modules-container.td-module-number4', 3],
                     replaceE: 'css;.page-nav.td-pb-padding-side',
@@ -3022,7 +3022,7 @@
                 host: 'www.sordum.org',
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="next page-numbers"][@href]',
+                    nextLink: 'css;a.next.page-numbers',
                     pageElement: 'css;.article > article',
                     insertPosition: ['css;nav.navigation.posts-navigation', 1],
                     replaceE: 'css;nav.navigation.posts-navigation',
@@ -3076,7 +3076,7 @@
                 host: 'www.windowslatest.com',
                 pager: {
                     type: 1,
-                    nextLink: '//div[contains(@class, "page-nav")]/a/i[@class="td-icon-menu-right"]/parent::a',
+                    nextLink: '//div[contains(@class, "page-nav")]/a[last()]',
                     pageElement: 'css;.td-ss-main-content > div:not(.td-block-title-wrap):not(.page-nav)',
                     insertPosition: ['css;.page-nav', 1],
                     replaceE: 'css;.page-nav',
@@ -3151,7 +3151,7 @@
                     }},
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="paginate-container"]//a[@href][contains(text(), "Next")]',
+                    nextLink: '//div[@class="paginate-container"]//a[contains(text(), "Next")]',
                     pageElement: 'css;#js-pjax-container .position-relative div[class^="col-lg-"] > div:not(.position-relative):not(.paginate-container)',
                     insertPosition: ['css;.paginate-container', 1],
                     replaceE: 'css;.paginate-container',
@@ -3459,10 +3459,10 @@
                 functionStart: function() {if (location.pathname === '/search.php') {curSite = DBSite.libgen;}},
                 pager: {
                     type: 1,
-                    nextLink: '//font/a[@href][contains(text(), "►")]',
+                    nextLink: '//font/a[contains(text(), "►")]',
                     pageElement: 'css;table[rules="rows"] > tbody > tr:nth-of-type(n+2), .paginator+script:not([src])',
                     insertPosition: ['css;table[rules="rows"] > tbody', 3],
-                    replaceE: '//td[./font/a[@href][contains(text(), "►")]]',
+                    replaceE: '//td[./font/a[contains(text(), "►")]]',
                     scriptType: 2,
                     history: true,
                     scrollDelta: 2000
@@ -3482,7 +3482,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[./span[@class="gs_ico gs_ico_nav_next"]]',
+                    nextLink: '//a[./span[contains(@class, "next")]]',
                     pageElement: 'css;#gs_res_ccl_mid > *',
                     insertPosition: ['css;#gs_res_ccl_mid', 3],
                     replaceE: 'id("gs_n")',
@@ -3514,7 +3514,7 @@
                 }},
                 pager: {
                     type: 1,
-                    nextLink: 'id("page")/a[./i[@class="c-icon-pager-next"]][@href]',
+                    nextLink: 'id("page")/a[./i[@class="c-icon-pager-next"]]',
                     pageElement: 'css;#bdxs_result_lists > div.result',
                     insertPosition: ['css;#bdxs_result_lists', 3],
                     replaceE: 'css;#page',
@@ -3607,33 +3607,33 @@
                 }},
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="next_page"][@href]',
+                    nextLink: 'css;a.next_page',
                     pageElement: 'css;ol#browse-script-list > li',
                     insertPosition: ['css;ol#browse-script-list', 3],
                     replaceE: 'css;.pagination',
-                    scrollDelta: 1000
+                    scrollDelta: 1300
                 }
             }, //             脚本
             greasyfork_feedback: {
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="next_page"][@href]',
+                    nextLink: 'css;a.next_page',
                     pageElement: 'css;.script-discussion-list > div',
                     insertPosition: ['css;.script-discussion-list', 3],
                     replaceE: 'css;.pagination',
-                    scrollDelta: 1500
+                    scrollDelta: 1800
                 }
             }, //    脚本 - 反馈页
             greasyfork_discussions: {
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//a[@class="next_page"][@href]',
+                    nextLink: 'css;a.next_page',
                     pageElement: 'css;.discussion-list > div',
                     insertPosition: ['css;.discussion-list', 3],
                     replaceE: 'css;.pagination',
-                    scrollDelta: 1000
+                    scrollDelta: 1300
                 }
             }, // 脚本 - 讨论页
             smzdm: {
@@ -3664,7 +3664,7 @@
                     }},
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="fy"]/a[contains(text(), "下一页")][@href]',
+                    nextLink: '//div[@class="fy"]/a[contains(text(), "下一页")]',
                     pageElement: 'css;.xxlb > .sk',
                     insertPosition: ['css;.xxlb', 3],
                     replaceE: 'css;.fy',
@@ -3675,7 +3675,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="fy"]/a[contains(text(), "下一页")][@href]',
+                    nextLink: '//div[@class="fy"]/a[contains(text(), "下一页")]',
                     pageElement: 'css;.m1_z > .lbk',
                     insertPosition: ['css;.page', 1],
                     replaceE: 'css;.fy',
@@ -3686,7 +3686,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="fy"]/a[contains(text(), "下一页")][@href]',
+                    nextLink: '//div[@class="fy"]/a[contains(text(), "下一页")]',
                     pageElement: 'css;.m1_z > .m2_lb',
                     insertPosition: ['css;.page', 1],
                     replaceE: 'css;.fy',
@@ -3760,7 +3760,7 @@
                 insStyle: '.progressive--not-loaded {filter: none !important;}',
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="page"]/a[@href][contains(text(), "下一页")]',
+                    nextLink: '//div[@class="page"]/a[contains(text(), "下一页")]',
                     pageElement: 'css;body > .container > div.item',
                     insertPosition: ['css;body > .container', 3],
                     replaceE: 'css;.page',
@@ -3807,7 +3807,7 @@
                 }},
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="pagesYY"]//a[@href][contains(text(), "下一页")]',
+                    nextLink: '//div[@class="pagesYY"]//a[contains(text(), "下一页")]',
                     pageElement: 'css;#listdiv > ul > li',
                     insertPosition: ['css;#listdiv > ul', 3],
                     replaceE: 'css;.pagesYY',
@@ -3817,24 +3817,24 @@
                     before: src_functionBefore,
                     parameter: [0, 'img[data-original]', 'data-original']
                 }
-            }, //             宅男女神
+            }, //             宅男女神 - 分类页
             fnvshen_g: {
                 SiteTypeID: 0,
                 insStyle: '.yalayi_box {display: none !important; margin: -4px 0 !important;}',
                 pager: {
                     type: 1,
-                    nextLink: 'id("pages")/a[@href][contains(text(), "下一页")]',
+                    nextLink: 'id("pages")/a[contains(text(), "下一页")]',
                     pageElement: 'css;#hgallery > img',
                     insertPosition: ['css;#hgallery', 3],
                     replaceE: 'css;#pages',
                     scrollDelta: 1000
                 }
-            }, //           宅男女神 - 图片内
+            }, //           宅男女神 - 图片页
             fnvshen_article_list: {
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//div[@class="pagesYY"]//a[@href][contains(text(), "下一页")]',
+                    nextLink: '//div[@class="pagesYY"]//a[contains(text(), "下一页")]',
                     pageElement: 'css;li.other_girlli',
                     insertPosition: ['//ul[./li[@class="other_girlli"]]', 3],
                     replaceE: 'css;.pagesYY',
@@ -3872,7 +3872,7 @@
                     mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 2000
                 }
-            }, //            秀人网
+            }, //            秀人网 - 图片页
             xiurenji_list: {
                 SiteTypeID: 0,
                 pager: {
@@ -3897,6 +3897,70 @@
                     scrollDelta: 1000
                 }
             }, //     秀人网 - 搜索页
+            tujigu: {
+                SiteTypeID: 0,
+                host: 'www.tujigu.net',
+                functionStart: function() {
+                    if (location.pathname.indexOf('/a/') > -1) {
+                        curSite = DBSite.tujigu_a;
+                    } else if (location.pathname != '/' && location.pathname.indexOf('/search/') === -1) {
+                        curSite = DBSite.tujigu;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: 'id("pages")/a[contains(text(), "下一页")]',
+                    pageElement: 'css;.hezi > ul > li',
+                    insertPosition: ['//div[@class="hezi"][last()]/ul', 3],
+                    replaceE: 'css;#pages',
+                    scrollDelta: 1000
+                }
+            }, //              图集谷 - 分类页
+            tujigu_a: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: 'id("pages")/a[contains(text(), "下一页")]',
+                    pageElement: 'css;.content > img',
+                    insertPosition: ['css;.content', 3],
+                    replaceE: 'css;#pages',
+                    scrollDelta: 2000
+                },
+                function: {
+                    before: src_functionBefore,
+                    parameter: [0, 'img[original]', 'original']
+                }
+            }, //            图集谷 - 图片页
+            mm131: {
+                SiteTypeID: 0,
+                host: 'www.mm131.net',
+                functionStart: function() {
+                    if (location.pathname.indexOf('.html') > -1) {
+                        curSite = DBSite.mm131_a;
+                    } else {
+                        curSite = DBSite.mm131;
+                }},
+                pager: {
+                    type: 1,
+                    nextLink: '//dd[@class="page"]/a[contains(text(), "下一页")]',
+                    pageElement: 'css;dl.list-left > dd:not([class="page"])',
+                    insertPosition: ['css;.page', 1],
+                    replaceE: 'css;.page',
+                    mimeType: 'text/html; charset=gb2312',
+                    scrollDelta: 1000
+                }
+            }, //               MM131 - 分类页
+            mm131_a: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: '//div[@class="content-page"]/a[contains(text(), "下一页")]',
+                    pageElement: 'css;.content-pic img',
+                    insertPosition: ['css;.content-pic', 3],
+                    replaceE: 'css;.content-page',
+                    mimeType: 'text/html; charset=gb2312',
+                    scrollDelta: 2000
+                }
+            }, //             MM131 - 图片页
             zhutix: {
                 SiteTypeID: 0,
                 host: 'zhutix.com',
@@ -4417,7 +4481,7 @@
 
     // [射手网] 获取下一页地址
     function assrt_functionNext() {
-        let nextXPAHT = '//a[@id="pl-nav"][@href][contains(text(), ">")]'
+        let nextXPAHT = '//a[@id="pl-nav"][contains(text(), ">")]'
         let url = getElementByXpath(nextXPAHT);
         if (url) {
             url = /(?<=\()\d+(?=,)/.exec(url.href)[0]
