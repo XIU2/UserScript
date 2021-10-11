@@ -4041,7 +4041,7 @@
     if (curSite.insStyle) insStyle(curSite.insStyle)
 
     curSite.pageUrl = ''; // 下一页URL
-    console.log(curSite);
+    //console.log(curSite);
     pageLoading(); // 自动无缝翻页
 
 
