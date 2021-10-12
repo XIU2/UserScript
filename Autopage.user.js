@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.9.1
+// @version      2.9.2
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX/XIU/D8/Begin(WP主题)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -1402,7 +1402,7 @@
                 functionStart: function() {if (location.pathname === '/forum/viewforum.php') { // 版块帖子列表
                     curSite = DBSite.cs_rin_ru;
                 } else if (location.pathname === '/forum/viewtopic.php') { // 帖子内
-                    if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.cs_rin_ru_viewtopic;
+                    if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.cs_rin_ru_list;
                 } else if (location.pathname === '/forum/search.php') { // 搜索结果
                     curSite = DBSite.cs_rin_ru_search;
                 }},
@@ -1418,7 +1418,7 @@
                     before: cs_rin_ru_functionBefore
                 }
             }, //               cs.rin.ru - 各版块帖子列表
-            cs_rin_ru_viewtopic: {
+            cs_rin_ru_list: {
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
@@ -1426,9 +1426,9 @@
                     pageElement: 'css;#pagecontent > table.tablebg:not(:nth-last-child(2)):not(:nth-child(2))',
                     insertPosition: ['css;#pagecontent > table.tablebg:nth-last-child(2)', 1],
                     replaceE: 'css;#pagecontent >table:not(.tablebg), #pageheader p.gensmall',
-                    scrollDelta: 1500
+                    scrollDelta: 2000
                 }
-            }, //     cs.rin.ru - 帖子内
+            }, //          cs.rin.ru - 帖子内
             cs_rin_ru_search: {
                 SiteTypeID: 0,
                 pager: {
@@ -2700,6 +2700,10 @@
                     curSite = DBSite.cocomanga;
                 } else if (/\/\d+\/$/.test(location.pathname)) {
                     setTimeout(function(){if (document.querySelector('a.website-display-all')) document.querySelector('a.website-display-all').click();}, 300)
+                } else if (location.pathname === '/show') {
+                    curSite = DBSite.cocomanga_list;
+                } else if (location.pathname === '/search') {
+                    curSite = DBSite.cocomanga_search;
                 }},
                 insStyle: '.mh_readend, .mh_footpager, .mh_readmode {display: none !important;} .mh_comicpic img {cursor: unset !important;}',
                 pager: {
@@ -2712,6 +2716,36 @@
                     scrollDelta: 2500
                 }
             }, //         COCOMANGA 漫画
+            cocomanga_list: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: cocomanga_list_functionNext,
+                    pageElement: 'css;ul.fed-list-info > li',
+                    insertPosition: ['css;ul.fed-list-info', 3],
+                    replaceE: 'css;.fed-page-info',
+                    scrollDelta: 1000
+                },
+                function: {
+                    before: src_functionBefore,
+                    parameter: [1, 'a[data-original]', 'data-original']
+                }
+            }, //    COCOMANGA 漫画 - 分类页
+            cocomanga_search: {
+                SiteTypeID: 0,
+                pager: {
+                    type: 1,
+                    nextLink: cocomanga_list_functionNext,
+                    pageElement: 'css;dl.fed-deta-info',
+                    insertPosition: ['css;.fed-page-info', 1],
+                    replaceE: 'css;.fed-page-info',
+                    scrollDelta: 1000
+                },
+                function: {
+                    before: src_functionBefore,
+                    parameter: [1, 'a[data-original]', 'data-original']
+                }
+            }, //  COCOMANGA 漫画 - 搜索页
             _423down: {
                 SiteTypeID: 0,
                 host: 'www.423down.com',
@@ -2724,7 +2758,7 @@
                     replaceE: 'css;div.paging',
                     scrollDelta: 1500
                 }
-            }, //               423Down
+            }, //            423Down
             iao_su: {
                 SiteTypeID: 0,
                 host: 'iao.su',
@@ -2737,7 +2771,7 @@
                     scriptType: 4,
                     scrollDelta: 1000
                 }
-            }, //                 不死鸟
+            }, //              不死鸟
             sharerw: {
                 SiteTypeID: 0,
                 host: 'www.sharerw.com',
@@ -2751,7 +2785,7 @@
                     replaceE: 'css;.pagebar',
                     scrollDelta: 1500
                 }
-            }, //                分享者
+            }, //             分享者
             sharerw_search: {
                 SiteTypeID: 0,
                 pager: {
@@ -2762,7 +2796,7 @@
                     replaceE: 'css;.pagebar',
                     scrollDelta: 1500
                 }
-            }, //         分享者 - 搜索页
+            }, //      分享者 - 搜索页
             extfans: {
                 SiteTypeID: 0,
                 host: 'www.extfans.com',
@@ -2775,7 +2809,7 @@
                     replaceE: 'css;.page',
                     scrollDelta: 2000
                 }
-            }, //                扩展迷
+            }, //             扩展迷
             chrome_zzzmh: {
                 SiteTypeID: 0,
                 host: 'chrome.zzzmh.cn',
@@ -2785,7 +2819,7 @@
                     intervals: 1000,
                     scrollDelta: 1500
                 }
-            }, //           极简插件
+            }, //        极简插件
             appinn: {
                 SiteTypeID: 0,
                 host: 'www.appinn.com',
@@ -2797,7 +2831,7 @@
                     replaceE: 'css;div.nav-links',
                     scrollDelta: 1500
                 }
-            }, //                 小众软件
+            }, //              小众软件
             isharepc: {
                 SiteTypeID: 0,
                 host: 'www.isharepc.com',
@@ -2809,19 +2843,19 @@
                     replaceE: 'css;nav.pagination',
                     scrollDelta: 1000
                 }
-            }, //               乐软博客
+            }, //            乐软博客
             ghxi: {
                 SiteTypeID: 0,
                 host: 'www.ghxi.com',
-                functionStart: function() {if (location.pathname === '/' && !location.search) {curSite = DBSite.ghxi;} else {curSite = DBSite.ghxi_postlist;}},
+                functionStart: function() {if (location.pathname === '/' && !location.search) {curSite = DBSite.ghxi;} else {curSite = DBSite.ghxi_list;}},
                 pager: {
                     type: 2,
                     nextLink: '.load-more',
                     intervals: 1000,
                     scrollDelta: 5000
                 }
-            }, //                   果核剥壳 - 首页
-            ghxi_postlist: {
+            }, //                果核剥壳 - 首页
+            ghxi_list: {
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
@@ -2832,16 +2866,17 @@
                     scrollDelta: 1500
                 },
                 function: {
-                    before: src_functionBefore
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-original]', 'data-original']
                 }
-            }, //          果核剥壳 - 分类/搜索页
+            }, //           果核剥壳 - 分类/搜索页
             sixyin: {
                 SiteTypeID: 0,
                 host: 'www.sixyin.com',
                 functionStart: function() {if (location.pathname === '/' && location.search === '') { // 首页
                     curSite = DBSite.sixyin;
                 } else if (location.pathname.indexOf('.html') === -1) { //    分类页
-                    curSite = DBSite.sixyin_postlist;
+                    curSite = DBSite.sixyin_list;
                 }},
                 pager: {
                     type: 2,
@@ -2849,8 +2884,8 @@
                     nextHTML: '点击查看更多',
                     scrollDelta: 1500
                 }
-            }, //                 六音软件 - 首页
-            sixyin_postlist: {
+            }, //              六音软件 - 首页
+            sixyin_list: {
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
@@ -2860,7 +2895,7 @@
                     replaceE: 'css;ul.pagination',
                     scrollDelta: 1500
                 }
-            }, //        六音软件 - 分类页
+            }, //         六音软件 - 分类页
             weidown: {
                 SiteTypeID: 0,
                 host: 'www.weidown.com',
@@ -2879,7 +2914,7 @@
                     replaceE: 'css;#pageGroup',
                     scrollDelta: 1500
                 }
-            }, //                微当下载
+            }, //             微当下载
             weidown_search: {
                 SiteTypeID: 0,
                 pager: {
@@ -2890,7 +2925,7 @@
                     replaceE: 'css;#pageGroup',
                     scrollDelta: 700
                 }
-            }, //         微当下载 - 搜索页
+            }, //      微当下载 - 搜索页
             weidown_special: {
                 SiteTypeID: 0,
                 pager: {
@@ -2901,7 +2936,7 @@
                     replaceE: 'css;#pageGroup',
                     scrollDelta: 700
                 }
-            }, //        微当下载 - 专题页
+            }, //     微当下载 - 专题页
             fsylr: {
                 SiteTypeID: 0,
                 host: 'fsylr.com',
@@ -2914,14 +2949,14 @@
                     replaceE: 'css;nav.pagination',
                     scrollDelta: 1000
                 }
-            }, //                  发烧友绿软
-            iplaysoft_postslist: {
+            }, //               发烧友绿软
+            iplaysoft: {
                 SiteTypeID: 0,
                 host: 'www.iplaysoft.com',
                 functionStart: function() {if (location.pathname.indexOf('.html') > -1 || location.pathname.indexOf('/p/') > -1) { // 文章内
-                    curSite = DBSite.iplaysoft_postcomments;
+                    curSite = DBSite.iplaysoft_comment;
                 } else { // 其他页面
-                    curSite = DBSite.iplaysoft_postslist;
+                    curSite = DBSite.iplaysoft;
                 }},
                 pager: {
                     type: 1,
@@ -2935,8 +2970,8 @@
                     before: src_functionBefore,
                     parameter: [0, 'img[data-src]', 'data-src']
                 }
-            }, //    异次元软件
-            iplaysoft_postcomments: {
+            }, //           异次元软件
+            iplaysoft_comment: {
                 SiteTypeID: 0,
                 pager: {
                     type: 2,
@@ -2944,7 +2979,7 @@
                     nextTextOf: '展开后面',
                     scrollDelta: 1200
                 }
-            }, // 异次元软件 - 评论
+            }, //   异次元软件 - 评论
             mpyit: {
                 SiteTypeID: 0,
                 host: 'www.mpyit.com',
@@ -2961,7 +2996,7 @@
                     replaceE: 'css;#post > #pagenavi',
                     scrollDelta: 1700
                 }
-            }, //                  老殁 | 殁漂遥
+            }, //               老殁 | 殁漂遥
             mpyit_category: {
                 SiteTypeID: 0,
                 pager: {
@@ -2972,7 +3007,7 @@
                     replaceE: 'css;#content > #pagenavi',
                     scrollDelta: 1700
                 }
-            }, //         老殁 | 殁漂遥 - 搜索页/分类页
+            }, //      老殁 | 殁漂遥 - 搜索页/分类页
             tenlonstudio: {
                 SiteTypeID: 0,
                 host: 'www.tenlonstudio.com',
@@ -2988,7 +3023,7 @@
                     intervals: 500,
                     scrollDelta: 1000
                 }
-            }, //           腾龙工作室
+            }, //        腾龙工作室
             tenlonstudio_list: {
                 SiteTypeID: 0,
                 pager: {
@@ -2999,7 +3034,7 @@
                     replaceE: 'css;.ajax-pager',
                     scrollDelta: 1000
                 }
-            }, //      腾龙工作室 - 分类/搜索页
+            }, //   腾龙工作室 - 分类/搜索页
             yxssp: {
                 SiteTypeID: 0,
                 host: 'www.yxssp.com',
@@ -3011,7 +3046,7 @@
                     replaceE: 'css;.page-nav.td-pb-padding-side',
                     scrollDelta: 1000
                 }
-            }, //                  异星软件空间
+            }, //               异星软件空间
             yrxitong: {
                 SiteTypeID: 0,
                 host: 'www.yrxitong.com',
@@ -3034,7 +3069,7 @@
                     before: src_functionBefore,
                     parameter: [1, 'a[data-original]', 'data-original']
                 }
-            }, //               小鱼儿 yr 系统
+            }, //            小鱼儿 yr 系统
             yrxitong_search: {
                 SiteTypeID: 0,
                 pager: {
@@ -3045,7 +3080,7 @@
                     replaceE: 'css;.pagenation',
                     scrollDelta: 2000
                 }
-            }, //        小鱼儿 yr 系统 - 搜索页
+            }, //     小鱼儿 yr 系统 - 搜索页
             sordum: {
                 SiteTypeID: 0,
                 host: 'www.sordum.org',
@@ -3057,7 +3092,7 @@
                     replaceE: 'css;nav.navigation.posts-navigation',
                     scrollDelta: 1500
                 }
-            }, //                 (下面这几个都是国外博客网站)
+            }, //              (下面这几个都是国外博客网站)
             winaero: {
                 SiteTypeID: 0,
                 host: 'winaero.com',
@@ -3442,7 +3477,7 @@
                     if (location.host === 'zzk.cnblogs.com') {
                         curSite = DBSite.cnblogs_search;
                     } else if (document.getElementById('post_list')) {
-                        curSite = DBSite.cnblogs_postlist;
+                        curSite = DBSite.cnblogs_list;
                     } else if (location.pathname.split('/').length === 3 && document.querySelector('.topicListFooter')) {
                         curSite = DBSite.cnblogs;
                         if (!document.getElementById('homepage_top_pager')) {
@@ -3460,7 +3495,7 @@
                     scrollDelta: 1000
                 }
             }, //                   博客园 - 文章列表（个人）
-            cnblogs_postlist: {
+            cnblogs_list: {
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
@@ -3470,7 +3505,7 @@
                     replaceE: 'css;.pager',
                     scrollDelta: 1000
                 }
-            }, //          博客园 - 文章列表
+            }, //              博客园 - 文章列表
             cnblogs_search: {
                 SiteTypeID: 0,
                 pager: {
@@ -3993,10 +4028,10 @@
             zhutix: {
                 SiteTypeID: 0,
                 host: 'zhutix.com',
-                functionStart: function() {if (document.getElementById('primary-home')) {
-                    curSite = DBSite.zhutix_postlist;
-                } else {
+                functionStart: function() {if (document.getElementById('post-list')) {
                     curSite = DBSite.zhutix;
+                } else {
+                    curSite = DBSite.zhutix_list;
                 }},
                 pager: {
                     type: 1,
@@ -4007,17 +4042,17 @@
                     scrollDelta: 1500
                 }
             }, //          致美化
-            zhutix_postlist: {
+            zhutix_list: {
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: '//li[@class="next-page"]/a',
+                    nextLink: 'css;li.next-page a',
                     pageElement: 'css;#primary-home > div:not(.pagination)',
                     insertPosition: ['css;.pagination', 1],
                     replaceE: 'css;.pagination',
                     scrollDelta: 1500
                 }
-            } //  致美化 - 文章列表
+            } //      致美化 - 文章列表
         };
         // 生成 SiteTypeID
         generateID();
@@ -5097,6 +5132,16 @@
                     oriE[i].outerHTML = repE[i].outerHTML;
                 }
             }
+        }
+    }
+    // [COCOMANGA 漫画 - 列表页] 获取下一页地址
+    function cocomanga_list_functionNext() {
+        let pageActive = parseInt(document.querySelector('.fed-page-info a.fed-btns-green').innerText);
+        if (/page=\d+/.test(location.search)) {
+            return (location.origin + location.pathname + location.search.replace(/page=\d+/,`page=${pageActive+1}`))
+        } else {
+            if (!location.search) return (location.origin + location.pathname + `?page=${pageActive+1}`)
+            return (location.origin + location.pathname + location.search + `&page=${pageActive+1}`)
         }
     }
 
