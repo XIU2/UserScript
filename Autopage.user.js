@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.9.0
+// @version      2.9.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX/XIU/D8/Begin(WP主题)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -459,8 +459,8 @@
                 functionStart: function() {if (location.pathname === '/f') {
                     baidu_tieba_1(); // 右侧悬浮发帖按钮点击事件（解决自动翻页导致无法发帖的问题）
                     curSite = DBSite.baidu_tieba;
-                //} else if (location.pathname.indexOf('/p/') > -1) {
-                    //curSite = DBSite.baidu_tieba_post;
+                /*} else if (location.pathname.indexOf('/p/') > -1) {
+                    curSite = DBSite.baidu_tieba_post;*/
                 } else if (location.pathname === '/f/search/res') {
                     curSite = DBSite.baidu_tieba_search;
                 }},
@@ -472,7 +472,7 @@
                     insertPosition: ['css;#thread_list', 3],
                     insertElement: baidu_tieba_insertElement,
                     replaceE: 'css;#frs_list_pager',
-                    intervals: 3000,
+                    intervals: 2000,
                     scrollDelta: 2000
                 },
                 function: {
@@ -481,13 +481,18 @@
             }, //        百度贴吧 - 帖子列表
             baidu_tieba_post: {
                 SiteTypeID: 0,
+                insStyle: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld, .core_reply div.hideLzl[style*="min-height:50px"] {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
                 pager: {
                     type: 1,
                     nextLink: '//li[contains(@class,"pb_list_pager")]/a[contains(text(),"下一页")]',
                     pageElement: 'css;#j_p_postlist > div',
                     insertPosition: ['css;#j_p_postlist', 3],
                     replaceE: 'css;li.pb_list_pager',
-                    scrollDelta: 1000
+                    scrollDelta: 1500
+                },
+                function: {
+                    before: src_functionBefore,
+                    parameter: [0, 'img[data-tb-lazyload]', 'data-tb-lazyload']
                 }
             }, //   百度贴吧 - 帖子内
             baidu_tieba_search: {
@@ -2683,6 +2688,30 @@
                     scrollDelta: 800
                 }
             }, //      Mangabz 漫画 - 分类/搜索页
+            cocomanga: {
+                SiteTypeID: 0,
+                host: 'www.cocomanga.com',
+                functionStart: function() {if (location.pathname.indexOf('.html') > -1) {
+                    if (!(getCookie('mh_readmode') === '' || getCookie('mh_readmode') === '3')) {
+                        document.cookie='mh_readmode=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; // 强制开启自带的无缝翻页功能
+                        location.reload(); // 刷新网页
+                    }
+                    setTimeout(cocomanga_init, 500);
+                    curSite = DBSite.cocomanga;
+                } else if (/\/\d+\/$/.test(location.pathname)) {
+                    setTimeout(function(){if (document.querySelector('a.website-display-all')) document.querySelector('a.website-display-all').click();}, 300)
+                }},
+                insStyle: '.mh_readend, .mh_footpager, .mh_readmode {display: none !important;} .mh_comicpic img {cursor: unset !important;}',
+                pager: {
+                    type: 4,
+                    nextLink: cocomanga_functionNext,
+                    insertPosition: ['css;#mangalist', 3],
+                    insertElement: cocomanga_insertElement,
+                    replaceE: 'css;.mh_readtitle, .mh_headpager > a.mh_prevbook, .mh_readend, head > title',
+                    intervals: 1000,
+                    scrollDelta: 2500
+                }
+            }, //         COCOMANGA 漫画
             _423down: {
                 SiteTypeID: 0,
                 host: 'www.423down.com',
@@ -5004,6 +5033,68 @@
                     }
                     MANGABZ_PAGE = 0;
                     mangabz_functionNext();
+                }
+            }
+        }
+    }
+
+
+    // [COCOMANGA 漫画] 初始化（调整本话图片）
+    function cocomanga_init() {
+        let last = document.querySelector('.mh_comicpic:last-of-type');
+        if (last && last.getAttribute('p')) {
+            document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).innerHTML = ''; // 删除旧图片元素
+            cocomanga_img(parseInt(last.getAttribute('p'))) // 插入新图片元素
+        }
+    }
+    // [COCOMANGA 漫画] 生成图片元素并插入网页
+    function cocomanga_img(totalImageCount) {
+        if (totalImageCount < 1) return
+        let _img = '';
+        for (let i=1; i<=totalImageCount; i++) {
+            _img += `<div class="mh_comicpic" p="${i}"><img src="${__cr.getPicUrl(i)}"></div>`;
+        }
+        document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
+    }
+    // [COCOMANGA 漫画] 获取下一页地址
+    function cocomanga_functionNext() {
+        var url = '';
+        url = getElementByXpath('//a[contains(@class, "read_page_link") and contains(string(), "下一章")][not(contains(@href, "javascript"))]')
+        if (url === curSite.pageUrl) return
+        curSite.pageUrl = url
+        getPageElems(curSite.pageUrl); // 访问下一话 URL 获取
+    }
+    // [COCOMANGA 漫画] 插入数据
+    function cocomanga_insertElement(pageElems, type) {
+        if (pageElems) {
+            // 插入 <script> 标签
+            pageElems.querySelectorAll('head > script:not([src])').forEach(function (one) {
+                document.body.appendChild(document.createElement('script')).textContent = one.textContent;
+            });
+            pageElems.querySelectorAll('script[src*="custom.js"], script[src*="dynamicjs.js"]').forEach(function (one) {
+                document.body.appendChild(document.createElement('script')).src = one.src;
+            });
+
+            // 插入新图片元素
+            setTimeout(function() {
+                let totalImageCount = __cdecrypt('fw122587mkertyui', CryptoJS.enc.Base64.parse(mh_info.enc_code1).toString(CryptoJS.enc.Utf8));
+                if (!totalImageCount) totalImageCount = __cdecrypt('fw12558899ertyui', CryptoJS.enc.Base64.parse(mh_info.enc_code1).toString(CryptoJS.enc.Utf8));
+                cocomanga_img(parseInt(totalImageCount));
+            }, 100)
+
+            // 添加历史记录
+            window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
+
+            // 当前页码 + 1
+            pageNum.now = pageNum._now + 1
+
+            // 替换元素
+            let oriE = document.querySelectorAll(curSite.pager.replaceE.replace('css;', '')),
+                repE = getAllElements(curSite.pager.replaceE, pageElems, pageElems);
+            console.log(oriE, repE);
+            if (oriE.length === repE.length) {
+                for (let i = 0; i < oriE.length; i++) {
+                    oriE[i].outerHTML = repE[i].outerHTML;
                 }
             }
         }
