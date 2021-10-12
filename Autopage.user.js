@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.9.2
+// @version      2.9.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX/XIU/D8/Begin(WP主题)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -2186,21 +2186,23 @@
                     scrollDelta: 900
                 }
             }, //           宝书网- 手机版
-            _23wx: {
+            bqg: {
                 SiteTypeID: 0,
-                host: 'www.23wx.cc',
-                functionStart: function() {if (/\d+\/\d+\.html/.test(location.pathname)) {curSite = DBSite._23wx;}},
+                host: ['www.23wx.cc', 'www.ibswtan.com'],
+                functionStart: function() {if (/\d+\/\d+\.html/.test(location.pathname)) {
+                    curSite = DBSite.bqg;
+                    if (location.host === 'www.23wx.cc') curSite.pager.mimeType = 'text/html; charset=gbk';
+                }},
                 pager: {
                     type: 1,
                     nextLink: '//div[@class="bottem2"]/a[contains(text(), "下一章")]',
                     pageElement: 'css;#content',
                     insertPosition: ['css;#content', 5],
-                    replaceE: 'css;.bottem2, head > title, .bookname > h1',
-                    mimeType: 'text/html; charset=gbk',
+                    replaceE: 'css;.bottem1, .bottem2, .bookname > h1, head > title',
                     history: true,
                     scrollDelta: 1500
                 }
-            }, //               顶点小说
+            }, //                 笔趣阁 + 顶点小说
             xineyby: {
                 SiteTypeID: 0,
                 host: 'www.xineyby.com',
@@ -2548,14 +2550,13 @@
                 } else if (location.pathname.indexOf('/comics') > -1) {
                     curSite = DBSite.copymanga_list;
                 }},
-                insStyle: '.upMember, .comicContainerAds, .footer {display: none !important;}',
+                iframe: true,
+                insStyle: '.upMember, .comicContainerAds, .footer, #Autopage_number {display: none !important;}',
                 pager: {
                     type: 4,
                     nextLink: copymanga_functionNext,
-                    insertPosition: ['css;ul.comicContent-image-list > li:first-child', 1],
-                    insertElement: copymanga_insertElement,
-                    replaceE: 'css;.disposableData, .disposablePass, .disposableUrlPrefix, .disposableUrlSuffix, .footer, h4.header, title',
-                    intervals: 5000,
+                    pageElement: 'css;ul.comicContent-list > li',
+                    insertPosition: ['css;ul.comicContent-list', 2],
                     scrollDelta: 3000
                 }
             }, //         拷贝漫画
@@ -2590,8 +2591,8 @@
                     nextLink: mhxqiu_functionNext,
                     insertPosition: ['css;#comicContain', 3],
                     insertElement: mhxqiu_insertElement,
-                    replaceE: 'css;#mainControlNext, h1.chaptername_title, title',
-                    intervals: 5000,
+                    replaceE: 'css;.main_control, h1.chaptername_title, head > title',
+                    intervals: 4000,
                     scrollDelta: 3000
                 }
             }, //            漫画星球
@@ -4764,9 +4765,7 @@
     function dmzj_insertElement(pageElems, type) {
         if (!pageElems) return
         // 插入并运行 <script>
-        let scriptElement = pageElems.querySelectorAll('head > script[type]:not([src])'), scriptText = '';
-        scriptElement.forEach(function (one) {scriptText += ';' + one.textContent;});
-        if (scriptText) document.body.appendChild(document.createElement('script')).textContent = scriptText;
+        insScriptAll('css;head > script[type]:not([src])', document.body, pageElems);
 
         // 插入图片
         let _img = '', _img_arr;
@@ -4822,9 +4821,7 @@
     function dmzj_manhua_insertElement(pageElems, type) {
         if (!pageElems) return
         // 插入并运行 <script>
-        let scriptElement = pageElems.querySelectorAll('head > script[type]:not([src])'), scriptText = '';
-        scriptElement.forEach(function (one) {scriptText += ';' + one.textContent;});
-        if (scriptText) document.body.appendChild(document.createElement('script')).textContent = scriptText;
+        insScriptAll('css;head > script[type]:not([src])', document.body, pageElems);
 
         // 插入图片
         let _img = '';
@@ -4858,30 +4855,18 @@
         if (next) {
             if (next.href === curSite.pageUrl) return
             curSite.pageUrl = next.href;
-            getPageElems(curSite.pageUrl);
-        }
-    }
-    // [拷贝漫画] 插入数据
-    function copymanga_insertElement(pageElems, type) {
-        if (!pageElems) return
-        // 添加历史记录
-        window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
-        let oldImg = document.querySelector('.comicContent-image-list').innerHTML;
-
-        // 替换元素
-        let oriE = document.querySelectorAll(curSite.pager.replaceE.replace('css;', '')),
-            repE = getAllElements(curSite.pager.replaceE, pageElems, pageElems);
-        if (oriE.length === repE.length) {
-            for (let i = 0; i < oriE.length; i++) {
-                oriE[i].outerHTML = repE[i].outerHTML;
-            }
-            // 插入并运行 <script>
-            document.body.appendChild(document.createElement('script')).src = document.querySelector('body > script[async][src*="comic_content_pass"]').src;
-            setTimeout(function(){
-                document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), oldImg); // 将 img 标签插入到网页中
-            }, 100);
-            // 当前页码 + 1
-            pageNum.now = pageNum._now + 1
+            //getPageElems(curSite.pageUrl);
+            curSite.SiteTypeID = 0;
+            insStyle('h4.header, h4.header +div[style*="fixed"] {display: none !important;} body::-webkit-scrollbar, aside div.dashboard-sidebar::-webkit-scrollbar {width: 0 !important;height: 0 !important;}');
+            let iframe = document.createElement('iframe');
+            document.body.appendChild(iframe);
+            iframe.style = 'width: 100%; height: 100%; border: none;';
+            iframe.src = curSite.pageUrl;
+            /*setTimeout(function(){
+                let oldImg = document.querySelector(curSite.pager.pageElement.replace('css;', '')).innerHTML;
+                iframe.contentWindow.document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), oldImg); // 将 img 标签插入到网页中
+                document.querySelector(curSite.pager.pageElement.replace('css;', '')).innerHTML = ''
+            }, 500);*/
         }
     }
 
@@ -4899,8 +4884,7 @@
     function mhxqiu_insertElement(pageElems, type) {
         if (!pageElems) return
         // 插入并运行 <script>
-        let scriptElement = getElementByXpath('//body/script[@type][not(@src)][contains(text(), "eval(")]', pageElems);
-        if (scriptElement) document.body.appendChild(document.createElement('script')).textContent = scriptElement.textContent;
+        insScriptAll('//body/script[@type][not(@src)][contains(text(), "eval(")]', document.body, pageElems);
 
         // 插入图片
         let _img = '';
@@ -4908,10 +4892,14 @@
             _img += `<li style="margin:0 auto;"><div style="display: inline-block;zoom: 1;"><img src="${now}" class="loaded lazy" style="opacity: 1;box-shadow:none;"></div></li>`;
         }
         if (_img) {
-            document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img); // 将 img 标签插入到网页中
+            // 将 img 标签插入到网页中
+            document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), _img);
 
             // 添加历史记录
             window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
+
+            // 当前页码 + 1
+            pageNum.now = pageNum._now + 1
 
             // 替换元素
             let oriE = document.querySelectorAll(curSite.pager.replaceE.replace('css;', '')),
@@ -4920,8 +4908,6 @@
                 for (let i = 0; i < oriE.length; i++) {
                     oriE[i].outerHTML = repE[i].outerHTML;
                 }
-                // 当前页码 + 1
-                pageNum.now = pageNum._now + 1
             }
         }
     }
@@ -5003,7 +4989,6 @@
 
     // [Mangabz 漫画] 初始化（调整本话图片）
     function mangabz_init() {
-        pageNumber('del');
         let showimage = document.getElementById('showimage'),
             cp_img = document.getElementById('cp_img'),
             cp_image = document.getElementById('cp_image');
@@ -5051,24 +5036,24 @@
                 }
             } else {
                 // 插入 <script> 标签
-                let scriptElement = pageElems.querySelectorAll('html:not([dir]) > head > script:not([src])'), scriptText = '';
-                scriptElement.forEach(function (one) {scriptText += ';' + one.textContent;});
-                if (scriptText) {
-                    document.body.appendChild(document.createElement('script')).textContent = scriptText;
+                insScriptAll('css;html:not([dir]) > head > script:not([src])', document.body, pageElems);
 
-                    window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
+                // 添加历史记录
+                window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
 
-                    // 替换待替换元素
-                    let oriE = getAllElements(curSite.pager.replaceE),
-                        repE = getAllElements(curSite.pager.replaceE, pageElems, pageElems);
-                    if (oriE.length === repE.length) {
-                        for (let i = 0; i < oriE.length; i++) {
-                            oriE[i].outerHTML = repE[i].outerHTML;
-                        }
+                // 当前页码 + 1
+                pageNum.now = pageNum._now + 1
+
+                // 替换待替换元素
+                let oriE = getAllElements(curSite.pager.replaceE),
+                    repE = getAllElements(curSite.pager.replaceE, pageElems, pageElems);
+                if (oriE.length === repE.length) {
+                    for (let i = 0; i < oriE.length; i++) {
+                        oriE[i].outerHTML = repE[i].outerHTML;
                     }
-                    MANGABZ_PAGE = 0;
-                    mangabz_functionNext();
                 }
+                MANGABZ_PAGE = 0;
+                mangabz_functionNext();
             }
         }
     }
@@ -5103,12 +5088,7 @@
     function cocomanga_insertElement(pageElems, type) {
         if (pageElems) {
             // 插入 <script> 标签
-            pageElems.querySelectorAll('head > script:not([src])').forEach(function (one) {
-                document.body.appendChild(document.createElement('script')).textContent = one.textContent;
-            });
-            pageElems.querySelectorAll('script[src*="custom.js"], script[src*="dynamicjs.js"]').forEach(function (one) {
-                document.body.appendChild(document.createElement('script')).src = one.src;
-            });
+            insScriptAll('css;head > script:not([src]), script[src*="custom.js"], script[src*="dynamicjs.js"]', document.body, pageElems);
 
             // 插入新图片元素
             setTimeout(function() {
@@ -5126,7 +5106,6 @@
             // 替换元素
             let oriE = document.querySelectorAll(curSite.pager.replaceE.replace('css;', '')),
                 repE = getAllElements(curSite.pager.replaceE, pageElems, pageElems);
-            console.log(oriE, repE);
             if (oriE.length === repE.length) {
                 for (let i = 0; i < oriE.length; i++) {
                     oriE[i].outerHTML = repE[i].outerHTML;
@@ -5555,6 +5534,7 @@
             }
         },
     };
+    // XHR 后处理结果
     function processResult(response) {
         //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
         var newBody = ShowPager.createDocumentByString(response.responseText);
@@ -5595,15 +5575,7 @@
             if (curSite.pager.scriptType) {
                 let scriptText = '';
                 if (curSite.pager.scriptType === 1) { //         下一页的所有 <script> 标签
-                    const scriptElems = getAllElements('//script', newBody, newBody);
-                    scriptElems.forEach(function (one) {
-                        if (one.src) {
-                            toElement.appendChild(document.createElement('script')).src = one.src;
-                        } else {
-                            scriptText += ';' + one.textContent;
-                        }
-                    });
-                    toElement.appendChild(document.createElement('script')).textContent = scriptText;
+                    insScriptAll('//script', toElement, newBody);
                 } else if (curSite.pager.scriptType === 2) { //  下一页主体元素同级 <script> 标签
                     pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
                     if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
@@ -5648,6 +5620,18 @@
                 }
             }
         }
+    }
+    // 插入所有 Script
+    function insScriptAll(selector = '//script', toElement = document.body, contextNode = document) {
+        let scriptElems = getAllElements(selector, contextNode, contextNode), scriptText = '';
+        scriptElems.forEach(function (one) {
+            if (one.src) {
+                toElement.appendChild(document.createElement('script')).src = one.src;
+            } else {
+                scriptText += one.textContent + ';';
+            }
+        });
+        if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
     }
     function getElementByCSS(css, contextNode = document) {
         return contextNode.querySelector(css);
