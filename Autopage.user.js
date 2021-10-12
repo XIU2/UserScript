@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.9.3
+// @version      2.9.4
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有使用「Discuz!、Flarum、DUX/XIU/D8/Begin(WP主题)」的网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -24,10 +24,10 @@
     'use strict';
     var menuAll = [
         ['menu_disable', '✅ 已启用 (点击对当前网站禁用)', '❌ 已禁用 (点击对当前网站启用)', []],
-        ['menu_discuz_thread_page', '帖子内自动翻页 (仅论坛)', '帖子内自动翻页 (仅论坛)', true],
+        ['menu_discuz_thread_page', '帖子内自动翻页', '帖子内自动翻页', true],
         ['menu_page_number', '显示当前页码及点击暂停翻页', '显示当前页码及点击暂停翻页', true],
         ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false]
-    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, locationchange = false, nowLocation = '', forumWebsite = ['cs.rin.ru', 'www.flyert.com', 'bbs.pediy.com', 'www.libaclub.com'];
+    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, locationchange = false, nowLocation = '', forumWebsite = ['cs.rin.ru', 'www.flyert.com', 'bbs.pediy.com', 'www.libaclub.com', 'tieba.baidu.com'];
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
     }
@@ -459,11 +459,12 @@
                 functionStart: function() {if (location.pathname === '/f') {
                     baidu_tieba_1(); // 右侧悬浮发帖按钮点击事件（解决自动翻页导致无法发帖的问题）
                     curSite = DBSite.baidu_tieba;
-                /*} else if (location.pathname.indexOf('/p/') > -1) {
-                    curSite = DBSite.baidu_tieba_post;*/
+                } else if (location.pathname.indexOf('/p/') > -1) {
+                    curSite = DBSite.baidu_tieba_post;
                 } else if (location.pathname === '/f/search/res') {
                     curSite = DBSite.baidu_tieba_search;
                 }},
+                iframe: true,
                 insStyle: 'img.j_retract {margin-top: 0 !important;margin-bottom: 0 !important;}', // 修复帖子列表中预览图片，在切换下一个/上一个图片时，多出来的图片上下边距
                 pager: {
                     type: 4,
@@ -483,8 +484,9 @@
                 SiteTypeID: 0,
                 insStyle: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld, .core_reply div.hideLzl[style*="min-height:50px"] {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
                 pager: {
-                    type: 1,
-                    nextLink: '//li[contains(@class,"pb_list_pager")]/a[contains(text(),"下一页")]',
+                    type: 4,
+                    nextLink: baidu_tieba_post_functionNext,
+                    //nextLink: '//li[contains(@class,"pb_list_pager")]/a[contains(text(),"下一页")]',
                     pageElement: 'css;#j_p_postlist > div',
                     insertPosition: ['css;#j_p_postlist', 3],
                     replaceE: 'css;li.pb_list_pager',
@@ -4847,6 +4849,16 @@
         }
     }
 
+    function baidu_tieba_post_functionNext() {
+        let next;
+        next = getElementByXpath('//li[contains(@class,"pb_list_pager")]/a[contains(text(),"下一页")]')
+        if (next) {
+            if (next.href === curSite.pageUrl) return
+            curSite.pageUrl = next.href;
+            insStyle('topic_list_box, ul.tbui_aside_float_bar, .core_title_wrap_bright.tbui_follow_fixed.core_title_absolute_bright {display: none !important;}');
+            insIframe(curSite.pageUrl);
+        }
+    }
 
     // [拷贝漫画] 获取下一页地址
     function copymanga_functionNext() {
@@ -4855,19 +4867,28 @@
         if (next) {
             if (next.href === curSite.pageUrl) return
             curSite.pageUrl = next.href;
-            //getPageElems(curSite.pageUrl);
-            curSite.SiteTypeID = 0;
-            insStyle('h4.header, h4.header +div[style*="fixed"] {display: none !important;} body::-webkit-scrollbar, aside div.dashboard-sidebar::-webkit-scrollbar {width: 0 !important;height: 0 !important;}');
-            let iframe = document.createElement('iframe');
-            document.body.appendChild(iframe);
-            iframe.style = 'width: 100%; height: 100%; border: none;';
-            iframe.src = curSite.pageUrl;
+            insStyle('h4.header, h4.header +div[style*="fixed"] {display: none !important;}');
+            insIframe(curSite.pageUrl);
             /*setTimeout(function(){
                 let oldImg = document.querySelector(curSite.pager.pageElement.replace('css;', '')).innerHTML;
                 iframe.contentWindow.document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).insertAdjacentHTML(addTo(curSite.pager.insertPosition[1]), oldImg); // 将 img 标签插入到网页中
                 document.querySelector(curSite.pager.pageElement.replace('css;', '')).innerHTML = ''
             }, 500);*/
         }
+    }
+
+
+    // 插入 iframe 加载下一页
+    function insIframe(src) {
+        // 停用当前页面翻页
+        curSite.SiteTypeID = 0;
+        // 隐藏当前页面的滚动条 + 页码
+        insStyle('body::-webkit-scrollbar, aside div.dashboard-sidebar::-webkit-scrollbar {width: 0 !important;height: 0 !important;} #Autopage_number {display: none !important;}');
+        // 创建 iframe
+        let iframe = document.createElement('iframe');
+        document.body.appendChild(iframe);
+        iframe.style = 'position: absolute; width: 100%; height: 100%; border: none;';
+        iframe.src = src;
     }
 
 
