@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.3.8
+// @version      1.3.9
 // @author       X.I.U
 // @description  自动签到（访问空间 +22 积分）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
@@ -507,8 +507,7 @@
     // 自动隐藏阅读权限 255 的帖子
     function delate255() {
         if (patt_forum.test(location.pathname) || location.search.indexOf('mod=forumdisplay') > -1){
-            let tbody = document.querySelectorAll('tbody[id^="normalthread_"] .xw1');
-            Array.from(tbody).forEach(function (_this) {
+            document.querySelectorAll('tbody[id^="normalthread_"] .xw1').forEach(function (_this) {
                 if (_this.textContent === '255') {
                     _this.parentNode.parentNode.parentNode.hidden = true;
                 }
@@ -538,7 +537,7 @@
                                     }
                                 }, 10);
                             }
-                        }else{
+                        } else {
                             ShowPager.loadMorePage();
                         }
                     }
@@ -624,6 +623,7 @@
                                         blockUsers('search');
                                     }
                                 }
+                                if (menu_value('menu_delate255')) delate255(); // 隐藏 255 权限帖子
                                 // 替换待替换元素
                                 try {
                                     let oriE = getAllElements(curSite.pager.replaceE);
