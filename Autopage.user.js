@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.9.5
+// @version      2.9.6
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -93,7 +93,6 @@
       3 = 插入该元素当中，最后一个子元素后面；
       4 = 插入该元素本身的后面；
       5 = 插入该元素末尾（针对文本）
-    mimeType: 网站编码
     scriptType: 单独插入 <script> 标签
       1 = 下一页的所有 <script> 标签
       2 = 下一页主体元素同级 <script> 标签
@@ -267,13 +266,26 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.next[href]',
+                    nextLink: 'css;a.next',
                     pageElement: 'css;#main > ul > li',
                     insertPosition: ['css;#main > ul', 3],
                     replaceE: 'css;nav.pagination',
                     scrollDelta: 1500
                 }
             }, //       WordPress 的 Begin 主题 - 搜索页
+            biquge: {
+                SiteTypeID: 0,
+                functionStart: function() {if (/\d+\/\d+\.html/.test(location.pathname)) {curSite = DBSite.biquge;}},
+                pager: {
+                    type: 1,
+                    nextLink: '//a[contains(text(), "下一章") or contains(text(), "下一页")]',
+                    pageElement: 'css;#content',
+                    insertPosition: ['css;#content', 5],
+                    replaceE: '//*[./a[contains(text(), "下一章") or contains(text(), "下一页")]] | //title',
+                    history: true,
+                    scrollDelta: 1500
+                }
+            }, //             笔趣阁 模板的小说网站
             baidu: {
                 SiteTypeID: 0,
                 host: 'www.baidu.com',
@@ -357,8 +369,8 @@
                 pager: {
                     type: 1,
                     nextLink: 'css;#sogou_next',
-                    pageElement: 'css;.news-box > ul[class*="news-list"] > li',
-                    insertPosition: ['css;.news-box > ul[class*="news-list"]', 3],
+                    pageElement: 'css;ul[class*="news-list"] > li',
+                    insertPosition: ['css;ul[class*="news-list"]', 3],
                     replaceE: 'css;#pagebar_container',
                     scrollDelta: 1000
                 }
@@ -385,7 +397,7 @@
                 functionStart: function() {if (location.pathname != '/') {curSite = DBSite.so; insStyle('img {opacity: 1 !important;}')}},
                 pager: {
                     type: 1,
-                    nextLink: 'css;#snext[href]',
+                    nextLink: 'css;a#snext',
                     pageElement: 'css;ul.result > li, style:not(src)',
                     insertPosition: ['css;ul.result', 3],
                     replaceE: 'css;#page',
@@ -438,7 +450,7 @@
                 functionStart: function() {if (location.pathname.indexOf('/search') > -1) {curSite = DBSite.yahoo;}},
                 pager: {
                     type: 1,
-                    nextLink: 'css;.pagination a.next[href]',
+                    nextLink: 'css;.pagination a.next',
                     pageElement: 'css;#web ol > li',
                     insertPosition: ['css;#web ol', 3],
                     replaceE: 'css;.pagination',
@@ -451,7 +463,7 @@
                 functionStart: function() {if (location.pathname.indexOf('/search') > -1) {curSite = DBSite.yahoo_jp;}},
                 pager: {
                     type: 1,
-                    nextLink: 'css;.Pagenation__next > a[href]',
+                    nextLink: 'css;.Pagenation__next > a',
                     pageElement: 'css;.Contents__innerGroupBody > div',
                     insertPosition: ['css;.Contents__innerGroupBody', 3],
                     replaceE: 'css;.Pagenation',
@@ -475,7 +487,7 @@
                 functionStart: function() {if (location.pathname === '/search') {curSite = DBSite.ecosia;}},
                 pager: {
                     type: 1,
-                    nextLink: 'css;nav.pagination a[href][aria-label="Next page"]',
+                    nextLink: 'css;nav.pagination a[aria-label="Next page"]',
                     pageElement: 'css;section.mainline > div:not(.related-queries)',
                     insertPosition: ['css;nav.pagination', 1],
                     replaceE: 'css;nav.pagination',
@@ -662,7 +674,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'a.js-keyboard-next[href]',
+                    nextLink: 'a.js-keyboard-next',
                     pageElement: 'css;.atl-main > div[class="atl-item"]',
                     insertPosition: ['css;.atl-main', 3],
                     replaceE: 'css;.atl-pages > form',
@@ -681,7 +693,7 @@
                 }},
                 pager: {
                     type: 1,
-                    nextLink: 'css;#pagebbtm a[title="下一页"][href]',
+                    nextLink: 'css;#pagebbtm a[title="下一页"]',
                     pageElement: 'css;#topicrows > tbody, #topicrows > script',
                     insertPosition: ['css;#topicrows', 3],
                     replaceE: 'css;div[name="pageball"]',
@@ -696,7 +708,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;#pagebbtm a[title*="下一页"][href]',
+                    nextLink: 'css;#pagebbtm a[title*="下一页"]',
                     pageElement: 'id("m_posts_c")/table | id("m_posts_c")/script | //script[contains(text(), "commonui.userInfo.setAll")]',
                     insertPosition: ['css;#m_posts_c', 3],
                     replaceE: 'css;div[name="pageball"]',
@@ -1032,7 +1044,7 @@
                 host: 'lowendtalk.com',
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.Next[href]',
+                    nextLink: 'css;a.Next',
                     pageElement: 'css;ul.DataList > li',
                     insertPosition: ['css;ul.DataList', 3],
                     replaceE: 'css;.Pager',
@@ -1273,7 +1285,7 @@
                 }},
                 pager: {
                     type: 1,
-                    nextLink: 'css;li.next > a[href]',
+                    nextLink: 'css;li.next > a',
                     pageElement: 'css;.work-list > div',
                     insertPosition: ['css;.work-list', 3],
                     replaceE: 'css;.pagerbar',
@@ -1284,7 +1296,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;li.next > a[href]',
+                    nextLink: 'css;li.next > a',
                     pageElement: 'css;.collect-list > div',
                     insertPosition: ['css;.collect-list', 3],
                     replaceE: 'css;.pagerbar',
@@ -1297,7 +1309,7 @@
                 functionStart: function() {if (location.pathname != '/') {curSite = DBSite.om;}},
                 pager: {
                     type: 1,
-                    nextLink: 'css;li.next > a[href]',
+                    nextLink: 'css;li.next > a',
                     pageElement: 'css;.main_content > ul > li',
                     insertPosition: ['css;.main_content > ul', 3],
                     replaceE: 'css;ul.pagination',
@@ -1363,7 +1375,7 @@
                 insStyle: 'a.prev, a.next {display: none !important;}',
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.next[href]',
+                    nextLink: 'css;a.next',
                     pageElement: 'css;#image-show > img',
                     insertPosition: ['css;#image-show', 3],
                     replaceE: 'css;#image-show > a',
@@ -1534,7 +1546,7 @@
                 functionStart: function() {if (location.pathname != '/') {curSite = DBSite.pianku;}},
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.a1[href]',
+                    nextLink: 'css;a.a1',
                     pageElement: 'css;.content-list > li',
                     insertPosition: ['css;.content-list', 3],
                     replaceE: 'css;.pages',
@@ -1769,7 +1781,6 @@
                     pageElement: 'css;#contrainer > .img> ul > li',
                     insertPosition: ['css;#contrainer > .img> ul', 3],
                     replaceE: 'css;.pages',
-                    mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 1000
                 }
             }, //          樱花动漫
@@ -1781,7 +1792,6 @@
                     pageElement: 'css;#contrainer .fire .pics > ul > li',
                     insertPosition: ['css;#contrainer .fire .pics > ul', 3],
                     replaceE: 'css;.pages',
-                    mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 1000
                 }
             }, //         樱花动漫 - 搜索页等
@@ -1899,7 +1909,7 @@
                 insStyle: '#post_container {height: auto !important;} #post_container > li {position: static !important; float: left !important; height: 620px !important;}',
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.next[href]',
+                    nextLink: 'css;a.next',
                     pageElement: 'css;#post_container > li',
                     insertPosition: ['css;#post_container', 3],
                     replaceE: 'css;.pagination',
@@ -1934,7 +1944,7 @@
                 host: 'gaoqing.fm',
                 pager: {
                     type: 2,
-                    nextLink: '.col-md-12 > a[href], #loadmore > a[href]',
+                    nextLink: '.col-md-12 > a, #loadmore > a',
                     intervals: 1500,
                     scrollDelta: 1000
                 }
@@ -1948,7 +1958,7 @@
                     }},
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.next.page-numbers[href]',
+                    nextLink: 'css;a.next.page-numbers',
                     pageElement: 'css;.list-grouped > div',
                     insertPosition: ['css;.list-grouped', 3],
                     replaceE: 'css;nav.pagination',
@@ -2092,7 +2102,7 @@
                 functionStart: function() {if (location.pathname != '/' && !(/\/\d{3,}/.test(location.pathname))) {curSite = DBSite.mini4k;};},
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.pager__item--next[href]',
+                    nextLink: 'css;a.pager__item--next',
                     pageElement: 'css;div[class*="-item-list"] > ul > li',
                     insertPosition: ['css;div[class*="-item-list"] > ul', 3],
                     replaceE: 'css;.pagination',
@@ -2125,7 +2135,7 @@
                 functionStart: function() {if (location.pathname.indexOf('/subtitle/') === -1) {curSite = DBSite.a4k;};},
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.pager__item--next[href]',
+                    nextLink: 'css;a.pager__item--next',
                     pageElement: 'css;ul.list > li',
                     insertPosition: ['css;ul.list', 3],
                     replaceE: 'css;.pagination',
@@ -2179,7 +2189,7 @@
                 functionStart: function() {if (location.pathname.indexOf('/all/') > -1) {curSite = DBSite.qidian;}},
                 pager: {
                     type: 1,
-                    nextLink: 'css;a[class*="pagination-next"][href]',
+                    nextLink: 'css;a[class*="pagination-next"]',
                     pageElement: 'css;ul.all-img-list > li',
                     insertPosition: ['css;ul.all-img-list', 3],
                     replaceE: 'css;#page-container',
@@ -2192,7 +2202,7 @@
                 insStyle: '.admire-wrap {display: none !important;}',
                 pager: {
                     type: 1,
-                    nextLink: 'css;a[id$="chapterNext"][href]',
+                    nextLink: 'css;a[id$="chapterNext"]',
                     pageElement: 'css;.main-text-wrap > div:not(.admire-wrap)',
                     insertPosition: ['css;.main-text-wrap', 3],
                     replaceE: 'css;.chapter-control, title',
@@ -2209,8 +2219,7 @@
                     nextLink: '//div[@class="listl2"]//a[text()="下一页"]',
                     pageElement: 'css;.listl2 > ul > li',
                     insertPosition: ['css;.listl2 > ul', 3],
-                    replaceE: 'css;listl2 > dl',
-                    mimeType: 'text/html; charset=gb2312',
+                    replaceE: 'css;.listl2 > dl',
                     scrollDelta: 900
                 }
             }, //             宝书网
@@ -2224,27 +2233,9 @@
                     pageElement: 'css;.man_first > ul > li',
                     insertPosition: ['css;.man_first > ul', 3],
                     replaceE: 'css;.man_first > dl',
-                    mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 900
                 }
             }, //           宝书网- 手机版
-            bqg: {
-                SiteTypeID: 0,
-                host: ['www.23wx.cc', 'www.ibswtan.com'],
-                functionStart: function() {if (/\d+\/\d+\.html/.test(location.pathname)) {
-                    curSite = DBSite.bqg;
-                    if (location.host === 'www.23wx.cc') curSite.pager.mimeType = 'text/html; charset=gbk';
-                }},
-                pager: {
-                    type: 1,
-                    nextLink: '//div[@class="bottem2"]/a[contains(text(), "下一章")]',
-                    pageElement: 'css;#content',
-                    insertPosition: ['css;#content', 5],
-                    replaceE: 'css;.bottem1, .bottem2, .bookname > h1, head > title',
-                    history: true,
-                    scrollDelta: 1500
-                }
-            }, //                 笔趣阁 + 顶点小说
             xineyby: {
                 SiteTypeID: 0,
                 host: 'www.xineyby.com',
@@ -2259,7 +2250,6 @@
                     pageElement: 'css;#contents',
                     insertPosition: ['css;#contents', 5],
                     replaceE: 'css;#footlink, head > title, #amain dd h1',
-                    mimeType: 'text/html; charset=gbk',
                     history: true,
                     scrollDelta: 900
                 }
@@ -2268,11 +2258,10 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;#pagelink a.next[href]',
+                    nextLink: 'css;#pagelink a.next',
                     pageElement: 'css;#content > dd tbody > tr:not(:first-child)',
                     insertPosition: ['css;#content > dd tbody', 3],
                     replaceE: 'css;#pagelink',
-                    mimeType: 'text/html; charset=gbk',
                     scrollDelta: 900
                 }
             }, //        无错小说网 - 分类/搜索页
@@ -2317,7 +2306,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;#pagelink > a.next[href]',
+                    nextLink: 'css;#pagelink > a.next',
                     pageElement: 'css;.store_collist > div.bookbox',
                     insertPosition: ['css;.store_collist', 3],
                     replaceE: 'css;#pagelink',
@@ -2332,7 +2321,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;#pagelink > a.next[href]',
+                    nextLink: 'css;#pagelink > a.next',
                     pageElement: 'css;.rankpage_box > div.rank_d_list',
                     insertPosition: ['css;div.pages', 1],
                     replaceE: 'css;#pagelink',
@@ -2366,7 +2355,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;#pagelink > strong+a[href] ,#pagelink a.next[href]',
+                    nextLink: 'css;#pagelink > strong+a ,#pagelink a.next',
                     pageElement: 'css;ol.book-ol > li',
                     insertPosition: ['css;ol.book-ol', 3],
                     replaceE: 'css;#pagelink',
@@ -2393,7 +2382,6 @@
                     pageElement: 'css;body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img',
                     insertPosition: ['css;body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child > a', 3],
                     replaceE: 'css;body > table > tbody > tr:nth-child(2), body > table > tbody > tr:nth-child(5)',
-                    mimeType: 'text/html; charset=big5',
                     scrollDelta: 2000
                 }
             }, //        动漫狂
@@ -2405,7 +2393,6 @@
                     pageElement: 'css;td[background="/image/content_box4.gif"]+td > table > tbody > tr',
                     insertPosition: ['css;td[background="/image/content_box4.gif"]+td > table > tbody', 3],
                     replaceE: '//a[@class="pages"]/parent::td/parent::tr | //font[contains(text(), "目前在第")]',
-                    mimeType: 'text/html; charset=big5',
                     scrollDelta: 1000
                 }
             }, //   动漫狂 - 分类/搜索页
@@ -2532,7 +2519,7 @@
                 insStyle: '.wrap_mhlist_l.con_left, .wrap_list {height: auto!important;}',
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.pg_next[href]',
+                    nextLink: 'css;a.pg_next',
                     pageElement: 'css;ul.list_con_li > li',
                     insertPosition: ['css;ul.list_con_li', 3],
                     replaceE: 'css;.page',
@@ -2544,7 +2531,7 @@
                 insStyle: '.wrap_mhlist_l.con_left {height: auto!important;}',
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.pg_next[href]',
+                    nextLink: 'css;a.pg_next',
                     pageElement: 'css;.ph_r_con_li > div:not(.ad_column)',
                     insertPosition: ['css;.ph_r_con_li', 3],
                     replaceE: 'css;.page',
@@ -2606,7 +2593,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;li.next > a[href]',
+                    nextLink: 'css;li.next > a',
                     pageElement: 'css;.exemptComic-box > div',
                     insertPosition: ['css;.exemptComic-box', 3],
                     replaceE: 'css;ul.page-all',
@@ -2674,7 +2661,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;li.next > a[href]',
+                    nextLink: 'css;li.next > a',
                     pageElement: 'css;ul.book-list > li',
                     insertPosition: ['css;ul.book-list', 3],
                     replaceE: 'css;ul.pagination',
@@ -2822,7 +2809,7 @@
                     if (location.pathname === '/search.php') {curSite = DBSite.sharerw_search;} else {curSite = DBSite.sharerw;};};},
                 pager: {
                     type: 1,
-                    nextLink: 'css;span.next > a[href]',
+                    nextLink: 'css;span.next > a',
                     pageElement: 'css;.new-post > article',
                     insertPosition: ['css;.new-post', 3],
                     replaceE: 'css;.pagebar',
@@ -2833,7 +2820,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;span.next > a[href]',
+                    nextLink: 'css;span.next > a',
                     pageElement: 'css;#mainbox > article',
                     insertPosition: ['css;.pagebar', 1],
                     replaceE: 'css;.pagebar',
@@ -2880,7 +2867,7 @@
                 host: 'www.isharepc.com',
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.next[href]',
+                    nextLink: 'css;a.next',
                     pageElement: 'css;.content > div',
                     insertPosition: ['css;nav.pagination', 1],
                     replaceE: 'css;nav.pagination',
@@ -2902,7 +2889,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.next[href]',
+                    nextLink: 'css;a.next',
                     pageElement: 'css;ul.post-loop > li',
                     insertPosition: ['css;ul.post-loop', 3],
                     replaceE: 'css;ul.pagination',
@@ -2986,7 +2973,7 @@
                 functionStart: function() {if (location.pathname.indexOf('.html') === -1) {curSite = DBSite.fsylr;}},
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.next.page-numbers[href]',
+                    nextLink: 'css;a.next.page-numbers',
                     pageElement: 'css;.posts-con > div:not([class*="posts-"])',
                     insertPosition: ['css;.posts-con', 3],
                     replaceE: 'css;nav.pagination',
@@ -3171,7 +3158,7 @@
                 functionStart: function() {if (location.pathname === '/blog/') {curSite = DBSite.winhelponline;}},
                 pager: {
                     type: 1,
-                    nextLink: 'css;span.prev > a[href]',
+                    nextLink: 'css;span.prev > a',
                     pageElement: 'css;#main > article',
                     insertPosition: ['css;nav.paging-navigation', 1],
                     replaceE: 'css;nav.paging-navigation',
@@ -3209,7 +3196,7 @@
                 functionStart: function() {if (location.search) curSite = DBSite.gitee;},
                 pager: {
                     type: 1,
-                    nextLink: 'css;li.next > a[href]',
+                    nextLink: 'css;li.next > a',
                     pageElement: 'css;#hits-list > div',
                     insertPosition: ['css;#hits-list', 3],
                     replaceE: 'css;ul.pagination',
@@ -3444,7 +3431,7 @@
                 }},
                 pager: {
                     type: 1,
-                    nextLink: 'css;a[href][rel="next"]',
+                    nextLink: 'css;a[rel="next"]',
                     pageElement: 'css;#questions > div',
                     insertPosition: ['css;#questions', 3],
                     replaceE: 'css;.pager',
@@ -3455,7 +3442,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;a[href][rel="next"]',
+                    nextLink: 'css;a[rel="next"]',
                     pageElement: 'css;#tags-browser > div',
                     insertPosition: ['css;#tags-browser', 3],
                     replaceE: 'css;.pager',
@@ -3466,7 +3453,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;a[href][rel="next"]',
+                    nextLink: 'css;a[rel="next"]',
                     pageElement: 'css;#user-browser > div:first-child > div',
                     insertPosition: ['css;#user-browser > div:first-child', 3],
                     replaceE: 'css;.pager',
@@ -3477,7 +3464,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;a[href][rel="next"]',
+                    nextLink: 'css;a[rel="next"]',
                     pageElement: 'css;.js-search-results > div:first-child > div',
                     insertPosition: ['css;.js-search-results > div:first-child', 3],
                     replaceE: 'css;.pager',
@@ -3506,7 +3493,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;a[href][rel="next"]',
+                    nextLink: 'css;a[rel="next"]',
                     pageElement: 'css;.search-result > section',
                     insertPosition: ['css;.search-result > div:last-child', 1],
                     replaceE: 'css;ul.pagination',
@@ -3602,7 +3589,7 @@
                 insStyle: 'li.aca_algo_count {display: none !important;}',
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.sb_pagN[href]',
+                    nextLink: 'css;a.sb_pagN',
                     pageElement: 'css;#b_results > li.aca_algo',
                     insertPosition: ['css;#b_results .b_pag', 1],
                     replaceE: 'css;#b_results .b_pag',
@@ -3633,7 +3620,7 @@
                 SiteTypeID: 0,
                 pager: {
                     type: 1,
-                    nextLink: 'css;a.res-page-next[href]',
+                    nextLink: 'css;a.res-page-next',
                     pageElement: 'css;#journaldetail > div',
                     insertPosition: ['css;#journaldetail', 3],
                     replaceE: 'css;.res-page',
@@ -3656,7 +3643,7 @@
                 functionStart: function() {if (location.pathname === '/s') {curSite = DBSite.so_xueshu;}},
                 pager: {
                     type: 1,
-                    nextLink: 'css;a#snext[href]',
+                    nextLink: 'css;a#snext',
                     pageElement: 'css;ul.list > li',
                     insertPosition: ['css;ul.list', 3],
                     replaceE: 'css;#page',
@@ -3856,7 +3843,6 @@
                     pageElement: 'css;.slist ul > li:not(.nextpage)',
                     insertPosition: ['css;.slist ul', 3],
                     replaceE: 'css;.page',
-                    mimeType: 'text/html; charset=gbk',
                     scrollDelta: 1000
                 }
             }, //           彼岸图网
@@ -3883,7 +3869,6 @@
                     pageElement: 'css;#dle-content > div',
                     insertPosition: ['css;#dle-content > noindex', 1],
                     replaceE: 'css;.navigation',
-                    mimeType: 'text/html; charset=windows-1251',
                     scrollDelta: 1000
                 }
             }, //            壁纸
@@ -3976,7 +3961,6 @@
                     pageElement: 'css;div.img > p > *',
                     insertPosition: ['css;div.img > p', 3],
                     replaceE: 'css;.page',
-                    mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 2000
                 }
             }, //            秀人网 - 图片页
@@ -3988,7 +3972,6 @@
                     pageElement: 'css;td >.tp2 > *',
                     insertPosition: ['css;td >.tp2', 3],
                     replaceE: 'css;.page',
-                    mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 1000
                 }
             }, //       秀人网 - 分类页
@@ -4000,7 +3983,6 @@
                     pageElement: 'css;.node > *',
                     insertPosition: ['css;.node', 3],
                     replaceE: 'css;.page',
-                    mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 1000
                 }
             }, //     秀人网 - 搜索页
@@ -4052,7 +4034,6 @@
                     pageElement: 'css;dl.list-left > dd:not([class="page"])',
                     insertPosition: ['css;.page', 1],
                     replaceE: 'css;.page',
-                    mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 1000
                 }
             }, //               MM131 - 分类页
@@ -4064,7 +4045,6 @@
                     pageElement: 'css;.content-pic img',
                     insertPosition: ['css;.content-pic', 3],
                     replaceE: 'css;.content-page',
-                    mimeType: 'text/html; charset=gb2312',
                     scrollDelta: 2000
                 }
             }, //             MM131 - 图片页
@@ -4174,6 +4154,8 @@
             } else if (location.pathname.indexOf('.html') === -1) {
                 curSite = DBSite.begin;
             }
+        } else if (webType === 9) { // < 所有使用 笔趣阁 模板的小说网站 >
+            DBSite.biquge.functionStart()
         }
     }
 
@@ -4316,7 +4298,7 @@
     }
     // [百度贴吧] 获取下一页地址
     function baidu_tieba_functionNext() {
-        let next = document.querySelector('a.next.pagination-item[href]');
+        let next = document.querySelector('a.next.pagination-item');
         if (next != null && next.nodeType === 1 && next.href && next.href.slice(0,4) === 'http') {
             var url = next.href + '&pagelets=frs-list%2Fpagelet%2Fthread&pagelets_stamp=' + new Date().getTime();
             if (url === curSite.pageUrl) return
@@ -4792,7 +4774,7 @@
     // [动漫之家] 获取下一页地址
     function dmzj_functionNext() {
         let next;
-        next = document.querySelector('span.next > a[href]')
+        next = document.querySelector('span.next > a')
         if (next) {
             if (next.href === curSite.pageUrl) return
             curSite.pageUrl = next.href;
@@ -4900,7 +4882,7 @@
     // [拷贝漫画] 加载下一页
     function copymanga_functionNext() {
         let next;
-        next = document.querySelector('.comicContent-next > a[href]')
+        next = document.querySelector('.comicContent-next > a')
         if (next) {
             if (next.href === curSite.pageUrl) return
             curSite.pageUrl = next.href;
@@ -5438,6 +5420,8 @@
             console.info('[自动无缝翻页] - 使用 WordPress <D8> 主题的网站'); return 7;
         } else if (document.querySelector('link[href*="themes/begin" i], script[src*="themes/begin" i], img[src*="themes/begin" i]')) {
             console.info('[自动无缝翻页] - 使用 WordPress <Begin> 主题的网站'); return 8;
+        } else if (document.querySelector('meta[name="description"][content*="小说"], meta[name="description"][content*="章节"], meta[name="description"][content*="阅读"]') && document.getElementById('content') && getElementByXpath('//a[contains(text(), "下一章") or contains(text(), "下一页")]')) {
+            console.info('[自动无缝翻页] - <笔趣阁> 模板的小说网站'); return 9;
         } else if (self != top) {
             return -1;
         }
@@ -5461,14 +5445,12 @@
     // 类型 4 专用
     function getPageElems(url, type = '', method = 'GET', data = '', type2) {
         //console.log(url, data)
-        let mimeType = '';
-        if (curSite.pager.mimeType) mimeType = curSite.pager.mimeType;
         GM_xmlhttpRequest({
             url: url,
             method: method,
             data: data,
             responseType: type,
-            overrideMimeType: mimeType,
+            overrideMimeType: 'text/html; charset=' + document.charset,
             headers: {
                 'Referer': location.href,
                 'Content-Type': (method === 'POST') ? 'application/x-www-form-urlencoded':''
@@ -5572,13 +5554,11 @@
                 if (curSite.pager.forceHTTPS && location.protocol === 'https:') {url = url.replace(/^http:/,'https:');}
                 if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
                 curSite.pageUrl = url;
-                let mimeType = '';
-                if (curSite.pager.mimeType) mimeType = curSite.pager.mimeType;
                 // 读取下一页的数据
                 GM_xmlhttpRequest({
                     url: url,
                     method: 'GET',
-                    overrideMimeType: mimeType,
+                    overrideMimeType: 'text/html; charset=' + document.charset,
                     headers: {
                         'Referer': location.href
                     },
