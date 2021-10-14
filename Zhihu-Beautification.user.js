@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.4.1
+// @version      1.4.2
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏、文章编辑页面与实际文章宽度一致
 // @match        *://www.zhihu.com/*
@@ -29,7 +29,7 @@
         ['menu_widescreenDisplaySearch', '搜索页、话题页、圈子', '宽屏显示', true],
         ['menu_widescreenDisplayCollection', '收藏页', '宽屏显示', true],
         ['menu_widescreenDisplayPost', '文章页', '宽屏显示', false],
-        ['menu_widescreenDisplayWidth', '宽屏宽度', '宽屏宽度 (100~1000)', '1000'],
+        ['menu_widescreenDisplayWidth', '宽屏宽度', '宽屏宽度 (默认 1000)', '1000'],
         ['menu_darkMode', '暗黑模式', '暗黑模式', true],
         ['menu_darkModeType', '暗黑模式切换（1~4）', '暗黑模式切换', 1],
         ['menu_darkModeAuto', '暗黑模式跟随浏览器', '暗黑模式跟随浏览器', false],
