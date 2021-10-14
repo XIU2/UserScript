@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      2.9.6
+// @version      2.9.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一部分，更多的写不下了...
 // @match        *://*/*
@@ -2366,6 +2366,17 @@
                     parameter: [0, 'img[data-original]', 'data-original']
                 }
             }, //   哔哩轻小说 (手机版) - 文库
+            manben: {
+                SiteTypeID: 0,
+                host: 'www.manben.com',
+                functionStart: function() {if (/\/m\d+/.test(location.pathname)) {
+                    if (getCookie('showtype') != '2') {
+                        document.cookie='showtype=2; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; // 写入 Cookie 开启 [垂直阅读] 模式
+                        location.reload(); // 刷新网页
+                    }
+                    curSite = DBSite.mhxqiu;
+                }}
+            }, //            漫本
             cartoonmad: {
                 SiteTypeID: 0,
                 host: ['www.cartoonmad.com','www.cartoonmad.cc'],
@@ -2614,13 +2625,13 @@
                 } else if (/\/(sort|rank)\//.test(location.pathname)) { // 分类页
                     curSite = DBSite.mhxqiu_list;
                 }},
-                insStyle: '.imgFloat_1, .imgFloat_2, .main_control {display: none !important;} body {height: auto !important;}',
+                insStyle: '.imgFloat_1, .imgFloat_2, .main_control, span.comic-ft {display: none !important;} html, body, #mainView {height: auto !important;} body.view .main ul.comic-contain li{margin:0 auto !important;} .comic-contain .loaded{box-shadow: none !important;}',
                 pager: {
                     type: 4,
                     nextLink: mhxqiu_functionNext,
                     insertPosition: ['css;#comicContain', 3],
                     insertElement: mhxqiu_insertElement,
-                    replaceE: 'css;.main_control, h1.chaptername_title, head > title',
+                    replaceE: 'css;.main_control, h1.chaptername_title, span.title-comicHeading, title',
                     intervals: 4000,
                     scrollDelta: 3000
                 }
@@ -2636,6 +2647,20 @@
                     scrollDelta: 1000
                 }
             }, //       漫画星球 - 分类页
+            fffdm: {
+                SiteTypeID: 0,
+                host: 'manhua.fffdm.com',
+                functionStart: function() {if (location.pathname.split('/').length === 4) {curSite = DBSite.fffdm;}},
+                insStyle: '#footer, #header {display: none !important;}',
+                pager: {
+                    type: 4,
+                    nextLink: fffdm_functionNext,
+                    insertPosition: ['css;#mhimg0', 3],
+                    insertElement: fffdm_insertElement,
+                    replaceE: 'css;.navigation, #weizhi, h1, title',
+                    scrollDelta: 2000
+                }
+            }, //             风之动漫
             gufengmh: {
                 SiteTypeID: 0,
                 host: /gufengmh/,
@@ -2687,7 +2712,7 @@
             }, //            砂之船动漫家
             mangabz: {
                 SiteTypeID: 0,
-                host: 'mangabz.com',
+                host: ['mangabz.com', 'www.mangabz.com'],
                 functionStart: function() {if (/\/m\d+/.test(location.pathname)) {
                     setTimeout(mangabz_init, 500);
                     curSite = DBSite.mangabz;
@@ -4917,6 +4942,7 @@
         if (next) {
             if (next.href === curSite.pageUrl) return
             curSite.pageUrl = next.href;
+            console.log(curSite.pageUrl)
             getPageElems(curSite.pageUrl);
         }
     }
@@ -4924,12 +4950,12 @@
     function mhxqiu_insertElement(pageElems, type) {
         if (!pageElems) return
         // 插入并运行 <script>
-        insScriptAll('//body/script[@type][not(@src)][contains(text(), "eval(")]', document.body, pageElems);
+        insScriptAll('//script[contains(text(), "eval") and contains(text(), "newImgs")]', document.body, pageElems);
 
         // 插入图片
         let _img = '';
         for (let now of newImgs) {
-            _img += `<li style="margin:0 auto;"><div style="display: inline-block;zoom: 1;"><img src="${now}" class="loaded lazy" style="opacity: 1;box-shadow:none;"></div></li>`;
+            _img += `<li><div style="display: inline-block;zoom: 1;"><img src="${now}" class="loaded lazy" style="opacity: 1;box-shadow:none;"></div></li>`;
         }
         if (_img) {
             // 将 img 标签插入到网页中
@@ -4949,6 +4975,47 @@
                     oriE[i].outerHTML = repE[i].outerHTML;
                 }
             }
+        }
+    }
+
+
+    // [风之动漫] 获取下一页地址
+    function fffdm_functionNext() {
+        let next = getElementByXpath('//a[contains(text(), "下一页") or contains(text(), "下一话")]');
+        if (next) {
+            if (next.href === curSite.pageUrl) return
+            curSite.pageUrl = next.href;
+            getPageElems(curSite.pageUrl);
+        }
+    }
+    // [风之动漫] 插入数据
+    function fffdm_insertElement(pageElems, type) {
+        if (!pageElems) return
+        // 插入并运行 <script>
+        let scriptElems = getElementByXpath('id("main")/script[contains(text(), "mhpicurl")][1]', pageElems, pageElems);
+        if (scriptElems) {
+            document.body.appendChild(document.createElement('script')).textContent = scriptElems.textContent.replace(/document\.write.+/, '');
+            //insScriptAll('id("main")/script[contains(text(), "mhpicurl")][1]', document.body, pageElems);
+
+            // 插入图片
+            setTimeout(function() {
+                document.querySelector(curSite.pager.insertPosition[0].replace('css;', '')).appendChild(document.createElement('img')).src = mhpicurl;
+
+                // 添加历史记录
+                window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
+
+                // 当前页码 + 1
+                pageNum.now = pageNum._now + 1
+
+                // 替换元素
+                let oriE = document.querySelectorAll(curSite.pager.replaceE.replace('css;', '')),
+                    repE = getAllElements(curSite.pager.replaceE, pageElems, pageElems);
+                if (oriE.length === repE.length) {
+                    for (let i = 0; i < oriE.length; i++) {
+                        oriE[i].outerHTML = repE[i].outerHTML;
+                    }
+                }
+            }, 100)
         }
     }
 
@@ -5173,7 +5240,6 @@
                     let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
                         scrollHeight = window.innerHeight || document.documentElement.clientHeight,
                         scrollDelta = curSite.pager.scrollDelta;
-
                     if (curSite.pager.type === 3) { // <<<<< 翻页类型 3（依靠元素距离可视区域底部的距离来触发翻页）>>>>>
                         let scrollElement = document.querySelector(curSite.pager.scrollElement);
                         //console.log(scrollElement.offsetTop - (scrollTop + scrollHeight), scrollDelta, curSite.SiteTypeID)
@@ -5442,15 +5508,24 @@
     }
 
 
-    // 类型 4 专用
+    // 翻页类型 4 专用
     function getPageElems(url, type = '', method = 'GET', data = '', type2) {
-        //console.log(url, data)
+        let mimeType;
+        switch (type) {
+            case 'json':
+                mimeType = 'application/json; charset=' + document.charset; break;
+            case 'text':
+                mimeType = 'text/plain; charset=' + document.charset; break;
+            default:
+                mimeType = 'text/html; charset=' + document.charset;
+        }
+
         GM_xmlhttpRequest({
             url: url,
             method: method,
             data: data,
             responseType: type,
-            overrideMimeType: 'text/html; charset=' + document.charset,
+            overrideMimeType: mimeType,
             headers: {
                 'Referer': location.href,
                 'Content-Type': (method === 'POST') ? 'application/x-www-form-urlencoded':''
