@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.0.0
+// @version      3.0.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、HiComic、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -1664,6 +1664,34 @@
                     pF: [0, 'img[data-original]', 'data-original']
                 }
             }, //        漫岛动漫
+            yxdm: {
+                host: 'www.yxdm.li',
+                functionStart: function() {if (location.pathname.indexOf('/search') > -1 || location.pathname.indexOf('/category') > -1) {curSite = DBSite.yxdm;}},
+                pager: {
+                    type: 1,
+                    nextL: '//a[@class="nextPage" or contains(text(), "下一页")]',
+                    pageE: 'css;.dhnew > ul > li',
+                    insertP: ['css;.dhnew > ul', 3],
+                    replaceE: 'css;.pagelist',
+                    scrollD: 2000
+                }
+            }, //          怡萱动漫
+            nicotv: {
+                host: 'www.nicotv.me',
+                functionStart: function() {if (location.pathname.indexOf('/search') > -1 || location.pathname.indexOf('/type') > -1) {curSite = DBSite.nicotv;}},
+                pager: {
+                    type: 1,
+                    nextL: '//ul[contains(@class, "pagination ")]//a[contains(text(), "»")]',
+                    pageE: 'css;ul.list-unstyled > li',
+                    insertP: ['css;ul.list-unstyled', 3],
+                    replaceE: 'css;ul.pagination ',
+                    scrollD: 1000
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-original]', 'data-original']
+                }
+            }, //        妮可动漫
             yhdm: {
                 host: 'www.imomoe.la',
                 functionStart: function() {if (location.pathname.indexOf('/list/') > -1) {
