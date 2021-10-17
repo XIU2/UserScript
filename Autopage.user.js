@@ -3440,6 +3440,7 @@
             w3school_cn: {
                 host: 'www.w3school.com.cn',
                 functionStart: function() {if (location.pathname.split('/').length > 2) {curSite = DBSite.w3school_cn;}},
+                insStyle: '#maincontent h1:not(:nth-of-type(1)) {margin-top: 30px;}',
                 pager: {
                     type: 1,
                     nextL: function() { // 过滤部分非本页的参考手册
@@ -3447,8 +3448,8 @@
                         if (next.href.indexOf('/index.') === -1) return next.href;
                         curSite = {SiteTypeID: 0}; return ''
                     },
-                    pageE: 'css;#maincontent > h1, #maincontent > div:not(#tpn):not(#bpn)',
-                    insertP: ['css;#bpn', 1],
+                    pageE: 'css;#maincontent > *:not(.prenextnav)',
+                    insertP: ['//div[@class="prenextnav"][last()]', 1],
                     replaceE: 'css;ul.prenext, #navsecond, head > title',
                     history: true,
                     forceHTTPS: true,
