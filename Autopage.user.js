@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.0.7
+// @version      3.0.8
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -81,19 +81,22 @@
     type：
       1 = 由脚本实现自动无缝翻页
       2 = 网站自带了自动无缝翻页功能，只需要点击下一页按钮即可
-          nextText: 按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页（避免一瞬间加载太多次下一页）
+          nextText:   按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页（避免一瞬间加载太多次下一页）
           nextTextOf: 按钮文本的一部分，当按钮文本包含该文本时，才会点击按钮加载下一页（避免一瞬间加载太多次下一页）
-          nextHTML: 按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页（避免一瞬间加载太多次下一页）
-          interval: 点击间隔时间，对于没有按钮文字变化的按钮，可以手动指定间隔时间，单位：ms
-          isHidden: 只有下一页按钮可见时（没有隐藏），才会点击
+          nextHTML:   按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页（避免一瞬间加载太多次下一页）
+          interval:   点击间隔时间，对于没有按钮文字变化的按钮，可以手动指定间隔时间，单位：ms
+          isHidden:   只有下一页按钮可见时（没有隐藏），才会点击
       3 = 依靠元素距离可视区域底部的距离来触发翻页
-      4 = 部分简单的动态加载类网站（暂时）
+          scrollE:    作为基准的元素（一般为底部页码元素）
+          scrollD:    基准元素 减去 可视区域底部
+      4 = 部分简单的动态加载类网站
+          insertE:    插入元素的函数
     insertP：
       1 = 插入该元素本身的前面；
       2 = 插入该元素当中，第一个子元素前面；
       3 = 插入该元素当中，最后一个子元素后面；
       4 = 插入该元素本身的后面；
-      5 = 插入该元素末尾（针对文本）
+      5 = 插入该元素末尾（针对小说网站等文本类的）
     scriptT: 单独插入 <script> 标签
       1 = 下一页的所有 <script> 标签
       2 = 下一页主体元素同级 <script> 标签
@@ -112,7 +115,7 @@
             discuz_forum: {
                 pager: {
                     type: 2,
-                    nextL: '#autopbn',
+                    nextL: 'css;#autopbn',
                     nextTextOf: '下一页',
                     scrollD: 1500
                 }
@@ -186,7 +189,7 @@
                 functionStart: function() {locationChange = true;if (location.pathname.indexOf('/d/') === -1) {curSite = DBSite.flarum;}},
                 pager: {
                     type: 2,
-                    nextL: '.DiscussionList-loadMore > button[title]',
+                    nextL: 'css;.DiscussionList-loadMore > button[title]',
                     interval: 500,
                     scrollD: 1000
                 }
@@ -272,7 +275,7 @@
             begin: {
                 pager: {
                     type: 2,
-                    nextL: 'div[id^="ias_trigger_"]',
+                    nextL: 'css;div[id^="ias_trigger_"]',
                     interval: 500,
                     scrollD: 1500
                 }
@@ -367,7 +370,7 @@
                 }},
                 pager: {
                     type: 2,
-                    nextL: '#look-more',
+                    nextL: 'css;#look-more',
                     interval: 1000,
                     scrollD: 1000
                 }
@@ -475,7 +478,7 @@
                 functionStart: function() {locationChange = true; if (location.search.indexOf('q=') > -1 && location.search.indexOf('t=web') > -1) {curSite = DBSite.qwant;}},
                 pager: {
                     type: 2,
-                    nextL: 'button[data-testid="buttonShowMore"]',
+                    nextL: 'css;button[data-testid="buttonShowMore"]',
                     interval: 500,
                     scrollD: 1500
                 }
@@ -497,7 +500,7 @@
                 functionStart: function() {if (location.pathname === '/search') {curSite = DBSite.magi;}},
                 pager: {
                     type: 2,
-                    nextL: '.card[data-type="next"]',
+                    nextL: 'css;.card[data-type="next"]',
                     nextText: '加载更多',
                     scrollD: 1500
                 }
@@ -647,7 +650,7 @@
                 host: 'weibo.com',
                 pager: {
                     type: 2,
-                    nextL: 'a[action-type="click_more_comment"]',
+                    nextL: 'css;a[action-type="click_more_comment"]',
                     nextText: '查看更多c',
                     scrollD: 1000
                 }
@@ -831,7 +834,7 @@
             jandan_dzh: {
                 pager: {
                     type: 2,
-                    nextL: '.show_more',
+                    nextL: 'css;.show_more',
                     interval: 1500,
                     scrollD: 1500
                 }
@@ -1137,7 +1140,7 @@
                 host: 'www.guokr.com',
                 pager: {
                     type: 2,
-                    nextL: 'div[class*="LoadMoreWrap"]',
+                    nextL: 'css;div[class*="LoadMoreWrap"]',
                     interval: 1500,
                     scrollD: 1500
                 }
@@ -1146,7 +1149,7 @@
                 host: 'www.expreview.com',
                 pager: {
                     type: 2,
-                    nextL: '#show_article_red_1SHOW',
+                    nextL: 'css;#show_article_red_1SHOW',
                     interval: 1500,
                     scrollD: 1500
                 }
@@ -1155,7 +1158,7 @@
                 host: 'www.landian.vip',
                 pager: {
                     type: 2,
-                    nextL: '.load-more > button',
+                    nextL: 'css;.load-more > button',
                     nextText: '加载更多',
                     scrollD: 1300
                 }
@@ -1164,7 +1167,7 @@
                 host: 'www.ithome.com',
                 pager: {
                     type: 2,
-                    nextL: 'a.more',
+                    nextL: 'css;a.more',
                     interval: 1500,
                     scrollD: 1500
                 }
@@ -1225,7 +1228,7 @@
                 functionStart: function() {if (location.pathname.indexOf('/so/') > -1) {curSite = DBSite.logosc;}},
                 pager: {
                     type: 2,
-                    nextL: 'button.so-pablo-button',
+                    nextL: 'css;button.so-pablo-button',
                     interval: 1500,
                     scrollD: 1500
                 }
@@ -1291,7 +1294,7 @@
                     pageE: 'css;.news_warp_center > *',
                     insertP: ['css;.news_warp_center', 3],
                     replaceE: 'css;.pagewrap',
-                    scrollElement: '.pagewrap',
+                    scrollE: 'css;.pagewrap',
                     scrollD: 400
                 }
             }, //                3DM
@@ -1315,7 +1318,7 @@
                     pageE: 'css;#Content >*:not(.news_ding):not(.page_fenye)',
                     insertP: ['css;.page_fenye', 1],
                     replaceE: 'css;.page_fenye',
-                    scrollElement: '.page_fenye',
+                    scrollE: 'css;.page_fenye',
                     scrollD: 400
                 }
             }, //              游侠网
@@ -1328,7 +1331,7 @@
                     pageE: 'css;.c-detail >*',
                     insertP: ['css;.c-detail', 3],
                     replaceE: 'css;.page_fenye',
-                    scrollElement: '.page_fenye',
+                    scrollE: 'css;.page_fenye',
                     scrollD: 400
                 }
             }, //               游侠网 - 攻略
@@ -1353,7 +1356,7 @@
                     pageE: 'css;.Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.page_css):not(.gs_ccs_solve):not(.post_ding)',
                     insertP: ['css;.page_css', 1],
                     replaceE: 'css;.page_css',
-                    scrollElement: '.page_css',
+                    scrollE: 'css;.page_css',
                     scrollD: 100
                 }
             }, //            游民星空
@@ -1365,7 +1368,7 @@
                     pageE: 'css;.Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.gs_ccs_solve):not(.post_ding)',
                     insertP: ['css;.gs_nc_editor', 1],
                     replaceE: 'css;.page_css',
-                    scrollElement: '.pagecss',
+                    scrollE: 'css;.pagecss',
                     scrollD: -1000
                 },
                 function: {
@@ -1511,7 +1514,7 @@
                 host: 'www.cupfox.com',
                 pager: {
                     type: 2,
-                    nextL: '.load-more',
+                    nextL: 'css;.load-more',
                     nextText: '点击加载更多',
                     scrollD: 700
                 }
@@ -1886,7 +1889,7 @@
                 functionStart: function() {if (location.pathname != '/' && !(/\/\d+\.htm/.test(location.pathname))) {curSite = DBSite.bdys;}},
                 pager: {
                     type: 2,
-                    nextL: 'div.layui-flow-more > a',
+                    nextL: 'css;div.layui-flow-more > a',
                     nextText: '加载更多',
                     scrollD: 1000
                 }
@@ -1895,7 +1898,7 @@
                 host: 'gaoqing.fm',
                 pager: {
                     type: 2,
-                    nextL: '.col-md-12 > a, #loadmore > a',
+                    nextL: 'css;.col-md-12 > a, #loadmore > a',
                     interval: 1500,
                     scrollD: 1000
                 }
@@ -1955,7 +1958,7 @@
                 host: 'bangumi.moe',
                 pager: {
                     type: 2,
-                    nextL: '[torrent-list="lattorrents"] button[ng-click="loadMore()"] ,[torrent-list="torrents"] button[ng-click="loadMore()"]',
+                    nextL: 'css;[torrent-list="lattorrents"] button[ng-click="loadMore()"] ,[torrent-list="torrents"] button[ng-click="loadMore()"]',
                     interval: 1000,
                     scrollD: 1500
                 }
@@ -2830,7 +2833,7 @@
                 host: 'chrome.zzzmh.cn',
                 pager: {
                     type: 2,
-                    nextL: 'button.more-btn',
+                    nextL: 'css;button.more-btn',
                     interval: 1000,
                     scrollD: 1500
                 }
@@ -2862,7 +2865,7 @@
                 functionStart: function() {if (location.pathname === '/' && !location.search) {curSite = DBSite.ghxi;} else {curSite = DBSite.ghxi_list;}},
                 pager: {
                     type: 2,
-                    nextL: '.load-more',
+                    nextL: 'css;.load-more',
                     interval: 1000,
                     scrollD: 5000
                 }
@@ -2890,7 +2893,7 @@
                 }},
                 pager: {
                     type: 2,
-                    nextL: '.load-more',
+                    nextL: 'css;.load-more',
                     nextHTML: '点击查看更多',
                     scrollD: 1500
                 }
@@ -2978,7 +2981,7 @@
             iplaysoft_comment: {
                 pager: {
                     type: 2,
-                    nextL: '#loadHistoryComments',
+                    nextL: 'css;#loadHistoryComments',
                     nextTextOf: '展开后面',
                     scrollD: 1200
                 }
@@ -3018,7 +3021,7 @@
                 }},
                 pager: {
                     type: 2,
-                    nextL: '.load-more',
+                    nextL: 'css;.load-more',
                     nextText: '加载更多',
                     interval: 500,
                     scrollD: 1000
@@ -3442,7 +3445,7 @@
                 functionStart: function() {if (location.pathname.split('/').length > 2) {curSite = DBSite.w3school_cn;}},
                 insStyle: '#maincontent h1:not(:nth-of-type(1)) {margin-top: 30px;}',
                 pager: {
-                    type: 1,
+                    type: 3,
                     nextL: function() { // 过滤部分非本页的参考手册
                         let next = document.querySelector('li.next > a')
                         if (next.href.indexOf('/index.') === -1) return next.href;
@@ -3451,9 +3454,10 @@
                     pageE: 'css;#maincontent > *:not(.prenextnav):not(#bpn):not(#tpn)',
                     insertP: ['id("bpn") | //div[@class="prenextnav"][last()]', 1],
                     replaceE: 'css;ul.prenext, #navsecond, title',
+                    scrollE: 'id("bpn") | //div[@class="prenextnav"][last()]',
                     history: true,
                     forceHTTPS: true,
-                    scrollD: 2000
+                    scrollD: 500
                 }
             }, //               W3school
             runoob: {
@@ -3555,7 +3559,7 @@
                 hiddenPN: true,
                 pager: {
                     type: 2,
-                    nextL: '#filemore',
+                    nextL: 'css;#filemore',
                     nextTextOf: '更多',
                     isHidden: true,
                     scrollD: 800
@@ -3567,7 +3571,7 @@
                 hiddenPN: true,
                 pager: {
                     type: 2,
-                    nextL: '#filemore > span[onclick]',
+                    nextL: 'css;#filemore > span[onclick]',
                     nextText: '显示更多文件',
                     isHidden: true,
                     scrollD: 800
@@ -3591,7 +3595,7 @@
                 host: 'pubmed.ncbi.nlm.nih.gov',
                 pager: {
                     type: 2,
-                    nextL: 'button.load-button.next-page',
+                    nextL: 'css;button.load-button.next-page',
                     nextText: 'Show more',
                     scrollD: 1500
                 }
@@ -3651,7 +3655,7 @@
             baidu_xueshu_paper: {
                 pager: {
                     type: 2,
-                    nextL: 'div:not([style*="display: none"]) > .more_btn',
+                    nextL: 'css;div:not([style*="display: none"]) > .more_btn',
                     nextText: '加载更多',
                     scrollD: 1000
                 }
@@ -3699,7 +3703,7 @@
                 host: 'www.afreecatv.com',
                 pager: {
                     type: 2,
-                    nextL: '.btn-more > button',
+                    nextL: 'css;.btn-more > button',
                     interval: 2000,
                     scrollD: 1000
                 }
@@ -4964,7 +4968,7 @@
     function gufengmh_insertE(pageElems, type) {
         if (pageElems) {
             let url = curSite.pageUrl;
-            pageElems = getAll(curSite.pager.pageE, pageElems, pageElems)[0];
+            pageElems = getOne(curSite.pager.pageE, pageElems, pageElems);
             let chapterImages, chapterPath;
             document.querySelector(curSite.pager.pageE.replace('css;', '')).innerText = pageElems.textContent; // 将当前网页内的数据所在元素内容改为刚刚获取的下一页数据内容，以便循环获取下一页 URL
             pageElems.textContent.split(';').forEach(function (one){ // 分号 ; 分割为数组并遍历
@@ -5159,9 +5163,9 @@
                         scrollHeight = window.innerHeight || document.documentElement.clientHeight,
                         scrollD = curSite.pager.scrollD;
                     if (curSite.pager.type === 3) { // <<<<< 翻页类型 3（依靠元素距离可视区域底部的距离来触发翻页）>>>>>
-                        let scrollElement = document.querySelector(curSite.pager.scrollElement);
-                        //console.log(scrollElement.offsetTop - (scrollTop + scrollHeight), scrollD, curSite.SiteTypeID)
-                        if (scrollElement.offsetTop - (scrollTop + scrollHeight) <= scrollD) {
+                        let scrollE = getOne(curSite.pager.scrollE);
+                        //console.log(scrollE.offsetTop - (scrollTop + scrollHeight), scrollD, curSite.SiteTypeID)
+                        if (scrollE.offsetTop - (scrollTop + scrollHeight) <= scrollD) {
                             if (curSite.SiteTypeID === SiteType.GAMERSKY_GL) curSite.pager.scrollD -= 800 // 游民星空 gl 的比较奇葩，需要特殊处理下
                             ShowPager.loadMorePage();
                         }
@@ -5173,7 +5177,7 @@
                                 ShowPager.loadMorePage();
 
                             } else if (curSite.pager.type === 2) { // <<<<< 翻页类型 2（网站自带了自动无缝翻页功能，只需要点击下一页按钮即可）>>>>>
-                                let autopbn = document.querySelector(curSite.pager.nextL);
+                                let autopbn = getOne(curSite.pager.nextL);
                                 if (autopbn) { // 寻找下一页链接
                                     if (!(curSite.pager.isHidden) || (curSite.pager.isHidden && !isHidden(autopbn))) { // 如果 isHidden = true，那么需要判断元素是否隐藏
                                         if (curSite.pager.nextText) {
@@ -5526,22 +5530,22 @@
         }
         return result;
     }
-    function getAll(selector, contextNode = undefined, doc = document, win = window, _cplink = undefined) {
+    function getOne(selector, contextNode = undefined, doc = document) {
+        if (!selector) return;
+        contextNode = contextNode || doc;
+        if (selector.search(/^css;/i) === 0) {
+            return getCSS(selector.slice(4), contextNode);
+        } else {
+            return getXpath(selector, contextNode, doc);
+        }
+    }
+    function getAll(selector, contextNode = undefined, doc = document) {
         if (!selector) return [];
         contextNode = contextNode || doc;
-        if (typeof selector === 'string') {
-            if (selector.search(/^css;/i) === 0) {
-                return getAllCSS(selector.slice(4), contextNode);
-            } else {
-                return getAllXpath(selector, contextNode, doc);
-            }
+        if (selector.search(/^css;/i) === 0) {
+            return getAllCSS(selector.slice(4), contextNode);
         } else {
-            const query = selector(doc, win, _cplink);
-            if (!Array.isArray(query)) {
-                throw new Error('function getAll() 返回错误类型');
-            } else {
-                return query;
-            }
+            return getAllXpath(selector, contextNode, doc);
         }
     }
 
