@@ -3889,14 +3889,25 @@
                 host: 'www.fnvshen.com',
                 functionStart: function() {
                     if (location.pathname.indexOf('/gallery/') > -1 || location.pathname.indexOf('/tag/') > -1) {
-                        curSite = DBSite.fnvshen;
+                        curSite = DBSite.fnvshen_list;
                     } else if (location.pathname.indexOf('/g/') > -1) {
-                        curSite = DBSite.fnvshen_g;
+                        curSite = DBSite.fnvshen;
                     } else if (/\/article\/\d+\//.test(location.pathname)) {
                         curSite = DBSite.fnvshen_article;
                     } else if (location.pathname.indexOf('/article/') > -1) {
                         curSite = DBSite.fnvshen_article_list;
                 }},
+                pager: {
+                    type: 1,
+                    nextL: 'id("pages")/a[contains(text(), "下一页")]',
+                    pageE: 'css;#hgallery > img',
+                    insertP: ['css;#hgallery', 3],
+                    replaceE: 'css;#pages',
+                    scrollD: 1000
+                }
+            }, //             宅男女神 - 图片页
+            fnvshen_list: {
+                insStyle: '.yalayi_box {display: none !important; margin: -4px 0 !important;}',
                 pager: {
                     type: 1,
                     nextL: '//div[@class="pagesYY"]//a[contains(text(), "下一页")]',
@@ -3909,18 +3920,7 @@
                     bF: src_bF,
                     pF: [0, 'img[data-original]', 'data-original']
                 }
-            }, //             宅男女神 - 分类页
-            fnvshen_g: {
-                insStyle: '.yalayi_box {display: none !important; margin: -4px 0 !important;}',
-                pager: {
-                    type: 1,
-                    nextL: 'id("pages")/a[contains(text(), "下一页")]',
-                    pageE: 'css;#hgallery > img',
-                    insertP: ['css;#hgallery', 3],
-                    replaceE: 'css;#pages',
-                    scrollD: 1000
-                }
-            }, //           宅男女神 - 图片页
+            }, //        宅男女神 - 分类页
             fnvshen_article_list: {
                 pager: {
                     type: 1,
@@ -3959,7 +3959,7 @@
                     replaceE: 'css;.page',
                     scrollD: 2000
                 }
-            }, //            秀人网 - 图片页
+            }, //            秀人集 - 图片页
             xiurenji_list: {
                 pager: {
                     type: 1,
@@ -3969,7 +3969,7 @@
                     replaceE: 'css;.page',
                     scrollD: 1000
                 }
-            }, //       秀人网 - 分类页
+            }, //       秀人集 - 分类页
             xiurenji_search: {
                 pager: {
                     type: 1,
@@ -3979,25 +3979,16 @@
                     replaceE: 'css;.page',
                     scrollD: 1000
                 }
-            }, //     秀人网 - 搜索页
+            }, //     秀人集 - 搜索页
             tujigu: {
                 host: 'www.tujigu.net',
                 functionStart: function() {
                     if (location.pathname.indexOf('/a/') > -1) {
-                        curSite = DBSite.tujigu_a;
-                    } else if (location.pathname != '/' && location.pathname.indexOf('/search/') === -1) {
                         curSite = DBSite.tujigu;
+                    } else if (location.pathname != '/' && location.pathname.indexOf('/search/') === -1) {
+                        curSite = DBSite.tujigu_list;
                 }},
-                pager: {
-                    type: 1,
-                    nextL: 'id("pages")/a[contains(text(), "下一页")]',
-                    pageE: 'css;.hezi > ul > li',
-                    insertP: ['//div[@class="hezi"][last()]/ul', 3],
-                    replaceE: 'css;#pages',
-                    scrollD: 1000
-                }
-            }, //              图集谷 - 分类页
-            tujigu_a: {
+                insStyle: '.content img {display: block !important;}',
                 pager: {
                     type: 1,
                     nextL: 'id("pages")/a[contains(text(), "下一页")]',
@@ -4010,7 +4001,17 @@
                     bF: src_bF,
                     pF: [0, 'img[original]', 'original']
                 }
-            }, //            图集谷 - 图片页
+            }, //              图集谷 - 图片页
+            tujigu_list: {
+                pager: {
+                    type: 1,
+                    nextL: 'id("pages")/a[contains(text(), "下一页")]',
+                    pageE: 'css;.hezi > ul > li',
+                    insertP: ['//div[@class="hezi"][last()]/ul', 3],
+                    replaceE: 'css;#pages',
+                    scrollD: 1000
+                }
+            }, //         图集谷 - 分类页
             mvtui: {
                 host: 'mvtui.com',
                 functionStart: function() {if (location.pathname.indexOf('.html') > -1) {curSite = DBSite.mvtui;} else {curSite = DBSite.mvtui_list;}},
@@ -4039,22 +4040,7 @@
             }, //          美女推 - 分类页
             mm131: {
                 host: 'www.mm131.net',
-                functionStart: function() {
-                    if (location.pathname.indexOf('.html') > -1) {
-                        curSite = DBSite.mm131_a;
-                    } else {
-                        curSite = DBSite.mm131;
-                }},
-                pager: {
-                    type: 1,
-                    nextL: '//dd[@class="page"]/a[contains(text(), "下一页")]',
-                    pageE: 'css;dl.list-left > dd:not([class="page"])',
-                    insertP: ['css;.page', 1],
-                    replaceE: 'css;.page',
-                    scrollD: 1000
-                }
-            }, //               MM131 - 分类页
-            mm131_a: {
+                functionStart: function() {if (location.pathname.indexOf('.html') > -1) {curSite = DBSite.mm131;} else {curSite = DBSite.mm131_list;}},
                 pager: {
                     type: 1,
                     nextL: '//div[@class="content-page"]/a[contains(text(), "下一页")]',
@@ -4063,7 +4049,17 @@
                     replaceE: 'css;.content-page',
                     scrollD: 2000
                 }
-            } //              MM131 - 图片页
+            }, //               MM131 - 图片页
+            mm131_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//dd[@class="page"]/a[contains(text(), "下一页")]',
+                    pageE: 'css;dl.list-left > dd:not([class="page"])',
+                    insertP: ['css;.page', 1],
+                    replaceE: 'css;.page',
+                    scrollD: 1000
+                }
+            } //           MM131 - 分类页
         };
         // 生成 SiteTypeID
         setSiteTypeID();
