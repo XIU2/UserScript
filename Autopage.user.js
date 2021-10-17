@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.0.8
+// @version      3.0.9
 // @author       X.I.U
-// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
+// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
 // @icon         data:image/png;base64,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
 // @grant        GM_xmlhttpRequest
@@ -61,7 +61,7 @@
 
             } else if (menuAll[i][0] === 'menu_discuz_thread_page') { // 帖子内自动翻页 (仅论坛)
 
-                if (webType === 2 || webType === 4 || webType === 10 || forumWebsite.indexOf(location.host) > -1) {
+                if ([2,4,5,6].indexOf(webType) > -1 || forumWebsite.indexOf(location.host) > -1) {
                     menuId[i] = GM_registerMenuCommand(`${menuAll[i][3]?'✅':'❌'} ${menuAll[i][1]}`, function(){menu_switch(menuAll[i][3], menuAll[i][0], menuAll[i][2])});
                 }
 
@@ -119,7 +119,7 @@
                     nextTextOf: '下一页',
                     scrollD: 1500
                 }
-            }, //       Discuz! 论坛 - 各版块帖子列表（自带无缝加载下一页按钮的）
+            }, //       Discuz! 论坛 - 帖子列表（自带无缝加载下一页按钮的）
             discuz_guide: {
                 pager: {
                     type: 1,
@@ -129,7 +129,7 @@
                     replaceE: 'css;.pg, .pages',
                     scrollD: 1000
                 }
-            }, //       Discuz! 论坛 - 导读页 及 各版块帖子列表（不带无缝加载下一页按钮的）
+            }, //       Discuz! 论坛 - 导读页 及 帖子列表（不带无缝加载下一页按钮的）
             discuz_waterfall: {
                 pager: {
                     type: 1,
@@ -139,7 +139,7 @@
                     replaceE: 'css;.pg, .pages',
                     scrollD: 1000
                 }
-            }, //   Discuz! 论坛 - 图片模式的各版块帖子列表（不带无缝加载下一页按钮的）
+            }, //   Discuz! 论坛 - 图片模式的帖子列表（不带无缝加载下一页按钮的）
             discuz_thread: {
                 insStyle: '.pgbtn {display: none;}',
                 pager: {
@@ -198,7 +198,7 @@
                 functionStart: function() {if (location.pathname.indexOf('/viewforum.php') > -1) {
                     curSite = DBSite.phpbb;
                 } else if (location.pathname.indexOf('/viewtopic.php') > -1 && GM_getValue('menu_discuz_thread_page')) {
-                    curSite = DBSite.phpbb_viewtopic;
+                    curSite = DBSite.phpbb_post;
                 } else if (location.pathname.indexOf('/search.php') > -1) {
                     curSite = DBSite.phpbb_search;
                 }},
@@ -210,8 +210,8 @@
                     replaceE: 'css;.action-bar .pagination, .topic-actions .pagination',
                     scrollD: 2000
                 }
-            }, //              phpBB 论坛 - 各版块帖子列表
-            phpbb_viewtopic: {
+            }, //              phpBB 论坛 - 帖子列表
+            phpbb_post: {
                 pager: {
                     type: 1,
                     nextL: 'css;.pagination li.next a[rel="next"], .topic-actions .pagination strong~a',
@@ -220,7 +220,7 @@
                     replaceE: 'css;.action-bar .pagination, .topic-actions .pagination',
                     scrollD: 2000
                 }
-            }, //    phpBB 论坛 - 帖子内
+            }, //         phpBB 论坛 - 帖子内
             phpbb_search: {
                 pager: {
                     type: 1,
@@ -231,6 +231,43 @@
                     scrollD: 2000
                 }
             }, //       phpBB 论坛 - 搜索页
+            xenforo: {
+                functionStart: function() {if (location.pathname.indexOf('/forums/') > -1 || location.pathname.indexOf('/f/') > -1) {
+                    curSite = DBSite.xenforo;
+                } else if ((location.pathname.indexOf('/threads/') > -1 || location.pathname.indexOf('/t/') > -1) && GM_getValue('menu_discuz_thread_page')) {
+                    curSite = DBSite.xenforo_post;
+                } else if (location.pathname.indexOf('/search/') > -1) {
+                    curSite = DBSite.xenforo_search;
+                }},
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.pageNav-jump--next',
+                    pageE: 'css;.structItemContainer-group.js-threadList > div',
+                    insertP: ['css;.structItemContainer-group.js-threadList', 3],
+                    replaceE: 'css;nav.pageNavWrapper',
+                    scrollD: 2500
+                }
+            }, //            XenForo 论坛 - 帖子列表
+            xenforo_post: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.pageNav-jump--next',
+                    pageE: 'css;.block-body.js-replyNewMessageContainer > article',
+                    insertP: ['css;.block-body.js-replyNewMessageContainer', 3],
+                    replaceE: 'css;nav.pageNavWrapper',
+                    scrollD: 2500
+                }
+            }, //       XenForo 论坛 - 帖子内
+            xenforo_search: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.pageNav-jump--next',
+                    pageE: 'css;ol.block-body > li',
+                    insertP: ['css;ol.block-body', 3],
+                    replaceE: 'css;nav.pageNavWrapper',
+                    scrollD: 2500
+                }
+            }, //     XenForo 论坛 - 搜索页
             xiuno: {
                 functionStart: function() {if (location.pathname === '/' || location.pathname.indexOf('/index') > -1 || location.pathname.indexOf('/forum') > -1) {
                     curSite = DBSite.xiuno;
@@ -246,7 +283,7 @@
                     replaceE: 'css;ul.pagination',
                     scrollD: 1500
                 }
-            }, //              Xiuno 论坛 - 各版块帖子列表
+            }, //              Xiuno 论坛 - 帖子列表
             xiuno_post: {
                 pager: {
                     type: 1,
@@ -258,6 +295,7 @@
                 }
             }, //         Xiuno 论坛 - 帖子内
             dux: {
+                functionStart: function() {if (location.pathname.indexOf('.html') === -1) curSite = DBSite.dux;},
                 host: 'www.puresys.net',
                 pager: {
                     type: 1,
@@ -273,6 +311,7 @@
                 }
             }, //                WordPress 的 DUX、XIU、D8 主题
             begin: {
+                functionStart: function() {if (location.search.slice(0,3) === '?s=') {curSite = DBSite.begin_search;} else if (location.pathname.indexOf('.html') === -1) {curSite = DBSite.begin;}},
                 pager: {
                     type: 2,
                     nextL: 'css;div[id^="ias_trigger_"]',
@@ -4037,81 +4076,34 @@
 
 
     if (webType != 1) {
-        if (webType === 2) { // < 所有 Discuz!论坛 >
-            if (document.querySelector('body[id="nv_forum"][class^="pg_"][onkeydown*="27"]')) {
-                switch (document.querySelector('body[id="nv_forum"][class^="pg_"][onkeydown*="27"]').className) {
-                    case 'pg_forumdisplay': // < 各版块帖子列表 >
-                        discuzForum(); break;
-                    case 'pg_viewthread': //   < 帖子内 >
-                        if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.discuz_thread; break;
-                    case 'pg_guide': //        < 导读帖子列表等 >
-                        curSite = DBSite.discuz_guide; break;
-                    case 'pg_collection': //   < 淘贴列表 >
-                        curSite = DBSite.discuz_collection; break;
-                }
-            }
-            // 如果上面没有匹配的则继续                  < 搜索结果 >
-            if (curSite.SiteTypeID === 0) {
-                if (location.pathname.indexOf('search') > -1 || document.querySelector('body[id="nv_search"][onkeydown*="27"]')) {
-                    curSite = DBSite.discuz_search;
-                }
-            }
-            // 如果上面没有匹配的则继续
-            if (curSite.SiteTypeID === 0) {
-                if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
-                    if (location.pathname.indexOf('/forum-') > -1) { //             < 各版块帖子列表 >
-                        discuzForum();
-                    } else if (location.pathname.indexOf('/thread-') > -1) { //     < 帖子内 >
-                        if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.discuz_thread;
-                    }
-                }
-            }
-            // 如果上面没有匹配的则继续
-            if (curSite.SiteTypeID === 0) {
-                if (location.search.indexOf('mod=forumdisplay') > -1 || location.pathname.indexOf('forumdisplay.php') > -1) { //      < 各版块帖子列表 >
-                    discuzForum();
-                } else if (location.search.indexOf('mod=viewthread') > -1 || location.pathname.indexOf('viewthread.php') > -1) { // < 帖子内 >
-                    if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.discuz_thread;
-                } else if (location.search.indexOf('mod=guide') > -1) { //      < 导读帖子列表 >
-                    curSite = DBSite.discuz_guide;
-                } else if(location.search.indexOf('mod=space') > -1 && location.search.indexOf('do=thread') > -1) { // 别人的主题/回复
-                    curSite = DBSite.discuz_youspace;
-                } else if (location.search.indexOf('mod=collection') > -1) { // < 淘贴列表 >
-                    curSite = DBSite.discuz_collection;
-                } else if (document.getElementById('threadlist')) { //          < 部分论坛的各板块 URL 是自定义的 >
-                    discuzForum();
-                } else if (document.getElementById('postlist')) { //            < 部分论坛的帖子内 URL 是自定义的 >
-                    if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.discuz_thread;
-                }
-            }
-        } else if (webType === 3) { // < 所有 Flarum 论坛 >
-            DBSite.flarum.functionStart()
-        } else if (webType === 4) { // < 所有 phpBB 论坛 >
-            DBSite.phpbb.functionStart()
-        } else if (webType === 10) { //< 所有 Xiuno 论坛 >
-            DBSite.xiuno.functionStart()
-        } else if (webType === 5) { // < 所有使用 WordPress DUX 主题的网站 >
-            if (location.pathname.indexOf('.html') === -1) curSite = DBSite.dux;
-            if (location.host === 'apphot.cc') curSite.pager.scrollD = 2500; // 对于速度慢的网站，需要增加翻页触发点
-        } else if (webType === 6) { // < 所有使用 WordPress XIU 主题的网站 >
-            if (location.pathname.indexOf('.html') === -1) curSite = DBSite.dux;
-            curSite.function = {bF: src_bF, pF: [0, 'img.thumb[data-original]', 'data-original']} // 修改插入前函数
-        } else if (webType === 7) { // < 所有使用 WordPress D8 主题的网站 >
-            if (location.pathname.indexOf('.html') === -1) curSite = DBSite.dux;
-            delete curSite.function; //  不需要插入前函数
-        } else if (webType === 8) { // < 所有使用 WordPress Begin 主题的网站 >
-            if (location.search.slice(0,3) === '?s=') {
-                curSite = DBSite.begin_search;
-            } else if (location.pathname.indexOf('.html') === -1) {
-                curSite = DBSite.begin;
-            }
-        } else if (webType === 9) { // < 所有使用 笔趣阁 模板的小说网站 >
-            DBSite.biquge.functionStart()
+        switch (webType) {
+            case 2: //   < 所有 Discuz!论坛 >
+                discuz_(); break;
+            case 3: //   < 所有 Flarum 论坛 >
+                DBSite.flarum.functionStart(); break;
+            case 4: //   < 所有 phpBB 论坛 >
+                DBSite.phpbb.functionStart(); break;
+            case 5: //   < 所有 Xiuno 论坛 >
+                DBSite.xiuno.functionStart(); break;
+            case 6: //   < 所有 XenForo 论坛 >
+                DBSite.xenforo.functionStart(); break;
+            case 100: // < 所有使用 WordPress DUX 主题的网站 >
+                DBSite.dux.functionStart(); if (location.host === 'apphot.cc') {curSite.pager.scrollD = 2500;}; break;
+            case 101: // < 所有使用 WordPress XIU 主题的网站 >
+                DBSite.dux.functionStart(); curSite.function = {bF: src_bF, pF: [0, 'img.thumb[data-original]', 'data-original']}; break;
+            case 102: // < 所有使用 WordPress D8 主题的网站 >
+                DBSite.dux.functionStart(); delete curSite.function; break;
+            case 103: // < 所有使用 WordPress Begin 主题的网站 >
+                DBSite.begin.functionStart(); break;
+            case 200: // < 所有使用 笔趣阁 模板的小说网站 >
+                DBSite.biquge.functionStart(); break;
         }
     }
 
-    if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
-    pausePageEvent(); // 左键双击网页空白处暂停翻页
+    // 显示页码
+    if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');}
+    // 左键双击网页空白处暂停翻页
+    pausePageEvent();
 
     if (locationChange) { // 对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则
         nowLocation = location.href
@@ -4160,6 +4152,54 @@
             curSite = DBSite.discuz_waterfall; waterfallStyle(); // 图片模式列表样式预处理
         } else {
             curSite = DBSite.discuz_guide;
+        }
+    }
+    function discuz_() {
+        if (document.querySelector('body[id="nv_forum"][class^="pg_"][onkeydown*="27"]')) {
+            switch (document.querySelector('body[id="nv_forum"][class^="pg_"][onkeydown*="27"]').className) {
+                case 'pg_forumdisplay': // < 各版块帖子列表 >
+                    discuzForum(); break;
+                case 'pg_viewthread': //   < 帖子内 >
+                    if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.discuz_thread; break;
+                case 'pg_guide': //        < 导读帖子列表等 >
+                    curSite = DBSite.discuz_guide; break;
+                case 'pg_collection': //   < 淘贴列表 >
+                    curSite = DBSite.discuz_collection; break;
+            }
+        }
+        // 如果上面没有匹配的则继续                  < 搜索结果 >
+        if (curSite.SiteTypeID === 0) {
+            if (location.pathname.indexOf('search') > -1 || document.querySelector('body[id="nv_search"][onkeydown*="27"]')) {
+                curSite = DBSite.discuz_search;
+            }
+        }
+        // 如果上面没有匹配的则继续
+        if (curSite.SiteTypeID === 0) {
+            if (location.pathname.indexOf('.html') > -1) { //                   判断是不是静态网页（.html 结尾）
+                if (location.pathname.indexOf('/forum-') > -1) { //             < 各版块帖子列表 >
+                    discuzForum();
+                } else if (location.pathname.indexOf('/thread-') > -1) { //     < 帖子内 >
+                    if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.discuz_thread;
+                }
+            }
+        }
+        // 如果上面没有匹配的则继续
+        if (curSite.SiteTypeID === 0) {
+            if (location.search.indexOf('mod=forumdisplay') > -1 || location.pathname.indexOf('forumdisplay.php') > -1) { //      < 各版块帖子列表 >
+                discuzForum();
+            } else if (location.search.indexOf('mod=viewthread') > -1 || location.pathname.indexOf('viewthread.php') > -1) { // < 帖子内 >
+                if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.discuz_thread;
+            } else if (location.search.indexOf('mod=guide') > -1) { //      < 导读帖子列表 >
+                curSite = DBSite.discuz_guide;
+            } else if(location.search.indexOf('mod=space') > -1 && location.search.indexOf('do=thread') > -1) { // 别人的主题/回复
+                curSite = DBSite.discuz_youspace;
+            } else if (location.search.indexOf('mod=collection') > -1) { // < 淘贴列表 >
+                curSite = DBSite.discuz_collection;
+            } else if (document.getElementById('threadlist')) { //          < 部分论坛的各板块 URL 是自定义的 >
+                discuzForum();
+            } else if (document.getElementById('postlist')) { //            < 部分论坛的帖子内 URL 是自定义的 >
+                if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.discuz_thread;
+            }
         }
     }
     // [Discuz! 论坛] 图片模式列表样式预处理
@@ -5275,18 +5315,20 @@
             console.info('[自动无缝翻页] - <Flarum> 论坛'); return 3;
         } else if (document.querySelector('body#phpbb')) {
             console.info('[自动无缝翻页] - <phpBB> 论坛'); return 4;
-        } else if (document.querySelector('link[href*="themes/dux" i], script[src*="themes/dux" i]')) {
-            console.info('[自动无缝翻页] - 使用 WordPress <DUX> 主题的网站'); return 5;
-        } else if (document.querySelector('link[href*="themes/xiu" i], script[src*="themes/xiu" i]')) {
-            console.info('[自动无缝翻页] - 使用 WordPress <XIU> 主题的网站'); return 6;
-        } else if (document.querySelector('link[href*="themes/d8" i], script[src*="themes/d8" i]')) {
-            console.info('[自动无缝翻页] - 使用 WordPress <D8> 主题的网站'); return 7;
-        } else if (document.querySelector('link[href*="themes/begin" i], script[src*="themes/begin" i], img[src*="themes/begin" i]')) {
-            console.info('[自动无缝翻页] - 使用 WordPress <Begin> 主题的网站'); return 8;
-        } else if (document.querySelector('meta[name="description"][content*="小说"], meta[name="description"][content*="章节"], meta[name="description"][content*="阅读"]') && document.getElementById('content') && getXpath('//a[contains(text(), "下一章") or contains(text(), "下一页")]')) {
-            console.info('[自动无缝翻页] - <笔趣阁> 模板的小说网站'); return 9;
         } else if (getXpath('//footer//a[contains(string(), "Xiuno")] | //link[contains(@href, "xiuno")] | //script[contains(@src, "xiuno")]')) {
-            console.info('[自动无缝翻页] - <Xiuno> 论坛'); return 10;
+            console.info('[自动无缝翻页] - <Xiuno> 论坛'); return 5;
+        } else if (typeof XF != 'undefined') {
+            console.info('[自动无缝翻页] - <XenForo> 论坛'); return 6;
+        } else if (document.querySelector('link[href*="themes/dux" i], script[src*="themes/dux" i]')) {
+            console.info('[自动无缝翻页] - 使用 WordPress <DUX> 主题的网站'); return 100;
+        } else if (document.querySelector('link[href*="themes/xiu" i], script[src*="themes/xiu" i]')) {
+            console.info('[自动无缝翻页] - 使用 WordPress <XIU> 主题的网站'); return 101;
+        } else if (document.querySelector('link[href*="themes/d8" i], script[src*="themes/d8" i]')) {
+            console.info('[自动无缝翻页] - 使用 WordPress <D8> 主题的网站'); return 102;
+        } else if (document.querySelector('link[href*="themes/begin" i], script[src*="themes/begin" i], img[src*="themes/begin" i]')) {
+            console.info('[自动无缝翻页] - 使用 WordPress <Begin> 主题的网站'); return 103;
+        } else if (document.querySelector('meta[name="description"][content*="小说"], meta[name="description"][content*="章节"], meta[name="description"][content*="阅读"]') && document.getElementById('content') && getXpath('//a[contains(text(), "下一章") or contains(text(), "下一页")]')) {
+            console.info('[自动无缝翻页] - <笔趣阁> 模板的小说网站'); return 200;
         } else if (self != top) {
             return -1;
         }
