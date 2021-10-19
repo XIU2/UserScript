@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.1.0
+// @version      3.1.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -1121,7 +1121,7 @@
                 }
             }, //   飞客网论坛 - 帖子内
             adnmb3: {
-                host: 'adnmb3.com',
+                host: ['adnmb3.com', 'www.tnmb.org'],
                 functionStart: function() {
                     if (location.pathname.indexOf('/m/f/') > -1) {
                         curSite = DBSite.adnmb3_mf;
@@ -1139,7 +1139,7 @@
                     insertP: ['css;.h-threads-list', 3],
                     replaceE: '//ul[contains(@class, "pagination")]',
                     scriptT: 3,
-                    scrollD: 1500
+                    scrollD: 2000
                 }
             }, //              A 岛
             adnmb3_t: {
@@ -1150,7 +1150,7 @@
                     insertP: ['css;.h-threads-list > .h-threads-item', 3],
                     replaceE: '//ul[contains(@class, "pagination")]',
                     scriptT: 3,
-                    scrollD: 1500
+                    scrollD: 2000
                 }
             }, //            A 岛 - 帖子内
             adnmb3_mf: {
@@ -1161,7 +1161,7 @@
                     insertP: ['css;#h-threads-pagination', 1],
                     replaceE: 'css;#h-threads-pagination',
                     scriptT: 3,
-                    scrollD: 1500
+                    scrollD: 2000
                 }
             }, //           A 岛 - 帖子列表（手机版）
             adnmb3_mt: {
@@ -1172,7 +1172,7 @@
                     insertP: ['css;.h-threads-replylist', 3],
                     replaceE: 'css;#h-threads-pagination',
                     scriptT: 3,
-                    scrollD: 1500
+                    scrollD: 2000
                 }
             }, //           A 岛 - 帖子内（手机版）
             guokr: {
@@ -4503,18 +4503,16 @@
 
     // [Anime1] 获取下一页内容（叠加）
     function anime1_nextL() {
-        let next = document.getElementById('tablepress-1_next');
+        let next = getCSS('#tablepress-1_next');
         if (next && next.className.indexOf('disabled') === -1) {
-            let oldList = document.querySelector('tbody.row-hover');
+            let oldList = getCSS('tbody.row-hover').innerHTML;
             if (oldList) {
-                // 将当前列表存为变量
-                oldList = oldList.innerHTML;
                 // 点击下一页
                 next.click();
                 // 当前页码 + 1
                 pageNum.now = pageNum._now + 1
                 // 插入到列表头部
-                document.querySelector('tbody.row-hover').insertAdjacentHTML('afterbegin', oldList);
+                getCSS('tbody.row-hover').insertAdjacentHTML('afterbegin', oldList);
             }
         }
     }
@@ -4899,7 +4897,7 @@
         if (next) {
             if (next.href === curSite.pageUrl) return
             curSite.pageUrl = next.href;
-            console.log(curSite.pageUrl)
+            //console.log(curSite.pageUrl)
             getPageElems(curSite.pageUrl);
         }
     }
@@ -5426,7 +5424,7 @@
                     timeout: 10000,
                     onload: function (response) {
                         try {
-                            processResult(response);
+                            processResult(ShowPager.createDocumentByString(response.responseText));
                         } catch (e) {
                             console.log(e);
                         }
@@ -5438,7 +5436,7 @@
     // XHR 后处理结果
     function processResult(response) {
         //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
-        var newBody = ShowPager.createDocumentByString(response.responseText);
+        var newBody = response;
         let pageElems = getAll(curSite.pager.pageE, newBody, newBody),
             toElement = getAll(curSite.pager.insertP[0])[0];
         //console.log(curSite.pager.pageE, pageElems, curSite.pager.insertP, toElement)
