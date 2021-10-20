@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.1.2
+// @version      3.1.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -1327,6 +1327,16 @@
             }, //             下得乐
             _3dmgame: {
                 host: 'www.3dmgame.com',
+                functionStart: function() {
+                    if (getCSS('.ztliswrap > div.lis')) {
+                        curSite = DBSite._3dmgame_list;
+                    } else if (getCSS('.newsleft > ul')) {
+                        curSite = DBSite._3dmgame_list2;
+                    } else if (location.pathname.indexOf('/resource') > -1) {
+                        curSite = DBSite._3dmgame_list3;
+                    } else {
+                        curSite = DBSite._3dmgame;
+                    }},
                 pager: {
                     type: 3,
                     nextL: 'css;li.next > a',
@@ -1335,9 +1345,47 @@
                     replaceE: 'css;.pagewrap',
                     scrollE: 'css;.pagewrap',
                     scriptT: 3,
-                    scrollD: 400
+                    scrollD: 600
                 }
             }, //                3DM
+            _3dmgame_list: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;li.next > a',
+                    pageE: 'css;.ztliswrap > div.lis',
+                    insertP: ['css;.pagewrap', 1],
+                    replaceE: 'css;.pagewrap',
+                    scrollD: 1000
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-original]', 'data-original']
+                }
+            }, //           3DM - 分类页
+            _3dmgame_list2: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;li.next > a',
+                    pageE: 'css;.newsleft > ul > li',
+                    insertP: ['css;.newsleft > ul', 3],
+                    replaceE: 'css;.pagewrap',
+                    scrollD: 1000
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-original]', 'data-original']
+                }
+            }, //          3DM - 游戏专区 - 分类页
+            _3dmgame_list3: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;li.next > a',
+                    pageE: 'css;.item > ul',
+                    insertP: ['css;.item > ul:last-child', 1],
+                    replaceE: 'css;.pagewrap',
+                    scrollD: 800
+                }
+            }, //          3DM - 游戏专区 - 资源页
             _3dmgame_mod: {
                 host: 'mod.3dmgame.com',
                 pager: {
@@ -1359,9 +1407,25 @@
                     insertP: ['css;.page_fenye', 1],
                     replaceE: 'css;.page_fenye',
                     scrollE: 'css;.page_fenye',
-                    scrollD: 400
+                    scrollD: 600
                 }
             }, //              游侠网
+            ali213_list: {
+                host: 'down.ali213.net',
+                functionStart: function() {if (getCSS('.famous-ul > .famous-li')) {curSite = DBSite.ali213_list;}},
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.page-next',
+                    pageE: 'css;.famous-ul > .famous-li',
+                    insertP: ['css;.famous-ul', 3],
+                    replaceE: 'css;.page-container',
+                    scrollD: 1000
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-original]', 'data-original']
+                }
+            }, //             游侠网 - 分类页
             ali213_gl: {
                 host: 'gl.ali213.net',
                 insStyle: '.n_show_b {display: none !important;}',
