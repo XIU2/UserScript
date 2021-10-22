@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.6.4
+// @version      1.6.5
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -134,31 +134,87 @@
 
     // Release
     function addRelease() {
-        let html = document.getElementsByClassName('Box-footer');if (!html) return
+        let html = document.getElementsByClassName('Box-footer');//if (html.length == 0) return
         let divDisplay = '';
-        if (document.documentElement.clientWidth > 1000) {divDisplay = 'float: right;margin-top: -3px;margin-left: 8px;';}; // 调整小屏幕下样式
-        Array.from(html).forEach(function (current) {
-            current.querySelectorAll('li.Box-row > a').forEach(function (_this) {
-                let href = _this.href.split(location.host),
-                    url = [],
-                    _html = `<div style="${divDisplay}">`;
+        if (html.length > 0) {
+            if (document.documentElement.clientWidth > 1000) {divDisplay = 'float: right;margin-top: -3px;margin-left: 8px;';}; // 调整小屏幕下样式
+            Array.from(html).forEach(function (current) {
+                current.querySelectorAll('li.Box-row > a').forEach(function (_this) {
+                    let href = _this.href.split(location.host),
+                        url = [],
+                        _html = `<div style="${divDisplay}">`;
 
-                for (let i=0;i<download_url.length;i++){
-                    if (download_url[i][0] === 'https://download.fastgit.org') {
-                        url[i] = download_url[i][0] + href[1]
-                    } else {
-                        url[i] = download_url[i][0] + '/' + _this.href
+                    for (let i=0;i<download_url.length;i++){
+                        if (download_url[i][0] === 'https://download.fastgit.org') {
+                            url[i] = download_url[i][0] + href[1]
+                        } else {
+                            url[i] = download_url[i][0] + '/' + _this.href
+                        }
+                        if (location.host === 'hub.fastgit.org') url[i] = url[i].replace('hub.fastgit.org','github.com')
                     }
-                    if (location.host === 'hub.fastgit.org') url[i] = url[i].replace('hub.fastgit.org','github.com')
-                }
 
-                for (let i=0;i<url.length;i++) {
-                    _html += `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
-                }
-                _html += `</div>`
-                _this.insertAdjacentHTML('afterend', _html);
+                    for (let i=0;i<url.length;i++) {
+                        _html += `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
+                    }
+                    _html += `</div>`
+                    _this.insertAdjacentHTML('afterend', _html);
+                });
             });
-        });
+        } else if (document.getElementsByClassName('Box Box--condensed').length > 0) {
+            html = document.getElementsByClassName('Box Box--condensed')
+            if (document.documentElement.clientWidth > 1000) {divDisplay = 'display: flex;';} else {divDisplay = 'display: block;';}
+            Array.from(html).forEach(function (current) {
+                current.querySelectorAll('.d-flex.Box-body > a').forEach(function (_this) {
+                    let href = _this.href.split(location.host),
+                        url = [],
+                        _html = `<div style="${divDisplay}justify-content: flex-end;">`;
+
+                    for (let i=0;i<download_url.length;i++){
+                        if (download_url[i][0] === 'https://download.fastgit.org') {
+                            url[i] = download_url[i][0] + href[1]
+                        } else {
+                            url[i] = download_url[i][0] + '/' + _this.href
+                        }
+                        if (location.host === 'hub.fastgit.org') url[i] = url[i].replace('hub.fastgit.org','github.com')
+                    }
+
+                    for (let i=0;i<url.length;i++) {
+                        _html += `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
+                    }
+                    _html += `</div>`
+                    _this.nextElementSibling.insertAdjacentHTML('afterend', _html);
+                });
+                // 修改[文件大小]元素样式
+                document.querySelectorAll('.Box.Box--condensed small').forEach(el=>{el.style.cssText='display: flex; justify-content: flex-end; flex-grow: 1; margin-right: 8px;'});
+
+
+                // Source Code
+                current.querySelectorAll('.d-block.Box-body > a').forEach(function (_this) {
+                    let href = _this.href.split(location.host),
+                        url = [],
+                        _html = `<div style="${divDisplay}justify-content: flex-end;flex-grow: 1;">`;
+
+                    for (let i=0;i<download_url.length;i++){
+                        if (download_url[i][0] === 'https://download.fastgit.org') {
+                            url[i] = download_url[i][0] + href[1]
+                        } else {
+                            url[i] = download_url[i][0] + '/' + _this.href
+                        }
+                        if (location.host === 'hub.fastgit.org') url[i] = url[i].replace('hub.fastgit.org','github.com')
+                    }
+
+                    for (let i=0;i<url.length;i++) {
+                        _html += `<a style="${style[0]}" class="btn" href="${url[i]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
+                    }
+                    _html += `</div>`
+                    _this.insertAdjacentHTML('afterend', _html);
+                });
+            });
+            // 修改 Source code 样式，使其和加速按钮并列一排
+            document.querySelectorAll('div.d-block.py-1.py-md-2.Box-body.px-2').forEach(el=>{el.className='d-flex py-1 py-md-2 Box-body px-2'});
+        } else {
+            return
+        }
     }
 
 
