@@ -1577,7 +1577,7 @@ function questionInvitation(){
             blockKeywords('index'); //                                         屏蔽指定关键词
             blockType(); //                                                    屏蔽指定类别（视频/文章等）
             // 解决屏蔽视频后，因为首页信息流太少而没有滚动条导致无法加载更多内容的问题
-            document.lastElementChild.appendChild(document.createElement('style')).textContent = '.Topstory-container{min-height: 1500px;}';
+            if (menu_value('menu_blockTypeVideo')) document.lastElementChild.appendChild(document.createElement('style')).textContent = '.Topstory-container{min-height: 1500px;}';
         }
     }
 })();
