@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.2.0
+// @version      3.2.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -1588,11 +1588,8 @@
                     insertP: ['css;ul.video-list', 3],
                     replaceE: 'css;ul.pages',
                     scriptT: 2,
-                    history: function() {
-                        if (/page=\d+/.test(location.search)) return false;
-                        return true;
-                    },
-                    scrollD: 800
+                    history: function() {if (/page=\d+/.test(location.search)) {return false;} else {return true;}},// 解决 locationChange 与 history 冲突的问题，只有返回 true 才会重置规则+页码
+                    scrollD: 1000
                 },
                 function: {
                     aF: bilibili_search_aF
@@ -4304,7 +4301,8 @@
         setSiteTypeID();
         // 用于脚本判断（针对部分特殊的网站）
         SiteType = {
-            BAIDU_TIEBA: DBSite.baidu_tieba.SiteTypeID
+            BAIDU_TIEBA: DBSite.baidu_tieba.SiteTypeID,
+            BILIBILI_SEARCH: DBSite.bilibili_search.SiteTypeID
         };
     }
 
@@ -5663,6 +5661,7 @@
                     timeout: 10000,
                     onload: function (response) {
                         try {
+                            //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
                             processResult(ShowPager.createDocumentByString(response.responseText));
                         } catch (e) {
                             console.log(e);
@@ -5674,13 +5673,12 @@
     };
     // XHR 后处理结果
     function processResult(response) {
-        //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
         var newBody = response;
         let pageElems = getAll(curSite.pager.pageE, newBody, newBody),
             toElement = getAll(curSite.pager.insertP[0])[0];
         //console.log(curSite.pager.pageE, pageElems, curSite.pager.insertP, toElement)
 
-        if (pageElems.length >= 0) {
+        if (pageElems.length > 0) {
             // 如果有插入前函数就执行函数
             if (curSite.function && curSite.function.bF) {
                 if (curSite.function.pF) { // 如果指定了参数
@@ -5729,8 +5727,10 @@
             }
 
             // 添加历史记录
-            if (curSite.pager.history && newBody.querySelector('title')) {
-                window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, newBody.querySelector('title').textContent, curSite.pageUrl);
+            if (curSite.pager.history) {
+                let title_ = newBody.querySelector('title');
+                if (title_) {title_ = title_.textContent;} else {title_ = document.title;};
+                window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, title_, curSite.pageUrl);
             }
 
             // 替换待替换元素
@@ -5757,6 +5757,8 @@
                     curSite.function.aF();
                 }
             }
+        } else { // 获取主体元素失败后，尝试重新获取
+            if (curSite.SiteTypeID === SiteType.BILIBILI_SEARCH) {curSite.pageUrl = '';}
         }
     }
     // 插入所有 Script
