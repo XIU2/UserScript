@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.1.9
+// @version      3.2.0
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -3829,6 +3829,73 @@
                     scrollD: 1000
                 }
             }, //            360 学术
+            cadtutor: {
+                host: 'www.cadtutor.net',
+                functionStart: function() {
+                    if (location.pathname.indexOf('/forum/forum/') > -1) {
+                        curSite = DBSite.cadtutor;
+                    } else if (location.pathname.indexOf('/forum/topic/') > -1) {
+                        curSite = DBSite.cadtutor_post;
+                    } else if (location.pathname.indexOf('/forum/search/') > -1) {
+                        curSite = DBSite.cadtutor_search;
+                    }},
+                pager: {
+                    type: 1,
+                    nextL: 'css;a[rel="next"]',
+                    pageE: 'css;ol.ipsDataList > li:not([data-rowid])~li',
+                    insertP: ['css;ol.ipsDataList', 3],
+                    replaceE: 'css;ul.ipsPagination',
+                    scrollD: 2000
+                }
+            }, //               CADTutor - 列表页
+            cadtutor_post: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;a[rel="next"]',
+                    pageE: 'css;#elPostFeed > form > *:not(input):not(.after-first-post)',
+                    insertP: ['css;#elPostFeed > form', 3],
+                    replaceE: 'css;ul.ipsPagination',
+                    scrollD: 2000
+                }
+            }, //          CADTutor - 帖子内
+            cadtutor_search: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;a[rel="next"]',
+                    pageE: 'css;ol.ipsStream > li',
+                    insertP: ['css;ol.ipsStream', 3],
+                    replaceE: 'css;ul.ipsPagination',
+                    scrollD: 2000
+                }
+            }, //        CADTutor - 搜索页
+            theswamp: {
+                host: 'www.theswamp.org',
+                functionStart: function() {
+                    if (!location.search) return
+                    if (location.search.indexOf('board=') > -1) {
+                        curSite = DBSite.theswamp;
+                    } else if (location.search.indexOf('topic=') > -1) {
+                        curSite = DBSite.theswamp_post;
+                    }},
+                pager: {
+                    type: 1,
+                    nextL: 'css;.pagelinks > strong+a',
+                    pageE: 'css;#messageindex tbody > tr:not([class])',
+                    insertP: ['css;#messageindex tbody', 3],
+                    replaceE: 'css;.pagelinks',
+                    scrollD: 2000
+                }
+            }, //               TheSwamp - 列表页
+            theswamp_post: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;.pagelinks > strong+a',
+                    pageE: 'css;#forumposts form > *',
+                    insertP: ['css;#forumposts form', 3],
+                    replaceE: 'css;.pagelinks',
+                    scrollD: 2000
+                }
+            }, //          TheSwamp - 帖子内
             wikihow: {
                 host: ['www.wikihow.com', 'zh.wikihow.com'],
                 functionStart: function() {if (location.pathname.indexOf('/Category:') > -1) {
