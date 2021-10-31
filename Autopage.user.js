@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.2.1
+// @version      3.2.2
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -959,6 +959,33 @@
                     scrollD: 1500
                 }
             }, //        看雪论坛 - 帖子内
+            bangumitv: {
+                host: 'bangumi.tv',
+                functionStart: function() {
+                if (location.pathname.indexOf('/browser') > -1 || location.pathname.indexOf('/subject_search') > -1) {
+                    curSite = DBSite.bangumitv;
+                } else if (location.pathname.indexOf('/forum') > -1) {
+                    curSite = DBSite.bangumitv_forum;
+                }},
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="page_inner"]/a[contains(text(), "››")]',
+                    pageE: 'css;ul#browserItemList > li',
+                    insertP: ['css;ul#browserItemList', 3],
+                    replaceE: 'css;.page_inner',
+                    scrollD: 1500
+                }
+            }, //           番组计划
+            bangumitv_forum: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="page_inner"]/a[contains(text(), "››")]',
+                    pageE: 'css;.topic_list > tbody:last-of-type > tr.topic',
+                    insertP: ['css;.topic_list > tbody:last-of-type', 3],
+                    replaceE: 'css;.page_inner',
+                    scrollD: 1500
+                }
+            }, //     番组计划 - 小组帖子列表
             kdslife: {
                 host: 'club.kdslife.com',
                 functionStart: function() {
@@ -3920,6 +3947,19 @@
                     scrollD: 3000
                 }
             }, //  指南 - 搜索页
+            oi_wiki: {
+                host: 'oi-wiki.org',
+                insStyle: 'blockquote.page-copyright, h2#__comments, form#gitalk-form {display: none !important;} article.md-content__inner{min-height: 700px;}',
+                pager: {
+                    type: 1,
+                    nextL: 'css;li.md-nav__item.md-nav__item--active.md-nav__item--nested li.md-nav__item--active+li a',
+                    pageE: 'css;article.md-content__inner',
+                    insertP: ['css;article.md-content__inner', 5],
+                    replaceE: 'css;.md-sidebar.md-sidebar--primary',
+                    history: true,
+                    scrollD: 1300
+                }
+            }, //         编程竞赛
             afreecatv: {
                 host: 'www.afreecatv.com',
                 pager: {
