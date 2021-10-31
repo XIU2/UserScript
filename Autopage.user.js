@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.2.2
+// @version      3.2.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -3781,6 +3781,19 @@
                     scrollD: 3000
                 }
             }, //                  学术
+            x_mol: {
+                host: 'www.x-mol.com',
+                functionStart: function() {if (location.pathname.indexOf('/search/q') > -1) {curSite = DBSite.x_mol;}},
+                pager: {
+                    type: 1,
+                    nextL: x_mol_mod_nextL,
+                    pageE: 'css;.magazine-senior-search-results-list > ul > li',
+                    insertP: ['css;.magazine-senior-search-results-list > ul', 3],
+                    replaceE: 'css;.pagination',
+                    history: true,
+                    scrollD: 2000
+                }
+            }, //                  学术
             google_scholar: {
                 pager: {
                     type: 1,
@@ -4654,6 +4667,26 @@
                 }
             } else {
                 url += location.origin + location.pathname + '?' + nextNum;
+            }
+        }
+        //console.log(url)
+        return url
+    }
+
+
+    // [X-MOL] 获取下一页地址
+    function x_mol_mod_nextL() {
+        let nextNum = getCSS('.pagination li.active+li > a');
+        var url;
+        if (nextNum && nextNum.textContent) {
+            if (location.search) {
+                let search;
+                if (location.search.indexOf('pageIndex=') > -1) {
+                    search = location.search.replace(/pageIndex=\d+/, 'pageIndex=' + nextNum.textContent);
+                } else {
+                    search = location.search + '&pageIndex=' + nextNum.textContent;
+                }
+                url = location.origin + location.pathname + search;
             }
         }
         //console.log(url)
