@@ -1520,6 +1520,7 @@
             }, //               NexusMods
             steamcommunity: {
                 host: 'steamcommunity.com',
+                functionStart: function() {if (location.pathname.indexOf('/workshop/browse') > -1) {curSite = DBSite.steamcommunity;}},
                 pager: {
                     type: 1,
                     nextL: '//a[@class="pagebtn"][last()]',
