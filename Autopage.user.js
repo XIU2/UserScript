@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.2.4
+// @version      3.2.5
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -4586,37 +4586,29 @@
     // [百度贴吧] 插入数据
     function baidu_tieba_insertE(newBody, type) {
         if (!newBody) return
-        let pageElems = getAll(curSite.pager.pageE, newBody, newBody),
-            toElement = getAll(curSite.pager.insertP[0])[0];
-        if (pageElems.length >= 0) {
-            // 执行插入前函数
-            pageElems = curSite.function.bF(pageElems);
-            // 插入位置
-            let addTo = getAddTo(curSite.pager.insertP[1]);
-            // 获取 <script> 内容
-            const scriptElems = getAll('//script', newBody, newBody);
-            let scriptText = '';
-            for (let i = 0; i < scriptElems.length; i++) {
-                if (scriptElems[i].textContent.indexOf('Bigpipe.register("frs-list/pagelet/thread_list"') > -1) {
-                    scriptText = scriptElems[i].textContent.replace('Bigpipe.register("frs-list/pagelet/thread_list", ','');
-                    break
-                }
-            }
-            if (scriptText) {
-                scriptText = scriptText.slice(0, scriptText.indexOf(').')) // 获取主体内容
-                let scriptJSON = JSON.parse(scriptText).content; //           字符串转 JSON
-                var temp_baidu_tieba = document.createElement('div'); temp_baidu_tieba.innerHTML = scriptJSON; // 字符串转 Element 元素
-                pageElems = curSite.function.bF(getAll(curSite.pager.pageE, temp_baidu_tieba, temp_baidu_tieba)); // 插入前执行函数
-                pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo, one);}); // 插入元素
-                // 当前页码 + 1
-                pageNum.now = pageNum._now + 1
-                // 替换元素
-                let oriE = document.querySelectorAll(curSite.pager.pageE.replace('css;', '')),
-                    repE = getAll(curSite.pager.replaceE, temp_baidu_tieba, temp_baidu_tieba);
-                if (oriE.length === repE.length) {
-                    for (let i = 0; i < oriE.length; i++) {
-                        oriE[i].outerHTML = repE[i].outerHTML;
-                    }
+        let toElement = getAll(curSite.pager.insertP[0])[0], pageElems;
+        // 插入位置
+        let addTo = getAddTo(curSite.pager.insertP[1]);
+        // 获取 <script> 内容
+        const scriptElems = getXpath(`//script[contains(text(), 'Bigpipe.register("frs-list/pagelet/thread_list", ')]`, newBody, newBody);
+        if (scriptElems) {
+            // 从 <script> 中提取帖子列表字符串
+            let scriptText = scriptElems.textContent.replace('Bigpipe.register("frs-list/pagelet/thread_list", ','');
+            scriptText = scriptText.slice(0, scriptText.indexOf(').'));
+            // 字符串格式化并转为 Element 元素
+            var temp_baidu_tieba = document.createElement('div'); temp_baidu_tieba.innerHTML = JSON.parse(scriptText).content;
+            // 插入前执行函数
+            pageElems = curSite.function.bF(getAll(curSite.pager.pageE, temp_baidu_tieba, temp_baidu_tieba));
+            // 插入元素
+            pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo, one);});
+            // 当前页码 + 1
+            pageNum.now = pageNum._now + 1
+            // 替换元素
+            let oriE = document.querySelectorAll(curSite.pager.replaceE.replace('css;', '')),
+                repE = getAll(curSite.pager.replaceE, temp_baidu_tieba, temp_baidu_tieba);
+            if (oriE.length === repE.length) {
+                for (let i = 0; i < oriE.length; i++) {
+                    oriE[i].outerHTML = repE[i].outerHTML;
                 }
             }
         }
