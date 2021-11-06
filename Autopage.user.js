@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.2.6
+// @version      3.2.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -2642,6 +2642,37 @@
                     scrollD: 800
                 }
             }, //      Mangabz 漫画 - 分类/搜索页
+            xmanhua: {
+                host: ['xmanhua.com', 'www.xmanhua.com'],
+                functionStart: function() {if (/\/m\d+/.test(location.pathname)) {
+                    setTimeout(mangabz_init, 500);
+                    curSite = DBSite.xmanhua;
+                } else if (/\/\d+xm\//.test(location.pathname)) {
+                    if (document.querySelector('.detail-list-form-more')) document.querySelector('.detail-list-form-more').click();
+                } else if (location.pathname.indexOf('/manga-list') > -1 || location.pathname === '/search') {
+                    curSite = DBSite.xmanhua_list;
+                }},
+                insStyle: '#Autopage_number, a.reader-bottom-page {display: none !important;} .header, .reader-bottom {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}',
+                pager: {
+                    type: 4,
+                    nextL: xmanhua_nextL,
+                    insertP: ['css;#cp_img', 3],
+                    insertE: xmanhua_insertE,
+                    replaceE: 'css;.reader-title, body > .container > div:not([id]), title',
+                    interval: 500,
+                    scrollD: 1500
+                }
+            }, //           Xmanhua 漫画
+            xmanhua_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="page-pagination"]//a[contains(text(), ">")]',
+                    pageE: 'css;ul.mh-list > li',
+                    insertP: ['css;ul.mh-list', 3],
+                    replaceE: 'css;.page-pagination',
+                    scrollD: 1000
+                }
+            }, //      Xmanhua 漫画 - 分类/搜索页
             cocomanga: {
                 host: 'www.cocomanga.com',
                 functionStart: function() {if (location.pathname.indexOf('.html') > -1) {
@@ -5431,6 +5462,65 @@
                 }
                 MANGABZ_PAGE = 0;
                 mangabz_nextL();
+            }
+        }
+    }
+
+
+    // [Xmanhua 漫画] 获取下一页地址
+    function xmanhua_nextL() {
+        var url = '';
+        if (XMANHUA_PAGE === XMANHUA_IMAGE_COUNT) { // 下一话
+            url = getXpath('//a[./img[contains(@src, "reader-bottom-right-2.png")]]')
+            if (url === curSite.pageUrl) return
+            curSite.pageUrl = url
+            //console.log(curSite.pageUrl)
+            getPageElems(curSite.pageUrl); // 访问下一话 URL 获取
+        } else { // 下一页
+            if (!mkey) var mkey = '';
+            url = location.origin + location.pathname + 'chapterimage.ashx' + `?cid=${XMANHUA_CID}&page=${XMANHUA_PAGE + 1}&key=${(mkey)}&_cid=${XMANHUA_CID}&_mid=${XMANHUA_MID}&_dt=${XMANHUA_VIEWSIGN_DT}&_sign=${XMANHUA_VIEWSIGN}`
+            if (url === curSite.pageUrl) return
+            curSite.pageUrl = url
+            //console.log(curSite.pageUrl)
+            getPageElems(curSite.pageUrl, 'text', 'GET', '', 'Next'); // 访问下一页 URL 获取
+        }
+    }
+    // [Xmanhua 漫画] 插入数据
+    function xmanhua_insertE(pageElems, type) {
+        if (pageElems) {
+            if (type === 'Next') {
+                let imgArr = eval(pageElems),
+                    _img = '';
+                for (let now of imgArr) {
+                    _img += `<img src="${now}">`;
+                }
+                if (_img) {
+                    document.querySelector(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+
+                    // 添加历史记录
+                    XMANHUA_PAGE += imgArr.length;
+                    window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, document.title, location.origin + XMANHUA_CURL.substring(0, XMANHUA_CURL.length - 1) + '-p' + XMANHUA_PAGE + '/');
+                }
+            } else {
+                // 插入 <script> 标签
+                insScriptAll('css;html:not([dir]) > head > script:not([src])', document.body, pageElems);
+
+                // 添加历史记录
+                window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
+
+                // 当前页码 + 1
+                pageNum.now = pageNum._now + 1
+
+                // 替换待替换元素
+                let oriE = getAll(curSite.pager.replaceE),
+                    repE = getAll(curSite.pager.replaceE, pageElems, pageElems);
+                if (oriE.length === repE.length) {
+                    for (let i = 0; i < oriE.length; i++) {
+                        oriE[i].outerHTML = repE[i].outerHTML;
+                    }
+                }
+                XMANHUA_PAGE = 0;
+                xmanhua_nextL();
             }
         }
     }
