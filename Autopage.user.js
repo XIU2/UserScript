@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.2.9
+// @version      3.3.0
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -4198,139 +4198,6 @@
                     pF: [0, 'img[_src]', '_src']
                 }
             }, //      新片场
-            xrmn5: {
-                host: 'www.xrmn5.com',
-                functionStart: function() {if (/\d+\.html/.test(location.pathname)) {
-                    curSite = DBSite.xrmn5;
-                } else if (location.pathname.indexOf('/search') > -1) {
-                    curSite = DBSite.xrmn5_search;
-                /*} else {
-                    curSite = DBSite.xrmn5_list;*/
-                }},
-                pager: {
-                    type: 1,
-                    nextL: '//div[contains(@class, "page")]//a[contains(text(), "下页")]',
-                    pageE: 'css;.content_left > p > img',
-                    insertP: ['css;.content_left > p', 3],
-                    replaceE: 'css;.page',
-                    scrollD: 3000
-                }
-            }, //               秀人美女网 - 图片页
-            xrmn5_list: {
-                pager: {
-                    type: 1,
-                    nextL: '//div[contains(@class, "page")]//a[contains(text(), "下页")]',
-                    pageE: 'css;ul.update_area_lists > li',
-                    insertP: ['css;ul.update_area_lists', 3],
-                    replaceE: 'css;.page',
-                    scrollD: 2000
-                }
-            }, //          秀人美女网 - 分类页
-            xrmn5_search: {
-                pager: {
-                    type: 1,
-                    nextL: 'css;.page a.current+a',
-                    pageE: 'css;div.sousuo',
-                    insertP: ['//div[contains(@class, "sousuo")][last()]', 4],
-                    replaceE: 'css;.page',
-                    scrollD: 2000
-                }
-            }, //        秀人美女网 - 搜索页
-            fnvshen: {
-                host: 'www.fnvshen.com',
-                functionStart: function() {
-                    if (location.pathname.indexOf('/gallery/') > -1 || location.pathname.indexOf('/tag/') > -1) {
-                        curSite = DBSite.fnvshen_list;
-                    } else if (location.pathname.indexOf('/g/') > -1) {
-                        curSite = DBSite.fnvshen;
-                    } else if (/\/article\/\d+\//.test(location.pathname)) {
-                        curSite = DBSite.fnvshen_article;
-                    } else if (location.pathname.indexOf('/article/') > -1) {
-                        curSite = DBSite.fnvshen_article_list;
-                }},
-                pager: {
-                    type: 1,
-                    nextL: 'id("pages")/a[contains(text(), "下一页")]',
-                    pageE: 'css;#hgallery > img',
-                    insertP: ['css;#hgallery', 3],
-                    replaceE: 'css;#pages',
-                    scrollD: 1000
-                }
-            }, //             宅男女神 - 图片页
-            fnvshen_list: {
-                insStyle: '.yalayi_box {display: none !important; margin: -4px 0 !important;}',
-                pager: {
-                    type: 1,
-                    nextL: '//div[@class="pagesYY"]//a[contains(text(), "下一页")]',
-                    pageE: 'css;#listdiv > ul > li',
-                    insertP: ['css;#listdiv > ul', 3],
-                    replaceE: 'css;.pagesYY',
-                    scrollD: 1000
-                },
-                function: {
-                    bF: src_bF,
-                    pF: [0, 'img[data-original]', 'data-original']
-                }
-            }, //        宅男女神 - 分类页
-            fnvshen_article_list: {
-                pager: {
-                    type: 1,
-                    nextL: '//div[@class="pagesYY"]//a[contains(text(), "下一页")]',
-                    pageE: 'css;li.other_girlli',
-                    insertP: ['//ul[./li[@class="other_girlli"]]', 3],
-                    replaceE: 'css;.pagesYY',
-                    scrollD: 1000
-                }
-            }, //宅男女神 - 文章列表
-            fnvshen_article: {
-                pager: {
-                    type: 1,
-                    nextL: 'css;.pagesYY a.cur+a',
-                    pageE: 'css;#articleDiv',
-                    insertP: ['css;#articleDiv', 5],
-                    replaceE: 'css;.pagesYY',
-                    scrollD: 1000
-                }
-            }, //     宅男女神 - 文章内
-            xiurenji: {
-                host: 'www.xiurenji.vip',
-                functionStart: function() {insStyle('img[src$=".gif"]:not([src*="logo"]) {display: none !important;}');
-                    if (location.pathname.indexOf('.html') > -1 && location.pathname.indexOf('/index') === -1) {
-                        curSite = DBSite.xiurenji;
-                    } else if (location.pathname.indexOf('search') > -1) {
-                        curSite = DBSite.xiurenji_search;
-                    } else {
-                        curSite = DBSite.xiurenji_list;
-                }},
-                pager: {
-                    type: 1,
-                    nextL: '//div[@class="page"]/a[contains(text(), "后")]',
-                    pageE: 'css;div.img > p > *',
-                    insertP: ['css;div.img > p', 3],
-                    replaceE: 'css;.page',
-                    scrollD: 2000
-                }
-            }, //            秀人集 - 图片页
-            xiurenji_list: {
-                pager: {
-                    type: 1,
-                    nextL: '//div[@class="page"]/a[contains(text(), "下页")]',
-                    pageE: 'css;td >.tp2 > *',
-                    insertP: ['css;td >.tp2', 3],
-                    replaceE: 'css;.page',
-                    scrollD: 1000
-                }
-            }, //       秀人集 - 分类页
-            xiurenji_search: {
-                pager: {
-                    type: 1,
-                    nextL: 'css;.page > a.current+a',
-                    pageE: 'css;.node > *',
-                    insertP: ['css;.node', 3],
-                    replaceE: 'css;.page',
-                    scrollD: 1000
-                }
-            }, //     秀人集 - 搜索页
             tujigu: {
                 host: 'www.tujigu.net',
                 functionStart: function() {
@@ -4389,6 +4256,45 @@
                     pF: [0, 'img[data-src]', 'data-src']
                 }
             }, //          美女推 - 分类页
+            xiurenji: {
+                host: /.xiurenji./,
+                functionStart: function() {insStyle('img[src$=".gif"]:not([src*="logo"]) {display: none !important;}');
+                    if (location.pathname.indexOf('.html') > -1 && location.pathname.indexOf('/index') === -1) {
+                        curSite = DBSite.xiurenji;
+                    } else if (location.pathname.indexOf('search') > -1) {
+                        curSite = DBSite.xiurenji_search;
+                    } else {
+                        curSite = DBSite.xiurenji_list;
+                }},
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="page"]/a[contains(text(), "后")]',
+                    pageE: 'css;div.img > p > *',
+                    insertP: ['css;div.img > p', 3],
+                    replaceE: 'css;.page',
+                    scrollD: 2000
+                }
+            }, //            秀人集 - 图片页
+            xiurenji_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="page"]/a[contains(text(), "下页")]',
+                    pageE: 'css;td >.tp2 > *',
+                    insertP: ['css;td >.tp2', 3],
+                    replaceE: 'css;.page',
+                    scrollD: 1000
+                }
+            }, //       秀人集 - 分类页
+            xiurenji_search: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;.page > a.current+a',
+                    pageE: 'css;.node > *',
+                    insertP: ['css;.node', 3],
+                    replaceE: 'css;.page',
+                    scrollD: 1000
+                }
+            }, //     秀人集 - 搜索页
             mm131: {
                 host: 'www.mm131.net',
                 functionStart: function() {if (location.pathname.indexOf('.html') > -1) {curSite = DBSite.mm131;} else {curSite = DBSite.mm131_list;}},
@@ -4410,7 +4316,101 @@
                     replaceE: 'css;.page',
                     scrollD: 1000
                 }
-            } //           MM131 - 分类页
+            }, //          MM131 - 分类页
+            fnvshen: {
+                host: 'www.fnvshen.com',
+                functionStart: function() {
+                    if (location.pathname.indexOf('/gallery/') > -1 || location.pathname.indexOf('/tag/') > -1) {
+                        curSite = DBSite.fnvshen_list;
+                    } else if (location.pathname.indexOf('/g/') > -1) {
+                        curSite = DBSite.fnvshen;
+                    } else if (/\/article\/\d+\//.test(location.pathname)) {
+                        curSite = DBSite.fnvshen_article;
+                    } else if (location.pathname.indexOf('/article/') > -1) {
+                        curSite = DBSite.fnvshen_article_list;
+                }},
+                pager: {
+                    type: 1,
+                    nextL: 'id("pages")/a[contains(text(), "下一页")]',
+                    pageE: 'css;#hgallery > img',
+                    insertP: ['css;#hgallery', 3],
+                    replaceE: 'css;#pages',
+                    scrollD: 1000
+                }
+            }, //             宅男女神 - 图片页
+            fnvshen_list: {
+                insStyle: '.yalayi_box {display: none !important; margin: -4px 0 !important;}',
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="pagesYY"]//a[contains(text(), "下一页")]',
+                    pageE: 'css;#listdiv > ul > li',
+                    insertP: ['css;#listdiv > ul', 3],
+                    replaceE: 'css;.pagesYY',
+                    scrollD: 1000
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-original]', 'data-original']
+                }
+            }, //        宅男女神 - 分类页
+            fnvshen_article_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="pagesYY"]//a[contains(text(), "下一页")]',
+                    pageE: 'css;li.other_girlli',
+                    insertP: ['//ul[./li[@class="other_girlli"]]', 3],
+                    replaceE: 'css;.pagesYY',
+                    scrollD: 1000
+                }
+            }, //宅男女神 - 文章列表
+            fnvshen_article: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;.pagesYY a.cur+a',
+                    pageE: 'css;#articleDiv',
+                    insertP: ['css;#articleDiv', 5],
+                    replaceE: 'css;.pagesYY',
+                    scrollD: 1000
+                }
+            }, //     宅男女神 - 文章内
+            xrmn5: {
+                host: 'www.xrmn5.com',
+                functionStart: function() {if (/\d+\.html/.test(location.pathname)) {
+                    curSite = DBSite.xrmn5;
+                } else if (location.pathname.indexOf('/search') > -1) {
+                    curSite = DBSite.xrmn5_search;
+                /*} else {
+                    curSite = DBSite.xrmn5_list;*/
+                }},
+                pager: {
+                    type: 1,
+                    nextL: '//div[contains(@class, "page")]//a[contains(text(), "下页")]',
+                    pageE: 'css;.content_left > p > img',
+                    insertP: ['css;.content_left > p', 3],
+                    replaceE: 'css;.page',
+                    scrollD: 3000
+                }
+            }, //               秀人美女网 - 图片页
+            xrmn5_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[contains(@class, "page")]//a[contains(text(), "下页")]',
+                    pageE: 'css;ul.update_area_lists > li',
+                    insertP: ['css;ul.update_area_lists', 3],
+                    replaceE: 'css;.page',
+                    scrollD: 2000
+                }
+            }, //          秀人美女网 - 分类页
+            xrmn5_search: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;.page a.current+a',
+                    pageE: 'css;div.sousuo',
+                    insertP: ['//div[contains(@class, "sousuo")][last()]', 4],
+                    replaceE: 'css;.page',
+                    scrollD: 2000
+                }
+            } //         秀人美女网 - 搜索页
         };
         // 生成 SiteTypeID
         setSiteTypeID();
