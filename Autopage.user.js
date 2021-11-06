@@ -2609,9 +2609,10 @@
                 pager: {
                     type: 1,
                     nextL: '//div[@class="fanye"][1]/a[@href][text()="下一页" or text()="下一话"]',
-                    pageE: 'css;.comicpage > div,title',
+                    pageE: 'css;.comicpage > div',
                     insertP: ['css;.comicpage', 3],
                     replaceE: 'css;.fanye,h1.title',
+                    history: true,
                     scrollD: 2000
                 },
                 function: {
@@ -5395,17 +5396,10 @@
     // [砂之船动漫家] 的插入前函数（加载图片）
     function szcdmj_bF(pageElems) {
         pageElems.forEach(function (one) {
-            if (one.tagName === 'TITLE') {
-                let title = one.textContent;
-                window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, title, curSite.pageUrl); // 添加历史记录
-                window.document.title = title; // 修改当前网页标题为下一页的标题
-                one.style.display = 'none';
-            } else {
-                let now = one.querySelector('img[data-original]')
-                if (now) {
-                    now.src = now.dataset.original;
-                    now.style.display = 'inline';
-                }
+            let now = one.querySelector('img[data-original]')
+            if (now) {
+                now.src = now.dataset.original;
+                now.style.display = 'inline';
             }
         });
         return pageElems
