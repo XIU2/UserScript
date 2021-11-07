@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.3.2
+// @version      1.3.3
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页、屏蔽导读悬赏贴（最新发表页）
 // @match        *://www.52pojie.cn/*
@@ -187,23 +187,15 @@
     // 自动签到（后台）
     function qianDao() {
         if (!menu_value('menu_autoClockIn')) return
+        if (location.pathname === '/home.php' && location.search.indexOf('mod=task') > -1) {return;}
         let qiandao = document.querySelector('#um a[href="home.php?mod=task&do=apply&id=2"]');
         if (qiandao) {
-            GM_xmlhttpRequest({
-                url: qiandao.href,
-                method: 'GET',
-                timeout: 5000,
-                onload: function (response) {
-                    let html = ShowPager.createDocumentByString(response.responseText);
-                    html = html.querySelector('#messagetext p')
-                    if (html && html.textContent.indexOf('任务已完成') > -1 || html && html.textContent.indexOf('已申请过此任务') > -1) {
-                        qiandao.querySelector('.qq_bind').src = 'https://www.52pojie.cn/static/image/common/wbs.png'; // 修改 [打卡签到] 图标为 [签到完毕] 图标
-                        qiandao.href = 'javascript:void(0);'
-                    } else {
-                        GM_notification({text: '自动签到失败！请联系作者解决！', title: '吾爱破解论坛增强', timeout: 3000});
-                    }
-                }
-            });
+            let iframe = document.createElement('iframe'); // XHR 方式无法签到，改用 iframe 框架打开签到网页
+            document.lastElementChild.appendChild(iframe);
+            iframe.style = 'display: none;';
+            iframe.src = qiandao.href;
+            qiandao.querySelector('.qq_bind').src = 'https://www.52pojie.cn/static/image/common/wbs.png'; // 修改 [打卡签到] 图标为 [签到完毕] 图标
+            qiandao.href = 'javascript:void(0);'
         }
     }
 
