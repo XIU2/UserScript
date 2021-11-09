@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.3.3
+// @version      3.3.4
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -549,7 +549,7 @@
                 functionStart: function() {if (location.pathname === '/f') {
                     baidu_tieba_1(); // 右侧悬浮发帖按钮点击事件（解决自动翻页导致无法发帖的问题）
                     curSite = DBSite.baidu_tieba;
-                } else if (location.pathname.indexOf('/p/') > -1) {
+                } else if (location.pathname.indexOf('/p/') > -1 && GM_getValue('menu_discuz_thread_page')) {
                     curSite = DBSite.baidu_tieba_post;
                 } else if (location.pathname === '/f/search/res') {
                     curSite = DBSite.baidu_tieba_search;
@@ -571,7 +571,7 @@
                 }
             }, //        百度贴吧 - 帖子列表
             baidu_tieba_post: {
-                insStyle: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld, .core_reply div.hideLzl[style*="min-height:50px"] {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
+                insStyle: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
                 pager: {
                     type: 4,
                     nextL: baidu_tieba_post_nextL,
