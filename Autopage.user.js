@@ -2571,7 +2571,12 @@
             }, //             风之动漫
             baozimh: {
                 host: ['www.webmota.com', 'cn.webmota.com', 'cn.baozimh.com'],
-                functionStart: function() {if (location.pathname.indexOf('/chapter/') > -1) {curSite = DBSite.baozimh;}},
+                functionStart: function() {
+                    if (location.pathname.indexOf('/chapter/') > -1) {
+                        curSite = DBSite.baozimh;
+                    } else if (location.pathname.indexOf('/comic/') > -1) {
+                        if (document.getElementById('button_show_all_chatper')) document.getElementById('button_show_all_chatper').click();
+                    }},
                 insStyle: '#footer, #header {display: none !important;} .header, .bottom-bar {opacity: 0.3;}',
                 pager: {
                     type: 1,
@@ -2619,7 +2624,7 @@
                     if (location.pathname.indexOf('/szcchapter/') > -1) {
                         curSite = DBSite.szcdmj;
                     } else if (location.pathname.indexOf('/szcbook/') > -1) {
-                        if (document.querySelector('#detail-list-more')) document.querySelector('#detail-list-more').click();
+                        if (document.getElementById('detail-list-more')) document.getElementById('detail-list-more').click();
                     } else if (location.pathname === '/szcbolist' || location.pathname === '/update') {
                         curSite = DBSite.szcdmj_list;
                     }},
