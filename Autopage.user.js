@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.3.6
+// @version      3.3.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、FitGirl、片库、茶杯狐、NO视频、低端影视、奈菲影视、91美剧网、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画DB、动漫之家、古风漫画网、PubMed、wikiHow、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -77,7 +77,9 @@
     /*
     自动翻页规则
     locationChange: 对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则
+
     insStyle: 要插入网页的 CSS Style 样式
+    hiddenPN: 不显示脚本左下角的页码
     type：
       1 = 由脚本实现自动无缝翻页
       2 = 网站自带了自动无缝翻页功能，只需要点击下一页按钮即可
@@ -91,6 +93,7 @@
           scrollD:    基准元素 减去 可视区域底部
       4 = 部分简单的动态加载类网站
           insertE:    插入元素的函数
+
     insertP：
       1 = 插入该元素本身的前面；
       2 = 插入该元素当中，第一个子元素前面；
@@ -104,8 +107,8 @@
       4 = 下一页主体元素子元素 <script> 标签
     history: 添加历史记录 并 修改当前 URL
     forceHTTPS: 下一页链接强制 HTTPS
-    hiddenPN: 不显示脚本左下角的页码
     scrollD：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大（如果 Type = 3，则相反）
+
     function：
       bF = 插入前执行函数；
       aF = 插入后执行函数；
@@ -571,7 +574,8 @@
                 }
             }, //        百度贴吧 - 帖子列表
             baidu_tieba_post: {
-                insStyle: '#Autopage_number, .d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
+                insStyle: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
+                hiddenPN: true,
                 pager: {
                     type: 4,
                     nextL: baidu_tieba_post_nextL,
@@ -2499,7 +2503,7 @@
                     curSite = DBSite.copymanga_list;
                 }},
                 iframe: true,
-                insStyle: '.upMember, .comicContainerAds, .footer, #Autopage_number {display: none !important;} body, html {height: auto !important;}',
+                insStyle: '.upMember, .comicContainerAds, .footer {display: none !important;} body, html {height: auto !important;}',
                 pager: {
                     type: 4,
                     nextL: copymanga_nextL,
@@ -2565,6 +2569,20 @@
                     scrollD: 2000
                 }
             }, //             风之动漫
+            baozimh: {
+                host: ['www.webmota.com', 'cn.webmota.com', 'cn.baozimh.com'],
+                functionStart: function() {if (location.pathname.indexOf('/chapter/') > -1) {curSite = DBSite.baozimh;}},
+                insStyle: '#footer, #header {display: none !important;} .header, .bottom-bar {opacity: 0.3;}',
+                pager: {
+                    type: 1,
+                    nextL: 'css;.next_chapter > a',
+                     pageE: 'css;.comic-contain > amp-img',
+                    insertP: ['css;.comic-contain', 3],
+                    replaceE: 'css;.next_chapter, .bottom-bar, .header .title, title',
+                    history: true,
+                    scrollD: 2000
+                }
+            }, //           包子漫画
             gufengmh: {
                 host: /gufengmh/,
                 functionStart: function() {if (/\/\d+.+\.html/.test(location.pathname)) {
@@ -2670,7 +2688,8 @@
                 } else if (location.pathname.indexOf('/manga-list') > -1 || location.pathname === '/search') {
                     curSite = DBSite.xmanhua_list;
                 }},
-                insStyle: '#Autopage_number, a.reader-bottom-page {display: none !important;} .header, .reader-bottom {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}',
+                hiddenPN: true,
+                insStyle: 'a.reader-bottom-page {display: none !important;} .header, .reader-bottom {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}',
                 pager: {
                     type: 4,
                     nextL: xmanhua_nextL,
