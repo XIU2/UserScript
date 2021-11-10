@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.3.8
+// @version      3.3.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、漫本、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -76,40 +76,45 @@
     function setDBSite() {
     /*
     自动翻页规则
-    locationChange: 对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则
+    locationChange: 对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则（只能放在 functionStart 中）
 
-    insStyle: 要插入网页的 CSS Style 样式
-    hiddenPN: 不显示脚本左下角的页码
-    type：
+    functionStart: 匹配该网站域名时要执行的函数（一般用于根据 URL 分配相应翻页规则）
+    insStyle:      要插入网页的 CSS Style 样式
+    hiddenPN:      不显示脚本左下角的页码
+
+    type:
       1 = 由脚本实现自动无缝翻页
       2 = 网站自带了自动无缝翻页功能，只需要点击下一页按钮即可
           nextText:   按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页（避免一瞬间加载太多次下一页）
           nextTextOf: 按钮文本的一部分，当按钮文本包含该文本时，才会点击按钮加载下一页（避免一瞬间加载太多次下一页）
           nextHTML:   按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页（避免一瞬间加载太多次下一页）
-          interval:   点击间隔时间，对于没有按钮文字变化的按钮，可以手动指定间隔时间，单位：ms
+          interval:   点击间隔时间，对于没有按钮文字变化的按钮，可以手动指定间隔时间（单位 ms）
           isHidden:   只有下一页按钮可见时（没有隐藏），才会点击
       3 = 依靠元素距离可视区域底部的距离来触发翻页
           scrollE:    作为基准的元素（一般为底部页码元素）
-          scrollD:    基准元素 减去 可视区域底部
-      4 = 部分简单的动态加载类网站
+          scrollD:    = 基准元素 - 可视区域底部
+      4 = 动态加载类网站（只能实现简单的）
           insertE:    插入元素的函数
-
-    insertP：
+    nextL:   下一页链接所在元素
+    pageE:   要获取的主体内容
+    insertP: 主体内容插入的位置
       1 = 插入该元素本身的前面；
       2 = 插入该元素当中，第一个子元素前面；
       3 = 插入该元素当中，最后一个子元素后面；
       4 = 插入该元素本身的后面；
       5 = 插入该元素末尾（针对小说网站等文本类的）
-    scriptT: 单独插入 <script> 标签
+    replaceE: 要替换为下一页内容的元素（比如页码）
+    scriptT:  单独插入 <script> 标签
       1 = 下一页的所有 <script> 标签
       2 = 下一页主体元素同级 <script> 标签
       3 = 下一页主体元素同级 <script> 标签（远程文件）
       4 = 下一页主体元素子元素 <script> 标签
-    history: 添加历史记录 并 修改当前 URL
+    history:    添加历史记录 并 修改当前 URL（如何和 locationChange 同用，需要改为函数根据情况返回 true / false）
     forceHTTPS: 下一页链接强制 HTTPS
-    scrollD：数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大（如果 Type = 3，则相反）
+    scrollD：   数值越大，滚动条触发点越靠上（越早开始翻页），一般是访问网页速度越慢，该值就需要越大（如果 Type = 3，则相反）
+    interval:   翻页后间隔时间（单位 ms）
 
-    function：
+    function:
       bF = 插入前执行函数；
       aF = 插入后执行函数；
       pF = 参数
@@ -4346,6 +4351,32 @@
                     pF: [0, 'img[data-src]', 'data-src']
                 }
             }, //          美女推 - 分类页
+            mzitu: {
+                host: 'www.mzitu.com',
+                functionStart: function() {if (/\/\d+/.test(location.pathname)) {curSite = DBSite.mzitu;document.querySelector('.main-image a[href]').href = 'javascript:void(0);'} else {curSite = DBSite.mzitu_list;}},
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="pagenavi"]/a[contains(string(), "下一页")]',
+                    pageE: 'css;.main-image img',
+                    insertP: ['css;.main-image a', 3],
+                    replaceE: 'css;.pagenavi',
+                    scrollD: 1500
+                }
+            }, //               妹子图 - 图片页
+            mzitu_list: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;.next.page-numbers',
+                    pageE: 'css;.postlist > ul > li',
+                    insertP: ['css;.postlist > ul', 3],
+                    replaceE: 'css;.pagination',
+                    scrollD: 1000
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-original]', 'data-original']
+                }
+            }, //          妹子图 - 分类/搜索页
             xiurenji: {
                 host: /.xiurenji./,
                 functionStart: function() {insStyle('img[src$=".gif"]:not([src*="logo"]) {display: none !important;}');
