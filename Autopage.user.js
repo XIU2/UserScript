@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.4.2
+// @version      3.4.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -2626,6 +2626,41 @@
                     scrollD: 2000
                 }
             }, //           包子漫画
+            leyuman: {
+                host: 'www.leyuman.com',
+                functionStart: function() {if (/\/comic\/\d+\/\d+\.html/.test(location.pathname)) {
+                    curSite = DBSite.leyuman;
+                    setTimeout(leyuman_init, 100);
+                } else if (/\/comic\/\d+\.html/.test(location.pathname)) {
+                    setTimeout(function(){if (document.getElementById('read-more')) document.getElementById('read-more').click();}, 500)
+                } else {
+                    curSite = DBSite.leyuman_list;
+                }},
+                insStyle: '.mh_select, .mh_comicpic > p, mh_headpager {display: none !important;} .mh_comicpic > img{width: 100% !important; height: auto !important;}',
+                pager: {
+                    type: 4,
+                    nextL: leyuman_nextL,
+                    insertP: ['css;.mh_comicpic', 3],
+                    insertE: leyuman_insertE,
+                    replaceE: 'css;.mh_headpager, .mh_readtitle, title',
+                    interval: 3000,
+                    scrollD: 3000
+                }
+            }, //           乐语漫画
+            leyuman_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//a[@class="page-link"][contains(text(), "下一页")]',
+                    pageE: 'css;.works_recommend.classification_works > ul',
+                    insertP: ['css;.works_recommend.classification_works', 3],
+                    replaceE: 'css;.paging',
+                    scrollD: 1000
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-src]', 'data-src']
+                }
+            }, //      乐语漫画 - 分类页
             gufengmh: {
                 host: /gufengmh/,
                 functionStart: function() {if (/\/\d+.+\.html/.test(location.pathname)) {
@@ -4211,6 +4246,18 @@
                     scrollD: 1000
                 }
             }, //  如意了教育 - 试卷
+            jiligamefun: {
+                host: 'www.jiligamefun.com',
+                functionStart: function() {if (location.pathname.indexOf('/category/') > -1) {curSite = DBSite.jiligamefun;}},
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.poi-pager__item.poi-pager__item_next',
+                    pageE: 'css;.inn-archive__container > article',
+                    insertP: ['css;.inn-archive__container', 3],
+                    replaceE: 'css;.poi-pager',
+                    scrollD: 1800
+                }
+            }, //     叽哩叽哩日报
             wendangku: {
                 host: 'www.wendangku.net',
                 functionStart: function() {if (location.pathname.indexOf('/doc/') > -1) {curSite = DBSite.wendangku;}},
@@ -5473,6 +5520,66 @@
                     }
                 }
             }, 100)
+        }
+    }
+
+
+    // [乐语漫画] 初始化（调整本话其余图片）
+    function leyuman_init() {
+        let _img = '';
+        for (let one of JSON.parse(z_img)) {
+            if (one.slice(0,4) === 'http') {
+                _img += `<img src="${one}">`;
+            } else {
+                _img += `<img src="https://img.shishi-life.com/${one}">`;
+            }
+        }
+        document.querySelector(curSite.pager.insertP[0].replace('css;', '')).innerHTML = _img;
+
+    }
+    // [乐语漫画] 获取下一页地址
+    function leyuman_nextL() {
+        let next = document.querySelector('#xurl');
+        if (next) {
+            if (next.href === curSite.pageUrl) return
+            curSite.pageUrl = next.href;
+            //console.log(curSite.pageUrl)
+            getPageElems(curSite.pageUrl);
+        }
+    }
+    // [乐语漫画] 插入数据
+    function leyuman_insertE(pageElems, type) {
+        if (!pageElems) return
+        // 插入并运行 <script>
+        insScriptAll('//body//script[not(@src)][contains(text(), "z_img=")]', document.body, pageElems);
+
+        // 插入图片
+        let _img = '';
+        for (let one of JSON.parse(z_img)) {
+            if (one.slice(0,4) === 'http') {
+                _img += `<img src="${one}">`;
+            } else {
+                _img += `<img src="https://img.shishi-life.com/${one}">`;
+            }
+        }
+        if (_img) {
+            // 将 img 标签插入到网页中
+            document.querySelector(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
+
+            // 添加历史记录
+            window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
+
+            // 当前页码 + 1
+            pageNum.now = pageNum._now + 1
+
+            // 替换元素
+            let oriE = document.querySelectorAll(curSite.pager.replaceE.replace('css;', '')),
+                repE = getAll(curSite.pager.replaceE, pageElems, pageElems);
+            if (oriE.length === repE.length) {
+                for (let i = 0; i < oriE.length; i++) {
+                    oriE[i].outerHTML = repE[i].outerHTML;
+                }
+            }
         }
     }
 
