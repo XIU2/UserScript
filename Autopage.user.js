@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.4.9
+// @version      3.5.0
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -364,7 +364,7 @@
                 }
             }, //                  百度 搜素
             google: {
-                host: /.google./,
+                host: /\.google\./,
                 functionStart: function() {if (location.pathname === '/search') {
                     curSite = DBSite.google;
                 } else if (location.pathname === '/scholar') {
@@ -2498,7 +2498,7 @@
                 }
             }, //   动漫狂 - 分类/搜索页
             manhuacat: {
-                host: 'www.manhuacat.com',
+                host: ['www.manhuacat.com', 'www.maofly.com'],
                 functionStart: function() {if (/\/manga\/\d+\/.+\.html/.test(location.pathname)) {
                     if (getCookie('is_pull') == 'true') { // 强制关闭 [下拉] 模式
                         document.cookie='is_pull=false; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; // 写入 Cookie 关闭 [下拉] 模式
@@ -2702,7 +2702,7 @@
                 }
             }, //动漫之家 - 日漫 - 最新更新
             copymanga: {
-                host: ['copymanga.com', 'www.copymanga.com'],
+                host: /copymanga\./,
                 functionStart: function() {if (location.pathname.indexOf('/chapter/') > -1) {
                     curSite = DBSite.copymanga;
                 } else if (location.pathname.indexOf('/comics') > -1) {
@@ -4050,7 +4050,7 @@
                 }
             }, //     致美化 - 文章列表
             lanzou: {
-                host: /\.lanzou[a-z]/,
+                host: /\.lanzou[a-z]\./,
                 hiddenPN: true,
                 pager: {
                     type: 2,
@@ -4586,7 +4586,7 @@
                 }
             }, //          妹子图 - 分类/搜索页
             xiurenji: {
-                host: /.xiurenji./,
+                host: /\.xiurenji\./,
                 functionStart: function() {insStyle('img[src$=".gif"]:not([src*="logo"]) {display: none !important;}');
                     if (location.pathname.indexOf('.html') > -1 && location.pathname.indexOf('/index') === -1) {
                         curSite = DBSite.xiurenji;
