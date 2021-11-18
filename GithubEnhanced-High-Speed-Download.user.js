@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.6.5
+// @version      1.6.6
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -45,9 +45,8 @@
         ['https://gh.api.99988866.xyz', '美国 1'],
         ['https://github.91chifun.workers.dev', '美国 2'],
         ['https://gh.xiu2.xyz', '美国 3'],
-        ['https://gh.argv.cc', '美国 4'],
+        ['https://github.rc1844.workers.dev', '美国 4'],
         ['https://pd.zwc365.com/seturl', '美国 5'],
-        ['https://git.yumenaka.net', '美国 6'],
         ['https://download.fastgit.org', '日本'],
         ['https://ghproxy.com', '韩国']
     ],
@@ -64,8 +63,7 @@
             ['https://raw.githubusercontent.com', 'Github 原生',''],
             ['https://cdn.jsdelivr.net','中国国内', '注意：该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10;注意：当前分支所有文件总文件大小超过 50MB 时，该加速源不可用。&#10;注意：当前分支名为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。'],
             ['https://raw.fastgit.org','中国香港', '注意：单个文件太大时可能会提示超时（实时获取中），请重试。'],
-            ['https://cdn.staticaly.com','日本东京', '注意：该加速是全球 Anycast CDN，国内一般分配到日本节点。'],
-            ['https://ghproxy.com','韩国首尔', '']
+            ['https://cdn.staticaly.com','日本东京', '注意：该加速是全球 Anycast CDN，国内一般分配到日本节点。']
         ],
         svg = [
             '<svg class="octicon octicon-file-zip mr-2" aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true"><path fill-rule="evenodd" d="M3.5 1.75a.25.25 0 01.25-.25h3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h2.086a.25.25 0 01.177.073l2.914 2.914a.25.25 0 01.073.177v8.586a.25.25 0 01-.25.25h-.5a.75.75 0 000 1.5h.5A1.75 1.75 0 0014 13.25V4.664c0-.464-.184-.909-.513-1.237L10.573.513A1.75 1.75 0 009.336 0H3.75A1.75 1.75 0 002 1.75v11.5c0 .649.353 1.214.874 1.515a.75.75 0 10.752-1.298.25.25 0 01-.126-.217V1.75zM8.75 3a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM6 5.25a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5A.75.75 0 016 5.25zm2 1.5A.75.75 0 018.75 6h.5a.75.75 0 010 1.5h-.5A.75.75 0 018 6.75zm-1.25.75a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5zM8 9.75A.75.75 0 018.75 9h.5a.75.75 0 010 1.5h-.5A.75.75 0 018 9.75zm-.75.75a1.75 1.75 0 00-1.75 1.75v3c0 .414.336.75.75.75h2.5a.75.75 0 00.75-.75v-3a1.75 1.75 0 00-1.75-1.75h-.5zM7 12.25a.25.25 0 01.25-.25h.5a.25.25 0 01.25.25v2.25H7v-2.25z"></path></svg>',
@@ -145,7 +143,8 @@
                         _html = `<div style="${divDisplay}">`;
 
                     for (let i=0;i<download_url.length;i++){
-                        if (download_url[i][0] === 'https://download.fastgit.org') {
+                        console.log(download_url[i][0])
+                        if (download_url[i][0] === 'https://download.fastgit.org' || download_url[i][0] === 'https://github.rc1844.workers.dev') {
                             url[i] = download_url[i][0] + href[1]
                         } else {
                             url[i] = download_url[i][0] + '/' + _this.href
@@ -170,7 +169,8 @@
                         _html = `<div style="${divDisplay}justify-content: flex-end;">`;
 
                     for (let i=0;i<download_url.length;i++){
-                        if (download_url[i][0] === 'https://download.fastgit.org') {
+                        console.log(download_url[i][0])
+                        if (download_url[i][0] === 'https://download.fastgit.org' || download_url[i][0] === 'https://github.rc1844.workers.dev') {
                             url[i] = download_url[i][0] + href[1]
                         } else {
                             url[i] = download_url[i][0] + '/' + _this.href
@@ -295,8 +295,7 @@
             url = [
                 raw_url[1][0] + '/gh' + href.replace('/blob/','@'),
                 raw_url[2][0] + href2,
-                raw_url[3][0] + '/gh' + href.replace('/blob/','/'),
-                raw_url[4][0] + '/' + raw_url[0][0] + href2
+                raw_url[3][0] + '/gh' + href.replace('/blob/','/')
             ],
             _html = ``;
         for (let i=0;i<url.length;i++) {
