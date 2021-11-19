@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.5.0
+// @version      3.5.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -2585,6 +2585,42 @@
                     scrollD: 1500
                 }
             }, //  漫画台 - 搜索页
+            manhuagui: {
+                host: 'www.mhgui.com',
+                functionStart: function() {if (/\/comic\/\d+\/\d+\.html/.test(location.pathname)) {
+                    if (!getXpath('//li[@class="pfunc"]/a[@class="current" and text()="双击"]')) getXpath('//li[@class="pfunc"]/a[text()="双击"]').click();
+                    pausePage = false;
+                    setTimeout(manhuagui_init, 100);
+                    curSite = DBSite.manhuagui;
+                } else if (location.pathname.indexOf('list/') > -1 || location.pathname.indexOf('/s/') > -1) {
+                    curSite = DBSite.manhuagui_list;
+                }},
+                insStyle: '.sub-btn, .tc {display: none !important;} #mangaBox > img {width: auto !important;height: auto !important;display: block !important;margin: 0 auto !important;}',
+                pager: {
+                    type: 4,
+                    nextL: manhuagui_nextL,
+                    pageE: 'css;body > script:not([src])',
+                    insertP: ['css;#mangaBox', 3],
+                    insertE: manhuagui_insertE,
+                    replaceE: 'css;title',
+                    interval: 4000,
+                    scrollD: 2500
+                }
+            }, //         漫画柜
+            manhuagui_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="pager"]/a[text()="下一页"]',
+                    pageE: 'css;.book-result > ul > li, .book-list > ul > li',
+                    insertP: ['css;.book-result > ul, .book-list > ul', 3],
+                    replaceE: 'css;.pager',
+                    scrollD: 1500
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-src]', 'data-src']
+                }
+            }, //    漫画台 - 分类/搜索页
             manhuadb: {
                 host: 'www.manhuadb.com',
                 functionStart: function() {if (/\/manhua\/\d+\/.+\.html/.test(location.pathname)) {
@@ -5287,7 +5323,7 @@
             _img += `<img src="${asset_domain}${img_pre}${now}">`;
         }
         getCSS('.img-content > img').remove();
-        getCSS(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
 
     }
     // [漫画猫] 获取下一页地址
@@ -5330,10 +5366,57 @@
             _img += `<img src="${vg_r_data.dataset.chapterDomain}${img_pre}${now}">`;
         }
         if (_img) {
-            getCSS(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+            getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
             // 当前页码 + 1
             pageNum.now = pageNum._now + 1
         }
+    }
+
+
+    // [漫画柜] 初始化（将本话其余图片插入网页中）
+    function manhuagui_init() {
+        // hook imgDate 代码
+        SMH.imgData = function(n) {window['imgDate'] = n;return{preInit:function(){}}}
+        // 重新执行本页的 imgDate 代码
+        insScriptAll(curSite.pager.pageE);
+        let _img = '', imgPath = `${location.protocol}//i.hamreus.com${window['imgDate'].path}`;
+        //console.log(imgPath, window['imgDate'])
+        if (!(window['imgDate']) || !(imgPath)) return
+        // 遍历图片文件名数组，组合为 img 标签
+        for (let i = 0; i < window['imgDate'].files.length; i++) {
+            _img += `<img src="${imgPath + window['imgDate'].files[i]}?e=${window['imgDate'].sl.e}&m=${window['imgDate'].sl.m}">`
+        }
+        // 插入并覆盖原来的一个图片
+        getOne(curSite.pager.insertP[0]).innerHTML = _img;
+        pausePage = true;
+    }
+    // [漫画柜] 获取下一页地址
+    function manhuagui_nextL() {
+        if (window['imgDate'].nextId == 0) return
+        var url = location.origin + location.pathname.replace(window['imgDate'].cid.toString(), window['imgDate'].nextId.toString())
+        if (url === curSite.pageUrl) return
+        curSite.pageUrl = url
+        getPageElems(curSite.pageUrl);
+    }
+    // [漫画柜] 插入数据
+    function manhuagui_insertE(pageElems, type) {
+        if (!pageElems) return
+        // 重新执行本页的 imgDate 代码
+        insScriptAll(curSite.pager.pageE, document.body, pageElems);
+        let _img = '', imgPath = `${location.protocol}//i.hamreus.com${window['imgDate'].path}`;
+        //console.log(imgPath, window['imgDate'])
+        if (!(window['imgDate']) || !(imgPath)) return
+        // 遍历图片文件名数组，组合为 img 标签
+        for (let i = 0; i < window['imgDate'].files.length; i++) {
+            _img += `<img src="${imgPath + window['imgDate'].files[i]}?e=${window['imgDate'].sl.e}&m=${window['imgDate'].sl.m}">`
+        }
+        // 将 img 标签插入到网页中
+        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
+        // 添加历史记录
+        window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
+        document.title = pageElems.querySelector('title').textContent;
+        // 当前页码 + 1
+        pageNum.now = pageNum._now + 1
     }
 
 
@@ -5351,7 +5434,7 @@
                         let src = data.dataset.host + data.dataset.img_pre + json[i].img;
                         _img += `<img class="img-fluid show-pic" src="${src}">`
                     }
-                    getCSS(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+                    getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
                 }
             }
         })
@@ -5395,7 +5478,7 @@
             if (src.indexOf('!p_c_c_') === -1) src += '!p_c_c_h'
             _img += `<img src="${src}">`
         })
-        getCSS(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
         window.document.title = window.document.title.replace(/(\(第.+\))? - HiComic/, `(${getCSS('.chapter_name').textContent}) - HiComic`); // 修改网页标题（加上 第 X 话）
     }
     // [HiComic(嗨漫画)] 获取下一页地址
@@ -5426,7 +5509,7 @@
             if (src.indexOf('!p_c_c_') === -1) src += '!p_c_c_h';
             _img += `<img src="${src}">`
         }
-        getCSS(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
         // 当前页码 + 1
         pageNum.now = pageNum._now + 1
     }
@@ -5439,7 +5522,7 @@
             _img += `<img src="${one.dataset.original}">`;
             one.parentElement.remove();
         })
-        getCSS(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
 
     }
     // [动漫之家] 获取下一页地址
@@ -5469,7 +5552,7 @@
             _img += `<img src="${img_prefix}${now}">`;
         }
         if (_img) {
-            getCSS(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+            getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
 
             // 添加历史记录
             window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
@@ -5495,7 +5578,7 @@
             _img += `<img src="${one.dataset.original}">`;
             one.parentElement.parentElement.remove();
         })
-        getCSS(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
 
     }
     // [动漫之家-漫画] 获取下一页地址
@@ -5520,7 +5603,7 @@
             _img += `<img src="${img_prefix}${now}">`;
         }
         if (_img) {
-            getCSS(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+            getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
 
             // 添加历史记录
             window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
@@ -5631,7 +5714,7 @@
         }
         if (_img) {
             // 将 img 标签插入到网页中
-            getCSS(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
+            getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
 
             // 添加历史记录
             window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
@@ -5671,7 +5754,7 @@
 
             // 插入图片
             setTimeout(function() {
-                getCSS(curSite.pager.insertP[0].replace('css;', '')).appendChild(document.createElement('img')).src = mhpicurl;
+                getOne(curSite.pager.insertP[0]).appendChild(document.createElement('img')).src = mhpicurl;
 
                 // 添加历史记录
                 window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
@@ -5702,7 +5785,7 @@
                 _img += `<img src="https://img.shishi-life.com/${one}">`;
             }
         }
-        getCSS(curSite.pager.insertP[0].replace('css;', '')).innerHTML = _img;
+        getOne(curSite.pager.insertP[0]).innerHTML = _img;
 
     }
     // [乐语漫画] 获取下一页地址
@@ -5732,7 +5815,7 @@
         }
         if (_img) {
             // 将 img 标签插入到网页中
-            getCSS(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
+            getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
 
             // 添加历史记录
             window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
@@ -5754,7 +5837,7 @@
 
     // [古风漫画网] 获取下一页地址
     function gufengmh_nextL() {
-        let pageElems = getCSS(curSite.pager.pageE.replace('css;', '')); // 寻找数据所在元素
+        let pageElems = getOne(curSite.pager.pageE); // 寻找数据所在元素
         if (pageElems) {
             let comicUrl, nextId;
             var url = '';
@@ -5780,7 +5863,7 @@
             let url = curSite.pageUrl;
             pageElems = getOne(curSite.pager.pageE, pageElems, pageElems);
             let chapterImages, chapterPath;
-            getCSS(curSite.pager.pageE.replace('css;', '')).innerText = pageElems.textContent; // 将当前网页内的数据所在元素内容改为刚刚获取的下一页数据内容，以便循环获取下一页 URL
+            getOne(curSite.pager.pageE).innerText = pageElems.textContent; // 将当前网页内的数据所在元素内容改为刚刚获取的下一页数据内容，以便循环获取下一页 URL
             pageElems.textContent.split(';').forEach(function (one){ // 分号 ; 分割为数组并遍历
                 //console.log(one)
                 if (one.indexOf('chapterImages') > -1) { // 图片文件名数组
@@ -5798,7 +5881,7 @@
                 chapterImages.forEach(function (one2){ // 遍历图片文件名数组，组合为 img 标签
                     _img += '<img src="https://res.xiaoqinre.com/' + chapterPath + one2 + '" data-index="0" style="display: inline-block;">'
                 })
-                getCSS(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+                getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
                 // 当前页码 + 1
                 pageNum.now = pageNum._now + 1
             }
@@ -5860,7 +5943,7 @@
                     _img += `<img src="${now}">`;
                 }
                 if (_img) {
-                    getCSS(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+                    getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
 
                     // 添加历史记录
                     MANGABZ_PAGE += imgArr.length;
@@ -5919,7 +6002,7 @@
                     _img += `<img src="${now}">`;
                 }
                 if (_img) {
-                    getCSS(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+                    getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
 
                     // 添加历史记录
                     XMANHUA_PAGE += imgArr.length;
@@ -5954,7 +6037,7 @@
     function cocomanga_init() {
         let last = getCSS('.mh_comicpic:last-of-type');
         if (last && last.getAttribute('p')) {
-            getCSS(curSite.pager.insertP[0].replace('css;', '')).innerHTML = ''; // 删除旧图片元素
+            getOne(curSite.pager.insertP[0]).innerHTML = ''; // 删除旧图片元素
             cocomanga_img(parseInt(last.getAttribute('p'))) // 插入新图片元素
         }
     }
@@ -5965,7 +6048,7 @@
         for (let i=1; i<=totalImageCount; i++) {
             _img += `<div class="mh_comicpic" p="${i}"><img src="${__cr.getPicUrl(i)}"></div>`;
         }
-        getCSS(curSite.pager.insertP[0].replace('css;', '')).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
     }
     // [COCOMANGA 漫画] 获取下一页地址
     function cocomanga_nextL() {
@@ -6231,11 +6314,7 @@
                 if (typeof curSite.pager.nextL == 'function') {
                     url = curSite.pager.nextL();
                 } else {
-                    if (curSite.pager.nextL.slice(0,4) === 'css;') {
-                        url = this.getFullHref(getCSS(curSite.pager.nextL.slice(4)));
-                    } else {
-                        url = this.getFullHref(getXpath(curSite.pager.nextL));
-                    }
+                    url = this.getFullHref(getOne(curSite.pager.nextL));
                 }
                 //console.log(url, curSite.pageUrl);
                 if (url === '') return;
