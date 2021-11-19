@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.5.1
+// @version      3.5.2
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -97,6 +97,8 @@
           scrollD:    = 基准元素 - 可视区域底部
       4 = 动态加载类网站（只能实现简单的）
           insertE:    插入元素的函数
+      5 = 插入 iframe 方式来加载下一页
+          insStyle:   加载 iframe 前要插入的 CSS Style 样式
     nextL:   下一页链接所在元素
     pageE:   要获取的主体内容
     insertP: 主体内容插入的位置
@@ -475,7 +477,7 @@
                 },
             }, //             DuckDuckGo 搜索
             startpage: {
-                host: 'www.startpage.com',
+                host: ['startpage.com', 'www.startpage.com'],
                 functionStart: function() {if (location.pathname.indexOf('/search') > -1) {curSite = DBSite.startpage;}},
                 pager: {
                     type: 1,
@@ -577,15 +579,17 @@
                     scrollD: 2000
                 },
                 function: {
-                    bF: baidu_tieba_bF
+                    bF: src_bF,
+                    pF: [0, 'img[data-original]', 'data-original']
                 }
             }, //        百度贴吧 - 帖子列表
             baidu_tieba_post: {
                 insStyle: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
                 hiddenPN: true,
                 pager: {
-                    type: 4,
-                    nextL: baidu_tieba_post_nextL,
+                    type: 5,
+                    nextL: '//li[contains(@class,"pb_list_pager")]/a[contains(text(),"下一页")]',
+                    insStyle: '.topic_list_box, ul.tbui_aside_float_bar, .core_title_wrap_bright.tbui_follow_fixed.core_title_absolute_bright {display: none !important;}',
                     scrollD: 1500
                 }
             }, //   百度贴吧 - 帖子内
@@ -742,7 +746,7 @@
                     scrollD: 1000
                 },
                 function: {
-                    aF: nga_thread_aF
+                    aF: function() {document.body.appendChild(document.createElement('script')).textContent = 'commonui.topicArg.loadAll();';}
                 }
             }, //          NGA - 各版块帖子列表
             nga_read: {
@@ -758,20 +762,20 @@
             }, //            NGA - 帖子内
             v2ex_recent: {
                 host: ['v2ex.com', 'www.v2ex.com'],
-                functionStart: function() {if (location.pathname === '/') { //                          首页
+                functionStart: function() {if (location.pathname === '/') {
                     v2ex_aF('#Main a.topic-link:not([target])');
-                } else if (location.pathname === '/recent') { //             最近主题页
+                } else if (location.pathname === '/recent') {
                     curSite = DBSite.v2ex_recent;
                     v2ex_aF('#Main a.topic-link:not([target])');
-                } else if (location.pathname === '/notifications') { //      提醒消息页
+                } else if (location.pathname === '/notifications') {
                     curSite = DBSite.v2ex_notifications;
                     v2ex_aF('#Main a[href^="/t/"]:not([target])');
-                } else if (location.pathname === '/balance') { //            账户余额页
+                } else if (location.pathname === '/balance') {
                     curSite = DBSite.v2ex_balance;
-                } else if (location.pathname.indexOf('/go/') > -1) { //      分类主题页
+                } else if (location.pathname.indexOf('/go/') > -1) {
                     curSite = DBSite.v2ex_go;
                     v2ex_aF('#Main a.topic-link:not([target])');
-                } else if (location.pathname.indexOf('/replies') > -1) { //  用户回复页
+                } else if (location.pathname.indexOf('/replies') > -1) {
                     curSite = DBSite.v2ex_replies;
                     v2ex_aF('#Main a[href^="/t/"]:not([target])');
                 }},
@@ -1575,7 +1579,7 @@
                 host: 'mod.3dmgame.com',
                 pager: {
                     type: 1,
-                    nextL: _3dmgame_mod_nextL,
+                    nextL: function() {return getPage_nextL('//li[@class="page-list active"]/following-sibling::li[contains(@class, "page-list")]/a', 'Page=', /Page=\d+/)},
                     pageE: '//div[contains(@class, "game-mod-list") or contains(@class, "search-mod-list")] | //script[not(@src or @type)][contains(text(), ".game-mod-page") or contains(text(), ".search-mod-page")]',
                     insertP: ['//div[contains(@class, "game-mod-wrap") or contains(@class, "search-mod ")]', 3],
                     scriptT: 2,
@@ -2385,10 +2389,11 @@
                 functionStart: function() {if (location.pathname != '/') {curSite = DBSite.assrt;};},
                 pager: {
                     type: 1,
-                    nextL: assrt_nextL,
-                    pageE: 'css;.resultcard > div:not(#top-banner):not(#bottom-banner)',
+                    nextL: function() {return getPage_nextL('css;#pl-current+a', 'page=', /page=\d+/);},
+                    pageE: 'css;.resultcard > div:not(#top-banner):not(#bottom-banner):not(.pagelinkcard)',
                     insertP: ['css;.pagelinkcard', 1],
                     replaceE: 'css;.pagelinkcard',
+                    history: true,
                     scrollD: 1000
                 }
             }, //         射手网（字幕）
@@ -2666,7 +2671,7 @@
                         document.cookie='display_mode=1; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; // 写入 Cookie 开启 [上下滚动阅读] 模式
                         location.reload(); // 刷新网页
                     }
-                    setTimeout(dmzj_init, 100);
+                    setTimeout(function() {dmzj_init('.comic_wraCon > a > img')}, 100);
                     curSite = DBSite.dmzj;
                 } else if (location.pathname.indexOf('/category') > -1 || location.pathname.indexOf('/update') > -1) {
                     curSite = DBSite.dmzj_list;
@@ -2676,7 +2681,7 @@
                 insStyle: 'p.mh_curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} .comic_wraCon > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}', // 隐藏中间的页数信息
                 pager: {
                     type: 4,
-                    nextL: dmzj_nextL,
+                    nextL: 'css;span.next > a',
                     insertP: ['css;.comic_wraCon', 3],
                     insertE: dmzj_insertE,
                     replaceE: 'css;.wrap_last_mid, .wrap_last_head, title',
@@ -2711,7 +2716,7 @@
                 functionStart: function() {if (/\/\d+\.shtml/.test(location.pathname)) {
                     let chapterScroll = getCSS('#qiehuan_txt') // 强制为 [上下滚动阅读] 模式
                     if (chapterScroll && chapterScroll.textContent === '切换到上下滚动阅读') {chapterScroll.click();}
-                    setTimeout(dmzj_manhua_init, 100);
+                    setTimeout(function() {dmzj_init('#center_box > .inner_img img[src]')}, 100);
                     curSite = DBSite.dmzj_manhua;
                 } else if (location.pathname.indexOf('/update') > -1) {
                     curSite = DBSite.dmzj_manhua_update;
@@ -2719,7 +2724,7 @@
                 insStyle: 'p.curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} #center_box > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}', // 隐藏中间的页数信息
                 pager: {
                     type: 4,
-                    nextL: dmzj_manhua_nextL,
+                    nextL: 'css;#next_chapter',
                     insertP: ['css;#center_box', 3],
                     insertE: dmzj_manhua_insertE,
                     replaceE: 'css;.display_graybg, title',
@@ -2748,8 +2753,9 @@
                 hiddenPN: true,
                 insStyle: '.upMember, .comicContainerAds, .footer {display: none !important;} body, html {height: auto !important;}',
                 pager: {
-                    type: 4,
-                    nextL: copymanga_nextL,
+                    type: 5,
+                    nextL: 'css;.comicContent-next > a',
+                    insStyle: 'h4.header, h4.header +div[style*="fixed"] {display: none !important;}',
                     history: true,
                     scrollD: 3000
                 }
@@ -2769,7 +2775,7 @@
                 }
             }, //    拷贝漫画 - 分类页
             mhxqiu: {
-                host: 'www.mhxqiu.com',
+                host: /\.mhxqiu/,
                 functionStart: function() {if (/\/\d+\.html/.test(location.pathname)) { // 阅读页
                     curSite = DBSite.mhxqiu;
                 } else if (/\/\d+\/$/.test(location.pathname)) { // 目录页
@@ -2780,7 +2786,7 @@
                 insStyle: '.imgFloat_1, .imgFloat_2, .main_control, span.comic-ft {display: none !important;} html, body, #mainView {height: auto !important;} body.view .main ul.comic-contain li{margin:0 auto !important;} .comic-contain .loaded{box-shadow: none !important;}',
                 pager: {
                     type: 4,
-                    nextL: mhxqiu_nextL,
+                    nextL: 'css;#mainControlNext',
                     insertP: ['css;#comicContain', 3],
                     insertE: mhxqiu_insertE,
                     replaceE: 'css;.main_control, h1.chaptername_title, span.title-comicHeading, title',
@@ -2801,10 +2807,10 @@
             fffdm: {
                 host: 'manhua.fffdm.com',
                 functionStart: function() {if (location.pathname.split('/').length === 4) {curSite = DBSite.fffdm;}},
-                insStyle: '#footer, #header {display: none !important;}',
+                insStyle: '#footer, #header {display: none !important;} #mhimg0 img {display: block !important;margin: 0 auto !important;}',
                 pager: {
                     type: 4,
-                    nextL: fffdm_nextL,
+                    nextL: '//a[contains(text(), "下一页") or contains(text(), "下一頁") or contains(text(), "下一话") or contains(text(), "下一話")]',
                     insertP: ['css;#mhimg0', 3],
                     insertE: fffdm_insertE,
                     replaceE: 'css;.navigation, #weizhi, h1, title',
@@ -2843,7 +2849,7 @@
                 insStyle: '.mh_select, .mh_comicpic > p, mh_headpager {display: none !important;} .mh_comicpic > img{width: 100% !important; height: auto !important;}',
                 pager: {
                     type: 4,
-                    nextL: leyuman_nextL,
+                    nextL: 'css;#xurl',
                     insertP: ['css;.mh_comicpic', 3],
                     insertE: leyuman_insertE,
                     replaceE: 'css;.mh_headpager, .mh_readtitle, title',
@@ -2916,7 +2922,8 @@
                     scrollD: 2000
                 },
                 function: {
-                    bF: szcdmj_bF
+                    bF: src_bF,
+                    pF: [0, 'img[data-original]', 'data-original']
                 }
             }, //            砂之船动漫家
             szcdmj_list: {
@@ -2932,7 +2939,7 @@
             mangabz: {
                 host: ['mangabz.com', 'www.mangabz.com'],
                 functionStart: function() {if (/\/m\d+/.test(location.pathname)) {
-                    setTimeout(mangabz_init, 500);
+                    setTimeout(mangabz_init, 1500);
                     curSite = DBSite.mangabz;
                 } else if (/\/\d+bz\//.test(location.pathname)) {
                     if (getCSS('.detail-list-form-more')) getCSS('.detail-list-form-more').click();
@@ -2947,7 +2954,7 @@
                     insertE: mangabz_insertE,
                     replaceE: 'css;p.top-title, body > .container > div:not([id]), title',
                     interval: 500,
-                    scrollD: 1000
+                    scrollD: 2000
                 }
             }, //           Mangabz 漫画
             mangabz_list: {
@@ -2963,7 +2970,7 @@
             xmanhua: {
                 host: ['xmanhua.com', 'www.xmanhua.com'],
                 functionStart: function() {if (/\/m\d+/.test(location.pathname)) {
-                    setTimeout(mangabz_init, 500);
+                    setTimeout(mangabz_init, 1500);
                     curSite = DBSite.xmanhua;
                 } else if (/\/\d+xm\//.test(location.pathname)) {
                     if (getCSS('.detail-list-form-more')) getCSS('.detail-list-form-more').click();
@@ -2979,7 +2986,7 @@
                     insertE: xmanhua_insertE,
                     replaceE: 'css;.reader-title, body > .container > div:not([id]), title',
                     interval: 500,
-                    scrollD: 1500
+                    scrollD: 2500
                 }
             }, //           Xmanhua 漫画
             xmanhua_list: {
@@ -3008,10 +3015,10 @@
                 } else if (location.pathname === '/search') {
                     curSite = DBSite.cocomanga_search;
                 }},
-                insStyle: '.mh_readend, .mh_footpager, .mh_readmode {display: none !important;} .mh_comicpic img {cursor: unset !important;}',
+                insStyle: '.mh_readend, .mh_footpager, .mh_readmode {display: none !important;} .mh_comicpic img {cursor: unset !important;} .mh_comicpic img {min-height: 150px;}',
                 pager: {
                     type: 4,
-                    nextL: cocomanga_nextL,
+                    nextL: '//a[contains(@class, "read_page_link") and contains(string(), "下一章")][not(contains(@href, "javascript"))]',
                     insertP: ['css;#mangalist', 3],
                     insertE: cocomanga_insertE,
                     replaceE: 'css;.mh_readtitle, .mh_headpager > a.mh_prevbook, .mh_readend, head > title',
@@ -3022,7 +3029,7 @@
             cocomanga_list: {
                 pager: {
                     type: 1,
-                    nextL: cocomanga_list_nextL,
+                    nextL: function() {return getPage_nextL('css;.fed-page-info a.fed-btns-green+a[onclick]', 'page=', /page=\d+/)},
                     pageE: 'css;ul.fed-list-info > li',
                     insertP: ['css;ul.fed-list-info', 3],
                     replaceE: 'css;.fed-page-info',
@@ -3036,7 +3043,7 @@
             cocomanga_search: {
                 pager: {
                     type: 1,
-                    nextL: cocomanga_list_nextL,
+                    nextL: function() {return getPage_nextL('css;.fed-page-info a.fed-btns-green+a[onclick]', 'page=', /page=\d+/)},
                     pageE: 'css;dl.fed-deta-info',
                     insertP: ['css;.fed-page-info', 1],
                     replaceE: 'css;.fed-page-info',
@@ -4146,12 +4153,12 @@
             }, //                  学术
             x_mol: {
                 host: 'www.x-mol.com',
-                functionStart: function() {if (location.pathname.indexOf('/search/q') > -1) {curSite = DBSite.x_mol;}},
+                functionStart: function() {if (location.pathname.indexOf('/search/q') > -1 || location.pathname.indexOf('/paper/') > -1) {curSite = DBSite.x_mol;}},
                 pager: {
                     type: 1,
-                    nextL: x_mol_mod_nextL,
-                    pageE: 'css;.magazine-senior-search-results-list > ul > li',
-                    insertP: ['css;.magazine-senior-search-results-list > ul', 3],
+                    nextL: function() {return getPage_nextL('css;.pagination li.active+li > a', 'pageIndex=', /pageIndex=\d+/)},
+                    pageE: 'css;.magazine-senior-search-results-list > ul > li, .magazine-model-content-new > ul > li',
+                    insertP: ['css;.magazine-senior-search-results-list > ul, .magazine-model-content-new > ul', 3],
                     replaceE: 'css;.pagination',
                     history: true,
                     scrollD: 2000
@@ -4853,6 +4860,7 @@
     //console.log(curSite);
     pageLoading(); // 自动无缝翻页
 
+    // --------------------------------------------------------
 
     // [Discuz! 论坛] 判断各版块帖子列表类型
     function discuzForum() {
@@ -4921,48 +4929,33 @@
     }
 
 
-    // 插入 Style 样式
-    function insStyle(style) {
-        document.lastElementChild.appendChild(document.createElement('style')).textContent = style;
-    }
-
-
-    // 通用型插入前函数（加载图片）
-    function src_bF(pageElems, css) {
-        pageElems.forEach(function (one) {
-            if (css[0] == 0) { // src 图片
-                one.querySelectorAll(css[1]).forEach(function (now) {
-                    now.src = now.getAttribute(css[2]);
-                });
-            } else if (css[0] == 1) { // 背景图片
-                one.querySelectorAll(css[1]).forEach(function (now) {
-                    now.style.backgroundImage = 'url("' + now.getAttribute(css[2]) + '")';
-                });
-            }
-        });
-        return pageElems
-    }
-
-
     // [头条搜索] 的插入前函数（过滤相关搜索）
     function toutiao_bF(pageElems) {
-        for (let i = 0; i < pageElems.length; i++) {
-            let now = pageElems[i].querySelector('div[class*="-header"]')
-            if (now && now.textContent === '相关搜索') {
-                pageElems.splice(i,1)
-            }
-        }
+        if (getXpath('//div[contains(@class,"-header") and string()="相关搜索"]', pageElems[pageElems.length - 1])) pageElems[pageElems.length - 1].style.display = 'none';
         return pageElems
     }
 
 
     // [Startpage] 获取下一页地址
     function startpage_nextL() {
-        let form = getXpath('//div[contains(@class, "pagination ")]/form[./button[@class="pagination__next-prev-button next"]]');
+        let form = getXpath('//div[contains(@class, "pagination ")]/form[./button[@class="pagination__next-prev-button next"]]'), value;
         if (form) {
-            let action = form.action, value = ''; // 获取提交表单 URL
             form.querySelectorAll('input[name]').forEach(function(input) {value += input.name + '=' + input.value + '&';}) // 生成表单参数
-            value = encodeURI(value.replace(/&$/,'')); // 清理最后一个 & 符号，并替换页码
+            value = encodeURI(value.replace(/&$/,'')); // 清理最后一个 & 符号
+            if (form.action && value) return (form.action + '?' + value)
+        }
+        return '';
+    }
+
+
+    // [SkrBT] 获取下一页地址
+    function skrbt_nextL() {
+        let page = getCSS('a[onclick][aria-label="Next"]');
+        if (page) {page = /(?<=\()\d+(?=\))/.exec(page.onclick)[0];} else {return '';} // 获取下一页页码
+        if (page) {
+            let action = getCSS('#search-form').action, value = ''; // 获取提交表单 URL
+            getAllCSS('#search-form input[name]').forEach(function(input) {value += input.name + '=' + input.value + '&';}) // 生成表单参数
+            value = encodeURI(value.replace(/&$/,'').replace(/p=\d+/,'p=' + page)); // 清理最后一个 & 符号，并替换页码
             if (action && value) return (action + '?' + value)
         }
         return '';
@@ -4979,25 +4972,11 @@
             if (button) {
                 button.onclick = function(){
                     let button2 = getCSS('div.edui-btn.edui-btn-fullscreen.edui-btn-name-portrait');
-                    if (button2) {
-                        button2.click();
-                    } else {
-                        alert('提示：登录后才能发帖！');
-                    }
+                    if (button2) {button2.click();} else {alert('提示：登录后才能发帖！');}
                     return false;
                 }
             }
         }
-    }
-    // [百度贴吧] 的插入前函数（加载图片）
-    function baidu_tieba_bF(pageElems) {
-        pageElems.forEach(function (one) {
-            one.querySelectorAll('img.threadlist_pic[data-original]').forEach(function (now) {
-                now.src = now.dataset.original;
-                now.style.display = 'inline';
-            })
-        });
-        return pageElems
     }
     // [百度贴吧] 获取下一页地址
     function baidu_tieba_nextL() {
@@ -5024,7 +5003,7 @@
             // 字符串格式化并转为 Element 元素
             var temp_baidu_tieba = document.createElement('div'); temp_baidu_tieba.innerHTML = JSON.parse(scriptText).content;
             // 插入前执行函数
-            pageElems = curSite.function.bF(getAll(curSite.pager.pageE, temp_baidu_tieba, temp_baidu_tieba));
+            pageElems = curSite.function.bF(getAll(curSite.pager.pageE, temp_baidu_tieba, temp_baidu_tieba), curSite.function.pF);
             // 插入元素
             pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo, one);});
             // 当前页码 + 1
@@ -5041,12 +5020,6 @@
     }
 
 
-    // [NGA(玩家社区)] 的插入后函数（加载各版块帖子列表样式）
-    function nga_thread_aF() {
-        document.body.appendChild(document.createElement('script')).textContent = 'commonui.topicArg.loadAll();';
-    }
-
-
     // [V2EX] 的插入后函数（新标签页打开链接）
     function v2ex_aF(css) {
         let links = getAllCSS(css);if (!links) return
@@ -5060,10 +5033,6 @@
         if (next && next.getAttribute('aria-disabled') === 'false') {
             page = getCSS('li.ant-pagination-item-active[title]');
             if (page && page.title) {
-                if (curSite.pager.interval) {
-                    let _SiteTypeID = curSite.SiteTypeID; curSite.SiteTypeID = 0;
-                    setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.interval)
-                }
                 return (location.origin + location.pathname + '?page=' + ++page.title);
             }
         }
@@ -5071,53 +5040,9 @@
     }
 
 
-    // [3DM MOD] 获取下一页地址
-    function _3dmgame_mod_nextL() {
-        let nextNum = getXpath('//li[@class="page-list active"]/following-sibling::li[contains(@class, "page-list")]/a');
-        var url = '';
-        if (nextNum && nextNum.textContent) {
-            nextNum = 'Page=' + nextNum.textContent;
-            if (location.search) {
-                let search = location.search.replace(/(&)?Page=\d+(&)?/, '');
-                if (search === '?') {
-                    url += location.origin + location.pathname + search + nextNum;
-                } else {
-                    url += location.origin + location.pathname + search + '&' + nextNum;
-                }
-            } else {
-                url += location.origin + location.pathname + '?' + nextNum;
-            }
-        }
-        //console.log(url)
-        return url
-    }
-
-
-    // [X-MOL] 获取下一页地址
-    function x_mol_mod_nextL() {
-        let nextNum = getCSS('.pagination li.active+li > a');
-        var url;
-        if (nextNum && nextNum.textContent) {
-            if (location.search) {
-                let search;
-                if (location.search.indexOf('pageIndex=') > -1) {
-                    search = location.search.replace(/pageIndex=\d+/, 'pageIndex=' + nextNum.textContent);
-                } else {
-                    search = location.search + '&pageIndex=' + nextNum.textContent;
-                }
-                url = location.origin + location.pathname + search;
-            }
-        }
-        //console.log(url)
-        return url
-    }
-
-
     // [游民星空-攻略] 的插入前函数（移除下一页底部的 "更多相关内容请关注：xxx" 文字）
     function gamersky_gl_bF(pageElems) {
-        pageElems.forEach(function (one) {
-            if (one.tagName === 'P' && one.textContent.indexOf('更多相关内容请关注') > -1) {one.style.display = 'none';}
-        });
+        pageElems.forEach(function (one) {if (one.tagName === 'P' && one.textContent.indexOf('更多相关内容请关注') > -1) {one.style.display = 'none';}});
         return pageElems
     }
 
@@ -5236,28 +5161,11 @@
         if (next && next.className.indexOf('disabled') === -1) {
             let oldList = getCSS('tbody.row-hover').innerHTML;
             if (oldList) {
-                // 点击下一页
                 next.click();
-                // 当前页码 + 1
-                pageNum.now = pageNum._now + 1
-                // 插入到列表头部
-                getCSS('tbody.row-hover').insertAdjacentHTML('afterbegin', oldList);
+                pageNum.now = pageNum._now + 1;
+                getCSS('tbody.row-hover').insertAdjacentHTML('afterbegin', oldList); // 插入到列表头部
             }
         }
-    }
-
-
-    // [SkrBT] 获取下一页地址
-    function skrbt_nextL() {
-        let page = getCSS('a[onclick][aria-label="Next"]');
-        if (page) {page = /(?<=\()\d+(?=\))/.exec(page.onclick)[0];} else {return '';} // 获取下一页页码
-        if (page) {
-            let action = getCSS('#search-form').action, value = ''; // 获取提交表单 URL
-            getAllCSS('#search-form input[name]').forEach(function(input) {value += input.name + '=' + input.value + '&';}) // 生成表单参数
-            value = encodeURI(value.replace(/&$/,'').replace(/p=\d+/,'p=' + page)); // 清理最后一个 & 符号，并替换页码
-            if (action && value) return (action + '?' + value)
-        }
-        return '';
     }
 
 
@@ -5268,20 +5176,6 @@
             if (now) {one.hidden = true;}
         });
         return pageElems
-    }
-
-
-    // [射手网] 获取下一页地址
-    function assrt_nextL() {
-        let nextXPAHT = '//a[@id="pl-nav"][contains(text(), ">")]'
-        let url = getXpath(nextXPAHT);
-        if (url) {
-            url = /(?<=\()\d+(?=,)/.exec(url.href)[0]
-            if (url) {
-                return (location.origin + location.pathname + location.search.replace(/(&)?page=\d+$/,'') + '&page=' + url);
-            }
-        }
-        return '';
     }
 
 
@@ -5299,12 +5193,10 @@
 
     // [漫画狂] 获取下一页地址
     function cartoonmad_nextL() {
-        let nextXPAHT = '//a[@class="pages"][contains(text(),"下一頁")]',
-            nextPXPATH = '//a[@class="pages"][contains(string(),"下一話")]'
-        let url = getXpath(nextXPAHT);
+        let url = getXpath('//a[@class="pages"][contains(text(),"下一頁")]');
         if (url) {
             if (url.getAttribute('href') === 'thend.asp') {
-                url = getXpath(nextPXPATH)
+                url = getXpath('//a[@class="pages"][contains(string(),"下一話")]')
                 if (url) return url.href;
                 pausePage = false;
                 GM_notification({text: `注意：该网站早期漫画（如海贼王、柯南）因为网站自身问题而无法翻至下一话（仅限于显示为 [第 X 卷]/[下一卷] 的）。\n因此需要手动去 [目录页] 进入下一卷！`, timeout: 10000});
@@ -5319,11 +5211,8 @@
     // [漫画猫] 初始化（显示本话所以图片）
     function manhuacat_init() {
         let _img = '';
-        for (let now of img_data_arr) {
-            _img += `<img src="${asset_domain}${img_pre}${now}">`;
-        }
-        getCSS('.img-content > img').remove();
-        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+        for (let now of img_data_arr) {_img += `<img src="${asset_domain}${img_pre}${now}">`;}
+        getOne(curSite.pager.insertP[0]).innerHTML = _img;
 
     }
     // [漫画猫] 获取下一页地址
@@ -5347,27 +5236,14 @@
         if (type === 'url') { // 获取下一页链接
             manhuacat_nextL(pageElems, type); return
         }
-
-        // 添加历史记录
-        window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
-
-        // 替换元素
-        let oriE = getAllCSS(curSite.pager.replaceE.replace('css;', '')),
-            repE = getAll(curSite.pager.replaceE, pageElems, pageElems);
-        if (oriE.length === repE.length) {
-            for (let i = 0; i < oriE.length; i++) {
-                oriE[i].outerHTML = repE[i].outerHTML;
-            }
-        }
+        addHistory(pageElems);
+        replaceElement(pageElems);
 
         // 插入图片
         let _img = '', _img_arr = LZString.decompressFromBase64(getXpath('//body/script[not(@src)][contains(text(), "img_data")]').textContent.split('"')[1]).split(','), vg_r_data = getCSS('.vg-r-data');;
-        for (let now of _img_arr) {
-            _img += `<img src="${vg_r_data.dataset.chapterDomain}${img_pre}${now}">`;
-        }
+        for (let now of _img_arr) {_img += `<img src="${vg_r_data.dataset.chapterDomain}${img_pre}${now}">`;}
         if (_img) {
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-            // 当前页码 + 1
             pageNum.now = pageNum._now + 1
         }
     }
@@ -5383,9 +5259,7 @@
         //console.log(imgPath, window['imgDate'])
         if (!(window['imgDate']) || !(imgPath)) return
         // 遍历图片文件名数组，组合为 img 标签
-        for (let i = 0; i < window['imgDate'].files.length; i++) {
-            _img += `<img src="${imgPath + window['imgDate'].files[i]}?e=${window['imgDate'].sl.e}&m=${window['imgDate'].sl.m}">`
-        }
+        for (let i = 0; i < window['imgDate'].files.length; i++) {_img += `<img src="${imgPath + window['imgDate'].files[i]}?e=${window['imgDate'].sl.e}&m=${window['imgDate'].sl.m}">`;}
         // 插入并覆盖原来的一个图片
         getOne(curSite.pager.insertP[0]).innerHTML = _img;
         pausePage = true;
@@ -5407,39 +5281,29 @@
         //console.log(imgPath, window['imgDate'])
         if (!(window['imgDate']) || !(imgPath)) return
         // 遍历图片文件名数组，组合为 img 标签
-        for (let i = 0; i < window['imgDate'].files.length; i++) {
-            _img += `<img src="${imgPath + window['imgDate'].files[i]}?e=${window['imgDate'].sl.e}&m=${window['imgDate'].sl.m}">`
-        }
-        // 将 img 标签插入到网页中
+        for (let i = 0; i < window['imgDate'].files.length; i++) {_img += `<img src="${imgPath + window['imgDate'].files[i]}?e=${window['imgDate'].sl.e}&m=${window['imgDate'].sl.m}">`;}
         getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
-        // 添加历史记录
-        window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
-        document.title = pageElems.querySelector('title').textContent;
-        // 当前页码 + 1
+        addHistory(pageElems);
         pageNum.now = pageNum._now + 1
     }
 
 
-    // [漫画DB] 初始化（将本话其余图片插入网页中）
+    // [漫画 DB] 初始化（将本话其余图片插入网页中）
     function manhuadb_init() {
-        let _img = '',
-            data = getCSS('.vg-r-data'), imgDate;
+        let _img = '', data = getCSS('.vg-r-data'), imgDate;
         if (!data) return
         getAllCSS(curSite.pager.pageE.replace('css;', '')).forEach(function (one) {
             if (one.tagName === 'SCRIPT' && one.textContent.indexOf('var img_data =') > -1) {
                 let json = JSON.parse(window.atob(one.textContent.split("'")[1]));
                 if (json) {
                     let _img = '';
-                    for (let i = 0; i < json.length; i++) { // 遍历图片文件名数组，组合为 img 标签
-                        let src = data.dataset.host + data.dataset.img_pre + json[i].img;
-                        _img += `<img class="img-fluid show-pic" src="${src}">`
-                    }
+                    for (let i = 0; i < json.length; i++) {_img += `<img class="img-fluid show-pic" src="${data.dataset.host + data.dataset.img_pre + json[i].img}">`;}
                     getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
                 }
             }
         })
     }
-    // [漫画DB] 获取下一页地址
+    // [漫画 DB] 获取下一页地址
     function manhuadb_nextL() {
         let nextArr = getAllCSS('a.fixed-a-es'), next;
         var url = '';
@@ -5454,16 +5318,11 @@
         curSite.pageUrl = url
         getPageElems(curSite.pageUrl);
     }
-    // [漫画DB] 插入数据
+    // [漫画 DB] 插入数据
     function manhuadb_insertE(pageElems, type) {
         if (!pageElems) return
-        let oriE = getAllCSS(curSite.pager.pageE.replace('css;', '')),
-            repE = getAll(curSite.pager.pageE, pageElems, pageElems);
-        if (oriE.length === repE.length) {
-            for (let i = 0; i < oriE.length; i++) {
-                oriE[i].outerHTML = repE[i].outerHTML;
-            }
-            // 当前页码 + 1
+        if (replaceElement(pageElems, curSite.pager.pageE, curSite.pager.pageE)) {
+            addHistory(pageElems);
             pageNum.now = pageNum._now + 1
             manhuadb_init(); // 将刚刚替换的图片插入网页中
         }
@@ -5499,10 +5358,9 @@
             getCSS('.next_chapter').id = 'None';
             getCSS('.next_chapter').classList.add('end');
         }
+        curSite.pageUrl =`https://www.hicomic.net/chapters/${pageElems.results.chapter.uuid}/contents`
         getCSS('.chapter_name').textContent = pageElems.results.chapter.name; // 修改漫画标题
-        let title = window.document.title.replace(/(\(第.+\))? - HiComic/, `(${pageElems.results.chapter.name}) - HiComic`)
-        window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, title, curSite.pageUrl); // 添加历史记录
-        window.document.title = title; // 修改当前网页标题为下一话的标题
+        addHistory(pageElems, window.document.title.replace(/(\(第.+\))? - HiComic/, `(${pageElems.results.chapter.name}) - HiComic`));
         let _img = '';
         for (let i = 0; i < pageElems.results.chapter.contents.length; i++) { // 遍历图片文件名数组，组合为 img 标签
             let src = pageElems.results.chapter.contents[i].url;
@@ -5510,30 +5368,15 @@
             _img += `<img src="${src}">`
         }
         getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-        // 当前页码 + 1
         pageNum.now = pageNum._now + 1
     }
 
 
     // [动漫之家] 初始化（调整本话其余图片）
-    function dmzj_init() {
+    function dmzj_init(css) {
         let _img = '';
-        getAllCSS('.comic_wraCon > a > img').forEach(function (one) {
-            _img += `<img src="${one.dataset.original}">`;
-            one.parentElement.remove();
-        })
-        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-
-    }
-    // [动漫之家] 获取下一页地址
-    function dmzj_nextL() {
-        let next;
-        next = getCSS('span.next > a')
-        if (next) {
-            if (next.href === curSite.pageUrl) return
-            curSite.pageUrl = next.href;
-            getPageElems(curSite.pageUrl);
-        }
+        getAllCSS(css).forEach(function (one) {_img += `<img src="${one.dataset.original}">`;})
+        getOne(curSite.pager.insertP[0]).innerHTML = _img;
     }
     // [动漫之家] 插入数据
     function dmzj_insertE(pageElems, type) {
@@ -5553,42 +5396,8 @@
         }
         if (_img) {
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-
-            // 添加历史记录
-            window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
-
-            // 替换元素
-            let oriE = getAllCSS(curSite.pager.replaceE.replace('css;', '')),
-                repE = getAll(curSite.pager.replaceE, pageElems, pageElems);
-            if (oriE.length === repE.length) {
-                for (let i = 0; i < oriE.length; i++) {
-                    oriE[i].outerHTML = repE[i].outerHTML;
-                }
-                // 当前页码 + 1
-                pageNum.now = pageNum._now + 1
-            }
-        }
-    }
-
-
-    // [动漫之家-漫画] 初始化（调整本话其余图片）
-    function dmzj_manhua_init() {
-        let _img = '';
-        getAllCSS('#center_box > .inner_img img[src]').forEach(function (one) {
-            _img += `<img src="${one.dataset.original}">`;
-            one.parentElement.parentElement.remove();
-        })
-        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-
-    }
-    // [动漫之家-漫画] 获取下一页地址
-    function dmzj_manhua_nextL() {
-        let next;
-        next = getCSS('#next_chapter')
-        if (next) {
-            if (next.href === curSite.pageUrl) return
-            curSite.pageUrl = next.href;
-            getPageElems(curSite.pageUrl);
+            addHistory(pageElems);
+            if (replaceElement(pageElems)) pageNum.now = pageNum._now + 1
         }
     }
     // [动漫之家-漫画] 插入数据
@@ -5604,103 +5413,12 @@
         }
         if (_img) {
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-
-            // 添加历史记录
-            window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
-
-            // 替换元素
-            let oriE = getAllCSS(curSite.pager.replaceE.replace('css;', '')),
-                repE = getAll(curSite.pager.replaceE, pageElems, pageElems);
-            if (oriE.length === repE.length) {
-                for (let i = 0; i < oriE.length; i++) {
-                    oriE[i].outerHTML = repE[i].outerHTML;
-                }
-                // 当前页码 + 1
-                pageNum.now = pageNum._now + 1
-            }
+            addHistory(pageElems);
+            if (replaceElement(pageElems)) pageNum.now = pageNum._now + 1
         }
     }
 
 
-    // [百度贴吧 - 帖子内] 加载下一页
-    function baidu_tieba_post_nextL() {
-        let next;
-        next = getXpath('//li[contains(@class,"pb_list_pager")]/a[contains(text(),"下一页")]')
-        if (next) {
-            if (next.href === curSite.pageUrl) return
-            curSite.pageUrl = next.href;
-            insStyle('topic_list_box, ul.tbui_aside_float_bar, .core_title_wrap_bright.tbui_follow_fixed.core_title_absolute_bright {display: none !important;}');
-            insIframe(curSite.pageUrl);
-        }
-    }
-
-
-    // [拷贝漫画] 加载下一页
-    function copymanga_nextL() {
-        let next;
-        next = getCSS('.comicContent-next > a')
-        if (next) {
-            if (next.href === curSite.pageUrl) return
-            curSite.pageUrl = next.href;
-            insStyle('h4.header, h4.header +div[style*="fixed"] {display: none !important;}');
-            insIframe(curSite.pageUrl);
-        }
-    }
-
-
-    // 插入 iframe 加载下一页
-    function insIframe(src) {
-        // 停用当前页面翻页
-        curSite.SiteTypeID = 0;
-        // 当滚动条到底部时（即完全显示 iframe 框架），隐藏当前页面的滚动条
-        window.addEventListener('scroll', function (e) {
-            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop,
-                scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight,
-                clientHeight = document.documentElement.clientHeight || document.body.clientHeight
-            if (scrollTop + clientHeight + 10 >= scrollHeight) {
-                if (!getCSS('#xiu-scroll')) {
-                    let newStyle = document.createElement('style'); newStyle.id = 'xiu-scroll';
-                    document.lastElementChild.appendChild(newStyle).textContent = 'html::-webkit-scrollbar {width: 0 !important;height: 0 !important;} html {scrollbar-width: none !important;}';
-                }
-            } else {
-                if (getCSS('#xiu-scroll')) {
-                    getCSS('#xiu-scroll').remove();
-                }
-            }
-            //console.log(`${scrollTop} + ${clientHeight} >= ${scrollTop + clientHeight} / ${scrollHeight}`)
-        }, false);
-
-        // 创建 iframe
-        let iframe = document.createElement('iframe');
-        iframe.style = 'position: absolute; width: 100%; height: 100%; border: none;';
-        iframe.src = src;
-
-        // 添加历史记录
-        if (curSite.pager.history) {
-            // 加载完成后才继续
-            iframe.onload = function() {
-                let title_ = iframe.contentWindow.document.title;
-                if (!title_) {title_ = window.top.document.title;};
-                window.top.history.pushState(`{title: ${document.title}, url: ${location.href}}`, title_, curSite.pageUrl);
-                window.top.document.title = iframe.contentWindow.document.title
-            };
-        }
-
-        // 插入 iframe
-        document.lastElementChild.appendChild(iframe);
-    }
-
-
-    // [漫画星球] 获取下一页地址
-    function mhxqiu_nextL() {
-        let next = getCSS('#mainControlNext');
-        if (next) {
-            if (next.href === curSite.pageUrl) return
-            curSite.pageUrl = next.href;
-            //console.log(curSite.pageUrl)
-            getPageElems(curSite.pageUrl);
-        }
-    }
     // [漫画星球] 插入数据
     function mhxqiu_insertE(pageElems, type) {
         if (!pageElems) return
@@ -5709,40 +5427,17 @@
 
         // 插入图片
         let _img = '';
-        for (let now of newImgs) {
-            _img += `<li><div style="display: inline-block;zoom: 1;"><img src="${now}" class="loaded lazy" style="opacity: 1;box-shadow:none;"></div></li>`;
-        }
+        for (let now of newImgs) {_img += `<li><div style="display: inline-block;zoom: 1;"><img src="${now}" class="loaded lazy" style="opacity: 1;box-shadow:none;"></div></li>`;}
         if (_img) {
             // 将 img 标签插入到网页中
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
-
-            // 添加历史记录
-            window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
-
-            // 当前页码 + 1
+            addHistory(pageElems);
             pageNum.now = pageNum._now + 1
-
-            // 替换元素
-            let oriE = getAllCSS(curSite.pager.replaceE.replace('css;', '')),
-                repE = getAll(curSite.pager.replaceE, pageElems, pageElems);
-            if (oriE.length === repE.length) {
-                for (let i = 0; i < oriE.length; i++) {
-                    oriE[i].outerHTML = repE[i].outerHTML;
-                }
-            }
+            replaceElement(pageElems)
         }
     }
 
 
-    // [风之动漫] 获取下一页地址
-    function fffdm_nextL() {
-        let next = getXpath('//a[contains(text(), "下一页") or contains(text(), "下一话")]');
-        if (next) {
-            if (next.href === curSite.pageUrl) return
-            curSite.pageUrl = next.href;
-            getPageElems(curSite.pageUrl);
-        }
-    }
     // [风之动漫] 插入数据
     function fffdm_insertE(pageElems, type) {
         if (!pageElems) return
@@ -5755,21 +5450,9 @@
             // 插入图片
             setTimeout(function() {
                 getOne(curSite.pager.insertP[0]).appendChild(document.createElement('img')).src = mhpicurl;
-
-                // 添加历史记录
-                window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
-
-                // 当前页码 + 1
+                addHistory(pageElems);
                 pageNum.now = pageNum._now + 1
-
-                // 替换元素
-                let oriE = getAllCSS(curSite.pager.replaceE.replace('css;', '')),
-                    repE = getAll(curSite.pager.replaceE, pageElems, pageElems);
-                if (oriE.length === repE.length) {
-                    for (let i = 0; i < oriE.length; i++) {
-                        oriE[i].outerHTML = repE[i].outerHTML;
-                    }
-                }
+                replaceElement(pageElems)
             }, 100)
         }
     }
@@ -5787,16 +5470,6 @@
         }
         getOne(curSite.pager.insertP[0]).innerHTML = _img;
 
-    }
-    // [乐语漫画] 获取下一页地址
-    function leyuman_nextL() {
-        let next = getCSS('#xurl');
-        if (next) {
-            if (next.href === curSite.pageUrl) return
-            curSite.pageUrl = next.href;
-            //console.log(curSite.pageUrl)
-            getPageElems(curSite.pageUrl);
-        }
     }
     // [乐语漫画] 插入数据
     function leyuman_insertE(pageElems, type) {
@@ -5816,21 +5489,9 @@
         if (_img) {
             // 将 img 标签插入到网页中
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
-
-            // 添加历史记录
-            window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
-
-            // 当前页码 + 1
+            addHistory(pageElems);
             pageNum.now = pageNum._now + 1
-
-            // 替换元素
-            let oriE = getAllCSS(curSite.pager.replaceE.replace('css;', '')),
-                repE = getAll(curSite.pager.replaceE, pageElems, pageElems);
-            if (oriE.length === repE.length) {
-                for (let i = 0; i < oriE.length; i++) {
-                    oriE[i].outerHTML = repE[i].outerHTML;
-                }
-            }
+            replaceElement(pageElems)
         }
     }
 
@@ -5871,34 +5532,16 @@
                 } else if (one.indexOf('chapterPath') > -1) { // 图片文件路径
                     chapterPath = one.split('"')[1];
                 } else if (one.indexOf('pageTitle') > -1) { // 网页标题
-                    let title = one.split('"')[1];
-                    window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, title, url); // 添加历史记录
-                    window.document.title = title; // 修改当前网页标题为下一页的标题
+                    addHistory(pageElems, one.split('"')[1]);
                 }
             })
             if (chapterImages && chapterPath) {
                 let _img = '';
-                chapterImages.forEach(function (one2){ // 遍历图片文件名数组，组合为 img 标签
-                    _img += '<img src="https://res.xiaoqinre.com/' + chapterPath + one2 + '" data-index="0" style="display: inline-block;">'
-                })
+                chapterImages.forEach(function (one2){_img += '<img src="https://res.xiaoqinre.com/' + chapterPath + one2 + '" data-index="0" style="display: inline-block;">';})
                 getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-                // 当前页码 + 1
                 pageNum.now = pageNum._now + 1
             }
         }
-    }
-
-
-    // [砂之船动漫家] 的插入前函数（加载图片）
-    function szcdmj_bF(pageElems) {
-        pageElems.forEach(function (one) {
-            let now = one.querySelector('img[data-original]')
-            if (now) {
-                now.src = now.dataset.original;
-                now.style.display = 'inline';
-            }
-        });
-        return pageElems
     }
 
 
@@ -5919,11 +5562,7 @@
     function mangabz_nextL() {
         var url = '';
         if (MANGABZ_PAGE === MANGABZ_IMAGE_COUNT) { // 下一话
-            url = getXpath('//a[./img[contains(@src, "icon_xiayizhang")]]')
-            if (url === curSite.pageUrl) return
-            curSite.pageUrl = url
-            //console.log(curSite.pageUrl)
-            getPageElems(curSite.pageUrl); // 访问下一话 URL 获取
+            if (getE_nextL('//a[./img[contains(@src, "icon_xiayizhang")]]')) getPageElems(curSite.pageUrl); // 访问下一话 URL 获取
         } else { // 下一页
             if (!mkey) var mkey = '';
             url = location.origin + location.pathname + 'chapterimage.ashx' + `?cid=${MANGABZ_CID}&page=${MANGABZ_PAGE + 1}&key=${(mkey)}&_cid=${MANGABZ_CID}&_mid=${MANGABZ_MID}&_dt=${MANGABZ_VIEWSIGN_DT}&_sign=${MANGABZ_VIEWSIGN}`
@@ -5936,37 +5575,21 @@
     // [Mangabz 漫画] 插入数据
     function mangabz_insertE(pageElems, type) {
         if (pageElems) {
-            if (type === 'Next') {
+            if (type === 'Next') { // 下一页
                 let imgArr = eval(pageElems),
                     _img = '';
-                for (let now of imgArr) {
-                    _img += `<img src="${now}">`;
-                }
+                for (let now of imgArr) {_img += `<img src="${now}">`;}
                 if (_img) {
                     getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-
-                    // 添加历史记录
                     MANGABZ_PAGE += imgArr.length;
-                    window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, document.title, location.origin + MANGABZ_CURL.substring(0, MANGABZ_CURL.length - 1) + '-p' + MANGABZ_PAGE + '/');
+                    addHistory(pageElems, document.title, location.origin + MANGABZ_CURL.substring(0, MANGABZ_CURL.length - 1) + '-p' + MANGABZ_PAGE + '/');
                 }
-            } else {
+            } else { // 下一话
                 // 插入 <script> 标签
                 insScriptAll('css;html:not([dir]) > head > script:not([src])', document.body, pageElems);
-
-                // 添加历史记录
-                window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
-
-                // 当前页码 + 1
+                addHistory(pageElems);
                 pageNum.now = pageNum._now + 1
-
-                // 替换待替换元素
-                let oriE = getAll(curSite.pager.replaceE),
-                    repE = getAll(curSite.pager.replaceE, pageElems, pageElems);
-                if (oriE.length === repE.length) {
-                    for (let i = 0; i < oriE.length; i++) {
-                        oriE[i].outerHTML = repE[i].outerHTML;
-                    }
-                }
+                replaceElement(pageElems)
                 MANGABZ_PAGE = 0;
                 mangabz_nextL();
             }
@@ -5978,11 +5601,7 @@
     function xmanhua_nextL() {
         var url = '';
         if (XMANHUA_PAGE === XMANHUA_IMAGE_COUNT) { // 下一话
-            url = getXpath('//a[./img[contains(@src, "reader-bottom-right-2.png")]]')
-            if (url === curSite.pageUrl) return
-            curSite.pageUrl = url
-            //console.log(curSite.pageUrl)
-            getPageElems(curSite.pageUrl); // 访问下一话 URL 获取
+            if (getE_nextL('//a[./img[contains(@src, "reader-bottom-right-2.png")]]')) getPageElems(curSite.pageUrl); // 访问下一话 URL 获取
         } else { // 下一页
             if (!mkey) var mkey = '';
             url = location.origin + location.pathname + 'chapterimage.ashx' + `?cid=${XMANHUA_CID}&page=${XMANHUA_PAGE + 1}&key=${(mkey)}&_cid=${XMANHUA_CID}&_mid=${XMANHUA_MID}&_dt=${XMANHUA_VIEWSIGN_DT}&_sign=${XMANHUA_VIEWSIGN}`
@@ -5995,37 +5614,21 @@
     // [Xmanhua 漫画] 插入数据
     function xmanhua_insertE(pageElems, type) {
         if (pageElems) {
-            if (type === 'Next') {
+            if (type === 'Next') { // 下一页
                 let imgArr = eval(pageElems),
                     _img = '';
-                for (let now of imgArr) {
-                    _img += `<img src="${now}">`;
-                }
+                for (let now of imgArr) {_img += `<img src="${now}">`;}
                 if (_img) {
                     getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-
-                    // 添加历史记录
                     XMANHUA_PAGE += imgArr.length;
-                    window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, document.title, location.origin + XMANHUA_CURL.substring(0, XMANHUA_CURL.length - 1) + '-p' + XMANHUA_PAGE + '/');
+                    addHistory(pageElems, document.title, location.origin + XMANHUA_CURL.substring(0, XMANHUA_CURL.length - 1) + '-p' + XMANHUA_PAGE + '/');
                 }
-            } else {
+            } else { // 下一话
                 // 插入 <script> 标签
                 insScriptAll('css;html:not([dir]) > head > script:not([src])', document.body, pageElems);
-
-                // 添加历史记录
-                window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
-
-                // 当前页码 + 1
+                addHistory(pageElems);
                 pageNum.now = pageNum._now + 1
-
-                // 替换待替换元素
-                let oriE = getAll(curSite.pager.replaceE),
-                    repE = getAll(curSite.pager.replaceE, pageElems, pageElems);
-                if (oriE.length === repE.length) {
-                    for (let i = 0; i < oriE.length; i++) {
-                        oriE[i].outerHTML = repE[i].outerHTML;
-                    }
-                }
+                replaceElement(pageElems)
                 XMANHUA_PAGE = 0;
                 xmanhua_nextL();
             }
@@ -6045,18 +5648,8 @@
     function cocomanga_img(totalImageCount) {
         if (totalImageCount < 1) return
         let _img = '';
-        for (let i=1; i<=totalImageCount; i++) {
-            _img += `<div class="mh_comicpic" p="${i}"><img src="${__cr.getPicUrl(i)}"></div>`;
-        }
+        for (let i=1; i<=totalImageCount; i++) {_img += `<div class="mh_comicpic" p="${i}"><img src="${__cr.getPicUrl(i)}"></div>`;}
         getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-    }
-    // [COCOMANGA 漫画] 获取下一页地址
-    function cocomanga_nextL() {
-        var url = '';
-        url = getXpath('//a[contains(@class, "read_page_link") and contains(string(), "下一章")][not(contains(@href, "javascript"))]')
-        if (url === curSite.pageUrl) return
-        curSite.pageUrl = url
-        getPageElems(curSite.pageUrl); // 访问下一话 URL 获取
     }
     // [COCOMANGA 漫画] 插入数据
     function cocomanga_insertE(pageElems, type) {
@@ -6070,99 +5663,81 @@
                 if (!totalImageCount) totalImageCount = __cdecrypt('fw12558899ertyui', CryptoJS.enc.Base64.parse(mh_info.enc_code1).toString(CryptoJS.enc.Utf8));
                 cocomanga_img(parseInt(totalImageCount));
             }, 100)
-
-            // 添加历史记录
-            window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, pageElems.querySelector('title').textContent, curSite.pageUrl);
-
-            // 当前页码 + 1
+            addHistory(pageElems);
             pageNum.now = pageNum._now + 1
-
-            // 替换元素
-            let oriE = getAllCSS(curSite.pager.replaceE.replace('css;', '')),
-                repE = getAll(curSite.pager.replaceE, pageElems, pageElems);
-            if (oriE.length === repE.length) {
-                for (let i = 0; i < oriE.length; i++) {
-                    oriE[i].outerHTML = repE[i].outerHTML;
-                }
-            }
-        }
-    }
-    // [COCOMANGA 漫画 - 列表页] 获取下一页地址
-    function cocomanga_list_nextL() {
-        let pageActive = parseInt(getCSS('.fed-page-info a.fed-btns-green').innerText);
-        if (/page=\d+/.test(location.search)) {
-            return (location.origin + location.pathname + location.search.replace(/page=\d+/,`page=${pageActive+1}`))
-        } else {
-            if (!location.search) return (location.origin + location.pathname + `?page=${pageActive+1}`)
-            return (location.origin + location.pathname + location.search + `&page=${pageActive+1}`)
+            replaceElement(pageElems)
         }
     }
 
+    // --------------------------------------------------------
 
     // 自动无缝翻页
     function pageLoading() {
         if (curSite.SiteTypeID > 0) {
             windowScroll(function (direction, e) {
-                if (direction === 'down' && pausePage === true && curSite.SiteTypeID > 0) { // 下滑 且 未暂停翻页 且 SiteTypeID > 0 时，才准备翻页
+                if (direction === 'down' && pausePage && curSite.SiteTypeID > 0) { // 下滑 且 未暂停翻页 且 SiteTypeID > 0 时，才准备翻页
                     let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
                         scrollHeight = window.innerHeight || document.documentElement.clientHeight,
                         scrollD = curSite.pager.scrollD;
-                    if (curSite.pager.type === 3) { // <<<<< 翻页类型 3（依靠元素距离可视区域底部的距离来触发翻页）>>>>>
+                    // <<<<< 翻页类型 3（依靠元素距离可视区域底部的距离来触发翻页）>>>>>
+                    if (curSite.pager.type === 3) {
                         let scrollE = getOne(curSite.pager.scrollE);
                         //console.log(scrollE.offsetTop - (scrollTop + scrollHeight), scrollD, curSite.SiteTypeID)
-                        if (scrollE.offsetTop - (scrollTop + scrollHeight) <= scrollD) {
-                            ShowPager.loadMorePage();
-                        }
+                        if (scrollE.offsetTop - (scrollTop + scrollHeight) <= scrollD) intervalPause(); ShowPager.loadMorePage();
 
                     } else {
                         if (document.documentElement.scrollHeight <= scrollHeight + scrollTop + scrollD) {
+                            // <<<<< 翻页类型 1（由脚本实现自动无缝翻页）>>>>>
+                            if (curSite.pager.type === 1) {
+                                intervalPause(); ShowPager.loadMorePage();
 
-                            if (curSite.pager.type === 1) { // <<<<< 翻页类型 1（由脚本实现自动无缝翻页）>>>>>
-                                ShowPager.loadMorePage();
-
-                            } else if (curSite.pager.type === 2) { // <<<<< 翻页类型 2（网站自带了自动无缝翻页功能，只需要点击下一页按钮即可）>>>>>
+                            // <<<<< 翻页类型 2（网站自带了自动无缝翻页功能，只需要点击下一页按钮即可）>>>>>
+                            } else if (curSite.pager.type === 2) {
                                 let autopbn = getOne(curSite.pager.nextL);
                                 if (autopbn) { // 寻找下一页链接
                                     if (!(curSite.pager.isHidden) || (curSite.pager.isHidden && !isHidden(autopbn))) { // 如果 isHidden = true，那么需要判断元素是否隐藏
                                         if (curSite.pager.nextText) {
                                             // 按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页
                                             if (autopbn.innerText === curSite.pager.nextText) {
-                                                autopbn.click();
-                                                pageNum.now = pageNum._now + 1; // 当前页码 + 1
+                                                autopbn.click(); pageNum.now = pageNum._now + 1;
                                             }
                                         } else if (curSite.pager.nextTextOf) {
                                             // 按钮文本的一部分，当按钮文本包含该文本时，才会点击按钮加载下一页
                                             if (autopbn.innerText.indexOf(curSite.pager.nextTextOf) > -1) {
-                                                autopbn.click();
-                                                pageNum.now = pageNum._now + 1; // 当前页码 + 1
+                                                autopbn.click(); pageNum.now = pageNum._now + 1;
                                             }
                                         } else if (curSite.pager.nextHTML) {
                                             // 按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页
                                             if (autopbn.innerHTML === curSite.pager.nextHTML) {
-                                                autopbn.click();
-                                                pageNum.now = pageNum._now + 1; // 当前页码 + 1
+                                                autopbn.click(); pageNum.now = pageNum._now + 1;
                                             }
                                         } else {
                                             // 如果没有指定按钮文字就直接点击
-                                            autopbn.click();
-                                            pageNum.now = pageNum._now + 1; // 当前页码 + 1
+                                            autopbn.click(); pageNum.now = pageNum._now + 1;
                                             // 对于没有按钮文字变化的按钮，可以指定间隔时间（默认 300ms）
                                             if (!curSite.pager.interval) curSite.pager.interval = 300;
-                                            let _SiteTypeID = curSite.SiteTypeID; curSite.SiteTypeID = 0;
-                                            setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.interval)
+                                            intervalPause();
                                         }
                                     }
                                 }
-
-                            } else if (curSite.pager.type === 4) { // <<<<< 翻页类型 4（部分简单的动态加载类网站）>>>>>
+                            // <<<<< 翻页类型 4（部分简单的动态加载类网站）>>>>>
+                            } else if (curSite.pager.type === 4) {
                                 // 为百度贴吧的发帖考虑，预留底部一小部分...
                                 if (!(document.documentElement.scrollHeight <= scrollHeight + scrollTop + 200 && curSite.SiteTypeID === SiteType.BAIDU_TIEBA)) {
-                                    curSite.pager.nextL();
+                                    if (typeof curSite.pager.nextL == 'function') {
+                                        curSite.pager.nextL();
+                                    } else if (getE_nextL(curSite.pager.nextL)) {
+                                        getPageElems(curSite.pageUrl);
+                                    }
+                                    intervalPause();
                                 }
-                                if (curSite.pager.interval) {
-                                    let _SiteTypeID = curSite.SiteTypeID;
-                                    curSite.SiteTypeID = 0;
-                                    setTimeout(function(){curSite.SiteTypeID = _SiteTypeID;}, curSite.pager.interval)
+
+                            // <<<<< 翻页类型 5（插入 iframe 方式来加载下一页）>>>>>
+                            } else if (curSite.pager.type === 5) {
+                                if (typeof curSite.pager.nextL == 'function') {
+                                    curSite.pager.nextL();
+                                } else if (getE_nextL(curSite.pager.nextL)) {
+                                    insIframe(curSite.pageUrl);
                                 }
                             }
                         }
@@ -6170,6 +5745,56 @@
                 }
             });
         }
+
+        function intervalPause() {
+            if (curSite.pager.interval) {
+                pausePage = false
+                setTimeout(function(){pausePage = true;}, curSite.pager.interval)
+            }
+        }
+    }
+    // 插入 iframe 方式加载下一页
+    function insIframe(src) {
+        // 停用当前页面翻页
+        curSite.SiteTypeID = 0;
+        // 当滚动条到底部时（即完全显示 iframe 框架），隐藏当前页面的滚动条
+        window.addEventListener('scroll', function (e) {
+            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop,
+                scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight,
+                clientHeight = document.documentElement.clientHeight || document.body.clientHeight
+            if (scrollTop + clientHeight + 10 >= scrollHeight) {
+                if (!getCSS('#xiu-scroll')) {
+                    let newStyle = document.createElement('style'); newStyle.id = 'xiu-scroll';
+                    newStyle.textContent = 'html::-webkit-scrollbar {width: 0 !important;height: 0 !important;} html {scrollbar-width: none !important;}';
+                    if (curSite.pager.insStyle) newStyle.textContent += curSite.pager.insStyle;
+                    document.lastElementChild.appendChild(newStyle);
+                }
+            } else {
+                if (getCSS('#xiu-scroll')) {
+                    getCSS('#xiu-scroll').remove();
+                }
+            }
+            //console.log(`${scrollTop} + ${clientHeight} >= ${scrollTop + clientHeight} / ${scrollHeight}`)
+        }, false);
+
+        // 创建 iframe
+        let iframe = document.createElement('iframe');
+        iframe.style = 'position: absolute; width: 100%; height: 100%; border: none;';
+        iframe.src = src;
+
+        // 添加历史记录
+        if (curSite.pager.history) {
+            // 加载完成后才继续
+            iframe.onload = function() {
+                let title_ = iframe.contentWindow.document.title;
+                if (!title_) {title_ = window.top.document.title;};
+                window.top.history.pushState(`{title: ${document.title}, url: ${location.href}}`, title_, curSite.pageUrl);
+                window.top.document.title = iframe.contentWindow.document.title
+            };
+        }
+
+        // 插入 iframe
+        document.lastElementChild.appendChild(iframe);
     }
     // 判断是支持
     function doesItSupport() {
@@ -6398,27 +6023,10 @@
             }
 
             // 添加历史记录
-            if (curSite.pager.history) {
-                let title_ = newBody.querySelector('title');
-                if (title_) {title_ = title_.textContent;} else {title_ = document.title;};
-                window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, title_, curSite.pageUrl);
-            }
+            if (curSite.pager.history) addHistory(newBody);
 
             // 替换待替换元素
-            if (curSite.pager.replaceE) {
-                try {
-                    let oriE = getAll(curSite.pager.replaceE),
-                        repE = getAll(curSite.pager.replaceE, newBody, newBody);
-                    //console.log(oriE, repE);
-                    if (oriE.length === repE.length) {
-                        for (let i = 0; i < oriE.length; i++) {
-                            oriE[i].outerHTML = repE[i].outerHTML;
-                        }
-                    }
-                } catch (e) {
-                    console.log(e);
-                }
-            }
+            if (curSite.pager.replaceE) replaceElement(newBody);
 
             // 如果有插入后函数就执行函数
             if (curSite.function && curSite.function.aF) {
@@ -6443,6 +6051,74 @@
             }
         });
         if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
+    }
+    // 插入 Style 样式
+    function insStyle(style) {
+        document.lastElementChild.appendChild(document.createElement('style')).textContent = style;
+    }
+    // 通用型插入前函数（加载图片）
+    function src_bF(pageElems, css) {
+        pageElems.forEach(function (one) {
+            if (css[0] == 0) { // src 图片
+                one.querySelectorAll(css[1]).forEach(function (now) {
+                    now.src = now.getAttribute(css[2]);
+                });
+            } else if (css[0] == 1) { // 背景图片
+                one.querySelectorAll(css[1]).forEach(function (now) {
+                    now.style.backgroundImage = 'url("' + now.getAttribute(css[2]) + '")';
+                });
+            }
+        });
+        return pageElems
+    }
+    // 通用型获取下一页地址（URL 替换 page= 参数）
+    function getPage_nextL(css, pf, reg) {
+        let nextNum = getOne(css);
+        var url = '';
+        if (nextNum && nextNum.textContent) {
+            if (location.search) {
+                if (location.search.indexOf(pf) > -1) {
+                    url = location.search.replace(reg, pf + nextNum.textContent);
+                } else {
+                    url = location.search + '&' + pf + nextNum.textContent;
+                }
+            } else {
+                url = '?' + pf + nextNum.textContent;
+            }
+            url = location.origin + location.pathname + url;
+        }
+        return url
+    }
+    // 通用型获取下一页地址（直接从元素获取）
+    function getE_nextL(css) {
+        let next = getOne(css)
+        if (next && next.href != curSite.pageUrl) {
+            curSite.pageUrl = next.href;
+            //console.log(curSite.pageUrl)
+            return true
+        }
+        return false
+    }
+    // 替换元素
+    function replaceElement(pageElems, o = curSite.pager.replaceE, r = curSite.pager.replaceE) {
+        let oriE = getAll(o),
+            repE = getAll(r, pageElems, pageElems);
+        //console.log(oriE, repE)
+        if (oriE.length === repE.length) {
+            for (let i = 0; i < oriE.length; i++) {
+                oriE[i].outerHTML = repE[i].outerHTML;
+            }
+            return true
+        }
+        return false
+    }
+    // 添加历史记录
+    function addHistory(pageElems, title, url) {
+        if (!curSite.pageUrl) return
+        title = title || pageElems.querySelector('title').textContent || document.title;
+        url = url || curSite.pageUrl;
+        window.history.pushState(`{title: ${document.title}, url: ${location.href}}`, title, url);
+        document.title = title;
     }
     // 获取元素（CSS/Xpath）
     function getCSS(css, contextNode = document) {
