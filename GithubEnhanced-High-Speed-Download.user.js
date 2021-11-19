@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.6.7
+// @version      1.6.8
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -245,7 +245,7 @@
         var mouseOverHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
-                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.color-icon-tertiary');
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file');
             aElm_new.forEach(el=>{el.style.cssText = 'display: inline'});
             aElm_now.forEach(el=>{el.style.cssText = 'display: none'});
         };
@@ -254,7 +254,7 @@
         var mouseOutHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
-                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.color-icon-tertiary');
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file');
             aElm_new.forEach(el=>{el.style.cssText = 'display: none'});
             aElm_now.forEach(el=>{el.style.cssText = 'display: inline'});
         };
@@ -263,7 +263,7 @@
         files.forEach(function(fileElm, i) {
             let trElm = fileElm.parentNode.parentNode,
                 cntElm_a = trElm.querySelector('.css-truncate.css-truncate-target.d-block.width-fit a'),
-                cntElm_svg = trElm.querySelector('.mr-3.flex-shrink-0 svg.octicon.octicon-file.color-icon-tertiary'),
+                cntElm_svg = trElm.querySelector('.mr-3.flex-shrink-0 svg.octicon.octicon-file'),
                 Name = cntElm_a.innerText,
                 href = cntElm_a.attributes.href.nodeValue.replace(`https://${location.host}`,'');
             let href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
@@ -307,7 +307,7 @@
         var mouseOverHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
-                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.color-icon-tertiary');
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file');
             aElm_new.forEach(el=>{el.style.cssText = 'display: inline'});
             aElm_now.forEach(el=>{el.style.cssText = 'display: none'});
         };
@@ -316,7 +316,7 @@
         var mouseOutHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
-                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file.color-icon-tertiary');
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file');
             aElm_new.forEach(el=>{el.style.cssText = 'display: none'});
             aElm_now.forEach(el=>{el.style.cssText = 'display: inline'});
         };
