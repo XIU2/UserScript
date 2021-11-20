@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.7.8
+// @version      1.7.9
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起当前回答/评论（左键两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽盐选内容、净化标题消息、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -727,18 +727,11 @@ function blockKeywords(type) {
     function blockKeywords_(className1, className2) {
         // 前几条因为是直接加载的，而不是动态插入网页的，所以需要单独判断
         function blockKeywords_now() {
-            document.querySelectorAll(className1).forEach(function(item1){
-                let item = item1.querySelector('h2.ContentItem-title meta[itemprop="name"], meta[itemprop="headline"]'); // 标题所在元素
-                if (item) {
-                    for (const keyword of menu_value('menu_customBlockKeywords')) { // 遍历关键词黑名单
-                        if (item.content.toLowerCase().indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该信息流
-                            console.log(item.content);
-                            item1.hidden = true;
-                            break;
-                        }
-                    }
-                }
-            })
+            if (location.pathname === '/hot') {
+                document.querySelectorAll('.HotItem').forEach(function(item1){blockKeywords_1(item1, 'h2.HotItem-title');})
+            } else {
+                document.querySelectorAll(className1).forEach(function(item1){blockKeywords_1(item1, 'h2.ContentItem-title meta[itemprop="name"], meta[itemprop="headline"]');})
+            }
         }
 
         blockKeywords_now();
@@ -751,18 +744,7 @@ function blockKeywords(type) {
             for (const mutation of mutationsList) {
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType != 1) return
-                    if (target.className === className2) {
-                        let item = target.querySelector('h2.ContentItem-title meta[itemprop="name"], meta[itemprop="headline"]'); // 标题所在元素
-                        if (item) {
-                            for (const keyword of menu_value('menu_customBlockKeywords')) { // 遍历关键词黑名单
-                                if (item.content.toLowerCase().indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该信息流
-                                    console.log(item.content);
-                                    target.hidden = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    if (target.className === className2) {blockKeywords_1(target, 'h2.ContentItem-title meta[itemprop="name"], meta[itemprop="headline"]');}
                 }
             }
         };
@@ -774,18 +756,7 @@ function blockKeywords(type) {
     function blockKeywords_search() {
         function blockKeywords_now() {
             if (location.search.indexOf('type=content') === -1) return // 目前只支持搜索页的 [综合]
-            document.querySelectorAll('.Card.SearchResult-Card[data-za-detail-view-path-module="AnswerItem"], .Card.SearchResult-Card[data-za-detail-view-path-module="PostItem"]').forEach(function(item1){
-                let item = item1.querySelector('a[data-za-detail-view-id]'); // 标题所在元素
-                if (item) {
-                    for (const keyword of menu_value('menu_customBlockKeywords')) { // 遍历关键词黑名单
-                        if (item.textContent.toLowerCase().indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该信息流
-                            console.log(item.textContent);
-                            item1.hidden = true;
-                            break;
-                        }
-                    }
-                }
-            })
+            document.querySelectorAll('.HotLanding-contentItem, .Card.SearchResult-Card[data-za-detail-view-path-module="AnswerItem"], .Card.SearchResult-Card[data-za-detail-view-path-module="PostItem"]').forEach(function(item1){blockKeywords_1(item1, 'a[data-za-detail-view-id]');})
         }
 
         setTimeout(blockKeywords_now, 500);
@@ -798,18 +769,7 @@ function blockKeywords(type) {
             for (const mutation of mutationsList) {
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType != 1) return
-                    if (target.className === 'Card SearchResult-Card' && (target.dataset.zaDetailViewPathModule === 'AnswerItem' || target.dataset.zaDetailViewPathModule === 'PostItem')) {
-                        let item = target.querySelector('a[data-za-detail-view-id]'); // 标题所在元素
-                        if (item) {
-                            for (const keyword of menu_value('menu_customBlockKeywords')) { // 遍历关键词黑名单
-                                if (item.textContent.toLowerCase().indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该信息流
-                                    console.log(item.textContent);
-                                    target.hidden = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    if (target.className === 'Card SearchResult-Card' && (target.dataset.zaDetailViewPathModule === 'AnswerItem' || target.dataset.zaDetailViewPathModule === 'PostItem')) {blockKeywords_1(target, 'a[data-za-detail-view-id]');}
                 }
             }
         };
@@ -853,6 +813,21 @@ function blockKeywords(type) {
         };
         const observer = new MutationObserver(callback);
         observer.observe(document, { childList: true, subtree: true });
+    }
+
+    function blockKeywords_1(item1, css) {
+        let item = item1.querySelector(css); // 标题所在元素
+        if (item) {
+            for (const keyword of menu_value('menu_customBlockKeywords')) { // 遍历关键词黑名单
+                let text = item.content || item.textContent;
+                if (text.toLowerCase().indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该信息流
+                    console.log(text);
+                    item1.hidden = true;
+                    item1.style.display = 'none';
+                    break;
+                }
+            }
+        }
     }
 }
 
