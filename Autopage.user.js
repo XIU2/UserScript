@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.5.2
+// @version      3.5.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -99,6 +99,7 @@
           insertE:    插入元素的函数
       5 = 插入 iframe 方式来加载下一页
           insStyle:   加载 iframe 前要插入的 CSS Style 样式
+          iframe:     这个必须加到 page{} 外面
     nextL:   下一页链接所在元素
     pageE:   要获取的主体内容
     insertP: 主体内容插入的位置
@@ -1312,6 +1313,17 @@
                     scrollD: 1500
                 }
             }, //                  IT 之家
+            /*pixiv: {
+                host: 'www.pixiv.net',
+                functionStart: function() {if (location.pathname.indexOf('/tags/') > -1) {curSite = DBSite.pixiv;}},
+                hiddenPN: true,
+                iframe: true,
+                pager: {
+                    type: 5,
+                    nextL: '//a[@aria-disabled="false"][contains(@class, "filterProps-Styled-Component")][@href][last()]',
+                    scrollD: 2500
+                }
+            },*/ //   Pixiv
             _58pic: {
                 host: 'www.58pic.com',
                 functionStart: function() {insStyle('.qt-model-t, .qtw-card.place-box.is-one, .search-v3-row .search-v3-back {display: none !important;}'); // 隐藏登录弹窗
@@ -2303,9 +2315,10 @@
                     scrollD: 900
                 }
             }, //           SkrBT
-            rarbgprx: {
+            rarbg: {
                 host: /rarbg/,
-                functionStart: function() {if (location.pathname === '/torrents.php') {curSite = DBSite.rarbgprx;}},
+                functionStart: function() {if (location.pathname === '/torrents.php') {curSite = DBSite.rarbg; rarbg_bF(getAllCSS('table.lista2t tr.lista2'));}},
+                insStyle: 'html::-webkit-scrollbar {height: 0 !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;#pager_links > a[title="next page"]',
@@ -2313,8 +2326,11 @@
                     insertP: ['css;table.lista2t > tbody', 3],
                     replaceE: 'css;#pager_links',
                     scrollD: 1000
+                },
+                function: {
+                    bF: rarbg_bF
                 }
-            }, //        RARBG
+            }, //           RARBG
             subdh: {
                 host: 'subdh.com',
                 functionStart: function() {if (location.pathname === '/' || location.pathname.indexOf('/list/new') > -1) {
@@ -5174,6 +5190,18 @@
         pageElems.forEach(function (one) {
             let now = one.querySelector('[id^="list_top"], [id^="list_bottom"]')
             if (now) {one.hidden = true;}
+        });
+        return pageElems
+    }
+
+
+    // [RARBG] 的插入前函数（鼠标指向显示封面）
+    function rarbg_bF(pageElems) {
+        pageElems.forEach(function (one) {
+            one.querySelectorAll('td > a[onmouseover][onmouseout]').forEach(function (now) {
+                now.parentElement.parentElement.setAttribute('onmouseover', now.getAttribute('onmouseover')); now.removeAttribute('onmouseover');
+                now.parentElement.parentElement.setAttribute('onmouseout', now.getAttribute('onmouseout')); now.removeAttribute('onmouseout');
+            });
         });
         return pageElems
     }
