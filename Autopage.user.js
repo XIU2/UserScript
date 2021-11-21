@@ -1330,7 +1330,8 @@
             },*/ //                     Pixiv
             _58pic: {
                 host: 'www.58pic.com',
-                functionStart: function() {if (location.pathname.indexOf('/tupian/') > -1 || location.pathname.indexOf('/piccate/') > -1) {
+                functionStart: function() {insStyle('.qt-model-t.login-model {display: none !important;}');
+                if (location.pathname.indexOf('/tupian/') > -1 || location.pathname.indexOf('/piccate/') > -1) {
                     curSite = DBSite._58pic;
                     if (location.pathname.indexOf('/piccate/') > -1 && getCSS('.card-grid-box .qt-card-box[style*="width:"]')) insStyle('.card-grid-box .qt-card-box {display: block;height: 300px;min-height: 250px;}')
                 } else if (location.pathname.indexOf('/c/') > -1) {
