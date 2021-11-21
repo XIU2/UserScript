@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.5.5
+// @version      3.5.6
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -589,12 +589,12 @@
                 }
             }, //        百度贴吧 - 帖子列表
             baidu_tieba_post: {
-                insStyle: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
+                insStyle: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld, .topic_list_box.topic-fixed {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
                 hiddenPN: true,
                 pager: {
                     type: 5,
                     nextL: '//li[contains(@class,"pb_list_pager")]/a[contains(text(),"下一页")]',
-                    insStyle: '.topic_list_box, ul.tbui_aside_float_bar, .core_title_wrap_bright.tbui_follow_fixed.core_title_absolute_bright {display: none !important;}',
+                    insStyle: 'ul.tbui_aside_float_bar, .core_title_wrap_bright.tbui_follow_fixed.core_title_absolute_bright {display: none !important;}',
                     scrollD: 1500
                 }
             }, //   百度贴吧 - 帖子内
@@ -1327,7 +1327,7 @@
                     nextL: '//a[@aria-disabled="false"][contains(@class, "filterProps-Styled-Component")][@href][last()]',
                     scrollD: 2500
                 }
-            },*/ //                     Pixiv
+            },*/ //           Pixiv
             _58pic: {
                 host: 'www.58pic.com',
                 functionStart: function() {insStyle('.qt-model-t.login-model {display: none !important;}');
@@ -5727,8 +5727,8 @@
                     // <<<<< 翻页类型 3（依靠元素距离可视区域底部的距离来触发翻页）>>>>>
                     if (curSite.pager.type === 3) {
                         let scrollE = getOne(curSite.pager.scrollE);
-                        //console.log(scrollE.offsetTop - (scrollTop + scrollHeight), scrollD, curSite.SiteTypeID)
-                        if (scrollE.offsetTop - (scrollTop + scrollHeight) <= scrollD) intervalPause(); ShowPager.loadMorePage();
+                        //console.log(scrollE.offsetTop, scrollE.offsetTop - (scrollTop + scrollHeight), scrollD,, curSite.SiteTypeID)
+                        if (scrollE.offsetTop - (scrollTop + scrollHeight) <= scrollD) {intervalPause(); ShowPager.loadMorePage();}
 
                     } else {
                         if (document.documentElement.scrollHeight <= scrollHeight + scrollTop + scrollD) {
@@ -6398,7 +6398,9 @@
     function isHidden(el){
         return (el.offsetParent === null);
     }
-    /*// 监听 XMLHttpRequest URL
+    /*
+
+    // 监听 XMLHttpRequest URL
     var _send = window.XMLHttpRequest.prototype.send
     function sendReplacement(data) {
         console.log(data)
@@ -6411,5 +6413,32 @@
         console.log(data, arguments)
         return _open.apply(this, arguments);
     }
-    window.XMLHttpRequest.prototype.open = openReplacement;*/
+    window.XMLHttpRequest.prototype.open = openReplacement;
+
+
+    document.body.addEventListener('click', function(e) {
+        if (e.target.tagName === 'A'){
+            if(e.target.href && e.target.target != '_blank' && !(e.target.onclick) && e.target.href.slice(0,4) == 'http' && e.target.getAttribute('href').slice(0,1) != '#') {
+                e.preventDefault(); // 阻止默认打开链接事件
+                window.top.location.href = e.target.href
+            }
+        } else {
+            let path = e.path || e.composedPath();
+            for (let i = 1; i < path.length - 3; i++) {
+                console.log(path[i])
+                if (path[i].tagName === 'A'){
+                    window.top.location.href = path[i].href
+                    if(path[i].href && path[i].target != '_blank' && !(path[i].onclick) && path[i].href.slice(0,4) == 'http' && path[i].getAttribute('href').slice(0,1) != '#') {
+                        e.preventDefault(); // 阻止默认打开链接事件
+                        console.log(path[i].href)
+                        window.top.location.href = path[i].href
+                    }
+                    break;
+                }
+            }
+        }
+    });
+
+    //document.head.appendChild(document.createElement('base')).target = '_top';
+*/
 })();
