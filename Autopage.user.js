@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.5.4
+// @version      3.5.5
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -1327,21 +1327,22 @@
                     nextL: '//a[@aria-disabled="false"][contains(@class, "filterProps-Styled-Component")][@href][last()]',
                     scrollD: 2500
                 }
-            },*/ //   Pixiv
+            },*/ //                     Pixiv
             _58pic: {
                 host: 'www.58pic.com',
-                functionStart: function() {insStyle('.qt-model-t, .qtw-card.place-box.is-one, .search-v3-row .search-v3-back {display: none !important;}'); // 隐藏登录弹窗
-                if (location.pathname.indexOf('/tupian/') > -1) {
+                functionStart: function() {insStyle('.qt-model-t, .qtw-card.place-box.is-one, .search-v3-row .search-v3-back {display: none !important;}');
+                if (location.pathname.indexOf('/tupian/') > -1 || location.pathname.indexOf('/piccate/') > -1) {
                     curSite = DBSite._58pic;
+                    if (location.pathname.indexOf('/piccate/') > -1 && getCSS('.card-grid-box .qt-card-box[style*="width:"]')) insStyle('.card-grid-box .qt-card-box {display: block;height: 300px;min-height: 250px;}')
                 } else if (location.pathname.indexOf('/c/') > -1) {
                     curSite = DBSite._58pic_c;
                 }},
-                insStyle: '.qtw-card.place-box.is-two {display: none !important;}', // 隐藏登录弹窗、隐藏末尾很大的 [下一页] 按钮
+                insStyle: '.qtw-card.place-box, .card-lazy, .is-line .is-back {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: '//div[contains(@class,"page-box")]//a[text()="下一页"]',
-                    pageE: 'css;.pic-box > .qtw-card',
-                    insertP: ['css;.pic-box', 3],
+                    pageE: 'css;.card-grid-box:not(.favorites-box) > div',
+                    insertP: ['css;.card-grid-box:not(.favorites-box)', 3],
                     replaceE: 'css;.page-box',
                     scrollD: 2500
                 },
