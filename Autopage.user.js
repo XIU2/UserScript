@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.5.3
+// @version      3.5.4
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -110,9 +110,10 @@
       5 = 插入该元素末尾（针对小说网站等文本类的）
     replaceE: 要替换为下一页内容的元素（比如页码）
     scriptT:  单独插入 <script> 标签
-      1 = 下一页的所有 <script> 标签
+      0 = 下一页的所有 <script> 标签
+      1 = 下一页的所有 <script> 标签（不包括 src 链接）
       2 = 下一页主体元素同级 <script> 标签
-      3 = 下一页主体元素同级 <script> 标签（远程文件）
+      3 = 下一页主体元素同级 <script> 标签（src 远程文件）
       4 = 下一页主体元素子元素 <script> 标签
     history:    添加历史记录 并 修改当前 URL（如何和 locationChange 同用，需要改为函数根据情况返回 true / false）
     forceHTTPS: 下一页链接强制 HTTPS
@@ -368,7 +369,7 @@
             }, //                  百度 搜素
             google: {
                 host: /\.google\./,
-                functionStart: function() {if (location.pathname === '/search') {
+                functionStart: function() {if (location.pathname === '/search' && location.search.indexOf('tbm=isch') === -1) {
                     curSite = DBSite.google;
                 } else if (location.pathname === '/scholar') {
                     curSite = DBSite.google_scholar;
@@ -376,11 +377,14 @@
                 pager: {
                     type: 1,
                     nextL: 'css;#pnnext',
-                    pageE: 'css;#res > *',
-                    insertP: ['css;#res', 3],
+                    pageE: 'id("search")/* | //style[not(contains(text(), "table,div,span,p{display:none}"))]',
+                    insertP: ['css;#search', 3],
                     replaceE: 'id("navcnt") | id("rcnt")//div[@role="navigation"]',
-                    scriptT: 1,
+                    scriptT: 0,
                     scrollD: 3000
+                },
+                function: {
+                    bF: google_bF
                 }
             }, //                 谷歌 搜索
             bing: {
@@ -4944,6 +4948,18 @@
         if (width) insStyle(`#waterfall {height: auto !important; width: 100% !important;} #waterfall > li {width: ${width} !important; float: left !important; position: inherit !important; left: auto !important; top: auto !important;}`);
     }
 
+    // [谷歌搜索] 的插入前函数（加载视频图片）
+    function google_bF(pageElems) {
+        if (location.search.indexOf('tbm=nws') === -1){
+            pageElems.forEach(function (one) {
+                getAllCSS('a[aria-label][href*="https://www.youtube.com/watch?v="]').forEach(function (one1) {
+                    let img = getCSS('img', one1)
+                    if (img) img.src = `https://i.ytimg.com/vi/${one1.href.split('?v=')[1]}/mqdefault.jpg`
+                })
+            });
+        }
+        return pageElems
+    }
 
     // [头条搜索] 的插入前函数（过滤相关搜索）
     function toutiao_bF(pageElems) {
@@ -5818,7 +5834,7 @@
                 if (!title_) {title_ = window.top.document.title;};
                 window.top.history.pushState(`{title: ${document.title}, url: ${location.href}}`, title_, curSite.pageUrl);
                 window.top.document.title = iframe.contentWindow.document.title
-            };
+            }
         }
 
         // 插入 iframe
@@ -6034,12 +6050,14 @@
             // 插入 <script> 标签
             if (curSite.pager.scriptT) {
                 let scriptText = '';
-                if (curSite.pager.scriptT === 1) { //         下一页的所有 <script> 标签
+                if (curSite.pager.scriptT === 0) { //         下一页的所有 <script> 标签
                     insScriptAll('//script', toElement, newBody);
+                } else if (curSite.pager.scriptT === 1) { //  下一页的所有 <script> 标签（不包括 src 链接）
+                    insScriptAll('//script[not(@src)]', toElement, newBody);
                 } else if (curSite.pager.scriptT === 2) { //  下一页主体元素同级 <script> 标签
                     pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
                     if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
-                } else if (curSite.pager.scriptT === 3) { //  下一页主体元素同级 <script> 标签（远程文件）
+                } else if (curSite.pager.scriptT === 3) { //  下一页主体元素同级 <script> 标签（src 远程文件）
                     pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT' && one.src) {toElement.appendChild(document.createElement('script')).src = one.src;}});
                 } else if (curSite.pager.scriptT === 4) { //  下一页主体元素子元素 <script> 标签
                     pageElems.forEach(function (one) {
@@ -6068,7 +6086,8 @@
             if (curSite.SiteTypeID === SiteType.BILIBILI_SEARCH) {curSite.pageUrl = '';}
         }
     }
-    // 插入所有 Script
+
+    // 插入 Script
     function insScriptAll(selector = '//script', toElement = document.body, contextNode = document) {
         let scriptElems = getAll(selector, contextNode, contextNode), scriptText = '';
         scriptElems.forEach(function (one) {
@@ -6080,7 +6099,7 @@
         });
         if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
     }
-    // 插入 Style 样式
+    // 插入 Style
     function insStyle(style) {
         document.lastElementChild.appendChild(document.createElement('style')).textContent = style;
     }
