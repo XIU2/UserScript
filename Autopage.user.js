@@ -3776,28 +3776,8 @@
                         if (indexOF('type=repositories', 's', true) || !indexOF('type=', 's')) {
                             curSite = DBSite.github_search;
                         } else {
-                            console.log(DBSite['github_search_' + /type=[a-z]+/.exec(location.search.toLowerCase())[0].replace('type=','')])
                             curSite = DBSite['github_search_' + /type=[a-z]+/.exec(location.search.toLowerCase())[0].replace('type=','')];
                         }
-                        /*} else if (indexOF('type=code', 's')) {
-                            curSite = DBSite.github_search_code;
-                        } else if (indexOF('type=commits', 's')) {
-                            curSite = DBSite.github_search_commits;
-                        } else if (indexOF('type=issues', 's')) {
-                            curSite = DBSite.github_search_issues;
-                        } else if (indexOF('type=discussions', 's')) {
-                            curSite = DBSite.github_search_discussions;
-                        } else if (indexOF('type=registrypackages', 's')) {
-                            curSite = DBSite.github_search_registrypackages;
-                        } else if (indexOF('type=marketplace', 's')) {
-                            curSite = DBSite.github_search_marketplace;
-                        } else if (indexOF('type=topics', 's')) {
-                            curSite = DBSite.github_search_topics;
-                        } else if (indexOF('type=wikis', 's')) {
-                            curSite = DBSite.github_search_wikis;
-                        } else if (indexOF('type=users', 's')) {
-                            curSite = DBSite.github_search_users;
-                        }*/
                         if (curSite.SiteTypeID > 0 && !curSite.pager.nextL) {
                             curSite.pager.type = 1;
                             curSite.pager.nextL = 'css;a.next_page';
