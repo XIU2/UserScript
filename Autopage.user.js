@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.5.7
+// @version      3.5.8
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -1324,8 +1324,10 @@
             }, //                  IT 之家
             pixiv: {
                 host: 'www.pixiv.net',
-                functionStart: function() {
-                    if (indexOF('/tags/') && self == top) {
+                functionStart: function() {locationChange = true;
+                    if (location.pathname == '/') {
+                        forceTarget();
+                    } else if (indexOF('/tags/') && self == top) {
                         curSite = DBSite.pixiv;
                     } else if (indexOF('/users/') && /\/(artworks|illustrations|manga)/.test(location.pathname)) {
                         curSite = DBSite.pixiv_user;
@@ -5945,6 +5947,7 @@
         return 0;
     }
 
+
     // 翻页类型 1/3 // 修改自 https://greasyfork.org/scripts/14178 、 https://github.com/machsix/Super-preloader
     var ShowPager = {
         getFullHref: function (e) {
@@ -6124,6 +6127,7 @@
         });
     }
 
+
     // 插入 Script
     function insScriptAll(selector = '//script', toElement = document.body, contextNode = document) {
         let scriptElems = getAll(selector, contextNode, contextNode), scriptText = '';
@@ -6255,6 +6259,7 @@
         }
     }
 
+
     // 强制新标签页打开链接（翻页模式 5/6）
     function forceTarget() {
         document.body.addEventListener('click', function(e) {
@@ -6281,6 +6286,25 @@
             }
         }
         //document.head.appendChild(document.createElement('base')).target = '_top';
+    }
+    // 判断元素是否隐藏（隐藏返回 true）
+    function isHidden(el){
+        return (el.offsetParent === null);
+    }
+    // 判断 URL 是否存在指定文本
+    function indexOF(e, l = 'p', low = false){
+        switch (l) {
+            case 'h':
+                l = location.href; break;
+            case 'p':
+                l = location.pathname; break;
+            case 's':
+                l = location.search; break;
+        }
+        //console.log(l,e,l.indexOf(e))
+        if (low) {e = e.toLowerCase(); l = l.toLowerCase();} // 全部转为小写
+        if (l.indexOf(e) > -1) return true
+        return false
     }
     // 启用/禁用 (当前网站)
     function menu_disable(type) {
@@ -6456,25 +6480,6 @@
         window.addEventListener('popstate',()=>{
             window.dispatchEvent(new Event('locationChange'))
         });
-    }
-    // 判断元素是否隐藏（隐藏返回 true）
-    function isHidden(el){
-        return (el.offsetParent === null);
-    }
-    // 判断 URL 是否存在指定文本
-    function indexOF(e, l = 'p', low = false){
-        switch (l) {
-            case 'h':
-                l = location.href; break;
-            case 'p':
-                l = location.pathname; break;
-            case 's':
-                l = location.search; break;
-        }
-        //console.log(l,e,l.indexOf(e))
-        if (low) {e = e.toLowerCase(); l = l.toLowerCase();} // 全部转为小写
-        if (l.indexOf(e) > -1) return true
-        return false
     }
     /*
 
