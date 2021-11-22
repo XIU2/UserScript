@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.5.8
+// @version      3.5.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -1344,6 +1344,7 @@
                     pageE: '//ul[contains(@class, "-1 ")]/li',
                     insertP: ['//ul[contains(@class, "-1 ")]', 3],
                     replaceE: '//nav[./a[@aria-disabled="false"][contains(@class, "filterProps-Styled-Component")]]',
+                    history: function() {if (/p=\d+/.test(location.search)) {return false;} else {return true;}},
                     loadTime: 1000,
                     scrollD: 1000
                 }
@@ -1357,6 +1358,7 @@
                     pageE: '//ul[contains(@class, "-1 ")]/li',
                     insertP: ['//ul[contains(@class, "-1 ")]', 3],
                     replaceE: '//nav[./a[@aria-disabled="false"][contains(@class, "filterProps-Styled-Component")]]',
+                    history: function() {if (/p=\d+/.test(location.search)) {return false;} else {return true;}},
                     scrollD: 2000
                 }
             }, //          Pixiv - 用户作品页
@@ -5855,7 +5857,7 @@
         let iframe = document.getElementById('xiu2_iframe');
         if (!iframe) {
             iframe = document.createElement('iframe');
-            iframe.style = 'position: absolute; width: 100%; height: 100%; border: none;display: none;';
+            iframe.style = 'position: absolute; width: 100%; height: 100%; border: none; display: none;';
             iframe.id = 'xiu2_iframe';
             iframe.src = src;
         }
@@ -5866,7 +5868,7 @@
             //iframe.contentWindow.scrollTo({top: 9999999, behavior: 'smooth'});
             if (!curSite.pager.loadTime) curSite.pager.loadTime = 100; // 默认 100ms
             setTimeout(function() {
-                //console.log(iframe.contentWindow.document.body)
+                //console.log(getOne(curSite.pager.insertP[0], iframe.contentWindow.document))
                 processResult(iframe.contentWindow.document); // 插入/替换元素等
                 pausePage = true; //      恢复翻页
             }, curSite.pager.loadTime) // 预留加载时间，确保网页加载完成
@@ -6013,7 +6015,7 @@
     function processResult(response) {
         var newBody = response;
         let pageElems = getAll(curSite.pager.pageE, newBody, newBody),
-            toElement = getAll(curSite.pager.insertP[0])[0];
+            toElement = getOne(curSite.pager.insertP[0]);
         //console.log(curSite.pager.pageE, pageElems, curSite.pager.insertP, toElement)
 
         if (pageElems.length > 0) {
@@ -6030,15 +6032,12 @@
             let addTo = getAddTo(curSite.pager.insertP[1]);
 
             // 插入新页面元素
-            if (curSite.pager.insertP[1] === 2 || curSite.pager.insertP[1] === 4) { // 插入到元素内头部、目标本身后面，需要合并后一起插入，否则会顺序相反
-                let afterend = '';
-                pageElems.forEach(function (one) {afterend += one.outerHTML;});
-                toElement.insertAdjacentHTML(addTo, afterend);
-            } else if (curSite.pager.insertP[1] === 5) { // 插入到目标内部末尾（针对文本）
+            if (curSite.pager.insertP[1] === 5) { // 插入到目标内部末尾（针对文本，比如小说网页）
                 let afterend = '';
                 pageElems.forEach(function (one) {afterend += one.innerHTML;});
                 toElement.insertAdjacentHTML(addTo, afterend);
             } else {
+                if (curSite.pager.insertP[1] === 2 || curSite.pager.insertP[1] === 4) pageElems.reverse(); // 插入到 [元素内头部]、[目标本身后面] 时，需要反转顺序
                 pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo, one);});
             }
 
