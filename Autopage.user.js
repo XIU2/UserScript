@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.6.4
+// @version      3.6.5
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -83,6 +83,7 @@
     functionStart: 匹配该网站域名时要执行的函数（一般用于根据 URL 分配相应翻页规则）
     insStyle:      要插入网页的 CSS Style 样式
     hiddenPN:      不显示脚本左下角的页码
+    retry:         允许获取失败后重试
 
     type:
       1 = 由脚本实现自动无缝翻页
@@ -1884,6 +1885,7 @@
             bilibili_search: {
                 host: 'search.bilibili.com',
                 functionStart: function() {locationChange = true; curSite = DBSite.bilibili_search;},
+                retry: 100,
                 pager: {
                     type: 1,
                     nextL: bilibili_search_nextL,
@@ -4765,12 +4767,14 @@
             mm131: {
                 host: ['www.mm131.net', 'www.mmm131.com'],
                 functionStart: function() {if (indexOF('.html')) {curSite = DBSite.mm131;} else {curSite = DBSite.mm131_list;}},
+                retry: 300,
                 pager: {
                     type: 1,
                     nextL: '//div[@class="content-page"]/a[contains(text(), "下一页")]',
                     pageE: 'css;.content-pic img',
                     insertP: ['css;.content-pic', 3],
                     replaceE: 'css;.content-page',
+                    history: true,
                     scrollD: 2000
                 }
             }, //               MM131 - 图片页
@@ -4787,12 +4791,14 @@
             mm131_m: {
                 host: 'm.mmm131.com',
                 functionStart: function() {insStyle('.bannert, .bannerb, bannert_ios, .bannerb_ios {display: none !important;}'); if (location.pathname == '/') {curSite = DBSite.mm131_m_;} else if (indexOF('.html')) {curSite = DBSite.mm131_m;} else {curSite = DBSite.mm131_m_list;}},
+                retry: true,
                 pager: {
                     type: 1,
                     nextL: '//div[@class="paging"]/a[text()="下一张" or text()="下一页"]',
                     pageE: 'css;.post-content img',
                     insertP: ['css;.post-content', 3],
                     replaceE: 'css;.paging',
+                    history: true,
                     scrollD: 2000
                 }
             }, //             MM131 - 手机版 - 图片页
@@ -4937,14 +4943,15 @@
                 }
             }, //           美女图片 - 分类页
             kingdom: {
-                host: ['kingdom-en.com', 'www.kingdom-en.com'],
-                functionStart: function() {if (indexOF('/meinvtupian/')) {curSite = DBSite.kingdom;} else {curSite = DBSite.kingdom_list;}},
+                host: ['kingdom-en.com', 'www.kingdom-en.com', 'm.kingdom-en.com'],
+                functionStart: function() {if (/\/\d+\.html/.test(location.pathname)) {curSite = DBSite.kingdom;} else {curSite = DBSite.kingdom_list;}},
+                insStyle: '.pic_center img {min-height: 300px;} .arcmain > .title, .footer, .index-list-title, .listmain_st {display: none !important;}',
                 pager: {
                     type: 1,
-                    nextL: 'css;a.page_next',
+                    nextL: '//a[@class="page_next"] | //div[@class="article_page"]//a[text()="下一页"]',
                     pageE: 'css;.pic_center img',
                     insertP: ['css;.pic_center', 3],
-                    replaceE: 'css;.pages2',
+                    replaceE: '//div[@class="pages2" or @class="article_page"]',
                     scrollD: 4000
                 }
             }, //             King爱模 - 图片页
@@ -4952,9 +4959,9 @@
                 pager: {
                     type: 1,
                     nextL: function() {return(getCSS('a.page_next').href.replace(/(www.)?ermo.net/, location.host).replace(/http(s)?:/, location.protocol))},
-                    pageE: 'css;.channel_list3 > ul > li',
-                    insertP: ['css;.channel_list3 > ul', 3],
-                    replaceE: 'css;.pages',
+                    pageE: 'css;.channel_list3 > ul > li, ul#container > li',
+                    insertP: ['css;.channel_list3 > ul, ul#container', 3],
+                    replaceE: 'css;.pages, .list_page',
                     scrollD: 1000
                 }
             } //         King爱模 - 分类页
@@ -4963,8 +4970,7 @@
         setSiteTypeID();
         // 用于脚本判断（针对部分特殊的网站）
         SiteType = {
-            BAIDU_TIEBA: DBSite.baidu_tieba.SiteTypeID,
-            BILIBILI_SEARCH: DBSite.bilibili_search.SiteTypeID
+            BAIDU_TIEBA: DBSite.baidu_tieba.SiteTypeID
         };
     }
 
@@ -6277,7 +6283,7 @@
                 }
             }
         } else { // 获取主体元素失败后，尝试重新获取
-            if (curSite.SiteTypeID === SiteType.BILIBILI_SEARCH) {curSite.pageUrl = '';}
+            setTimeout(function(){if (curSite.retry) {curSite.pageUrl = '';}}, curSite.retry)
         }
     }
     // 翻页类型 4
