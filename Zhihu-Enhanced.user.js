@@ -604,7 +604,7 @@ function blockUsers(type) {
             for (const mutation of mutationsList) {
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType != 1) return
-                    console.log(target, target.className)
+                    //console.log(target, target.className)
                     if (target.className && (target.className.indexOf('Popover-content Popover-content--top HoverCard-popoverTarget') > -1 || target.className.indexOf('Popover-content Popover-content--bottom HoverCard-popoverTarget') > -1) || target.querySelector('.Popover-content.Popover-content--top.HoverCard-popoverTarget') || target.querySelector('.Popover-content.Popover-content--bottom.HoverCard-popoverTarget')) {
                         let item = target.querySelector('.MemberButtonGroup.ProfileButtonGroup.HoverCard-buttons'),
                             item1 = target.querySelector('a.UserLink-link'),
