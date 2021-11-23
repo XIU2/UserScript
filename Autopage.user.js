@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.6.0
+// @version      3.6.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -1327,9 +1327,9 @@
                 functionStart: function() {locationChange = true;
                     if (location.pathname == '/') {
                         forceTarget();
-                    } else if (indexOF('/tags/') && self == top) {
+                    } else if (indexOF('/tags/')/* && self == top*/) {
                         curSite = DBSite.pixiv;
-                        if (indexOF('/novels')) {insStyle('ul[class*="-1 "] > li {display: inline !important;}')} else {insStyle('a[href^="/premium/lead/lp"], div[class*="-0 "] > div[class*="-4 "] > section:first-of-type {display: none}');}
+                        if (!indexOF('/novels'))insStyle('a[href^="/premium/lead/lp"], div[class*="-0 "] > div[class*="-4 "] > section:first-of-type {display: none}');
                     } else if (indexOF('/users/') && /\/(artworks|illustrations|manga)/.test(location.pathname)) {
                         curSite = DBSite.pixiv_user;
                     } else if (indexOF('/artworks/')) {
@@ -1337,21 +1337,23 @@
                     }
                 },
                 forceTarget: true,
+                hiddenPN: true,
                 iframe: true,
+                insStyle: 'ul[class*="-1 "] > li {display: inline !important;} #root{margin-bottom: -175px;}',
                 pager: {
-                    type: 6,
+                    type: 5,
                     nextL: 'css;a[aria-disabled="false"][class*="filterProps-Styled-Component"][href]:last-child',
                     pageE: '//ul[contains(@class, "-1 ")]/li',
                     insertP: ['//ul[contains(@class, "-1 ")]', 3],
                     replaceE: '//nav[./a[@aria-disabled="false"][contains(@class, "filterProps-Styled-Component")]]',
                     history: function() {if (/p=\d+/.test(location.search)) {return false;} else {return true;}},
-                    loadTime: 1000,
-                    scrollD: 1000
+                    scrollD: 2000
                 }
             }, //               Pixiv - 分类页
             pixiv_user: {
                 forceTarget: true,
                 hiddenPN: true,
+                insStyle: 'ul[class*="-1 "] > li {display: inline !important;} #root{margin-bottom: -125px;}',
                 pager: {
                     type: 5,
                     nextL: 'css;a[aria-disabled="false"][class*="filterProps-Styled-Component"][href]:last-child',
@@ -1362,6 +1364,27 @@
                     scrollD: 2000
                 }
             }, //          Pixiv - 用户作品页
+            vilipix: {
+                host: 'www.vilipix.com',
+                functionStart: function() {locationChange = true;
+                    if (location.pathname == '/') {
+                        forceTarget();
+                    } else if (indexOF('/tags/') || indexOF('/user/') || indexOF('/new') || indexOF('/ranking')) {
+                        curSite = DBSite.vilipix;
+                    }
+                },
+                forceTarget: true,
+                pager: {
+                    type: 6,
+                    nextL: function() {let next = getCSS('li.number.active+li.number'); if (next) {return (location.origin + location.pathname + '?p=' + next.textContent)} else {return '';}},
+                    pageE: 'css;ul.illust-content > li',
+                    insertP: ['css;ul.illust-content', 3],
+                    replaceE: 'css;ul.el-pager',
+                    history: function() {if (/p=\d+/.test(location.search)) {return false;} else {return true;}},
+                    loadTime: 800,
+                    scrollD: 2000
+                }
+            }, //             vilipix
             _58pic: {
                 host: 'www.58pic.com',
                 functionStart: function() {insStyle('.qt-model-t.login-model {display: none !important;}');
@@ -4875,6 +4898,24 @@
     }
     if (curSite.insStyle) insStyle(curSite.insStyle)
 
+    // 对翻页模式 5 的子 iframe 添加一个跟随滚动的事件
+    if (curSite.pager.type === 5 && self != top) {
+        var beforeScrollTop = document.documentElement.scrollTop || document.body.scrollTop
+        window.addEventListener('scroll', function (e) {
+            let scrollTop = window.parent.document.documentElement.scrollTop || window.parent.document.body.scrollTop,
+                clientHeight = window.parent.document.documentElement.clientHeight || window.parent.document.body.clientHeight,
+                scrollHeight = window.parent.document.documentElement.scrollHeight || window.parent.document.body.scrollHeight,
+                afterScrollTop = document.documentElement.scrollTop || document.body.scrollTop,
+                delta = afterScrollTop - beforeScrollTop;
+            if (delta == 0) return false;
+            beforeScrollTop = afterScrollTop;
+            //console.log(delta, scrollHeight - (scrollTop + clientHeight), '2222')
+            if (delta > 0 && scrollTop + clientHeight < scrollHeight) {
+                window.parent.scrollBy(0, delta*2);
+            }
+        }, false);
+    }
+
     curSite.pageUrl = ''; // 下一页URL
     //console.log(curSite);
     pageLoading(); // 自动无缝翻页
@@ -5778,7 +5819,10 @@
                             // <<<<< 翻页类型 5（插入 iframe 方式来加载下一页）>>>>>
                             } else if (curSite.pager.type === 5) {
                                 if (typeof curSite.pager.nextL == 'function') {
-                                    curSite.pager.nextL();
+                                    let tempUrl = curSite.pager.nextL();
+                                    if (tempUrl === '' || curSite.pageUrl === tempUrl) return;
+                                    curSite.pageUrl = tempUrl;
+                                    insIframe(curSite.pageUrl);
                                 } else if (getE_nextL(curSite.pager.nextL)) {
                                     insIframe(curSite.pageUrl);
                                 }
@@ -5786,7 +5830,10 @@
                             // <<<<< 翻页类型 6（通过 iframe 获取下一页动态加载内容）>>>>>
                             } else if (curSite.pager.type === 6) {
                                 if (typeof curSite.pager.nextL == 'function') {
-                                    curSite.pager.nextL();
+                                    let tempUrl = curSite.pager.nextL();
+                                    if (tempUrl === '' || curSite.pageUrl === tempUrl) return;
+                                    curSite.pageUrl = tempUrl;
+                                    insIframe_(curSite.pageUrl);
                                 } else if (getE_nextL(curSite.pager.nextL)) {
                                     insIframe_(curSite.pageUrl);
                                 }
@@ -5807,25 +5854,30 @@
     // 翻页类型 5（插入 iframe 方式加载下一页）
     function insIframe(src) {
         // 停用当前页面翻页
+        if (!pausePage) return
         curSite.SiteTypeID = 0;
+        pausePage = false
+
+        var beforeScrollTop = document.documentElement.scrollTop || document.body.scrollTop
         // 当滚动条到底部时（即完全显示 iframe 框架），隐藏当前页面的滚动条
-        window.addEventListener('scroll', function (e) {
+        window.addEventListener('scroll', function () {
             let scrollTop = document.documentElement.scrollTop || document.body.scrollTop,
+                clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
                 scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight,
-                clientHeight = document.documentElement.clientHeight || document.body.clientHeight
-            if (scrollTop + clientHeight + 10 >= scrollHeight) {
-                if (!getCSS('#xiu-scroll')) {
-                    let newStyle = document.createElement('style'); newStyle.id = 'xiu-scroll';
-                    newStyle.textContent = 'html::-webkit-scrollbar {width: 0 !important;height: 0 !important;} html {scrollbar-width: none !important;}';
-                    if (curSite.pager.insStyle) newStyle.textContent += curSite.pager.insStyle;
-                    document.lastElementChild.appendChild(newStyle);
-                }
-            } else {
-                if (getCSS('#xiu-scroll')) {
-                    getCSS('#xiu-scroll').remove();
-                }
+                afterScrollTop = document.documentElement.scrollTop || document.body.scrollTop,
+                delta = afterScrollTop - beforeScrollTop;
+            if (delta == 0) return false;
+            beforeScrollTop = afterScrollTop;
+
+            //console.log(delta, scrollHeight - (scrollTop + clientHeight + 10), '1111')
+            if (delta > 0 && scrollTop + clientHeight + 10 >= scrollHeight && !getCSS('#xiu-scroll')) {
+                let newStyle = document.createElement('style'); newStyle.id = 'xiu-scroll';
+                newStyle.textContent = 'html::-webkit-scrollbar {width: 0 !important;height: 0 !important;} html {scrollbar-width: none !important;}';
+                if (curSite.pager.insStyle) newStyle.textContent += curSite.pager.insStyle;
+                document.lastElementChild.appendChild(newStyle);
+            } else if (delta < 0 && getCSS('#xiu-scroll')) {
+                getCSS('#xiu-scroll').remove();
             }
-            //console.log(`${scrollTop} + ${clientHeight} >= ${scrollTop + clientHeight} / ${scrollHeight}`)
         }, false);
 
         // 创建 iframe
@@ -5854,28 +5906,38 @@
         pausePage = false
 
         // 如果不存在，则创建一个 iframe
-        let iframe = document.getElementById('xiu2_iframe');
+        let iframe = document.getElementById('xiu_iframe');
         if (!iframe) {
             iframe = document.createElement('iframe');
-            iframe.style = 'position: absolute; width: 100%; height: 100%; border: none; display: none;';
-            iframe.id = 'xiu2_iframe';
+            iframe.style = 'position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; border: none; z-index: -999; /*visibility: hidden;*/';
+            iframe.id = 'xiu_iframe';
             iframe.src = src;
         }
 
         // 加载完成后才继续
         iframe.onload = function() {
-            iframe.contentWindow.scrollTo(0, 999999); // 滚动到底部，以触发网页的滚动条相关加载事件
+            //iframe.contentWindow.scrollTo(0, 999999); // 滚动到底部，以触发网页的滚动条相关加载事件
             //iframe.contentWindow.scrollTo({top: 9999999, behavior: 'smooth'});
             if (!curSite.pager.loadTime) curSite.pager.loadTime = 100; // 默认 100ms
-            setTimeout(function() {
-                //console.log(getOne(curSite.pager.insertP[0], iframe.contentWindow.document))
-                processResult(iframe.contentWindow.document); // 插入/替换元素等
-                pausePage = true; //      恢复翻页
-            }, curSite.pager.loadTime) // 预留加载时间，确保网页加载完成
+            //console.log(curSite.pager.loadTime, curSite.pager.loadTime/30)
+            console.time('sort');
+            let time1 = 0 ,time2 = setInterval(function(){
+                let scrollHeight = (iframe.contentWindow.document.documentElement.scrollHeight || iframe.contentWindow.document.body.scrollHeight)/10
+                iframe.contentWindow.scrollTo(0, 999999);
+                iframe.contentWindow.scrollTo(0, scrollHeight*time1);
+                //console.log(time1, iframe.contentWindow.document.documentElement.scrollHeight || iframe.contentWindow.document.body.scrollHeight)
+                if (++time1 == 10) {
+                    console.timeEnd('sort');
+                    clearInterval(time2);
+                    processResult(iframe.contentWindow.document); // 插入/替换元素等
+                    //console.log(iframe.contentWindow.document.documentElement.scrollHeight || iframe.contentWindow.document.body.scrollHeight)
+                    pausePage = true; //      恢复翻页
+                }
+            }, curSite.pager.loadTime/10)
         }
 
         // 插入 iframe（如果已存在则直接改 src）
-        if (document.getElementById('xiu2_iframe')) {
+        if (document.getElementById('xiu_iframe')) {
             iframe.src = src;
         } else {
             document.lastElementChild.appendChild(iframe);
@@ -5950,7 +6012,7 @@
     }
 
 
-    // 翻页类型 1/3 // 修改自 https://greasyfork.org/scripts/14178 、 https://github.com/machsix/Super-preloader
+    // 翻页类型 1/3 （修改自 https://greasyfork.org/scripts/14178 、 https://github.com/machsix/Super-preloader）
     var ShowPager = {
         getFullHref: function (e) {
             if (e != null && e.nodeType === 1 && e.href && e.href.slice(0,4) === 'http') return e.href;
