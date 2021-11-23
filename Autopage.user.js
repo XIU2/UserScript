@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.6.2
+// @version      3.6.3
 // @author       X.I.U
-// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
+// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
 // @connect      www.xuexiniu.com
 // @connect      bbs.xuexiniu.com
@@ -702,6 +702,34 @@
                     scrollD: 1000
                 }
             }, //      豆瓣 - 小组帖子内
+            zhihu: {
+                host: 'www.zhihu.com',
+                functionStart: function() {locationChange = true; if ((indexOF('/people/') && location.pathname.split('/').length == 4) || indexOF('/collection/')) curSite = DBSite.zhihu;},
+                forceTarget: true,
+                hiddenPN: true,
+                iframe: true,
+                pager: {
+                    type: 5,
+                    nextL: function() {
+                        let next = getCSS('.Pagination .PaginationButton--current+button:not(.PaginationButton-next)');
+                        if (next) return (location.origin + location.pathname + '?page=' + next.textContent)
+                    },
+                    history: function() {if (/page=\d+/.test(location.search)) {return false;} else {return true;}},
+                    scrollD: 2000
+                }
+            }, //               知乎 - 用户主页、收藏夹
+            /*sciencedirect: {
+                host: 'www.sciencedirect.com',
+                functionStart: function() {if (location.pathname == '/search') curSite = DBSite.sciencedirect;},
+                hiddenPN: true,
+                //iframe: true,
+                pager: {
+                    type: 5,
+                    nextL: 'css;a[data-aa-name="srp-next-page"]',
+                    history: true,
+                    scrollD: 2000
+                }
+            },*/ //               知乎 - 用户主页、收藏夹
             weibo_comment: {
                 host: 'weibo.com',
                 pager: {
@@ -1343,9 +1371,9 @@
                 pager: {
                     type: 5,
                     nextL: 'css;a[aria-disabled="false"][class*="filterProps-Styled-Component"][href]:last-child',
-                    pageE: '//ul[contains(@class, "-1 ")]/li',
+                    /*pageE: '//ul[contains(@class, "-1 ")]/li',
                     insertP: ['//ul[contains(@class, "-1 ")]', 3],
-                    replaceE: '//nav[./a[@aria-disabled="false"][contains(@class, "filterProps-Styled-Component")]]',
+                    replaceE: '//nav[./a[@aria-disabled="false"][contains(@class, "filterProps-Styled-Component")]]',*/
                     history: function() {if (/p=\d+/.test(location.search)) {return false;} else {return true;}},
                     scrollD: 2000
                 }
@@ -1357,9 +1385,9 @@
                 pager: {
                     type: 5,
                     nextL: 'css;a[aria-disabled="false"][class*="filterProps-Styled-Component"][href]:last-child',
-                    pageE: '//ul[contains(@class, "-1 ")]/li',
+                    /*pageE: '//ul[contains(@class, "-1 ")]/li',
                     insertP: ['//ul[contains(@class, "-1 ")]', 3],
-                    replaceE: '//nav[./a[@aria-disabled="false"][contains(@class, "filterProps-Styled-Component")]]',
+                    replaceE: '//nav[./a[@aria-disabled="false"][contains(@class, "filterProps-Styled-Component")]]',*/
                     history: function() {if (/p=\d+/.test(location.search)) {return false;} else {return true;}},
                     scrollD: 2000
                 }
@@ -1376,7 +1404,7 @@
                 forceTarget: true,
                 pager: {
                     type: 6,
-                    nextL: function() {let next = getCSS('li.number.active+li.number'); if (next) {return (location.origin + location.pathname + '?p=' + next.textContent)} else {return '';}},
+                    nextL: function() {let next = getCSS('li.number.active+li.number'); if (next) return (location.origin + location.pathname + '?p=' + next.textContent)},
                     pageE: 'css;ul.illust-content > li',
                     insertP: ['css;ul.illust-content', 3],
                     replaceE: 'css;ul.el-pager',
@@ -4509,6 +4537,21 @@
                     scrollD: 1000
                 }
             }, //  如意了教育 - 试卷
+            che168: {
+                host: 'www.che168.com',
+                functionStart: function() {
+                    if (location.pathname != '/' && !indexOF('/dealer/')) {
+                        curSite = DBSite.che168;
+                    }},
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.page-item-next',
+                    pageE: 'css;ul.viewlist_ul > li',
+                    insertP: ['css;ul.viewlist_ul', 3],
+                    replaceE: 'css;.page',
+                    scrollD: 2000
+                }
+            }, //          二手车之家
             jiligamefun: {
                 host: 'www.jiligamefun.com',
                 functionStart: function() {if (indexOF('/category/')) {curSite = DBSite.jiligamefun;}},
@@ -4720,7 +4763,7 @@
                 }
             }, //     秀人集 - 搜索页
             mm131: {
-                host: 'www.mm131.net',
+                host: ['www.mm131.net', 'www.mmm131.com'],
                 functionStart: function() {if (indexOF('.html')) {curSite = DBSite.mm131;} else {curSite = DBSite.mm131_list;}},
                 pager: {
                     type: 1,
@@ -4741,6 +4784,41 @@
                     scrollD: 1000
                 }
             }, //          MM131 - 分类页
+            mm131_m: {
+                host: 'm.mmm131.com',
+                functionStart: function() {insStyle('.bannert, .bannerb, bannert_ios, .bannerb_ios {display: none !important;}'); if (location.pathname == '/') {curSite = DBSite.mm131_m_;} else if (indexOF('.html')) {curSite = DBSite.mm131_m;} else {curSite = DBSite.mm131_m_list;}},
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="paging"]/a[text()="下一张" or text()="下一页"]',
+                    pageE: 'css;.post-content img',
+                    insertP: ['css;.post-content', 3],
+                    replaceE: 'css;.paging',
+                    scrollD: 2000
+                }
+            }, //             MM131 - 手机版 - 图片页
+            mm131_m_list: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;#xbtn',
+                    pageE: 'css;#content > article',
+                    insertP: ['css;#webpage', 1],
+                    replaceE: 'css;#webpage',
+                    scrollD: 2000
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-img]', 'data-img']
+                }
+            }, //        MM131 - 手机版 - 分类页
+            mm131_m_: {
+                pager: {
+                    type: 2,
+                    nextL: 'css;#webpage>span[onclick]',
+                    isHidden: true,
+                    interval: 500,
+                    scrollD: 2000
+                }
+            }, //            MM131 - 手机版 - 首页
             fnvshen: {
                 host: 'www.fnvshen.com',
                 functionStart: function() {
@@ -5832,7 +5910,7 @@
                             } else if (curSite.pager.type === 5) {
                                 if (typeof curSite.pager.nextL == 'function') {
                                     let tempUrl = curSite.pager.nextL();
-                                    if (tempUrl === '' || curSite.pageUrl === tempUrl) return;
+                                    if (!tempUrl || (tempUrl && tempUrl.slice(0,4) != 'http') || tempUrl === curSite.pageUrl) return;
                                     curSite.pageUrl = tempUrl;
                                     insIframe(curSite.pageUrl);
                                 } else if (getE_nextL(curSite.pager.nextL)) {
@@ -5843,7 +5921,7 @@
                             } else if (curSite.pager.type === 6) {
                                 if (typeof curSite.pager.nextL == 'function') {
                                     let tempUrl = curSite.pager.nextL();
-                                    if (tempUrl === '' || curSite.pageUrl === tempUrl) return;
+                                    if (!tempUrl || (tempUrl && tempUrl.slice(0,4) != 'http') || tempUrl === curSite.pageUrl ) return;
                                     curSite.pageUrl = tempUrl;
                                     insIframe_(curSite.pageUrl);
                                 } else if (getE_nextL(curSite.pager.nextL)) {
@@ -5884,7 +5962,7 @@
             //console.log(delta, scrollHeight - (scrollTop + clientHeight + 10), '1111')
             if (delta > 0 && scrollTop + clientHeight + 10 >= scrollHeight && !getCSS('#xiu-scroll')) {
                 let newStyle = document.createElement('style'); newStyle.id = 'xiu-scroll';
-                newStyle.textContent = 'html::-webkit-scrollbar {width: 0 !important;height: 0 !important;} html {scrollbar-width: none !important;}';
+                newStyle.textContent = 'html::-webkit-scrollbar, body::-webkit-scrollbar {width: 0 !important;height: 0 !important;} html, body {scrollbar-width: none !important;}';
                 if (curSite.pager.insStyle) newStyle.textContent += curSite.pager.insStyle;
                 document.lastElementChild.appendChild(newStyle);
             } else if (delta < 0 && getCSS('#xiu-scroll')) {
@@ -5932,14 +6010,14 @@
             //iframe.contentWindow.scrollTo({top: 9999999, behavior: 'smooth'});
             if (!curSite.pager.loadTime) curSite.pager.loadTime = 100; // 默认 100ms
             //console.log(curSite.pager.loadTime, curSite.pager.loadTime/30)
-            console.time('sort');
+            //console.time('sort');
             let time1 = 0 ,time2 = setInterval(function(){
                 let scrollHeight = (iframe.contentWindow.document.documentElement.scrollHeight || iframe.contentWindow.document.body.scrollHeight)/10
                 iframe.contentWindow.scrollTo(0, 999999);
                 iframe.contentWindow.scrollTo(0, scrollHeight*time1);
                 //console.log(time1, iframe.contentWindow.document.documentElement.scrollHeight || iframe.contentWindow.document.body.scrollHeight)
                 if (++time1 == 10) {
-                    console.timeEnd('sort');
+                    //console.timeEnd('sort');
                     clearInterval(time2);
                     processResult(iframe.contentWindow.document); // 插入/替换元素等
                     //console.log(iframe.contentWindow.document.documentElement.scrollHeight || iframe.contentWindow.document.body.scrollHeight)
