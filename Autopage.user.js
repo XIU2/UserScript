@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.6.3
+// @version      3.6.4
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -718,18 +718,6 @@
                     scrollD: 2000
                 }
             }, //               知乎 - 用户主页、收藏夹
-            /*sciencedirect: {
-                host: 'www.sciencedirect.com',
-                functionStart: function() {if (location.pathname == '/search') curSite = DBSite.sciencedirect;},
-                hiddenPN: true,
-                //iframe: true,
-                pager: {
-                    type: 5,
-                    nextL: 'css;a[data-aa-name="srp-next-page"]',
-                    history: true,
-                    scrollD: 2000
-                }
-            },*/ //               知乎 - 用户主页、收藏夹
             weibo_comment: {
                 host: 'weibo.com',
                 pager: {
@@ -4244,6 +4232,18 @@
                     scrollD: 2000
                 }
             }, //                学术
+            /*sciencedirect: {
+                host: 'www.sciencedirect.com',
+                functionStart: function() {if (location.pathname == '/search') curSite = DBSite.sciencedirect;},
+                hiddenPN: true,
+                iframe: true,
+                pager: {
+                    type: 5,
+                    nextL: 'css;a[data-aa-name="srp-next-page"]',
+                    history: true,
+                    scrollD: 2000
+                }
+            },*/ //               学术
             google_scholar: {
                 pager: {
                     type: 1,
@@ -4892,7 +4892,7 @@
                     replaceE: 'css;.page',
                     scrollD: 3000
                 }
-            }, //               秀人美女网 - 图片页
+            }, //               秀人美女 - 图片页
             xrmn5_list: {
                 pager: {
                     type: 1,
@@ -4902,7 +4902,7 @@
                     replaceE: 'css;.page',
                     scrollD: 2000
                 }
-            }, //          秀人美女网 - 分类页
+            }, //          秀人美女 - 分类页
             xrmn5_search: {
                 pager: {
                     type: 1,
@@ -4912,7 +4912,52 @@
                     replaceE: 'css;.page',
                     scrollD: 2000
                 }
-            } //         秀人美女网 - 搜索页
+            }, //        秀人美女 - 搜索页
+            ku66: {
+                host: 'www.ku66.net',
+                functionStart: function() {if (/\/\d+\.html/.test(location.pathname)) {curSite = DBSite.ku66;} else {curSite = DBSite.ku66_list;}},
+                insStyle: '.content img {min-height: 300px;}',
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="NewPages"]//a[text()="下一页"]',
+                    pageE: 'css;.content > img',
+                    insertP: ['css;.content', 3],
+                    replaceE: 'css;.NewPages',
+                    scrollD: 4000
+                }
+            }, //                美女图片 - 图片页
+            ku66_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="NewPages"]//a[text()="下一页"]',
+                    pageE: 'css;.TypeList > ul > li',
+                    insertP: ['css;.TypeList > ul', 3],
+                    replaceE: 'css;.NewPages',
+                    scrollD: 1000
+                }
+            }, //           美女图片 - 分类页
+            kingdom: {
+                host: ['kingdom-en.com', 'www.kingdom-en.com'],
+                functionStart: function() {if (indexOF('/meinvtupian/')) {curSite = DBSite.kingdom;} else {curSite = DBSite.kingdom_list;}},
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.page_next',
+                    pageE: 'css;.pic_center img',
+                    insertP: ['css;.pic_center', 3],
+                    replaceE: 'css;.pages2',
+                    scrollD: 4000
+                }
+            }, //             King爱模 - 图片页
+            kingdom_list: {
+                pager: {
+                    type: 1,
+                    nextL: function() {return(getCSS('a.page_next').href.replace(/(www.)?ermo.net/, location.host).replace(/http(s)?:/, location.protocol))},
+                    pageE: 'css;.channel_list3 > ul > li',
+                    insertP: ['css;.channel_list3 > ul', 3],
+                    replaceE: 'css;.pages',
+                    scrollD: 1000
+                }
+            } //         King爱模 - 分类页
         };
         // 生成 SiteTypeID
         setSiteTypeID();
