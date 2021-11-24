@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.6.6
+// @version      3.6.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -29,7 +29,7 @@
         ['menu_discuz_thread_page', '帖子内自动翻页', '帖子内自动翻页', true],
         ['menu_page_number', '显示当前页码及点击暂停翻页', '显示当前页码及点击暂停翻页', true],
         ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false]
-    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, locationChange = false, nowLocation = '', forumWebsite = ['cs.rin.ru', 'www.flyert.com', 'bbs.pediy.com', 'www.libaclub.com', 'tieba.baidu.com', 'www.cadtutor.net', 'www.theswamp.org', 'www.xuexiniu.com', 'bbs.xuexiniu.com', 'www.taoguba.com.cn'];
+    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, locationC = false, nowLocation = '', forumWebsite = ['cs.rin.ru', 'www.flyert.com', 'bbs.pediy.com', 'www.libaclub.com', 'tieba.baidu.com', 'www.cadtutor.net', 'www.theswamp.org', 'www.xuexiniu.com', 'bbs.xuexiniu.com', 'www.taoguba.com.cn'];
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
     }
@@ -77,16 +77,16 @@
     // 网站规则
     function setDBSite() {
     /*
-    自动翻页规则
-    locationChange: 对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则（需要放在 functionS 中）
-
     functionS:   匹配该网站域名时要执行的函数（一般用于根据 URL 分配相应翻页规则）
+       locationC = true; 对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则（需要放在 functionS 中）
+
     insStyle:    要插入网页的 CSS Style 样式
-    hiddenPN:    不显示脚本左下角的页码
+    hiddenPN:    不显示脚本左下角的页码（比如翻页模式 5）
     history:     添加历史记录 并 修改当前 URL
     retry:       允许获取失败后重试
 
-    type:
+pager: {
+    type:     翻页模式
        1 = 由脚本实现自动无缝翻页（适用于：静态加载内容网站，常规模式）
 
        2 = 只需要点击下一页按钮（适用于：网站自带了 自动无缝翻页 功能）
@@ -115,16 +115,16 @@
     nextL:    下一页链接所在元素
     pageE:    要获取的主体内容
     insertP:  主体内容插入的位置
-       1 = 插入该元素本身的前面；
-       2 = 插入该元素当中，第一个子元素前面；
-       3 = 插入该元素当中，最后一个子元素后面；
-       4 = 插入该元素本身的后面；
+       1 = 插入该元素本身的前面
+       2 = 插入该元素当中，第一个子元素前面
+       3 = 插入该元素当中，最后一个子元素后面
+       4 = 插入该元素本身的后面
        5 = 插入该元素末尾（针对小说网站等文本类的）
 
     replaceE: 要替换为下一页内容的元素（比如页码）
     scrollD： 依靠 [滚动条] 与 [底部] 之间的距离缩小来触发翻页。数值越大，越早开始翻页，一般是访问网页速度越慢，该值就需要越大
 
-    scriptT:    单独插入 <script> 标签
+    scriptT:  单独插入 <script> 标签
        0 = 下一页的所有 <script> 标签
        1 = 下一页的所有 <script> 标签（不包括 src 链接）
        2 = 下一页 pageE 主体元素同级 <script> 标签
@@ -133,12 +133,13 @@
 
     interval:   翻页后间隔时间（单位 ms）
     forceHTTPS: 下一页链接强制 HTTPS
-
-    function:
-       bF = 插入前执行函数；
-       aF = 插入后执行函数；
+},
+function: {
+       bF = 插入前执行函数
+       aF = 插入后执行函数
        pF = 参数
-    */
+}
+    */ //<<< 自动翻页规则 >>>
         DBSite = {
             discuz_forum: {
                 pager: {
@@ -214,7 +215,7 @@
                 }
             }, //  Discuz! 论坛 - 淘帖页
             flarum: {
-                functionS: function() {locationChange = true;if (!indexOF('/d/')) {curSite = DBSite.flarum;}},
+                functionS: function() {locationC = true;if (!indexOF('/d/')) {curSite = DBSite.flarum;}},
                 pager: {
                     type: 2,
                     nextL: 'css;.DiscussionList-loadMore > button',
@@ -545,7 +546,7 @@
             }, //               Yahoo 搜索 (JP)
             qwant: {
                 host: 'www.qwant.com',
-                functionS: function() {locationChange = true; if (indexOF('q=', 's') && indexOF('t=web', 's')) {curSite = DBSite.qwant;}},
+                functionS: function() {locationC = true; if (indexOF('q=', 's') && indexOF('t=web', 's')) {curSite = DBSite.qwant;}},
                 pager: {
                     type: 2,
                     nextL: 'css;button[data-testid="buttonShowMore"]',
@@ -714,7 +715,7 @@
             }, //      豆瓣 - 小组帖子内
             zhihu: {
                 host: 'www.zhihu.com',
-                functionS: function() {locationChange = true; if ((indexOF('/people/') && location.pathname.split('/').length == 4) || indexOF('/collection/')) curSite = DBSite.zhihu;},
+                functionS: function() {locationC = true; if ((indexOF('/people/') && location.pathname.split('/').length == 4) || indexOF('/collection/')) curSite = DBSite.zhihu;},
                 forceTarget: true,
                 hiddenPN: true,
                 history: true,
@@ -766,7 +767,7 @@
             nga_thread: {
                 host: ['bbs.nga.cn', 'ngabbs.com', 'nga.178.com', 'g.nga.cn'],
                 iframe: true,
-                functionS: function() {locationChange = true;
+                functionS: function() {locationC = true;
                 if (location.pathname === '/thread.php') { // 帖子列表
                     curSite = DBSite.nga_thread;
                 } else if (location.pathname === '/read.php') { // 帖子内
@@ -1350,7 +1351,7 @@
             }, //                  IT 之家
             pixiv: {
                 host: 'www.pixiv.net',
-                functionS: function() {locationChange = true;
+                functionS: function() {locationC = true;
                     if (location.pathname == '/') {
                         forceTarget();
                     } else if (indexOF('/tags/')/* && self == top*/) {
@@ -1392,7 +1393,7 @@
             }, //          Pixiv - 用户作品页
             vilipix: {
                 host: 'www.vilipix.com',
-                functionS: function() {locationChange = true;
+                functionS: function() {locationC = true;
                     if (location.pathname == '/') {
                         forceTarget();
                     } else if (indexOF('/tags/') || indexOF('/user/') || indexOF('/new') || indexOF('/ranking')) {
@@ -1519,7 +1520,7 @@
             }, //              搜图神器 (免费无版权)
             iconfont: {
                 host: 'www.iconfont.cn',
-                functionS: function() {locationChange = true; if (indexOF('/search/')) curSite = DBSite.iconfont;},
+                functionS: function() {locationC = true; if (indexOF('/search/')) curSite = DBSite.iconfont;},
                 forceTarget: true,
                 hiddenPN: true,
                 insStyle: '.footer, header .bind-tips, .block-pagination-wrap {display: none !important;}',
@@ -1910,7 +1911,7 @@
             }, //                 FitGirl Repacks
             bilibili_search: {
                 host: 'search.bilibili.com',
-                functionS: function() {locationChange = true; curSite = DBSite.bilibili_search;},
+                functionS: function() {locationC = true; curSite = DBSite.bilibili_search;},
                 history: true,
                 retry: 100,
                 pager: {
@@ -3839,7 +3840,7 @@
             }, //                     Gitee - 搜索页
             github_star: {
                 host: 'github.com',
-                functionS: function() {locationChange = true;
+                functionS: function() {locationC = true;
                     if (indexOF('tab=stars', 's')) {
                         curSite = DBSite.github_star;
                     } else if ((indexOF('/issues') && !indexOF('/issues/')) || (indexOF('/pulls') && !indexOF('/pulls/'))) {
@@ -4049,7 +4050,7 @@
             }, //      StackOverflow - Search
             segmentfault: {
                 host: 'segmentfault.com',
-                functionS: function() {locationChange = true;
+                functionS: function() {locationC = true;
                     if (indexOF('/questions')) {
                     curSite = DBSite.segmentfault;
                 } else if (location.pathname === '/search') {
@@ -4260,9 +4261,10 @@
                     scrollD: 2000
                 }
             }, //                学术
-            /*sciencedirect: {
+            sciencedirect: {
                 host: 'www.sciencedirect.com',
-                functionS: function() {if (location.pathname == '/search') curSite = DBSite.sciencedirect;},
+                functionS: function() {locationC = true; if (location.pathname == '/search') {curSite = DBSite.sciencedirect; setTimeout(function(){insStyle('html, body {height: ' + (document.documentElement.scrollHeight || document.body.scrollHeight) + 'px;}')}, 2000)}},
+                insStyle: 'footer {display: none !important;}',
                 hiddenPN: true,
                 history: true,
                 iframe: true,
@@ -4271,7 +4273,7 @@
                     nextL: 'css;a[data-aa-name="srp-next-page"]',
                     scrollD: 2000
                 }
-            },*/ //               学术
+            }, //        学术
             google_scholar: {
                 pager: {
                     type: 1,
@@ -5033,7 +5035,8 @@
     // 强制新标签页打开链接（翻页模式 5/6）
     if (curSite.forceTarget) forceTarget();
 
-    if (locationChange) { // 对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则
+    // 对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则
+    if (locationC) {
         nowLocation = location.href
         addLocationchange(); // 自定义 locationChange 事件
         if (webType === 1) {
@@ -5043,9 +5046,11 @@
                 if (nowLocation != location.href) {
                     if (curSite.pager && curSite.pager.type == 5) { // 对于翻页模式 5，如果是 iframe 框架内 URL 变动，则升级为顶级页面，如果是顶级页面的 URL 变动，则清理 iframe 框架
                         if (self != top) {window.top.location.href = location.href;} else {if (getCSS('iframe#xiu_iframe')) {getCSS('iframe#xiu_iframe').remove();}}
+                        pausePage = true;
                     }
                     nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
                     registerMenuCommand(); // 重新判断规则
+                    //console.log(curSite);
                     curSite.pageUrl = ''; // 下一页URL
                     pageLoading(); // 自动无缝翻页
 
@@ -5066,6 +5071,7 @@
             })
         }
     }
+    // 插入 Style CSS 样式
     if (curSite.insStyle) insStyle(curSite.insStyle)
 
     // 对翻页模式 5 的子 iframe 添加一个跟随滚动的事件
