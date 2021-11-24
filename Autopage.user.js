@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.6.8
+// @version      3.6.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -119,7 +119,8 @@ pager: {
        2 = 插入该元素当中，第一个子元素前面
        3 = 插入该元素当中，最后一个子元素后面
        4 = 插入该元素本身的后面
-       5 = 插入该元素末尾（针对小说网站等文本类的）
+       5 = 插入 pageE 列表最后一个元素的后面（该 insertP 可以直接省略）
+       6 = 插入该元素末尾（针对小说网站等文本类的）
 
     replaceE: 要替换为下一页内容的元素（比如页码）
     scrollD： 依靠 [滚动条] 与 [底部] 之间的距离缩小来触发翻页。数值越大，越早开始翻页，一般是访问网页速度越慢，该值就需要越大
@@ -245,7 +246,6 @@ function: {
                     type: 1,
                     nextL: 'css;.pagination li.next a[rel="next"], .topic-actions .pagination strong~a',
                     pageE: 'css;div.post[id], div.post[id]+hr',
-                    insertP: ['(//div[contains(@class, "post ")][@id]/following-sibling::hr[last()] | //div[contains(@class, "post ")][@id][last()])[last()]', 4],
                     replaceE: 'css;.action-bar .pagination, .topic-actions .pagination',
                     scrollD: 2000
                 }
@@ -365,7 +365,7 @@ function: {
                     type: 1,
                     nextL: '//a[contains(text(), "下一章") or contains(text(), "下一页")]',
                     pageE: 'css;#content',
-                    insertP: ['css;#content', 5],
+                    insertP: ['css;#content', 6],
                     replaceE: '//*[./a[contains(text(), "下一章") or contains(text(), "下一页")]] | //title',
                     scrollD: 1500
                 }
@@ -586,11 +586,11 @@ function: {
                 } else if (location.pathname === '/f/search/res') {
                     curSite = DBSite.baidu_tieba_search;
                 }},
-                iframe: true,
                 insStyle: 'img.j_retract {margin-top: 0 !important;margin-bottom: 0 !important;}', // 修复帖子列表中预览图片，在切换下一个/上一个图片时，多出来的图片上下边距
+                iframe: true,
                 pager: {
                     type: 4,
-                    nextL: baidu_tieba_nextL,
+                    nextL: function() {if (getE_nextL('css;a.next.pagination-item')) getPageElems(curSite.pageUrl + '&pagelets=frs-list%2Fpagelet%2Fthread&pagelets_stamp=' + new Date().getTime());},
                     pageE: 'css;#thread_list > li',
                     insertP: ['css;#thread_list', 3],
                     insertE: baidu_tieba_insertE,
@@ -604,9 +604,9 @@ function: {
                 }
             }, //        百度贴吧 - 帖子列表
             baidu_tieba_post: {
-                insStyle: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld, .topic_list_box.topic-fixed {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
-                hiddenPN: true,
                 forceTarget: true,
+                hiddenPN: true,
+                insStyle: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld, .topic_list_box.topic-fixed {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
                 pager: {
                     type: 5,
                     nextL: '//li[contains(@class,"pb_list_pager")]/a[contains(text(),"下一页")]',
@@ -1167,7 +1167,6 @@ function: {
                         return '';
                     },
                     pageE: 'css;.lifeContent-topicList-item',
-                    insertP: ['//div[@class="lifeContent-topicList"]//div[@class="lifeContent-topicList-item"][last()]', 4],
                     replaceE: 'css;.N_sortPage ',
                     scrollD: 1000
                 }
@@ -1414,12 +1413,11 @@ function: {
             }, //             Vilipix
             pixivision: {
                 host: 'www.pixivision.net',
-                functionS: function() {if (indexOF('/c/') || indexOF('/s/')) curSite = DBSite.pixivision;},
+                functionS: function() {if (!indexOF('/a/')) curSite = DBSite.pixivision;},
                 pager: {
                     type: 1,
                     nextL: 'css;a.next',
                     pageE: 'css;li.article-card-container',
-                    insertP: ['css;li.article-card-container:last-of-type', 4],
                     replaceE: 'css;._pager',
                     scrollD: 2000
                 }
@@ -1531,7 +1529,17 @@ function: {
                     nextL: function() {return getP_nextL('css;li.active+li:not(.disabled) > a', 'page=', /page=\d+/)},
                     scrollD: 1000
                 }
-            }, //               iconfont
+            }, //            iconfont
+            iconarchive: {
+                host: 'iconarchive.com',
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.next',
+                    pageE: 'css;.icondetail',
+                    replaceE: 'css;.pagination',
+                    scrollD: 2000
+                }
+            }, //         IconArchive
             puxiang: {
                 host: 'www.puxiang.com',
                 functionS: function() {if (location.pathname === '/search/favorite') {
@@ -1581,7 +1589,6 @@ function: {
                     type: 1,
                     nextL: '//a[@class="page-link" and contains(text(), "下一页")]',
                     pageE: 'css;.row > .col-sm-6',
-                    insertP: ['css;.row > .col-sm-6:last-of-type', 4],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1000
                 }
@@ -1801,13 +1808,15 @@ function: {
             nexusmods: {
                 host: 'www.nexusmods.com',
                 pager: {
-                    type: 4,
+                    type: 1,
                     nextL: nexusmods_nextL,
                     pageE: 'css;ul.tiles > li',
                     insertP: ['css;ul.tiles', 3],
-                    insertE: nexusmods_insertE,
                     replaceE: 'css;.pagination',
-                    scrollD: 3000
+                    scrollD: 4000
+                },
+                function: {
+                    bF: nexusmods_bF
                 }
             }, //               NexusMods
             curseforge: {
@@ -1816,7 +1825,6 @@ function: {
                     type: 1,
                     nextL: 'css;.pagination-next > a',
                     pageE: 'css;div.my-2',
-                    insertP: ['css;div.my-2:last-of-type', 4],
                     replaceE: 'css;.pagination',
                     scrollD: 2500
                 }
@@ -3081,6 +3089,7 @@ function: {
                 } else if (indexOF('/manga-list') || location.pathname === '/search') {
                     curSite = DBSite.mangabz_list;
                 }},
+                hiddenPN: true,
                 insStyle: 'body > .container > div:not([id]) {display: none !important;} .top-bar {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}',
                 pager: {
                     type: 4,
@@ -3253,7 +3262,7 @@ function: {
                     type: 1,
                     nextL: '//div[contains(@class, "articlebtn")]/a[contains(text(), "下一页") or contains(text(), "下一章")]',
                     pageE: 'css;#BookText',
-                    insertP: ['css;#BookText', 5],
+                    insertP: ['css;#BookText', 6],
                     replaceE: 'css;.articlebtn, head > title',
                     scrollD: 1000
                 }
@@ -3290,7 +3299,7 @@ function: {
                     type: 1,
                     nextL: 'id("footlink")/a[contains(text(), "下一页")]',
                     pageE: 'css;#contents',
-                    insertP: ['css;#contents', 5],
+                    insertP: ['css;#contents', 6],
                     replaceE: 'css;#footlink, head > title, #amain dd h1',
                     scrollD: 900
                 }
@@ -3705,7 +3714,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="btn-pager"]/a[contains(text(), "❯")]',
                     pageE: 'css;li.post-list-item',
-                    insertP: ['css;li.post-list-item:last-child', 4],
                     replaceE: 'css;.ajax-pager',
                     scrollD: 1000
                 }
@@ -3937,7 +3945,6 @@ function: {
                     type: 1,
                     nextL: 'css;nav.paginate-container > a[aria-label="Next"]',
                     pageE: 'css;li.notifications-list-item',
-                    insertP: ['css;li.notifications-list-item:last-child', 4],
                     replaceE: 'css;nav.paginate-container, .js-notifications-list-paginator-counts',
                     scrollD: 3000
                 }
@@ -3947,7 +3954,7 @@ function: {
                     pageE: 'css;ul.repo-list > li',
                     insertP: ['css;ul.repo-list', 3],
                 }
-            }, //             Github - Search 列表
+            }, //Github - Search 列表
             github_search_code: {
                 pager: {
                     pageE: 'css;.code-list-item',
@@ -4452,7 +4459,7 @@ function: {
                     type: 1,
                     nextL: 'css;li.md-nav__item.md-nav__item--active.md-nav__item--nested li.md-nav__item--active+li a',
                     pageE: 'css;article.md-content__inner',
-                    insertP: ['css;article.md-content__inner', 5],
+                    insertP: ['css;article.md-content__inner', 6],
                     replaceE: 'css;.md-sidebar.md-sidebar--primary',
                     scrollD: 1300
                 }
@@ -4908,7 +4915,7 @@ function: {
                     type: 1,
                     nextL: 'css;.pagesYY a.cur+a',
                     pageE: 'css;#articleDiv',
-                    insertP: ['css;#articleDiv', 5],
+                    insertP: ['css;#articleDiv', 6],
                     replaceE: 'css;.pagesYY',
                     scrollD: 1000
                 }
@@ -5230,44 +5237,18 @@ function: {
             }
         }
     }
-    // [百度贴吧] 获取下一页地址
-    function baidu_tieba_nextL() {
-        let next = getCSS('a.next.pagination-item');
-        if (next != null && next.nodeType === 1 && next.href && next.href.slice(0,4) === 'http') {
-            var url = next.href + '&pagelets=frs-list%2Fpagelet%2Fthread&pagelets_stamp=' + new Date().getTime();
-            if (url === curSite.pageUrl) return
-            curSite.pageUrl = url;
-            getPageElems(curSite.pageUrl);
-        };
-    }
     // [百度贴吧] 插入数据
-    function baidu_tieba_insertE(newBody, type) {
-        if (!newBody) return
-        let toElement = getAll(curSite.pager.insertP[0])[0], pageElems;
-        // 插入位置
-        let addTo = getAddTo(curSite.pager.insertP[1]);
+    function baidu_tieba_insertE(pageElems, type) {
+        if (!pageElems) return
         // 获取 <script> 内容
-        const scriptElems = getXpath(`//script[contains(text(), 'Bigpipe.register("frs-list/pagelet/thread_list", ')]`, newBody, newBody);
+        const scriptElems = getXpath(`//script[contains(text(), 'Bigpipe.register("frs-list/pagelet/thread_list", ')]`, pageElems, pageElems);
         if (scriptElems) {
             // 从 <script> 中提取帖子列表字符串
             let scriptText = scriptElems.textContent.replace('Bigpipe.register("frs-list/pagelet/thread_list", ','');
             scriptText = scriptText.slice(0, scriptText.indexOf(').'));
-            // 字符串格式化并转为 Element 元素
-            var temp_baidu_tieba = document.createElement('div'); temp_baidu_tieba.innerHTML = JSON.parse(scriptText).content;
-            // 插入前执行函数
-            pageElems = curSite.function.bF(getAll(curSite.pager.pageE, temp_baidu_tieba, temp_baidu_tieba), curSite.function.pF);
-            // 插入元素
-            pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo, one);});
-            // 当前页码 + 1
-            pageNum.now = pageNum._now + 1
-            // 替换元素
-            let oriE = getAllCSS(curSite.pager.replaceE.replace('css;', '')),
-                repE = getAll(curSite.pager.replaceE, temp_baidu_tieba, temp_baidu_tieba);
-            if (oriE.length === repE.length) {
-                for (let i = 0; i < oriE.length; i++) {
-                    oriE[i].outerHTML = repE[i].outerHTML;
-                }
-            }
+            // 字符串转 Element 元素
+            let temp_baidu_tieba = document.createElement('div'); temp_baidu_tieba.innerHTML = JSON.parse(scriptText).content;
+            processResult(temp_baidu_tieba);
         }
     }
 
@@ -5324,45 +5305,24 @@ function: {
                     out_items = out_items.replace(/categories:\[.*\]/, categoriesUrl)
                 }
             }
-            url = `https://www.nexusmods.com${modList.uri}?RH_${modList.id}=${out_items}`
-            //console.log(nextNum, url, curSite.pageUrl, out_items)
-            if (url === curSite.pageUrl) return
-            curSite.pageUrl = url;
-            //console.log(nextNum, curSite.pageUrl, out_items)
-            getPageElems(curSite.pageUrl)
+            return `https://www.nexusmods.com${modList.uri}?RH_${modList.id}=${out_items}`
         }
+        return ''
     }
-    // [NexusMods] 插入数据
-    function nexusmods_insertE(newBody, type) {
-        if (!newBody) return
-        let pageElems = getAll(curSite.pager.pageE, newBody, newBody), // 主体元素
-            toElement = getAll(curSite.pager.insertP[0])[0], // 插入位置的元素
-            addTo = getAddTo(curSite.pager.insertP[1]); // 插入位置
-        // 添加下载数据
+    // [NexusMods] 的插入前函数（隐藏底部元素）
+    function nexusmods_bF(pageElems) {
         pageElems.forEach(function (one) {
             let now = one.querySelector('.mod-tile-left');
             if (now) {
                 let downloadCount = now.querySelector('.downloadcount > span.flex-label');
                 if (downloadCount) {
-                    //console.log(now.dataset.gameId, now.dataset.modId)
                     if (GlobalModStats[now.dataset.gameId] && GlobalModStats[now.dataset.gameId][now.dataset.modId]) {
                         downloadCount.textContent = shortFormat(parseInt(GlobalModStats[now.dataset.gameId][now.dataset.modId].total));
                     }
                 }
             }
         });
-        // 插入网页
-        pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo, one);});
-        // 当前页码 + 1
-        pageNum.now = pageNum._now + 1
-        // 替换元素
-        let oriE = getAllCSS(curSite.pager.replaceE.replace('css;', '')),
-            repE = getAll(curSite.pager.replaceE, newBody, newBody);
-        if (oriE.length === repE.length) {
-            for (let i = 0; i < oriE.length; i++) {
-                oriE[i].outerHTML = repE[i].outerHTML;
-            }
-        }
+        return pageElems
     }
 
 
@@ -6257,12 +6217,16 @@ function: {
     };
     // 翻页类型 1/3/6（XHR 后处理结果）
     function processResult(response) {
-        var newBody = response;
-        let pageElems = getAll(curSite.pager.pageE, newBody, newBody),
+        if (!curSite.pager.insertP) {curSite.pager.insertP = [curSite.pager.pageE, 5]}
+        let pageElems = getAll(curSite.pager.pageE, response, response), toElement;
+        if (curSite.pager.insertP[1] === 5) { // 插入 pageE 列表最后一个元素的后面
+            toElement = getAll(curSite.pager.insertP[0]).pop();
+        } else {
             toElement = getOne(curSite.pager.insertP[0]);
+        }
         //console.log(curSite.pager.pageE, pageElems, curSite.pager.insertP, toElement)
 
-        if (pageElems.length > 0) {
+        if (pageElems.length > 0 && toElement) {
             // 如果有插入前函数就执行函数
             if (curSite.function && curSite.function.bF) {
                 if (curSite.function.pF) { // 如果指定了参数
@@ -6276,7 +6240,7 @@ function: {
             let addTo = getAddTo(curSite.pager.insertP[1]);
 
             // 插入新页面元素
-            if (curSite.pager.insertP[1] === 5) { // 插入到目标内部末尾（针对文本，比如小说网页）
+            if (curSite.pager.insertP[1] === 6) { // 插入到目标内部末尾（针对文本，比如小说网页）
                 let afterend = '';
                 pageElems.forEach(function (one) {afterend += one.innerHTML;});
                 toElement.insertAdjacentHTML(addTo, afterend);
@@ -6292,9 +6256,9 @@ function: {
             if (curSite.pager.scriptT) {
                 let scriptText = '';
                 if (curSite.pager.scriptT === 0) { //         下一页的所有 <script> 标签
-                    insScriptAll('//script', toElement, newBody);
+                    insScriptAll('//script', toElement, response);
                 } else if (curSite.pager.scriptT === 1) { //  下一页的所有 <script> 标签（不包括 src 链接）
-                    insScriptAll('//script[not(@src)]', toElement, newBody);
+                    insScriptAll('//script[not(@src)]', toElement, response);
                 } else if (curSite.pager.scriptT === 2) { //  下一页主体元素同级 <script> 标签
                     pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
                     if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
@@ -6310,10 +6274,10 @@ function: {
             }
 
             // 添加历史记录
-            if (curSite.history) addHistory(newBody);
+            if (curSite.history) addHistory(response);
 
             // 替换待替换元素
-            if (curSite.pager.replaceE) replaceElement(newBody);
+            if (curSite.pager.replaceE) replaceElement(response);
 
             // 如果有插入后函数就执行函数
             if (curSite.function && curSite.function.aF) {
@@ -6423,7 +6387,7 @@ function: {
     // 通用型获取下一页地址（直接从元素获取）
     function getE_nextL(css) {
         let next = getOne(css)
-        if (next && next.href != curSite.pageUrl) {
+        if (next && next.href && next.href.slice(0,4) === 'http' && next.href != curSite.pageUrl) {
             curSite.pageUrl = next.href;
             //console.log(curSite.pageUrl)
             return true
@@ -6684,11 +6648,11 @@ function: {
             case 2:
                 return 'afterbegin'; break;
             case 3:
+            case 6:
                 return 'beforeend'; break;
             case 4:
-                return 'afterend'; break;
             case 5:
-                return 'beforeend'; break;
+                return 'afterend'; break;
         }
     }
     // 滚动条事件
