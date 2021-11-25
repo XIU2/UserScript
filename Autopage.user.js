@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.7.1
+// @version      3.7.2
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -1065,6 +1065,32 @@ function: {
                     scrollD: 1500
                 }
             }, //     番组计划 - 小组帖子列表
+            dongchedi: {
+                host: 'www.dongchedi.com',
+                functionS: function() {locationC = true;
+                    if (indexOF('/community/')) {
+                        curSite = DBSite.dongchedi;
+                    }},
+                history: true,
+                pager: {
+                    type: 1,
+                    nextL: 'css;li.pagination-item.is-active+li > a',
+                    pageE: 'css;.data-wrapper > section.community-card',
+                    insertP: ['css;.data-wrapper', 3],
+                    replaceE: '//ul[./li[contains(@class, "pagination-item")]]',
+                    scrollD: 2000
+                },
+                function: {
+                    bF: function(pageElems) {
+                        pageElems.forEach(function (one) {
+                            one.querySelectorAll('.g-load-img-wrap, .tw-absolute.tw-cursor-pointer, .avatar').forEach(function (now) {
+                                getCSS('noscript+img', now).src = getCSS('noscript > img', now).src;
+                            });
+                        });
+                        return pageElems
+                    }
+                }
+            }, //           懂车帝论坛
             kdslife: {
                 host: 'club.kdslife.com',
                 functionS: function() {
@@ -3049,6 +3075,48 @@ function: {
                     pF: [0, 'img[data-src]', 'data-src']
                 }
             }, //      乐语漫画 - 分类页
+            _77mh: {
+                host: 'www.77mh.cc',
+                functionS: function() {if (/\/\d+\.html/.test(location.pathname)) {
+                    curSite = DBSite._77mh;
+                    setTimeout(_77mh_init, 100);
+                } else if (indexOF('/colist_')) {
+                    setTimeout(function(){if (getCSS('#listmore1, .listmore')) getCSS('#listmore1, .listmore').click();}, 500)
+                } else {
+                    curSite = DBSite._77mh_list;
+                }},
+                insStyle: '.page_num, #bdtopbot {display: none !important;} #comicImg > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}',
+                history: true,
+                pager: {
+                    type: 4,
+                    nextL: _77mh_nextL,
+                    insertP: ['css;#comicImg', 3],
+                    insertE: _77mh_insertE,
+                    interval: 3000,
+                    scrollD: 2000
+                }
+            }, //             新新漫画
+            _77mh_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="pages_s"]/a[text()="下一页"]',
+                    pageE: 'css;.ar_list_co > ul > li',
+                    insertP: ['css;.ar_list_co > ul', 3],
+                    replaceE: 'css;.pages_s',
+                    scrollD: 1000
+                }
+            }, //        新新漫画 - 分类页
+            _77mh_search: {
+                host: 'so.77mh.cc',
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.next',
+                    pageE: 'css;.ar_list_co > ul > dl',
+                    insertP: ['css;.ar_list_co > ul', 3],
+                    replaceE: 'css;.pages_s',
+                    scrollD: 1000
+                }
+            }, //      新新漫画 - 搜索页
             gufengmh: {
                 host: /gufengmh/,
                 functionS: function() {if (/\/\d+.+\.html/.test(location.pathname)) {
@@ -5784,6 +5852,38 @@ function: {
     }
 
 
+    // [新新漫画] 初始化（调整本话其余图片）
+    function _77mh_init() {
+        let _img = '';
+        for (let one of arr) {_img += `<img src="${img_qianz}${one}">`;}
+        getOne(curSite.pager.insertP[0]).innerHTML = _img;
+    }
+    // [新新漫画] 获取下一页地址
+    function _77mh_nextL() {
+        let next = nextLink_b
+        if (next && next != curSite.pageUrl) {
+            curSite.pageUrl = next;
+            getPageElems_(curSite.pageUrl);
+        }
+    }
+    // [新新漫画] 插入数据
+    function _77mh_insertE(pageElems, type) {
+        if (!pageElems) return
+        // 插入并运行 <script>
+        insScriptAll('//script[not(@src)][contains(text(), "eval(")]', document.body, pageElems);
+
+        // 插入图片
+        let _img = '';
+        for (let one of msg.split('|')) {_img += `<img src="${img_qianz}${one}.webp">`;}
+        if (_img) {
+            // 将 img 标签插入到网页中
+            getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
+            addHistory(pageElems);
+            pageNum.now = pageNum._now + 1
+        }
+    }
+
+
     // [古风漫画网] 获取下一页地址
     function gufengmh_nextL() {
         let pageElems = getOne(curSite.pager.pageE); // 寻找数据所在元素
@@ -6625,7 +6725,7 @@ function: {
                 return
             }
             // 插入网页
-            let _html = `<style>#Autopage_number {top: calc(75vh) !important;left: 0 !important;width: 32px;height: 32px;padding: 6px !important;display: flex;position: fixed !important;opacity: 0.5;transition: .2s;z-index: 1000 !important;cursor: pointer;user-select: none !important;flex-direction: column;align-items: center;justify-content: center;box-sizing: content-box;border-radius: 0 50% 50% 0;transform-origin: center !important;transform: translateX(-8px);background-color: #eee;-webkit-tap-highlight-color: transparent;box-shadow: 1px 1px 3px 0px #aaa !important;color: #000 !important;} #Autopage_number:hover {opacity: 0.9;transform: translateX(0);}</style>
+            let _html = `<style>#Autopage_number {top: calc(75vh) !important;left: 0 !important;width: 32px;height: 32px;padding: 6px !important;display: flex;position: fixed !important;opacity: 0.5;transition: .2s;z-index: 9999 !important;cursor: pointer;user-select: none !important;flex-direction: column;align-items: center;justify-content: center;box-sizing: content-box;border-radius: 0 50% 50% 0;transform-origin: center !important;transform: translateX(-8px);background-color: #eee;-webkit-tap-highlight-color: transparent;box-shadow: 1px 1px 3px 0px #aaa !important;color: #000 !important;} #Autopage_number:hover {opacity: 0.9;transform: translateX(0);}</style>
 <div id="Autopage_number" title="1. 此处数字为 [当前页码] (可在脚本菜单中关闭)&#10;&#10;2. 鼠标左键点击此处 [临时暂停本页自动无缝翻页]（再次点击可恢复）">${pageNum._now}</div>`
             document.body.insertAdjacentHTML('beforeend', _html);
             // 点击事件（临时暂停翻页）
