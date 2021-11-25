@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.6.9
+// @version      3.7.0
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -78,7 +78,7 @@
     function setDBSite() {
     /*
     functionS:   匹配该网站域名时要执行的函数（一般用于根据 URL 分配相应翻页规则）
-       locationC = true; 对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则（需要放在 functionS 中）
+    locationC:   对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则（需要放在 functionS 中）
 
     insStyle:    要插入网页的 CSS Style 样式
     hiddenPN:    不显示脚本左下角的页码（比如翻页模式 5）
@@ -96,7 +96,7 @@ pager: {
            interval:    点击间隔时间，对于没有按钮文字变化的按钮，可以手动指定间隔时间（单位 ms，默认 300，当指定上面三个时，会忽略 interval）
            isHidden:    只有下一页按钮可见时（没有被隐藏），才会点击
 
-       3 = 依靠 [指定元素] 与 [可视区域底部] 之间的距离缩小来触发翻页（适用于：主体元素下方内容太多 且 高度不固定时）
+       3 = 依靠 [基准元素] 与 [浏览器可视区域底部] 之间的距离缩小来触发翻页（适用于：主体元素下方内容太多 且 高度不固定时）
            scrollE:     作为基准线的元素（一般为底部页码元素）
            scrollD:     基准元素 - 可视区域底部
 
@@ -123,7 +123,7 @@ pager: {
        6 = 插入该元素末尾（针对小说网站等文本类的）
 
     replaceE: 要替换为下一页内容的元素（比如页码）
-    scrollD： 依靠 [滚动条] 与 [底部] 之间的距离缩小来触发翻页。数值越大，越早开始翻页，一般是访问网页速度越慢，该值就需要越大
+    scrollD： 翻页动作触发点（[滚动条] 与 [网页底部] 之间的距离），数值越大，越早开始翻页，一般是访问网页速度越慢，该值就需要越大
 
     scriptT:  单独插入 <script> 标签
        0 = 下一页的所有 <script> 标签
@@ -590,7 +590,7 @@ function: {
                 iframe: true,
                 pager: {
                     type: 4,
-                    nextL: function() {if (getE_nextL('css;a.next.pagination-item')) getPageElems(curSite.pageUrl + '&pagelets=frs-list%2Fpagelet%2Fthread&pagelets_stamp=' + new Date().getTime());},
+                    nextL: function() {if (getNextE('css;a.next.pagination-item')) getPageElems_(curSite.pageUrl + '&pagelets=frs-list%2Fpagelet%2Fthread&pagelets_stamp=' + new Date().getTime());},
                     pageE: 'css;#thread_list > li',
                     insertP: ['css;#thread_list', 3],
                     insertE: baidu_tieba_insertE,
@@ -1526,12 +1526,14 @@ function: {
                 iframe: true,
                 pager: {
                     type: 5,
-                    nextL: function() {return getP_nextL('css;li.active+li:not(.disabled) > a', 'page=', /page=\d+/)},
+                    nextL: () => getNextP('css;li.active+li:not(.disabled) > a', 'page=', /page=\d+/),
                     scrollD: 1000
                 }
             }, //            iconfont
             iconarchive: {
                 host: 'iconarchive.com',
+                functionS: function() {if (indexOF('/tag/') || indexOF('/search')) curSite = DBSite.iconarchive;},
+                history: true,
                 pager: {
                     type: 1,
                     nextL: 'css;a.next',
@@ -1715,7 +1717,7 @@ function: {
                 history: true,
                 pager: {
                     type: 1,
-                    nextL: function() {return getP_nextL('//li[@class="page-list active"]/following-sibling::li[contains(@class, "page-list")]/a', 'Page=', /Page=\d+/)},
+                    nextL: () => getNextP('//li[@class="page-list active"]/following-sibling::li[contains(@class, "page-list")]/a', 'Page=', /Page=\d+/),
                     pageE: '//div[contains(@class, "game-mod-list") or contains(@class, "search-mod-list")] | //script[not(@src or @type)][contains(text(), ".game-mod-page") or contains(text(), ".search-mod-page")]',
                     insertP: ['//div[contains(@class, "game-mod-wrap") or contains(@class, "search-mod ")]', 3],
                     scriptT: 2,
@@ -2533,7 +2535,7 @@ function: {
                 history: true,
                 pager: {
                     type: 1,
-                    nextL: function() {return getP_nextL('css;#pl-current+a', 'page=', /page=\d+/);},
+                    nextL: () => getNextP('css;#pl-current+a', 'page=', /page=\d+/),
                     pageE: 'css;.resultcard > div:not(#top-banner):not(#bottom-banner):not(.pagelinkcard)',
                     insertP: ['css;.pagelinkcard', 1],
                     replaceE: 'css;.pagelinkcard',
@@ -3173,7 +3175,7 @@ function: {
             cocomanga_list: {
                 pager: {
                     type: 1,
-                    nextL: function() {return getP_nextL('css;.fed-page-info a.fed-btns-green+a[onclick]', 'page=', /page=\d+/)},
+                    nextL: () => getNextP('css;.fed-page-info a.fed-btns-green+a[onclick]', 'page=', /page=\d+/),
                     pageE: 'css;ul.fed-list-info > li',
                     insertP: ['css;ul.fed-list-info', 3],
                     replaceE: 'css;.fed-page-info',
@@ -3187,7 +3189,7 @@ function: {
             cocomanga_search: {
                 pager: {
                     type: 1,
-                    nextL: function() {return getP_nextL('css;.fed-page-info a.fed-btns-green+a[onclick]', 'page=', /page=\d+/)},
+                    nextL: () => getNextP('css;.fed-page-info a.fed-btns-green+a[onclick]', 'page=', /page=\d+/),
                     pageE: 'css;dl.fed-deta-info',
                     insertP: ['css;.fed-page-info', 1],
                     replaceE: 'css;.fed-page-info',
@@ -3339,7 +3341,7 @@ function: {
                 }},
                 pager: {
                     type: 1,
-                    nextL: function() {return (location.origin + ReadParams.url_next)},
+                    nextL: () => (location.origin + ReadParams.url_next),
                     pageE: 'id("mlfy_main_text")/* | //script[contains(text(), "ReadParams")]',
                     insertP: ['css;#mlfy_main_text', 3],
                     replaceE: 'css;title',
@@ -4265,7 +4267,7 @@ function: {
                 history: true,
                 pager: {
                     type: 1,
-                    nextL: function() {return getP_nextL('css;.pagination li.active+li > a', 'pageIndex=', /pageIndex=\d+/)},
+                    nextL: () => getNextP('css;.pagination li.active+li > a', 'pageIndex=', /pageIndex=\d+/),
                     pageE: 'css;.magazine-senior-search-results-list > ul > li, .magazine-model-content-new > ul > li',
                     insertP: ['css;.magazine-senior-search-results-list > ul, .magazine-model-content-new > ul', 3],
                     replaceE: 'css;.pagination',
@@ -4981,6 +4983,52 @@ function: {
                     scrollD: 1000
                 }
             }, //           美女图片 - 分类页
+            ku137: {
+                host: 'www.ku137.net',
+                functionS: function() {if (/\/\d+\.html/.test(location.pathname)) {curSite = DBSite.ku137;} else if (location.pathname != '/') {curSite = DBSite.ku137_list;}},
+                insStyle: '.Title9, .dibu1, .dibu2 {display: none !important;} .content img {min-height: 500px;}',
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="page"]/a[text()="下一页"]',
+                    pageE: 'css;.content > img',
+                    insertP: ['css;.content', 3],
+                    replaceE: 'css;.page',
+                    scrollD: 3000
+                }
+            }, //               美女写真 - 图片页
+            ku137_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="page"]/a[text()="下一页"]',
+                    pageE: 'css;.m-list > ul > li',
+                    insertP: ['css;.m-list > ul', 3],
+                    replaceE: 'css;.page',
+                    scrollD: 1500
+                }
+            }, //          美女写真 - 分类页
+            ku137_m: {
+                host: 'm.ku137.net',
+                functionS: function() {if (/\/\d+\.html/.test(location.pathname)) {curSite = DBSite.ku137_m;} else if (location.pathname != '/') {curSite = DBSite.ku137_m_list;}},
+                insStyle: '.ArticleImageBox img {min-height: 300px;}',
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="article_page"]//a[text()="下一页"]',
+                    pageE: 'css;.ArticleImageBox > *',
+                    insertP: ['css;.ArticleImageBox', 3],
+                    replaceE: 'css;.article_page',
+                    scrollD: 3000
+                }
+            }, //             美女写真 - 手机版 - 图片页
+            ku137_m_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="article_page"]//a[text()="下一页"]',
+                    pageE: 'css;.PictureList > ul > li',
+                    insertP: ['css;.PictureList > ul', 3],
+                    replaceE: 'css;.article_page',
+                    scrollD: 1500
+                }
+            }, //        美女写真 - 手机版 - 分类页
             kingdom: {
                 host: ['kingdom-en.com', 'www.kingdom-en.com', 'm.kingdom-en.com'],
                 functionS: function() {if (/\/\d+\.html/.test(location.pathname)) {curSite = DBSite.kingdom;} else {curSite = DBSite.kingdom_list;}},
@@ -4997,7 +5045,7 @@ function: {
             kingdom_list: {
                 pager: {
                     type: 1,
-                    nextL: function() {return(getCSS('a.page_next').href.replace(/(www.)?ermo.net/, location.host).replace(/http(s)?:/, location.protocol))},
+                    nextL: () => getCSS('a.page_next').href.replace(/(www.)?ermo.net/, location.host).replace(/http(s)?:/, location.protocol),
                     pageE: 'css;.channel_list3 > ul > li, ul#container > li',
                     insertP: ['css;.channel_list3 > ul, ul#container', 3],
                     replaceE: 'css;.pages, .list_page',
@@ -5062,6 +5110,7 @@ function: {
                     nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
                     registerMenuCommand(); // 重新判断规则
                     //console.log(curSite);
+                    if (curSite.insStyle) {insStyle(curSite.insStyle)} // 插入 Style CSS 样式
                     curSite.pageUrl = ''; // 下一页URL
                     pageLoading(); // 自动无缝翻页
 
@@ -5074,6 +5123,7 @@ function: {
                 if (nowLocation != location.href) {
                     nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
                     DBSite.flarum.functionS(); // 重新判断规则
+                    if (curSite.insStyle) {insStyle(curSite.insStyle)} // 插入 Style CSS 样式
                     pageLoading(); // 自动无缝翻页
 
                     if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
@@ -5107,7 +5157,9 @@ function: {
     //console.log(curSite);
     pageLoading(); // 自动无缝翻页
 
+
     // --------------------------------------------------------
+
 
     // [Discuz! 论坛] 判断各版块帖子列表类型
     function discuzForum() {
@@ -5175,6 +5227,7 @@ function: {
         if (width) insStyle(`#waterfall {height: auto !important; width: 100% !important;} #waterfall > li {width: ${width} !important; float: left !important; position: inherit !important; left: auto !important; top: auto !important;}`);
     }
 
+
     // [谷歌搜索] 的插入前函数（加载视频图片）
     function google_bF(pageElems) {
         if (!indexOF('tbm=nws', 's')){
@@ -5187,6 +5240,7 @@ function: {
         }
         return pageElems
     }
+
 
     // [头条搜索] 的插入前函数（过滤相关搜索）
     function toutiao_bF(pageElems) {
@@ -5248,7 +5302,7 @@ function: {
             scriptText = scriptText.slice(0, scriptText.indexOf(').'));
             // 字符串转 Element 元素
             let temp_baidu_tieba = document.createElement('div'); temp_baidu_tieba.innerHTML = JSON.parse(scriptText).content;
-            processResult(temp_baidu_tieba);
+            processElems(temp_baidu_tieba);
         }
     }
 
@@ -5445,12 +5499,12 @@ function: {
             if(pageElems.code == '0000') {
                 if (pageElems.url === curSite.pageUrl) return
                 curSite.pageUrl = pageElems.url;
-                getPageElems(curSite.pageUrl); // 真正的下一页链接
+                getPageElems_(curSite.pageUrl); // 真正的下一页链接
             }
         } else {
             let vg_r_data = getCSS('.vg-r-data');
             if (vg_r_data) {
-                getPageElems(`https://${location.host}/chapter_num?chapter_id=${vg_r_data.dataset.chapter_num}&ctype=1&type=${vg_r_data.dataset.chapterType};`, 'json', 'GET', '', 'url');
+                getPageElems_(`https://${location.host}/chapter_num?chapter_id=${vg_r_data.dataset.chapter_num}&ctype=1&type=${vg_r_data.dataset.chapterType};`, 'json', 'GET', '', 'url');
             }
         }
     }
@@ -5461,7 +5515,7 @@ function: {
             manhuacat_nextL(pageElems, type); return
         }
         addHistory(pageElems);
-        replaceElement(pageElems);
+        replaceElems(pageElems);
 
         // 插入图片
         let _img = '', _img_arr = LZString.decompressFromBase64(getXpath('//body/script[not(@src)][contains(text(), "img_data")]').textContent.split('"')[1]).split(','), vg_r_data = getCSS('.vg-r-data');;
@@ -5494,7 +5548,7 @@ function: {
         var url = location.origin + location.pathname.replace(window['imgDate'].cid.toString(), window['imgDate'].nextId.toString())
         if (url === curSite.pageUrl) return
         curSite.pageUrl = url
-        getPageElems(curSite.pageUrl);
+        getPageElems_(curSite.pageUrl);
     }
     // [漫画柜] 插入数据
     function manhuagui_insertE(pageElems, type) {
@@ -5540,12 +5594,12 @@ function: {
         }
         if (url === curSite.pageUrl) return
         curSite.pageUrl = url
-        getPageElems(curSite.pageUrl);
+        getPageElems_(curSite.pageUrl);
     }
     // [漫画 DB] 插入数据
     function manhuadb_insertE(pageElems, type) {
         if (!pageElems) return
-        if (replaceElement(pageElems, curSite.pager.pageE, curSite.pager.pageE)) {
+        if (replaceElems(pageElems, curSite.pager.pageE, curSite.pager.pageE)) {
             addHistory(pageElems);
             pageNum.now = pageNum._now + 1
             manhuadb_init(); // 将刚刚替换的图片插入网页中
@@ -5570,7 +5624,7 @@ function: {
         nextId = getCSS('.next_chapter:not(.end)')
         if (nextId && nextId.id && nextId.id != 'None') {
             curSite.pageUrl = location.href;
-            getPageElems(`https://www.hicomic.net/api/web/chapter/${nextId.id}/contents`, 'json');
+            getPageElems_(`https://www.hicomic.net/api/web/chapter/${nextId.id}/contents`, 'json');
         }
     }
     // [HiComic(嗨漫画)] 插入数据
@@ -5621,7 +5675,7 @@ function: {
         if (_img) {
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
             addHistory(pageElems);
-            if (replaceElement(pageElems)) pageNum.now = pageNum._now + 1
+            if (replaceElems(pageElems)) pageNum.now = pageNum._now + 1
         }
     }
     // [动漫之家-漫画] 插入数据
@@ -5638,7 +5692,7 @@ function: {
         if (_img) {
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
             addHistory(pageElems);
-            if (replaceElement(pageElems)) pageNum.now = pageNum._now + 1
+            if (replaceElems(pageElems)) pageNum.now = pageNum._now + 1
         }
     }
 
@@ -5657,7 +5711,7 @@ function: {
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
             addHistory(pageElems);
             pageNum.now = pageNum._now + 1
-            replaceElement(pageElems)
+            replaceElems(pageElems)
         }
     }
 
@@ -5676,7 +5730,7 @@ function: {
                 getOne(curSite.pager.insertP[0]).appendChild(document.createElement('img')).src = mhpicurl;
                 addHistory(pageElems);
                 pageNum.now = pageNum._now + 1
-                replaceElement(pageElems)
+                replaceElems(pageElems)
             }, 100)
         }
     }
@@ -5715,7 +5769,7 @@ function: {
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
             addHistory(pageElems);
             pageNum.now = pageNum._now + 1
-            replaceElement(pageElems)
+            replaceElems(pageElems)
         }
     }
 
@@ -5738,7 +5792,7 @@ function: {
                 url = comicUrl + nextId + '.html'
                 if (url === curSite.pageUrl) return
                 curSite.pageUrl = url
-                getPageElems(curSite.pageUrl); // 访问下一页 URL 获取
+                getPageElems_(curSite.pageUrl); // 访问下一页 URL 获取
             }
         }
     }
@@ -5786,14 +5840,14 @@ function: {
     function mangabz_nextL() {
         var url = '';
         if (MANGABZ_PAGE === MANGABZ_IMAGE_COUNT) { // 下一话
-            if (getE_nextL('//a[./img[contains(@src, "icon_xiayizhang")]]')) getPageElems(curSite.pageUrl); // 访问下一话 URL 获取
+            if (getNextE('//a[./img[contains(@src, "icon_xiayizhang")]]')) getPageElems_(curSite.pageUrl); // 访问下一话 URL 获取
         } else { // 下一页
             if (!mkey) var mkey = '';
             url = location.origin + location.pathname + 'chapterimage.ashx' + `?cid=${MANGABZ_CID}&page=${MANGABZ_PAGE + 1}&key=${(mkey)}&_cid=${MANGABZ_CID}&_mid=${MANGABZ_MID}&_dt=${MANGABZ_VIEWSIGN_DT}&_sign=${MANGABZ_VIEWSIGN}`
             if (url === curSite.pageUrl) return
             curSite.pageUrl = url
             //console.log(curSite.pageUrl)
-            getPageElems(curSite.pageUrl, 'text', 'GET', '', 'Next'); // 访问下一页 URL 获取
+            getPageElems_(curSite.pageUrl, 'text', 'GET', '', 'Next'); // 访问下一页 URL 获取
         }
     }
     // [Mangabz 漫画] 插入数据
@@ -5813,7 +5867,7 @@ function: {
                 insScriptAll('css;html:not([dir]) > head > script:not([src])', document.body, pageElems);
                 addHistory(pageElems);
                 pageNum.now = pageNum._now + 1
-                replaceElement(pageElems)
+                replaceElems(pageElems)
                 MANGABZ_PAGE = 0;
                 mangabz_nextL();
             }
@@ -5825,14 +5879,14 @@ function: {
     function xmanhua_nextL() {
         var url = '';
         if (XMANHUA_PAGE === XMANHUA_IMAGE_COUNT) { // 下一话
-            if (getE_nextL('//a[./img[contains(@src, "reader-bottom-right-2.png")]]')) getPageElems(curSite.pageUrl); // 访问下一话 URL 获取
+            if (getNextE('//a[./img[contains(@src, "reader-bottom-right-2.png")]]')) getPageElems_(curSite.pageUrl); // 访问下一话 URL 获取
         } else { // 下一页
             if (!mkey) var mkey = '';
             url = location.origin + location.pathname + 'chapterimage.ashx' + `?cid=${XMANHUA_CID}&page=${XMANHUA_PAGE + 1}&key=${(mkey)}&_cid=${XMANHUA_CID}&_mid=${XMANHUA_MID}&_dt=${XMANHUA_VIEWSIGN_DT}&_sign=${XMANHUA_VIEWSIGN}`
             if (url === curSite.pageUrl) return
             curSite.pageUrl = url
             //console.log(curSite.pageUrl)
-            getPageElems(curSite.pageUrl, 'text', 'GET', '', 'Next'); // 访问下一页 URL 获取
+            getPageElems_(curSite.pageUrl, 'text', 'GET', '', 'Next'); // 访问下一页 URL 获取
         }
     }
     // [Xmanhua 漫画] 插入数据
@@ -5852,7 +5906,7 @@ function: {
                 insScriptAll('css;html:not([dir]) > head > script:not([src])', document.body, pageElems);
                 addHistory(pageElems);
                 pageNum.now = pageNum._now + 1
-                replaceElement(pageElems)
+                replaceElems(pageElems)
                 XMANHUA_PAGE = 0;
                 xmanhua_nextL();
             }
@@ -5889,11 +5943,13 @@ function: {
             }, 100)
             addHistory(pageElems);
             pageNum.now = pageNum._now + 1
-            replaceElement(pageElems)
+            replaceElems(pageElems)
         }
     }
 
+
     // --------------------------------------------------------
+
 
     // 自动无缝翻页
     function pageLoading() {
@@ -5903,17 +5959,16 @@ function: {
                     let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
                         scrollHeight = window.innerHeight || document.documentElement.clientHeight,
                         scrollD = curSite.pager.scrollD;
-                    // <<<<< 翻页类型 3（依靠 [指定元素] 与 [可视区域底部] 之间的距离缩小来触发翻页）>>>>>
+                    // <<<<< 翻页类型 3（依靠 [基准元素] 与 [浏览器可视区域底部] 之间的距离缩小来触发翻页）>>>>>
                     if (curSite.pager.type === 3) {
                         let scrollE = getOne(curSite.pager.scrollE);
                         //console.log(scrollE.offsetTop, scrollE.offsetTop - (scrollTop + scrollHeight), scrollD, scrollTop + scrollHeight, curSite.SiteTypeID)
-                        if (scrollE.offsetTop - (scrollTop + scrollHeight) <= scrollD) {intervalPause(); ShowPager.loadMorePage();}
+                        if (scrollE.offsetTop - (scrollTop + scrollHeight) <= scrollD) {intervalPause(); checkURL(getPageElems);}
 
                     } else {
                         if (document.documentElement.scrollHeight <= scrollHeight + scrollTop + scrollD) {
                             // <<<<< 翻页类型 1（由脚本实现自动无缝翻页）>>>>>
-                            if (curSite.pager.type === 1) {
-                                intervalPause(); ShowPager.loadMorePage();
+                            if (curSite.pager.type === 1) {intervalPause(); checkURL(getPageElems);
 
                             // <<<<< 翻页类型 2（网站自带了自动无缝翻页功能，只需要点击下一页按钮即可）>>>>>
                             } else if (curSite.pager.type === 2) {
@@ -5944,40 +5999,20 @@ function: {
                                         }
                                     }
                                 }
+
                             // <<<<< 翻页类型 4（部分简单的动态加载类网站）>>>>>
                             } else if (curSite.pager.type === 4) {
                                 // 为百度贴吧的发帖考虑，预留底部一小部分...
                                 if (!(curSite.SiteTypeID === SiteType.BAIDU_TIEBA && document.documentElement.scrollHeight <= scrollHeight + scrollTop + 200)) {
                                     intervalPause();
-                                    if (typeof curSite.pager.nextL == 'function') {
-                                        curSite.pager.nextL();
-                                    } else if (getE_nextL(curSite.pager.nextL)) {
-                                        getPageElems(curSite.pageUrl);
-                                    }
+                                    if (typeof curSite.pager.nextL == 'function') {curSite.pager.nextL();} else if (getNextE(curSite.pager.nextL)) {getPageElems_(curSite.pageUrl);}
                                 }
 
                             // <<<<< 翻页类型 5（插入 iframe 方式来加载下一页）>>>>>
-                            } else if (curSite.pager.type === 5) {
-                                if (typeof curSite.pager.nextL == 'function') {
-                                    let tempUrl = curSite.pager.nextL();
-                                    if (!tempUrl || (tempUrl && tempUrl.slice(0,4) != 'http') || tempUrl === curSite.pageUrl) return;
-                                    curSite.pageUrl = tempUrl;
-                                    insIframe(curSite.pageUrl);
-                                } else if (getE_nextL(curSite.pager.nextL)) {
-                                    insIframe(curSite.pageUrl);
-                                }
+                            } else if (curSite.pager.type === 5) {checkURL(insIframe);
 
                             // <<<<< 翻页类型 6（通过 iframe 获取下一页动态加载内容）>>>>>
-                            } else if (curSite.pager.type === 6) {
-                                if (typeof curSite.pager.nextL == 'function') {
-                                    let tempUrl = curSite.pager.nextL();
-                                    if (!tempUrl || (tempUrl && tempUrl.slice(0,4) != 'http') || tempUrl === curSite.pageUrl ) return;
-                                    curSite.pageUrl = tempUrl;
-                                    insIframe_(curSite.pageUrl);
-                                } else if (getE_nextL(curSite.pager.nextL)) {
-                                    insIframe_(curSite.pageUrl);
-                                }
-                            }
+                            } else if (curSite.pager.type === 6) {checkURL(insIframe_);}
                         }
                     }
                 }
@@ -5989,6 +6024,213 @@ function: {
                 pausePage = false
                 setTimeout(function(){pausePage = true;}, curSite.pager.interval)
             }
+        }
+    }
+    // 判断是支持
+    function doesItSupport() {
+        setDBSite(); // 配置 DBSite 变量对象
+
+        // 遍历判断是否是某个已支持的网站，顺便直接赋值
+        let support = false;
+        for (let now in DBSite) { // 遍历对象
+            if (!DBSite[now].host) continue; // 如果不存在则继续下一个循环
+            if (Array.isArray(DBSite[now].host)) { // 如果是数组
+                for (let i of DBSite[now].host) { // 遍历数组
+                    if (i === location.host) {
+                        if (DBSite[now].functionS) {
+                            DBSite[now].functionS();
+                        } else {
+                            curSite = DBSite[now];
+                        }
+                        support = true; break; // 如果找到了就退出循环
+                    }
+                }
+            } else if (DBSite[now].host instanceof RegExp) {
+                if (DBSite[now].host.test(location.host)) {
+                    if (self != top) {if (!DBSite[now].iframe) break;} // 如果当前位于 iframe 框架下，就需要判断是否需要执行
+                    if (DBSite[now].functionS) {
+                        DBSite[now].functionS();
+                    } else {
+                        curSite = DBSite[now];
+                    }
+                    support = true; break; // 如果找到了就退出循环
+                }
+            } else if (DBSite[now].host === location.host) {
+                if (self != top) {if (!DBSite[now].iframe) break;} // 如果当前位于 iframe 框架下，就需要判断是否需要执行
+                if (DBSite[now].functionS) {
+                    DBSite[now].functionS();
+                } else {
+                    curSite = DBSite[now];
+                }
+                support = true; break; // 如果找到了就退出循环
+            }
+        }
+
+        if (support) {
+            console.info('[自动无缝翻页] - 独立规则 网站'); return 1;
+        } else if (getCSS('meta[name="author" i][content*="Discuz!" i], meta[name="generator" i][content*="Discuz!" i], body[id="nv_forum" i][class^="pg_" i][onkeydown*="27"], body[id="nv_search" i][onkeydown*="27"]') || (getCSS('a[href*="www.discuz.net" i]') && getCSS('a[href*="www.discuz.net" i]').textContent.indexOf('Discuz!') > -1) || (getCSS('#ft') && getCSS('#ft').textContent.indexOf('Discuz!') > -1)) {
+            console.info('[自动无缝翻页] - <Discuz!> 论坛'); return 2;
+        } else if (getCSS('#flarum-loading')) {
+            console.info('[自动无缝翻页] - <Flarum> 论坛'); return 3;
+        } else if (getCSS('body#phpbb')) {
+            console.info('[自动无缝翻页] - <phpBB> 论坛'); return 4;
+        } else if (getXpath('//footer//a[contains(string(), "Xiuno")] | //link[contains(@href, "xiuno")] | //script[contains(@src, "xiuno")]')) {
+            console.info('[自动无缝翻页] - <Xiuno> 论坛'); return 5;
+        } else if (typeof XF != 'undefined') {
+            console.info('[自动无缝翻页] - <XenForo> 论坛'); return 6;
+        } else if (getCSS('link[href*="themes/dux" i], script[src*="themes/dux" i]')) {
+            console.info('[自动无缝翻页] - 使用 WordPress <DUX> 主题的网站'); return 100;
+        } else if (getCSS('link[href*="themes/xiu" i], script[src*="themes/xiu" i]')) {
+            console.info('[自动无缝翻页] - 使用 WordPress <XIU> 主题的网站'); return 101;
+        } else if (getCSS('link[href*="themes/d8" i], script[src*="themes/d8" i]')) {
+            console.info('[自动无缝翻页] - 使用 WordPress <D8> 主题的网站'); return 102;
+        } else if (getCSS('link[href*="themes/begin" i], script[src*="themes/begin" i], img[src*="themes/begin" i]')) {
+            console.info('[自动无缝翻页] - 使用 WordPress <Begin> 主题的网站'); return 103;
+        } else if (getCSS('meta[name="description"][content*="小说"], meta[name="description"][content*="章节"], meta[name="description"][content*="阅读"]') && getCSS('#content') && getXpath('//a[contains(text(), "下一章") or contains(text(), "下一页")]')) {
+            console.info('[自动无缝翻页] - <笔趣阁> 模板的小说网站'); return 200;
+        } else if (self != top) {
+            return -1;
+        }
+        return 0;
+    }
+
+
+    // 翻页类型 1/3
+    function getPageElems(url) {
+        GM_xmlhttpRequest({
+            url: url,
+            method: 'GET',
+            overrideMimeType: 'text/html; charset=' + document.charset,
+            headers: {
+                'Referer': location.href
+            },
+            timeout: 10000,
+            onload: function (response) {
+                try {
+                    //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
+                    processElems(createDocumentByString(response.responseText));
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+        });
+    }
+    // 翻页类型 4
+    function getPageElems_(url, type = '', method = 'GET', data = '', type2) {
+        let mimeType;
+        switch (type) {
+            case 'json':
+                mimeType = 'application/json; charset=' + document.charset; break;
+            case 'text':
+                mimeType = 'text/plain; charset=' + document.charset; break;
+            default:
+                mimeType = 'text/html; charset=' + document.charset;
+        }
+
+        GM_xmlhttpRequest({
+            url: url,
+            method: method,
+            data: data,
+            responseType: type,
+            overrideMimeType: mimeType,
+            headers: {
+                'Referer': location.href,
+                'Content-Type': (method === 'POST') ? 'application/x-www-form-urlencoded':''
+            },
+            timeout: 10000,
+            onload: function (response) {
+                try {
+                    //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
+                    switch (type) {
+                        case 'json':
+                            curSite.pager.insertE(response.response, type2);
+                            break;
+                        case 'text':
+                            curSite.pager.insertE(response.responseText, type2)
+                            break;
+                        default:
+                            curSite.pager.insertE(createDocumentByString(response.responseText), type2)
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+        });
+    }
+    // 翻页类型 1/3/6（XHR 后处理结果，插入、替换元素等）
+    function processElems(response) {
+        if (!curSite.pager.insertP) {curSite.pager.insertP = [curSite.pager.pageE, 5]}
+        let pageElems = getAll(curSite.pager.pageE, response, response), toElement;
+        if (curSite.pager.insertP[1] === 5) { // 插入 pageE 列表最后一个元素的后面
+            toElement = getAll(curSite.pager.insertP[0]).pop();
+        } else {
+            toElement = getOne(curSite.pager.insertP[0]);
+        }
+        //console.log(curSite.pager.pageE, pageElems, curSite.pager.insertP, toElement)
+
+        if (pageElems.length > 0 && toElement) {
+            // 如果有插入前函数就执行函数
+            if (curSite.function && curSite.function.bF) {
+                if (curSite.function.pF) { // 如果指定了参数
+                    pageElems = curSite.function.bF(pageElems, curSite.function.pF);
+                } else {
+                    pageElems = curSite.function.bF(pageElems);
+                }
+            }
+
+            // 插入位置
+            let addTo = getAddTo(curSite.pager.insertP[1]);
+
+            // 插入新页面元素
+            if (curSite.pager.insertP[1] === 6) { // 插入到目标内部末尾（针对文本，比如小说网页）
+                let afterend = '';
+                pageElems.forEach(function (one) {afterend += one.innerHTML;});
+                toElement.insertAdjacentHTML(addTo, afterend);
+            } else {
+                if (curSite.pager.insertP[1] === 2 || curSite.pager.insertP[1] === 4) pageElems.reverse(); // 插入到 [元素内头部]、[目标本身后面] 时，需要反转顺序
+                pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo, one);});
+            }
+
+            // 当前页码 + 1
+            pageNum.now = pageNum._now + 1
+
+            // 插入 <script> 标签
+            if (curSite.pager.scriptT) {
+                let scriptText = '';
+                if (curSite.pager.scriptT === 0) { //         下一页的所有 <script> 标签
+                    insScriptAll('//script', toElement, response);
+                } else if (curSite.pager.scriptT === 1) { //  下一页的所有 <script> 标签（不包括 src 链接）
+                    insScriptAll('//script[not(@src)]', toElement, response);
+                } else if (curSite.pager.scriptT === 2) { //  下一页主体元素同级 <script> 标签
+                    pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
+                    if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
+                } else if (curSite.pager.scriptT === 3) { //  下一页主体元素同级 <script> 标签（src 远程文件）
+                    pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT' && one.src) {toElement.appendChild(document.createElement('script')).src = one.src;}});
+                } else if (curSite.pager.scriptT === 4) { //  下一页主体元素子元素 <script> 标签
+                    pageElems.forEach(function (one) {
+                        const scriptElems = one.querySelectorAll('script');
+                        scriptElems.forEach(function (script) {scriptText += ';' + script.textContent;});
+                    });
+                    if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
+                }
+            }
+
+            // 添加历史记录
+            if (curSite.history) addHistory(response);
+
+            // 替换待替换元素
+            if (curSite.pager.replaceE) replaceElems(response);
+
+            // 如果有插入后函数就执行函数
+            if (curSite.function && curSite.function.aF) {
+                if (curSite.function.pF) { // 如果指定了参数
+                    curSite.function.aF(curSite.function.pF);
+                } else {
+                    curSite.function.aF();
+                }
+            }
+        } else { // 获取主体元素失败后，尝试重新获取
+            setTimeout(function(){if (curSite.retry) {curSite.pageUrl = '';}}, curSite.retry)
         }
     }
     // 翻页类型 5（插入 iframe 方式加载下一页）
@@ -6071,7 +6313,7 @@ function: {
                 if (++time1 == 10) {
                     //console.timeEnd('sort');
                     clearInterval(time2);
-                    processResult(iframe.contentWindow.document); // 插入/替换元素等
+                    processElems(iframe.contentWindow.document); // 插入/替换元素等
                     //console.log(iframe.contentWindow.document.documentElement.scrollHeight || iframe.contentWindow.document.body.scrollHeight)
                     pausePage = true; //      恢复翻页
                 }
@@ -6085,272 +6327,8 @@ function: {
             document.lastElementChild.appendChild(iframe);
         }
     }
-    // 判断是支持
-    function doesItSupport() {
-        setDBSite(); // 配置 DBSite 变量对象
-
-        // 遍历判断是否是某个已支持的网站，顺便直接赋值
-        let support = false;
-        for (let now in DBSite) { // 遍历对象
-            if (!DBSite[now].host) continue; // 如果不存在则继续下一个循环
-            if (Array.isArray(DBSite[now].host)) { // 如果是数组
-                for (let i of DBSite[now].host) { // 遍历数组
-                    if (i === location.host) {
-                        if (DBSite[now].functionS) {
-                            DBSite[now].functionS();
-                        } else {
-                            curSite = DBSite[now];
-                        }
-                        support = true; break; // 如果找到了就退出循环
-                    }
-                }
-            } else if (DBSite[now].host instanceof RegExp) {
-                if (DBSite[now].host.test(location.host)) {
-                    if (self != top) {if (!DBSite[now].iframe) break;} // 如果当前位于 iframe 框架下，就需要判断是否需要执行
-                    if (DBSite[now].functionS) {
-                        DBSite[now].functionS();
-                    } else {
-                        curSite = DBSite[now];
-                    }
-                    support = true; break; // 如果找到了就退出循环
-                }
-            } else if (DBSite[now].host === location.host) {
-                if (self != top) {if (!DBSite[now].iframe) break;} // 如果当前位于 iframe 框架下，就需要判断是否需要执行
-                if (DBSite[now].functionS) {
-                    DBSite[now].functionS();
-                } else {
-                    curSite = DBSite[now];
-                }
-                support = true; break; // 如果找到了就退出循环
-            }
-        }
-
-        if (support) {
-            console.info('[自动无缝翻页] - 独立规则 网站'); return 1;
-        } else if (getCSS('meta[name="author" i][content*="Discuz!" i], meta[name="generator" i][content*="Discuz!" i], body[id="nv_forum" i][class^="pg_" i][onkeydown*="27"], body[id="nv_search" i][onkeydown*="27"]') || (getCSS('a[href*="www.discuz.net" i]') && getCSS('a[href*="www.discuz.net" i]').textContent.indexOf('Discuz!') > -1) || (getCSS('#ft') && getCSS('#ft').textContent.indexOf('Discuz!') > -1)) {
-            console.info('[自动无缝翻页] - <Discuz!> 论坛'); return 2;
-        } else if (getCSS('#flarum-loading')) {
-            console.info('[自动无缝翻页] - <Flarum> 论坛'); return 3;
-        } else if (getCSS('body#phpbb')) {
-            console.info('[自动无缝翻页] - <phpBB> 论坛'); return 4;
-        } else if (getXpath('//footer//a[contains(string(), "Xiuno")] | //link[contains(@href, "xiuno")] | //script[contains(@src, "xiuno")]')) {
-            console.info('[自动无缝翻页] - <Xiuno> 论坛'); return 5;
-        } else if (typeof XF != 'undefined') {
-            console.info('[自动无缝翻页] - <XenForo> 论坛'); return 6;
-        } else if (getCSS('link[href*="themes/dux" i], script[src*="themes/dux" i]')) {
-            console.info('[自动无缝翻页] - 使用 WordPress <DUX> 主题的网站'); return 100;
-        } else if (getCSS('link[href*="themes/xiu" i], script[src*="themes/xiu" i]')) {
-            console.info('[自动无缝翻页] - 使用 WordPress <XIU> 主题的网站'); return 101;
-        } else if (getCSS('link[href*="themes/d8" i], script[src*="themes/d8" i]')) {
-            console.info('[自动无缝翻页] - 使用 WordPress <D8> 主题的网站'); return 102;
-        } else if (getCSS('link[href*="themes/begin" i], script[src*="themes/begin" i], img[src*="themes/begin" i]')) {
-            console.info('[自动无缝翻页] - 使用 WordPress <Begin> 主题的网站'); return 103;
-        } else if (getCSS('meta[name="description"][content*="小说"], meta[name="description"][content*="章节"], meta[name="description"][content*="阅读"]') && getCSS('#content') && getXpath('//a[contains(text(), "下一章") or contains(text(), "下一页")]')) {
-            console.info('[自动无缝翻页] - <笔趣阁> 模板的小说网站'); return 200;
-        } else if (self != top) {
-            return -1;
-        }
-        return 0;
-    }
 
 
-    // 翻页类型 1/3 （修改自 https://greasyfork.org/scripts/14178 、 https://github.com/machsix/Super-preloader）
-    var ShowPager = {
-        getFullHref: function (e) {
-            if (e != null && e.nodeType === 1 && e.href && e.href.slice(0,4) === 'http') return e.href;
-            return '';
-        },
-        createDocumentByString: function (e) {
-            if (e) {
-                if ('HTML' !== document.documentElement.nodeName) return (new DOMParser).parseFromString(e, 'application/xhtml+xml');
-                var t;
-                try { t = (new DOMParser).parseFromString(e, 'text/html');} catch (e) {}
-                if (t) return t;
-                if (document.implementation.createHTMLDocument) {
-                    t = document.implementation.createHTMLDocument('ADocument');
-                } else {
-                    try {((t = document.cloneNode(!1)).appendChild(t.importNode(document.documentElement, !1)), t.documentElement.appendChild(t.createElement('head')), t.documentElement.appendChild(t.createElement('body')));} catch (e) {}
-                }
-                if (t) {
-                    var r = document.createRange(),
-                        n = r.createContextualFragment(e);
-                    r.selectNodeContents(document.body);
-                    t.body.appendChild(n);
-                    for (var a, o = { TITLE: !0, META: !0, LINK: !0, STYLE: !0, BASE: !0}, i = t.body, s = i.childNodes, c = s.length - 1; c >= 0; c--) o[(a = s[c]).nodeName] && i.removeChild(a);
-                    return t;
-                }
-            } else console.error('没有找到要转成 DOM 的字符串');
-        },
-        loadMorePage: function () {
-            if (curSite.pager) {
-                var url;
-                if (typeof curSite.pager.nextL == 'function') {
-                    url = curSite.pager.nextL();
-                } else {
-                    url = this.getFullHref(getOne(curSite.pager.nextL));
-                }
-                //console.log(url, curSite.pageUrl);
-                if (url === '') return;
-                if (curSite.pager.forceHTTPS && location.protocol === 'https:') {url = url.replace(/^http:/,'https:');}
-                if (curSite.pageUrl === url) return;// 避免重复加载相同的页面
-                curSite.pageUrl = url;
-                // 读取下一页的数据
-                GM_xmlhttpRequest({
-                    url: url,
-                    method: 'GET',
-                    overrideMimeType: 'text/html; charset=' + document.charset,
-                    headers: {
-                        'Referer': location.href
-                    },
-                    timeout: 10000,
-                    onload: function (response) {
-                        try {
-                            //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
-                            processResult(ShowPager.createDocumentByString(response.responseText));
-                        } catch (e) {
-                            console.log(e);
-                        }
-                    }
-                });
-            }
-        },
-    };
-    // 翻页类型 1/3/6（XHR 后处理结果）
-    function processResult(response) {
-        if (!curSite.pager.insertP) {curSite.pager.insertP = [curSite.pager.pageE, 5]}
-        let pageElems = getAll(curSite.pager.pageE, response, response), toElement;
-        if (curSite.pager.insertP[1] === 5) { // 插入 pageE 列表最后一个元素的后面
-            toElement = getAll(curSite.pager.insertP[0]).pop();
-        } else {
-            toElement = getOne(curSite.pager.insertP[0]);
-        }
-        //console.log(curSite.pager.pageE, pageElems, curSite.pager.insertP, toElement)
-
-        if (pageElems.length > 0 && toElement) {
-            // 如果有插入前函数就执行函数
-            if (curSite.function && curSite.function.bF) {
-                if (curSite.function.pF) { // 如果指定了参数
-                    pageElems = curSite.function.bF(pageElems, curSite.function.pF);
-                } else {
-                    pageElems = curSite.function.bF(pageElems);
-                }
-            }
-
-            // 插入位置
-            let addTo = getAddTo(curSite.pager.insertP[1]);
-
-            // 插入新页面元素
-            if (curSite.pager.insertP[1] === 6) { // 插入到目标内部末尾（针对文本，比如小说网页）
-                let afterend = '';
-                pageElems.forEach(function (one) {afterend += one.innerHTML;});
-                toElement.insertAdjacentHTML(addTo, afterend);
-            } else {
-                if (curSite.pager.insertP[1] === 2 || curSite.pager.insertP[1] === 4) pageElems.reverse(); // 插入到 [元素内头部]、[目标本身后面] 时，需要反转顺序
-                pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo, one);});
-            }
-
-            // 当前页码 + 1
-            pageNum.now = pageNum._now + 1
-
-            // 插入 <script> 标签
-            if (curSite.pager.scriptT) {
-                let scriptText = '';
-                if (curSite.pager.scriptT === 0) { //         下一页的所有 <script> 标签
-                    insScriptAll('//script', toElement, response);
-                } else if (curSite.pager.scriptT === 1) { //  下一页的所有 <script> 标签（不包括 src 链接）
-                    insScriptAll('//script[not(@src)]', toElement, response);
-                } else if (curSite.pager.scriptT === 2) { //  下一页主体元素同级 <script> 标签
-                    pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
-                    if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
-                } else if (curSite.pager.scriptT === 3) { //  下一页主体元素同级 <script> 标签（src 远程文件）
-                    pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT' && one.src) {toElement.appendChild(document.createElement('script')).src = one.src;}});
-                } else if (curSite.pager.scriptT === 4) { //  下一页主体元素子元素 <script> 标签
-                    pageElems.forEach(function (one) {
-                        const scriptElems = one.querySelectorAll('script');
-                        scriptElems.forEach(function (script) {scriptText += ';' + script.textContent;});
-                    });
-                    if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
-                }
-            }
-
-            // 添加历史记录
-            if (curSite.history) addHistory(response);
-
-            // 替换待替换元素
-            if (curSite.pager.replaceE) replaceElement(response);
-
-            // 如果有插入后函数就执行函数
-            if (curSite.function && curSite.function.aF) {
-                if (curSite.function.pF) { // 如果指定了参数
-                    curSite.function.aF(curSite.function.pF);
-                } else {
-                    curSite.function.aF();
-                }
-            }
-        } else { // 获取主体元素失败后，尝试重新获取
-            setTimeout(function(){if (curSite.retry) {curSite.pageUrl = '';}}, curSite.retry)
-        }
-    }
-    // 翻页类型 4
-    function getPageElems(url, type = '', method = 'GET', data = '', type2) {
-        let mimeType;
-        switch (type) {
-            case 'json':
-                mimeType = 'application/json; charset=' + document.charset; break;
-            case 'text':
-                mimeType = 'text/plain; charset=' + document.charset; break;
-            default:
-                mimeType = 'text/html; charset=' + document.charset;
-        }
-
-        GM_xmlhttpRequest({
-            url: url,
-            method: method,
-            data: data,
-            responseType: type,
-            overrideMimeType: mimeType,
-            headers: {
-                'Referer': location.href,
-                'Content-Type': (method === 'POST') ? 'application/x-www-form-urlencoded':''
-            },
-            timeout: 10000,
-            onload: function (response) {
-                try {
-                    //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
-                    switch (type) {
-                        case 'json':
-                            curSite.pager.insertE(response.response, type2);
-                            break;
-                        case 'text':
-                            curSite.pager.insertE(response.responseText, type2)
-                            break;
-                        default:
-                            curSite.pager.insertE(ShowPager.createDocumentByString(response.responseText), type2)
-                    }
-                } catch (e) {
-                    console.log(e);
-                }
-            }
-        });
-    }
-
-
-    // 插入 Script
-    function insScriptAll(selector = '//script', toElement = document.body, contextNode = document) {
-        let scriptElems = getAll(selector, contextNode, contextNode), scriptText = '';
-        scriptElems.forEach(function (one) {
-            if (one.src) {
-                toElement.appendChild(document.createElement('script')).src = one.src;
-            } else {
-                scriptText += one.textContent + ';';
-            }
-        });
-        if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
-    }
-    // 插入 Style
-    function insStyle(style) {
-        document.lastElementChild.appendChild(document.createElement('style')).textContent = style;
-    }
     // 通用型插入前函数（加载图片）
     function src_bF(pageElems, css) {
         pageElems.forEach(function (one) {
@@ -6367,7 +6345,7 @@ function: {
         return pageElems
     }
     // 通用型获取下一页地址（URL 替换 page= 参数）
-    function getP_nextL(css, pf, reg) {
+    function getNextP(css, pf, reg) {
         let nextNum = getOne(css);
         var url = '';
         if (nextNum && nextNum.textContent) {
@@ -6385,17 +6363,34 @@ function: {
         return url
     }
     // 通用型获取下一页地址（直接从元素获取）
-    function getE_nextL(css) {
+    function getNextE(css) {
+        if (!css) css = curSite.pager.nextL;
         let next = getOne(css)
-        if (next && next.href && next.href.slice(0,4) === 'http' && next.href != curSite.pageUrl) {
-            curSite.pageUrl = next.href;
+        if (next && next.nodeType === 1 && next.href && next.href.slice(0,4) === 'http' && next.href != curSite.pageUrl) {
+            if (curSite.pager.forceHTTPS && location.protocol === 'https:') {
+                curSite.pageUrl = next.href.replace(/^http:/,'https:');
+            } else {
+                curSite.pageUrl = next.href;
+            }
             //console.log(curSite.pageUrl)
             return true
         }
         return false
     }
+    // 检查 URL
+    function checkURL(func) {
+        if (typeof curSite.pager.nextL == 'function') {
+            let tempUrl = curSite.pager.nextL();
+            if (!tempUrl || (tempUrl && tempUrl.slice(0,4) != 'http') || tempUrl === curSite.pageUrl ) return;
+            curSite.pageUrl = tempUrl;
+            func(curSite.pageUrl);
+        } else if (getNextE()) {
+            func(curSite.pageUrl);
+        }
+        //console.log(curSite.pageUrl);
+    }
     // 替换元素
-    function replaceElement(pageElems, o = curSite.pager.replaceE, r = curSite.pager.replaceE) {
+    function replaceElems(pageElems, o = curSite.pager.replaceE, r = curSite.pager.replaceE) {
         let oriE = getAll(o),
             repE = getAll(r, pageElems, pageElems);
         //console.log(oriE, repE)
@@ -6416,6 +6411,24 @@ function: {
         window.top.document.xiu_nowUrl = curSite.pageUrl;
         window.top.history.pushState('xiu_history', title, url);
     }
+    // 插入 Script
+    function insScriptAll(selector = '//script', toElement = document.body, contextNode = document) {
+        let scriptElems = getAll(selector, contextNode, contextNode), scriptText = '';
+        scriptElems.forEach(function (one) {
+            if (one.src) {
+                toElement.appendChild(document.createElement('script')).src = one.src;
+            } else {
+                scriptText += one.textContent + ';';
+            }
+        });
+        if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
+    }
+    // 插入 Style
+    function insStyle(style) {
+        document.lastElementChild.appendChild(document.createElement('style')).textContent = style;
+    }
+
+
     // 获取元素（CSS/Xpath）
     function getCSS(css, contextNode = document) {
         return contextNode.querySelector(css);
@@ -6465,6 +6478,27 @@ function: {
         } else {
             return getAllXpath(selector, contextNode, doc);
         }
+    }
+    function createDocumentByString(e) {
+        if (e) {
+            if ('HTML' !== document.documentElement.nodeName) return (new DOMParser).parseFromString(e, 'application/xhtml+xml');
+            var t;
+            try { t = (new DOMParser).parseFromString(e, 'text/html');} catch (e) {}
+            if (t) return t;
+            if (document.implementation.createHTMLDocument) {
+                t = document.implementation.createHTMLDocument('ADocument');
+            } else {
+                try {((t = document.cloneNode(!1)).appendChild(t.importNode(document.documentElement, !1)), t.documentElement.appendChild(t.createElement('head')), t.documentElement.appendChild(t.createElement('body')));} catch (e) {}
+            }
+            if (t) {
+                var r = document.createRange(),
+                    n = r.createContextualFragment(e);
+                r.selectNodeContents(document.body);
+                t.body.appendChild(n);
+                for (var a, o = { TITLE: !0, META: !0, LINK: !0, STYLE: !0, BASE: !0}, i = t.body, s = i.childNodes, c = s.length - 1; c >= 0; c--) o[(a = s[c]).nodeName] && i.removeChild(a);
+                return t;
+            }
+        } else console.error('没有找到要转成 DOM 的字符串');
     }
 
 
@@ -6689,22 +6723,4 @@ function: {
             window.dispatchEvent(new Event('locationChange'))
         });
     }
-    /*
-
-    // 监听 XMLHttpRequest URL
-    var _send = window.XMLHttpRequest.prototype.send
-    function sendReplacement(data) {
-        console.log(data)
-        return _send.apply(this, arguments);
-    }
-    window.XMLHttpRequest.prototype.send = sendReplacement;
-    // 监听 XMLHttpRequest 模式(GET/POST)和数据
-    var _open = window.XMLHttpRequest.prototype.open
-    function openReplacement(data) {
-        console.log(data, arguments)
-        return _open.apply(this, arguments);
-    }
-    window.XMLHttpRequest.prototype.open = openReplacement;
-
-    */
 })();
