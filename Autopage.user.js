@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.7.0
+// @version      3.7.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -372,16 +372,38 @@ function: {
             }, //             笔趣阁 模板的小说网站
             baidu: {
                 host: 'www.baidu.com',
+                functionS: function() {locationC = true;
+                    if (location.pathname == '/s') {
+                        curSite = DBSite.baidu
+                    } else if (indexOF('/s')) {
+                        location.host = 'm.baidu.com'
+                    }
+                },
                 insStyle: '.new-pmd .c-img-border {position: initial !important;} .op-bk-polysemy-video__wrap.c-gap-bottom {display: none !important;}',
+                history: true,
                 pager: {
                     type: 1,
                     nextL: 'id("page")//a[contains(text(),"下一页")]',
                     pageE: 'css;#content_left > *',
                     insertP: ['css;#content_left', 3],
                     replaceE: 'css;#page',
-                    scrollD: 1200
+                    scrollD: 1500
                 }
-            }, //                  百度 搜素
+            }, //                  百度 搜索
+            baidu_m: {
+                host: 'm.baidu.com',
+                functionS: function() {if (indexOF('/s')) curSite = DBSite.baidu_m;},
+                history: true,
+                insStyle: 'div.result[tpl="recommend_list"], #page-copyright {display: none !important;}',
+                pager: {
+                    type: 1,
+                    nextL: 'css;a[class^="new-nextpage"]',
+                    pageE: 'css;#results > *',
+                    insertP: ['css;#results', 3],
+                    replaceE: 'css;#page-controller',
+                    scrollD: 2000
+                }
+            }, //                百度 搜索 - 手机版
             google: {
                 host: /\.google\./,
                 functionS: function() {if (location.pathname === '/search' && !indexOF('tbm=isch', 's')) {
@@ -389,6 +411,7 @@ function: {
                 } else if (location.pathname === '/scholar') {
                     curSite = DBSite.google_scholar;
                 }},
+                history: true,
                 pager: {
                     type: 1,
                     nextL: 'css;#pnnext',
@@ -410,6 +433,7 @@ function: {
                     curSite = DBSite.bing_academic;
                 }},
                 insStyle: '.b_imagePair.square_mp > .inner {display: none !important;}',
+                history: true,
                 pager: {
                     type: 1,
                     nextL: '//a[contains(@class,"sb_pagN")]',
@@ -422,6 +446,7 @@ function: {
             sogou: {
                 host: 'www.sogou.com',
                 functionS: function() {if (location.pathname != '/') {curSite = DBSite.sogou;}},
+                history: true,
                 pager: {
                     type: 1,
                     nextL: 'css;#sogou_next',
@@ -447,6 +472,7 @@ function: {
                 }
             }, //           搜狗微信 - 首页
             sogou_weixin_search: {
+                history: true,
                 pager: {
                     type: 1,
                     nextL: 'css;#sogou_next',
@@ -459,6 +485,7 @@ function: {
             toutiao: {
                 host: ['www.toutiao.com', 'so.toutiao.com'],
                 functionS: function() {if (location.hostname != 'www.toutiao.com') {if (location.pathname === '/search') {curSite = DBSite.toutiao;}}},
+                history: true,
                 pager: {
                     type: 1,
                     nextL: '//div[contains(@class, "-pagination")]/a[contains(string(), "下一页")]',
@@ -474,6 +501,7 @@ function: {
             so: {
                 host: 'www.so.com',
                 functionS: function() {if (location.pathname != '/') {curSite = DBSite.so; insStyle('img {opacity: 1 !important;}')}},
+                history: true,
                 pager: {
                     type: 1,
                     nextL: 'css;a#snext',
@@ -499,6 +527,7 @@ function: {
             startpage: {
                 host: ['startpage.com', 'www.startpage.com'],
                 functionS: function() {if (indexOF('/search')) {curSite = DBSite.startpage;}},
+                history: true,
                 pager: {
                     type: 1,
                     nextL: startpage_nextL,
@@ -511,6 +540,7 @@ function: {
             yandex: {
                 host: 'yandex.com',
                 functionS: function() {if (location.pathname === '/search/') {curSite = DBSite.yandex;}},
+                history: true,
                 pager: {
                     type: 1,
                     nextL: 'css;a.pager__item_kind_next',
@@ -523,6 +553,7 @@ function: {
             yahoo: {
                 host: 'search.yahoo.com',
                 functionS: function() {if (indexOF('/search')) {curSite = DBSite.yahoo;}},
+                history: true,
                 pager: {
                     type: 1,
                     nextL: 'css;.pagination a.next',
@@ -535,6 +566,7 @@ function: {
             yahoo_jp: {
                 host: 'search.yahoo.co.jp',
                 functionS: function() {if (indexOF('/search')) {curSite = DBSite.yahoo_jp;}},
+                history: true,
                 pager: {
                     type: 1,
                     nextL: 'css;.Pagenation__next > a',
@@ -557,6 +589,7 @@ function: {
             ecosia: {
                 host: 'www.ecosia.org',
                 functionS: function() {if (location.pathname === '/search') {curSite = DBSite.ecosia;}},
+                history: true,
                 pager: {
                     type: 1,
                     nextL: 'css;nav.pagination a[aria-label="Next page"]',
