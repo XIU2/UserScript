@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.7.3
+// @version      3.7.4
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -29,7 +29,7 @@
         ['menu_discuz_thread_page', '帖子内自动翻页', '帖子内自动翻页', true],
         ['menu_page_number', '显示当前页码及点击暂停翻页', '显示当前页码及点击暂停翻页', true],
         ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false]
-    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, locationC = false, nowLocation = '', forumWebsite = ['cs.rin.ru', 'www.flyert.com', 'bbs.pediy.com', 'www.libaclub.com', 'tieba.baidu.com', 'www.cadtutor.net', 'www.theswamp.org', 'www.xuexiniu.com', 'bbs.xuexiniu.com', 'www.taoguba.com.cn'];
+    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, locationC = false, nowLocation = '', forumWebsite = ['cs.rin.ru', 'www.flyert.com', 'bbs.pediy.com', 'www.libaclub.com', 'tieba.baidu.com', 'www.cadtutor.net', 'www.theswamp.org', 'www.xuexiniu.com', 'bbs.xuexiniu.com', 'www.taoguba.com.cn', 'www.cnprint.org'];
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
     }
@@ -1316,6 +1316,28 @@ function: {
                     scrollD: 3000
                 }
             }, //   飞客网论坛 - 帖子内
+            cnprint: {
+                host: 'www.cnprint.org',
+                functionS: function() {if (indexOF('/forum/')) {curSite = DBSite.cnprint;} else if (indexOF('/thread/') && GM_getValue('menu_discuz_thread_page')) {curSite = DBSite.cnprint_thread;}},
+                pager: {
+                    type: 1,
+                    nextL: 'css;a[rel="next"]',
+                    pageE: 'css;tbody[id*="threadbits_forum"] > tr',
+                    insertP: ['css;tbody[id*="threadbits_forum"]', 3],
+                    replaceE: 'css;.pagenav',
+                    scrollD: 2500
+                }
+            }, //             CPC 中文印刷社区
+            cnprint_thread: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;a[rel="next"]',
+                    pageE: 'css;#posts > div:not([id])',
+                    insertP: ['css;#posts', 3],
+                    replaceE: 'css;.pagenav',
+                    scrollD: 2000
+                }
+            }, //      CPC 中文印刷社区 - 帖子内
             adnmb3: {
                 host: ['adnmb3.com', 'www.tnmb.org'],
                 functionS: function() {
@@ -6281,91 +6303,6 @@ function: {
             }
         });
     }
-    // 翻页类型 1/3/6（XHR 后处理结果，插入、替换元素等）
-    function processElems(response) {
-        if (!curSite.pager.insertP) {curSite.pager.insertP = [curSite.pager.pageE, 5]}
-        let pageElems = getAll(curSite.pager.pageE, response, response), toElement;
-        if (curSite.pager.insertP[1] === 5) { // 插入 pageE 列表最后一个元素的后面
-            toElement = getAll(curSite.pager.insertP[0]).pop();
-        } else {
-            toElement = getOne(curSite.pager.insertP[0]);
-        }
-        //console.log(curSite.pager.pageE, pageElems, curSite.pager.insertP, toElement)
-
-        if (pageElems.length > 0 && toElement) {
-            // 如果有插入前函数就执行函数
-            if (curSite.function && curSite.function.bF) {
-                if (curSite.function.pF) { // 如果指定了参数
-                    pageElems = curSite.function.bF(pageElems, curSite.function.pF);
-                } else {
-                    pageElems = curSite.function.bF(pageElems);
-                }
-            }
-
-            // 插入位置
-            let addTo = getAddTo(curSite.pager.insertP[1]);
-
-            // 插入新页面元素
-            if (curSite.pager.insertP[1] === 6) { // 插入到目标内部末尾（针对文本，比如小说网页）
-                let afterend = '';
-                pageElems.forEach(function (one) {afterend += one.innerHTML;});
-                toElement.insertAdjacentHTML(addTo, afterend);
-            } else {
-                if (curSite.pager.insertP[1] === 2 || curSite.pager.insertP[1] === 4) pageElems.reverse(); // 插入到 [元素内头部]、[目标本身后面] 时，需要反转顺序
-                pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo, one);});
-            }
-
-            // 当前页码 + 1
-            pageNum.now = pageNum._now + 1
-
-            // 插入 <script> 标签
-            if (curSite.pager.scriptT) {
-                let scriptText = '';
-                if (curSite.pager.scriptT === 0) { //         下一页的所有 <script> 标签
-                    insScriptAll('//script', toElement, response);
-                } else if (curSite.pager.scriptT === 1) { //  下一页的所有 <script> 标签（不包括 src 链接）
-                    insScriptAll('//script[not(@src)]', toElement, response);
-                } else if (curSite.pager.scriptT === 2) { //  下一页主体元素同级 <script> 标签
-                    pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
-                    if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
-                } else if (curSite.pager.scriptT === 3) { //  下一页主体元素同级 <script> 标签（src 远程文件）
-                    pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT' && one.src) {toElement.appendChild(document.createElement('script')).src = one.src;}});
-                } else if (curSite.pager.scriptT === 4) { //  下一页主体元素子元素 <script> 标签
-                    pageElems.forEach(function (one) {
-                        const scriptElems = one.querySelectorAll('script');
-                        scriptElems.forEach(function (script) {scriptText += ';' + script.textContent;});
-                    });
-                    if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
-                }
-            }
-
-            // 添加历史记录
-            if (curSite.history) addHistory(response);
-
-            // 替换待替换元素
-            if (curSite.pager.replaceE) replaceElems(response);
-
-            // 如果有插入后函数就执行函数
-            if (curSite.function && curSite.function.aF) {
-                if (curSite.function.pF) { // 如果指定了参数
-                    curSite.function.aF(curSite.function.pF);
-                } else {
-                    curSite.function.aF();
-                }
-            }
-        } else { // 获取主体元素失败后，尝试重新获取
-            if (curSite.retry) {
-                setTimeout(function(){curSite.pageUrl = '';}, curSite.retry)
-            } else { // 尝试替换元素看能不能继续翻页下去
-                if (curSite.pager.replaceE) {
-                    if (replaceElems(response)) { // 如果替换成功
-                        pageNum.now = pageNum._now + 1; // 当前页码 + 1
-                        if (curSite.history) addHistory(response); // 添加历史记录
-                    }
-                }
-            }
-        }
-    }
     // 翻页类型 5（插入 iframe 方式加载下一页）
     function insIframe(src) {
         // 停用当前页面翻页
@@ -6462,6 +6399,91 @@ function: {
     }
 
 
+    // XHR 后处理结果，插入、替换元素等（适用于翻页类型 1/3/6）
+    function processElems(response) {
+        if (!curSite.pager.insertP) {curSite.pager.insertP = [curSite.pager.pageE, 5]}
+        let pageElems = getAll(curSite.pager.pageE, response, response), toElement;
+        if (curSite.pager.insertP[1] === 5) { // 插入 pageE 列表最后一个元素的后面
+            toElement = getAll(curSite.pager.insertP[0]).pop();
+        } else {
+            toElement = getOne(curSite.pager.insertP[0]);
+        }
+        //console.log(curSite.pager.pageE, pageElems, curSite.pager.insertP, toElement)
+
+        if (pageElems.length > 0 && toElement) {
+            // 如果有插入前函数就执行函数
+            if (curSite.function && curSite.function.bF) {
+                if (curSite.function.pF) { // 如果指定了参数
+                    pageElems = curSite.function.bF(pageElems, curSite.function.pF);
+                } else {
+                    pageElems = curSite.function.bF(pageElems);
+                }
+            }
+
+            // 插入位置
+            let addTo = getAddTo(curSite.pager.insertP[1]);
+
+            // 插入新页面元素
+            if (curSite.pager.insertP[1] === 6) { // 插入到目标内部末尾（针对文本，比如小说网页）
+                let afterend = '';
+                pageElems.forEach(function (one) {afterend += one.innerHTML;});
+                toElement.insertAdjacentHTML(addTo, afterend);
+            } else {
+                if (curSite.pager.insertP[1] === 2 || curSite.pager.insertP[1] === 4) pageElems.reverse(); // 插入到 [元素内头部]、[目标本身后面] 时，需要反转顺序
+                pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo, one);});
+            }
+
+            // 当前页码 + 1
+            pageNum.now = pageNum._now + 1
+
+            // 插入 <script> 标签
+            if (curSite.pager.scriptT) {
+                let scriptText = '';
+                if (curSite.pager.scriptT === 0) { //         下一页的所有 <script> 标签
+                    insScriptAll('//script', toElement, response);
+                } else if (curSite.pager.scriptT === 1) { //  下一页的所有 <script> 标签（不包括 src 链接）
+                    insScriptAll('//script[not(@src)]', toElement, response);
+                } else if (curSite.pager.scriptT === 2) { //  下一页主体元素同级 <script> 标签
+                    pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
+                    if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
+                } else if (curSite.pager.scriptT === 3) { //  下一页主体元素同级 <script> 标签（src 远程文件）
+                    pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT' && one.src) {toElement.appendChild(document.createElement('script')).src = one.src;}});
+                } else if (curSite.pager.scriptT === 4) { //  下一页主体元素子元素 <script> 标签
+                    pageElems.forEach(function (one) {
+                        const scriptElems = one.querySelectorAll('script');
+                        scriptElems.forEach(function (script) {scriptText += ';' + script.textContent;});
+                    });
+                    if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
+                }
+            }
+
+            // 添加历史记录
+            if (curSite.history) addHistory(response);
+
+            // 替换待替换元素
+            if (curSite.pager.replaceE) replaceElems(response);
+
+            // 如果有插入后函数就执行函数
+            if (curSite.function && curSite.function.aF) {
+                if (curSite.function.pF) { // 如果指定了参数
+                    curSite.function.aF(curSite.function.pF);
+                } else {
+                    curSite.function.aF();
+                }
+            }
+        } else { // 获取主体元素失败后，尝试重新获取
+            if (curSite.retry) {
+                setTimeout(function(){curSite.pageUrl = '';}, curSite.retry)
+            } else { // 尝试替换元素看能不能继续翻页下去
+                if (curSite.pager.replaceE) {
+                    if (replaceElems(response)) { // 如果替换成功
+                        pageNum.now = pageNum._now + 1; // 当前页码 + 1
+                        if (curSite.history) addHistory(response); // 添加历史记录
+                    }
+                }
+            }
+        }
+    }
     // 通用型插入前函数（加载图片）
     function src_bF(pageElems, css) {
         pageElems.forEach(function (one) {
