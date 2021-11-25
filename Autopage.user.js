@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.7.2
+// @version      3.7.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -4745,6 +4745,20 @@ function: {
                     scrollD: 1000
                 }
             }, //             必应壁纸
+            konachan: {
+                host: 'konachan.net',
+                functionS: function() {if (indexOF('/post')) {curSite = DBSite.konachan; document.head.appendChild(document.createElement('base')).target = '_blank';}},
+                insStyle: 'html, body {min-height: 1000px;} .javascript-hide {display: inline-block !important;} ul#post-list-posts img, ul#post-list-posts .inner{width: auto !important; height: auto !important;} ul#post-list-posts li {width: 33% !important;} a.directlink {margin: 0 !important;}',
+                history: true,
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.next_page',
+                    pageE: 'css;ul#post-list-posts > li',
+                    insertP: ['css;ul#post-list-posts', 3],
+                    replaceE: 'css;#paginator',
+                    scrollD: 1000
+                }
+            }, //          动漫壁纸
             nastol: {
                 host: 'www.nastol.com.ua',
                 pager: {
@@ -6340,7 +6354,16 @@ function: {
                 }
             }
         } else { // 获取主体元素失败后，尝试重新获取
-            setTimeout(function(){if (curSite.retry) {curSite.pageUrl = '';}}, curSite.retry)
+            if (curSite.retry) {
+                setTimeout(function(){curSite.pageUrl = '';}, curSite.retry)
+            } else { // 尝试替换元素看能不能继续翻页下去
+                if (curSite.pager.replaceE) {
+                    if (replaceElems(response)) { // 如果替换成功
+                        pageNum.now = pageNum._now + 1; // 当前页码 + 1
+                        if (curSite.history) addHistory(response); // 添加历史记录
+                    }
+                }
+            }
         }
     }
     // 翻页类型 5（插入 iframe 方式加载下一页）
@@ -6504,7 +6527,7 @@ function: {
         let oriE = getAll(o),
             repE = getAll(r, pageElems, pageElems);
         //console.log(oriE, repE)
-        if (oriE.length === repE.length) {
+        if (oriE.length != 0 && repE.length != 0 && oriE.length === repE.length) {
             for (let i = 0; i < oriE.length; i++) {
                 oriE[i].outerHTML = repE[i].outerHTML;
             }
