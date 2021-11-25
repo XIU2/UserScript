@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.7.5
+// @version      3.7.6
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -3982,8 +3982,46 @@ function: {
                 }
             },
             gitee: {
+                host: 'gitee.com',
+                functionS: function() {
+                    if (indexOF('/explore/')) {
+                        curSite = DBSite.gitee;
+                    } else if (indexOF(/\/issues$/)) {
+                        curSite = DBSite.gitee_issues;
+                    } else if (indexOF(/\/releases/)) {
+                        curSite = DBSite.gitee_releases;
+                    } else if (indexOF(/\/tags/)) {
+                        curSite = DBSite.gitee_tags;
+                    }
+                    if (curSite.SiteTypeID > 0 && !curSite.pager.nextL) {
+                        curSite.pager.type = 1;
+                        curSite.pager.nextL = 'css;a[rel="next"]';
+                        curSite.pager.replaceE = 'css;.pagination';
+                        curSite.pager.scrollD = 2500;
+                    }
+                },
+                pager: {
+                    pageE: 'css;.items > .item',
+                }
+            }, //                     Gitee - Explore 列表
+            gitee_issues: {
+                pager: {
+                    pageE: 'css;.issue-wrapper',
+                }
+            }, //              Gitee - Issues 列表
+            gitee_releases: {
+                pager: {
+                    pageE: 'css;.release-tag-item',
+                }
+            }, //            Gitee - Releases 列表
+            gitee_tags: {
+                pager: {
+                    pageE: 'css;.tag-item',
+                }
+            }, //                Gitee - Tags 列表
+            gitee_search: {
                 host: 'search.gitee.com',
-                functionS: function() {if (location.search) curSite = DBSite.gitee;},
+                functionS: function() {if (location.search) curSite = DBSite.gitee_search;},
                 pager: {
                     type: 1,
                     nextL: 'css;li.next:not(.disabled) > a',
@@ -3992,19 +4030,19 @@ function: {
                     replaceE: 'css;ul.pagination',
                     scrollD: 1000
                 }
-            }, //                     Gitee - 搜索页
+            }, //              Gitee - Search 列表
             github_star: {
                 host: 'github.com',
                 functionS: function() {locationC = true;
                     if (indexOF('tab=stars', 's')) {
                         curSite = DBSite.github_star;
-                    } else if ((indexOF('/issues') && !indexOF('/issues/')) || (indexOF('/pulls') && !indexOF('/pulls/'))) {
+                    } else if (indexOF(/\/issues$/) || indexOF(/\/pulls$/)) {
                         curSite = DBSite.github_issues;
-                    } else if (indexOF('/discussions') && !(/\/discussions\/\d+/.test(location.pathname)) && !indexOF('new')) {
+                    } else if (indexOF(/\/discussions$/) || indexOF('/discussions/categories')) {
                         curSite = DBSite.github_discussions;
-                    } else if (indexOF('/releases') && !indexOF('/releases/tag/') && !indexOF('edit')) {
+                    } else if (indexOF(/\/releases$/)) {
                         curSite = DBSite.github_releases;
-                    } else if (indexOF('/tags') && !indexOF('/tags/')) {
+                    } else if (indexOF(/\/tags$/)) {
                         curSite = DBSite.github_tags;
                     } else if (indexOF('/commits')) {
                         curSite = DBSite.github_commits;
@@ -6722,7 +6760,11 @@ function: {
         }
         //console.log(l,e,l.indexOf(e))
         if (low) {e = e.toLowerCase(); l = l.toLowerCase();} // 全部转为小写
-        if (l.indexOf(e) > -1) return true
+        if (e instanceof RegExp) {
+            if (e.test(l)) return true
+        } else {
+            if (l.indexOf(e) > -1) return true
+        }
         return false
     }
     // 启用/禁用 (当前网站)
