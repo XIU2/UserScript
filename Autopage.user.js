@@ -4960,29 +4960,6 @@ function: {
                     scrollD: 2000
                 }
             }, //        秀人美女 - 搜索页
-            ku66: {
-                host: 'www.ku66.net',
-                functionS: function() {if (/\/\d+\.html/.test(location.pathname)) {curSite = DBSite.ku66;} else {curSite = DBSite.ku66_list;}},
-                insStyle: '.content img {min-height: 300px;}',
-                pager: {
-                    type: 1,
-                    nextL: '//div[@class="NewPages"]//a[text()="下一页"]',
-                    pageE: 'css;.content > img',
-                    insertP: ['css;.content', 3],
-                    replaceE: 'css;.NewPages',
-                    scrollD: 4000
-                }
-            }, //                美女图片 - 图片页
-            ku66_list: {
-                pager: {
-                    type: 1,
-                    nextL: '//div[@class="NewPages"]//a[text()="下一页"]',
-                    pageE: 'css;.TypeList > ul > li',
-                    insertP: ['css;.TypeList > ul', 3],
-                    replaceE: 'css;.NewPages',
-                    scrollD: 1000
-                }
-            }, //           美女图片 - 分类页
             ku137: {
                 host: 'www.ku137.net',
                 functionS: function() {if (/\/\d+\.html/.test(location.pathname)) {curSite = DBSite.ku137;} else if (location.pathname != '/') {curSite = DBSite.ku137_list;}},
