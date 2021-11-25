@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.3.0
+// @version      1.3.1
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
 // @match        *://*/*
@@ -329,8 +329,8 @@
             style_31 = style_31_firefox
         }
 
-        // 白天（7点到19点）
-        if (hours > 6 && hours < 19) {
+        // 白天（7点到18点）
+        if (hours > 6 && hours < 18) {
             if (menu_value('menu_runDuringTheDay')) {
                 style_12 = style_11
                 style_22 = style_21
@@ -414,23 +414,6 @@
                 }, 1500);
             }
         });
-
-        // 用来解决一些 CSS 加载缓慢的网站，可能会出现没有正确排除的问题，在没有找到更好的办法之前，先这样凑活着用
-        /*setTimeout(function(){
-            console.log('[护眼模式] html:', window.getComputedStyle(document.lastElementChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
-            if (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)' || getColorValue(document.body) > 0 && getColorValue(document.body) < 898989 || getColorValue(document.lastElementChild) > 0 && getColorValue(document.lastElementChild) < 898989) {
-                // 如果是黑色 (等于0,0,0) 或深色 (小于 89,89,89)，就停用本脚本滤镜
-                if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
-                    for (let i=0;i<websiteList.length;i++){ // 这些网站强制启用护眼模式滤镜
-                        if (websiteList[i] === location.host) return
-                    }
-                    if (remove) return
-                    console.log('[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜...')
-                    if (document.getElementById('XIU2DarkMode')) document.getElementById('XIU2DarkMode').remove();
-                    if (document.getElementById('XIU2DarkMode2')) document.getElementById('XIU2DarkMode2').remove();
-                }
-            }
-        }, 3000);*/
 
         // 解决远景论坛会清理掉前面插入的 CSS 样式的问题
         if (location.hostname === 'bbs.pcbeta.com') {
