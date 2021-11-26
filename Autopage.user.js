@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.7.6
+// @version      3.7.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -128,9 +128,8 @@ pager: {
     scriptT:  单独插入 <script> 标签
        0 = 下一页的所有 <script> 标签
        1 = 下一页的所有 <script> 标签（不包括 src 链接）
-       2 = 下一页 pageE 主体元素同级 <script> 标签
-       3 = 下一页 pageE 主体元素同级 <script> 标签（src 远程文件）
-       4 = 下一页 pageE 主体元素子元素 <script> 标签
+       2 = 下一页主体元素 (pageE) 的同级 <script> 标签
+       3 = 下一页主体元素 (pageE) 的子元素 <script> 标签
 
     interval:   翻页后间隔时间（单位 ms）
     forceHTTPS: 下一页链接强制 HTTPS
@@ -140,7 +139,7 @@ function: {
        aF = 插入后执行函数
        pF = 参数
 }
-    */ //<<< 自动翻页规则 >>>
+    */ //<<< 规则简单说明 >>>
         DBSite = {
             discuz_forum: {
                 pager: {
@@ -453,7 +452,7 @@ function: {
                     pageE: 'css;.results > *',
                     insertP: ['css;.results', 3],
                     replaceE: 'css;#pagebar_container',
-                    scriptT: 4,
+                    scriptT: 3,
                     scrollD: 1200
                 }
             }, //                  搜狗 搜索
@@ -945,7 +944,7 @@ function: {
                     pageE: 'css;ol.commentlist > li[id^="comment-"], script[src^="//cdn.jandan.net/static/min/"]',
                     insertP: ['css;ol.commentlist', 3],
                     replaceE: 'css;.cp-pagenavi',
-                    scriptT: 3,
+                    scriptT: 2,
                     scrollD: 1500
                 }
             }, //      煎蛋网
@@ -1075,7 +1074,7 @@ function: {
                 pager: {
                     type: 1,
                     nextL: 'css;li.pagination-item.is-active+li > a',
-                    pageE: 'css;.data-wrapper > section.community-card',
+                    pageE: 'css;.data-wrapper > section.community-card, style',
                     insertP: ['css;.data-wrapper', 3],
                     replaceE: '//ul[./li[contains(@class, "pagination-item")]]',
                     scrollD: 2000
@@ -1115,7 +1114,7 @@ function: {
                     pageE: 'css;#reply_list_panel > *, script[src*="ui/js/kds.js"]',
                     insertP: ['css;#reply_list_panel', 3],
                     replaceE: 'css;.pages',
-                    scriptT: 3,
+                    scriptT: 2,
                     scrollD: 1000
                 }
             }, //           宽带山论坛 - 帖子内
@@ -1378,7 +1377,7 @@ function: {
                     pageE: 'css;.h-threads-list > *, script[src$="/h.desktop.js"]',
                     insertP: ['css;.h-threads-list', 3],
                     replaceE: '//ul[contains(@class, "pagination")]',
-                    scriptT: 3,
+                    scriptT: 2,
                     scrollD: 2000
                 }
             }, //              A 岛
@@ -1389,7 +1388,7 @@ function: {
                     pageE: 'css;.h-threads-list > .h-threads-item > .h-threads-item-replys, script[src$="/h.desktop.js"]',
                     insertP: ['css;.h-threads-list > .h-threads-item', 3],
                     replaceE: '//ul[contains(@class, "pagination")]',
-                    scriptT: 3,
+                    scriptT: 2,
                     scrollD: 2000
                 }
             }, //            A 岛 - 帖子内
@@ -1400,7 +1399,7 @@ function: {
                     pageE: 'css;.h-middle > div[id^="threads_"], .h-middle > hr.h-middle > div[id^="threads_"], .h-middle > hr:nth-of-type(n+2), script[src$="/h.mobile.js"]',
                     insertP: ['css;#h-threads-pagination', 1],
                     replaceE: 'css;#h-threads-pagination',
-                    scriptT: 3,
+                    scriptT: 2,
                     scrollD: 2000
                 }
             }, //           A 岛 - 帖子列表（手机版）
@@ -1411,7 +1410,7 @@ function: {
                     pageE: 'css;.h-threads-replylist > div, script[src$="/h.mobile.js"]',
                     insertP: ['css;.h-threads-replylist', 3],
                     replaceE: 'css;#h-threads-pagination',
-                    scriptT: 3,
+                    scriptT: 2,
                     scrollD: 2000
                 }
             }, //           A 岛 - 帖子内（手机版）
@@ -1773,7 +1772,7 @@ function: {
                     insertP: ['css;.news_warp_center', 3],
                     replaceE: 'css;.pagewrap',
                     scrollE: 'css;.pagewrap',
-                    scriptT: 3,
+                    scriptT: 2,
                     scrollD: 1000
                 }
             }, //                3DM
@@ -3607,7 +3606,7 @@ function: {
                     pageE: 'css;#index > article, #archive > article',
                     insertP: ['css;ol.page-navigator', 1],
                     replaceE: 'css;ol.page-navigator',
-                    scriptT: 4,
+                    scriptT: 3,
                     scrollD: 1000
                 }
             }, //              不死鸟
@@ -4622,7 +4621,7 @@ function: {
                     pageE: 'css;#cat_all > .cat_grid > div',
                     insertP: ['css;#cat_all > .cat_grid', 3],
                     replaceE: 'css;#large_pagination',
-                    scriptT: 4,
+                    scriptT: 3,
                     scrollD: 2000
                 }
             }, //         指南
@@ -5706,7 +5705,7 @@ function: {
         // hook imgDate 代码
         SMH.imgData = function(n) {window['imgDate'] = n;return{preInit:function(){}}}
         // 重新执行本页的 imgDate 代码
-        insScriptAll(curSite.pager.pageE);
+        insScript(curSite.pager.pageE);
         let _img = '', imgPath = `${location.protocol}//i.hamreus.com${window['imgDate'].path}`;
         //console.log(imgPath, window['imgDate'])
         if (!(window['imgDate']) || !(imgPath)) return
@@ -5728,7 +5727,7 @@ function: {
     function manhuagui_insertE(pageElems, type) {
         if (!pageElems) return
         // 重新执行本页的 imgDate 代码
-        insScriptAll(curSite.pager.pageE, document.body, pageElems);
+        insScript(curSite.pager.pageE, document.body, pageElems);
         let _img = '', imgPath = `${location.protocol}//i.hamreus.com${window['imgDate'].path}`;
         //console.log(imgPath, window['imgDate'])
         if (!(window['imgDate']) || !(imgPath)) return
@@ -5834,7 +5833,7 @@ function: {
     function dmzj_insertE(pageElems, type) {
         if (!pageElems) return
         // 插入并运行 <script>
-        insScriptAll('css;head > script[type]:not([src])', document.body, pageElems);
+        insScript('css;head > script[type]:not([src])', document.body, pageElems);
 
         // 插入图片
         let _img = '', _img_arr;
@@ -5856,7 +5855,7 @@ function: {
     function dmzj_manhua_insertE(pageElems, type) {
         if (!pageElems) return
         // 插入并运行 <script>
-        insScriptAll('css;head > script[type]:not([src])', document.body, pageElems);
+        insScript('css;head > script[type]:not([src])', document.body, pageElems);
 
         // 插入图片
         let _img = '';
@@ -5875,7 +5874,7 @@ function: {
     function mhxqiu_insertE(pageElems, type) {
         if (!pageElems) return
         // 插入并运行 <script>
-        insScriptAll('//script[contains(text(), "eval") and contains(text(), "newImgs")]', document.body, pageElems);
+        insScript('//script[contains(text(), "eval") and contains(text(), "newImgs")]', document.body, pageElems);
 
         // 插入图片
         let _img = '';
@@ -5897,7 +5896,6 @@ function: {
         let scriptElems = getXpath('id("main")/script[contains(text(), "mhpicurl")][1]', pageElems, pageElems);
         if (scriptElems) {
             document.body.appendChild(document.createElement('script')).textContent = scriptElems.textContent.replace(/document\.write.+/, '');
-            //insScriptAll('id("main")/script[contains(text(), "mhpicurl")][1]', document.body, pageElems);
 
             // 插入图片
             setTimeout(function() {
@@ -5927,7 +5925,7 @@ function: {
     function leyuman_insertE(pageElems, type) {
         if (!pageElems) return
         // 插入并运行 <script>
-        insScriptAll('//body//script[not(@src)][contains(text(), "z_img=")]', document.body, pageElems);
+        insScript('//body//script[not(@src)][contains(text(), "z_img=")]', document.body, pageElems);
 
         // 插入图片
         let _img = '';
@@ -5966,7 +5964,7 @@ function: {
     function _77mh_insertE(pageElems, type) {
         if (!pageElems) return
         // 插入并运行 <script>
-        insScriptAll('//script[not(@src)][contains(text(), "eval(")]', document.body, pageElems);
+        insScript('//script[not(@src)][contains(text(), "eval(")]', document.body, pageElems);
 
         // 插入图片
         let _img = '';
@@ -6070,7 +6068,7 @@ function: {
                 }
             } else { // 下一话
                 // 插入 <script> 标签
-                insScriptAll('css;html:not([dir]) > head > script:not([src])', document.body, pageElems);
+                insScript('css;html:not([dir]) > head > script:not([src])', document.body, pageElems);
                 addHistory(pageElems);
                 pageNum.now = pageNum._now + 1
                 replaceElems(pageElems)
@@ -6109,7 +6107,7 @@ function: {
                 }
             } else { // 下一话
                 // 插入 <script> 标签
-                insScriptAll('css;html:not([dir]) > head > script:not([src])', document.body, pageElems);
+                insScript('css;html:not([dir]) > head > script:not([src])', document.body, pageElems);
                 addHistory(pageElems);
                 pageNum.now = pageNum._now + 1
                 replaceElems(pageElems)
@@ -6139,7 +6137,7 @@ function: {
     function cocomanga_insertE(pageElems, type) {
         if (pageElems) {
             // 插入 <script> 标签
-            insScriptAll('css;head > script:not([src]), script[src*="custom.js"], script[src*="dynamicjs.js"]', document.body, pageElems);
+            insScript('css;head > script:not([src]), script[src*="custom.js"], script[src*="dynamicjs.js"]', document.body, pageElems);
 
             // 插入新图片元素
             setTimeout(function() {
@@ -6497,23 +6495,16 @@ function: {
             pageNum.now = pageNum._now + 1
 
             // 插入 <script> 标签
-            if (curSite.pager.scriptT) {
-                let scriptText = '';
-                if (curSite.pager.scriptT === 0) { //         下一页的所有 <script> 标签
-                    insScriptAll('//script', toElement, response);
-                } else if (curSite.pager.scriptT === 1) { //  下一页的所有 <script> 标签（不包括 src 链接）
-                    insScriptAll('//script[not(@src)]', toElement, response);
-                } else if (curSite.pager.scriptT === 2) { //  下一页主体元素同级 <script> 标签
-                    pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT') {scriptText += ';' + one.textContent;}});
-                    if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
-                } else if (curSite.pager.scriptT === 3) { //  下一页主体元素同级 <script> 标签（src 远程文件）
-                    pageElems.forEach(function (one) {if (one.tagName === 'SCRIPT' && one.src) {toElement.appendChild(document.createElement('script')).src = one.src;}});
-                } else if (curSite.pager.scriptT === 4) { //  下一页主体元素子元素 <script> 标签
-                    pageElems.forEach(function (one) {
-                        const scriptElems = one.querySelectorAll('script');
-                        scriptElems.forEach(function (script) {scriptText += ';' + script.textContent;});
-                    });
-                    if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
+            if (curSite.pager.scriptT || curSite.pager.scriptT == 0) {
+                switch (curSite.pager.scriptT) {
+                    case 0: // 下一页的所有 <script> 标签
+                        insScript('css;script', toElement, response); break;
+                    case 1: // 下一页的所有 <script> 标签（不包括 src 链接）
+                        insScript('css;script:not([src])', toElement, response); break;
+                    case 2: // 下一页主体元素 (pageE) 的同级 <script> 标签
+                        insScript(null, toElement, pageElems); break;
+                    case 3: // 下一页主体元素 (pageE) 的子元素 <script> 标签
+                        insScript('css;script:not([src])', toElement, pageElems); break;
                 }
             }
 
@@ -6626,19 +6617,27 @@ function: {
         window.top.document.xiu_nowUrl = curSite.pageUrl;
         window.top.history.pushState('xiu_history', title, url);
     }
-    // 插入 Script
-    function insScriptAll(selector = '//script', toElement = document.body, contextNode = document) {
-        let scriptElems = getAll(selector, contextNode, contextNode), scriptText = '';
-        scriptElems.forEach(function (one) {
-            if (one.src) {
-                toElement.appendChild(document.createElement('script')).src = one.src;
+    // 插入 <Script>
+    function insScript(selector, toElement = document.body, contextNode = document) {
+        let scriptElems = contextNode;
+        if (selector) {
+            if (contextNode instanceof Array) {
+                scriptElems = []; contextNode.forEach(function (one) {scriptElems = scriptElems.concat(getAll(selector, one, one));})
             } else {
-                scriptText += one.textContent + ';';
+                scriptElems = getAll(selector, contextNode, contextNode);
+            }
+        }
+        scriptElems.forEach(function (one) {
+            if (one.tagName === 'SCRIPT') {
+                if (one.src) {
+                    toElement.appendChild(document.createElement('script')).src = one.src;
+                } else {
+                    toElement.appendChild(document.createElement('script')).textContent = one.textContent;
+                }
             }
         });
-        if (scriptText) toElement.appendChild(document.createElement('script')).textContent = scriptText;
     }
-    // 插入 Style
+    // 插入 <Style>
     function insStyle(style) {
         document.lastElementChild.appendChild(document.createElement('style')).textContent = style;
     }
