@@ -1934,7 +1934,7 @@ function: {
                     scriptT: 2,
                     scrollD: 1500
                 }
-            }, //          创意工坊 - 项目列表
+            }, //          Steam 创意工坊 - 项目列表
             yikm: {
                 host: 'www.yikm.net',
                 pager: {
@@ -6623,7 +6623,7 @@ function: {
     }
 
 
-    // 获取元素（CSS/Xpath）
+    // 获取元素（CSS/Xpath）来自：https://github.com/machsix/Super-preloader
     function getCSS(css, contextNode = document) {
         return contextNode.querySelector(css);
     }
