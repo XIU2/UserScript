@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.8.0
+// @version      3.8.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -121,6 +121,7 @@ pager: {
        4 = 插入该元素本身的后面
        5 = 插入 pageE 列表最后一个元素的后面（该 insertP 可以直接省略）
        6 = 插入该元素末尾（针对小说网站等文本类的）
+    // 小技巧：当 pageE 为 'ul > li'，且 insertP 为 ['ul', 3] 时，这种情况下是可以省略掉 insertP 的，即改用 5
 
     replaceE: 要替换为下一页内容的元素（比如页码）
     scrollD： 翻页动作触发点（[滚动条] 与 [网页底部] 之间的距离），数值越大，越早开始翻页，一般是访问网页速度越慢，该值就需要越大
@@ -365,7 +366,7 @@ function: {
                     nextL: '//a[contains(text(), "下一章") or contains(text(), "下一页")]',
                     pageE: 'css;#content',
                     insertP: ['css;#content', 6],
-                    replaceE: '//*[./a[contains(text(), "下一章") or contains(text(), "下一页")]] | //title',
+                    replaceE: '//*[./a[contains(text(), "下一章") or contains(text(), "下一页")]]',
                     scrollD: 1500
                 }
             }, //             笔趣阁 模板的小说网站
@@ -650,7 +651,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next',
                     pageE: 'css;.s_post_list > div',
-                    insertP: ['css;.s_post_list', 3],
                     replaceE: 'css;.pager',
                     scriptT: 1,
                     scrollD: 1000
@@ -2686,7 +2686,7 @@ function: {
                     nextL: function() {if (getCSS('a.rd-aside__item.j-rd-next')) return location.origin + getCSS('a.rd-aside__item.j-rd-next').getAttribute('_href')},
                      pageE: 'css;.rd-article-wr > div',
                     insertP: ['css;.rd-article-wr', 3],
-                    replaceE: 'css;a.last-crumb, .rd-aside, title',
+                    replaceE: 'css;a.last-crumb, .rd-aside',
                     interval: 2000,
                     scrollD: 2000
                 },
@@ -2753,12 +2753,13 @@ function: {
                     curSite = DBSite.manhuacat_search;
                 }},
                 insStyle: '#left, #right, #pull-load, .loading, .pagination, footer {display: none !important;} .img-content > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}', // 隐藏不需要的元素，调整图片
+                history: true,
                 pager: {
                     type: 4,
                     nextL: manhuacat_nextL,
                     insertP: ['css;.img-content', 3],
                     insertE: manhuacat_insertE,
-                    replaceE: 'css;.comic-detail > .breadcrumb-bar, .comic-detail >h2.h4, title, .vg-r-data, body > script:not([src])',
+                    replaceE: 'css;.comic-detail > .breadcrumb-bar, .comic-detail >h2.h4, .vg-r-data, body > script:not([src])',
                     interval: 2000,
                     scrollD: 3000
                 }
@@ -2802,7 +2803,7 @@ function: {
                     nextL: '//div[contains(@class, "page")]//a[@href][contains(text(), "下一页") or contains(text(), "下一章")]',
                     pageE: 'css;#htmlContent p.img > img',
                     insertP: ['css;#htmlContent p.img', 3],
-                    replaceE: 'css;.page, .title, title',
+                    replaceE: 'css;.page, .title',
                     scrollD: 2000
                 }
             }, //         漫画台
@@ -2940,12 +2941,13 @@ function: {
                     curSite = DBSite.dmzj_rank;
                 }},
                 insStyle: 'p.mh_curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} .comic_wraCon > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}', // 隐藏中间的页数信息
+                history: true,
                 pager: {
                     type: 4,
                     nextL: 'css;span.next > a',
                     insertP: ['css;.comic_wraCon', 3],
                     insertE: dmzj_insertE,
-                    replaceE: 'css;.wrap_last_mid, .wrap_last_head, title',
+                    replaceE: 'css;.wrap_last_mid, .wrap_last_head',
                     interval: 2000,
                     scrollD: 3000
                 }
@@ -2983,12 +2985,13 @@ function: {
                     curSite = DBSite.dmzj_manhua_update;
                 }},
                 insStyle: 'p.curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} #center_box > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}', // 隐藏中间的页数信息
+                history: true,
                 pager: {
                     type: 4,
                     nextL: 'css;#next_chapter',
                     insertP: ['css;#center_box', 3],
                     insertE: dmzj_manhua_insertE,
-                    replaceE: 'css;.display_graybg, title',
+                    replaceE: 'css;.display_graybg',
                     interval: 2000,
                     scrollD: 3000
                 }
@@ -3044,12 +3047,13 @@ function: {
                     curSite = DBSite.mhxqiu_list;
                 }},
                 insStyle: '.imgFloat_1, .imgFloat_2, .main_control, span.comic-ft {display: none !important;} html, body, #mainView {height: auto !important;} body.view .main ul.comic-contain li{margin:0 auto !important;} .comic-contain .loaded{box-shadow: none !important;}',
+                history: true,
                 pager: {
                     type: 4,
                     nextL: 'css;#mainControlNext',
                     insertP: ['css;#comicContain', 3],
                     insertE: mhxqiu_insertE,
-                    replaceE: 'css;.main_control, h1.chaptername_title, span.title-comicHeading, title',
+                    replaceE: 'css;.main_control, h1.chaptername_title, span.title-comicHeading',
                     interval: 4000,
                     scrollD: 3000
                 }
@@ -3068,12 +3072,13 @@ function: {
                 host: 'manhua.fffdm.com',
                 functionS: function() {if (location.pathname.split('/').length === 4) {curSite = DBSite.fffdm;}},
                 insStyle: '#footer, #header {display: none !important;} #mhimg0 img {display: block !important;margin: 0 auto !important;}',
+                history: true,
                 pager: {
                     type: 4,
                     nextL: '//a[contains(text(), "下一页") or contains(text(), "下一頁") or contains(text(), "下一话") or contains(text(), "下一話")]',
                     insertP: ['css;#mhimg0', 3],
                     insertE: fffdm_insertE,
-                    replaceE: 'css;.navigation, #weizhi, h1, title',
+                    replaceE: 'css;.navigation, #weizhi, h1',
                     scrollD: 2000
                 }
             }, //             风之动漫
@@ -3092,7 +3097,7 @@ function: {
                     nextL: 'css;.next_chapter > a',
                     pageE: 'css;.comic-contain > amp-img',
                     insertP: ['css;.comic-contain', 3],
-                    replaceE: 'css;.next_chapter, .bottom-bar, .header .title, title',
+                    replaceE: 'css;.next_chapter, .bottom-bar, .header .title',
                     scrollD: 2000
                 }
             }, //           包子漫画
@@ -3107,12 +3112,13 @@ function: {
                     curSite = DBSite.leyuman_list;
                 }},
                 insStyle: '.mh_select, .mh_comicpic > p, mh_headpager {display: none !important;} .mh_comicpic > img{width: 100% !important; height: auto !important;}',
+                history: true,
                 pager: {
                     type: 4,
                     nextL: 'css;#xurl',
                     insertP: ['css;.mh_comicpic', 3],
                     insertE: leyuman_insertE,
-                    replaceE: 'css;.mh_headpager, .mh_readtitle, title',
+                    replaceE: 'css;.mh_headpager, .mh_readtitle',
                     interval: 3000,
                     scrollD: 3000
                 }
@@ -3248,14 +3254,15 @@ function: {
                 } else if (indexOF('/manga-list') || lp == '/search') {
                     curSite = DBSite.mangabz_list;
                 }},
-                hiddenPN: true,
                 insStyle: 'body > .container > div:not([id]) {display: none !important;} .top-bar {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}',
+                hiddenPN: true,
+                history: true,
                 pager: {
                     type: 4,
                     nextL: mangabz_nextL,
                     insertP: ['css;#cp_img', 3],
                     insertE: mangabz_insertE,
-                    replaceE: 'css;p.top-title, body > .container > div:not([id]), title',
+                    replaceE: 'css;p.top-title, body > .container > div:not([id])',
                     interval: 500,
                     scrollD: 2000
                 }
@@ -3280,14 +3287,15 @@ function: {
                 } else if (indexOF('/manga-list') || lp == '/search') {
                     curSite = DBSite.xmanhua_list;
                 }},
-                hiddenPN: true,
                 insStyle: 'a.reader-bottom-page {display: none !important;} .header, .reader-bottom {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}',
+                hiddenPN: true,
+                history: true,
                 pager: {
                     type: 4,
                     nextL: xmanhua_nextL,
                     insertP: ['css;#cp_img', 3],
                     insertE: xmanhua_insertE,
-                    replaceE: 'css;.reader-title, body > .container > div:not([id]), title',
+                    replaceE: 'css;.reader-title, body > .container > div:not([id])',
                     interval: 500,
                     scrollD: 2500
                 }
@@ -3319,12 +3327,13 @@ function: {
                     curSite = DBSite.cocomanga_search;
                 }},
                 insStyle: '.mh_readend, .mh_footpager, .mh_readmode {display: none !important;} .mh_comicpic img {cursor: unset !important;} .mh_comicpic img {min-height: 150px;}',
+                history: true,
                 pager: {
                     type: 4,
                     nextL: '//a[contains(@class, "read_page_link") and contains(string(), "下一章")][not(contains(@href, "javascript"))]',
                     insertP: ['css;#mangalist', 3],
                     insertE: cocomanga_insertE,
-                    replaceE: 'css;.mh_readtitle, .mh_headpager > a.mh_prevbook, .mh_readend, head > title',
+                    replaceE: 'css;.mh_readtitle, .mh_headpager > a.mh_prevbook, .mh_readend',
                     interval: 1000,
                     scrollD: 2500
                 }
@@ -3378,7 +3387,7 @@ function: {
                     nextL: 'css;a[id$="chapterNext"]',
                     pageE: 'css;.main-text-wrap > div:not(.admire-wrap)',
                     insertP: ['css;.main-text-wrap', 3],
-                    replaceE: 'css;.chapter-control, title',
+                    replaceE: 'css;.chapter-control',
                     scrollD: 900
                 }
             }, //           起点小说 - 阅读页
@@ -3422,7 +3431,7 @@ function: {
                     nextL: '//div[contains(@class, "articlebtn")]/a[contains(text(), "下一页") or contains(text(), "下一章")]',
                     pageE: 'css;#BookText',
                     insertP: ['css;#BookText', 6],
-                    replaceE: 'css;.articlebtn, head > title',
+                    replaceE: 'css;.articlebtn',
                     scrollD: 1000
                 }
             }, //               御书网
@@ -3459,7 +3468,7 @@ function: {
                     nextL: 'id("footlink")/a[contains(text(), "下一页")]',
                     pageE: 'css;#contents',
                     insertP: ['css;#contents', 6],
-                    replaceE: 'css;#footlink, head > title, #amain dd h1',
+                    replaceE: 'css;#footlink, #amain dd h1',
                     scrollD: 900
                 }
             }, //               无错小说网
@@ -3535,7 +3544,7 @@ function: {
                     nextL: '//p[@class="mlfy_page"]/a[contains(text(), "下一页") or contains(text(), "下一章")]',
                     pageE: 'css;#mlfy_main_text > *',
                     insertP: ['css;#mlfy_main_text', 3],
-                    replaceE: 'css;p.mlfy_page, head > title',
+                    replaceE: 'css;p.mlfy_page',
                     scrollD: 1000
                 }
             }, //             哔哩轻小说
@@ -3574,13 +3583,13 @@ function: {
                 } else if (indexOF('/wenku/') || indexOF('/sa/')) {
                     curSite = DBSite.linovelib_w_wenku;
                 }},
+                insStyle: 'body {min-height: 1000px;}',
                 history: true,
                 pager: {
                     type: 1,
-                    nextL: function() {if (ReadParams) {return ReadParams.url_next}; return ''},
+                    nextL: function() {if (ReadParams) {return (location.origin + ReadParams.url_next)}; return ''},
                     pageE: '//body/script[contains(text(), "var ReadParams")] | id("apage")/div',
                     insertP: ['css;#apage', 3],
-                    replaceE: 'css;head > title',
                     scriptT: 2,
                     scrollD: 1000
                 }
@@ -4297,7 +4306,7 @@ function: {
                     },
                     pageE: 'css;#maincontent > *:not([class*="prenextnav"]):not(#bpn):not(#tpn)',
                     insertP: ['id("bpn") | //div[contains(@class, "prenextnav")][last()]', 1],
-                    replaceE: 'css;ul.prenext, #navsecond, title',
+                    replaceE: 'css;ul.prenext, #navsecond',
                     scrollE: 'id("bpn") | //div[contains(@class, "prenextnav")][last()]',
                     forceHTTPS: true,
                     scrollD: 600
@@ -4317,7 +4326,7 @@ function: {
                     },
                     pageE: 'css;#content > *',
                     insertP: ['css;#content', 3],
-                    replaceE: 'css;.previous-next-links, #leftcolumn, head > title',
+                    replaceE: 'css;.previous-next-links, #leftcolumn',
                     forceHTTPS: true,
                     scrollD: 1000
                 },
