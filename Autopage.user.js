@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.8.1
+// @version      3.8.2
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -113,15 +113,17 @@ pager: {
            forceTarget: 强制新标签页打开链接
 
     nextL:    下一页链接所在元素
-    pageE:    要获取的主体内容
-    insertP:  主体内容插入的位置
-       1 = 插入该元素本身的前面
-       2 = 插入该元素当中，第一个子元素前面
-       3 = 插入该元素当中，最后一个子元素后面
-       4 = 插入该元素本身的后面
-       5 = 插入 pageE 列表最后一个元素的后面（该 insertP 可以直接省略）
-       6 = 插入该元素末尾（针对小说网站等文本类的）
-    // 小技巧：当 pageE 为 'ul > li'，且 insertP 为 ['ul', 3] 时，这种情况下是可以省略掉 insertP 的，即改用 5
+    pageE:    要从下一页获取的元素
+    insertP:  下一页元素插入本页的位置（数组第一个是基准元素，第二个是基准元素的前后具体位置）
+       1 = 插入基准元素自身的前面
+       2 = 插入基准元素内，第一个子元素前面
+       3 = 插入基准元素内，最后一个子元素后面
+       4 = 插入基准元素自身的后面
+       5 = 插入 pageE 列表最后一个元素的后面（该 insertP 可以直接省略不写，等同于 ['pageE', 5] ）
+       6 = 插入该元素自身内部末尾（针对小说网站等文本类的）
+    // 小技巧：例如当 pageE: 'css;ul > li' 且 insertP: ['css;ul', 3] 时（即 insertP 基准元素是 pageE 元素的父元素），是可以省略不写 insertP（实际等同于 ['css;ul > li', 5] ）
+               另外当 pageE: 'css;.item' 且 insertP: ['css;.item', 4] 时，也可以省略不写 insertP（实际等同于 ['css;.item', 5] ）
+               注意如果 pageE 中选择了多类元素时不能省略 insertP（如包含 ',' '|' 符号）
 
     replaceE: 要替换为下一页内容的元素（比如页码）
     scrollD： 翻页动作触发点（[滚动条] 与 [网页底部] 之间的距离），数值越大，越早开始翻页，一般是访问网页速度越慢，该值就需要越大
@@ -155,7 +157,6 @@ function: {
                     type: 1,
                     nextL: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
                     pageE: 'css;#threadlist table > tbody[id^="normalthread_"]',
-                    insertP: ['id("threadlist")//table/tbody[starts-with(@id, "normalthread_")]/parent::table', 3],
                     replaceE: 'css;.pg, .pages',
                     scrollD: 1000
                 }
@@ -165,7 +166,6 @@ function: {
                     type: 1,
                     nextL: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
                     pageE: 'css;#waterfall > li',
-                    insertP: ['css;#waterfall', 3],
                     replaceE: 'css;.pg, .pages',
                     scrollD: 1000
                 }
@@ -176,7 +176,6 @@ function: {
                     type: 1,
                     nextL: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
                     pageE: 'css;#postlist > div[id^="post_"]',
-                    insertP: ['css;#postlist', 3],
                     replaceE: 'css;.pg, .pages',
                     scrollD: 1000
                 },
@@ -190,7 +189,6 @@ function: {
                     type: 1,
                     nextL: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
                     pageE: 'css;#threadlist > ul',
-                    insertP: ['css;#threadlist', 3],
                     replaceE: 'css;.pg, .pages',
                     scrollD: 1000
                 }
@@ -200,7 +198,6 @@ function: {
                     type: 1,
                     nextL: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
                     pageE: 'css;tbody > tr:not(.th)',
-                    insertP: ['css;tbody', 3],
                     replaceE: 'css;.pg, .pages',
                     scrollD: 1000
                 }
@@ -210,7 +207,6 @@ function: {
                     type: 1,
                     nextL: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
                     pageE: 'css;#ct .bm_c table > tbody',
-                    insertP: ['css;#ct .bm_c table', 3],
                     replaceE: 'css;.pg, .pages',
                     scrollD: 1000
                 }
@@ -236,7 +232,6 @@ function: {
                     type: 1,
                     nextL: 'css;.pagination li.next a[rel="next"], .topic-actions .pagination strong~a',
                     pageE: 'css;.forumbg:not(.announcement) ul.topiclist.topics > li',
-                    insertP: ['css;.forumbg:not(.announcement) ul.topiclist.topics', 3],
                     replaceE: 'css;.action-bar .pagination, .topic-actions .pagination',
                     scrollD: 2000
                 }
@@ -255,7 +250,6 @@ function: {
                     type: 1,
                     nextL: 'css;.pagination li.next a[rel="next"], .topic-actions .pagination strong~a',
                     pageE: 'css;div.search.post',
-                    insertP: ['//div[contains(@class, "search") and contains(@class, "post")][last()]', 1],
                     replaceE: 'css;.action-bar .pagination, .pagination',
                     scrollD: 2000
                 }
@@ -272,7 +266,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.pageNav-jump--next',
                     pageE: 'css;.structItemContainer-group.js-threadList > div',
-                    insertP: ['css;.structItemContainer-group.js-threadList', 3],
                     replaceE: 'css;nav.pageNavWrapper',
                     scrollD: 2500
                 }
@@ -282,7 +275,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.pageNav-jump--next',
                     pageE: 'css;.block-body.js-replyNewMessageContainer > article',
-                    insertP: ['css;.block-body.js-replyNewMessageContainer', 3],
                     replaceE: 'css;nav.pageNavWrapper',
                     scrollD: 2500
                 }
@@ -292,7 +284,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.pageNav-jump--next',
                     pageE: 'css;ol.block-body > li',
-                    insertP: ['css;ol.block-body', 3],
                     replaceE: 'css;nav.pageNavWrapper',
                     scrollD: 2500
                 }
@@ -308,7 +299,6 @@ function: {
                     type: 1,
                     nextL: '//li/a[contains(text(), "▶")]',
                     pageE: 'css;ul.threadlist > li',
-                    insertP: ['css;ul.threadlist', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1500
                 }
@@ -318,7 +308,6 @@ function: {
                     type: 1,
                     nextL: '//li/a[contains(text(), "▶")]',
                     pageE: '(//ul[contains(@class, "postlist")][./li[@data-uid]])[last()]/li',
-                    insertP: ['(//ul[contains(@class, "postlist")][./li[@data-uid]])[last()]', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1500
                 }
@@ -330,7 +319,6 @@ function: {
                     type: 1,
                     nextL: 'css;li.next-page > a',
                     pageE: 'css;.content > article',
-                    insertP: ['css;.content > .pagination', 1],
                     replaceE: 'css;.content > .pagination',
                     scrollD: 1500
                 },
@@ -353,7 +341,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next',
                     pageE: 'css;#main > ul > li',
-                    insertP: ['css;#main > ul', 3],
                     replaceE: 'css;nav.pagination',
                     scrollD: 1500
                 }
@@ -372,22 +359,15 @@ function: {
             }, //             笔趣阁 模板的小说网站
             baidu: {
                 host: 'www.baidu.com',
-                functionS: function() {locationC = true;
-                    if (lp == '/s') {
-                        curSite = DBSite.baidu
-                    } else if (indexOF('/s')) {
-                        location.host = 'm.baidu.com'
-                    }
-                },
+                functionS: function() {locationC = true; if (lp == '/s') {curSite = DBSite.baidu;} else if (indexOF('/s')) {location.host = 'm.baidu.com';}},
                 insStyle: '.new-pmd .c-img-border {position: initial !important;} .op-bk-polysemy-video__wrap.c-gap-bottom {display: none !important;}',
                 history: true,
                 pager: {
                     type: 1,
                     nextL: 'id("page")//a[contains(text(),"下一页")]',
                     pageE: 'css;#content_left > *',
-                    insertP: ['css;#content_left', 3],
                     replaceE: 'css;#page',
-                    scrollD: 1500
+                    scrollD: 2000
                 }
             }, //                  百度 搜索
             baidu_m: {
@@ -399,7 +379,6 @@ function: {
                     type: 1,
                     nextL: 'css;a[class^="new-nextpage"]',
                     pageE: 'css;#results > *',
-                    insertP: ['css;#results', 3],
                     replaceE: 'css;#page-controller',
                     scrollD: 2000
                 }
@@ -437,10 +416,12 @@ function: {
                 pager: {
                     type: 1,
                     nextL: '//a[contains(@class,"sb_pagN")]',
-                    pageE: 'css;#b_results > li:not(.b_msg):not(.b_pag):not(#mfa_root)',
-                    insertP: ['css;#b_results > .b_pag', 1],
+                    pageE: 'css;#b_results > li:not(.b_msg):not([class="b_ans"]):not(.b_pag):not(#mfa_root)',
                     replaceE: 'css;#b_results > .b_pag',
                     scrollD: 1500
+                },
+                function: {
+                    bF: bing_bF
                 }
             }, //                   必应 搜索
             sogou: {
@@ -451,7 +432,6 @@ function: {
                     type: 1,
                     nextL: 'css;#sogou_next',
                     pageE: 'css;.results > *',
-                    insertP: ['css;.results', 3],
                     replaceE: 'css;#pagebar_container',
                     scriptT: 3,
                     scrollD: 1200
@@ -477,20 +457,18 @@ function: {
                     type: 1,
                     nextL: 'css;#sogou_next',
                     pageE: 'css;ul[class*="news-list"] > li',
-                    insertP: ['css;ul[class*="news-list"]', 3],
                     replaceE: 'css;#pagebar_container',
                     scrollD: 1000
                 }
             }, //    搜狗微信 - 搜索
             toutiao: {
                 host: ['www.toutiao.com', 'so.toutiao.com'],
-                functionS: function() {if (location.hostname != 'www.toutiao.com') {if (lp == '/search') {curSite = DBSite.toutiao;}}},
+                functionS: function() {if (location.hostname != 'www.toutiao.com' && lp == '/search') curSite = DBSite.toutiao;},
                 history: true,
                 pager: {
                     type: 1,
                     nextL: '//div[contains(@class, "-pagination")]/a[contains(string(), "下一页")]',
                     pageE: 'css;div[class*="-result-list"] > .result-content[data-i]',
-                    insertP: ['css;div[class*="-result-list"] > .result-content:not([data-i]):last-child', 1],
                     replaceE: 'css;div[class*="-pagination"]',
                     scrollD: 1200
                 },
@@ -532,9 +510,8 @@ function: {
                     type: 1,
                     nextL: startpage_nextL,
                     pageE: 'css;section.w-gl--desktop > div',
-                    insertP: ['css;section.w-gl--desktop', 3],
                     replaceE: 'css;.pagination',
-                    scrollD: 1500
+                    scrollD: 2000
                 }
             }, //              Startpage 搜索
             yandex: {
@@ -558,7 +535,6 @@ function: {
                     type: 1,
                     nextL: 'css;.pagination a.next',
                     pageE: 'css;#web ol > li',
-                    insertP: ['css;#web ol', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 1500
                 }
@@ -571,7 +547,6 @@ function: {
                     type: 1,
                     nextL: 'css;.Pagenation__next > a',
                     pageE: 'css;.Contents__innerGroupBody > div',
-                    insertP: ['css;.Contents__innerGroupBody', 3],
                     replaceE: 'css;.Pagenation',
                     scrollD: 1500
                 }
@@ -594,7 +569,6 @@ function: {
                     type: 1,
                     nextL: 'css;nav.pagination a[aria-label="Next page"]',
                     pageE: 'css;section.mainline > div:not(.related-queries)',
-                    insertP: ['css;nav.pagination', 1],
                     replaceE: 'css;nav.pagination',
                     scrollD: 1500
                 }
@@ -671,7 +645,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next',
                     pageE: 'css;#comments > .comment-item',
-                    insertP: ['css;#paginator', 1],
                     replaceE: 'css;#paginator',
                     scrollD: 1000
                 }
@@ -681,7 +654,6 @@ function: {
                     type: 1,
                     nextL: 'css;link[rel="next"]',
                     pageE: 'css;.review-list > div',
-                    insertP: ['css;.review-list', 3],
                     replaceE: 'css;.paginator',
                     scrollD: 1000
                 }
@@ -691,7 +663,6 @@ function: {
                     type: 1,
                     nextL: 'css;link[rel="next"]',
                     pageE: 'css;#comments > div',
-                    insertP: ['css;#comments', 3],
                     replaceE: 'css;.paginator',
                     scrollD: 1000
                 }
@@ -701,7 +672,6 @@ function: {
                     type: 1,
                     nextL: 'css;link[rel="next"]',
                     pageE: 'css;.grid-view > div',
-                    insertP: ['css;.grid-view', 3],
                     replaceE: 'css;.paginator',
                     scrollD: 1000
                 }
@@ -719,7 +689,6 @@ function: {
                     type: 1,
                     nextL: 'css;span.next > a',
                     pageE: 'css;table.olt > tbody > tr:not(.th)',
-                    insertP: ['css;table.olt > tbody', 3],
                     replaceE: 'css;.paginator',
                     scrollD: 1000
                 }
@@ -729,7 +698,6 @@ function: {
                     type: 1,
                     nextL: 'css;span.next > a',
                     pageE: 'css;#content .article > div > .channel-item',
-                    insertP: ['css;#content .article > div', 3],
                     replaceE: 'css;.paginator',
                     scrollD: 1000
                 }
@@ -739,7 +707,6 @@ function: {
                     type: 1,
                     nextL: 'css;span.next > a',
                     pageE: 'css;#comments > li',
-                    insertP: ['css;#comments', 3],
                     replaceE: 'css;.paginator',
                     scrollD: 1000
                 }
@@ -779,7 +746,6 @@ function: {
                     type: 1,
                     nextL: '//div[contains(@class, "pages")]/div[@class="links"]/a[contains(text(), "下一页")]',
                     pageE: 'css;.tab-bbs-list > tbody:not(:first-of-type)',
-                    insertP: ['css;table.tab-bbs-list', 3],
                     replaceE: '//div[contains(@class, "pages")]',
                     scrollD: 1500
                 }
@@ -787,11 +753,10 @@ function: {
             tianya_post: {
                 pager: {
                     type: 1,
-                    nextL: 'a.js-keyboard-next',
+                    nextL: 'css;a.js-keyboard-next',
                     pageE: 'css;.atl-main > div[class="atl-item"]',
-                    insertP: ['css;.atl-main', 3],
                     replaceE: 'css;.atl-pages > form',
-                    scrollD: 1500
+                    scrollD: 2000
                 }
             }, //         天涯社区 - 帖子内
             nga_thread: {
@@ -850,7 +815,7 @@ function: {
                     type: 1,
                     nextL: '//a[@class="page_current"]/following-sibling::a[1]',
                     pageE: 'css;.cell.item',
-                    insertP: ['//div[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
+                    //insertP: ['//div[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
                     replaceE: 'css;#Main > .box > .cell[style]:not(.item) > table',
                     scrollD: 1500
                 },
@@ -864,7 +829,6 @@ function: {
                     type: 1,
                     nextL: '//a[@class="page_current"]/following-sibling::a[1]',
                     pageE: 'css;#notifications > div',
-                    insertP: ['css;#notifications', 3],
                     replaceE: 'css;#Main > .box > .cell[style] > table',
                     scrollD: 1500
                 },
@@ -892,7 +856,6 @@ function: {
                     type: 1,
                     nextL: '//a[@class="page_current"]/following-sibling::a[1]',
                     pageE: 'css;#TopicsNode > div',
-                    insertP: ['css;#TopicsNode', 3],
                     replaceE: 'css;#Main > .box > .cell[style] > table',
                     scrollD: 1500
                 },
@@ -906,7 +869,6 @@ function: {
                     type: 1,
                     nextL: '//a[@class="page_current"]/following-sibling::a[1]',
                     pageE: 'css;#Main .box > div:not(.cell) > table > tbody > tr:not(:first-child)',
-                    insertP: ['css;#Main .box > div:not(.cell) > table > tbody', 3],
                     replaceE: 'css;#Main > .box > .cell[style] > table',
                     scrollD: 1000
                 }
@@ -925,7 +887,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="wp-pagenavi"]/a[contains(text(), "下一页") or contains(text(), "更多文章")]',
                     pageE: 'css;#content > .list-post',
-                    insertP: ['css;.wp-pagenavi', 1],
                     replaceE: 'css;.wp-pagenavi',
                     scrollD: 1500
                 },
@@ -966,7 +927,6 @@ function: {
                     type: 1,
                     nextL: '//ul[@class="pagination"]//a[./span[@class="next"]]',
                     pageE: 'css;.recommend-article > ul > li',
-                    insertP: ['css;.recommend-article > ul', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1500
                 }
@@ -976,7 +936,6 @@ function: {
                     type: 1,
                     nextL: '//ul[@class="pagination"]//a[./span[@class="next"]]',
                     pageE: 'css;[id^="qiushi_tag_"]',
-                    insertP: ['css;ul.pagination', 1],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1500
                 }
@@ -1020,7 +979,6 @@ function: {
                     type: 1,
                     nextL: '//ul[contains(@class, "pagination")]//a[contains(text(), "▶")]',
                     pageE: 'css;table.threadlist > tbody > tr',
-                    insertP: ['css;table.threadlist > tbody', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1500
                 }
@@ -1030,7 +988,6 @@ function: {
                     type: 1,
                     nextL: '//ul[contains(@class, "pagination")]//a[contains(text(), "▶")]',
                     pageE: 'css;table.postlist > tbody > tr[data-pid]',
-                    insertP: ['css;table.postlist > tbody > tr:not([data-pid])', 1],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1500
                 }
@@ -1047,7 +1004,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="page_inner"]/a[contains(text(), "››")]',
                     pageE: 'css;ul#browserItemList > li',
-                    insertP: ['css;ul#browserItemList', 3],
                     replaceE: 'css;.page_inner',
                     scrollD: 1500
                 }
@@ -1057,7 +1013,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="page_inner"]/a[contains(text(), "››")]',
                     pageE: 'css;.topic_list > tbody:last-of-type > tr.topic',
-                    insertP: ['css;.topic_list > tbody:last-of-type', 3],
                     replaceE: 'css;.page_inner',
                     scrollD: 1500
                 }
@@ -1100,7 +1055,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="fr i3_r"]/a[contains(text(), "后一页")]',
                     pageE: 'css;ul.main_List > li.i2:not(.h_bg)',
-                    insertP: ['css;ul.main_List > li.i3', 1],
                     replaceE: 'css;ul.main_List > li.i3',
                     scrollD: 1000
                 }
@@ -1135,7 +1089,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="ui-crumbs-more"]/a[@class="fn-link"][1]',
                     pageE: 'css;ul.ui-list > li:not(.ui-list-item-head):not(.ui-list-merchant-ad)',
-                    insertP: ['css;ul.ui-list', 3],
                     replaceE: 'css;div.ui-crumbs-more',
                     scrollD: 1200
                 }
@@ -1146,7 +1099,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.ui-paging-next',
                     pageE: 'css;ul.ui-list > li:not(.ui-list-item-head):not(.ui-list-merchant-ad)',
-                    insertP: ['css;ul.ui-list', 3],
                     replaceE: 'css;div.ui-paging',
                     scrollD: 1200
                 }
@@ -1168,7 +1120,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.ui-paging-next',
                     pageE: 'css;ul.ui-list > li',
-                    insertP: ['css;ul.ui-list', 3],
                     replaceE: 'css;div.ui-paging',
                     scrollD: 2000
                 }
@@ -1179,7 +1130,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="ui-page"]/a[contains(text(), "下一页")]',
                     pageE: 'css;.ui-box-main > ul.ui-list > li',
-                    insertP: ['css;.ui-box-main > ul.ui-list', 3],
                     replaceE: 'css;div.ui-page',
                     scrollD: 1200
                 }
@@ -1206,7 +1156,6 @@ function: {
                         return '';
                     },
                     pageE: 'css;.p_list > .p_list01[class*="user_"]',
-                    insertP: ['//div[@class="p_list"][./div[contains(@class, "user_")]]', 3],
                     replaceE: 'css;.t_page',
                     scrollD: 1000
                 }
@@ -1239,7 +1188,6 @@ function: {
                         return '';
                     },
                     pageE: 'css;div[id^="reply_"]',
-                    insertP: ['css;#new_wrap_container', 3],
                     replaceE: 'css;.t_page',
                     scrollD: 1000
                 },
@@ -1254,7 +1202,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.Next',
                     pageE: 'css;ul.DataList > li',
-                    insertP: ['css;ul.DataList', 3],
                     replaceE: 'css;.Pager',
                     scrollD: 1500
                 }
@@ -1266,7 +1213,6 @@ function: {
                     type: 1,
                     nextL: '//div[contains(@class, "_pageNav")]/a[contains(text(), "下一页")]',
                     pageE: 'css;ul.gb-bbs-list > li',
-                    insertP: ['css;ul.gb-bbs-list', 3],
                     replaceE: 'css;._pageNav',
                     scrollD: 1000
                 },
@@ -1282,7 +1228,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.page_down',
                     pageE: 'css;.table-section > dl:not(.table_head)',
-                    insertP: ['css;.table-section', 3],
                     replaceE: 'css;.forumList_page',
                     scrollD: 2000
                 }
@@ -1298,7 +1243,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.nxt:not([href*="javascript"])',
                     pageE: 'css;#threadlist table > tbody[id^="normalthread_"]',
-                    insertP: ['id("threadlist")//table/tbody[starts-with(@id, "normalthread_")]/parent::table', 3],
                     replaceE: 'css;.pg',
                     scrollD: 2500
                 }
@@ -1308,7 +1252,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.nxt:not([href*="javascript"])',
                     pageE: 'css;#postlist > .comiis_viewbox',
-                    insertP: ['css;#postlist', 3],
                     replaceE: 'css;.comiis_pgs > .pg',
                     scrollD: 3000
                 }
@@ -1320,7 +1263,6 @@ function: {
                     type: 1,
                     nextL: 'css;a[rel="next"]',
                     pageE: 'css;tbody[id*="threadbits_forum"] > tr',
-                    insertP: ['css;tbody[id*="threadbits_forum"]', 3],
                     replaceE: 'css;.pagenav',
                     scrollD: 2500
                 }
@@ -1330,7 +1272,6 @@ function: {
                     type: 1,
                     nextL: 'css;a[rel="next"]',
                     pageE: 'css;#posts > div:not([id])',
-                    insertP: ['css;#posts', 3],
                     replaceE: 'css;.pagenav',
                     scrollD: 2000
                 }
@@ -1342,7 +1283,6 @@ function: {
                     type: 1,
                     nextL: 'css;li.next > a',
                     pageE: 'css;ul.fly-list > li',
-                    insertP: ['css;ul.fly-list', 3],
                     replaceE: 'css;.pages',
                     scrollD: 2000
                 }
@@ -1352,7 +1292,6 @@ function: {
                     type: 1,
                     nextL: 'css;li.next > a',
                     pageE: 'css;ul#jieda > li',
-                    insertP: ['css;ul#jieda', 3],
                     replaceE: 'css;.pages',
                     scrollD: 2000
                 }
@@ -1497,7 +1436,6 @@ function: {
                     type: 6,
                     nextL: function() {let next = getCSS('li.number.active+li.number'); if (next) return (location.origin + location.pathname + '?p=' + next.textContent)},
                     pageE: 'css;ul.illust-content > li',
-                    insertP: ['css;ul.illust-content', 3],
                     replaceE: 'css;ul.el-pager',
                     loadTime: 800,
                     scrollD: 2000
@@ -1528,7 +1466,6 @@ function: {
                     type: 1,
                     nextL: '//div[contains(@class,"page-box")]//a[text()="下一页"]',
                     pageE: 'css;.card-grid-box:not(.favorites-box) > div',
-                    insertP: ['css;.card-grid-box:not(.favorites-box)', 3],
                     replaceE: 'css;.page-box',
                     scrollD: 2500
                 },
@@ -1542,7 +1479,6 @@ function: {
                     type: 1,
                     nextL: '//div[contains(@class,"page-box")]//a[text()="下一页"]',
                     pageE: 'css;.list-box > .qtw-card',
-                    insertP: ['css;.list-box', 3],
                     replaceE: 'css;.page-box',
                     scrollD: 4000
                 },
@@ -1574,7 +1510,6 @@ function: {
                     type: 1,
                     nextL: '//a[@title="下一页" or text()="下一页"][not(contains(@class, "search-works-nextpage"))]',
                     pageE: 'css;ul#img-list-outer > li',
-                    insertP: ['css;ul#img-list-outer', 3],
                     replaceE: 'css;.common-page-box, .common-seo-page-box',
                     scrollD: 2000
                 },
@@ -1589,7 +1524,6 @@ function: {
                     type: 1,
                     nextL: '//a[text()="›"]',
                     pageE: 'css;[class^="results"]  > [class^="container"] > div',
-                    insertP: ['css;[class^="results"]  > [class^="container"]', 3],
                     replaceE: '//a[text()="›"]',
                     scrollD: 2000
                 },
@@ -1646,7 +1580,6 @@ function: {
                     type: 1,
                     nextL: 'css;li.next > a',
                     pageE: 'css;.work-list > div',
-                    insertP: ['css;.work-list', 3],
                     replaceE: 'css;.pagerbar',
                     scrollD: 1500
                 }
@@ -1656,7 +1589,6 @@ function: {
                     type: 1,
                     nextL: 'css;li.next > a',
                     pageE: 'css;.collect-list > div',
-                    insertP: ['css;.collect-list', 3],
                     replaceE: 'css;.pagerbar',
                     scrollD: 1500
                 }
@@ -1691,7 +1623,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.nxt:not([href*="javascript"])',
                     pageE: 'css;.waterfall > li',
-                    insertP: ['css;.waterfall', 3],
                     replaceE: 'css;.pg',
                     scrollD: 1500
                 }
@@ -1701,7 +1632,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.nxt:not([href*="javascript"])',
                     pageE: 'css;#zhanzhuai_primary > .box',
-                    insertP: ['css;#zhanzhuai_primary > #modactions', 1],
                     replaceE: 'css;.pg',
                     scrollD: 1500
                 }
@@ -1723,7 +1653,6 @@ function: {
                     type: 1,
                     nextL: 'css;li.next > a',
                     pageE: 'css;.main_content > ul > li',
-                    insertP: ['css;.main_content > ul', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1500
                 }
@@ -1736,7 +1665,6 @@ function: {
                     type: 1,
                     nextL: 'css;li.next_page a[rel="next"]',
                     pageE: 'css;ul.list-page-ul > li',
-                    insertP: ['css;ul.list-page-ul', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 2000
                 }
@@ -1744,7 +1672,7 @@ function: {
             _3dmgame: {
                 host: 'www.3dmgame.com',
                 functionS: function() {
-                    if (getCSS('.ztliswrap > div.lis')) {
+                    if (getCSS('.Llist_b > div.lis')) {
                         curSite = DBSite._3dmgame_list;
                     } else if (getCSS('.newsleft > ul')) {
                         curSite = DBSite._3dmgame_list2;
@@ -1769,8 +1697,7 @@ function: {
                 pager: {
                     type: 1,
                     nextL: 'css;li.next > a',
-                    pageE: 'css;.ztliswrap > div.lis',
-                    insertP: ['css;.pagewrap', 1],
+                    pageE: 'css;.Llist_b > div.lis',
                     replaceE: 'css;.pagewrap',
                     scrollD: 1000
                 },
@@ -1784,7 +1711,6 @@ function: {
                     type: 1,
                     nextL: 'css;li.next > a',
                     pageE: 'css;.newsleft > ul > li',
-                    insertP: ['css;.newsleft > ul', 3],
                     replaceE: 'css;.pagewrap',
                     scrollD: 1000
                 },
@@ -1834,7 +1760,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.page-next',
                     pageE: 'css;.famous-ul > .famous-li',
-                    insertP: ['css;.famous-ul', 3],
                     replaceE: 'css;.page-container',
                     scrollD: 1000
                 },
@@ -1864,7 +1789,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next',
                     pageE: 'css;#image-show > img',
-                    insertP: ['css;#image-show', 3],
                     replaceE: 'css;#image-show > a',
                     scrollD: 1200
                 }
@@ -1904,7 +1828,6 @@ function: {
                     type: 1,
                     nextL: nexusmods_nextL,
                     pageE: 'css;ul.tiles > li',
-                    insertP: ['css;ul.tiles', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 4000
                 },
@@ -1929,7 +1852,6 @@ function: {
                     type: 1,
                     nextL: '//a[@class="pagebtn"][last()]',
                     pageE: 'css;.workshopBrowseItems > *',
-                    insertP: ['css;.workshopBrowseItems', 3],
                     replaceE: 'css;.workshopBrowsePaging',
                     scriptT: 2,
                     scrollD: 1500
@@ -1941,7 +1863,6 @@ function: {
                     type: 1,
                     nextL: '//ul[@class="pager"]//a[text()="下一页"]',
                     pageE: '//h2[contains(text(), "所有游戏") or contains(text(), "搜索结果")]/following-sibling::div[1]/div',
-                    insertP: ['//h2[contains(text(), "所有游戏") or contains(text(), "搜索结果")]/following-sibling::div[1]', 3],
                     replaceE: 'css;ul.pager',
                     scrollD: 1500
                 }
@@ -1959,7 +1880,6 @@ function: {
                     type: 1,
                     nextL: '//td[@class="gensmall"][@align="right"]//a[text()="Next"]',
                     pageE: 'css;#pagecontent > table.tablebg > tbody > tr:not([align])',
-                    insertP: ['css;#pagecontent > table.tablebg > tbody > tr[align]', 1],
                     replaceE: 'css;#pagecontent > table:first-child',
                     scrollD: 1500
                 },
@@ -1972,7 +1892,6 @@ function: {
                     type: 1,
                     nextL: 'id("pageheader")/p[@class="gensmall"]//a[text()="Next"]',
                     pageE: 'css;#pagecontent > table.tablebg:not(:nth-last-child(2)):not(:nth-child(2))',
-                    insertP: ['css;#pagecontent > table.tablebg:nth-last-child(2)', 1],
                     replaceE: 'css;#pagecontent >table:not(.tablebg), #pageheader p.gensmall',
                     scrollD: 2000
                 }
@@ -1982,7 +1901,6 @@ function: {
                     type: 1,
                     nextL: 'id("wrapcentre")/div[@class="nav"]//a[text()="Next"]',
                     pageE: 'css;#wrapcentre > form > table.tablebg > tbody > tr[valign]',
-                    insertP: ['css;#wrapcentre > form > table.tablebg > tbody > tr:last-child', 1],
                     replaceE: 'css;#wrapcentre > div',
                     scrollD: 1500
                 }
@@ -1994,7 +1912,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next.page-numbers',
                     pageE: 'css;article[id^="post-"]',
-                    insertP: ['css;nav.paging-navigation', 1],
                     replaceE: 'css;nav.paging-navigation',
                     scrollD: 2000
                 }
@@ -2005,7 +1922,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next.page-numbers',
                     pageE: 'css;article[id^="post-"]',
-                    insertP: ['css;nav.paging-navigation', 1],
                     replaceE: 'css;nav.paging-navigation',
                     scrollD: 2500
                 }
@@ -2035,7 +1951,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.a1',
                     pageE: 'css;.content-list > li',
-                    insertP: ['css;.content-list', 3],
                     replaceE: 'css;.pages',
                     scrollD: 1500
                 },
@@ -2060,7 +1975,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.nextpostslink',
                     pageE: 'css;.video-listing-content .row > div',
-                    insertP: ['css;.video-listing-content .row', 3],
                     replaceE: 'css;.wp-pagenavi',
                     scrollD: 1500
                 },
@@ -2076,7 +1990,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next',
                     pageE: 'css;.post-box-list > article',
-                    insertP: ['css;.post-box-list', 3],
                     replaceE: 'css;.pagination_wrap',
                     scrollD: 1500
                 }
@@ -2088,7 +2001,6 @@ function: {
                     type: 1,
                     nextL: '//ul[contains(@class, "myui-page")]/li/a[contains(text(), "下一页")]',
                     pageE: 'css;ul.myui-vodlist > li',
-                    insertP: ['css;ul.myui-vodlist', 3],
                     replaceE: 'css;ul.myui-page',
                     scrollD: 1500
                 },
@@ -2105,7 +2017,6 @@ function: {
                     type: 1,
                     nextL: '//ul[contains(@class, "stui-page__item")]//a[contains(text(), "下一页")]',
                     pageE: 'css;ul.stui-vodlist > li',
-                    insertP: ['css;ul.stui-vodlist', 3],
                     replaceE: 'css;ul.stui-page__item',
                     scrollD: 1000
                 },
@@ -2121,7 +2032,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.page-number.page-next',
                     pageE: 'css;.module-items > *',
-                    insertP: ['css;.module-items', 3],
                     replaceE: 'css;#page',
                     scrollD: 1000
                 },
@@ -2137,7 +2047,6 @@ function: {
                     type: 1,
                     nextL: 'css;.next-page > a',
                     pageE: 'css;.m-movies > article',
-                    insertP: ['css;.pagination', 1],
                     replaceE: 'css;.pagination',
                     scrollD: 1500
                 },
@@ -2153,7 +2062,6 @@ function: {
                     type: 1,
                     nextL: '//ul[contains(@class, "stui-page")]/li/a[contains(text(), "下一页")]',
                     pageE: 'css;ul.stui-vodlist > li',
-                    insertP: ['css;ul.stui-vodlist', 3],
                     replaceE: 'css;ul.stui-page',
                     scrollD: 1500
                 },
@@ -2174,7 +2082,6 @@ function: {
                     type: 1,
                     nextL: 'css;#page a[title="下一页"]',
                     pageE: 'css;ul.search-result > a',
-                    insertP: ['css;ul.search-result', 3],
                     replaceE: 'css;#page',
                     scrollD: 1000
                 },
@@ -2188,7 +2095,6 @@ function: {
                     type: 1,
                     nextL: 'css;#page a[title="下一页"]',
                     pageE: 'css;ul.show-list > li',
-                    insertP: ['css;ul.show-list', 3],
                     replaceE: 'css;#page',
                     scrollD: 1000
                 },
@@ -2208,7 +2114,6 @@ function: {
                     type: 1,
                     nextL: 'css;.pagego a',
                     pageE: 'css;.list > ul > li',
-                    insertP: ['css;.list > ul', 3],
                     replaceE: 'css;.newpages, .pagego, #float_show',
                     scrollD: 1000
                 }
@@ -2218,7 +2123,6 @@ function: {
                     type: 1,
                     nextL: '//a[@class="a1"][contains(text(), "下一页")]',
                     pageE: 'css;.search_list > *',
-                    insertP: ['css;.search_list', 3],
                     replaceE: 'css;.pages',
                     scrollD: 1000
                 }
@@ -2232,7 +2136,6 @@ function: {
                     type: 1,
                     nextL: '//div[contains(@class, "page")]/a[contains(text(), ">")]',
                     pageE: 'css;.index-tj > ul > li',
-                    insertP: ['css;.index-tj > ul', 3],
                     replaceE: 'css;.page',
                     scrollD: 1000
                 },
@@ -2248,7 +2151,6 @@ function: {
                     type: 1,
                     nextL: '//a[@class="nextPage" or contains(text(), "下一页")]',
                     pageE: 'css;.dhnew > ul > li',
-                    insertP: ['css;.dhnew > ul', 3],
                     replaceE: 'css;.pagelist',
                     scrollD: 2000
                 }
@@ -2260,7 +2162,6 @@ function: {
                     type: 1,
                     nextL: '//ul[contains(@class, "pagination ")]//a[contains(text(), "»")]',
                     pageE: 'css;ul.list-unstyled > li',
-                    insertP: ['css;ul.list-unstyled', 3],
                     replaceE: 'css;ul.pagination ',
                     scrollD: 1000
                 },
@@ -2280,7 +2181,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="pages"]/a[contains(text(), "下一页")]',
                     pageE: 'css;#contrainer > .img> ul > li',
-                    insertP: ['css;#contrainer > .img> ul', 3],
                     replaceE: 'css;.pages',
                     scrollD: 1000
                 }
@@ -2290,7 +2190,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="pages"]/a[contains(text(), "下一页")]',
                     pageE: 'css;#contrainer .fire .pics > ul > li',
-                    insertP: ['css;#contrainer .fire .pics > ul', 3],
                     replaceE: 'css;.pages',
                     scrollD: 1000
                 }
@@ -2308,7 +2207,6 @@ function: {
                     type: 1,
                     nextL: 'id("container")//div[@class="blockcontent"]/div[@style][not(@class)]/li/a[contains(text(), "下一页")]',
                     pageE: 'css;#container .blockcontent1 > div',
-                    insertP: ['css;#container .blockcontent1', 3],
                     replaceE: 'css;#container .blockcontent > div[style]:not([class])',
                     scrollD: 1000
                 }
@@ -2318,7 +2216,6 @@ function: {
                     type: 1,
                     nextL: 'id("container")//div[@class="blockcontent"]/div[@style][not(@class)]/li/a[contains(text(), "下一页")]',
                     pageE: 'css;#container .blockcontent > ul > li',
-                    insertP: ['css;#container .blockcontent > ul', 3],
                     replaceE: 'css;#container .blockcontent > div[style]:not([class])',
                     scrollD: 1000
                 }
@@ -2328,7 +2225,6 @@ function: {
                     type: 1,
                     nextL: 'id("container")/ul[@style][not(@class)]/li/a[contains(text(), "下一页")]',
                     pageE: 'css;#container > .div_right  .blockcontent.div_right_r_3 > ul',
-                    insertP: ['css;#container > .div_right  .blockcontent.div_right_r_3', 3],
                     replaceE: 'css;#container > ul[style]:not([class])',
                     scrollD: 1000
                 }
@@ -2346,7 +2242,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="pagelist"]//a[contains(text(), "下一页") or contains(text(), "下一頁")]',
                     pageE: 'css;.dhnew ul > li',
-                    insertP: ['css;.dhnew ul', 3],
                     replaceE: 'css;.pagelist',
                     scrollD: 1000
                 }
@@ -2356,7 +2251,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="pagelist"]//a[contains(text(), "下一页") or contains(text(), "下一頁")]',
                     pageE: 'css;.xgyd ul > li',
-                    insertP: ['css;.xgyd ul', 3],
                     replaceE: 'css;.pagelist',
                     scrollD: 1000
                 }
@@ -2366,7 +2260,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="pagelist"]//a[contains(text(), "下一页") or contains(text(), "下一頁")]',
                     pageE: 'css;.side-update.normal-wai > .normal-nei',
-                    insertP: ['css;.side-update.normal-wai', 3],
                     replaceE: 'css;.pagelist',
                     scrollD: 1000
                 }
@@ -2390,7 +2283,6 @@ function: {
                     type: 1,
                     nextL: 'css;.nav-previous > a',
                     pageE: 'css;#main > article',
-                    insertP: ['css;nav.navigation', 1],
                     replaceE: 'css;nav.navigation',
                     scrollD: 1200
                 }
@@ -2402,7 +2294,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next',
                     pageE: 'css;#post_container > li',
-                    insertP: ['css;#post_container', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 1500
                 }
@@ -2412,8 +2303,7 @@ function: {
                 pager: {
                     type: 1,
                     nextL: '//div[@class="page"]/a[contains(text(), "▶") or contains(text(), "下一页")]',
-                    pageE: 'css;#threadlist > table, #threadlist > hr',
-                    insertP: ['css;#threadlist', 3],
+                    pageE: 'css;#threadlist > *',
                     replaceE: 'css;.page',
                     scrollD: 2000
                 }
@@ -2439,15 +2329,11 @@ function: {
             }, //      高清电台
             yyds: {
                 host: 'yyds.fans',
-                functionS: function() {
-                    if (location.search != '' && !indexOF('p=', 's')) {
-                        curSite = DBSite.yyds;
-                    }},
+                functionS: function() {if (location.search != '' && !indexOF('p=', 's')) {curSite = DBSite.yyds;}},
                 pager: {
                     type: 1,
                     nextL: 'css;a.next.page-numbers',
                     pageE: 'css;.list-grouped > div',
-                    insertP: ['css;.list-grouped', 3],
                     replaceE: 'css;nav.pagination',
                     scrollD: 1100
                 }
@@ -2458,7 +2344,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.nextprev',
                     pageE: 'css;#data_list > tr',
-                    insertP: ['css;#data_list', 3],
                     replaceE: 'css;.pages',
                     scrollD: 2500
                 }
@@ -2469,7 +2354,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="nav_title"]/a[contains(text(), "下一")]',
                     pageE: 'css;#topic_list > tbody > tr',
-                    insertP: ['css;#topic_list > tbody', 3],
                     replaceE: 'css;.nav_title',
                     scrollD: 1500
                 },
@@ -2483,7 +2367,6 @@ function: {
                     type: 1,
                     nextL: 'css;ul.pagination a[rel="next"]',
                     pageE: 'css;.topic-list > div',
-                    insertP: ['css;.topic-list', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1500
                 }
@@ -2499,15 +2382,11 @@ function: {
             }, //       萌番组
             miobt: {
                 host: ['miobt.com', 'www.36dm.club'],
-                functionS: function() {curSite = DBSite.miobt;
-                    if (location.host === 'www.36dm.club') {
-                        curSite.pager.scrollD = 1000;
-                    }},
+                functionS: function() {curSite = DBSite.miobt; if (location.host === 'www.36dm.club') {curSite.pager.scrollD = 1000;}},
                 pager: {
                     type: 1,
                     nextL: '//a[@class="nextprev"][contains(text(), "〉") or contains(text(), "下一页") or contains(text(), "»")]',
                     pageE: 'css;#data_list > tr',
-                    insertP: ['css;#data_list', 3],
                     replaceE: 'css;.pages',
                     scrollD: 2000
                 }
@@ -2518,7 +2397,6 @@ function: {
                     type: 1,
                     nextL: 'css;a[rel="next"], li.next > a',
                     pageE: 'css;table.torrent-list > tbody > tr',
-                    insertP: ['css;table.torrent-list > tbody', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 2000
                 }
@@ -2543,7 +2421,6 @@ function: {
                     type: 1,
                     nextL: 'css;#pager_links > a[title="next page"]',
                     pageE: 'css;table.lista2t tr.lista2',
-                    insertP: ['css;table.lista2t > tbody', 3],
                     replaceE: 'css;#pager_links',
                     scrollD: 1000
                 },
@@ -2553,16 +2430,11 @@ function: {
             }, //           RARBG
             subdh: {
                 host: 'subdh.com',
-                functionS: function() {if (lp == '/' || indexOF('/list/new')) {
-                    curSite = DBSite.subdh;
-                } else if (indexOF('/search')) {
-                    curSite = DBSite.subdh_search;
-                }},
+                functionS: function() {if (lp == '/' || indexOF('/list/new')) {curSite = DBSite.subdh;} else if (indexOF('/search')) {curSite = DBSite.subdh_search;}},
                 pager: {
                     type: 1,
                     nextL: '//a[@class="page-link"][contains(text(), "下一页")]',
                     pageE: 'css;.col-lg-9 .bg-white.shadow-sm.rounded-3 > .row.gx-0',
-                    insertP: ['css;.col-lg-9 .bg-white.shadow-sm.rounded-3', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1000
                 }
@@ -2584,7 +2456,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.pager__item--next',
                     pageE: 'css;div[class*="-item-list"] > ul > li',
-                    insertP: ['css;div[class*="-item-list"] > ul', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 2000
                 }
@@ -2600,7 +2471,6 @@ function: {
                     type: 1,
                     nextL: '//ul[@class="pagination"]/li/a[contains(text(), "下一页")]',
                     pageE: 'css;table.table > tbody > tr',
-                    insertP: ['css;table.table > tbody', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1000
                 },
@@ -2615,7 +2485,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.pager__item--next',
                     pageE: 'css;ul.list > li',
-                    insertP: ['css;ul.list', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 1000
                 }
@@ -2654,7 +2523,6 @@ function: {
                     type: 1,
                     nextL: '//a[@class="page-link"][contains(text(), "下一页")]',
                     pageE: 'css;.bg-white.shadow-sm.rounded-3 > div',
-                    insertP: ['css;.bg-white.shadow-sm.rounded-3', 3],
                     replaceE: 'css;nav.clearfix',
                     scrollD: 800
                 }
@@ -2684,8 +2552,7 @@ function: {
                 pager: {
                     type: 1,
                     nextL: function() {if (getCSS('a.rd-aside__item.j-rd-next')) return location.origin + getCSS('a.rd-aside__item.j-rd-next').getAttribute('_href')},
-                     pageE: 'css;.rd-article-wr > div',
-                    insertP: ['css;.rd-article-wr', 3],
+                    pageE: 'css;.rd-article-wr > div',
                     replaceE: 'css;a.last-crumb, .rd-aside',
                     interval: 2000,
                     scrollD: 2000
@@ -2700,7 +2567,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next',
                     pageE: 'css;.cate-comic-list > div',
-                    insertP: ['css;.cate-comic-list', 3],
                     replaceE: 'css;#Pagination',
                     scrollD: 1000
                 },
@@ -2723,7 +2589,6 @@ function: {
                     type: 1,
                     nextL: cartoonmad_nextL,
                     pageE: 'css;body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img',
-                    insertP: ['css;body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child > a', 3],
                     replaceE: 'css;body > table > tbody > tr:nth-child(2), body > table > tbody > tr:nth-child(5)',
                     scrollD: 2000
                 }
@@ -2733,7 +2598,6 @@ function: {
                     type: 1,
                     nextL: '//a[@class="pages"][contains(text(), "下一頁")]',
                     pageE: 'css;td[background="/image/content_box4.gif"]+td > table > tbody > tr',
-                    insertP: ['css;td[background="/image/content_box4.gif"]+td > table > tbody', 3],
                     replaceE: '//a[@class="pages"]/parent::td/parent::tr | //font[contains(text(), "目前在第")]',
                     scrollD: 1000
                 }
@@ -2769,7 +2633,6 @@ function: {
                     type: 1,
                     nextL: '//div[contains(@class, "pagination")]//a[contains(text(), "下一页") or contains(text(), "下页")]',
                     pageE: 'css;.comic-main-section > *',
-                    insertP: ['css;.comic-main-section', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 1000
                 },
@@ -2783,7 +2646,6 @@ function: {
                     type: 1,
                     nextL: '//div[contains(@class, "pagination")]//a[contains(text(), "下一页") or contains(text(), "下页")]',
                     pageE: 'css;.comic-main-section .row > div',
-                    insertP: ['css;.comic-main-section .row', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 1000
                 }
@@ -2802,7 +2664,6 @@ function: {
                     type: 1,
                     nextL: '//div[contains(@class, "page")]//a[@href][contains(text(), "下一页") or contains(text(), "下一章")]',
                     pageE: 'css;#htmlContent p.img > img',
-                    insertP: ['css;#htmlContent p.img', 3],
                     replaceE: 'css;.page, .title',
                     scrollD: 2000
                 }
@@ -2812,7 +2673,6 @@ function: {
                     type: 1,
                     nextL: 'css;#pagelink a.next',
                     pageE: 'css;.article-list',
-                    insertP: ['css;#pagelink', 1],
                     replaceE: 'css;#pagelink',
                     scrollD: 1500
                 }
@@ -2822,7 +2682,6 @@ function: {
                     type: 1,
                     nextL: 'css;#pagelink a.next',
                     pageE: 'css;#content > table > tbody > tr:not([align])',
-                    insertP: ['css;#content > table > tbody', 3],
                     replaceE: 'css;#pagelink',
                     scrollD: 1500
                 }
@@ -2958,7 +2817,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.pg_next',
                     pageE: 'css;ul.list_con_li > li',
-                    insertP: ['css;ul.list_con_li', 3],
                     replaceE: 'css;.page',
                     scrollD: 1000
                 }
@@ -2969,7 +2827,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.pg_next',
                     pageE: 'css;.ph_r_con_li > div:not(.ad_column)',
-                    insertP: ['css;.ph_r_con_li', 3],
                     replaceE: 'css;.page',
                     scrollD: 1000
                 }
@@ -3001,7 +2858,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="pages"]/a[contains(text(), "下一页")]',
                     pageE: 'css;.newpic_content > *:not(.pages)',
-                    insertP: ['css;.newpic_content', 3],
                     replaceE: 'css;.pages',
                     scrollD: 1000
                 }
@@ -3028,7 +2884,6 @@ function: {
                     type: 1,
                     nextL: 'css;li.next > a',
                     pageE: 'css;.exemptComic-box > div',
-                    insertP: ['css;.exemptComic-box', 3],
                     replaceE: 'css;ul.page-all',
                     scrollD: 1500
                 },
@@ -3063,7 +2918,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="NewPages"]//a[contains(text(), "下一页")]',
                     pageE: 'css;.cy_list_mh > ul',
-                    insertP: ['css;.cy_list_mh', 3],
                     replaceE: 'css;.NewPages',
                     scrollD: 1000
                 }
@@ -3096,7 +2950,6 @@ function: {
                     type: 1,
                     nextL: 'css;.next_chapter > a',
                     pageE: 'css;.comic-contain > amp-img',
-                    insertP: ['css;.comic-contain', 3],
                     replaceE: 'css;.next_chapter, .bottom-bar, .header .title',
                     scrollD: 2000
                 }
@@ -3128,7 +2981,6 @@ function: {
                     type: 1,
                     nextL: '//a[@class="page-link"][contains(text(), "下一页")]',
                     pageE: 'css;.works_recommend.classification_works > ul',
-                    insertP: ['css;.works_recommend.classification_works', 3],
                     replaceE: 'css;.paging',
                     scrollD: 1000
                 },
@@ -3163,7 +3015,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="pages_s"]/a[text()="下一页"]',
                     pageE: 'css;.ar_list_co > ul > li',
-                    insertP: ['css;.ar_list_co > ul', 3],
                     replaceE: 'css;.pages_s',
                     scrollD: 1000
                 }
@@ -3174,7 +3025,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next',
                     pageE: 'css;.ar_list_co > ul > dl',
-                    insertP: ['css;.ar_list_co > ul', 3],
                     replaceE: 'css;.pages_s',
                     scrollD: 1000
                 }
@@ -3204,7 +3054,6 @@ function: {
                     type: 1,
                     nextL: 'css;li.next > a',
                     pageE: 'css;ul.book-list > li',
-                    insertP: ['css;ul.book-list', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1000
                 }
@@ -3239,7 +3088,6 @@ function: {
                     type: 1,
                     nextL: 'css;#nextPage',
                     pageE: 'css;ul.mh-list > li',
-                    insertP: ['css;ul.mh-list', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 1000
                 }
@@ -3272,7 +3120,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="page-pagination"]//a[contains(text(), ">")]',
                     pageE: 'css;ul.mh-list > li',
-                    insertP: ['css;ul.mh-list', 3],
                     replaceE: 'css;.page-pagination',
                     scrollD: 800
                 }
@@ -3305,7 +3152,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="page-pagination"]//a[contains(text(), ">")]',
                     pageE: 'css;ul.mh-list > li',
-                    insertP: ['css;ul.mh-list', 3],
                     replaceE: 'css;.page-pagination',
                     scrollD: 1000
                 }
@@ -3343,7 +3189,6 @@ function: {
                     type: 1,
                     nextL: () => getNextP('css;.fed-page-info a.fed-btns-green+a[onclick]', 'page=', /page=\d+/),
                     pageE: 'css;ul.fed-list-info > li',
-                    insertP: ['css;ul.fed-list-info', 3],
                     replaceE: 'css;.fed-page-info',
                     scrollD: 1000
                 },
@@ -3357,7 +3202,6 @@ function: {
                     type: 1,
                     nextL: () => getNextP('css;.fed-page-info a.fed-btns-green+a[onclick]', 'page=', /page=\d+/),
                     pageE: 'css;dl.fed-deta-info',
-                    insertP: ['css;.fed-page-info', 1],
                     replaceE: 'css;.fed-page-info',
                     scrollD: 1000
                 },
@@ -3373,7 +3217,6 @@ function: {
                     type: 1,
                     nextL: 'css;a[class*="pagination-next"]',
                     pageE: 'css;ul.all-img-list > li',
-                    insertP: ['css;ul.all-img-list', 3],
                     replaceE: 'css;#page-container',
                     scrollD: 900
                 }
@@ -3386,7 +3229,6 @@ function: {
                     type: 1,
                     nextL: 'css;a[id$="chapterNext"]',
                     pageE: 'css;.main-text-wrap > div:not(.admire-wrap)',
-                    insertP: ['css;.main-text-wrap', 3],
                     replaceE: 'css;.chapter-control',
                     scrollD: 900
                 }
@@ -3398,7 +3240,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="listl2"]//a[text()="下一页"]',
                     pageE: 'css;.listl2 > ul > li',
-                    insertP: ['css;.listl2 > ul', 3],
                     replaceE: 'css;.listl2 > dl',
                     scrollD: 900
                 }
@@ -3410,7 +3251,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="man_first"]//a[text()="下一页"]',
                     pageE: 'css;.man_first > ul > li',
-                    insertP: ['css;.man_first > ul', 3],
                     replaceE: 'css;.man_first > dl',
                     scrollD: 900
                 }
@@ -3440,7 +3280,6 @@ function: {
                     type: 1,
                     nextL: 'id("pager")//a[contains(text(), "下一页")]',
                     pageE: 'css;.books-list > ul > li',
-                    insertP: ['css;.books-list > ul', 3],
                     replaceE: 'css;#pager',
                     scrollD: 1000
                 }
@@ -3450,7 +3289,6 @@ function: {
                     type: 1,
                     nextL: 'id("pager")//a[contains(text(), "下一页")]',
                     pageE: 'css;ul.search-list > li',
-                    insertP: ['css;ul.search-list', 3],
                     replaceE: 'css;#pager',
                     scrollD: 1000
                 }
@@ -3493,7 +3331,6 @@ function: {
                     type: 1,
                     nextL: '//ul[@class="pagination"]/li/a[contains(text(), "下一页")]',
                     pageE: 'css;.rank-book-list > div',
-                    insertP: ['css;.rank-book-list', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1000
                 }
@@ -3520,7 +3357,6 @@ function: {
                     type: 1,
                     nextL: 'css;.pages a.next, .pages > strong+a',
                     pageE: 'css;#sitebox > dl',
-                    insertP: ['css;#sitebox', 3],
                     replaceE: 'css;.pages',
                     scrollD: 1000
                 },
@@ -3543,7 +3379,6 @@ function: {
                     type: 1,
                     nextL: '//p[@class="mlfy_page"]/a[contains(text(), "下一页") or contains(text(), "下一章")]',
                     pageE: 'css;#mlfy_main_text > *',
-                    insertP: ['css;#mlfy_main_text', 3],
                     replaceE: 'css;p.mlfy_page',
                     scrollD: 1000
                 }
@@ -3553,7 +3388,6 @@ function: {
                     type: 1,
                     nextL: 'css;#pagelink > a.next',
                     pageE: 'css;.store_collist > div.bookbox',
-                    insertP: ['css;.store_collist', 3],
                     replaceE: 'css;#pagelink',
                     scrollD: 1000
                 },
@@ -3567,7 +3401,6 @@ function: {
                     type: 1,
                     nextL: 'css;#pagelink > a.next',
                     pageE: 'css;.rankpage_box > div.rank_d_list',
-                    insertP: ['css;div.pages', 1],
                     replaceE: 'css;#pagelink',
                     scrollD: 1000
                 },
@@ -3599,7 +3432,6 @@ function: {
                     type: 1,
                     nextL: 'css;#pagelink > strong+a ,#pagelink a.next',
                     pageE: 'css;ol.book-ol > li',
-                    insertP: ['css;ol.book-ol', 3],
                     replaceE: 'css;#pagelink',
                     scrollD: 1000
                 },
@@ -3615,7 +3447,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="paging"]//a[contains(text(),"下一页")]',
                     pageE: 'css;div.content-wrap ul.excerpt > li',
-                    insertP: ['css;div.content-wrap ul.excerpt', 3],
                     replaceE: 'css;div.paging',
                     scrollD: 2000
                 }
@@ -3634,13 +3465,11 @@ function: {
             }, //              不死鸟
             sharerw: {
                 host: 'www.sharerw.com',
-                functionS: function() {if (!indexOF('.html')) {
-                    if (lp == '/search.php') {curSite = DBSite.sharerw_search;} else {curSite = DBSite.sharerw;};};},
+                functionS: function() {if (!indexOF('.html')) {if (lp == '/search.php') {curSite = DBSite.sharerw_search;} else {curSite = DBSite.sharerw;};};},
                 pager: {
                     type: 1,
                     nextL: 'css;span.next > a',
                     pageE: 'css;.new-post > article',
-                    insertP: ['css;.new-post', 3],
                     replaceE: 'css;.pagebar',
                     scrollD: 1500
                 }
@@ -3650,7 +3479,6 @@ function: {
                     type: 1,
                     nextL: 'css;span.next > a',
                     pageE: 'css;#mainbox > article',
-                    insertP: ['css;.pagebar', 1],
                     replaceE: 'css;.pagebar',
                     scrollD: 1500
                 }
@@ -3662,7 +3490,6 @@ function: {
                     type: 1,
                     nextL: 'css;.page a[data-page="next"]',
                     pageE: 'css;.side-left > ul[class*="-list"] > li',
-                    insertP: ['css;.side-left > ul[class*="-list"]', 3],
                     replaceE: 'css;.page',
                     scrollD: 2000
                 }
@@ -3682,7 +3509,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next.page-numbers',
                     pageE: 'css;section#latest-posts > article',
-                    insertP: ['css;nav.navigation.pagination', 1],
                     replaceE: 'css;div.nav-links',
                     scrollD: 1500
                 }
@@ -3693,7 +3519,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next',
                     pageE: 'css;.content > div',
-                    insertP: ['css;nav.pagination', 1],
                     replaceE: 'css;nav.pagination',
                     scrollD: 1000
                 }
@@ -3713,7 +3538,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next',
                     pageE: 'css;ul.post-loop > li',
-                    insertP: ['css;ul.post-loop', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1500
                 },
@@ -3741,7 +3565,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next',
                     pageE: 'css;ul.post-loop > li',
-                    insertP: ['css;ul.post-loop', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1500
                 }
@@ -3753,7 +3576,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="pagination"]//a[contains(text(), "Next")]',
                     pageE: 'css;article.article',
-                    insertP: ['css;.pagination', 1],
                     replaceE: 'css;.pagination',
                     scrollD: 1000
                 }
@@ -3781,7 +3603,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.nextpage',
                     pageE: 'css;.articleListWrapper > .richTextItem.search',
-                    insertP: ['css;#pageGroup', 1],
                     replaceE: 'css;#pageGroup',
                     scrollD: 700
                 }
@@ -3803,23 +3624,17 @@ function: {
                     type: 1,
                     nextL: 'css;a.next.page-numbers',
                     pageE: 'css;.posts-con > div:not([class*="posts-"])',
-                    insertP: ['css;.posts-con', 3],
                     replaceE: 'css;nav.pagination',
-                    scrollD: 1000
+                    scrollD: 2000
                 }
             }, //               发烧友绿软
             iplaysoft: {
                 host: 'www.iplaysoft.com',
-                functionS: function() {if (indexOF('.html') || indexOF('/p/')) { // 文章内
-                    curSite = DBSite.iplaysoft_comment;
-                } else { // 其他页面
-                    curSite = DBSite.iplaysoft;
-                }},
+                functionS: function() {if (indexOF('.html') || indexOF('/p/')) {curSite = DBSite.iplaysoft_comment;} else {curSite = DBSite.iplaysoft;}},
                 pager: {
                     type: 1,
                     nextL: 'css;.pagenavi a[title="下一页"]',
                     pageE: 'css;#postlist > div.entry',
-                    insertP: ['css;#postlist > .pagenavi-button', 1],
                     replaceE: 'css;.pagenavi-button, .pagenavi',
                     scrollD: 1200
                 },
@@ -3847,7 +3662,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.page-numbers[title="下一页"]',
                     pageE: 'css;#post > div[id^="post-"]',
-                    insertP: ['css;#post > #pagenavi', 1],
                     replaceE: 'css;#post > #pagenavi',
                     scrollD: 1700
                 }
@@ -3857,7 +3671,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.page-numbers[title="下一页"]',
                     pageE: 'css;#content > div[class^="entry_box"]',
-                    insertP: ['css;#content > #pagenavi', 1],
                     replaceE: 'css;#content > #pagenavi',
                     scrollD: 1700
                 }
@@ -3892,7 +3705,6 @@ function: {
                     type: 1,
                     nextL: '//div[contains(@class, "page-nav")]/a[last()]',
                     pageE: 'css;.td-modules-container.td-module-number4 > div',
-                    insertP: ['css;.td-modules-container.td-module-number4', 3],
                     replaceE: 'css;.page-nav.td-pb-padding-side',
                     scrollD: 1000
                 }
@@ -3910,7 +3722,6 @@ function: {
                     type: 1,
                     nextL: 'css;span.pageNext > a',
                     pageE: 'css;#containerFormsCenter .m_news_list > div',
-                    insertP: ['css;#containerFormsCenter .m_news_list', 3],
                     replaceE: 'css;.pagenation',
                     scrollD: 1200
                 },
@@ -3924,7 +3735,6 @@ function: {
                     type: 1,
                     nextL: 'css;span.pageNext > a',
                     pageE: 'css;#containerFormsCenter .newsList > div',
-                    insertP: ['css;#containerFormsCenter .newsList', 3],
                     replaceE: 'css;.pagenation',
                     scrollD: 2000
                 }
@@ -3935,7 +3745,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next.page-numbers',
                     pageE: 'css;.article > article',
-                    insertP: ['css;nav.navigation.posts-navigation', 1],
                     replaceE: 'css;nav.navigation.posts-navigation',
                     scrollD: 1500
                 }
@@ -3947,7 +3756,6 @@ function: {
                     type: 1,
                     nextL: 'css;.nav-previous > a',
                     pageE: 'css;#content > article',
-                    insertP: ['css;#nav-below', 1],
                     replaceE: 'css;#nav-below',
                     scrollD: 1500
                 }
@@ -3959,7 +3767,6 @@ function: {
                     type: 1,
                     nextL: 'css;.page_next > a',
                     pageE: 'css;#main .post-list article',
-                    insertP: ['css;.page_nav', 1],
                     replaceE: 'css;.page_nav',
                     scrollD: 1500
                 },
@@ -3974,7 +3781,6 @@ function: {
                     type: 1,
                     nextL: 'css;span.prev > a',
                     pageE: 'css;#main > article',
-                    insertP: ['css;nav.paging-navigation', 1],
                     replaceE: 'css;nav.paging-navigation',
                     scrollD: 2000
                 }
@@ -3985,7 +3791,6 @@ function: {
                     type: 1,
                     nextL: '//div[contains(@class, "page-nav")]/a[last()]',
                     pageE: 'css;.td-ss-main-content > div:not(.td-block-title-wrap):not(.page-nav)',
-                    insertP: ['css;.page-nav', 1],
                     replaceE: 'css;.page-nav',
                     scrollD: 2000
                 }
@@ -3997,7 +3802,6 @@ function: {
                     type: 1,
                     nextL: 'css;li.pagination-next > a',
                     pageE: 'css;#genesis-content > article',
-                    insertP: ['css;.pagination', 1],
                     replaceE: 'css;.pagination',
                     scrollD: 1500
                 }
@@ -4047,7 +3851,6 @@ function: {
                     type: 1,
                     nextL: 'css;li.next:not(.disabled) > a',
                     pageE: 'css;#hits-list > div',
-                    insertP: ['css;#hits-list', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1000
                 }
@@ -4101,7 +3904,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next_page',
                     pageE: 'css;.js-navigation-container.js-active-navigation-container > div[id^="issue_"]',
-                    insertP: ['css;.js-navigation-container.js-active-navigation-container', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 3000
                 }
@@ -4111,7 +3913,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next_page',
                     pageE: 'css;#repo-content-pjax-container div[data-discussion-hovercards-enabled] > div',
-                    insertP: ['css;#repo-content-pjax-container div[data-discussion-hovercards-enabled]', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 3000
                 }
@@ -4121,7 +3922,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next_page',
                     pageE: 'css;#repo-content-pjax-container > div[data-pjax] > div:not(.paginate-container)',
-                    insertP: ['//div[contains(@class, "paginate-container")][1]', 1],
                     replaceE: 'css;.pagination',
                     scrollD: 3000
                 }
@@ -4131,7 +3931,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="pagination"]/a[contains(text(), "Next")]',
                     pageE: 'css;.Box-body > div.Box-row',
-                    insertP: ['css;.Box-body', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 3000
                 }
@@ -4141,7 +3940,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="paginate-container"]//a[contains(text(), "Older")]',
                     pageE: 'css;div.js-navigation-container > div',
-                    insertP: ['css;div.js-navigation-container', 3],
                     replaceE: 'css;.paginate-container',
                     scrollD: 3000
                 }
@@ -4158,61 +3956,51 @@ function: {
             github_search_repositories: {
                 pager: {
                     pageE: 'css;ul.repo-list > li',
-                    insertP: ['css;ul.repo-list', 3],
                 }
             }, //Github - Search 列表
             github_search_code: {
                 pager: {
                     pageE: 'css;.code-list-item',
-                    insertP: ['css;.code-list-item:last-child', 1],
                 }
             }, //        Github - Search 列表 - Code
             github_search_commits: {
                 pager: {
                     pageE: 'css;#commit_search_results > div',
-                    insertP: ['css;#commit_search_results', 3],
                 }
             }, //     Github - Search 列表 - Commit
             github_search_issues: {
                 pager: {
                     pageE: 'css;.issue-list-item',
-                    insertP: ['css;.issue-list-item:last-child', 1],
                 }
             }, //      Github - Search 列表 - Issues
             github_search_discussions: {
                 pager: {
                     pageE: 'css;.discussion-list-item',
-                    insertP: ['css;.discussion-list-item:last-child', 1],
                 }
             }, // Github - Search 列表 - Discussions
             github_search_registrypackages: {
                 pager: {
                     pageE: 'css;#package_search_results > div',
-                    insertP: ['css;#package_search_results', 3],
                 }
             }, // Github - Search 列表 - Package
             github_search_marketplace: {
                 pager: {
                     pageE: 'css;#marketplace_search_results > div:first-child > div',
-                    insertP: ['css;#marketplace_search_results > div:first-child', 3],
                 }
             }, // Github - Search 列表 - Marketplace
             github_search_topics: {
                 pager: {
                     pageE: 'css;.topic-list-item',
-                    insertP: ['css;.topic-list-item:last-child', 1],
                 }
             }, //      Github - Search 列表 - Topics
             github_search_wikis: {
                 pager: {
                     pageE: 'css;#wiki_search_results > div:first-child > div',
-                    insertP: ['css;#wiki_search_results > div:first-child', 3],
                 }
             }, //       Github - Search 列表 - wiki
             github_search_users: {
                 pager: {
                     pageE: 'css;#user_search_results > div:first-child > div',
-                    insertP: ['css;#user_search_results > div:first-child', 3],
                 }
             }, //       Github - Search 列表 - user
             stackoverflow: {
@@ -4230,7 +4018,6 @@ function: {
                     type: 1,
                     nextL: 'css;a[rel="next"]',
                     pageE: 'css;#questions > div',
-                    insertP: ['css;#questions', 3],
                     replaceE: 'css;.pager',
                     scrollD: 1500
                 }
@@ -4240,7 +4027,6 @@ function: {
                     type: 1,
                     nextL: 'css;a[rel="next"]',
                     pageE: 'css;#tags-browser > div',
-                    insertP: ['css;#tags-browser', 3],
                     replaceE: 'css;.pager',
                     scrollD: 1500
                 }
@@ -4250,7 +4036,6 @@ function: {
                     type: 1,
                     nextL: 'css;a[rel="next"]',
                     pageE: 'css;#user-browser > div:first-child > div',
-                    insertP: ['css;#user-browser > div:first-child', 3],
                     replaceE: 'css;.pager',
                     scrollD: 1500
                 }
@@ -4260,7 +4045,6 @@ function: {
                     type: 1,
                     nextL: 'css;a[rel="next"]',
                     pageE: 'css;.js-search-results > div:first-child > div',
-                    insertP: ['css;.js-search-results > div:first-child', 3],
                     replaceE: 'css;.pager',
                     scrollD: 1500
                 }
@@ -4277,7 +4061,6 @@ function: {
                     type: 1,
                     nextL: '//a[@class="page-link"][contains(text(), "下一页")]',
                     pageE: 'css;ul.list-group > li',
-                    insertP: ['css;ul.list-group', 3],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1000
                 }
@@ -4287,7 +4070,6 @@ function: {
                     type: 1,
                     nextL: 'css;a[rel="next"]',
                     pageE: 'css;.search-result > section',
-                    insertP: ['css;.search-result > div:last-child', 1],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1000
                 }
@@ -4355,7 +4137,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="topicListFooter"]//a[contains(text(), "下一页")]',
                     pageE: 'css;div.day',
-                    insertP: ['css;.topicListFooter:not([id])', 1],
                     replaceE: 'css;.topicListFooter',
                     scrollD: 1000
                 }
@@ -4365,7 +4146,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="pager"]//a[contains(text(), ">")]',
                     pageE: 'css;#post_list > article',
-                    insertP: ['css;#post_list', 3],
                     replaceE: 'css;.pager',
                     scrollD: 1000
                 }
@@ -4375,7 +4155,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="pager"]//a[contains(text(), ">")]',
                     pageE: 'css;div.searchItem',
-                    insertP: ['css;#paging_block', 1],
                     replaceE: 'css;.pager',
                     scrollD: 1000
                 }
@@ -4391,7 +4170,6 @@ function: {
                     type: 1,
                     nextL: '//li[@class="next-page"]/a | //div[@class="btn-pager"]/a[contains(text(), "❯")]',
                     pageE: 'css;#post-list > ul > li',
-                    insertP: ['css;#post-list > ul', 3],
                     replaceE: 'css;.pagination, .b2-pagenav.post-nav',
                     scrollD: 1500
                 }
@@ -4401,7 +4179,6 @@ function: {
                     type: 1,
                     nextL: 'css;li.next-page a',
                     pageE: 'css;#primary-home > div:not(.pagination)',
-                    insertP: ['css;.pagination', 1],
                     replaceE: 'css;.pagination',
                     scrollD: 1500
                 }
@@ -4460,7 +4237,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.pagination__btn--next',
                     pageE: 'css;ul.items-results > *',
-                    insertP: ['css;ul.items-results', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 3000
                 }
@@ -4501,13 +4277,37 @@ function: {
                     insertE: nsfc_insertE,
                     scrollD: 1500
                 }
-            }, //        学术
+            }, //                 国家自然科学基金
+            cqvip: {
+                host: 'www.cqvip.com',
+                functionS: function() {if (indexOF('/search')) {curSite = DBSite.cqvip;}},
+                history: true,
+                pager: {
+                    type: 6,
+                    nextL: '//ul[@class="pagenum"]//a[text()="下一页"]',
+                    pageE: 'css;ul.prolist:last-child > li',
+                    replaceE: 'css;ul.pagenum',
+                    loadTime: 1000,
+                    scrollD: 2000
+                }
+            }, //                维普网
+            wanfangdata: {
+                host: 's.wanfangdata.com.cn',
+                functionS: function() {locationC = true; curSite = DBSite.wanfangdata;},
+                insStyle: '#zkFooter {display: none !important;}',
+                history: true,
+                iframe: true,
+                pager: {
+                    type: 5,
+                    nextL: () => getNextP('css;.pager.active+span.pager', 'p=', /p=\d+/),
+                    scrollD: 2000
+                }
+            }, //          万方数据知识服务平台
             google_scholar: {
                 pager: {
                     type: 1,
                     nextL: '//a[./span[contains(@class, "next")]]',
                     pageE: 'css;#gs_res_ccl_mid > *',
-                    insertP: ['css;#gs_res_ccl_mid', 3],
                     replaceE: 'id("gs_n")',
                     scriptT: 1,
                     scrollD: 2000
@@ -4519,7 +4319,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.sb_pagN',
                     pageE: 'css;#b_results > li.aca_algo',
-                    insertP: ['css;#b_results .b_pag', 1],
                     replaceE: 'css;#b_results .b_pag',
                     scrollD: 1000
                 }
@@ -4538,7 +4337,6 @@ function: {
                     type: 1,
                     nextL: 'id("page")/a[./i[@class="c-icon-pager-next"]]',
                     pageE: 'css;#bdxs_result_lists > div.result',
-                    insertP: ['css;#bdxs_result_lists', 3],
                     replaceE: 'css;#page',
                     scrollD: 1000
                 }
@@ -4549,7 +4347,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.res-page-next',
                     pageE: 'css;#journaldetail > div',
-                    insertP: ['css;#journaldetail', 3],
                     replaceE: 'css;.res-page',
                     scrollD: 1000
                 }
@@ -4569,7 +4366,6 @@ function: {
                     type: 1,
                     nextL: 'css;a#snext',
                     pageE: 'css;ul.list > li',
-                    insertP: ['css;ul.list', 3],
                     replaceE: 'css;#page',
                     scrollD: 1000
                 }
@@ -4588,7 +4384,6 @@ function: {
                     type: 1,
                     nextL: 'css;a[rel="next"]',
                     pageE: 'css;ol.ipsDataList > li:not([data-rowid])~li',
-                    insertP: ['css;ol.ipsDataList', 3],
                     replaceE: 'css;ul.ipsPagination',
                     scrollD: 2000
                 }
@@ -4598,7 +4393,6 @@ function: {
                     type: 1,
                     nextL: 'css;a[rel="next"]',
                     pageE: 'css;#elPostFeed > form > *:not(input):not(.after-first-post)',
-                    insertP: ['css;#elPostFeed > form', 3],
                     replaceE: 'css;ul.ipsPagination',
                     scrollD: 2000
                 }
@@ -4608,7 +4402,6 @@ function: {
                     type: 1,
                     nextL: 'css;a[rel="next"]',
                     pageE: 'css;ol.ipsStream > li',
-                    insertP: ['css;ol.ipsStream', 3],
                     replaceE: 'css;ul.ipsPagination',
                     scrollD: 2000
                 }
@@ -4626,7 +4419,6 @@ function: {
                     type: 1,
                     nextL: 'css;.pagelinks > strong+a',
                     pageE: 'css;#messageindex tbody > tr:not([class])',
-                    insertP: ['css;#messageindex tbody', 3],
                     replaceE: 'css;.pagelinks',
                     scrollD: 2000
                 }
@@ -4636,7 +4428,6 @@ function: {
                     type: 1,
                     nextL: 'css;.pagelinks > strong+a',
                     pageE: 'css;#forumposts form > *',
-                    insertP: ['css;#forumposts form', 3],
                     replaceE: 'css;.pagelinks',
                     scrollD: 2000
                 }
@@ -4652,7 +4443,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.pag_next',
                     pageE: 'css;#cat_all > .cat_grid > div',
-                    insertP: ['css;#cat_all > .cat_grid', 3],
                     replaceE: 'css;#large_pagination',
                     scriptT: 3,
                     scrollD: 2000
@@ -4663,7 +4453,6 @@ function: {
                     type: 1,
                     nextL: 'css;#searchresults_footer > a.buttonright',
                     pageE: 'css;#searchresults_list > a',
-                    insertP: ['css;#searchresults_list', 3],
                     replaceE: 'css;#searchresults_footer',
                     scrollD: 3000
                 }
@@ -4703,7 +4492,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next_page',
                     pageE: 'css;ol#browse-script-list > li',
-                    insertP: ['css;ol#browse-script-list', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 1300
                 }
@@ -4713,7 +4501,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next_page',
                     pageE: 'css;.script-discussion-list > div',
-                    insertP: ['css;.script-discussion-list', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 1800
                 }
@@ -4723,7 +4510,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next_page',
                     pageE: 'css;.discussion-list > div',
-                    insertP: ['css;.discussion-list', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 1300
                 }
@@ -4737,7 +4523,6 @@ function: {
                     type: 1,
                     nextL: '//ul[@class="pagenation-list"]//a[contains(text() ,"下一页")] | //ul[@class="pagenation-list"]/li[contains(@class, "next-page")]/a',
                     pageE: 'css;#feed-main-list > li',
-                    insertP: ['css;#feed-main-list', 3],
                     replaceE: 'css;ul.pagenation-list',
                     scrollD: 1500
                 }
@@ -4751,7 +4536,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next',
                     pageE: 'css;.share-list > ul > li',
-                    insertP: ['css;.share-list > ul', 3],
                     replaceE: 'css;.h-pages',
                     scrollD: 1500
                 }
@@ -4805,7 +4589,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.page-item-next',
                     pageE: 'css;ul.viewlist_ul > li',
-                    insertP: ['css;ul.viewlist_ul', 3],
                     replaceE: 'css;.page',
                     scrollD: 2000
                 }
@@ -4817,7 +4600,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.poi-pager__item.poi-pager__item_next',
                     pageE: 'css;.inn-archive__container > article',
-                    insertP: ['css;.inn-archive__container', 3],
                     replaceE: 'css;.poi-pager',
                     scrollD: 1800
                 }
@@ -4829,7 +4611,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next',
                     pageE: 'css;#contents > *:not(.pages)',
-                    insertP: ['css;.pages', 1],
                     replaceE: 'css;.pages',
                     scrollD: 1800
                 }
@@ -4841,7 +4622,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="page"]/a[contains(text(),"下一页")]',
                     pageE: 'css;.slist ul > li:not(.nextpage)',
-                    insertP: ['css;.slist ul', 3],
                     replaceE: 'css;.page',
                     scrollD: 1000
                 }
@@ -4854,7 +4634,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="page"]/a[contains(text(), "下一页")]',
                     pageE: 'css;body > .container > div.item',
-                    insertP: ['css;body > .container', 3],
                     replaceE: 'css;.page',
                     scrollD: 1000
                 }
@@ -4868,7 +4647,6 @@ function: {
                     type: 1,
                     nextL: 'css;a.next_page',
                     pageE: 'css;ul#post-list-posts > li',
-                    insertP: ['css;ul#post-list-posts', 3],
                     replaceE: 'css;#paginator',
                     scrollD: 1000
                 }
@@ -4879,7 +4657,6 @@ function: {
                     type: 1,
                     nextL: '//a[./span[@class="nav-next"]]',
                     pageE: 'css;#dle-content > div',
-                    insertP: ['css;#dle-content > noindex', 1],
                     replaceE: 'css;.navigation',
                     scrollD: 1000
                 }
@@ -4890,7 +4667,6 @@ function: {
                     type: 1,
                     nextL: 'css;a#next',
                     pageE: 'css;.wallpapers_container > div.wall-resp',
-                    insertP: ['css;div.pagination_container, .wallpapers_container > div.wall-resp+div:not(.wall-resp)', 1],
                     replaceE: 'css;ul.pagination',
                     scrollD: 1000
                 }
@@ -4924,7 +4700,6 @@ function: {
                     type: 1,
                     nextL: 'id("pages")/a[contains(text(), "下一页")]',
                     pageE: 'css;.content > img',
-                    insertP: ['css;.content', 3],
                     replaceE: 'css;#pages',
                     scrollD: 2000
                 },
@@ -4950,7 +4725,6 @@ function: {
                     type: 1,
                     nextL: 'css;.article-paging span.current+a',
                     pageE: 'css;.article-content > p',
-                    insertP: ['css;.article-paging', 1],
                     replaceE: 'css;.article-paging',
                     scrollD: 3000
                 }
@@ -4960,7 +4734,6 @@ function: {
                     type: 1,
                     nextL: 'css;li.next-page a',
                     pageE: 'css;#posts > div',
-                    insertP: ['css;#posts', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 1500
                 },
@@ -4976,7 +4749,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="pagenavi"]/a[contains(string(), "下一页")]',
                     pageE: 'css;.main-image img',
-                    insertP: ['css;.main-image a', 3],
                     replaceE: 'css;.pagenavi',
                     scrollD: 1500
                 }
@@ -4986,7 +4758,6 @@ function: {
                     type: 1,
                     nextL: 'css;.next.page-numbers',
                     pageE: 'css;.postlist > ul > li',
-                    insertP: ['css;.postlist > ul', 3],
                     replaceE: 'css;.pagination',
                     scrollD: 1000
                 },
@@ -5009,7 +4780,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="page"]/a[contains(text(), "后")]',
                     pageE: 'css;div.img > p > *',
-                    insertP: ['css;div.img > p', 3],
                     replaceE: 'css;.page',
                     scrollD: 2000
                 }
@@ -5019,7 +4789,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="page"]/a[contains(text(), "下页")]',
                     pageE: 'css;td >.tp2 > *',
-                    insertP: ['css;td >.tp2', 3],
                     replaceE: 'css;.page',
                     scrollD: 1000
                 }
@@ -5029,7 +4798,6 @@ function: {
                     type: 1,
                     nextL: 'css;.page > a.current+a',
                     pageE: 'css;.node > *',
-                    insertP: ['css;.node', 3],
                     replaceE: 'css;.page',
                     scrollD: 1000
                 }
@@ -5043,7 +4811,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="content-page"]/a[contains(text(), "下一页")]',
                     pageE: 'css;.content-pic img',
-                    insertP: ['css;.content-pic', 3],
                     replaceE: 'css;.content-page',
                     scrollD: 2000
                 }
@@ -5053,7 +4820,6 @@ function: {
                     type: 1,
                     nextL: '//dd[@class="page"]/a[contains(text(), "下一页")]',
                     pageE: 'css;dl.list-left > dd:not([class="page"])',
-                    insertP: ['css;.page', 1],
                     replaceE: 'css;.page',
                     scrollD: 1000
                 }
@@ -5067,7 +4833,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="paging"]/a[text()="下一张" or text()="下一页"]',
                     pageE: 'css;.post-content img',
-                    insertP: ['css;.post-content', 3],
                     replaceE: 'css;.paging',
                     scrollD: 2000
                 }
@@ -5077,7 +4842,6 @@ function: {
                     type: 1,
                     nextL: 'css;#xbtn',
                     pageE: 'css;#content > article',
-                    insertP: ['css;#webpage', 1],
                     replaceE: 'css;#webpage',
                     scrollD: 2000
                 },
@@ -5111,7 +4875,6 @@ function: {
                     type: 1,
                     nextL: 'id("pages")/a[contains(text(), "下一页")]',
                     pageE: 'css;#hgallery > img',
-                    insertP: ['css;#hgallery', 3],
                     replaceE: 'css;#pages',
                     scrollD: 1000
                 }
@@ -5122,7 +4885,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="pagesYY"]//a[contains(text(), "下一页")]',
                     pageE: 'css;#listdiv > ul > li',
-                    insertP: ['css;#listdiv > ul', 3],
                     replaceE: 'css;.pagesYY',
                     scrollD: 1000
                 },
@@ -5136,7 +4898,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="pagesYY"]//a[contains(text(), "下一页")]',
                     pageE: 'css;li.other_girlli',
-                    insertP: ['//ul[./li[@class="other_girlli"]]', 3],
                     replaceE: 'css;.pagesYY',
                     scrollD: 1000
                 }
@@ -5152,19 +4913,18 @@ function: {
                 }
             }, //     宅男女神 - 文章内
             xrmn5: {
-                host: 'www.xrmn5.com',
+                host: 'www.xrmn5.cc',
                 functionS: function() {if (indexOF(/\d+\.html/)) {
                     curSite = DBSite.xrmn5;
                 } else if (indexOF('/search')) {
                     curSite = DBSite.xrmn5_search;
-                /*} else {
-                    curSite = DBSite.xrmn5_list;*/
+                } else {
+                    curSite = DBSite.xrmn5_list;
                 }},
                 pager: {
                     type: 1,
                     nextL: '//div[contains(@class, "page")]//a[contains(text(), "下页")]',
                     pageE: 'css;.content_left > p > img',
-                    insertP: ['css;.content_left > p', 3],
                     replaceE: 'css;.page',
                     scrollD: 3000
                 }
@@ -5174,7 +4934,6 @@ function: {
                     type: 1,
                     nextL: '//div[contains(@class, "page")]//a[contains(text(), "下页")]',
                     pageE: 'css;ul.update_area_lists > li',
-                    insertP: ['css;ul.update_area_lists', 3],
                     replaceE: 'css;.page',
                     scrollD: 2000
                 }
@@ -5184,7 +4943,6 @@ function: {
                     type: 1,
                     nextL: 'css;.page a.current+a',
                     pageE: 'css;div.sousuo',
-                    insertP: ['//div[contains(@class, "sousuo")][last()]', 4],
                     replaceE: 'css;.page',
                     scrollD: 2000
                 }
@@ -5197,7 +4955,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="page"]/a[text()="下一页"]',
                     pageE: 'css;.content > img',
-                    insertP: ['css;.content', 3],
                     replaceE: 'css;.page',
                     scrollD: 3000
                 }
@@ -5207,7 +4964,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="page"]/a[text()="下一页"]',
                     pageE: 'css;.m-list > ul > li',
-                    insertP: ['css;.m-list > ul', 3],
                     replaceE: 'css;.page',
                     scrollD: 1500
                 }
@@ -5220,7 +4976,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="article_page"]//a[text()="下一页"]',
                     pageE: 'css;.ArticleImageBox > *',
-                    insertP: ['css;.ArticleImageBox', 3],
                     replaceE: 'css;.article_page',
                     scrollD: 3000
                 }
@@ -5230,7 +4985,6 @@ function: {
                     type: 1,
                     nextL: '//div[@class="article_page"]//a[text()="下一页"]',
                     pageE: 'css;.PictureList > ul > li',
-                    insertP: ['css;.PictureList > ul', 3],
                     replaceE: 'css;.article_page',
                     scrollD: 1500
                 }
@@ -5243,7 +4997,6 @@ function: {
                     type: 1,
                     nextL: '//a[@class="page_next"] | //div[@class="article_page"]//a[text()="下一页"]',
                     pageE: 'css;.pic_center img',
-                    insertP: ['css;.pic_center', 3],
                     replaceE: '//div[@class="pages2" or @class="article_page"]',
                     scrollD: 4000
                 }
@@ -5253,7 +5006,6 @@ function: {
                     type: 1,
                     nextL: () => getCSS('a.page_next').href.replace(/(www.)?ermo.net/, location.host).replace(/http(s)?:/, location.protocol),
                     pageE: 'css;.channel_list3 > ul > li, ul#container > li',
-                    insertP: ['css;.channel_list3 > ul, ul#container', 3],
                     replaceE: 'css;.pages, .list_page',
                     scrollD: 1000
                 }
@@ -5444,6 +5196,17 @@ function: {
                 })
             });
         }
+        return pageElems
+    }
+
+
+    // [必应搜索] 的插入前函数（加载网站图标）
+    function bing_bF(pageElems) {
+        pageElems.forEach(function (one) {
+            getAllCSS('div.rms_iac[data-src]').forEach(function (one1) {
+                one1.outerHTML = `<img src="${one1.dataset.src}" height="16" width="16" alt="全球 Web 图标" role="presentation" class="rms_img">`;
+            })
+        });
         return pageElems
     }
 
@@ -6429,7 +6192,7 @@ function: {
                 let newStyle = document.createElement('style'); newStyle.id = 'xiu-scroll';
                 newStyle.textContent = 'html::-webkit-scrollbar, body::-webkit-scrollbar {width: 0 !important;height: 0 !important;} html, body {scrollbar-width: none !important;}';
                 if (curSite.pager.insStyle) newStyle.textContent += curSite.pager.insStyle;
-                document.lastElementChild.appendChild(newStyle);
+                document.documentElement.appendChild(newStyle);
             } else if (delta < 0 && getCSS('#xiu-scroll')) {
                 getCSS('#xiu-scroll').remove();
             }
@@ -6453,7 +6216,7 @@ function: {
         }
 
         // 插入 iframe
-        document.lastElementChild.appendChild(iframe);
+        document.documentElement.appendChild(iframe);
     }
     // 翻页类型 6（通过 iframe 获取下一页动态加载内容）
     function insIframe_(src) {
@@ -6496,7 +6259,7 @@ function: {
         if (document.getElementById('xiu_iframe')) {
             iframe.src = src;
         } else {
-            document.lastElementChild.appendChild(iframe);
+            document.documentElement.appendChild(iframe);
         }
     }
 
@@ -6531,7 +6294,7 @@ function: {
                 pageElems.forEach(function (one) {afterend += one.innerHTML;});
                 toElement.insertAdjacentHTML(addTo, afterend);
             } else {
-                if (curSite.pager.insertP[1] === 2 || curSite.pager.insertP[1] === 4) pageElems.reverse(); // 插入到 [元素内头部]、[目标本身后面] 时，需要反转顺序
+                if (curSite.pager.insertP[1] === 2 || curSite.pager.insertP[1] === 4 || curSite.pager.insertP[1] === 5) pageElems.reverse(); // 插入到 [元素内头部]、[目标本身后面] 时，需要反转顺序
                 pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo, one);});
             }
 
@@ -6599,14 +6362,15 @@ function: {
         let nextNum = getOne(css);
         var url = '';
         if (nextNum && nextNum.textContent) {
+            nextNum = nextNum.textContent.replaceAll(' ','');
             if (location.search) {
                 if (indexOF(pf, 's')) {
-                    url = location.search.replace(reg, pf + nextNum.textContent);
+                    url = location.search.replace(reg, pf + nextNum);
                 } else {
-                    url = location.search + '&' + pf + nextNum.textContent;
+                    url = location.search + '&' + pf + nextNum;
                 }
             } else {
-                url = '?' + pf + nextNum.textContent;
+                url = '?' + pf + nextNum;
             }
             url = location.origin + location.pathname + url;
         }
@@ -6683,7 +6447,7 @@ function: {
     }
     // 插入 <Style>
     function insStyle(style) {
-        document.lastElementChild.appendChild(document.createElement('style')).textContent = style;
+        document.documentElement.appendChild(document.createElement('style')).textContent = style;
     }
 
 
@@ -6874,9 +6638,9 @@ function: {
                 return
             }
             // 插入网页
-            let _html = `<style>#Autopage_number {top: calc(75vh) !important;left: 0 !important;width: 32px;height: 32px;padding: 6px !important;display: flex;position: fixed !important;opacity: 0.5;transition: .2s;z-index: 9999 !important;cursor: pointer;user-select: none !important;flex-direction: column;align-items: center;justify-content: center;box-sizing: content-box;border-radius: 0 50% 50% 0;transform-origin: center !important;transform: translateX(-8px);background-color: #eee;-webkit-tap-highlight-color: transparent;box-shadow: 1px 1px 3px 0px #aaa !important;color: #000 !important;} #Autopage_number:hover {opacity: 0.9;transform: translateX(0);}</style>
+            let _html = `<style>#Autopage_number {top: calc(75vh) !important;left: 0 !important;width: 32px;height: 32px;padding: 6px !important;display: flex;position: fixed !important;opacity: 0.5;transition: .2s;z-index: 9999 !important;cursor: pointer;user-select: none !important;flex-direction: column;align-items: center;justify-content: center;box-sizing: content-box;border-radius: 0 50% 50% 0;transform-origin: center !important;transform: translateX(-8px);background-color: #eee;-webkit-tap-highlight-color: transparent;box-shadow: 1px 1px 3px 0px #aaa !important;color: #000 !important;font-size: medium;} #Autopage_number:hover {opacity: 0.9;transform: translateX(0);}</style>
 <div id="Autopage_number" title="1. 此处数字为 [当前页码] (可在脚本菜单中关闭)&#10;&#10;2. 鼠标左键点击此处 [临时暂停本页自动无缝翻页]（再次点击可恢复）">${pageNum._now}</div>`
-            document.body.insertAdjacentHTML('beforeend', _html);
+            document.documentElement.insertAdjacentHTML('beforeend', _html);
             if (curSite.pager && curSite.pager.type == 5) window.top.document.xiu_pausePage = pausePage
             // 点击事件（临时暂停翻页）
             getCSS('#Autopage_number').onclick = function () {
