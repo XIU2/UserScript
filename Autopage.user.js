@@ -121,9 +121,11 @@ pager: {
        4 = 插入基准元素自身的后面
        5 = 插入 pageE 列表最后一个元素的后面（该 insertP 可以直接省略不写，等同于 ['pageE', 5] ）
        6 = 插入该元素自身内部末尾（针对小说网站等文本类的）
-    // 小技巧：例如当 pageE: 'css;ul > li' 且 insertP: ['css;ul', 3] 时（即 insertP 基准元素是 pageE 元素的父元素），是可以省略不写 insertP（实际等同于 ['css;ul > li', 5] ）
-               另外当 pageE: 'css;.item' 且 insertP: ['css;.item', 4] 时，也可以省略不写 insertP（实际等同于 ['css;.item', 5] ）
-               注意如果 pageE 中选择了多类元素时不能省略 insertP（如包含 ',' '|' 符号）
+    // 小技巧：当基准元素是下一页主体元素的父元素时（或者说要将下一页元素插入到本页同元素最后一个后面时）是可以省略不写 insertP
+         例如：当 pageE: 'css;ul>li' 且 insertP: ['css;ul', 3] 时，实际等同于 ['css;ul>li', 5]
+               当 pageE: 'css;.item' 且 insertP: ['css;.item', 4] 时，实际等同于 ['css;.item', 5]
+               当 pageE: 'css;.item' 且 insertP: ['css;.page', 1] 时，实际等同于 ['css;.item', 5]
+         注意：如 pageE 中选择了多类元素，则不能省略 insertP（比如包含 `,` 与 `|` 符号）
 
     replaceE: 要替换为下一页内容的元素（比如页码）
     scrollD： 翻页动作触发点（[滚动条] 与 [网页底部] 之间的距离），数值越大，越早开始翻页，一般是访问网页速度越慢，该值就需要越大
