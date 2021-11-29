@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.8.8
+// @version      3.8.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -299,7 +299,7 @@ function: {
                 }},
                 pager: {
                     type: 1,
-                    nextL: '//li/a[contains(text(), "▶")]',
+                    nextL: '//li[@class="page-item"]/a[text()="▶"]',
                     pageE: 'css;ul.threadlist > li',
                     replaceE: 'css;ul.pagination',
                     scrollD: 1500
@@ -308,8 +308,8 @@ function: {
             xiuno_post: {
                 pager: {
                     type: 1,
-                    nextL: '//li/a[contains(text(), "▶")]',
-                    pageE: '(//ul[contains(@class, "postlist")][./li[@data-uid]])[last()]/li',
+                    nextL: '//li[@class="page-item"]/a[text()="▶"]',
+                    pageE: 'css;li.post[data-pid]:not(.newpost)',
                     replaceE: 'css;ul.pagination',
                     scrollD: 1500
                 }
@@ -6639,7 +6639,7 @@ function: {
     function menu_disable(type) {
         switch(type) {
             case 'check':
-                if(check()) {return true;} else {return false;}; break;
+                return check(); break;
             case 'add':
                 add(); break;
             case 'del':
@@ -6647,8 +6647,7 @@ function: {
         }
 
         function check() { // 存在返回真，不存在返回假
-            let list = GM_getValue('menu_disable'); // 读取网站列表
-            if (list.indexOf(location.hostname) === -1) return false // 不存在返回假
+            if (GM_getValue('menu_disable').indexOf(location.hostname) == -1) return false // 不存在返回假
             return true
         }
 
