@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.8.6
+// @version      3.8.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -63,7 +63,7 @@
 
             } else if (menuAll[i][0] === 'menu_discuz_thread_page') { // 帖子内自动翻页 (仅论坛)
 
-                if ([2,4,5,6].indexOf(webType) > -1 || forumWebsite.indexOf(location.host) > -1) {
+                if ([2,4,5,6].indexOf(webType) > -1 || forumWebsite.indexOf(location.hostname) > -1) {
                     menuId[i] = GM_registerMenuCommand(`${menuAll[i][3]?'✅':'❌'} ${menuAll[i][1]}`, function(){menu_switch(menuAll[i][3], menuAll[i][0], menuAll[i][2])});
                 }
 
@@ -361,7 +361,7 @@ function: {
             }, //             笔趣阁 模板的小说网站
             baidu: {
                 host: 'www.baidu.com',
-                functionS: function() {locationC = true; if (lp == '/s') {curSite = DBSite.baidu;} else if (indexOF('/s')) {location.host = 'm.baidu.com';}},
+                functionS: function() {locationC = true; if (lp == '/s') {curSite = DBSite.baidu;} else if (indexOF('/s')) {location.hostname = 'm.baidu.com';}},
                 insStyle: '.new-pmd .c-img-border {position: initial !important;} .op-bk-polysemy-video__wrap.c-gap-bottom {display: none !important;}',
                 history: true,
                 pager: {
@@ -1684,6 +1684,17 @@ function: {
                     scrollD: 2000
                 }
             }, //             下得乐
+            Mixkit: {
+                host: 'mixkit.co',
+                functionS: function() {if (location.pathname != '/') {curSite = DBSite.Mixkit;}},
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.pagination__link--next',
+                    pageE: 'css;.item-grid-item',
+                    replaceE: 'css;.pagination__wrapper',
+                    scrollD: 2000
+                }
+            }, //              Mixkit
             _3dmgame: {
                 host: 'www.3dmgame.com',
                 functionS: function() {
@@ -2397,7 +2408,7 @@ function: {
             }, //       萌番组
             miobt: {
                 host: ['miobt.com', 'www.36dm.club'],
-                functionS: function() {curSite = DBSite.miobt; if (location.host === 'www.36dm.club') {curSite.pager.scrollD = 1000;}},
+                functionS: function() {curSite = DBSite.miobt; if (location.hostname === 'www.36dm.club') {curSite.pager.scrollD = 1000;}},
                 pager: {
                     type: 1,
                     nextL: '//a[@class="nextprev"][contains(text(), "〉") or contains(text(), "下一页") or contains(text(), "»")]',
@@ -3666,6 +3677,16 @@ function: {
                     scrollD: 1200
                 }
             }, //   异次元软件 - 评论
+            mubolin: {
+                host: 'www.mubolin.cn',
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.next.page-numbers',
+                    pageE: 'css;#recent-content > div',
+                    replaceE: 'css;nav.pagination',
+                    scrollD: 1500
+                }
+            }, //             悪魔の小站
             mpyit: {
                 host: 'www.mpyit.com',
                 functionS: function() {if (lp == '/' && !location.search) {
@@ -4136,7 +4157,7 @@ function: {
             cnblogs: {
                 host: ['www.cnblogs.com', 'zzk.cnblogs.com'],
                 functionS: function() {
-                    if (location.host === 'zzk.cnblogs.com') {
+                    if (location.hostname === 'zzk.cnblogs.com') {
                         curSite = DBSite.cnblogs_search;
                     } else if (getCSS('#post_list')) {
                         curSite = DBSite.cnblogs_list;
@@ -4531,7 +4552,7 @@ function: {
             }, // 脚本 - 讨论页
             smzdm: {
                 host: ['www.smzdm.com', 'search.smzdm.com'],
-                 functionS: function() {if (location.host === 'search.smzdm.com' || indexOF('/fenlei/')) {
+                 functionS: function() {if (location.hostname === 'search.smzdm.com' || indexOF('/fenlei/')) {
                     curSite = DBSite.smzdm;
                  }},
                 pager: {
@@ -5032,7 +5053,7 @@ function: {
             kingdom_list: {
                 pager: {
                     type: 1,
-                    nextL: () => getCSS('a.page_next').href.replace(/(www.)?ermo.net/, location.host).replace(/http(s)?:/, location.protocol),
+                    nextL: () => getCSS('a.page_next').href.replace(/(www.)?ermo.net/, location.hostname).replace(/http(s)?:/, location.protocol),
                     pageE: 'css;.channel_list3 > ul > li, ul#container > li',
                     replaceE: 'css;.pages, .list_page',
                     scrollD: 1000
@@ -5061,7 +5082,7 @@ function: {
             case 6: //   < 所有 XenForo 论坛 >
                 DBSite.xenforo.functionS(); break;
             case 100: // < 所有使用 WordPress DUX 主题的网站 >
-                DBSite.dux.functionS(); if (location.host === 'apphot.cc') {curSite.pager.scrollD = 2500;}; break;
+                DBSite.dux.functionS(); if (location.hostname === 'apphot.cc') {curSite.pager.scrollD = 2500;}; break;
             case 101: // < 所有使用 WordPress XIU 主题的网站 >
                 DBSite.dux.functionS(); curSite.function = {bF: src_bF, pF: [0, 'img.thumb[data-original]', 'data-original']}; break;
             case 102: // < 所有使用 WordPress D8 主题的网站 >
@@ -5502,7 +5523,7 @@ function: {
         } else {
             let vg_r_data = getCSS('.vg-r-data');
             if (vg_r_data) {
-                getPageElems_(`https://${location.host}/chapter_num?chapter_id=${vg_r_data.dataset.chapter_num}&ctype=1&type=${vg_r_data.dataset.chapterType};`, 'json', 'GET', '', 'url');
+                getPageElems_(`${location.origin}/chapter_num?chapter_id=${vg_r_data.dataset.chapter_num}&ctype=1&type=${vg_r_data.dataset.chapterType};`, 'json', 'GET', '', 'url');
             }
         }
     }
@@ -6078,7 +6099,7 @@ function: {
             if (!DBSite[now].host) continue; // 如果不存在则继续下一个循环
             if (Array.isArray(DBSite[now].host)) { // 如果是数组
                 for (let i of DBSite[now].host) { // 遍历数组
-                    if (i === location.host) {
+                    if (i === location.hostname) {
                         if (DBSite[now].functionS) {
                             DBSite[now].functionS();
                         } else {
@@ -6088,7 +6109,7 @@ function: {
                     }
                 }
             } else if (DBSite[now].host instanceof RegExp) {
-                if (DBSite[now].host.test(location.host)) {
+                if (DBSite[now].host.test(location.hostname)) {
                     if (self != top) {if (!DBSite[now].iframe) break;} // 如果当前位于 iframe 框架下，就需要判断是否需要执行
                     if (DBSite[now].functionS) {
                         DBSite[now].functionS();
@@ -6097,7 +6118,7 @@ function: {
                     }
                     support = true; break; // 如果找到了就退出循环
                 }
-            } else if (DBSite[now].host === location.host) {
+            } else if (DBSite[now].host === location.hostname) {
                 if (self != top) {if (!DBSite[now].iframe) break;} // 如果当前位于 iframe 框架下，就需要判断是否需要执行
                 if (DBSite[now].functionS) {
                     DBSite[now].functionS();
@@ -6616,14 +6637,14 @@ function: {
 
         function check() { // 存在返回真，不存在返回假
             let list = GM_getValue('menu_disable'); // 读取网站列表
-            if (list.indexOf(location.host) === -1) return false // 不存在返回假
+            if (list.indexOf(location.hostname) === -1) return false // 不存在返回假
             return true
         }
 
         function add() {
             if (check()) return
             let list = GM_getValue('menu_disable'); // 读取网站列表
-            list.push(location.host); // 追加网站域名
+            list.push(location.hostname); // 追加网站域名
             GM_setValue('menu_disable', list); // 写入配置
             location.reload(); // 刷新网页
         }
@@ -6631,7 +6652,7 @@ function: {
         function del() {
             if (!check()) return
             let list = GM_getValue('menu_disable'), // 读取网站列表
-            index = list.indexOf(location.host);
+            index = list.indexOf(location.hostname);
             list.splice(index, 1); // 删除网站域名
             GM_setValue('menu_disable', list); // 写入配置
             location.reload(); // 刷新网页
