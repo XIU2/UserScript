@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.8.5
+// @version      3.8.6
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -436,7 +436,7 @@ function: {
                     pageE: 'css;.results > *',
                     replaceE: 'css;#pagebar_container',
                     scriptT: 3,
-                    scrollD: 1200
+                    scrollD: 1500
                 }
             }, //                  搜狗 搜索
             sogou_weixin: {
@@ -460,7 +460,7 @@ function: {
                     nextL: 'css;#sogou_next',
                     pageE: 'css;ul[class*="news-list"] > li',
                     replaceE: 'css;#pagebar_container',
-                    scrollD: 1000
+                    scrollD: 1200
                 }
             }, //    搜狗微信 - 搜索
             toutiao: {
@@ -472,7 +472,7 @@ function: {
                     nextL: '//div[contains(@class, "-pagination")]/a[contains(string(), "下一页")]',
                     pageE: 'css;div[class*="-result-list"] > .result-content[data-i]',
                     replaceE: 'css;div[class*="-pagination"]',
-                    scrollD: 1200
+                    scrollD: 1500
                 },
                 function: {
                     bF: toutiao_bF
@@ -488,7 +488,7 @@ function: {
                     pageE: 'css;ul.result > li, style:not(src)',
                     insertP: ['css;ul.result', 3],
                     replaceE: 'css;#page',
-                    scrollD: 1200
+                    scrollD: 1500
                 },
                 function: {
                     bF: src_bF,
@@ -526,7 +526,7 @@ function: {
                     pageE: 'css;#search-result > *, style',
                     insertP: ['css;#search-result', 3],
                     replaceE: 'css;.pager',
-                    scrollD: 1500
+                    scrollD: 2000
                 }
             }, //                 Yandex 搜索
             yahoo: {
@@ -538,7 +538,7 @@ function: {
                     nextL: 'css;.pagination a.next',
                     pageE: 'css;#web ol > li',
                     replaceE: 'css;.pagination',
-                    scrollD: 1500
+                    scrollD: 2000
                 }
             }, //                  Yahoo 搜索
             yahoo_jp: {
@@ -550,7 +550,7 @@ function: {
                     nextL: 'css;.Pagenation__next > a',
                     pageE: 'css;.Contents__innerGroupBody > div',
                     replaceE: 'css;.Pagenation',
-                    scrollD: 1500
+                    scrollD: 2000
                 }
             }, //               Yahoo 搜索 (JP)
             qwant: {
@@ -560,7 +560,7 @@ function: {
                     type: 2,
                     nextL: 'css;button[data-testid="buttonShowMore"]',
                     interval: 500,
-                    scrollD: 1500
+                    scrollD: 2000
                 }
             }, //                  Qwant 搜索
             ecosia: {
@@ -585,6 +585,19 @@ function: {
                     scrollD: 1500
                 }
             }, //                   Magi 搜索
+            ask: {
+                host: ['ask.com', 'www.ask.com'],
+                functionS: function() {if (lp == '/web') {curSite = DBSite.ask;}},
+                insStyle: '.PartialSearchResults-heading {display: none !important;}',
+                history: true,
+                pager: {
+                    type: 1,
+                    nextL: 'css;li.PartialWebPagination-next > a',
+                    pageE: 'css;.PartialSearchResults.mid',
+                    replaceE: 'css;.PartialWebPagination ',
+                    scrollD: 2000
+                }
+            }, //                    ASK 搜索
             baidu_tieba: {
                 host: 'tieba.baidu.com',
                 functionS: function() {if (lp == '/f') {
