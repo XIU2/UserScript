@@ -104,11 +104,11 @@ pager: {
            insertE:     用来插入元素的函数
 
        5 = 插入 iframe 方式来加载下一页，无限套娃（适用于：部分动态加载内容的网站，需要允许 iframe 且支持通过 GET/POST 直接打开下一页）
-           insStyle:    加载 iframe 前要插入的 CSS Style 样式
-           iframe:      这个必须加到 page{} 外面
-           forceTarget: 强制新标签页打开链接
+           insStyle:    加载 iframe 前要插入的 CSS Style 样式（比如为了悬浮的样式与下一页的重叠，隐藏网页底部间距提高阅读连续性）
+           iframe:      这个必须加到 pager{} 外面（这样才会在该域名的 iframe 框架下运行脚本）
+           forceTarget: 强制新标签页打开链接（适用于一些使用 pjax 技术的链接）
 
-       6 = 通过 iframe 获取下一页动态加载内容插入本页，只有一个娃（适用于：部分动态加载内容的网站，与上面不同的是，该模式适合简单的网页）
+       6 = 通过 iframe 获取下一页动态加载内容插入本页，只有一个娃（适用于：部分动态加载内容的网站，与上面不同的是，该模式适合简单的网页，没有复杂事件什么的）
            loadTime:    预留的网页加载时间，确保网页内容加载完成
            forceTarget: 强制新标签页打开链接
 
@@ -157,7 +157,7 @@ function: {
             discuz_guide: {
                 pager: {
                     type: 1,
-                    nextL: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
+                    nextL: 'css;a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'css;#threadlist table > tbody[id^="normalthread_"]',
                     replaceE: 'css;.pg, .pages',
                     scrollD: 1000
@@ -166,7 +166,7 @@ function: {
             discuz_waterfall: {
                 pager: {
                     type: 1,
-                    nextL: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
+                    nextL: 'css;a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'css;#waterfall > li',
                     replaceE: 'css;.pg, .pages',
                     scrollD: 1000
@@ -176,7 +176,7 @@ function: {
                 insStyle: '.pgbtn {display: none;}',
                 pager: {
                     type: 1,
-                    nextL: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
+                    nextL: 'css;a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'css;#postlist > div[id^="post_"]',
                     replaceE: 'css;.pg, .pages',
                     scrollD: 1000
@@ -189,7 +189,7 @@ function: {
             discuz_search: {
                 pager: {
                     type: 1,
-                    nextL: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
+                    nextL: 'css;a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'css;#threadlist > ul',
                     replaceE: 'css;.pg, .pages',
                     scrollD: 1000
@@ -198,7 +198,7 @@ function: {
             discuz_youspace: {
                 pager: {
                     type: 1,
-                    nextL: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
+                    nextL: 'css;a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'css;tbody > tr:not(.th)',
                     replaceE: 'css;.pg, .pages',
                     scrollD: 1000
@@ -207,7 +207,7 @@ function: {
             discuz_collection: {
                 pager: {
                     type: 1,
-                    nextL: '//a[contains(@class, "nxt") or contains(@class, "next")][not(contains(@href, "javascript"))]',
+                    nextL: 'css;a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'css;#ct .bm_c table > tbody',
                     replaceE: 'css;.pg, .pages',
                     scrollD: 1000
@@ -412,7 +412,7 @@ function: {
                 history: true,
                 pager: {
                     type: 1,
-                    nextL: '//a[contains(@class,"sb_pagN")]',
+                    nextL: 'css;a.sb_pagN',
                     pageE: 'css;#b_results > li:not(.b_msg):not([class="b_ans"]):not(.b_pag):not(#mfa_root)',
                     replaceE: 'css;#b_results > .b_pag',
                     scrollD: 1500
@@ -464,7 +464,7 @@ function: {
                 history: true,
                 pager: {
                     type: 1,
-                    nextL: '//div[contains(@class, "-pagination")]/a[contains(string(), "下一页")]',
+                    nextL: '//div[contains(@class, "-pagination")]/a[string()="下一页"]',
                     pageE: 'css;div[class*="-result-list"] > .result-content[data-i]',
                     replaceE: 'css;div[class*="-pagination"]',
                     scrollD: 1500
@@ -625,7 +625,7 @@ function: {
                 insStyle: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld, .topic_list_box.topic-fixed {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
                 pager: {
                     type: 5,
-                    nextL: '//li[contains(@class,"pb_list_pager")]/a[contains(text(),"下一页")]',
+                    nextL: '//li[contains(@class,"pb_list_pager")]/a[text()="下一页"]',
                     insStyle: 'ul.tbui_aside_float_bar, .core_title_wrap_bright.tbui_follow_fixed.core_title_absolute_bright {display: none !important;}',
                     scrollD: 1500
                 }
@@ -754,7 +754,7 @@ function: {
                 }},
                 pager: {
                     type: 1,
-                    nextL: '//div[contains(@class, "pages")]/div[@class="links"]/a[contains(text(), "下一页")]',
+                    nextL: '//div[contains(@class, "pages")]/div[@class="links"]/a[text()="下一页"]',
                     pageE: 'css;.tab-bbs-list > tbody:not(:first-of-type)',
                     replaceE: '//div[contains(@class, "pages")]',
                     scrollD: 1500
@@ -823,9 +823,8 @@ function: {
                 }},
                 pager: {
                     type: 1,
-                    nextL: '//a[@class="page_current"]/following-sibling::a[1]',
+                    nextL: 'css;a.page_current+a.page_normal',
                     pageE: 'css;.cell.item',
-                    //insertP: ['//div[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
                     replaceE: 'css;#Main > .box > .cell[style]:not(.item) > table',
                     scrollD: 1500
                 },
@@ -837,7 +836,7 @@ function: {
             v2ex_notifications: {
                 pager: {
                     type: 1,
-                    nextL: '//a[@class="page_current"]/following-sibling::a[1]',
+                    nextL: 'css;a.page_current+a.page_normal',
                     pageE: 'css;#notifications > div',
                     replaceE: 'css;#Main > .box > .cell[style] > table',
                     scrollD: 1500
@@ -850,7 +849,7 @@ function: {
             v2ex_replies: {
                 pager: {
                     type: 1,
-                    nextL: '//a[@class="page_current"]/following-sibling::a[1]',
+                    nextL: 'css;a.page_current+a.page_normal',
                     pageE: '//div[@id="Main"]//div[@class="box"]//div[@class="dock_area"] | //*[@id="Main"]//div[@class="box"]//div[@class="inner"] | //*[@id="Main"]//div[@class="box"]//div[@class="dock_area"][last()]/following-sibling::div[@class="cell"][1]',
                     insertP: ['//div[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
                     replaceE: 'css;#Main > .box > .cell[style] > table',
@@ -864,7 +863,7 @@ function: {
             v2ex_go: {
                 pager: {
                     type: 1,
-                    nextL: '//a[@class="page_current"]/following-sibling::a[1]',
+                    nextL: 'css;a.page_current+a.page_normal',
                     pageE: 'css;#TopicsNode > div',
                     replaceE: 'css;#Main > .box > .cell[style] > table',
                     scrollD: 1500
@@ -877,7 +876,7 @@ function: {
             v2ex_balance: {
                 pager: {
                     type: 1,
-                    nextL: '//a[@class="page_current"]/following-sibling::a[1]',
+                    nextL: 'css;a.page_current+a.page_normal',
                     pageE: 'css;#Main .box > div:not(.cell) > table > tbody > tr:not(:first-child)',
                     replaceE: 'css;#Main > .box > .cell[style] > table',
                     scrollD: 1000
@@ -987,7 +986,7 @@ function: {
                 }},
                 pager: {
                     type: 1,
-                    nextL: '//ul[contains(@class, "pagination")]//a[contains(text(), "▶")]',
+                    nextL: '//a[@class="page-link" and text()="▶"]',
                     pageE: 'css;table.threadlist > tbody > tr',
                     replaceE: 'css;ul.pagination',
                     scrollD: 1500
@@ -996,7 +995,7 @@ function: {
             pediy_thread: {
                 pager: {
                     type: 1,
-                    nextL: '//ul[contains(@class, "pagination")]//a[contains(text(), "▶")]',
+                    nextL: '//a[@class="page-link" and text()="▶"]',
                     pageE: 'css;table.postlist > tbody > tr[data-pid]',
                     replaceE: 'css;ul.pagination',
                     scrollD: 1500
@@ -1012,7 +1011,7 @@ function: {
                 }},
                 pager: {
                     type: 1,
-                    nextL: '//div[@class="page_inner"]/a[contains(text(), "››")]',
+                    nextL: '//div[@class="page_inner"]/a[text()="››"]',
                     pageE: 'css;ul#browserItemList > li',
                     replaceE: 'css;.page_inner',
                     scrollD: 1500
@@ -1021,7 +1020,7 @@ function: {
             bangumitv_forum: {
                 pager: {
                     type: 1,
-                    nextL: '//div[@class="page_inner"]/a[contains(text(), "››")]',
+                    nextL: '//div[@class="page_inner"]/a[text()="››"]',
                     pageE: 'css;.topic_list > tbody:last-of-type > tr.topic',
                     replaceE: 'css;.page_inner',
                     scrollD: 1500
@@ -1063,7 +1062,7 @@ function: {
                     }},
                 pager: {
                     type: 1,
-                    nextL: '//div[@class="fr i3_r"]/a[contains(text(), "后一页")]',
+                    nextL: '//div[@class="fr i3_r"]/a[text()="后一页"]',
                     pageE: 'css;ul.main_List > li.i2:not(.h_bg)',
                     replaceE: 'css;ul.main_List > li.i3',
                     scrollD: 1000
@@ -1072,7 +1071,7 @@ function: {
             kdslife_t: {
                 pager: {
                     type: 1,
-                    nextL: '//div[@class="pages"]/a[contains(text(), ">>")]',
+                    nextL: '//div[@class="pages"]/a[text()=">>"]',
                     pageE: 'css;#reply_list_panel > *, script[src*="ui/js/kds.js"]',
                     insertP: ['css;#reply_list_panel', 3],
                     replaceE: 'css;.pages',
@@ -1221,7 +1220,7 @@ function: {
                 functionS: function() {if (indexOF('/forum')) {curSite = DBSite.lieyou;}},
                 pager: {
                     type: 1,
-                    nextL: '//div[contains(@class, "_pageNav")]/a[contains(text(), "下一页")]',
+                    nextL: '//div[contains(@class, "_pageNav")]/a[text()="下一页"]',
                     pageE: 'css;ul.gb-bbs-list > li',
                     replaceE: 'css;._pageNav',
                     scrollD: 1000
@@ -1300,7 +1299,7 @@ function: {
                     }},
                 pager: {
                     type: 1,
-                    nextL: '//ul[contains(@class, "pagination")]//a[contains(text(), "下一页")]',
+                    nextL: '//ul[contains(@class, "pagination")]//a[text()="下一页"]',
                     pageE: 'css;.h-threads-list > *, script[src$="/h.desktop.js"]',
                     insertP: ['css;.h-threads-list', 3],
                     replaceE: '//ul[contains(@class, "pagination")]',
@@ -1311,7 +1310,7 @@ function: {
             adnmb3_t: {
                 pager: {
                     type: 1,
-                    nextL: '//ul[contains(@class, "pagination")]//a[contains(text(), "下一页")]',
+                    nextL: '//ul[contains(@class, "pagination")]//a[text()="下一页"]',
                     pageE: 'css;.h-threads-list > .h-threads-item > .h-threads-item-replys, script[src$="/h.desktop.js"]',
                     insertP: ['css;.h-threads-list > .h-threads-item', 3],
                     replaceE: '//ul[contains(@class, "pagination")]',
@@ -1322,7 +1321,7 @@ function: {
             adnmb3_mf: {
                 pager: {
                     type: 1,
-                    nextL: '//li[contains(@class, "pagination-next")]//a[contains(text(), "下一页")]',
+                    nextL: '//li[contains(@class, "pagination-next")]//a[text()="下一页"]',
                     pageE: 'css;.h-middle > div[id^="threads_"], .h-middle > hr.h-middle > div[id^="threads_"], .h-middle > hr:nth-of-type(n+2), script[src$="/h.mobile.js"]',
                     insertP: ['css;#h-threads-pagination', 1],
                     replaceE: 'css;#h-threads-pagination',
@@ -1333,7 +1332,7 @@ function: {
             adnmb3_mt: {
                 pager: {
                     type: 1,
-                    nextL: '//li[contains(@class, "pagination-next")]//a[contains(text(), "下一页")]',
+                    nextL: '//li[contains(@class, "pagination-next")]//a[text()="下一页"]',
                     pageE: 'css;.h-threads-replylist > div, script[src$="/h.mobile.js"]',
                     insertP: ['css;.h-threads-replylist', 3],
                     replaceE: 'css;#h-threads-pagination',
@@ -1964,7 +1963,7 @@ function: {
                 functionS: function() {if (lp == '/search.php' || indexOF('/list/')) {curSite = DBSite.nfmovies;}},
                 pager: {
                     type: 1,
-                    nextL: '//ul[contains(@class, "myui-page")]/li/a[contains(text(), "下一页")]',
+                    nextL: '//ul[contains(@class, "myui-page")]/li/a[text()="下一页"]',
                     pageE: 'css;ul.myui-vodlist > li',
                     replaceE: 'css;ul.myui-page',
                     scrollD: 1500
@@ -1975,12 +1974,12 @@ function: {
                 }
             }, //        奈菲影视
             zxzj: {
-                host: 'www.zxzj.me',
+                host: ['www.zxzj.me', 'www.zxzj.fun'],
                 functionS: function() {if (location.pathname != '/' && !indexOF('/detail/') && !indexOF('/video/')) {curSite = DBSite.zxzj;}},
                 insStyle: 'div.stui-page__all {display: none !important;}',
                 pager: {
                     type: 1,
-                    nextL: '//ul[contains(@class, "stui-page__item")]//a[contains(text(), "下一页")]',
+                    nextL: '//ul[contains(@class, "stui-page__item")]//a[text()="下一页"]',
                     pageE: 'css;ul.stui-vodlist > li',
                     replaceE: 'css;ul.stui-page__item',
                     scrollD: 1000
@@ -2025,7 +2024,7 @@ function: {
                 functionS: function() {if (indexOF('/vodtype/')) {curSite = DBSite.zhenbuka;}},
                 pager: {
                     type: 1,
-                    nextL: '//ul[contains(@class, "stui-page")]/li/a[contains(text(), "下一页")]',
+                    nextL: '//ul[contains(@class, "stui-page")]/li/a[text()="下一页"]',
                     pageE: 'css;ul.stui-vodlist > li',
                     replaceE: 'css;ul.stui-page',
                     scrollD: 1500
@@ -2099,7 +2098,7 @@ function: {
                 }},
                 pager: {
                     type: 1,
-                    nextL: '//div[contains(@class, "page")]/a[contains(text(), ">")]',
+                    nextL: '//div[contains(@class, "page")]/a[text()=">"]',
                     pageE: 'css;.index-tj > ul > li',
                     replaceE: 'css;.page',
                     scrollD: 1000
@@ -2111,10 +2110,10 @@ function: {
             }, //        漫岛动漫
             yxdm: {
                 host: 'www.yxdm.li',
-                functionS: function() {if (indexOF('/search') || indexOF('/category')) {curSite = DBSite.yxdm;}},
+                functionS: function() {if (indexOF('/search') || indexOF('/category') || indexOF('/resource')) {curSite = DBSite.yxdm;}},
                 pager: {
                     type: 1,
-                    nextL: '//a[@class="nextPage" or contains(text(), "下一页")]',
+                    nextL: '//a[@class="nextPage" or text()="下一页"]',
                     pageE: 'css;.dhnew > ul > li',
                     replaceE: 'css;.pagelist',
                     scrollD: 2000
@@ -2125,7 +2124,7 @@ function: {
                 functionS: function() {if (indexOF('/search') || indexOF('/type')) {curSite = DBSite.nicotv;}},
                 pager: {
                     type: 1,
-                    nextL: '//ul[contains(@class, "pagination ")]//a[contains(text(), "»")]',
+                    nextL: '//ul[contains(@class, "pagination ")]//a[text()="»"]',
                     pageE: 'css;ul.list-unstyled > li',
                     replaceE: 'css;ul.pagination ',
                     scrollD: 1000
@@ -2136,7 +2135,7 @@ function: {
                 }
             }, //        妮可动漫
             yhdm: {
-                host: 'www.imomoe.la',
+                host: ['www.imomoe.la', 'www.imomoe.live'],
                 functionS: function() {if (indexOF('/list/')) {
                     curSite = DBSite.yhdm;
                 } else if (lp == '/so.asp' || lp == '/search.asp') {
@@ -2144,7 +2143,7 @@ function: {
                 }},
                 pager: {
                     type: 1,
-                    nextL: '//div[@class="pages"]/a[contains(text(), "下一页")]',
+                    nextL: '//div[@class="pages"]/a[text()="下一页"]',
                     pageE: 'css;#contrainer > .img> ul > li',
                     replaceE: 'css;.pages',
                     scrollD: 1000
@@ -2153,7 +2152,7 @@ function: {
             yhdm_: {
                 pager: {
                     type: 1,
-                    nextL: '//div[@class="pages"]/a[contains(text(), "下一页")]',
+                    nextL: '//div[@class="pages"]/a[text()="下一页"]',
                     pageE: 'css;#contrainer .fire .pics > ul > li',
                     replaceE: 'css;.pages',
                     scrollD: 1000
