@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.8.2
+// @version      1.8.3
 // @author       X.I.U
-// @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起当前回答/评论（左键两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、屏蔽盐选内容、净化标题消息、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
+// @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起当前回答/评论（左键两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、移除高亮链接、屏蔽盐选内容、净化标题消息、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
@@ -37,6 +37,7 @@ var menu_ALL = [
     ['menu_blockTypeArticle', '文章 [首页、搜索页]', '文章（首页、搜索页）', false],
     ['menu_blockTypeTopic', '话题 [搜索页]', '话题（搜索页）', false],
     ['menu_blockTypeSearch', '杂志文章、相关搜索等 [搜索页]', '相关搜索、杂志等（搜索页）', false],
+    ['menu_removeHighlightLink', '移除高亮链接', '移除高亮链接', true],
     ['menu_blockYanXuan', '屏蔽盐选内容', '屏蔽盐选内容', false],
     ['menu_cleanTitles', '净化标题消息 (标题中的私信/消息)', '净化标题提醒', false],
     ['menu_questionRichTextMore', '展开问题描述', '展开问题描述', false],
@@ -930,6 +931,27 @@ function findParentElement(item, className, type = false) {
 }
 
 
+// 移除高亮链接
+function removeHighlightLink() {
+    if (!menu_value('menu_removeHighlightLink')) return
+    const callback = (mutationsList, observer) => {
+        for (const mutation of mutationsList) {
+            for (const target of mutation.addedNodes) {
+                if (target.nodeType != 1 || target.tagName != 'A') break
+                if (target.dataset.zaNotTrackLink && target.href.indexOf('https://www.zhihu.com/search?q=') > -1) {
+                    target.parentElement.replaceWith(target.textContent);
+                }
+            }
+        }
+    };
+    const observer = new MutationObserver(callback);
+    observer.observe(document, { childList: true, subtree: true });
+
+    // 针对的是打开网页后直接加载的前面几个回答（上面哪些是针对动态加载的回答）
+    document.querySelectorAll('span > a[data-za-not-track-link][href^="https://www.zhihu.com/search?q="]').forEach(e => e.parentElement.replaceWith(e.textContent))
+}
+
+
 // 屏蔽盐选内容
 function blockYanXuan() {
     if (!menu_value('menu_blockYanXuan')) return
@@ -1434,8 +1456,11 @@ function questionInvitation(){
     }
 
     function start(){
-        if (location.hostname != 'zhuanlan.zhihu.com') collapsedAnswer(); //   一键收起回答
-        if (location.hostname != 'zhuanlan.zhihu.com') questionInvitation(); //默认折叠邀请
+        removeHighlightLink(); //                                              移除高亮链接
+        if (location.hostname != 'zhuanlan.zhihu.com') {
+            collapsedAnswer(); //                                              一键收起回答
+            questionInvitation(); //                                           默认折叠邀请
+        }
         closeFloatingComments(); //                                            快捷关闭悬浮评论（监听点击事件，点击网页两侧空白处）
         blockKeywords('comment'); //                                           屏蔽指定关键词（评论）
         if (location.pathname.indexOf('question') > -1) { //       回答页 //
