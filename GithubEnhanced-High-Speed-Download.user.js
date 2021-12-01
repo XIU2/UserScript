@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.7.0
+// @version      1.7.1
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -37,8 +37,8 @@
     }
     const download_url = [
         ['https://pd.zwc365.com/seturl/https://github.com', '美国 1'],
-        ['https://gh.api.99988866.xyz/https://github.com', '美国 2'],
-        ['https://gh.xiu2.xyz/https://github.com', '美国 3'],
+        ['https://gh.xiu2.xyz/https://github.com', '美国 2'],
+        ['https://gh.api.99988866.xyz/https://github.com', '美国 3'],
         ['https://github.rc1844.workers.dev', '美国 4'],
         ['https://download.fastgit.org', '日本'],
         ['https://ghproxy.com/https://github.com', '韩国'],
@@ -168,7 +168,7 @@
         }
 
         for (let i=0;i<url.length;i++) {
-            _html += `<li class="Box-row Box-row--hover-gray p-3 mt-0 XIU2-DZ"><a class="d-flex flex-items-center color-text-primary text-bold no-underline" rel="nofollow" href="${url[i]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
+            _html += `<li class="Box-row Box-row--hover-gray p-3 mt-0 XIU2-DZ"><a class="d-flex flex-items-center color-text-primary text-bold no-underline" rel="noreferrer nofollow" href="${url[i]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
         }
         html.insertAdjacentHTML('afterend', _html);
     }
