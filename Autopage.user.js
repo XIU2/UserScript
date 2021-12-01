@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.9.4
+// @version      3.9.5
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -1488,26 +1488,6 @@ function: {
                     pF: [0, 'img[data-original]', 'data-original']
                 }
             }, //               昵图网
-            sccnn: {
-                host: 'www.sccnn.com',
-                pager: {
-                    type: 1,
-                    nextL: '//ul[@class="listpage"]//a[text()=">"]',
-                    pageE: 'css;td[valign="TOP"]:not([width]) tr[valign="Middle"]',
-                    replaceE: 'css;ul.listpage',
-                    scrollD: 1000
-                }
-            }, //               素材中国
-            sccnn_so: {
-                host: 'so.sccnn.com',
-                pager: {
-                    type: 1,
-                    nextL: 'css;font[color="Red"]+a.F16',
-                    pageE: '//tr[@valign="Top"][1]/preceding-sibling::tr',
-                    replaceE: '//tr[@valign="Top"][last()]',
-                    scrollD: 1000
-                }
-            }, //            素材中国
             pixabay: {
                 host: 'pixabay.com',
                 pager: {
@@ -1532,6 +1512,26 @@ function: {
                     scrollD: 1500
                 }
             }, //              搜图神器 (免费无版权)
+            sccnn: {
+                host: 'www.sccnn.com',
+                pager: {
+                    type: 1,
+                    nextL: '//ul[@class="listpage"]//a[text()=">"]',
+                    pageE: 'css;td[valign="TOP"]:not([width]) tr[valign="Middle"]',
+                    replaceE: 'css;ul.listpage',
+                    scrollD: 1000
+                }
+            }, //               素材中国
+            sccnn_so: {
+                host: 'so.sccnn.com',
+                pager: {
+                    type: 1,
+                    nextL: 'css;font[color="Red"]+a.F16',
+                    pageE: '//tr[@valign="Top"][1]/preceding-sibling::tr',
+                    replaceE: '//tr[@valign="Top"][last()]',
+                    scrollD: 1000
+                }
+            }, //            素材中国 - 搜索页
             iconfont: {
                 host: 'www.iconfont.cn',
                 functionS: function() {locationC = true; if (indexOF('/search/')) curSite = DBSite.iconfont;},
@@ -5037,6 +5037,31 @@ function: {
                     scrollD: 1500
                 }
             }, //        美女写真 - 手机版 - 分类页
+            mnttz: {
+                host: 'www.mnttz.com',
+                functionS: function() {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.mnttz;} else {curSite = DBSite.mnttz_list;}},
+                insStyle: 'img.content_img {min-height: 500px;}',
+                pager: {
+                    type: 1,
+                    nextL: 'css;.article-paging > span+a',
+                    pageE: 'css;img.content_img',
+                    replaceE: 'css;.article-paging',
+                    scrollD: 3000
+                }
+            }, //               美女套图 - 图片页
+            mnttz_list: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;li.next-page > a',
+                    pageE: 'css;article.excerpt',
+                    replaceE: 'css;.pagination',
+                    scrollD: 1500
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-src]', 'data-src']
+                }
+            }, //          美女套图 - 分类页
             kingdom: {
                 host: ['kingdom-en.com', 'www.kingdom-en.com', 'm.kingdom-en.com'],
                 functionS: function() {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.kingdom;} else {curSite = DBSite.kingdom_list;}},
