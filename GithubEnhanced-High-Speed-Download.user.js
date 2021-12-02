@@ -168,7 +168,7 @@
         }
 
         for (let i=0;i<url.length;i++) {
-            _html += `<li class="Box-row Box-row--hover-gray p-3 mt-0 XIU2-DZ"><a class="d-flex flex-items-center color-text-primary text-bold no-underline" rel="noreferrer nofollow" href="${url[i]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
+            _html += `<li class="Box-row Box-row--hover-gray p-3 mt-0 XIU2-DZ"><a class="d-flex flex-items-center color-text-primary text-bold no-underline" rel="noreferrer noopener nofollow" href="${url[i]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
         }
         html.insertAdjacentHTML('afterend', _html);
     }
