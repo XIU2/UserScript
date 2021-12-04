@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.8.3
+// @version      1.8.4
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起当前回答/评论（左键两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、移除高亮链接、屏蔽盐选内容、净化标题消息、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -843,10 +843,15 @@ function blockType(type) {
         if (menu_value('menu_blockTypeSearch') && location.pathname === '/search') setTimeout(function(){document.querySelector('.RelevantQuery').parentElement.parentElement.hidden = true;;}, 1000)
         name = 'h2.ContentItem-title a, a.KfeCollection-PcCollegeCard-link, h2.SearchTopicHeader-Title a'
         addSetInterval_(name);
-    } else {
+    } else if (type === 'question') { // 问题页
+        if (!menu_value('menu_blockTypeVideo')) return
+        document.lastChild.appendChild(document.createElement('style')).textContent = `.VideoAnswerPlayer, .VideoAnswerPlayer-video, .VideoAnswerPlayer-iframe {display: none !important;}`;
+        name = '.VideoAnswerPlayer'
+        document.querySelectorAll(name).forEach(function(item){blockType_(item);})
+    } else { // 首页
         if (!menu_value('menu_blockTypeVideo') && !menu_value('menu_blockTypeArticle')) return
         // 移除相关搜索
-        if (menu_value('menu_blockTypeVideo')) document.lastChild.appendChild(document.createElement('style')).textContent = `nav.TopstoryTabs > a[aria-controls="Topstory-zvideo"] {display: none;}`;
+        if (menu_value('menu_blockTypeVideo')) document.lastChild.appendChild(document.createElement('style')).textContent = `nav.TopstoryTabs > a[aria-controls="Topstory-zvideo"] {display: none !important;}`;
         name = 'h2.ContentItem-title a'
         document.querySelectorAll(name).forEach(function(item){blockType_(item);})
     }
@@ -881,6 +886,8 @@ function blockType(type) {
             } else if (titleA.href.indexOf('/market/') > -1) { //           如果是杂志文章等乱七八糟的
                 if (menu_value('menu_blockTypeArticle')) findParentElement(titleA, 'Card SearchResult-Card').hidden = true;
             }
+        } else if (location.pathname.indexOf('/question/') > -1) { // 问题页
+            if (menu_value('menu_blockTypeVideo')) findParentElement(titleA, 'List-item').hidden = true;
         } else { // 首页
             if (titleA.href.indexOf('/zvideo/') > -1) { //                  如果是视频
                 if (menu_value('menu_blockTypeVideo')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem--old TopstoryItem-isRecommend').hidden = true;
@@ -1470,6 +1477,7 @@ function questionInvitation(){
                 questionRichTextMore(); //                                     展开问题描述
                 blockUsers('question'); //                                     屏蔽指定用户
                 blockYanXuan(); //                                             屏蔽盐选内容
+                blockType('question'); //                                            屏蔽指定类别（视频/文章等）
                 defaultCollapsedAnswer(); //                                   默认收起回答
             }
             setInterval(topTime_question, 300); //                             置顶显示时间
