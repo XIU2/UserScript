@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      3.9.8
+// @version      3.9.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -2888,6 +2888,39 @@ function: {
                     scrollD: 1000
                 }
             }, //动漫之家 - 日漫 - 最新更新
+            acgn: {
+                host: 'comic.acgn.cc',
+                functionS: function() {
+                    if (indexOF('/view-')) {
+                        curSite = DBSite.acgn;
+                        acgn_aF();
+                    } else if (indexOF('/cate-') || indexOF('/pinyin-')) {
+                        curSite = DBSite.acgn_list;
+                    }
+                },
+                insStyle: '.img1 {cursor: initial !important;}',
+                history: true,
+                pager: {
+                    type: 1,
+                    nextL: 'css;#next_chapter',
+                    pageE: 'css;.pic[_src]',
+                    replaceE: 'css;[class^="display_"]',
+                    interval: 2000,
+                    scrollD: 2000
+                },
+                function: {
+                    aF: acgn_aF
+                }
+            }, //              动漫戏说
+            acgn_list: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;a[rel="next"]',
+                    pageE: 'css;ul#display > li',
+                    replaceE: 'css;#pagination',
+                    scrollD: 1000
+                }
+            }, //         动漫戏说 - 分类页
             copymanga: {
                 host: /copymanga\./,
                 functionS: function() {if (indexOF('/chapter/')) {
@@ -5852,6 +5885,15 @@ function: {
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
             addHistory(pageElems);
             if (replaceElems(pageElems)) pageNum.now = pageNum._now + 1
+        }
+    }
+
+
+    // [动漫戏说] 插入后函数（加载图片）
+    function acgn_aF() {
+        let old = getAllCSS('.pic[_src][id]'), _img = '';
+        if (old.length > 0) {
+            for (let now of old) {now.outerHTML = `<div class="pic" _src="${now.getAttribute('_src')}"><img src="${now.getAttribute('_src')}" class="img1"></div>`;}
         }
     }
 
