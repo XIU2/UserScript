@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.0.2
+// @version      4.0.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -4978,6 +4978,57 @@ function: {
                     scrollD: 2000
                 }
             }, //            MM131 - 手机版 - 首页
+            mrcong: {
+                host: 'mrcong.com',
+                functionS: function() {if (lp == '/' || indexOF('/tag/')) {curSite = DBSite.mrcong_list;} else {curSite = DBSite.mrcong;}},
+                pager: {
+                    type: 1,
+                    nextL: 'css;.post-page-numbers.current+a.post-page-numbers',
+                    pageE: 'css;#fukie2 > p > img',
+                    replaceE: 'css;.page-link',
+                    scrollD: 3000
+                }
+            }, //              MrCong - 图片页
+            mrcong_list: {
+                pager: {
+                    type: 3,
+                    nextL: 'css;.current+a.page',
+                    pageE: 'css;article.item-list',
+                    scrollE: 'css;.pagination',
+                    replaceE: 'css;.pagination',
+                    scrollD: 2000
+                }
+            }, //         MrCong - 分类页
+            buondua: {
+                host: 'buondua.com',
+                functionS: function() {if (indexOF(/-photos-\d+/)) {curSite = DBSite.buondua;} else {curSite = DBSite.buondua_list;}},
+                pager: {
+                    type: 3,
+                    nextL: '//nav[@class="pagination"]//span[./a[contains(@class, "is-current")]]/following-sibling::span[1]/a',
+                    pageE: 'css;.article-fulltext > p',
+                    scrollE: 'css;nav.pagination',
+                    replaceE: 'css;nav.pagination',
+                    scrollD: 1500
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-src]', 'data-src']
+                }
+            }, //             Buon Dua - 图片页
+            buondua_list: {
+                pager: {
+                    type: 3,
+                    nextL: 'css;.pagination-next',
+                    pageE: 'css;.items-row.column, .collection-item.column',
+                    scrollE: 'css;nav.pagination',
+                    replaceE: 'css;nav.pagination',
+                    scrollD: 1200
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-src]', 'data-src']
+                }
+            }, //        Buon Dua - 分类页
             fnvshen: {
                 host: 'www.fnvshen.com',
                 functionS: function() {
