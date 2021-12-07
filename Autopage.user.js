@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.0.4
+// @version      4.0.5
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -4295,6 +4295,8 @@ function: {
                         curSite = DBSite.github;
                     } else if (indexOF('tab=stars', 's')) {
                         curSite = DBSite.github_star;
+                    } else if (indexOF('tab=repositories', 's')) {
+                        curSite = DBSite.github_repositories;
                     } else if (indexOF(/\/issues$/) || indexOF(/\/pulls$/)) {
                         curSite = DBSite.github_issues;
                     } else if (indexOF(/\/discussions$/) || indexOF('/discussions/categories')) {
@@ -4342,6 +4344,15 @@ function: {
                     scrollD: 3000
                 }
             }, //               Github - 用户 Star 列表
+            github_repositories: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="paginate-container"]//a[contains(text(), "Next")]',
+                    pageE: 'css;#user-repositories-list > ul > li',
+                    replaceE: 'css;.paginate-container',
+                    scrollD: 3000
+                }
+            }, //       Github - 用户 项目 列表
             github_issues: {
                 pager: {
                     type: 1,
