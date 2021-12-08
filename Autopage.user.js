@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.0.6
+// @version      4.0.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -5160,6 +5160,50 @@ function: {
                     scrollD: 1500
                 }
             }, //          精品美女 - 分类页
+            ku66: {
+                host: 'www.ku66.net',
+                functionS: function() {if (/\/\d+\.html/.test(location.pathname)) {curSite = DBSite.ku66;} else {curSite = DBSite.ku66_list;}},
+                insStyle: '.content img {min-height: 500px;}',
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="NewPages"]//a[text()="下一页"]',
+                    pageE: 'css;.content > img',
+                    insertP: ['css;.content', 3],
+                    replaceE: 'css;.NewPages',
+                    scrollD: 4000
+                }
+            }, //                美女图片 - 图片页
+            ku66_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="NewPages"]//a[text()="下一页"]',
+                    pageE: 'css;.TypeList > ul > li',
+                    insertP: ['css;.TypeList > ul', 3],
+                    replaceE: 'css;.NewPages',
+                    scrollD: 1000
+                }
+            }, //           美女图片 - 分类页
+            ku66_m: {
+                host: 'm.ku66.net',
+                functionS: function() {if (/\/\d+\.html/.test(location.pathname)) {curSite = DBSite.ku66_m;} else {curSite = DBSite.ku66_m_list;}},
+                insStyle: '.ArticleImageBox img {min-height: 200px;}',
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="article_page"]//a[text()="下一页"]',
+                    pageE: 'css;.ArticleImageBox > *',
+                    replaceE: 'css;.article_page',
+                    scrollD: 4000
+                }
+            }, //              美女图片 - 手机版 - 图片页
+            ku66_m_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="article_page"]//a[text()="下一页"]',
+                    pageE: 'css;.PictureList > ul > li',
+                    replaceE: 'css;.article_page',
+                    scrollD: 1000
+                }
+            }, //         美女图片 - 手机版 - 分类页
             ku137: {
                 host: 'www.ku137.net',
                 functionS: function() {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.ku137;} else if (location.pathname != '/') {curSite = DBSite.ku137_list;}},
