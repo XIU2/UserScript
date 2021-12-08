@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.0.5
+// @version      4.0.6
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -344,6 +344,7 @@ function: {
             }, //       WordPress 的 Begin 主题 - 搜索页
             biquge: {
                 functionS: function() {if (indexOF(/\d+\/\d+\.html/)) {curSite = DBSite.biquge;}},
+                insStyle: 'img {display: none !important;}',
                 history: true,
                 pager: {
                     type: 1,
@@ -354,6 +355,19 @@ function: {
                     scrollD: 1500
                 }
             }, //             笔趣阁 模板的小说网站
+            biquge_m: {
+                functionS: function() {if (indexOF(/\d+\/\d+\.html/)) {curSite = DBSite.biquge_m;}},
+                insStyle: 'img {display: none !important;}',
+                history: true,
+                pager: {
+                    type: 1,
+                    nextL: '//a[contains(text(), "下一章") or contains(text(), "下一页")]',
+                    pageE: 'css;#chaptercontent, .chaptercontent, #BookText',
+                    insertP: ['css;#chaptercontent, .chaptercontent, #BookText', 6],
+                    replaceE: '//*[./a[contains(text(), "下一章") or contains(text(), "下一页")]]',
+                    scrollD: 1500
+                }
+            }, //           笔趣阁 - 手机版 模板的小说网站
             baidu: {
                 host: 'www.baidu.com',
                 functionS: function() {locationC = true; if (lp == '/s') {curSite = DBSite.baidu;} else if (indexOF('/s')) {location.hostname = 'm.baidu.com';}},
@@ -5341,6 +5355,8 @@ function: {
                 DBSite.begin.functionS(); break;
             case 200: // < 所有使用 笔趣阁 模板的小说网站 >
                 DBSite.biquge.functionS(); break;
+            case 201: // < 所有使用 笔趣阁 - 手机版 模板的小说网站 >
+                DBSite.biquge_m.functionS(); break;
         }
     }
 
@@ -6440,6 +6456,8 @@ function: {
             console.info('[自动无缝翻页] - 使用 WordPress <Begin> 主题的网站'); return 103;
         } else if (getCSS('meta[name="description"][content*="小说"], meta[name="description"][content*="章节"], meta[name="description"][content*="阅读"]') && getCSS('#content') && getXpath('//a[contains(text(), "下一章") or contains(text(), "下一页")]')) {
             console.info('[自动无缝翻页] - <笔趣阁> 模板的小说网站'); return 200;
+        } else if (getCSS('meta[name="description"][content*="小说"], meta[name="description"][content*="章节"], meta[name="description"][content*="阅读"]') && getCSS('#chaptercontent, .chaptercontent, #BookText') && getXpath('//a[contains(text(), "下一章") or contains(text(), "下一页")]')) {
+            console.info('[自动无缝翻页] - <笔趣阁 - 手机版> 模板的小说网站'); return 201;
         } else if (self != top) {
             return -1;
         }
