@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         3DM论坛增强
-// @version      1.1.2
+// @version      1.1.3
 // @author       X.I.U
 // @description  自动回复、自动无缝翻页、清理置顶帖子、自动滚动至隐藏内容
 // @match        *://bbs.3dmgame.com/*
@@ -108,7 +108,7 @@
                 nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;div#postlist > div[id^="post_"]',
                 HT_insert: ['css;div#postlist', 2],
-                replaceE: '//div[contains(@class,"pg")][./a[contains(@class,"nxt")][not(contains(@href,"javascript"))]]'
+                replaceE: 'css;#ct > .pgs'
             }
         },
         search: {

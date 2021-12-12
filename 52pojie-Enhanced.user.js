@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.3.4
+// @version      1.3.5
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页、屏蔽导读悬赏贴（最新发表页）
 // @match        *://www.52pojie.cn/*
@@ -93,7 +93,7 @@
                 nextLink: '//a[@class="nxt"][@href]',
                 pageElement: 'css;div#postlist > div[id^="post_"]',
                 HT_insert: ['css;div#postlist', 2],
-                replaceE: '//div[contains(@class,"pg")][./a[contains(@class,"nxt")][not(contains(@href,"javascript"))]]',
+                replaceE: 'css;#ct > .pgs',
                 scrollDelta: 766
             }
         },
