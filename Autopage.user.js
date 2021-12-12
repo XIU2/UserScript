@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.1.0
+// @version      4.1.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -662,21 +662,23 @@ function: {
             }, // 百度贴吧 - 搜索页
             douban_subject_comments: {
                 host: 'movie.douban.com',
-                functionS: function() {if (indexOF('/subject') && indexOF('/comments')) {
+                functionS: function() {if (indexOF('/subject/') && indexOF('/comments')) {
                     curSite = DBSite.douban_subject_comments;
-                } else if (indexOF('/subject') && indexOF('/reviews')) {
+                } else if (indexOF('/subject/') && indexOF('/reviews')) {
                     curSite = DBSite.douban_subject_reviews;
-                } else if(indexOF('/subject') && indexOF('/episode') || indexOF('/subject') && indexOF('/tv_discuss')) {
+                } else if(indexOF('/subject/') && indexOF('/episode') || indexOF('/subject/') && indexOF('/tv_discuss')) {
                     curSite = DBSite.douban_subject_episode;
-                } else if(indexOF('/people') && indexOF('/collect')) { // 看过的电影
+                } else if(indexOF('/people/') && indexOF('/collect')) {
                     curSite = DBSite.douban_people_collect;
+                } else if(indexOF('/celebrity/') && indexOF('/movies')) {
+                    curSite = DBSite.douban_celebrity_movies;
                 }},
                 pager: {
                     type: 1,
                     nextL: 'css;a.next',
                     pageE: 'css;#comments > .comment-item',
                     replaceE: 'css;#paginator',
-                    scrollD: 1000
+                    scrollD: 1500
                 }
             }, // 豆瓣 - 短评
             douban_subject_reviews: {
@@ -685,7 +687,7 @@ function: {
                     nextL: 'css;link[rel="next"]',
                     pageE: 'css;.review-list > div',
                     replaceE: 'css;.paginator',
-                    scrollD: 1000
+                    scrollD: 1500
                 }
             }, //  豆瓣 - 影评
             douban_subject_episode: {
@@ -694,7 +696,7 @@ function: {
                     nextL: 'css;link[rel="next"]',
                     pageE: 'css;#comments > div',
                     replaceE: 'css;.paginator',
-                    scrollD: 1000
+                    scrollD: 1500
                 }
             }, //  豆瓣 - 剧评
             douban_people_collect: {
@@ -703,9 +705,18 @@ function: {
                     nextL: 'css;link[rel="next"]',
                     pageE: 'css;.grid-view > div',
                     replaceE: 'css;.paginator',
-                    scrollD: 1000
+                    scrollD: 1500
                 }
             }, //   豆瓣 - 看过的电影
+            douban_celebrity_movies: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;link[rel="next"]',
+                    pageE: 'css;.grid_view > ul > li',
+                    replaceE: 'css;.paginator',
+                    scrollD: 1500
+                }
+            }, // 豆瓣 - 作品
             douban_group: {
                 host: 'www.douban.com',
                 functionS: function() {if (indexOF('/group/topic/')) {
@@ -720,7 +731,7 @@ function: {
                     nextL: 'css;span.next > a',
                     pageE: 'css;table.olt > tbody > tr:not(.th)',
                     replaceE: 'css;.paginator',
-                    scrollD: 1000
+                    scrollD: 1500
                 }
             }, //            豆瓣 - 小组
             douban_group_explore: {
@@ -729,7 +740,7 @@ function: {
                     nextL: 'css;span.next > a',
                     pageE: 'css;#content .article > div > .channel-item',
                     replaceE: 'css;.paginator',
-                    scrollD: 1000
+                    scrollD: 1500
                 }
             }, //    豆瓣 - 小组讨论精选
             douban_group_topic: {
@@ -738,7 +749,7 @@ function: {
                     nextL: 'css;span.next > a',
                     pageE: 'css;#comments > li',
                     replaceE: 'css;.paginator',
-                    scrollD: 1000
+                    scrollD: 1500
                 }
             }, //      豆瓣 - 小组帖子内
             zhihu: {
@@ -4668,6 +4679,20 @@ function: {
                     pageE: 'css;.share-list > ul > li',
                     replaceE: 'css;.h-pages',
                     scrollD: 1500
+                }
+            }, //         没得比 - 分类/搜索页
+            _1688: {
+                host: 'shop1460048610607.1688.com',
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.next',
+                    pageE: 'css;.wp-all-offer-tab ul.offer-list-row',
+                    replaceE: 'css;li.pagination',
+                    scrollD: 1500
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-lazy-load-src]', 'data-lazy-load-src']
                 }
             }, //         没得比 - 分类/搜索页
             ruyile_xuexiao: {
