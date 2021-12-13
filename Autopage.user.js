@@ -161,7 +161,7 @@ function: {
                     nextL: 'css;a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'id("threadlist")//table[./tbody[contains(@id, "normalthread_")]]/tbody[not(@id="separatorline")]',
                     replaceE: 'css;.pg, .pages',
-                    scrollD: 1000
+                    scrollD: 1500
                 }
             }, //       Discuz! 论坛 - 导读页 及 帖子列表（不带无缝加载下一页按钮的）
             discuz_waterfall: {
@@ -170,7 +170,7 @@ function: {
                     nextL: 'css;a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'css;#waterfall > li',
                     replaceE: 'css;.pg, .pages',
-                    scrollD: 1000
+                    scrollD: 1500
                 }
             }, //   Discuz! 论坛 - 图片模式的帖子列表（不带无缝加载下一页按钮的）
             discuz_thread: {
@@ -180,7 +180,7 @@ function: {
                     nextL: 'css;a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'css;#postlist > div[id^="post_"]',
                     replaceE: 'css;#ct > .pgs, .pages',
-                    scrollD: 1000
+                    scrollD: 1500
                 },
                 function: {
                     bF: src_bF,
@@ -193,7 +193,7 @@ function: {
                     nextL: 'css;a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'css;#threadlist > ul',
                     replaceE: 'css;.pg, .pages',
-                    scrollD: 1000
+                    scrollD: 1500
                 }
             }, //      Discuz! 论坛 - 搜索页
             discuz_youspace: {
@@ -202,7 +202,7 @@ function: {
                     nextL: 'css;a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'css;form:not([action^="search.php?"]) tbody > tr:not(.th)',
                     replaceE: 'css;.pg, .pages',
-                    scrollD: 1000
+                    scrollD: 1500
                 }
             }, //    Discuz! 论坛 - 回复页、主题页（别人的）
             discuz_collection: {
@@ -211,7 +211,7 @@ function: {
                     nextL: 'css;a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'css;#ct .bm_c table > tbody',
                     replaceE: 'css;.pg, .pages',
-                    scrollD: 1000
+                    scrollD: 1500
                 }
             }, //  Discuz! 论坛 - 淘帖页
             flarum: {
@@ -220,7 +220,7 @@ function: {
                     type: 2,
                     nextL: 'css;.DiscussionList-loadMore > button',
                     isHidden: true,
-                    scrollD: 1000
+                    scrollD: 1500
                 }
             }, //             Flarum 论坛
             phpbb: {
