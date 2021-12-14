@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         吾爱破解论坛增强 - 自动签到、翻页
-// @version      1.3.5
+// @version      1.3.6
 // @author       X.I.U
 // @description  自动签到、自动无缝翻页、屏蔽导读悬赏贴（最新发表页）
 // @match        *://www.52pojie.cn/*
@@ -188,7 +188,7 @@
     function qianDao() {
         if (!menu_value('menu_autoClockIn')) return
         if (location.pathname === '/home.php' && location.search.indexOf('mod=task') > -1) {return;}
-        let qiandao = document.querySelector('#um a[href="home.php?mod=task&do=apply&id=2"]');
+        let qiandao = document.querySelector('#um a[href^="home.php?mod=task&do=apply&id=2"]');
         if (qiandao) {
             let iframe = document.createElement('iframe'); // XHR 方式无法签到，改用 iframe 框架打开签到网页
             document.lastElementChild.appendChild(iframe);
