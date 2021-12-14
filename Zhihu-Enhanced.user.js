@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.8.4
+// @version      1.8.5
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起当前回答/评论（左键两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、移除高亮链接、屏蔽盐选内容、净化标题消息、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -716,6 +716,9 @@ function blockKeywords(type) {
             break;
         case 'people':
             blockKeywords_('.List-item', 'List-item');
+            break;
+        case 'collection':
+            blockKeywords_('.Card.CollectionDetailPageItem', 'Card CollectionDetailPageItem');
             break;
         case 'search':
             blockKeywords_search();
@@ -1477,7 +1480,7 @@ function questionInvitation(){
                 questionRichTextMore(); //                                     展开问题描述
                 blockUsers('question'); //                                     屏蔽指定用户
                 blockYanXuan(); //                                             屏蔽盐选内容
-                blockType('question'); //                                            屏蔽指定类别（视频/文章等）
+                blockType('question'); //                                      屏蔽指定类别（视频/文章等）
                 defaultCollapsedAnswer(); //                                   默认收起回答
             }
             setInterval(topTime_question, 300); //                             置顶显示时间
@@ -1500,7 +1503,7 @@ function questionInvitation(){
                 blockUsers('topic'); //                                        屏蔽指定用户
                 blockKeywords('topic'); //                                     屏蔽指定关键词
             }
-        } else if (location.hostname === 'zhuanlan.zhihu.com'){ //   文章 //
+        } else if (location.hostname === 'zhuanlan.zhihu.com'){ //    文章 //
             backToTop('article.Post-Main.Post-NormalMain'); //                 快捷返回顶部
             backToTop('div.Post-Sub.Post-NormalSub'); //                       快捷返回顶部
             setInterval(topTime_zhuanlan, 300); //                             置顶显示时间
@@ -1516,6 +1519,13 @@ function questionInvitation(){
             setInterval(topTime_people, 300); //                               置顶显示时间
             blockUsers('people'); //                                           屏蔽指定用户
             blockKeywords('people'); //                                        屏蔽指定关键词
+        } else if (location.pathname.indexOf('/collection/') > -1) { // 收藏夹 //
+            addTypeTips(); //                                                  区分问题文章
+            addToQuestion(); //                                                直达问题按钮
+            collapsedNowAnswer('main'); //                                     收起当前回答 + 快捷返回顶部
+            collapsedNowAnswer('.CollectionsDetailPage'); //                   收起当前回答 + 快捷返回顶部
+            setInterval(topTime_people, 300); //                               置顶显示时间
+            blockKeywords('collection'); //                                    屏蔽指定关键词
         } else { //                                                     首页 //
             collapsedNowAnswer('main div'); //                                 收起当前回答 + 快捷返回顶部
             collapsedNowAnswer('.Topstory-container'); //                      收起当前回答 + 快捷返回顶部
