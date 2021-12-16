@@ -33,7 +33,7 @@ var menu_ALL = [
     ['menu_blockKeywords', '屏蔽指定关键词', '屏蔽指定关键词', true],
     ['menu_customBlockKeywords', '自定义屏蔽关键词', '自定义屏蔽关键词', []],
     ['menu_blockType', '屏蔽指定类别 (视频/文章等)', '勾选 = 屏蔽该类别的信息流', ''],
-    ['menu_blockTypeVideo', '视频 [首页、搜索页]', '视频（首页、搜索页）', true],
+    ['menu_blockTypeVideo', '视频 [首页、搜索页、问题页]', '视频（首页、搜索页、问题页）', true],
     ['menu_blockTypeArticle', '文章 [首页、搜索页]', '文章（首页、搜索页）', false],
     ['menu_blockTypeTopic', '话题 [搜索页]', '话题（搜索页）', false],
     ['menu_blockTypeSearch', '杂志文章、相关搜索等 [搜索页]', '相关搜索、杂志等（搜索页）', false],
