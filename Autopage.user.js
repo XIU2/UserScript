@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.1.5
+// @version      4.1.6
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -180,7 +180,7 @@ function: {
                     type: 1,
                     nextL: 'css;a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'css;#postlist > div[id^="post_"]',
-                    replaceE: 'css;#ct > .pgs, .pages',
+                    replaceE: '//div[contains(@class,"pg") or contains(@class,"pages")][./a[contains(@class,"nxt") or contains(@class,"next")][not(contains(@href,"javascript") or contains(@href,"commentmore"))]]',
                     scrollD: 1500
                 },
                 function: {
@@ -6770,14 +6770,17 @@ function: {
                 }
             }
         } else { // 获取主体元素失败后，尝试重新获取
+            console.log(curSite.pager.pageE, pageElems, curSite.pager.insertP, toElement)
             if (curSite.retry) {
+                console.warn('[自动无缝翻页] 获取主体元素失败，尝试重新获取...')
                 setTimeout(function(){curSite.pageUrl = '';}, curSite.retry)
             } else { // 尝试替换元素看能不能继续翻页下去
                 if (curSite.pager.replaceE) {
                     if (replaceElems(response)) { // 如果替换成功
+                        console.log('[自动无缝翻页] 获取主体元素失败，尝试替换元素成功！')
                         pageNum.now = pageNum._now + 1; // 当前页码 + 1
                         if (curSite.history) addHistory(response); // 添加历史记录
-                    }
+                    } else {console.error('[自动无缝翻页] 获取主体元素失败，尝试替换元素失败...')}
                 }
             }
         }
