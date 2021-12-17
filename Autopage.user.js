@@ -180,7 +180,7 @@ function: {
                     type: 1,
                     nextL: 'css;a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'css;#postlist > div[id^="post_"]',
-                    replaceE: '//div[contains(@class,"pg") or contains(@class,"pages")][./a[contains(@class,"nxt") or contains(@class,"next")][not(contains(@href,"javascript") or contains(@href,"commentmore"))]]',
+                    replaceE: '//div[contains(@class,"pg") or contains(@class,"pages")][./a[contains(@class,"nxt") or contains(@class,"next") or contains(@class,"prev")][not(contains(@href,"javascript") or contains(@href,"commentmore"))]]',
                     scrollD: 1500
                 },
                 function: {
