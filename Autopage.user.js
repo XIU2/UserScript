@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.1.8
+// @version      4.1.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -4214,16 +4214,12 @@ function: {
                         if (next && next.href.split('/').length === location.href.split('/').length && next.href.split('/')[3] === location.href.split('/')[3]) return next.href;
                         next.href = location.href; curSite = {SiteTypeID: 0}; return ''
                     },
-                    pageE: 'css;#content > *',
+                    pageE: 'css;#content > *, script[src*="assets/js/main.min.js"]',
                     insertP: ['css;#content', 3],
                     replaceE: 'css;.previous-next-links, #leftcolumn',
+                    scriptT: 2,
                     forceHTTPS: true,
                     scrollD: 1000
-                },
-                function: {
-                    aF: function() { // 左侧栏高亮当前页面标题
-                        let title = document.title.split(' | '); if (title.length > 1) {title = title[0]; getAllCSS('#leftcolumn > a').forEach(function(e){if (e.innerText === title) {e.style = 'background-color: rgb(150, 185, 125); font-weight: bold; color: rgb(255, 255, 255);';}})}
-                    }
                 }
             }, //                    菜鸟教程
             cnblogs: {
@@ -6730,6 +6726,12 @@ function: {
             // 当前页码 + 1
             pageNum.now = pageNum._now + 1
 
+            // 添加历史记录
+            if (curSite.history) addHistory(response);
+
+            // 替换待替换元素
+            if (curSite.pager.replaceE) replaceElems(response);
+
             // 插入 <script> 标签
             if (curSite.pager.scriptT || curSite.pager.scriptT == 0) {
                 switch (curSite.pager.scriptT) {
@@ -6743,12 +6745,6 @@ function: {
                         insScript('css;script:not([src])', toElement, pageElems); break;
                 }
             }
-
-            // 添加历史记录
-            if (curSite.history) addHistory(response);
-
-            // 替换待替换元素
-            if (curSite.pager.replaceE) replaceElems(response);
 
             // 如果有插入后函数就执行函数
             if (curSite.function && curSite.function.aF) {
