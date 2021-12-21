@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.8.5
+// @version      1.8.6
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起当前回答/评论（左键两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、移除高亮链接、屏蔽盐选内容、净化标题消息、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -147,6 +147,9 @@ function getCollapsedAnswerObserver() {
                 if (!mutation.target.classList.contains('RichContent')) continue
                 for (const addedNode of mutation.addedNodes) {
                     if (addedNode.nodeType != Node.ELEMENT_NODE) continue
+                    //console.log(addedNode, addedNode.offsetHeight)
+                    if (addedNode.className == 'RichContent-inner' && addedNode.offsetHeight < 400) return
+                    //console.log(addedNode.offsetHeight)
                     const button = addedNode.querySelector('.ContentItem-actions.Sticky [data-zop-retract-question]');
                     if (button) {
                         mutation.target.setAttribute('script-collapsed', '');
@@ -244,9 +247,11 @@ function collapsedNowAnswer(selectors) {
             if (rightButton) {
                 // 固定的 [收起评论]（先看看是否展开评论）
                 let commentCollapseButton = rightButton.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
+                //console.log('111')
                 if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) commentCollapseButton.click();
                 // 再去收起回答
                 rightButton = rightButton.querySelector('.ContentItem-rightButton[data-zop-retract-question]')
+                //console.log('222')
                 if (rightButton) rightButton.click();
                 // 固定在回答底部的 [收起回答]（此时正在浏览回答内容 [尾部区域]）
             } else {
@@ -256,7 +261,9 @@ function collapsedNowAnswer(selectors) {
                         // 固定的 [收起评论]（先看看是否展开评论，即存在 [收起评论] 按钮）
                         let commentCollapseButton = el.parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                         // 如果展开了评论，就收起评论
+                        //console.log('333')
                         if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) commentCollapseButton.click();
+                        //console.log('444')
                         el.click() // 再去收起回答
                         answerCollapseButton_ = true; // 如果找到并点击收起了，就没必要执行下面的代码了（可视区域中没有 [收起回答] 时）
                         break
@@ -269,8 +276,10 @@ function collapsedNowAnswer(selectors) {
                             // 固定的 [收起评论]（先看看是否展开评论，即存在 [收起评论] 按钮）
                             let commentCollapseButton = el.parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                             // 如果展开了评论，就收起评论
+                            //console.log('555')
                             if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) commentCollapseButton.click();
-                            let answerCollapseButton__ = document.querySelector('.ContentItem-rightButton[data-zop-retract-question]');
+                            let answerCollapseButton__ = el.querySelector('.ContentItem-rightButton[data-zop-retract-question]');
+                            //console.log('666')
                             if (answerCollapseButton__) answerCollapseButton__.click() // 再去收起回答
                             break
                         }
@@ -283,6 +292,7 @@ function collapsedNowAnswer(selectors) {
             // 悬浮的 [收起评论]（此时正在浏览评论内容 [中间区域]）
             let commentCollapseButton = document.querySelector('.CommentCollapseButton')
             if (commentCollapseButton) {
+                //console.log('777')
                 commentCollapseButton.click();
             } else { // 固定的 [收起评论]（此时正在浏览评论内容 [头部区域]）
                 let commentCollapseButton_1 = document.querySelectorAll('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type, .ContentItem-action > button.Button.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
@@ -290,6 +300,7 @@ function collapsedNowAnswer(selectors) {
                     for (let el of commentCollapseButton_1) {
                         if (el.textContent.indexOf('收起评论') > -1) {
                             if (isElementInViewport(el)) {
+                                //console.log('888')
                                 el.click()
                                 commentCollapseButton_ = true // 如果找到并点击了，就没必要执行下面的代码了（可视区域中没有 [收起评论] 时）
                                 break
@@ -304,6 +315,7 @@ function collapsedNowAnswer(selectors) {
                             if (isElementInViewport(el)) {
                                 let commentCollapseButton = findParentElement(el, 'ContentItem AnswerItem').querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                                 if (commentCollapseButton.textContent.indexOf('收起评论') > -1) {
+                                    //console.log('999')
                                     commentCollapseButton.click()
                                     commentCollapseButton__ = true // 如果找到并点击了，就没必要执行下面的代码了（可视区域中没有 评论元素 时）
                                     break
@@ -319,6 +331,7 @@ function collapsedNowAnswer(selectors) {
                                     let commentCollapseButton = findParentElement(el, 'ContentItem AnswerItem').querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                                     //console.log(commentCollapseButton)
                                     if (commentCollapseButton.textContent.indexOf('收起评论') > -1) {
+                                        //console.log('101010')
                                         commentCollapseButton.click()
                                         break
                                     }
