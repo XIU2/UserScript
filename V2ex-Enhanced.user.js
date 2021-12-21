@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.1.4
+// @version      1.1.5
 // @author       X.I.U
 // @description  自动签到、链接转图片、自动无缝翻页、回到顶部（右键点击两侧空白处）、快速回复（左键双击两侧空白处）、新标签页打开链接、标签页伪装为 Github（摸鱼）
 // @match        *://v2ex.com/*
@@ -218,13 +218,14 @@
 
     // 后台签到
     function qianDao_(qiandao, timeNow) {
-        let url = (location.origin + "/mission/daily/redeem?" + RegExp("once\\=(\\d+)").exec(document.querySelector('div#Top .tools').innerHTML)[0]);
+        let url = (location.origin + "/mission/daily/redeem?" + RegExp("once\\=(\\d+)").exec(document.querySelector('div#Top .tools, #menu-body').innerHTML)[0]);
         GM_xmlhttpRequest({
             url: url,
             method: 'GET',
             timeout: 5000,
             onload: function (response) {
                 let html = ShowPager.createDocumentByString(response.responseText);
+                console.log(html)
                 if (html.querySelector('li.fa.fa-ok-sign')) {
                     html = html.getElementById('Main').textContent.match(/已连续登录 (\d+?) 天/)[0];
                     GM_setValue('menu_clockInTime', timeNow); // 写入签到时间以供后续比较
@@ -321,9 +322,7 @@
             }
         })
         document.querySelectorAll('form').forEach(function (_this) {
-            if (!_this.target) {
-                _this.target = '_self'
-            }
+            if (!_this.target) {_this.target = '_self'}
         });
 
         const callback = (mutationsList, observer) => {
