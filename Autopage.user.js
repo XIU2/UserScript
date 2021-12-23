@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.2.1
+// @version      4.2.2
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -4879,10 +4879,6 @@ function: {
                     pageE: 'css;.content > img',
                     replaceE: 'css;#pages',
                     scrollD: 2000
-                },
-                function: {
-                    bF: src_bF,
-                    pF: [0, 'img[original]', 'original']
                 }
             }, //              图集谷 - 图片页
             tujigu_list: {
@@ -5340,6 +5336,22 @@ function: {
                     scrollD: 1000
                 }
             }, //        King爱模 - 分类页
+            kissgoddess: {
+                host: ['kissgoddess.com', 'tw.kissgoddess.com', 'jp.kissgoddess.com'],
+                functionS: function() {if (indexOF('/album/') || indexOF('/category/')) curSite = DBSite.kissgoddess;},
+                insStyle: '.td-gallery-content > img {min-height: 300px;}',
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.a1:last-of-type',
+                    pageE: 'css;.td-gallery-content > img, .td-category-span',
+                    replaceE: 'css;#pages',
+                    scrollD: 3000
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-original]', 'data-original']
+                }
+            }, //         Kiss Goddess - 图片页
             planetminecraft: {
                 host: 'www.planetminecraft.com',
                 functionS: function() {if (!indexOF('/forums/') && !indexOF('/posts/')) {curSite = DBSite.planetminecraft;}},
@@ -6786,10 +6798,12 @@ function: {
     function src_bF(pageElems, css) {
         pageElems.forEach(function (one) {
             if (css[0] == 0) { // src 图片
+                if (one.tagName == 'IMG' && one.getAttribute(css[2])) one.src = one.getAttribute(css[2]);
                 one.querySelectorAll(css[1]).forEach(function (now) {
                     now.src = now.getAttribute(css[2]);
                 });
             } else if (css[0] == 1) { // 背景图片
+                if (one.tagName == 'IMG' && one.getAttribute(css[2])) one.style.backgroundImage = 'url("' + one.getAttribute(css[2]) + '")';
                 one.querySelectorAll(css[1]).forEach(function (now) {
                     now.style.backgroundImage = 'url("' + now.getAttribute(css[2]) + '")';
                 });
