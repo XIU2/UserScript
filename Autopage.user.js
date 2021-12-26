@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.2.5
+// @version      4.2.6
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -31,7 +31,7 @@
         ['menu_discuz_thread_page', '帖子内自动翻页', '帖子内自动翻页', true],
         ['menu_page_number', '显示当前页码及点击暂停翻页', '显示当前页码及点击暂停翻页', true],
         ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false]
-    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, locationC = false, nowLocation = '', lp = location.pathname, forumWebsite = ['cs.rin.ru', 'www.flyert.com', 'bbs.pediy.com', 'www.libaclub.com', 'tieba.baidu.com', 'www.cadtutor.net', 'www.theswamp.org', 'www.xuexiniu.com', 'bbs.xuexiniu.com', 'www.taoguba.com.cn', 'www.cnprint.org', 'www.ablesci.com'];
+    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, locationC = false, nowLocation = '', lp = location.pathname, forumWebsite = ['cs.rin.ru', 'www.flyert.com', 'bbs.pediy.com', 'www.libaclub.com', 'tieba.baidu.com', 'jump2.bdimg.com', 'www.douban.com', 'bbs.tianya.cn', 'www.lkong.com', 'bbs.pediy.com', 'www.cadtutor.net', 'www.theswamp.org', 'www.xuexiniu.com', 'bbs.xuexiniu.com', 'www.taoguba.com.cn', 'www.cnprint.org', 'www.ablesci.com', 'bbs.nga.cn', 'ngabbs.com', 'nga.178.com', 'g.nga.cn'];
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
     }
@@ -732,7 +732,7 @@ function: {
             }, // 豆瓣 - 作品
             douban_group: {
                 host: 'www.douban.com',
-                functionS: function() {if (indexOF('/group/topic/')) {
+                functionS: function() {if (indexOF('/group/topic/') && GM_getValue('menu_discuz_thread_page')) {
                     curSite = DBSite.douban_group_topic;
                 } else if (indexOF('/group/explore')) {
                     curSite = DBSite.douban_group_explore;
@@ -793,7 +793,7 @@ function: {
                 host: 'bbs.tianya.cn',
                 functionS: function() {if (indexOF('/list')) {
                     curSite = DBSite.tianya;
-                } else if (indexOF('/post')) {
+                } else if (indexOF('/post') && GM_getValue('menu_discuz_thread_page')) {
                     curSite = DBSite.tianya_post;
                 }},
                 pager: {
@@ -817,9 +817,9 @@ function: {
                 host: ['bbs.nga.cn', 'ngabbs.com', 'nga.178.com', 'g.nga.cn'],
                 iframe: true,
                 functionS: function() {locationC = true;
-                if (lp == '/thread.php') { // 帖子列表
+                if (lp == '/thread.php') {
                     curSite = DBSite.nga_thread;
-                } else if (lp == '/read.php') { // 帖子内
+                } else if (lp == '/read.php' && GM_getValue('menu_discuz_thread_page')) {
                     curSite = DBSite.nga_read;
                 }},
                 pager: {
@@ -997,7 +997,7 @@ function: {
                 host: 'www.lkong.com',
                 functionS: function() {if (indexOF('/forum/')) {
                     curSite = DBSite.lkong;
-                } else if (indexOF('/thread/')) {
+                } else if (indexOF('/thread/') && GM_getValue('menu_discuz_thread_page')) {
                     curSite = DBSite.lkong_thread;
                 }},
                 pager: {
@@ -1025,8 +1025,8 @@ function: {
                 host: 'bbs.pediy.com',
                 functionS: function() {if (indexOF('/forum-')) {
                     curSite = DBSite.pediy_forum;
-                } else if (indexOF('/thread-')) {
-                    if (GM_getValue('menu_discuz_thread_page')) {curSite = DBSite.pediy_thread;}
+                } else if (indexOF('/thread-') && GM_getValue('menu_discuz_thread_page')) {
+                    curSite = DBSite.pediy_thread;
                 }},
                 pager: {
                     type: 1,
@@ -1190,7 +1190,7 @@ function: {
             taoguba: {
                 host: 'www.taoguba.com.cn',
                 functionS: function() {insStyle('#joinTGB {display: none !important;}')
-                    if (indexOF('/Article/')) {
+                    if (indexOF('/Article/') && GM_getValue('menu_discuz_thread_page')) {
                         curSite = DBSite.taoguba_t;
                     } else if (indexOF('/shenghuoba/')) {
                         curSite = DBSite.taoguba_;
@@ -1927,10 +1927,10 @@ function: {
             }, //                    小霸王其乐无穷
             cs_rin_ru: {
                 host: 'cs.rin.ru',
-                functionS: function() {if (lp == '/forum/viewforum.php') { // 版块帖子列表
+                functionS: function() {if (lp == '/forum/viewforum.php') {
                     curSite = DBSite.cs_rin_ru;
-                } else if (lp == '/forum/viewtopic.php') { // 帖子内
-                    if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.cs_rin_ru_list;
+                } else if (lp == '/forum/viewtopic.php' && GM_getValue('menu_discuz_thread_page')) {
+                    curSite = DBSite.cs_rin_ru_list;
                 } else if (lp == '/forum/search.php') { // 搜索结果
                     curSite = DBSite.cs_rin_ru_search;
                 }},
