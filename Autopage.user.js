@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.2.7
+// @version      4.2.8
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -836,6 +836,7 @@ function: {
                 }
             }, //          NGA - 各版块帖子列表
             nga_read: {
+                retry: 1000,
                 pager: {
                     type: 1,
                     nextL: 'css;#pagebbtm a[title*="下一页"]',
@@ -4248,9 +4249,9 @@ function: {
                     scrollD: 1000
                 }
             }, //       SegmentFault - Search
-            w3school_cn: {
+            w3school_com_cn: {
                 host: 'www.w3school.com.cn',
-                functionS: function() {if (location.pathname.split('/').length > 2) {curSite = DBSite.w3school_cn;}},
+                functionS: function() {if (location.pathname.split('/').length > 2) {curSite = DBSite.w3school_com_cn;}},
                 insStyle: '#maincontent h1:not(:nth-of-type(1)) {margin-top: 30px;}',
                 history: true,
                 pager: {
@@ -4267,7 +4268,19 @@ function: {
                     forceHTTPS: true,
                     scrollD: 600
                 }
-            }, //               W3school
+            }, //           W3school
+            w3cschool_cn: {
+                host: 'www.w3cschool.cn',
+                functionS: function() {if (location.pathname.split('/').length > 2) {curSite = DBSite.w3cschool_cn;}},
+                insStyle: '.widget-body, #rfbanner {display: none !important;}',
+                pager: {
+                    type: 1,
+                    nextL: 'css;.next-link > a',
+                    pageE: 'css;#pro-mian-header, .content-bg',
+                    replaceE: 'css;.content-links, .splitter-sidebar',
+                    scrollD: 1500
+                }
+            }, //              W3Cschool
             runoob: {
                 host: 'www.runoob.com',
                 functionS: function() {if (location.pathname.split('/').length > 2 && getCSS('#leftcolumn')) {curSite = DBSite.runoob;}},
