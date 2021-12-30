@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.4.3
+// @version      1.4.4
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -179,6 +179,8 @@
 .Pc-card.Card {display: none !important;}
 /* 屏蔽文章页推荐文章 */
 .Recommendations-Main {display: none !important;}
+/* 解除盐选内容选中复制限制 */
+div[class*="ManuscriptIntro-root-"] {user-select: auto !important;}
 `,
             style_index = `/* 屏蔽首页广告 */
 .TopstoryItem--advertCard {display: none !important;}
