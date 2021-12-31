@@ -890,7 +890,7 @@ function blockType(type) {
 
     function blockType_(titleA) {
         if (!titleA) return // 判断是否为真
-        console.log(titleA.href)
+        //console.log(titleA.href)
         if (location.pathname === '/search') { // 搜索页
             if (location.search.indexOf('type=content') === -1) return //   仅限搜索页的 [综合]
             if (titleA.href.indexOf('/zvideo/') > -1 || titleA.href.indexOf('video.zhihu.com') > -1) { //                  如果是视频
