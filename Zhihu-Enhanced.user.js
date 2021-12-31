@@ -147,9 +147,9 @@ function getCollapsedAnswerObserver() {
                 if (!mutation.target.classList.contains('RichContent')) continue
                 for (const addedNode of mutation.addedNodes) {
                     if (addedNode.nodeType != Node.ELEMENT_NODE) continue
-                    console.log(addedNode, addedNode.offsetHeight)
+                    //console.log(addedNode, addedNode.offsetHeight)
                     if (addedNode.className == 'RichContent-inner' && addedNode.offsetHeight < 400) return
-                    console.log(addedNode.offsetHeight)
+                    //console.log(addedNode.offsetHeight)
                     const button = addedNode.querySelector('.ContentItem-actions.Sticky [data-zop-retract-question]');
                     if (button) {
                         mutation.target.setAttribute('script-collapsed', '');
@@ -866,7 +866,7 @@ function blockType(type) {
         document.querySelectorAll(name).forEach(function(item){blockType_(item);})
     } else { // 首页
         if (!menu_value('menu_blockTypeVideo') && !menu_value('menu_blockTypeArticle')) return
-        if (menu_value('menu_blockTypeVideo')) document.lastChild.appendChild(document.createElement('style')).textContent = `.Card .ZVideoItem-video {display: none !important;}`;
+        if (menu_value('menu_blockTypeVideo')) document.lastChild.appendChild(document.createElement('style')).textContent = `.Card .ZVideoItem-video, nav.TopstoryTabs > a[aria-controls="Topstory-zvideo"] {display: none !important;}`;
         name = 'h2.ContentItem-title a:not(.zhihu_e_toQuestion)'
         document.querySelectorAll(name).forEach(function(item){blockType_(item);})
     }
