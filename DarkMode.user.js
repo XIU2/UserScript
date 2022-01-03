@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.3.3
+// @version      1.3.4
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
 // @match        *://*/*
@@ -335,8 +335,14 @@
             style_21_firefox = `html {filter: brightness(${style_20[0]}%) sepia(${style_20[1]}%) !important; background-image: url();}`,
             style_22 = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important;}`,
             style_22_firefox = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important; background-image: url();}`,
-            style_31 = `html {filter: invert(${style_30[0]}%) !important;} img, video, [style*="background"][style*="url"], #bilibiliPlayer:not(.mode-fullscreen), #bilibiliPlayer:not(.mode-fullscreen) .bilibili-player-video-sendbar {filter: invert(1) !important;} img[alt="[公式]"] {filter: none !important;}`,
-            style_31_firefox = `html {filter: invert(${style_30[0]}%) !important; background-image: url();} img, video, [style*="background"][style*="url"], #bilibiliPlayer:not(.mode-fullscreen), #bilibiliPlayer:not(.mode-fullscreen) .bilibili-player-video-sendbar {filter: invert(1) !important;} img[alt="[公式]"] {filter: none !important;}`;
+            style_31 = `html {filter: invert(${style_30[0]}%) !important;}
+img, video, [style*="background"][style*="url"], #bilibiliPlayer:not(.mode-fullscreen), #bilibiliPlayer:not(.mode-fullscreen) .bilibili-player-video-sendbar {filter: invert(1) !important;}
+img[alt="[公式]"] {filter: none !important;}
+.bilibili-player.bilibili-player-area-v1, .bilibili-player.bilibili-player-area-v3 {box-shadow: none !important;}`,
+            style_31_firefox = `html {filter: invert(${style_30[0]}%) !important; background-image: url();}
+img, video, [style*="background"][style*="url"], #bilibiliPlayer:not(.mode-fullscreen), #bilibiliPlayer:not(.mode-fullscreen) .bilibili-player-video-sendbar {filter: invert(1) !important;}
+img[alt="[公式]"] {filter: none !important;}
+.bilibili-player.bilibili-player-area-v1, .bilibili-player.bilibili-player-area-v3 {box-shadow: none !important;}`;
 
         // Firefox 浏览器需要特殊对待
         if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
