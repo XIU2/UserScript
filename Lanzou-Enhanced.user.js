@@ -1,12 +1,9 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.3.6
+// @version      1.3.7
 // @author       X.I.U
 // @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、点击直接下载文件、自动显示更多文件、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
-// @match        *://*.lanzous.com/*
-// @match        *://*.lanzoux.com/*
-// @match        *://*.lanzoui.com/*
-// @match        *://*.lanzouo.com/*
+// @include      /^https:\/\/.+\.lanzou[a-z]\.com\/.*$/
 // @match        *://pan.lanzou.com/*
 // @match        *://lanzou.com/u
 // @match        *://www.lanzou.com/account.php*
