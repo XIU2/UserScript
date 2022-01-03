@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         护眼模式
-// @version      1.3.4
+// @version      1.3.5
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
 // @match        *://*/*
@@ -369,7 +369,7 @@
                 break;
             case 3:
                 style += style_31;
-                if (location.hostname.indexOf('.bilibili.com') > -1) {style += `#bilibiliPlayer:not(.mode-fullscreen), #bilibiliPlayer:not(.mode-fullscreen) .bilibili-player-video-sendbar {filter: invert(1) !important;} .bilibili-player.bilibili-player-area-v1, .bilibili-player.bilibili-player-area-v3 {box-shadow: none !important;} * {font-weight: bold !important;}`}
+                if (location.hostname.indexOf('.bilibili.com') > -1) {style += `#bilibiliPlayer video {filter: none !important;} #bilibiliPlayer:not(.mode-fullscreen), #bilibiliPlayer:not(.mode-fullscreen) .bilibili-player-video-sendbar {filter: invert(1) !important;} .bilibili-player.bilibili-player-area-v1, .bilibili-player.bilibili-player-area-v3, #bilibiliPlayer {box-shadow: none !important;} * {font-weight: bold !important;}`}
                 break;
         }
         style_Add.id = 'XIU2DarkMode';
