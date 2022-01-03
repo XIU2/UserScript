@@ -335,14 +335,8 @@
             style_21_firefox = `html {filter: brightness(${style_20[0]}%) sepia(${style_20[1]}%) !important; background-image: url();}`,
             style_22 = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important;}`,
             style_22_firefox = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important; background-image: url();}`,
-            style_31 = `html {filter: invert(${style_30[0]}%) !important;}
-img, video, [style*="background"][style*="url"], #bilibiliPlayer:not(.mode-fullscreen), #bilibiliPlayer:not(.mode-fullscreen) .bilibili-player-video-sendbar {filter: invert(1) !important;}
-img[alt="[公式]"] {filter: none !important;}
-.bilibili-player.bilibili-player-area-v1, .bilibili-player.bilibili-player-area-v3 {box-shadow: none !important;}`,
-            style_31_firefox = `html {filter: invert(${style_30[0]}%) !important; background-image: url();}
-img, video, [style*="background"][style*="url"], #bilibiliPlayer:not(.mode-fullscreen), #bilibiliPlayer:not(.mode-fullscreen) .bilibili-player-video-sendbar {filter: invert(1) !important;}
-img[alt="[公式]"] {filter: none !important;}
-.bilibili-player.bilibili-player-area-v1, .bilibili-player.bilibili-player-area-v3 {box-shadow: none !important;}`;
+            style_31 = `html {filter: invert(${style_30[0]}%) !important;} img, video, [style*="background"][style*="url"] {filter: invert(1) !important;} img[alt="[公式]"] {filter: none !important;}`,
+            style_31_firefox = `html {filter: invert(${style_30[0]}%) !important; background-image: url();} img, video, [style*="background"][style*="url"] {filter: invert(1) !important;} img[alt="[公式]"] {filter: none !important;}`;
 
         // Firefox 浏览器需要特殊对待
         if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
@@ -375,6 +369,7 @@ img[alt="[公式]"] {filter: none !important;}
                 break;
             case 3:
                 style += style_31;
+                if (location.hostname.indexOf('.bilibili.com') > -1) {style += `#bilibiliPlayer:not(.mode-fullscreen), #bilibiliPlayer:not(.mode-fullscreen) .bilibili-player-video-sendbar {filter: invert(1) !important;} .bilibili-player.bilibili-player-area-v1, .bilibili-player.bilibili-player-area-v3 {box-shadow: none !important;} * {font-weight: bold !important;}`}
                 break;
         }
         style_Add.id = 'XIU2DarkMode';
