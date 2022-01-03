@@ -1,9 +1,10 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.3.0
+// @version      4.3.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
+// @connect      www.ykmh.com
 // @connect      www.xuexiniu.com
 // @connect      bbs.xuexiniu.com
 // @connect      www.tujigu.net
@@ -3017,6 +3018,40 @@ function: {
                     scrollD: 1000
                 }
             }, //         动漫戏说 - 分类页
+            ykmh: {
+                host: 'www.ykmh.com',
+                functionS: function() {if (indexOF(/\/\d+\.html/)) {
+                    let chapterScroll = getCSS('#qiehuan_txt') // 强制为 [上下滚动阅读] 模式
+                    if (localStorage.getItem('chapterScroll') != '"scroll"') {
+                        localStorage.setItem('chapterScroll', '"scroll"'); location.reload()
+                    } else {
+                        setTimeout(ykmh_init, 100);
+                        curSite = DBSite.ykmh;
+                    }
+                } else if (indexOF('/list') || indexOF('/search')) {
+                    curSite = DBSite.ykmh_list;
+                }},
+                insStyle: 'p.img_info {display: none !important;} #images > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}',
+                history: true,
+                pager: {
+                    type: 4,
+                    nextL: ykmh_nextL,
+                    insertP: ['css;#images', 3],
+                    insertE: ykmh_insertE,
+                    replaceE: 'css;.head_title, span.head_wz',
+                    interval: 2000,
+                    scrollD: 3000
+                }
+            }, //              优酷漫画
+            ykmh_list: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;li.next > a',
+                    pageE: 'css;li.list-comic',
+                    replaceE: 'css;ul.pagination',
+                    scrollD: 1000
+                }
+            }, //         优酷漫画 - 分类页
             copymanga: {
                 host: /copymanga\./,
                 functionS: function() {if (indexOF('/chapter/')) {
@@ -4076,15 +4111,38 @@ function: {
                 }
             }, //            科研通 - 帖子内
             google_scholar: {
+                host: 'scholar.google.com',
+                functionS: function() {if (lp == '/scholar') {curSite = DBSite.google_scholar;}},
+                history: true,
                 pager: {
                     type: 1,
                     nextL: '//a[./span[contains(@class, "next")]]',
                     pageE: 'css;#gs_res_ccl_mid > *',
-                    replaceE: 'id("gs_n")',
+                    insertP: ['css;#gs_res_ccl_mid', 3],
+                    replaceE: 'css;#gs_n',
                     scriptT: 1,
                     scrollD: 2000
                 }
             }, //       谷歌学术
+            google_scholar_: {
+                host: 'sc.panda321.com',
+                history: true,
+                pager: {
+                    type: 1,
+                    nextL: '//a[./span[contains(@class, "next")]]',
+                    pageE: 'css;#gs_res_ccl_mid > *',
+                    insertP: ['css;#gs_res_ccl_mid', 3],
+                    replaceE: 'css;#gs_n',
+                    scriptT: 1,
+                    scrollD: 2000
+                },
+                function: {
+                    bF: function(pageElems){
+                        getCSS('#gs_n').remove();
+                        return pageElems
+                    }
+                }
+            }, //      谷歌学术 - 其他镜像站
             bing_academic: {
                 insStyle: 'li.aca_algo_count {display: none !important;}',
                 pager: {
@@ -6195,6 +6253,42 @@ function: {
     }
 
 
+    // [优酷漫画] 初始化（调整本话其余图片）
+    function ykmh_init(css) {
+        let host = SinMH.getChapterImage(1).split('/')[0] + '//' + SinMH.getChapterImage(1).split('/')[2];
+        if (!host) return
+        let _img = '';
+        for (let one of chapterImages) {_img += `<img src="${host}${one}">`;}
+        getOne(curSite.pager.insertP[0]).innerHTML = _img;
+    }
+    // [优酷漫画] 获取下一页地址
+    function ykmh_nextL() {
+        let url = comicUrl + nextChapterData.id + '.html'
+        if (url && url != '.html' && url != curSite.pageUrl) {
+            curSite.pageUrl = url;
+            getPageElems_(curSite.pageUrl);
+        }
+    }
+    // [优酷漫画] 插入数据
+    function ykmh_insertE(pageElems, type) {
+        //console.log(pageElems)
+        if (!pageElems) return
+        // 插入并运行 <script>
+        insScript('//script[contains(text(),"chapterImages")]', document.body, pageElems);
+
+        let host = SinMH.getChapterImage(1).split('/')[0] + '//' + SinMH.getChapterImage(1).split('/')[2];
+        if (!host) host = document.querySelector(curSite.pager.insertP[0]).src.split('/')[0] + '//' + document.querySelector(curSite.pager.insertP[0]).src.split('/')[2]
+        // 插入图片
+        let _img = '';
+        for (let one of chapterImages) {_img += `<img src="${host}${one}">`;}
+        if (_img) {
+            getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+            addHistory(pageElems);
+            if (replaceElems(pageElems)) pageNum.now = pageNum._now + 1
+        }
+    }
+
+
     // [动漫戏说] 插入后函数（加载图片）
     function acgn_aF() {
         let old = getAllCSS('.pic[_src][id]'), _img = '';
@@ -6984,6 +7078,7 @@ function: {
     // 添加历史记录
     function addHistory(pageElems, title, url) {
         if (!curSite.pageUrl) return
+        //console.log(pageElems.querySelector('title'), curSite.pageUrl)
         title = title || pageElems.querySelector('title').textContent || window.top.document.title;
         url = url || curSite.pageUrl;
         window.top.document.title = title;
