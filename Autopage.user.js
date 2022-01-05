@@ -1332,7 +1332,7 @@ function: {
                 }
             }, //      CPC 中文印刷社区 - 帖子内
             discusshk: {
-                host: /.+_discuss_com_hk\.for\.alnk\.cn/,
+                host: /.+\.discuss\.com\.hk/,
                 functionS: function() {if (lp == '/forumdisplay.php') {curSite = DBSite.discusshk;} else if (lp == '/viewthread.php' && GM_getValue('menu_discuz_thread_page')) {curSite = DBSite.discusshk_thread;}},
                 pager: {
                     type: 1,
