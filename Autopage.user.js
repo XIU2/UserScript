@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.3.7
+// @version      4.3.8
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -2039,6 +2039,7 @@ function: {
                     scrollD: 1000
                 },
                 function: {
+                    bF: bilibili_search_bF,
                     aF: bilibili_search_aF
                 }
             }, //         B 站(Bilibili) - 搜索页 - 视频
@@ -5974,14 +5975,25 @@ function: {
             }
         }
     }
+    // [bilibili_search] 插入前函数（加载图片）
+    function bilibili_search_bF(pageElems) {
+        pageElems.forEach(function (one) {
+            let img = getCSS('.img > .lazy-img > img[src=""]', one)
+            if (img) {
+                img.setAttribute('data-srclz', 'lazy')
+            }
+        });
+        return pageElems
+    }
     // [bilibili_search] 插入后函数（加载图片）
     function bilibili_search_aF() {
         let result = __INITIAL_STATE__.flow[__INITIAL_STATE__.flow.fields[0]].result;
         if (result.length > 0) {
-            let imgArr = getAllCSS('.img > .lazy-img > img[src=""]');
+            let imgArr = getAllCSS('.img > .lazy-img > img[data-srclz]');
             if (imgArr.length > 0) {
                 for (let i = 0; i < imgArr.length; i++) {
                     imgArr[i].src = result[i].pic;
+                    imgArr[i].removeAttribute('data-srclz');
                 }
             }
         }
