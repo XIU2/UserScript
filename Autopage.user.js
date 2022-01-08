@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.3.6
+// @version      4.3.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -4764,6 +4764,18 @@ function: {
                     scrollD: 800
                 }
             }, //         蓝奏云 - 后台
+            alipanso: {
+                host: 'www.alipanso.com',
+                functionS: function() {if (lp == '/search.html') {curSite = DBSite.alipanso;}},
+                insStyle: '.pager-wrap {display: none !important;}',
+                history: true,
+                pager: {
+                    type: 1,
+                    nextL: () => getNextU('page=', /page=\d+/),
+                    pageE: 'css;#res_list > div',
+                    scrollD: 2000
+                }
+            }, //        阿里盘搜
             wikihow: {
                 host: ['www.wikihow.com', 'zh.wikihow.com'],
                 functionS: function() {if (indexOF('/Category:')) {
@@ -7066,6 +7078,27 @@ function: {
         }
         return url
     }
+    // 通用型获取下一页地址（从 URL 中获取页码，URL 替换 page= 参数）
+    function getNextU(pf, reg, initpage = '2') {
+        let nextNum = getSearch(pf.replace('=',''));
+        if (nextNum) {
+            nextNum = String(parseInt(nextNum)+1)
+        } else {
+            nextNum = initpage
+        }
+        var url = '';
+        if (location.search) {
+            if (indexOF(pf, 's')) {
+                url = location.search.replace(reg, pf + nextNum);
+            } else {
+                url = location.search + '&' + pf + nextNum;
+            }
+        } else {
+            url = '?' + pf + nextNum;
+        }
+        url = location.origin + location.pathname + url;
+        return url
+    }
     // 通用型获取下一页地址（直接从元素获取）
     function getNextE(css) {
         if (!css) css = curSite.pager.nextL;
@@ -7264,6 +7297,16 @@ function: {
             if (l.indexOf(e) > -1) return true
         }
         return false
+    }
+    // 获取 Search 指定参数
+    function getSearch(variable) {
+        let query = window.location.search.substring(1),
+            vars = query.split('&');
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split('=');
+            if(pair[0] == variable){return pair[1];}
+        }
+        return '';
     }
     // 启用/禁用 (当前网站)
     function menu_disable(type) {
