@@ -1344,10 +1344,7 @@ function questionInvitation(){
 
     function start(){
         removeHighlightLink(); //                                              移除高亮链接
-        if (location.hostname != 'zhuanlan.zhihu.com') {
-            collapsedAnswer(); //                                              一键收起回答
-            questionInvitation(); //                                           默认折叠邀请
-        }
+        if (location.hostname != 'zhuanlan.zhihu.com') {collapsedAnswer();} // 一键收起回答
         closeFloatingComments(); //                                            快捷关闭悬浮评论（监听点击事件，点击网页两侧空白处）
         blockKeywords('comment'); //                                           屏蔽指定关键词（评论）
 
@@ -1364,7 +1361,7 @@ function questionInvitation(){
             }
             setInterval(function(){topTime_('.ContentItem.AnswerItem', 'ContentItem-meta')}, 300); // 置顶显示时间
             setTimeout(question_time, 300); //                                 问题创建时间
-
+            questionInvitation(); //                                           默认折叠邀请
 
         } else if (location.pathname === '/search') { //          搜索结果页 //
             collapsedNowAnswer('main div'); //                                 收起当前回答 + 快捷返回顶部
