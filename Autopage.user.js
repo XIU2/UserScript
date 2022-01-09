@@ -16,6 +16,7 @@
 // @grant        GM_openInTab
 // @grant        GM_getValue
 // @grant        GM_setValue
+// @grant        GM_deleteValue
 // @grant        GM_notification
 // @grant        unsafeWindow
 // @license      GPL-3.0 License
@@ -29,10 +30,19 @@
     'use strict';
     var menuAll = [
         ['menu_disable', '✅ 已启用 (点击对当前网站禁用)', '❌ 已禁用 (点击对当前网站启用)', []],
-        ['menu_discuz_thread_page', '帖子内自动翻页', '帖子内自动翻页', true],
+        ['menu_thread', '帖子内自动翻页 (社区类网站)', '帖子内自动翻页 (社区类网站)', true],
         ['menu_page_number', '显示当前页码及点击暂停翻页', '显示当前页码及点击暂停翻页', true],
         ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false]
-    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, locationC = false, nowLocation = '', lp = location.pathname, forumWebsite = ['cs.rin.ru', 'www.flyert.com', 'bbs.pediy.com', 'www.libaclub.com', 'tieba.baidu.com', 'jump2.bdimg.com', 'www.douban.com', 'bbs.tianya.cn', 'www.lkong.com', 'bbs.pediy.com', 'www.cadtutor.net', 'www.theswamp.org', 'www.xuexiniu.com', 'bbs.xuexiniu.com', 'www.taoguba.com.cn', 'www.cnprint.org', 'www.ablesci.com', 'bbs.nga.cn', 'ngabbs.com', 'nga.178.com', 'g.nga.cn', 'www.discuss.com.hk'];
+    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, locationC = false, nowLocation = '', lp = location.pathname;
+
+    // 过渡，几个版本后删掉，记得顺便删掉 grant GM_deleteValue
+
+    if (GM_getValue('menu_discuz_thread_page') != null && GM_getValue('menu_thread') == null){
+        GM_setValue('menu_thread', GM_getValue('menu_discuz_thread_page'));
+        GM_deleteValue('menu_discuz_thread_page');
+    }
+
+
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
     }
@@ -47,12 +57,13 @@
         }
         for (let i=0;i<menuAll.length;i++) { // 循环注册脚本菜单
             menuAll[i][3] = GM_getValue(menuAll[i][0]);
+
             if (menuAll[i][0] === 'menu_disable') { // 启用/禁用
 
                 if (menu_disable('check')) { // 当前网站在禁用列表中
                     menuId[i] = GM_registerMenuCommand(`${menuAll[i][2]}`, function(){menu_disable('del')});
                     return
-                } else { // // 不在禁用列表中
+                } else { // 不在禁用列表中
                     webType = doesItSupport(); // 判断网站类型（即是否支持），顺便直接赋值
                     if (webType === 0) {
                         GM_registerMenuCommand('❌ 当前网站暂不支持 [点击申请支持]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
@@ -62,12 +73,6 @@
                         return
                     }
                     menuId[i] = GM_registerMenuCommand(`${menuAll[i][1]}`, function(){menu_disable('add')});
-                }
-
-            } else if (menuAll[i][0] === 'menu_discuz_thread_page') { // 帖子内自动翻页 (仅论坛)
-
-                if ([2,4,5,6].indexOf(webType) > -1 || forumWebsite.indexOf(location.hostname) > -1) {
-                    menuId[i] = GM_registerMenuCommand(`${menuAll[i][3]?'✅':'❌'} ${menuAll[i][1]}`, function(){menu_switch(menuAll[i][3], menuAll[i][0], menuAll[i][2])});
                 }
 
             } else {
@@ -228,7 +233,7 @@ function: {
             phpbb: {
                 functionS: function() {if (indexOF('/viewforum.php')) {
                     curSite = DBSite.phpbb;
-                } else if (indexOF('/viewtopic.php') && GM_getValue('menu_discuz_thread_page')) {
+                } else if (indexOF('/viewtopic.php') && GM_getValue('menu_thread')) {
                     curSite = DBSite.phpbb_post;
                 } else if (indexOF('/search.php')) {
                     curSite = DBSite.phpbb_search;
@@ -262,7 +267,7 @@ function: {
             xenforo: {
                 functionS: function() {if (indexOF(/\/(forums|f)\//)) {
                     curSite = DBSite.xenforo;
-                } else if (indexOF(/\/(threads|t)\//) && GM_getValue('menu_discuz_thread_page')) {
+                } else if (indexOF(/\/(threads|t)\//) && GM_getValue('menu_thread')) {
                     curSite = DBSite.xenforo_post;
                 } else if (indexOF('/search/')) {
                     curSite = DBSite.xenforo_search;
@@ -294,7 +299,7 @@ function: {
                 }
             }, //     XenForo 论坛 - 搜索页
             xiuno: {
-                functionS: function() {if (lp == '/' || indexOF(/\/(index|forum)/)) {curSite = DBSite.xiuno;} else if (indexOF('/thread') && GM_getValue('menu_discuz_thread_page')) {curSite = DBSite.xiuno_post;}},
+                functionS: function() {if (lp == '/' || indexOF(/\/(index|forum)/)) {curSite = DBSite.xiuno;} else if (indexOF('/thread') && GM_getValue('menu_thread')) {curSite = DBSite.xiuno_post;}},
                 pager: {
                     type: 1,
                     nextL: '//li[@class="page-item"]/a[text()="▶"]',
@@ -632,7 +637,7 @@ function: {
                     if (lp == '/f') {
                     baidu_tieba_1(); // 右侧悬浮发帖按钮点击事件（解决自动翻页导致无法发帖的问题）
                     curSite = DBSite.baidu_tieba;
-                } else if (indexOF('/p/') && GM_getValue('menu_discuz_thread_page')) {
+                } else if (indexOF('/p/') && GM_getValue('menu_thread')) {
                     curSite = DBSite.baidu_tieba_post;
                 } else if (lp == '/f/search/res') {
                     curSite = DBSite.baidu_tieba_search;
@@ -732,7 +737,7 @@ function: {
             }, // 豆瓣 - 作品
             douban_group: {
                 host: 'www.douban.com',
-                functionS: function() {if (indexOF('/group/topic/') && GM_getValue('menu_discuz_thread_page')) {
+                functionS: function() {if (indexOF('/group/topic/') && GM_getValue('menu_thread')) {
                     curSite = DBSite.douban_group_topic;
                 } else if (indexOF('/group/explore')) {
                     curSite = DBSite.douban_group_explore;
@@ -793,7 +798,7 @@ function: {
                 host: 'bbs.tianya.cn',
                 functionS: function() {if (indexOF('/list')) {
                     curSite = DBSite.tianya;
-                } else if (indexOF('/post') && GM_getValue('menu_discuz_thread_page')) {
+                } else if (indexOF('/post') && GM_getValue('menu_thread')) {
                     curSite = DBSite.tianya_post;
                 }},
                 pager: {
@@ -819,7 +824,7 @@ function: {
                 functionS: function() {locationC = true;
                 if (lp == '/thread.php') {
                     curSite = DBSite.nga_thread;
-                } else if (lp == '/read.php' && GM_getValue('menu_discuz_thread_page')) {
+                } else if (lp == '/read.php' && GM_getValue('menu_thread')) {
                     curSite = DBSite.nga_read;
                 }},
                 pager: {
@@ -998,7 +1003,7 @@ function: {
                 host: 'www.lkong.com',
                 functionS: function() {if (indexOF('/forum/')) {
                     curSite = DBSite.lkong;
-                } else if (indexOF('/thread/') && GM_getValue('menu_discuz_thread_page')) {
+                } else if (indexOF('/thread/') && GM_getValue('menu_thread')) {
                     curSite = DBSite.lkong_thread;
                 }},
                 pager: {
@@ -1026,7 +1031,7 @@ function: {
                 host: 'bbs.pediy.com',
                 functionS: function() {if (indexOF('/forum-')) {
                     curSite = DBSite.pediy_forum;
-                } else if (indexOF('/thread-') && GM_getValue('menu_discuz_thread_page')) {
+                } else if (indexOF('/thread-') && GM_getValue('menu_thread')) {
                     curSite = DBSite.pediy_thread;
                 }},
                 pager: {
@@ -1191,7 +1196,7 @@ function: {
             taoguba: {
                 host: 'www.taoguba.com.cn',
                 functionS: function() {insStyle('#joinTGB {display: none !important;}')
-                    if (indexOF('/Article/') && GM_getValue('menu_discuz_thread_page')) {
+                    if (indexOF('/Article/') && GM_getValue('menu_thread')) {
                         curSite = DBSite.taoguba_t;
                     } else if (indexOF('/shenghuoba/')) {
                         curSite = DBSite.taoguba_;
@@ -1291,7 +1296,7 @@ function: {
                 functionS: function() {if (indexOF('/forum-') || indexOF('mod=forumdisplay', 's')) {
                     curSite = DBSite.flyert_forumdisplay;
                 } else if (indexOF('/forum') || indexOF('mod=viewthread', 's')) {
-                    if (GM_getValue('menu_discuz_thread_page')) {curSite = DBSite.flyert_viewthread;}
+                    if (GM_getValue('menu_thread')) {curSite = DBSite.flyert_viewthread;}
                 }},
                 pager: {
                     type: 1,
@@ -1312,7 +1317,7 @@ function: {
             }, //   飞客网论坛 - 帖子内
             cnprint: {
                 host: 'www.cnprint.org',
-                functionS: function() {if (indexOF('/forum/')) {curSite = DBSite.cnprint;} else if (indexOF('/thread/') && GM_getValue('menu_discuz_thread_page')) {curSite = DBSite.cnprint_thread;}},
+                functionS: function() {if (indexOF('/forum/')) {curSite = DBSite.cnprint;} else if (indexOF('/thread/') && GM_getValue('menu_thread')) {curSite = DBSite.cnprint_thread;}},
                 pager: {
                     type: 1,
                     nextL: 'css;a[rel="next"]',
@@ -1332,7 +1337,7 @@ function: {
             }, //      CPC 中文印刷社区 - 帖子内
             discusshk: {
                 host: /.+\.discuss\.com\.hk/,
-                functionS: function() {if (lp == '/forumdisplay.php') {curSite = DBSite.discusshk;} else if (lp == '/viewthread.php' && GM_getValue('menu_discuz_thread_page')) {curSite = DBSite.discusshk_thread;}},
+                functionS: function() {if (lp == '/forumdisplay.php') {curSite = DBSite.discusshk;} else if (lp == '/viewthread.php' && GM_getValue('menu_thread')) {curSite = DBSite.discusshk_thread;}},
                 pager: {
                     type: 1,
                     nextL: 'css;.pagination a.next',
@@ -1351,6 +1356,27 @@ function: {
                     scrollD: 2000
                 }
             }, //    中国香港论坛 - 帖子内
+            tgfcer: {
+                host: 'bbs.tgfcer.com',
+                functionS: function() {if (lp == '/forumdisplay.php' || indexOF('/forum')) {curSite = DBSite.tgfcer;} else if (GM_getValue('menu_thread') && (lp == '/viewthread.php' || indexOF('/thread'))) {curSite = DBSite.tgfcer_thread;}},
+                pager: {
+                    type: 1,
+                    nextL: 'css;.pages a.next',
+                    pageE: 'css;tbody[id^="normalthread_"]',
+                    replaceE: 'css;.pages',
+                    scrollD: 2000
+                }
+            }, //           TGFC Lifestyle
+            tgfcer_thread: {
+                insStyle: '.viewthread:not(:first-of-type) h1 {display: none !important;}',
+                pager: {
+                    type: 1,
+                    nextL: 'css;.pages a.next',
+                    pageE: 'css;.viewthread',
+                    replaceE: 'css;.pages',
+                    scrollD: 2000
+                }
+            }, //    TGFC Lifestyle - 帖子内
             adnmb3: {
                 host: ['adnmb3.com', 'www.tnmb.org'],
                 functionS: function() {
@@ -1671,7 +1697,7 @@ function: {
                         } else {
                             curSite = DBSite.discuz_guide
                         }
-                    } else if (getCSS('body#nv_forum.pg_viewthread') && GM_getValue('menu_discuz_thread_page')) {
+                    } else if (getCSS('body#nv_forum.pg_viewthread') && GM_getValue('menu_thread')) {
                         curSite = DBSite.xuexiniu_thread;
                     } else if (indexOF('/search.php')) {
                         curSite = DBSite.xuexiniu_search;
@@ -1962,7 +1988,7 @@ function: {
                 host: 'cs.rin.ru',
                 functionS: function() {if (lp == '/forum/viewforum.php') {
                     curSite = DBSite.cs_rin_ru;
-                } else if (lp == '/forum/viewtopic.php' && GM_getValue('menu_discuz_thread_page')) {
+                } else if (lp == '/forum/viewtopic.php' && GM_getValue('menu_thread')) {
                     curSite = DBSite.cs_rin_ru_list;
                 } else if (lp == '/forum/search.php') { // 搜索结果
                     curSite = DBSite.cs_rin_ru_search;
@@ -4138,7 +4164,7 @@ function: {
             }, //                维普网
             ablesci: {
                 host: 'www.ablesci.com',
-                functionS: function() {if (indexOF('/detail') && GM_getValue('menu_discuz_thread_page')) {curSite = DBSite.ablesci_p;} else if (getCSS('ul.fly-list')) {curSite = DBSite.ablesci;}},
+                functionS: function() {if (indexOF('/detail') && GM_getValue('menu_thread')) {curSite = DBSite.ablesci_p;} else if (getCSS('ul.fly-list')) {curSite = DBSite.ablesci;}},
                 pager: {
                     type: 1,
                     nextL: 'css;li.next > a',
@@ -5565,7 +5591,7 @@ function: {
                 functionS: function() {
                     if (indexOF('/forum/forum/')) {
                         curSite = DBSite.cadtutor;
-                    } else if (indexOF('/forum/topic/') && GM_getValue('menu_discuz_thread_page')) {
+                    } else if (indexOF('/forum/topic/') && GM_getValue('menu_thread')) {
                         curSite = DBSite.cadtutor_post;
                     } else if (indexOF('/forum/search/')) {
                         curSite = DBSite.cadtutor_search;
@@ -5602,7 +5628,7 @@ function: {
                     if (!location.search) return
                     if (indexOF('board=', 's')) {
                         curSite = DBSite.theswamp;
-                    } else if (indexOF('topic=', 's') && GM_getValue('menu_discuz_thread_page')) {
+                    } else if (indexOF('topic=', 's') && GM_getValue('menu_thread')) {
                         curSite = DBSite.theswamp_post;
                     }},
                 pager: {
@@ -5749,7 +5775,7 @@ function: {
                 case 'pg_forumdisplay': // < 各版块帖子列表 >
                     discuzForum(); break;
                 case 'pg_viewthread': //   < 帖子内 >
-                    if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.discuz_thread; break;
+                    if (GM_getValue('menu_thread')) curSite = DBSite.discuz_thread; break;
                 case 'pg_guide': //        < 导读帖子列表等 >
                     curSite = DBSite.discuz_guide; break;
                 case 'pg_collection': //   < 淘贴列表 >
@@ -5768,7 +5794,7 @@ function: {
                 if (indexOF('/forum-')) { //             < 各版块帖子列表 >
                     discuzForum();
                 } else if (indexOF('/thread-')) { //     < 帖子内 >
-                    if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.discuz_thread;
+                    if (GM_getValue('menu_thread')) curSite = DBSite.discuz_thread;
                 }
             }
         }
@@ -5777,7 +5803,7 @@ function: {
             if (indexOF('mod=forumdisplay', 's') || indexOF('forumdisplay.php')) { //      < 各版块帖子列表 >
                 discuzForum();
             } else if (indexOF('mod=viewthread', 's') || indexOF('viewthread.php')) { // < 帖子内 >
-                if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.discuz_thread;
+                if (GM_getValue('menu_thread')) curSite = DBSite.discuz_thread;
             } else if (indexOF('mod=guide', 's')) { //      < 导读帖子列表 >
                 curSite = DBSite.discuz_guide;
             } else if(indexOF('mod=space', 's') && indexOF('do=thread', 's')) { // 别人的主题/回复
@@ -5787,7 +5813,7 @@ function: {
             } else if (getCSS('#threadlist')) { //          < 部分论坛的各板块 URL 是自定义的 >
                 discuzForum();
             } else if (getCSS('#postlist')) { //            < 部分论坛的帖子内 URL 是自定义的 >
-                if (GM_getValue('menu_discuz_thread_page')) curSite = DBSite.discuz_thread;
+                if (GM_getValue('menu_thread')) curSite = DBSite.discuz_thread;
             }
         }
     }
