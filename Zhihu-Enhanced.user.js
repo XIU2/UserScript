@@ -194,9 +194,9 @@ function defaultCollapsedAnswer() {
 // 一键收起回答（全部）
 function collapsedAnswer() {
     if (!menu_value('menu_collapsedAnswer')) return
-    console.log('1111', document.querySelector('.CornerAnimayedFlex'))
+    //console.log('1111', document.querySelector('.CornerAnimayedFlex'))
     if (document.querySelector('.CornerAnimayedFlex') && !document.getElementById('collapsed-button')) {
-        console.log('2222')
+        //console.log('2222')
         document.head.appendChild(document.createElement('style')).textContent = '.CornerButton{margin-bottom:8px !important;}.CornerButtons{bottom:45px !important;}';
         document.querySelector('.CornerAnimayedFlex').insertAdjacentHTML('afterBegin', '<button id="collapsed-button" data-tooltip="收起全部回答" data-tooltip-position="left" data-tooltip-will-hide-on-click="false" aria-label="收起全部回答" type="button" class="Button CornerButton Button--plain"><svg class="ContentItem-arrowIcon is-active" aria-label="收起全部回答" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M16.036 19.59a1 1 0 0 1-.997.995H9.032a.996.996 0 0 1-.997-.996v-7.005H5.03c-1.1 0-1.36-.633-.578-1.416L11.33 4.29a1.003 1.003 0 0 1 1.412 0l6.878 6.88c.782.78.523 1.415-.58 1.415h-3.004v7.005z"></path></svg></button>');
         document.getElementById('collapsed-button').onclick = function () {
