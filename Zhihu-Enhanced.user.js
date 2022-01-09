@@ -1286,20 +1286,19 @@ function topTime_people() {
 
 // 完整显示时间 + 置顶显示时间 - 专栏/文章
 function topTime_zhuanlan() {
-    let t = document.querySelector('.ContentItem-time');if (!t) return
+    let t = document.querySelector('.ContentItem-time'); if (!t) return
     // 完整显示时间
-    if (t.innerText.indexOf('编辑于') > -1 && !(t.classList.contains('xiu-time'))) {
-        let bianjiyu = t.innerText;
+    if (t.textContent.indexOf('编辑于') > -1 && !(t.classList.contains('xiu-time'))) {
+        let tt = t.textContent;
         t.click();
-        t.innerText = (t.innerText + "，" + bianjiyu)
+        t.textContent = (t.textContent + ' ，' + tt)
         t.classList.add('xiu-time');
     }
 
     //发布时间置顶
     if (menu_value('menu_publishTop') && !(document.querySelector('.Post-Header > .ContentItem-time')) && !(document.querySelector('.ContentItem-meta > .ContentItem-time'))) {
-        t.style.cssText = 'padding:0px 0px 0px 0px; margin-top: 14px'
+        t.style.cssText = 'margin-top: 14px; padding: 0;'
         let temp_time = t.cloneNode(true);
-        // t.style.display = 'none';
         if (location.href.indexOf('/column/') > -1){
             document.querySelector('.ContentItem-meta').insertAdjacentElement('beforeEnd', temp_time);
         } else {
@@ -1345,7 +1344,7 @@ function directLink () {
 
 // 默认高清原图，修改自：https://greasyfork.org/scripts/402808（从 JQuery 改为原生 JavaScript，且精简、优化了代码）
 function originalPic(){
-    document.querySelectorAll('img').forEach(function(one){if (one.dataset.original != undefined && one.src != one.dataset.original && one.className != 'comment_sticker') {one.src = one.dataset.original}});
+    document.querySelectorAll('img[data-original]:not(.comment_sticker):not(.Avatar)').forEach(function(one){if (one.src != one.dataset.original) {one.src = one.dataset.original}});
 }
 
 
