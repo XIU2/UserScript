@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.8.8
+// @version      1.8.9
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起当前回答/评论（左键两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、移除高亮链接、屏蔽盐选内容、净化标题消息、展开问题描述、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -384,6 +384,7 @@ function isElementInViewport_(el) {
 function customBlockUsers() {
     let nowBlockUsers = '';
     menu_value('menu_customBlockUsers').forEach(function(item){nowBlockUsers += '|' + item})
+    //console.log(nowBlockUsers.replace('|',''))
     let newBlockUsers = prompt('编辑 [自定义屏蔽用户]\n（不同用户名之间使用 "|" 分隔，例如：用户A|用户B|用户C ）', nowBlockUsers.replace('|',''));
     if (newBlockUsers === '') {
         GM_setValue('menu_customBlockUsers', []);
@@ -1218,17 +1219,17 @@ function addLocationchange() {
 }
 
 
-// [完整显示时间 + 置顶显示时间] 功能修改自：https://greasyfork.org/scripts/402808（从 JQuery 改为原生 JavaScript，且优化了代码）
+// [完整显示时间 + 置顶显示时间] 功能修改自：https://greasyfork.org/scripts/402808（从 JQuery 改为原生 JavaScript，且精简、优化了代码）
 // 完整显示时间 + 置顶显示时间 - 首页
 function topTime_index() {
     let topTime = document.querySelectorAll('.TopstoryItem');if (!topTime) return
     topTime.forEach(function(_this) {
-        let ContentItemTime = _this.querySelector('.ContentItem-time');if (!ContentItemTime) return
-        if (!(ContentItemTime.classList.contains('full')) && ContentItemTime.querySelector('span') && ContentItemTime.querySelector('span').innerText != null) {
+        let t = _this.querySelector('.ContentItem-time');if (!t) return
+        if (!(t.classList.contains('full')) && t.querySelector('span') && t.querySelector('span').innerText != null) {
             // 完整显示时间
-            topTime_allTime(ContentItemTime)
+            topTime_allTime(t)
             // 发布时间置顶
-            topTime_publishTop(ContentItemTime, _this, 'ContentItem-meta')
+            topTime_publishTop(t, _this, 'ContentItem-meta')
         }
     });
 }
@@ -1238,24 +1239,19 @@ function topTime_index() {
 function topTime_question() {
     let topTime = document.querySelectorAll('.ContentItem.AnswerItem');if (!topTime) return
     topTime.forEach(function(_this) {
-        let ContentItemTime = _this.querySelector('.ContentItem-time');if (!ContentItemTime) return
-        if (!(ContentItemTime.classList.contains('full')) && ContentItemTime.querySelector('span') && ContentItemTime.querySelector('span').innerText != null) {
+        let t = _this.querySelector('.ContentItem-time');if (!t) return
+        if (!(t.classList.contains('full')) && t.querySelector('span') && t.querySelector('span').innerText != null) {
             // 完整显示时间
-            topTime_allTime(ContentItemTime)
+            topTime_allTime(t)
             // 发布时间置顶
-            topTime_publishTop(ContentItemTime, _this, 'ContentItem-meta')
+            topTime_publishTop(t, _this, 'ContentItem-meta')
         }
 
     });
 
     // 问题创建时间
-    if (!(document.querySelector('.QuestionPage .QuestionHeader-side p')) && location.href.indexOf("log") == -1) { // 没有执行过 且 非问题日志页
-        let createtime = document.querySelector('.QuestionPage>[itemprop~=dateCreated]').getAttribute('content');
-        let modifiedtime = document.querySelector('.QuestionPage>[itemprop~=dateModified]').getAttribute('content');
-        createtime = getUTC8(new Date(createtime));
-        modifiedtime = getUTC8(new Date(modifiedtime));
-        // 添加到问题页右上角
-        document.querySelector('.QuestionPage .QuestionHeader-side').insertAdjacentHTML('beforeEnd', '<div style=\"color:#8590a6; margin-top:15px\"><p>创建时间:&nbsp;&nbsp;' + createtime + '</p><p>最后编辑:&nbsp;&nbsp;' + modifiedtime + '</p></div>');
+    if (!(document.querySelector('.QuestionPage .QuestionHeader-side .QuestionTime-xiu')) && location.href.indexOf('/log') == -1) {
+        document.querySelector('.QuestionPage .QuestionHeader-side').insertAdjacentHTML('beforeEnd', '<div class="QuestionTime-xiu" style="color:#9098ac; margin-top:10px"><p>创建时间：' + getUTC8(new Date(document.querySelector('.QuestionPage > meta[itemprop=dateCreated]').content)) + '</p><p>最后编辑：' + getUTC8(new Date(document.querySelector('.QuestionPage > meta[itemprop=dateModified]').content)) + '</p></div>');
     }
 }
 
@@ -1264,12 +1260,12 @@ function topTime_question() {
 function topTime_search() {
     let topTime = document.querySelectorAll('.ContentItem.AnswerItem, .ContentItem.ArticleItem');if (!topTime) return
     topTime.forEach(function(_this) {
-        let ContentItemTime = _this.querySelector('.ContentItem-time');if (!ContentItemTime) return
-        if (!(ContentItemTime.classList.contains('full')) && ContentItemTime.querySelector('span') && ContentItemTime.querySelector('span').innerText != null) {
+        let t = _this.querySelector('.ContentItem-time');if (!t) return
+        if (!(t.classList.contains('full')) && t.querySelector('span') && t.querySelector('span').innerText != null) {
             // 完整显示时间
-            topTime_allTime(ContentItemTime)
+            topTime_allTime(t)
             // 发布时间置顶
-            topTime_publishTop(ContentItemTime, _this, 'SearchItem-meta')
+            topTime_publishTop(t, _this, 'SearchItem-meta')
         }
 
     });
@@ -1280,12 +1276,12 @@ function topTime_search() {
 function topTime_people() {
     let topTime = document.querySelectorAll('.ContentItem.AnswerItem, .ContentItem.ArticleItem');if (!topTime) return
     topTime.forEach(function(_this) {
-        let ContentItemTime = _this.querySelector('.ContentItem-time');if (!ContentItemTime) return
-        if (!(ContentItemTime.classList.contains('full')) && ContentItemTime.querySelector('span') && ContentItemTime.querySelector('span').innerText != null) {
+        let t = _this.querySelector('.ContentItem-time');if (!t) return
+        if (!(t.classList.contains('full')) && t.querySelector('span') && t.querySelector('span').innerText != null) {
             // 完整显示时间
-            topTime_allTime(ContentItemTime)
+            topTime_allTime(t)
             // 发布时间置顶
-            topTime_publishTop(ContentItemTime, _this, 'ContentItem-meta')
+            topTime_publishTop(t, _this, 'ContentItem-meta')
         }
 
     });
@@ -1294,22 +1290,22 @@ function topTime_people() {
 
 // 完整显示时间 + 置顶显示时间 - 专栏/文章
 function topTime_zhuanlan() {
-    let ContentItemTime = document.querySelector('.ContentItem-time');if (!ContentItemTime) return
+    let t = document.querySelector('.ContentItem-time');if (!t) return
     // 完整显示时间
     if (menu_value('menu_allTime')) {
-        if (ContentItemTime.innerText.indexOf('编辑于') > -1 && !(ContentItemTime.classList.contains('doneeeeee'))) {
-            let bianjiyu = ContentItemTime.innerText;
-            ContentItemTime.click();
-            ContentItemTime.innerText = (ContentItemTime.innerText + "，" + bianjiyu)
-            ContentItemTime.classList.add("doneeeeee");
+        if (t.innerText.indexOf('编辑于') > -1 && !(t.classList.contains('xiu-time'))) {
+            let bianjiyu = t.innerText;
+            t.click();
+            t.innerText = (t.innerText + "，" + bianjiyu)
+            t.classList.add('xiu-time');
         }
     }
 
     //发布时间置顶
     if (menu_value('menu_publishTop') && !(document.querySelector('.Post-Header > .ContentItem-time')) && !(document.querySelector('.ContentItem-meta > .ContentItem-time'))) {
-        ContentItemTime.style.cssText = 'padding:0px 0px 0px 0px; margin-top: 14px'
-        let temp_time = ContentItemTime.cloneNode(true);
-        // ContentItemTime.style.display = 'none';
+        t.style.cssText = 'padding:0px 0px 0px 0px; margin-top: 14px'
+        let temp_time = t.cloneNode(true);
+        // t.style.display = 'none';
         if (location.href.indexOf('/column/') > -1){
             document.querySelector('.ContentItem-meta').insertAdjacentElement('beforeEnd', temp_time);
         } else {
@@ -1320,137 +1316,60 @@ function topTime_zhuanlan() {
 
 
 // 完整显示时间
-function topTime_allTime(ContentItemTime) {
+function topTime_allTime(t) {
     if (!menu_value('menu_allTime')) return
-    if (ContentItemTime.innerText.indexOf("发布于") == -1 && ContentItemTime.innerText.indexOf("编辑于") > -1) { //只有 "编辑于" 时增加具体发布时间 data-tooltip
-        let data_tooltip = ContentItemTime.querySelector('span').getAttribute('data-tooltip');
-        let oldtext = ContentItemTime.querySelector('span').innerText;
-        ContentItemTime.querySelector('span').innerText = data_tooltip + "，" + oldtext;
-        ContentItemTime.classList.add('full');
-    } else if (ContentItemTime.innerText.indexOf("发布于") > -1 && ContentItemTime.innerText.indexOf("编辑于") == -1) { //只有 "发布于" 时替换为具体发布时间 data-tooltip
-        let data_tooltip = ContentItemTime.querySelector('span').getAttribute('data-tooltip');
-        ContentItemTime.querySelector('span').innerText = data_tooltip;
-        ContentItemTime.classList.add('full');
+    if (t.textContent.indexOf('发布于') > -1 && t.textContent.indexOf('编辑于') == -1) {
+        t.querySelector('span').textContent = (t.querySelector('span').dataset.tooltip);
+        t.classList.add('full');
+    } else if (t.textContent.indexOf('发布于') == -1 && t.textContent.indexOf('编辑于') > -1) {
+        t.querySelector('span').textContent = (t.querySelector('span').dataset.tooltip) + ' ，' + (t.querySelector('span').textContent);
+        t.classList.add('full');
     }
 }
 
 
 // 发布时间置顶
-function topTime_publishTop(ContentItemTime, _this, class_) {
+function topTime_publishTop(t, _this, _class) {
     if (!menu_value('menu_publishTop')) return
-    if (!ContentItemTime.parentNode.classList.contains(class_)) {
-        let temp_time = ContentItemTime.cloneNode(true);
-        //_this.querySelector('.RichContent .ContentItem-time').style.display = 'none';
-        _this.querySelector('.' + class_).insertAdjacentElement('beforeEnd', temp_time);
+    if (!t.parentNode.classList.contains(_class)) {
+        let temp_time = t.cloneNode(true);
+        _this.querySelector('.' + _class).insertAdjacentElement('beforeEnd', temp_time);
     }
 }
 
 
-// UTC 标准时转 UTC+8 北京时间，来自：https://greasyfork.org/zh-CN/scripts/402808
-function getUTC8(datetime) {
-    let month = (datetime.getMonth() + 1) < 10 ? "0" + (datetime.getMonth() + 1) : (datetime.getMonth() + 1);
-    let date = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
-    let hours = datetime.getHours() < 10 ? "0" + datetime.getHours() : datetime.getHours();
-    let minutes = datetime.getMinutes() < 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
-    let seconds = datetime.getSeconds() < 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
-    return (datetime.getFullYear() + "-" + month + "-" + date + "\xa0\xa0" + hours + ":" + minutes + ":" + seconds);
+// UTC 标准时转 UTC+8 北京时间，修改自：https://greasyfork.org/zh-CN/scripts/402808（精简）
+function getUTC8(t) {
+    return (t.getFullYear() + '-' + (((t.getMonth() + 1) < 10) ? ('0' + (t.getMonth() + 1)) : (t.getMonth() + 1)) + '-' + ((t.getDate() < 10) ? ('0' + t.getDate()) : t.getDate()) + '\xa0\xa0' + ((t.getHours() < 10) ? ('0' + t.getHours()) : t.getHours()) + ':' + ((t.getMinutes() < 10) ? ('0' + t.getMinutes()) : t.getMinutes()) + ':' + ((t.getSeconds() < 10) ? ('0' + t.getSeconds()) : t.getSeconds()));
 }
 
 
-// 默认站外直链，修改自：https://greasyfork.org/scripts/402808（从 JQuery 改为原生 JavaScript）
+// 默认站外直链，修改自：https://greasyfork.org/scripts/402808（从 JQuery 改为原生 JavaScript，且精简、优化了代码）
 function directLink () {
-    let link, equal, colon, externalHref, protocol, path, newHref;
-    // 文字链接
-    link = document.querySelectorAll('a[class*="external"]')
-    if (link) {
-        link.forEach(function (_this) {
-            if (_this.getElementsByTagName('span').length > 0) {
-                newHref = _this.innerText;
-                _this.setAttribute('href', newHref);
-            } else if (_this.href.indexOf("link.zhihu.com/?target=") > -1) {
-                externalHref = _this.href;
-                newHref = externalHref.substring(externalHref = _this.href.indexOf('link.zhihu.com/?target=') + 'link.zhihu.com/?target='.length);
-                _this.setAttribute('href', decodeURIComponent(newHref));
-            } else {
-                externalHref = _this.href;
-                if (externalHref.lastIndexOf("https%3A")) {
-                    newHref = _this.href.substring(_this.href.lastIndexOf("https%3A"));
-                } else if (externalHref.lastIndexOf("http%3A%2F%2F")) {
-                    newHref = _this.href.substring(_this.href.lastIndexOf("http%3A"));
-                }
-                _this.setAttribute('href', decodeURIComponent(newHref));
-            }
-        });
-    }
-
-    // 卡片链接
-    link = document.querySelectorAll('a[class*="LinkCard"]:not([class*="MCNLinkCard"]):not([class*="ZVideoLinkCard"])')
-    if (link) {
-        link.forEach(function (_this) {
-            if (_this.getElementsByTagName('LinkCard-title').length > 0 && _this.getElementsByTagName('LinkCard-title')[0].indexOf("http") > -1) {
-                newHref = _this.getElementsByTagName('LinkCard-title').innerText;
-                _this.setAttribute('href', newHref);
-            } else if (_this.href.indexOf("link.zhihu.com/?target=") > -1) {
-                externalHref = _this.href;
-                newHref = externalHref.substring(externalHref = _this.href.indexOf("link.zhihu.com/?target=") + "link.zhihu.com/?target=".length);
-                _this.setAttribute('href', decodeURIComponent(newHref));
-            } else {
-                externalHref = _this.href;
-                if (externalHref.lastIndexOf("https%3A")) {
-                    newHref = _this.href.substring(_this.href.lastIndexOf("https%3A"));
-                } else if (externalHref.lastIndexOf("http%3A%2F%2F")) {
-                    newHref = _this.href.substring(_this.href.lastIndexOf("http%3A"));
-                }
-                _this.setAttribute('href', decodeURIComponent(newHref));
-            }
-        });
-    }
-
-    // 旧版视频卡片链接
-    link = document.querySelectorAll('a.VideoCard-link')
-    if (link) {
-        link.forEach(function (_this) {
-            if (_this.href.indexOf('link.zhihu.com/?target=') > -1) {
-                externalHref = _this.href;
-                equal = externalHref.lastIndexOf('http');
-                colon = externalHref.lastIndexOf('%3A');
-                protocol = externalHref.substring(equal, colon);
-                path = externalHref.substring(colon + 5, externalHref.length);
-                newHref = protocol + '://' + path;
-                _this.setAttribute('href', decodeURIComponent(newHref));
-            }
-        });
-    }
+    document.querySelectorAll('a.external[href*="link.zhihu.com/?target="], a.LinkCard[href*="link.zhihu.com/?target="]:not(.MCNLinkCard):not(.ZVideoLinkCard):not(.ADLinkCardContainer)').forEach(function (_this) {_this.href = decodeURIComponent(_this.href.substring(_this.href.indexOf('link.zhihu.com/?target=') + 23));});
 }
 
 
-// 默认高清原图，修改自：https://greasyfork.org/scripts/402808（从 JQuery 改为原生 JavaScript）
+// 默认高清原图，修改自：https://greasyfork.org/scripts/402808（从 JQuery 改为原生 JavaScript，且精简、优化了代码）
 function originalPic(){
-    let pic = document.getElementsByTagName('img');if (!pic) return
-    Array.from(pic).forEach(function(pic1){
-        if (pic1.getAttribute('data-original') != undefined && pic1.className != 'comment_sticker') {
-            if (pic1.getAttribute('src') != pic1.getAttribute('data-original')) {
-                pic1.setAttribute('src', pic1.getAttribute('data-original'))
-            }
-        }
-    });
+    document.querySelectorAll('img').forEach(function(one){if (one.dataset.original != undefined && one.src != one.dataset.original && one.className != 'comment_sticker') {one.src = one.dataset.original}});
 }
 
 
-// 默认折叠邀请，修改自：https://greasyfork.org/scripts/402808（从 JQuery 改为原生 JavaScript）
+// 默认折叠邀请，修改自：https://greasyfork.org/scripts/402808（从 JQuery 改为原生 JavaScript，且精简、优化了代码）
 function questionInvitation(){
-    let timer = setInterval(function(){
-        let QuestionInvitation = document.querySelector('.QuestionInvitation-content');if (!QuestionInvitation) return
-        clearInterval(timer);
-        QuestionInvitation.style.display = 'none';
-        document.querySelector('.QuestionInvitation-title').innerHTML = document.querySelector('.QuestionInvitation-title').innerText + '<span style="color: #8590a6;font-size: 14px;"> 展开/折叠</span>'
+    let time = setInterval(function(){
+        let q = document.querySelector('.QuestionInvitation-content'); if (!q) return
+        clearInterval(time);
+        q.style.display = 'none';
+        document.querySelector('.QuestionInvitation-title').innerHTML = document.querySelector('.QuestionInvitation-title').innerText + '<span style="cursor: pointer; font-size: 14px; color: #919aae;"> 展开/折叠</span>'
         // 点击事件（展开/折叠）
         document.querySelector('.Topbar').onclick = function(){
-            let QuestionInvitation = document.querySelector('.QuestionInvitation-content')
-            if (QuestionInvitation.style.display == 'none') {
-                QuestionInvitation.style.display = ''
+            let q = document.querySelector('.QuestionInvitation-content')
+            if (q.style.display == 'none') {
+                q.style.display = ''
             } else {
-                QuestionInvitation.style.display = 'none'
+                q.style.display = 'none'
             }
         }
     });
