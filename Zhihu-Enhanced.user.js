@@ -37,15 +37,12 @@ var menu_ALL = [
     ['menu_blockTypeArticle', '文章 [首页、搜索页]', '文章（首页、搜索页）', false],
     ['menu_blockTypeTopic', '话题 [搜索页]', '话题（搜索页）', false],
     ['menu_blockTypeSearch', '杂志文章、相关搜索等 [搜索页]', '相关搜索、杂志等（搜索页）', false],
-    ['menu_removeHighlightLink', '移除高亮链接', '移除高亮链接', true],
     ['menu_blockYanXuan', '屏蔽盐选内容', '屏蔽盐选内容', false],
     ['menu_cleanTitles', '净化标题消息 (标题中的私信/消息)', '净化标题提醒', false],
     ['menu_questionRichTextMore', '展开问题描述', '展开问题描述', false],
     ['menu_publishTop', '置顶显示时间', '置顶显示时间', true],
-    ['menu_allTime', '完整显示时间', '完整显示时间', true],
     ['menu_typeTips', '区分问题文章', '区分问题文章', true],
-    ['menu_toQuestion', '直达问题按钮', '直达问题按钮', true],
-    ['menu_directLink', '默认站外直链', '默认站外直链', true]
+    ['menu_toQuestion', '直达问题按钮', '直达问题按钮', true]
 ], menu_ID = [];
 for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
     if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
@@ -959,7 +956,6 @@ function findParentElement(item, className, type = false) {
 
 // 移除高亮链接
 function removeHighlightLink() {
-    if (!menu_value('menu_removeHighlightLink')) return
     const callback = (mutationsList, observer) => {
         for (const mutation of mutationsList) {
             for (const target of mutation.addedNodes) {
@@ -1292,13 +1288,11 @@ function topTime_people() {
 function topTime_zhuanlan() {
     let t = document.querySelector('.ContentItem-time');if (!t) return
     // 完整显示时间
-    if (menu_value('menu_allTime')) {
-        if (t.innerText.indexOf('编辑于') > -1 && !(t.classList.contains('xiu-time'))) {
-            let bianjiyu = t.innerText;
-            t.click();
-            t.innerText = (t.innerText + "，" + bianjiyu)
-            t.classList.add('xiu-time');
-        }
+    if (t.innerText.indexOf('编辑于') > -1 && !(t.classList.contains('xiu-time'))) {
+        let bianjiyu = t.innerText;
+        t.click();
+        t.innerText = (t.innerText + "，" + bianjiyu)
+        t.classList.add('xiu-time');
     }
 
     //发布时间置顶
@@ -1317,7 +1311,6 @@ function topTime_zhuanlan() {
 
 // 完整显示时间
 function topTime_allTime(t) {
-    if (!menu_value('menu_allTime')) return
     if (t.textContent.indexOf('发布于') > -1 && t.textContent.indexOf('编辑于') == -1) {
         t.querySelector('span').textContent = (t.querySelector('span').dataset.tooltip);
         t.classList.add('full');
@@ -1380,7 +1373,7 @@ function questionInvitation(){
     addLocationchange();
     removeLogin(); //                                                      移除登录弹窗
     setInterval(originalPic,100); //                                       默认高清原图
-    if (menu_value('menu_directLink')) setInterval(directLink, 100); //    默认站外直链
+    setInterval(directLink, 100); //    默认站外直链
     window.addEventListener('locationchange', function(){ // 针对的是从单个回答页跳转到完整回答页时
         if (location.pathname.indexOf('question') > -1 && location.pathname.indexOf('waiting') === -1 && location.pathname.indexOf('/answer/') === -1) { //       回答页 //
             setTimeout(function(){
