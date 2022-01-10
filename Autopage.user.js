@@ -1366,7 +1366,7 @@ function: {
                     replaceE: 'css;.pages',
                     scrollD: 2000
                 }
-            }, //           TGFC Lifestyle
+            }, //              TGFC Lifestyle
             tgfcer_thread: {
                 insStyle: '.viewthread:not(:first-of-type) h1 {display: none !important;}',
                 pager: {
@@ -1376,7 +1376,7 @@ function: {
                     replaceE: 'css;.pages',
                     scrollD: 2000
                 }
-            }, //    TGFC Lifestyle - 帖子内
+            }, //       TGFC Lifestyle - 帖子内
             adnmb3: {
                 host: ['adnmb3.com', 'www.tnmb.org'],
                 functionS: function() {
@@ -6807,11 +6807,15 @@ function: {
 
         // 遍历判断是否是某个已支持的网站，顺便直接赋值
         let support = false;
+        end:
         for (let now in DBSite) { // 遍历对象
             if (!DBSite[now].host) continue; // 如果不存在则继续下一个循环
+
             if (Array.isArray(DBSite[now].host)) { // 如果是数组
                 for (let i of DBSite[now].host) { // 遍历数组
-                    if (i === location.hostname) {
+                    if (i === location.hostname) { // 如果找到匹配的
+
+                        if (self != top) {if (!DBSite[now].iframe) break end;} // 如果当前位于 iframe 框架下，就需要判断是否需要继续执行
                         if (DBSite[now].functionS) {
                             DBSite[now].functionS();
                         } else {
@@ -6820,9 +6824,10 @@ function: {
                         support = true; break; // 如果找到了就退出循环
                     }
                 }
-            } else if (DBSite[now].host instanceof RegExp) {
-                if (DBSite[now].host.test(location.hostname)) {
-                    if (self != top) {if (!DBSite[now].iframe) break;} // 如果当前位于 iframe 框架下，就需要判断是否需要执行
+            } else if (DBSite[now].host instanceof RegExp) { // 如果是正则表达式
+                if (DBSite[now].host.test(location.hostname)) { // 如果找到匹配的
+
+                    if (self != top) {if (!DBSite[now].iframe) break;} // 如果当前位于 iframe 框架下，就需要判断是否需要继续执行
                     if (DBSite[now].functionS) {
                         DBSite[now].functionS();
                     } else {
@@ -6830,8 +6835,9 @@ function: {
                     }
                     support = true; break; // 如果找到了就退出循环
                 }
-            } else if (DBSite[now].host === location.hostname) {
-                if (self != top) {if (!DBSite[now].iframe) break;} // 如果当前位于 iframe 框架下，就需要判断是否需要执行
+            } else if (DBSite[now].host === location.hostname) { // 如果是普通字符串（找到匹配的）
+
+                if (self != top) {if (!DBSite[now].iframe) break;} // 如果当前位于 iframe 框架下，就需要判断是否需要继续执行
                 if (DBSite[now].functionS) {
                     DBSite[now].functionS();
                 } else {
