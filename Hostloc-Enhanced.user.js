@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.4.1
+// @version      1.4.2
 // @author       X.I.U
 // @description  自动签到（访问空间 +22 积分）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键点击两侧空白处）、收起预览帖子（左键点击两侧空白处）、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复、屏蔽阅读权限 255 帖子
 // @match        *://hostloc.com/*
@@ -190,8 +190,8 @@
 
     curSite.pageUrl = ""; // 下一页URL
     pageLoading(); // 自动翻页
-    if(menu_value('menu_backToTop'))backToTop(); //    回到顶部（右键点击左右两侧空白处）
-    if(menu_value('menu_autoSignIn'))autoSignIn(); //  自动签到（访问空间 10 次 = 20 积分）
+    if(menu_value('menu_backToTop')) backToTop(); //    回到顶部（右键点击左右两侧空白处）
+    if(menu_value('menu_autoSignIn')) autoSignIn(); //  自动签到（访问空间 10 次 = 20 积分）
     //replyIntervalDOMNodeInserted(); //                 监听插入事件（回帖间隔）
 
 
@@ -211,7 +211,7 @@
             let signIn = setInterval(function(){
                 GM_xmlhttpRequest({
                     url: url_list[url++],
-                    method: "GET",
+                    method: 'GET',
                     timeout: 4000
                 });
                 console.log(`[全球主机交流论坛 增强] 积分 +2 (${url_list[url]})`);
@@ -256,7 +256,7 @@
                 blockUsers_('[id^="post_"]', 'a[href^="space-uid"]');
                 blockUsers_('[id^="comment_"] > div', 'a.xi2.xw1'); // 点评
                 break;
-            case 'forum': // 各版块帖子列表
+            case 'forum': //  各版块帖子列表
                 blockUsers_('[id^="normalthread_"]', 'a[href^="space-uid"]');
                 blockUsers_vfastpost(); // 预览帖子中的回复
                 break;
@@ -266,15 +266,13 @@
             case 'notice': // 消息
                 blockUsers_('dl.cl', '.ntc_body a[href^="space-uid"]');
                 break;
-            case 'pm': // 私人聊天
+            case 'pm': //     私人聊天
                 blockUsers_('dl[id^="pmlist_"]', '.ptm.pm_c a[href^="space-uid"]');
                 break;
         }
 
         function blockUsers_(list1, list2) {
-            let listItem = document.querySelectorAll(list1);
-            if (listItem.length < 1) return
-            listItem.forEach(function(item){ // 遍历所有帖子
+            document.querySelectorAll(list1).forEach(function(item){ // 遍历所有帖子
                 menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
                     let itemName = item.querySelector(list2); // 寻找用户名
                     if (itemName && itemName.textContent === item1) {
@@ -287,10 +285,8 @@
 
         function blockUsers_vfastpost() {
             let vfastpost = e => {
-                if (e.target.innerHTML && e.target.innerHTML.indexOf('id="vfastpost"') > -1) {
-                    let listItem = e.target.querySelectorAll('.bm_c > [id^="post_"]');
-                    if (listItem.length < 1) return
-                    listItem.forEach(function(item){ // 遍历所有回复
+                if (e.target.nodeType == 1 && e.target.outerHTML && e.target.outerHTML.indexOf('class="fastpreview"') > -1) {
+                    e.target.querySelectorAll('.bm_c > [id^="post_"]').forEach(function(item){ // 遍历所有回复
                         menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
                             let itemName = item.querySelector('a.xi2'); // 寻找用户名
                             if (itemName && itemName.textContent === item1) {
@@ -325,9 +321,7 @@
     function blockKeywords() {
         if (!menu_value('menu_blockKeywords')) return
         if (!menu_value('menu_customBlockKeywords') || menu_value('menu_customBlockKeywords').length < 1) return
-        let listItem = document.querySelectorAll('[id^="normalthread_"]');
-        if (listItem.length < 1) return
-        listItem.forEach(function(item){ // 遍历所有帖子标题
+        document.querySelectorAll('[id^="normalthread_"]').forEach(function(item){ // 遍历所有帖子标题
             menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词
                 let itemName = item.querySelector('a.s.xst'); // 寻找帖子标题
                 if (itemName && itemName.textContent.indexOf(item1) > -1) {
@@ -342,7 +336,7 @@
     // 监听插入事件（有新的回复主题，点击查看）
     function blockDOMNodeInserted() {
         let block = e => {
-            if (e.target.textContent && e.target.textContent.indexOf('newthread') > -1) {
+            if (e.target.nodeType == 1 && e.target.textContent && e.target.textContent.indexOf('newthread') > -1) {
                 setTimeout(function () {
                     blockUsers('forum'); //                           屏蔽用户（黑名单）
                     blockKeywords(); //                               屏蔽关键词（帖子标题）
@@ -356,7 +350,7 @@
     // 监听插入事件（预览快速回复带签名）
     function vfastpostDOMNodeInserted() {
         let vfastpost = e => {
-            if (e.target.innerHTML && e.target.innerHTML.indexOf('id="vfastpost"') > -1) {
+            if (e.target.nodeType == 1 && e.target.innerHTML && e.target.innerHTML.indexOf('id="vfastpost"') > -1) {
                 e.target.getElementsByTagName('form')[0].insertAdjacentHTML('afterbegin', `<input type="hidden" name="usesig" value="1">`);
             }
         }
@@ -395,7 +389,7 @@
 
         function replyCustom_0() {
             let vfastpost = e => {
-                if (e.target.innerHTML && e.target.innerHTML.indexOf('id="vfastpost"') > -1) {
+                if (e.target.nodeType == 1 && e.target.innerHTML && e.target.innerHTML.indexOf('id="vfastpost"') > -1) {
                     let message = e.target.querySelector('input[name="message"]'), id = message.id.match(/\d+/g)[0];
                     message.parentNode.innerHTML = `<textarea type="text" name="message" id="vmessage_${id}" style="width: 99.8%;height: 30px;border: none;outline: none;font-size: 14px;overflow-y: hidden;"></textarea>`
                     document.getElementById(`vreplysubmit_${id}`).onclick = function(){
@@ -408,8 +402,7 @@
 
         function replyCustom_1() {
             let floatlayout_reply = e => {
-                console.log()
-                if (e.target.innerHTML && e.target.innerHTML.indexOf('id="floatlayout_reply"') > -1) {
+                if (e.target.nodeType == 1 && e.target.innerHTML && e.target.innerHTML.indexOf('id="floatlayout_reply"') > -1) {
                     document.getElementById('postsubmit').onclick = function(){
                         if (GM_getValue('menu_customLittleTail')) document.getElementById('postmessage').value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');
                     }
@@ -438,7 +431,7 @@
     // 监听插入事件（回帖间隔）
     /*function replyIntervalDOMNodeInserted() {
         let replyInterval = e => {
-            if (e.target.innerHTML && e.target.textContent.indexOf('发表回复 金钱+1') > -1) {
+            if (e.target.nodeType == 1 && e.target.innerHTML && e.target.textContent.indexOf('发表回复 金钱+1') > -1) {
                 setTimeout(function () {GM_notification({text: '过去 60 秒了，可以回帖了~', timeout: 3500});}, 60000)
             }
         }
@@ -521,7 +514,7 @@
         if (!menu_value('menu_pageLoading')) return
         if (curSite.SiteTypeID > 0){
             windowScroll(function (direction, e) {
-                if (direction === "down") { // 下滑才准备翻页
+                if (direction === 'down') { // 下滑才准备翻页
                     let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
                     if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + 999) {
                         if (curSite.SiteTypeID === SiteType.FORUM) { // 如果是各版块帖子列表则直接点下一页就行了
@@ -529,7 +522,7 @@
                             if (autopbn && autopbn.textContent === "下一页 »"){ // 如果已经在加载中了，就忽略
                                 autopbn.click();
                                 let timer = setInterval(function(){ // 在下一页加载完成后
-                                    if (document.querySelector('#autopbn').textContent === "下一页 »") {
+                                    if (document.querySelector('#autopbn').textContent === '下一页 »') {
                                         if (menu_value('menu_delate255')) delate255(); // 隐藏 255 权限帖子
                                         if (menu_value('menu_blockUsers')) blockUsers('forum'); // 屏蔽用户（黑名单）
                                         if (menu_value('menu_blockKeywords')) blockKeywords(); // 屏蔽关键词（帖子标题）
