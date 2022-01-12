@@ -2,7 +2,7 @@
 // @name         蓝奏云网盘增强
 // @version      1.3.8
 // @author       X.I.U
-// @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白打开目录、自动显示更多文件、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
+// @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @include      /^https:\/\/.+\.lanzou[a-z]\.com\/.*$/
 // @match        *://pan.lanzou.com/*
 // @match        *://lanzou.com/u
@@ -127,7 +127,7 @@
             setTimeout(hideSha, 500); //                 隐藏分享链接窗口（这样自动打开/复制分享链接时，不会一闪而过）
             fobiddenBack(); //                           禁止浏览器返回（并绑定新的返回事件）
             EventXMLHttpRequest(); //                    监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
-            setTimeout(clickOpenDirectory, 500); //      点击打开目录
+            setTimeout(clickOpenDirectory, 500); //      点击空白进入目录
 
             dragEnter(); //                              拖入文件自动显示上传框
             setTimeout(viewTop,1000); //                 监听并修改右键菜单 [外链分享地址] 为 [复制并打开分享链接] / [复制分享链接] / [打开分享链接] 之一
@@ -190,7 +190,7 @@
     }
 
 
-    // 点击空白打开目录
+    // 点击空白进入目录
     function clickOpenDirectory() {
         mainframe.document.getElementById('sub_folder_list').onclick = function(e){
             //console.log(e.target);
