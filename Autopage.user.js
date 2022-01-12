@@ -18,6 +18,7 @@
 // @grant        GM_setValue
 // @grant        GM_deleteValue
 // @grant        GM_notification
+// @grant        window.onurlchange
 // @grant        unsafeWindow
 // @license      GPL-3.0 License
 // @run-at       document-end
@@ -5727,9 +5728,9 @@ function: {
     // 对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则
     if (locationC) {
         nowLocation = location.href
-        addLocationchange(); // 自定义 locationChange 事件
+        if (window.onurlchange === undefined) {addUrlChangeEvent();} // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
         if (webType === 1) {
-            window.addEventListener('locationChange', function(){
+            window.addEventListener('urlchange', function(){
                 lp = location.pathname;
                 //console.log(nowLocation, location.href)
                 if (curSite.history && window.top.document.xiu_nowUrl === location.href) {nowLocation = location.href; return}
@@ -5749,7 +5750,7 @@ function: {
                 pausePageEvent(); // 左键双击网页空白处暂停翻页
             })
         } else if (webType === 3) {
-            window.addEventListener('locationChange', function(){
+            window.addEventListener('urlchange', function(){
                 lp = location.pathname;
                 if (nowLocation == location.href) return
                 nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
@@ -7552,24 +7553,24 @@ function: {
             }, false);
         }, 1000)
     }
-    // 自定义 locationChange 事件（用来监听 URL 变化）
-    function addLocationchange() {
+    // 自定义 urlchange 事件（用来监听 URL 变化）
+    function addUrlChangeEvent() {
         history.pushState = ( f => function pushState(){
             var ret = f.apply(this, arguments);
             window.dispatchEvent(new Event('pushstate'));
-            window.dispatchEvent(new Event('locationChange'));
+            window.dispatchEvent(new Event('urlchange'));
             return ret;
         })(history.pushState);
 
         history.replaceState = ( f => function replaceState(){
             var ret = f.apply(this, arguments);
             window.dispatchEvent(new Event('replacestate'));
-            window.dispatchEvent(new Event('locationChange'));
+            window.dispatchEvent(new Event('urlchange'));
             return ret;
         })(history.replaceState);
 
         window.addEventListener('popstate',()=>{
-            window.dispatchEvent(new Event('locationChange'))
+            window.dispatchEvent(new Event('urlchange'))
         });
     }
 })();

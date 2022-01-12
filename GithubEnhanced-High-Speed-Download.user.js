@@ -12,6 +12,7 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_notification
+// @grant        window.onurlchange
 // @license      GPL-3.0 License
 // @run-at       document-end
 // @namespace    https://greasyfork.org/scripts/412245
@@ -120,10 +121,10 @@
         setTimeout(addRawDownLink, 2000); // 添加 Raw 下载链接（☁），延迟 2 秒执行，避免被 pjax 刷掉
     });
 
-    addLocationchange();
-    window.addEventListener('locationchange', function(){
-        addRawDownLink_(); // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）事件
-    })
+    // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）事件
+    // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
+    if (window.onurlchange === undefined) {addUrlChangeEvent();}
+    window.addEventListener('urlchange', function() {addRawDownLink_();});
 
 
     // Release
@@ -337,24 +338,24 @@
     }
 
 
-    // 自定义 locationchange 事件（用来监听 URL 变化）
-    function addLocationchange() {
+    // 自定义 urlchange 事件（用来监听 URL 变化）
+    function addUrlChangeEvent() {
         history.pushState = ( f => function pushState(){
             var ret = f.apply(this, arguments);
             window.dispatchEvent(new Event('pushstate'));
-            window.dispatchEvent(new Event('locationchange'));
+            window.dispatchEvent(new Event('urlchange'));
             return ret;
         })(history.pushState);
 
         history.replaceState = ( f => function replaceState(){
             var ret = f.apply(this, arguments);
             window.dispatchEvent(new Event('replacestate'));
-            window.dispatchEvent(new Event('locationchange'));
+            window.dispatchEvent(new Event('urlchange'));
             return ret;
         })(history.replaceState);
 
         window.addEventListener('popstate',()=>{
-            window.dispatchEvent(new Event('locationchange'))
+            window.dispatchEvent(new Event('urlchange'))
         });
     }
 })();

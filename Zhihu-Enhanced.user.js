@@ -14,6 +14,7 @@
 // @grant        GM_setValue
 // @grant        GM_notification
 // @grant        GM_info
+// @grant        window.onurlchange
 // @license      GPL-3.0 License
 // @run-at       document-end
 // @incompatible safari
@@ -169,7 +170,7 @@ function getCollapsedAnswerObserver() {
             }
         }
 
-        window.addEventListener('locationchange', function() {
+        window.addEventListener('urlchange', function() {
             observer[location.href.indexOf('/answer/') === -1 ? 'start' : 'end']();
         })
         window._collapsedAnswerObserver = observer;
@@ -222,7 +223,7 @@ function collapsedAnswer() {
                 const observer = getCollapsedAnswerObserver();
                 observer.start();
                 if (!menu_value('menu_defaultCollapsedAnswer') && !observer._disconnectListener) {
-                    window.addEventListener('locationchange', function() {
+                    window.addEventListener('urlchange', function() {
                         observer.end();
                         window._collapsedAnswerObserver = null;
                     })
@@ -435,7 +436,7 @@ function blockUsers(type) {
         }
 
         blockKeywords_now();
-        window.addEventListener('locationchange', function(){
+        window.addEventListener('urlchange', function(){
             setTimeout(blockKeywords_now, 500); // 网页 URL 变化后再次执行
         })
 
@@ -543,7 +544,7 @@ function blockUsers(type) {
         }
 
         setTimeout(blockUsers_now, 500);
-        window.addEventListener('locationchange', function(){
+        window.addEventListener('urlchange', function(){
             setTimeout(blockUsers_now, 500); // 网页 URL 变化后再次执行
         })
 
@@ -753,7 +754,7 @@ function blockKeywords(type) {
         }
 
         blockKeywords_now();
-        window.addEventListener('locationchange', function(){
+        window.addEventListener('urlchange', function(){
             setTimeout(blockKeywords_now, 500); // 网页 URL 变化后再次执行
         })
 
@@ -778,7 +779,7 @@ function blockKeywords(type) {
         }
 
         setTimeout(blockKeywords_now, 500);
-        window.addEventListener('locationchange', function(){
+        window.addEventListener('urlchange', function(){
             setTimeout(blockKeywords_now, 500); // 网页 URL 变化后再次执行
         })
 
@@ -882,7 +883,7 @@ function blockType(type) {
     });
     observer.observe(document, { childList: true, subtree: true });
 
-    window.addEventListener('locationchange', function(){
+    window.addEventListener('urlchange', function(){
         addSetInterval_(name);
         // 移除相关搜索
         if (menu_value('menu_blockTypeSearch') && location.pathname === '/search' && location.search.indexOf('type=content') > -1) setTimeout(function(){document.querySelector('.RelevantQuery').parentElement.parentElement.hidden = true;}, 1500)
@@ -1056,7 +1057,7 @@ function addToQuestion() {
     });
     observer.observe(document, { childList: true, subtree: true });
 
-    window.addEventListener('locationchange', function(){
+    window.addEventListener('urlchange', function(){
         addSetInterval_('h2.ContentItem-title a:not(.zhihu_e_tips)');
     })
 
@@ -1193,24 +1194,24 @@ function closeFloatingComments() {
 }*/
 
 
-// 自定义 locationchange 事件（用来监听 URL 变化）
-function addLocationchange() {
+// 自定义 urlchange 事件（用来监听 URL 变化）
+function addUrlChangeEvent() {
     history.pushState = ( f => function pushState(){
         var ret = f.apply(this, arguments);
         window.dispatchEvent(new Event('pushstate'));
-        window.dispatchEvent(new Event('locationchange'));
+        window.dispatchEvent(new Event('urlchange'));
         return ret;
     })(history.pushState);
 
     history.replaceState = ( f => function replaceState(){
         var ret = f.apply(this, arguments);
         window.dispatchEvent(new Event('replacestate'));
-        window.dispatchEvent(new Event('locationchange'));
+        window.dispatchEvent(new Event('urlchange'));
         return ret;
     })(history.replaceState);
 
     window.addEventListener('popstate',()=>{
-        window.dispatchEvent(new Event('locationchange'))
+        window.dispatchEvent(new Event('urlchange'))
     });
 }
 
@@ -1331,11 +1332,11 @@ function questionInvitation(){
 
 
 (function() {
-    addLocationchange();
+    if (window.onurlchange === undefined) {addUrlChangeEvent();} // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
     removeLogin(); //                                                      移除登录弹窗
     setInterval(originalPic,100); //                                       默认高清原图
     setInterval(directLink, 100); //    默认站外直链
-    window.addEventListener('locationchange', function(){ // 针对的是从单个回答页跳转到完整回答页时
+    window.addEventListener('urlchange', function(){ // 针对的是从单个回答页跳转到完整回答页时
         if (location.pathname.indexOf('question') > -1 && location.pathname.indexOf('waiting') === -1 && location.pathname.indexOf('/answer/') === -1) { //       回答页 //
             setTimeout(function(){
                 collapsedNowAnswer('.QuestionPage'); //                        收起当前回答 + 快捷返回顶部
