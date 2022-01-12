@@ -26,8 +26,7 @@
         if (menu_ID.length > 0){for (let i=0;i<menu_ID.length;i++){GM_unregisterMenuCommand(menu_ID[i]);}}
         menu_ID[0] = GM_registerMenuCommand('#️⃣ 修改全局默认音量 [ ' + GM_getValue('menu_defaultVolume', 30) + '% ]', function(){customDefaultVolume()});
         menu_ID[1] = GM_registerMenuCommand('🔁 忘记当前网站音量 (即跟随全局)', function(){resetCurrentVolume()});
-        // 记得修改反馈 URL
-        menu_ID[2] = GM_registerMenuCommand('💬 反馈 & 建议', function () {GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true}); GM_openInTab('https://greasyfork.org/zh-CN/scripts/XXXXXXXXXXXXXX/feedback', {active: true,insert: true,setParent: true});});
+        menu_ID[2] = GM_registerMenuCommand('💬 反馈 & 建议', function () {GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true}); GM_openInTab('https://greasyfork.org/zh-CN/scripts/438400/feedback', {active: true,insert: true,setParent: true});});
     }
 
     insPage();
