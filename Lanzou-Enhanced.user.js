@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.3.7
+// @version      1.3.8
 // @author       X.I.U
-// @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、点击直接下载文件、自动显示更多文件、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
+// @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白打开目录、自动显示更多文件、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @include      /^https:\/\/.+\.lanzou[a-z]\.com\/.*$/
 // @match        *://pan.lanzou.com/*
 // @match        *://lanzou.com/u
@@ -127,6 +127,7 @@
             setTimeout(hideSha, 500); //                 隐藏分享链接窗口（这样自动打开/复制分享链接时，不会一闪而过）
             fobiddenBack(); //                           禁止浏览器返回（并绑定新的返回事件）
             EventXMLHttpRequest(); //                    监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
+            setTimeout(clickOpenDirectory, 500); //      点击打开目录
 
             dragEnter(); //                              拖入文件自动显示上传框
             setTimeout(viewTop,1000); //                 监听并修改右键菜单 [外链分享地址] 为 [复制并打开分享链接] / [复制分享链接] / [打开分享链接] 之一
@@ -189,6 +190,17 @@
     }
 
 
+    // 点击空白打开目录
+    function clickOpenDirectory() {
+        mainframe.document.getElementById('sub_folder_list').onclick = function(e){
+            //console.log(e.target);
+            if (e.target.className && e.target.className == 'f_tb') {
+                e.target.querySelector('span.follink').click()
+            }
+        }
+    }
+
+
     // 右键文件显示菜单
     function rightClickMenu() {
         if (!menu_value('menu_rightClickMenu')) return
@@ -197,25 +209,24 @@
     }
 
 
-    // 右键文件显示菜单，参数：文件/文件夹列表 ID、菜单 ID 前缀
+    // 右键文件显示菜单，参数：文件/文件夹列表 ID、菜单 ID、菜单 ID前缀
     function rightClickMenu_(list_id_name, menu_id_name_prefix, list_id_name_prefix) {
         let list_ = mainframe.document.getElementById(list_id_name);
-        if (list_) { //                                          文件/文件夹列表
-            list_.oncontextmenu = function(e){
-                e.preventDefault(); //                           屏蔽浏览器自身右键菜单
-                let left = e.pageX - 30; //                      右键菜单弹出位置
-                let list_ID = e.target.id;
-                if (e.target.nodeName === 'FONT') {
-                    list_ID = e.target.parentNode.parentNode.id
-                } else if(e.target.id === '') {
-                    list_ID = e.target.parentNode.id
-                }
-                list_ID = /\d+/.exec(list_ID)
-                if(list_ID.length > 0){
-                    mainframe.document.getElementById(menu_id_name_prefix + list_ID[0]).style.cssText='position: absolute !important; left: ' + left + 'px;' // 修改右键菜单弹出位置（X）
-                    mainframe.document.getElementById(list_id_name_prefix + list_ID[0]).focus();
-                    mainframe.document.getElementById(list_id_name_prefix + list_ID[0]).click();
-                }
+        if (!list_) return //                                文件/文件夹列表
+        list_.oncontextmenu = function(e){
+            e.preventDefault(); //                           屏蔽浏览器自身右键菜单
+            let left = e.pageX - 30; //                      右键菜单弹出位置
+            let list_ID = e.target.id;
+            if (e.target.nodeName === 'FONT') {
+                list_ID = e.target.parentNode.parentNode.id
+            } else if(e.target.id === '') {
+                list_ID = e.target.parentNode.id
+            }
+            list_ID = /\d+/.exec(list_ID)
+            if(list_ID.length > 0){
+                mainframe.document.getElementById(menu_id_name_prefix + list_ID[0]).style.cssText='position: absolute !important; left: ' + left + 'px;' // 修改右键菜单弹出位置（X）
+                mainframe.document.getElementById(list_id_name_prefix + list_ID[0]).focus();
+                mainframe.document.getElementById(list_id_name_prefix + list_ID[0]).click();
             }
         }
     }
