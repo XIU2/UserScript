@@ -135,11 +135,13 @@
     // 快捷回到顶部（右键两侧空白处）
     function backToTop() {
         if (!GM_getValue('menu_backToTop')) return
-        document.getElementById('web_content_wrapper').oncontextmenu = document.querySelector('#web_content_wrapper > .cw').oncontextmenu = document.getElementById('links_wrapper').oncontextmenu = function(e){
-            if (e.target == this) {
-                e.preventDefault();
-                window.scrollTo(0,0);
+        document.querySelectorAll('#web_content_wrapper, #web_content_wrapper > .cw, #links_wrapper').forEach(ele => {
+            ele.oncontextmenu = function(e) {
+                if (e.target == this) {
+                    e.preventDefault();
+                    window.scrollTo(0,0);
+                }
             }
-        }
+        })
     }
 })();
