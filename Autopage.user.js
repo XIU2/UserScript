@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.4.5
+// @version      4.4.6
 // @author       X.I.U
-// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
+// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
 // @connect      www.ykmh.com
 // @connect      www.xuexiniu.com
@@ -318,6 +318,28 @@ function: {
                     scrollD: 1500
                 }
             }, //         Xiuno 论坛 - 帖子内
+            nexusphp: {
+                functionS: function() {
+                    if (lp == '/torrents.php' || getCSS('table.torrents')) {
+                        curSite = DBSite.nexusphp;
+                    } else if (lp == '/subtitles.php') {
+                        curSite = DBSite.nexusphp;
+                        curSite.pager.pageE = 'css;#outer > table.main~table > tbody > tr:not(:first-of-type)'
+                    } else if (lp == '/forums.php' && indexOF('action=viewforum', 's')) {
+                        curSite = DBSite.nexusphp;
+                        curSite.pager.pageE = 'css;#outer > table.main+table > tbody > tr:not(:first-of-type):not(:last-of-type)'
+                    } else if (lp == '/forums.php' && indexOF('action=viewtopic', 's') && GM_getValue('menu_thread')) {
+                        curSite = DBSite.nexusphp;
+                        curSite.pager.pageE = 'css;td.text > div, td.text > div+table.main'
+                    }},
+                pager: {
+                    type: 1,
+                    nextL: '//a[./b[contains(text(), "下一页") or contains(text(), ">>")]]',
+                    pageE: 'css;table.torrents > tbody > tr:not(:first-of-type)',
+                    replaceE: '//p[@align][./font[@class="gray"]]',
+                    scrollD: 1500
+                }
+            }, //           NexusPHP 论坛
             dux: {
                 functionS: function() {if (!indexOF('.html')) curSite = DBSite.dux;},
                 host: 'www.puresys.net',
@@ -5714,6 +5736,8 @@ function: {
                 DBSite.xiuno.functionS(); break;
             case 6: //   < 所有 XenForo 论坛 >
                 DBSite.xenforo.functionS(); break;
+            case 7: //   < 所有 NexusPHP 论坛 >
+                DBSite.nexusphp.functionS(); break;
             case 100: // < 所有使用 WordPress DUX 主题的网站 >
                 DBSite.dux.functionS(); if (location.hostname === 'apphot.cc') {curSite.pager.scrollD = 2500;}; break;
             case 101: // < 所有使用 WordPress XIU 主题的网站 >
@@ -6890,6 +6914,8 @@ function: {
             console.info('[自动无缝翻页] - <Xiuno> 论坛'); return 5;
         } else if (typeof XF != 'undefined') {
             console.info('[自动无缝翻页] - <XenForo> 论坛'); return 6;
+        } else if (getCSS('head meta[name="generator" i][content="nexusphp" i]') || getXpath('id("footer")[contains(string(), "NexusPHP")]')) {
+            console.info('[自动无缝翻页] - <NexusPHP> 论坛'); return 7;
         } else if (getCSS('link[href*="themes/dux" i], script[src*="themes/dux" i]')) {
             console.info('[自动无缝翻页] - 使用 WordPress <DUX> 主题的网站'); return 100;
         } else if (getCSS('link[href*="themes/xiu" i], script[src*="themes/xiu" i]')) {
