@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.4.6
+// @version      4.4.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、古风漫画网、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -2946,16 +2946,16 @@ function: {
                 }
             }, //     爱漫画 - 分类页
             manhuagui: {
-                host: ['www.manhuagui.com', 'www.mhgui.com'],
+                host: ['www.mhgui.com', 'tw.mhgui.com', 'www.manhuagui.com', 'tw.manhuagui.com'],
                 functionS: function() {if (indexOF(/\/comic\/\d+\/\d+\.html/)) {
-                    if (!getXpath('//li[@class="pfunc"]/a[@class="current" and text()="双击"]')) getXpath('//li[@class="pfunc"]/a[text()="双击"]').click();
+                    if (!getXpath('//li[@class="pfunc"]/a[@class="current"][text()="双击" or text()="雙擊"]')) getXpath('//li[@class="pfunc"]/a[text()="双击" or text()="雙擊"]').click();
                     pausePage = false;
                     setTimeout(manhuagui_init, 100);
                     curSite = DBSite.manhuagui;
                 } else if (indexOF('list/') || indexOF('/s/')) {
                     curSite = DBSite.manhuagui_list;
                 }},
-                insStyle: '.sub-btn, .tc {display: none !important;} #mangaBox > img {width: auto !important;height: auto !important;display: block !important;margin: 0 auto !important;}',
+                insStyle: '.sub-btn, .tc {display: none !important;} #mangaBox > img {width: auto !important;height: auto !important;display: block !important;margin: 0 auto !important;max-width: 100% !important;}',
                 pager: {
                     type: 4,
                     nextL: manhuagui_nextL,
@@ -2970,7 +2970,7 @@ function: {
             manhuagui_list: {
                 pager: {
                     type: 1,
-                    nextL: '//div[@class="pager"]/a[text()="下一页"]',
+                    nextL: '//div[@class="pager"]/a[text()="下一页" or text()="下一頁"]',
                     pageE: 'css;.book-result > ul > li, .book-list > ul > li',
                     insertP: ['css;.book-result > ul, .book-list > ul', 3],
                     replaceE: 'css;.pager',
