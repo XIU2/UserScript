@@ -1513,7 +1513,7 @@ function: {
                     }
                 },
                 forceTarget: true,
-                insStyle: 'ul[class*="-1 "] > li {display: inline !important;} #root{margin-bottom: -175px;} ul > li > button[class^="sc-"][style="background-color: rgb(0, 0, 0);"], a[href^="/premium/lead/lp"] {display: none !important;}',
+                insStyle: 'ul[class*="-1 "] > li {display: inline !important;} #root{margin-bottom: -175px;} ul > li > button[class^="sc-"], a[href^="/premium/lead/lp"] {display: none !important;}',
                 iframe: true,
                 pager: {
                     type: 5,
