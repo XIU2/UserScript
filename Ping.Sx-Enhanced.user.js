@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Ping.Sx 增强
-// @version      1.0.0
+// @version      1.0.1
 // @author       X.I.U
 // @description  一键复制所有 IP、清理 IP 链接（点击复制而不是跳转）、快捷回到顶部（右键两侧空白处）
 // @match        https://ping.sx/ping*
@@ -8,6 +8,7 @@
 // @match        https://ping.sx/check-port*
 // @icon         https://ping.sx/favicon.ico
 // @grant        GM_setClipboard
+// @grant        window.onurlchange
 // @license      GPL-3.0 License
 // @run-at       document-end
 // @namespace    https://github.com/XIU2/UserScript
@@ -16,6 +17,8 @@
 
 (function() {
     'use strict';
+    window.addEventListener('urlchange', function() {addCopyButton(); cleanLinks(); backToTop();});
+
     setTimeout(addCopyButton, 2000); // 添加复制按钮
     setTimeout(cleanLinks, 2000); //    清理链接（可以直接点击复制单个 IP）
     setTimeout(backToTop, 2000); //     快捷回到顶部（右键左右两侧空白处）
@@ -23,6 +26,7 @@
 
     // 添加复制按钮
     function addCopyButton() {
+        if (document.querySelector('#copy_233, #copynocn_233')) return
         // 复制全部
         let _copy = `<li><a title="复制当前页面下的所有 IP 地址到剪切板" class="text-gray-600 hover:text-gray-900 px-3 lg:px-5 py-2 flex items-center transition duration-150 ease-in-out" href="javascript:void(0);" title="一键复制所有 IP" id="copy_233">Copy</a></li>`
         document.querySelector('header ul').insertAdjacentHTML('afterbegin', _copy);
