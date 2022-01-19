@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.7.3
+// @version      1.7.4
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -58,7 +58,7 @@
             ['https://raw.githubusercontent.com', 'Github 原生',''],
             ['https://ghproxy.fsou.cc/https://github.com', '中国香港 1', ''],
             ['https://pd.zwc365.com/seturl/https://raw.githubusercontent.com', '中国香港 2'],
-            ['https://cdn.jsdelivr.net/gh','日本东京 1', '注意：该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10;注意：当前分支所有文件总文件大小超过 50MB 时，该加速源不可用。&#10;注意：当前 分支名 为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。'],
+            ['https://fastly.jsdelivr.net/gh','日本东京 1', '注意：该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10;注意：当前分支所有文件总文件大小超过 50MB 时，该加速源不可用。&#10;注意：当前 分支名 为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。'],
             ['https://cdn.staticaly.com/gh','日本东京 2', '注意：该加速是全球 Anycast CDN，国内一般分配到日本节点。'],
             ['https://raw.fastgit.org','日本东京 3', '注意：单个文件太大时可能会提示超时（实时获取中），请重试。']
         ],
