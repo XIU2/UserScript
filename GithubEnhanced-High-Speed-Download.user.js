@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.7.5
+// @version      1.7.6
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -124,18 +124,22 @@
     // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）事件
     // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
     if (window.onurlchange === undefined) {addUrlChangeEvent();}
-    window.addEventListener('urlchange', function() {addRawDownLink_();});
+    window.addEventListener('urlchange', function() {
+        addRawDownLink_();
+        if (location.pathname.indexOf('/releases')) {addRelease();}
+    });
 
 
     // Release
     function addRelease() {
-        let html = document.getElementsByClassName('Box-footer'); if (html.length == 0) return
+        let html = document.querySelectorAll('.Box-footer'); if (html.length == 0) return
         let divDisplay = '';
         if (document.documentElement.clientWidth > 1000) {divDisplay = 'float: right;margin-top: -3px;margin-left: 8px;';}; // 调整小屏幕时的样式
-        Array.from(html).forEach(function (current) {
+        for (const current of html) {
+            if (current.querySelector('.XIU2-RS')) continue
             current.querySelectorAll('li.Box-row > a').forEach(function (_this) {
                 let href = _this.href.split(location.host),
-                    url = '', _html = `<div style="${divDisplay}">`;
+                    url = '', _html = `<div class="XIU2-RS" style="${divDisplay}">`;
 
                 // 循环生成 HTML 标签
                 for (let i=0;i<download_url.length;i++) {
@@ -145,10 +149,9 @@
 
                     _html += `<a style="${style[0]}" class="btn" href="${url}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
                 }
-                _html += `</div>`
-                _this.insertAdjacentHTML('afterend', _html);
+                _this.insertAdjacentHTML('afterend', _html + '</div>');
             });
-        });
+        }
     }
 
 
