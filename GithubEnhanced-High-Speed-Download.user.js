@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.7.6
+// @version      1.7.7
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -46,13 +46,13 @@
         //['https://ghproxy.fsou.cc/https://github.com', '香港']
     ],
         clone_url = [
-            ['https://hub.fastgit.xyz', '中国香港'],
             ['https://gitclone.com', '中国浙江'],
-            ['https://github.com.cnpmjs.org', '新加坡']
+            ['https://github.com.cnpmjs.org', '新加坡'],
+            ['https://hub.fastgit.xyz', '日本东京']
         ],
         clone_ssh_url = [
-            ['git@git.zhlh6.cn', '中国北京'],
-            ['git@hub.fastgit.xyz', '中国香港']
+            ['git@hub.fastgit.xyz', '日本东京'],
+            ['git@git.zhlh6.cn', '美国']
         ],
         raw_url = [
             ['https://raw.githubusercontent.com', 'Github 原生',''],
