@@ -46,13 +46,13 @@
         //['https://ghproxy.fsou.cc/https://github.com', '香港']
     ],
         clone_url = [
-            ['https://hub.fastgit.org', '中国香港'],
+            ['https://hub.fastgit.xyz', '中国香港'],
             ['https://gitclone.com', '中国浙江'],
             ['https://github.com.cnpmjs.org', '新加坡']
         ],
         clone_ssh_url = [
             ['git@git.zhlh6.cn', '中国北京'],
-            ['git@hub.fastgit.org', '中国香港']
+            ['git@hub.fastgit.xyz', '中国香港']
         ],
         raw_url = [
             ['https://raw.githubusercontent.com', 'Github 原生',''],
