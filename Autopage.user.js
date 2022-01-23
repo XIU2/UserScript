@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.5.3
+// @version      4.5.4
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -129,7 +129,7 @@ pager: {
        3 = 插入基准元素内，最后一个子元素后面
        4 = 插入基准元素自身的后面
        5 = 插入 pageE 列表最后一个元素的后面（该 insertP 可以直接省略不写，等同于 ['pageE', 5] ）
-       6 = 插入该元素自身内部末尾（针对小说网站等文本类的）
+       6 = 插入该元素自身内部末尾（针对小说网站等文本类的），附带参数 insertP6Br: true, 用来中间插入换行
     // 小技巧：当基准元素是下一页主体元素的父元素时（或者说要将下一页元素插入到本页同元素最后一个后面时）是可以省略不写 insertP
          例如：当 pageE: 'css;ul>li' 且 insertP: ['css;ul', 3] 时，实际等同于 ['css;ul>li', 5]
                当 pageE: 'css;.item' 且 insertP: ['css;.item', 4] 时，实际等同于 ['css;.item', 5]
@@ -381,6 +381,7 @@ function: {
                     nextL: '//a[contains(text(), "下一章") or contains(text(), "下一页")]',
                     pageE: 'css;#content, .content, #chaptercontent, .chaptercontent, #BookText',
                     insertP: ['css;#content, .content, #chaptercontent, .chaptercontent, #BookText', 6],
+                    insertP6Br: true,
                     replaceE: '//*[./a[contains(text(), "下一章") or contains(text(), "下一页")]]',
                     scrollD: 1500
                 }
@@ -3597,6 +3598,7 @@ function: {
                     nextL: '//div[contains(@class, "articlebtn")]/a[contains(text(), "下一页") or contains(text(), "下一章")]',
                     pageE: 'css;#BookText',
                     insertP: ['css;#BookText', 6],
+                    insertP6Br: true,
                     replaceE: 'css;.articlebtn',
                     scrollD: 1000
                 }
@@ -3628,6 +3630,7 @@ function: {
                     nextL: '//font[contains(text(), "下一章")]/following-sibling::a[1]',
                     pageE: 'css;.content',
                     insertP: ['css;.content', 6],
+                    insertP6Br: true,
                     replaceE: 'css;.pagego',
                     scrollD: 1500
                 }
@@ -3640,6 +3643,7 @@ function: {
                     nextL: 'css;#nextLink',
                     pageE: 'css;#cp_content',
                     insertP: ['css;#cp_content', 6],
+                    insertP6Br: true,
                     replaceE: 'css;#pg_bar',
                     scrollD: 1500
                 }
@@ -3656,6 +3660,7 @@ function: {
                     nextL: 'id("footlink")/a[contains(text(), "下一页")]',
                     pageE: 'css;#contents',
                     insertP: ['css;#contents', 6],
+                    insertP6Br: true,
                     replaceE: 'css;#footlink, #amain dd h1',
                     scrollD: 900
                 }
@@ -3894,29 +3899,17 @@ function: {
                     pF: [0, 'img[data-original]', 'data-original']
                 }
             }, //           果核剥壳 - 分类/搜索页
-            sixyin: {
-                host: 'www.sixyin.com',
-                functionS: function() {if (lp == '/' && location.search === '') { // 首页
-                    curSite = DBSite.sixyin;
-                } else if (!indexOF('.html')) { //    分类页
-                    curSite = DBSite.sixyin_list;
-                }},
-                pager: {
-                    type: 2,
-                    nextL: 'css;.load-more',
-                    nextHTML: '点击查看更多',
-                    scrollD: 1500
-                }
-            }, //              六音软件 - 首页
-            sixyin_list: {
+            _6yit: {
+                host: ['www.6yit.com'],
+                functionS: function() {if (!indexOF('.html')) {curSite = DBSite._6yit;}},
                 pager: {
                     type: 1,
-                    nextL: 'css;a.next',
-                    pageE: 'css;ul.post-loop > li',
-                    replaceE: 'css;ul.pagination',
+                    nextL: 'css;a.next.page-numbers',
+                    pageE: 'css;posts.posts-item.list',
+                    replaceE: 'css;.pagenav',
                     scrollD: 1500
                 }
-            }, //         六音软件 - 分类页
+            }, //              六音软件
             apprcn: {
                 host: ['www.apprcn.com', 'free.apprcn.com'],
                 functionS: function() {if (lp == '/' || indexOF('/category/')) {curSite = DBSite.apprcn;}},
@@ -6936,7 +6929,7 @@ function: {
             console.info('[自动无缝翻页] - 使用 WordPress <D8> 主题的网站'); return 102;
         } else if (getCSS('link[href*="themes/begin" i], script[src*="themes/begin" i], img[src*="themes/begin" i]')) {
             console.info('[自动无缝翻页] - 使用 WordPress <Begin> 主题的网站'); return 103;
-        } else if (getCSS('meta[name="description" i][content*="小说"], meta[name="description" i][content*="章节"], meta[name="description" i][content*="阅读"]') && getCSS('#content, .content, #chaptercontent, .chaptercontent, #BookText') && getXpath('//a[contains(text(), "下一章") or contains(text(), "下一页")]')) {
+        } else if ((getCSS('meta[name="description" i][content*="小说"], meta[name="description" i][content*="章节"], meta[name="description" i][content*="阅读"]') || location.hostname.indexOf('biqu') || document.title.indexOf('笔趣阁')) && getCSS('#content, .content, #chaptercontent, .chaptercontent, #BookText') && getXpath('//a[contains(text(), "下一章") or contains(text(), "下一页")]')) {
             console.info('[自动无缝翻页] - <笔趣阁> 模板的小说网站'); return 200;
         } else if (self != top) {
             return -1;
@@ -7131,6 +7124,7 @@ function: {
             // 插入新页面元素
             if (curSite.pager.insertP[1] === 6) { // 插入到目标内部末尾（针对文本，比如小说网页）
                 let afterend = '';
+                if (curSite.pager.insertP6Br) afterend += '<br/><br/>'
                 pageElems.forEach(function (one) {afterend += one.innerHTML;});
                 toElement.insertAdjacentHTML(addTo, afterend);
             } else {
