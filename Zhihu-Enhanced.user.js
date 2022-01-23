@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.9.5
+// @version      1.9.6
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起当前回答/评论（左键两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、移除高亮链接、屏蔽盐选内容、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -142,16 +142,27 @@ function getCollapsedAnswerObserver() {
         const observer = new MutationObserver(mutations => {
             for (const mutation of mutations) {
                 if (mutation.target.hasAttribute('script-collapsed')) return
-                if (!mutation.target.classList.contains('RichContent')) continue
-                //console.log(mutation.target)
-                for (const addedNode of mutation.addedNodes) {
-                    if (addedNode.nodeType != Node.ELEMENT_NODE) continue
-                    //console.log(addedNode, addedNode.offsetHeight)
-                    if (addedNode.classList.contains('RichContent-inner') && (addedNode.offsetHeight < 400 || addedNode.textContent.length < 200)) {console.log(addedNode, addedNode.offsetHeight, addedNode.textContent.length);break}
-                    //console.log(addedNode.offsetHeight)
-                    const button = addedNode.querySelector('.ContentItem-actions.Sticky [data-zop-retract-question]');
+                // 短的回答
+                if (mutation.target.classList.contains('RichContent')) {
+                    for (const addedNode of mutation.addedNodes) {
+                        if (addedNode.nodeType != Node.ELEMENT_NODE) continue
+                        if (addedNode.className != 'RichContent-inner') continue
+                        if (addedNode.offsetHeight < 400) break
+                        //console.log('111',addedNode, addedNode.classList, addedNode.classList.contains('RichContent-inner'), addedNode.offsetHeight, addedNode.textContent.length)
+                        const button = mutation.target.querySelector('.ContentItem-actions.Sticky [data-zop-retract-question]');
+                        if (button) {
+                            mutation.target.setAttribute('script-collapsed', '');
+                            button.click();
+                            return
+                        }
+                    }
+                // 长的回答
+                } else if (mutation.target.tagName === 'DIV' && !mutation.target.style.cssText && !mutation.target.className) {
+                    if (mutation.target.parentElement.hasAttribute('script-collapsed')) return
+                    //console.log('222',mutation.target, mutation.target.querySelector('.ContentItem-actions.Sticky [data-zop-retract-question]'))
+                    const button = mutation.target.querySelector('.ContentItem-actions.Sticky [data-zop-retract-question]');
                     if (button) {
-                        mutation.target.setAttribute('script-collapsed', '');
+                        mutation.target.parentElement.setAttribute('script-collapsed', '');
                         button.click();
                         return
                     }
