@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.5.8
+// @version      4.5.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -5008,6 +5008,30 @@ function: {
                     scrollD: 1000
                 }
             }, //      Quicker
+            bookmarkearth: {
+                host: 'www.bookmarkearth.com',
+                functionS: function() {if (lp == '/' || lp == '/page') {
+                    curSite = DBSite.bookmarkearth;
+                } else if (lp == '/s/search') {
+                    curSite = DBSite.bookmarkearth_search;
+                }},
+                pager: {
+                    type: 1,
+                    nextL: () => getNextU('currentPage=', /currentPage=\d+/, '/page', '2', getCSS('ul.pager').dataset.totalpage),
+                    pageE: 'css;.document-piece',
+                    replaceE: 'css;ul.pager',
+                    scrollD: 1000
+                }
+            }, //        书签地球
+            bookmarkearth_search: {
+                pager: {
+                    type: 1,
+                    nextL: () => getNextP('css;a.cut-page-item.active+a.cut-page-item', 'currentPage=', /currentPage=\d+/),
+                    pageE: 'css;.document-piece',
+                    replaceE: 'css;.cut-page',
+                    scrollD: 1000
+                }
+            }, // 书签地球 - 搜索页
             smzdm: {
                 host: ['www.smzdm.com', 'search.smzdm.com'],
                  functionS: function() {if (location.hostname === 'search.smzdm.com' || indexOF('/fenlei/')) {
@@ -7249,12 +7273,14 @@ function: {
         return url
     }
     // 通用型获取下一页地址（从 URL 中获取页码，URL 替换 page= 参数）
-    function getNextU(pf, reg, initpage = '2') {
+    function getNextU(pf, reg, lp = location.pathname, initP = '2', endP) {
         let nextNum = getSearch(pf.replace('=',''));
         if (nextNum) {
-            nextNum = String(parseInt(nextNum)+1)
+            nextNum = String(parseInt(nextNum)+1);
+            if (endP && (parseInt(nextNum) > parseInt(endP))) return ''
         } else {
-            nextNum = initpage
+            nextNum = initP;
+            if (endP && (parseInt(nextNum) >= parseInt(endP))) return ''
         }
         var url = '';
         if (location.search) {
@@ -7266,7 +7292,7 @@ function: {
         } else {
             url = '?' + pf + nextNum;
         }
-        url = location.origin + location.pathname + url;
+        url = location.origin + lp + url;
         return url
     }
     // 通用型获取下一页地址（直接从元素获取）
