@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.1.5
+// @version      1.1.6
 // @author       X.I.U
 // @description  自动签到、链接转图片、自动无缝翻页、回到顶部（右键点击两侧空白处）、快速回复（左键双击两侧空白处）、新标签页打开链接、标签页伪装为 Github（摸鱼）
 // @match        *://v2ex.com/*
@@ -159,16 +159,16 @@
 
 
     switch (location.pathname) {
-        case "/": //              首页
+        case '/': //              首页
             addChangesLink();
             break;
-        case "/recent": //        最近主题页
+        case '/recent': //        最近主题页
             curSite = DBSite.recent;
             break;
-        case "/notifications": // 提醒消息页
+        case '/notifications': // 提醒消息页
             curSite = DBSite.notifications;
             break;
-        case "/balance": //       账户余额页
+        case '/balance': //       账户余额页
             curSite = DBSite.balance;
             break;
         default:
@@ -193,7 +193,7 @@
 
     // 自动签到（后台）
     function qianDao() {
-        let timeNow = new Date().getUTCFullYear() + "/" + (new Date().getUTCMonth() + 1) + "/" + new Date().getUTCDate() // 当前 UTC-0 时间（V2EX 按这个时间的）
+        let timeNow = new Date().getUTCFullYear() + '/' + (new Date().getUTCMonth() + 1) + '/' + new Date().getUTCDate() // 当前 UTC-0 时间（V2EX 按这个时间的）
         if (location.pathname == '/') { //                               在首页
             let qiandao = document.querySelector('.box .inner a[href="/mission/daily"]');
             if (qiandao) { //                                            如果找到了签到提示
@@ -225,7 +225,7 @@
             timeout: 5000,
             onload: function (response) {
                 let html = ShowPager.createDocumentByString(response.responseText);
-                console.log(html)
+                //console.log(html)
                 if (html.querySelector('li.fa.fa-ok-sign')) {
                     html = html.getElementById('Main').textContent.match(/已连续登录 (\d+?) 天/)[0];
                     GM_setValue('menu_clockInTime', timeNow); // 写入签到时间以供后续比较
@@ -265,8 +265,8 @@
 
     // 回到顶部（右键左右两侧空白处）
     function backToTop() {
-        document.getElementById('Wrapper').oncontextmenu = document.querySelector("#Wrapper > .content").oncontextmenu = function(event){
-            if (event.target==this) {
+        document.getElementById('Wrapper').oncontextmenu = document.querySelector('#Wrapper > .content').oncontextmenu = function(event){
+            if (event.target == this) {
                 event.preventDefault();
                 window.scrollTo(0,0)
             }
@@ -317,7 +317,7 @@
         if (location.pathname.indexOf('/settings') > -1) return
         document.head.appendChild(document.createElement('base')).target = '_blank'; // 让所有链接默认以新标签页打开
         Array.from(document.links).forEach(function (_this) {
-            if (_this.onclick || _this.href.slice(0,4) != 'http' || _this.href.indexOf('#;') > -1 || _this.href.indexOf('night/toggle') > -1 || _this.href.indexOf('/favorite') > -1) {
+            if (_this.onclick || _this.href.slice(0,4) != 'http' || _this.href.indexOf('#;') > -1 || _this.href.indexOf('night/toggle') > -1 || _this.href.indexOf('/favorite') > -1 || _this.href.indexOf('/?tab=') > -1) {
                 _this.target = '_self'
             }
         })
