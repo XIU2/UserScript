@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.5.9
+// @version      4.6.0
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -16,7 +16,6 @@
 // @grant        GM_openInTab
 // @grant        GM_getValue
 // @grant        GM_setValue
-// @grant        GM_deleteValue
 // @grant        GM_notification
 // @grant        window.onurlchange
 // @grant        unsafeWindow
@@ -35,14 +34,6 @@
         ['menu_page_number', '显示当前页码及点击暂停翻页', '显示当前页码及点击暂停翻页', true],
         ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false]
     ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, locationC = false, nowLocation = '', lp = location.pathname;
-
-    // 过渡，几个版本后删掉，记得顺便删掉 grant GM_deleteValue
-
-    if (GM_getValue('menu_discuz_thread_page') != null && GM_getValue('menu_thread') == null){
-        GM_setValue('menu_thread', GM_getValue('menu_discuz_thread_page'));
-        GM_deleteValue('menu_discuz_thread_page');
-    }
-
 
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
@@ -5034,9 +5025,7 @@ function: {
             }, // 书签地球 - 搜索页
             smzdm: {
                 host: ['www.smzdm.com', 'search.smzdm.com'],
-                 functionS: function() {if (location.hostname === 'search.smzdm.com' || indexOF('/fenlei/')) {
-                    curSite = DBSite.smzdm;
-                 }},
+                functionS: function() {if (location.hostname === 'search.smzdm.com' || indexOF('/fenlei/') || indexOF(/\/mall\/.+\/.+/)) {curSite = DBSite.smzdm;}},
                 pager: {
                     type: 1,
                     nextL: '//ul[@class="pagenation-list"]//a[contains(text() ,"下一页")] | //ul[@class="pagenation-list"]/li[contains(@class, "next-page")]/a',
