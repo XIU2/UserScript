@@ -103,7 +103,7 @@
                 menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
             }
         }
-        menu_ID[menu_ID.length] = GM_registerMenuCommand('💬 反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/412212/feedback', {active: true,insert: true,setParent: true});});
+        menu_ID[menu_ID.length] = GM_registerMenuCommand('💬 反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/426377/feedback', {active: true,insert: true,setParent: true});});
     }
 
 
@@ -335,8 +335,8 @@
             style_21_firefox = `html {filter: brightness(${style_20[0]}%) sepia(${style_20[1]}%) !important; background-image: url();}`,
             style_22 = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important;}`,
             style_22_firefox = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important; background-image: url();}`,
-            style_31 = `html {filter: invert(${style_30[0]}%) !important;} img, video, [style*="background"][style*="url"], svg {filter: invert(1) !important;} img[alt="[公式]"] {filter: none !important;} html {text-shadow: 0 0 0 !important;}`,
-            style_31_firefox = `html {filter: invert(${style_30[0]}%) !important; background-image: url();} img, video, [style*="background"][style*="url"], svg {filter: invert(1) !important;} img[alt="[公式]"] {filter: none !important;} html {text-shadow: 0 0 0 !important;}`;
+            style_31 = `html {filter: invert(${style_30[0]}%) !important; text-shadow: 0 0 0 !important;} img, video, [style*="background"][style*="url"], svg {filter: invert(1) !important;} img[alt="[公式]"] {filter: none !important;}`,
+            style_31_firefox = `html {filter: invert(${style_30[0]}%) !important; background-image: url(); text-shadow: 0 0 0 !important;} img, video, [style*="background"][style*="url"], svg {filter: invert(1) !important;} img[alt="[公式]"] {filter: none !important;}`;
 
         // Firefox 浏览器需要特殊对待
         if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
