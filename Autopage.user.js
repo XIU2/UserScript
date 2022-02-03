@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.6.1
+// @version      4.6.2
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -425,6 +425,7 @@ function: {
                 host: ['www.bing.com','cn.bing.com'],
                 functionS: function() {if (lp == '/search') {
                     curSite = DBSite.bing;
+                    curSite.function = {bF: bing_bF}
                 } else if (lp == '/academic/search') {
                     curSite = DBSite.bing_academic;
                 }},
@@ -434,10 +435,7 @@ function: {
                     nextL: 'css;a.sb_pagN, a.sb_halfnext, a.sb_fullnpl',
                     pageE: 'css;#b_results > li:not(.b_msg):not([class="b_ans"]):not(.b_pag):not(#mfa_root)',
                     replaceE: 'css;#b_results > .b_pag',
-                    scrollD: 1500
-                },
-                function: {
-                    bF: bing_bF
+                    scrollD: 2000
                 }
             }, //                   必应 搜索
             sogou: {
@@ -449,7 +447,7 @@ function: {
                     pageE: 'css;.results > *',
                     replaceE: 'css;#pagebar_container',
                     scriptT: 3,
-                    scrollD: 1500
+                    scrollD: 2000
                 }
             }, //                  搜狗 搜索
             sogou_weixin: {
@@ -483,7 +481,7 @@ function: {
                     nextL: '//div[contains(@class, "-pagination")]/a[string()="下一页"]',
                     pageE: 'css;div[class*="-result-list"] > .result-content[data-i]',
                     replaceE: 'css;div[class*="-pagination"]',
-                    scrollD: 1500
+                    scrollD: 2000
                 },
                 function: {
                     bF: toutiao_bF
@@ -498,7 +496,7 @@ function: {
                     pageE: 'css;ul.result > li, style:not(src)',
                     insertP: ['css;ul.result', 3],
                     replaceE: 'css;#page',
-                    scrollD: 1500
+                    scrollD: 2000
                 },
                 function: {
                     bF: src_bF,
@@ -841,7 +839,7 @@ function: {
                     replaceE: 'css;ul.hupu-rc-pagination',
                     scrollD: 1500
                 }
-            }, //              虎扑社区
+            }, //                虎扑社区
             hupu_post: {
                 pager: {
                     type: 1,
@@ -850,7 +848,7 @@ function: {
                     replaceE: 'css;ul.hupu-rc-pagination',
                     scrollD: 2000
                 }
-            }, //         虎扑社区 - 帖子内
+            }, //           虎扑社区 - 帖子内
             nga_thread: {
                 host: ['bbs.nga.cn', 'ngabbs.com', 'nga.178.com', 'g.nga.cn'],
                 iframe: true,
@@ -2581,7 +2579,7 @@ function: {
                 }
             }, //          动漫花园
             futaacg: {
-                host: 'futaacg.com',
+                host: /futaacg\./,
                 pager: {
                     type: 1,
                     nextL: 'css;ul.pagination a[rel="next"]',
@@ -2610,6 +2608,28 @@ function: {
                     scrollD: 2000
                 }
             }, //         MioBT + 简单动漫
+            reimu: {
+                host: /\.reimu\./,
+                functionS: function() {if (lp == '/' || indexOF('/category') || indexOF('/tag')) curSite = DBSite.reimu},
+                pager: {
+                    type: 1,
+                    nextL: 'css;span.current+a.sfwppa-current-page',
+                    pageE: 'css;article[id^="post-"]',
+                    replaceE: 'css;.wp-pagenavi',
+                    scrollD: 1500
+                }
+            }, //         REIMU
+            hacg: {
+                host: /\.hacg\./,
+                functionS: function() {if (indexOF('/wp/') && !indexOF(/\d+\.html/)) curSite = DBSite.hacg},
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.nextpostslink',
+                    pageE: 'css;article[id^="post-"]',
+                    replaceE: 'css;.wp-pagenavi',
+                    scrollD: 1500
+                }
+            }, //          HACG
             nyaa: {
                 host: /nyaa\.si/,
                 pager: {
@@ -3911,7 +3931,7 @@ function: {
                     replaceE: 'css;.pagenav',
                     scrollD: 1500
                 }
-            }, //              六音软件
+            }, //               六音软件
             apprcn: {
                 host: ['www.apprcn.com', 'free.apprcn.com'],
                 functionS: function() {if (lp == '/' || indexOF('/category/')) {curSite = DBSite.apprcn;}},
@@ -5183,6 +5203,492 @@ function: {
                     pF: [0, 'img[_src]', '_src']
                 }
             }, //      新片场
+            tujigu: {
+                host: ['www.tuji001.com', 'www.tujigu.net'],
+                functionS: function() {
+                    if (indexOF('/a/')) {
+                        curSite = DBSite.tujigu;
+                    } else if (location.pathname != '/' && !indexOF('/search/')) {
+                        curSite = DBSite.tujigu_list;
+                }},
+                insStyle: '.content img {display: block !important;}',
+                pager: {
+                    type: 1,
+                    nextL: 'id("pages")/a[contains(text(), "下一页")]',
+                    pageE: 'css;.content > img',
+                    replaceE: 'css;#pages',
+                    scrollD: 2000
+                }
+            }, //              tujigu - 图片页
+            tujigu_list: {
+                pager: {
+                    type: 1,
+                    nextL: 'id("pages")/a[contains(text(), "下一页")]',
+                    pageE: 'css;.hezi > ul > li',
+                    insertP: ['//div[@class="hezi"][last()]/ul', 3],
+                    replaceE: 'css;#pages',
+                    scrollD: 1000
+                }
+            }, //         tujigu - 分类页
+            mvtui: {
+                host: 'mvtui.com',
+                functionS: function() {if (indexOF('.html')) {curSite = DBSite.mvtui;} else {curSite = DBSite.mvtui_list;}},
+                pager: {
+                    type: 1,
+                    nextL: 'css;.article-paging span.current+a',
+                    pageE: 'css;.article-content > p',
+                    replaceE: 'css;.article-paging',
+                    scrollD: 3000
+                }
+            }, //               mvtui - 图片页
+            mvtui_list: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;li.next-page a',
+                    pageE: 'css;#posts > div',
+                    replaceE: 'css;.pagination',
+                    scrollD: 1500
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-src]', 'data-src']
+                }
+            }, //          mvtui - 分类页
+            mzitu: {
+                host: 'www.mzitu.com',
+                functionS: function() {if (indexOF(/\/\d+/)) {curSite = DBSite.mzitu;getCSS('.main-image a[href]').href = 'javascript:void(0);'} else {curSite = DBSite.mzitu_list;}},
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="pagenavi"]/a[contains(string(), "下一页")]',
+                    pageE: 'css;.main-image img',
+                    replaceE: 'css;.pagenavi',
+                    scrollD: 1500
+                }
+            }, //               mzitu - 图片页
+            mzitu_list: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;.next.page-numbers',
+                    pageE: 'css;.postlist > ul > li',
+                    replaceE: 'css;.pagination',
+                    scrollD: 1000
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-original]', 'data-original']
+                }
+            }, //          mzitu - 分类/搜索页
+            xiurenji: {
+                host: /\.xiuren[a-z]+\./,
+                functionS: function() {insStyle('img[src$=".gif"]:not([src*="logo"]) {display: none !important;}');
+                    if (indexOF('.html') && !indexOF('/index')) {
+                        curSite = DBSite.xiurenji;
+                    } else if (indexOF('search')) {
+                        curSite = DBSite.xiurenji_search;
+                    } else {
+                        curSite = DBSite.xiurenji_list;
+                }},
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="page"]/a[text()="下页"]',
+                    pageE: 'css;div.content > p > *',
+                    replaceE: 'css;.page',
+                    scrollD: 1500
+                }
+            }, //            xiurenji - 图片页
+            xiurenji_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="page"]/a[text()="下页"]',
+                    pageE: 'css;li.i_list',
+                    replaceE: 'css;.page',
+                    scrollD: 1000
+                }
+            }, //       xiurenji - 分类页
+            xiurenji_search: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;.page > a.current+a',
+                    pageE: 'css;.node > *',
+                    replaceE: 'css;.page',
+                    scrollD: 700
+                }
+            }, //     xiurenji - 搜索页
+            tvv: {
+                host: /\.tvv\.tw/,
+                functionS: function() {if (lp == '/' || indexOF('/page/') || indexOF('/category/')) {curSite = DBSite.tvv;}},
+                insStyle: '.blog-masonry, .blog-masonry-4col {height: auto !important;} .blog-listing {position: relative !important;float: left !important;top: auto !important;left: auto !important;} .blog-title > a {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;} .blog-image img {min-height: 300px;}',
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.next',
+                    pageE: 'css;.blog-listing',
+                    replaceE: 'css;.pagination',
+                    scrollD: 2000
+                }
+            }, //               tvv
+            mm131: {
+                host: ['www.mm131.net', 'www.mmm131.com'],
+                functionS: function() {if (indexOF('.html')) {curSite = DBSite.mm131;} else {curSite = DBSite.mm131_list;}},
+                retry: 300,
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="content-page"]/a[contains(text(), "下一页")]',
+                    pageE: 'css;.content-pic img',
+                    replaceE: 'css;.content-page',
+                    scrollD: 2000
+                }
+            }, //               MM131 - 图片页
+            mm131_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//dd[@class="page"]/a[contains(text(), "下一页")]',
+                    pageE: 'css;dl.list-left > dd:not([class="page"])',
+                    replaceE: 'css;.page',
+                    scrollD: 1000
+                }
+            }, //          MM131 - 分类页
+            mm131_m: {
+                host: 'm.mmm131.com',
+                functionS: function() {insStyle('.bannert, .bannerb, bannert_ios, .bannerb_ios {display: none !important;}'); if (lp == '/') {curSite = DBSite.mm131_m_;} else if (indexOF('.html')) {curSite = DBSite.mm131_m;} else {curSite = DBSite.mm131_m_list;}},
+                retry: true,
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="paging"]/a[text()="下一张" or text()="下一页"]',
+                    pageE: 'css;.post-content img',
+                    replaceE: 'css;.paging',
+                    scrollD: 2000
+                }
+            }, //             MM131 - 手机版 - 图片页
+            mm131_m_list: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;#xbtn',
+                    pageE: 'css;#content > article',
+                    replaceE: 'css;#webpage',
+                    scrollD: 2000
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-img]', 'data-img']
+                }
+            }, //        MM131 - 手机版 - 分类页
+            mm131_m_: {
+                pager: {
+                    type: 2,
+                    nextL: 'css;#webpage>span[onclick]',
+                    isHidden: true,
+                    interval: 500,
+                    scrollD: 2000
+                }
+            }, //            MM131 - 手机版 - 首页
+            mrcong: {
+                host: 'mrcong.com',
+                functionS: function() {if (lp == '/' || indexOF('/tag/')) {curSite = DBSite.mrcong_list;} else {curSite = DBSite.mrcong;}},
+                pager: {
+                    type: 1,
+                    nextL: 'css;.post-page-numbers.current+a.post-page-numbers',
+                    pageE: 'css;#fukie2 > p > img',
+                    replaceE: 'css;.page-link',
+                    scrollD: 3000
+                }
+            }, //              MrCong - 图片页
+            mrcong_list: {
+                pager: {
+                    type: 3,
+                    nextL: 'css;.current+a.page',
+                    pageE: 'css;article.item-list',
+                    scrollE: 'css;.pagination',
+                    replaceE: 'css;.pagination',
+                    scrollD: 2000
+                }
+            }, //         MrCong - 分类页
+            buondua: {
+                host: 'buondua.com',
+                functionS: function() {if (indexOF(/-photos-\d+/)) {curSite = DBSite.buondua;} else {curSite = DBSite.buondua_list;}},
+                pager: {
+                    type: 3,
+                    nextL: '//nav[@class="pagination"]//span[./a[contains(@class, "is-current")]]/following-sibling::span[1]/a',
+                    pageE: 'css;.article-fulltext > p',
+                    scrollE: 'css;nav.pagination',
+                    replaceE: 'css;nav.pagination',
+                    scrollD: 1500
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-src]', 'data-src']
+                }
+            }, //             Buon Dua - 图片页
+            buondua_list: {
+                pager: {
+                    type: 3,
+                    nextL: 'css;.pagination-next',
+                    pageE: 'css;.items-row.column, .collection-item.column',
+                    scrollE: 'css;nav.pagination',
+                    replaceE: 'css;nav.pagination',
+                    scrollD: 1200
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-src]', 'data-src']
+                }
+            }, //        Buon Dua - 分类页
+            fnvshen: {
+                host: 'www.fnvshen.com',
+                functionS: function() {
+                    if (indexOF('/gallery/') || indexOF('/tag/')) {
+                        curSite = DBSite.fnvshen_list;
+                    } else if (indexOF('/g/')) {
+                        curSite = DBSite.fnvshen;
+                    } else if (indexOF(/\/article\/\d+\//)) {
+                        curSite = DBSite.fnvshen_article;
+                    } else if (indexOF('/article/')) {
+                        curSite = DBSite.fnvshen_article_list;
+                }},
+                pager: {
+                    type: 1,
+                    nextL: 'css;#pages > span +a:not(.a1)',
+                    pageE: 'css;#hgallery > img',
+                    replaceE: 'css;#pages',
+                    scrollD: 1500
+                }
+            }, //             fnvshen - 图片页
+            fnvshen_list: {
+                insStyle: '.yalayi_box {display: none !important; margin: -4px 0 !important;}',
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="pagesYY"]//a[contains(text(), "下一页")]',
+                    pageE: 'css;#listdiv > ul > li',
+                    replaceE: 'css;.pagesYY',
+                    scrollD: 1000
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-original]', 'data-original']
+                }
+            }, //        fnvshen - 分类页
+            fnvshen_article_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="pagesYY"]//a[contains(text(), "下一页")]',
+                    pageE: 'css;li.other_girlli',
+                    replaceE: 'css;.pagesYY',
+                    scrollD: 1000
+                }
+            }, //fnvshen - 文章列表
+            fnvshen_article: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;.pagesYY a.cur+a',
+                    pageE: 'css;#articleDiv',
+                    insertP: ['css;#articleDiv', 6],
+                    replaceE: 'css;.pagesYY',
+                    scrollD: 1000
+                }
+            }, //     fnvshen - 文章内
+            xrmn5: {
+                host: 'www.xrmn5.cc',
+                functionS: function() {if (indexOF(/\d+\.html/)) {
+                    curSite = DBSite.xrmn5;
+                } else if (indexOF('/search')) {
+                    curSite = DBSite.xrmn5_search;
+                } else {
+                    curSite = DBSite.xrmn5_list;
+                }},
+                pager: {
+                    type: 1,
+                    nextL: '//div[contains(@class, "page")]//a[contains(text(), "下页")]',
+                    pageE: 'css;.content_left > p > img',
+                    replaceE: 'css;.page',
+                    scrollD: 3000
+                }
+            }, //               xrmn5 - 图片页
+            xrmn5_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[contains(@class, "page")]//a[contains(text(), "下页")]',
+                    pageE: 'css;ul.update_area_lists > li',
+                    replaceE: 'css;.page',
+                    scrollD: 2000
+                }
+            }, //          xrmn5 - 分类页
+            xrmn5_search: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;.page a.current+a',
+                    pageE: 'css;div.sousuo',
+                    replaceE: 'css;.page',
+                    scrollD: 2000
+                }
+            }, //        xrmn5 - 搜索页
+            jpmn8: {
+                host: 'www.jpmn8.com',
+                functionS: function() {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.jpmn8;} else if (location.pathname != '/') {curSite = DBSite.jpmn8_list;}},
+                insStyle: 'img[onload] {min-height: 500px;}',
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="pagination1"]//a[text()="下一页"]',
+                    pageE: 'css;img[onload]',
+                    replaceE: 'css;.pagination1',
+                    scrollD: 3000
+                }
+            }, //               jpmn8 - 图片页
+            jpmn8_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="pagination1"]//a[text()="下一页"]',
+                    pageE: 'css;article.excerpt',
+                    replaceE: 'css;.pagination1',
+                    scrollD: 1500
+                }
+            }, //          jpmn8 - 分类页
+            ku66: {
+                host: 'www.ku66.net',
+                functionS: function() {if (/\/\d+\.html/.test(location.pathname)) {curSite = DBSite.ku66;} else {curSite = DBSite.ku66_list;}},
+                insStyle: '.content img {min-height: 500px;}',
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="NewPages"]//a[text()="下一页"]',
+                    pageE: 'css;.content > img',
+                    insertP: ['css;.content', 3],
+                    replaceE: 'css;.NewPages',
+                    scrollD: 4000
+                }
+            }, //                ku66 - 图片页
+            ku66_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="NewPages"]//a[text()="下一页"]',
+                    pageE: 'css;.TypeList > ul > li',
+                    insertP: ['css;.TypeList > ul', 3],
+                    replaceE: 'css;.NewPages',
+                    scrollD: 1000
+                }
+            }, //           ku66 - 分类页
+            ku66_m: {
+                host: 'm.ku66.net',
+                functionS: function() {if (/\/\d+\.html/.test(location.pathname)) {curSite = DBSite.ku66_m;} else {curSite = DBSite.ku66_m_list;}},
+                insStyle: '.ArticleImageBox img {min-height: 200px;}',
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="article_page"]//a[text()="下一页"]',
+                    pageE: 'css;.ArticleImageBox > *',
+                    replaceE: 'css;.article_page',
+                    scrollD: 4000
+                }
+            }, //              ku66 - 手机版 - 图片页
+            ku66_m_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="article_page"]//a[text()="下一页"]',
+                    pageE: 'css;.PictureList > ul > li',
+                    replaceE: 'css;.article_page',
+                    scrollD: 1000
+                }
+            }, //         ku66 - 手机版 - 分类页
+            ku137: {
+                host: 'www.ku137.net',
+                functionS: function() {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.ku137;} else if (location.pathname != '/') {curSite = DBSite.ku137_list;}},
+                insStyle: '.Title9, .dibu1, .dibu2 {display: none !important;} .content img {min-height: 500px;}',
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="page"]/a[text()="下一页"]',
+                    pageE: 'css;.content > img',
+                    replaceE: 'css;.page',
+                    scrollD: 3000
+                }
+            }, //               ku137 - 图片页
+            ku137_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="page"]/a[text()="下一页"]',
+                    pageE: 'css;.m-list > ul > li',
+                    replaceE: 'css;.page',
+                    scrollD: 1500
+                }
+            }, //          ku137 - 分类页
+            ku137_m: {
+                host: 'm.ku137.net',
+                functionS: function() {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.ku137_m;} else if (location.pathname != '/') {curSite = DBSite.ku137_m_list;}},
+                insStyle: '.ArticleImageBox img {min-height: 300px;}',
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="article_page"]//a[text()="下一页"]',
+                    pageE: 'css;.ArticleImageBox > *',
+                    replaceE: 'css;.article_page',
+                    scrollD: 3000
+                }
+            }, //             ku137 - 手机版 - 图片页
+            ku137_m_list: {
+                pager: {
+                    type: 1,
+                    nextL: '//div[@class="article_page"]//a[text()="下一页"]',
+                    pageE: 'css;.PictureList > ul > li',
+                    replaceE: 'css;.article_page',
+                    scrollD: 1500
+                }
+            }, //        ku137 - 手机版 - 分类页
+            mnttz: {
+                host: 'www.mnttz.com',
+                functionS: function() {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.mnttz;} else {curSite = DBSite.mnttz_list;}},
+                insStyle: 'img.content_img {min-height: 500px;}',
+                pager: {
+                    type: 1,
+                    nextL: 'css;.article-paging > span+a',
+                    pageE: 'css;img.content_img',
+                    replaceE: 'css;.article-paging',
+                    scrollD: 3000
+                }
+            }, //               mnttz - 图片页
+            mnttz_list: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;li.next-page > a',
+                    pageE: 'css;article.excerpt',
+                    replaceE: 'css;.pagination',
+                    scrollD: 1500
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-src]', 'data-src']
+                }
+            }, //          mnttz - 分类页
+            kingdom: {
+                host: ['kingdom-en.com', 'www.kingdom-en.com', 'm.kingdom-en.com'],
+                functionS: function() {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.kingdom;} else {curSite = DBSite.kingdom_list;}},
+                insStyle: '.pic_center img {min-height: 300px;} .arcmain > .title, .footer, .index-list-title, .listmain_st {display: none !important;}',
+                pager: {
+                    type: 1,
+                    nextL: '//a[@class="page_next"] | //div[@class="article_page"]//a[text()="下一页"]',
+                    pageE: 'css;.pic_center img',
+                    replaceE: '//div[@class="pages2" or @class="article_page"]',
+                    scrollD: 4000
+                }
+            }, //             kingdom - 图片页
+            kingdom_list: {
+                pager: {
+                    type: 1,
+                    nextL: () => getCSS('a.page_next').href.replace(/(www.)?ermo.net/, location.hostname).replace(/http(s)?:/, location.protocol),
+                    pageE: 'css;.channel_list3 > ul > li, ul#container > li',
+                    replaceE: 'css;.pages, .list_page',
+                    scrollD: 1000
+                }
+            }, //        kingdom - 分类页
+            kissgoddess: {
+                host: ['kissgoddess.com', 'tw.kissgoddess.com', 'jp.kissgoddess.com'],
+                functionS: function() {if (indexOF('/album/') || indexOF('/category/')) curSite = DBSite.kissgoddess;},
+                insStyle: '.td-gallery-content > img {min-height: 300px;}',
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.a1:last-of-type',
+                    pageE: 'css;.td-gallery-content > img, .td-category-span',
+                    replaceE: 'css;#pages',
+                    scrollD: 3000
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-original]', 'data-original']
+                }
+            }, //         Kiss Goddess - 图片页
             planetminecraft: {
                 host: 'www.planetminecraft.com',
                 functionS: function() {if (!indexOF('/forums/') && !indexOF('/posts/')) {curSite = DBSite.planetminecraft;}},
@@ -5451,6 +5957,12 @@ function: {
 
     // [必应搜索] 的插入前函数（加载网站图标）
     function bing_bF(pageElems) {
+        if (!getCSS('.b_title > a.sh_favicon')) {
+            insStyle('.b_title > a.sh_favicon {display: none !important;}');
+            delete curSite.function
+            console.log(curSite)
+            return pageElems
+        }
         pageElems.forEach(function (one) {
             getAllCSS('div.rms_iac[data-src]').forEach(function (one1) {
                 one1.outerHTML = `<img src="${one1.dataset.src}" height="16" width="16" alt="全球 Web 图标" role="presentation" class="rms_img">`;
