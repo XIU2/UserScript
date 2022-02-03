@@ -2,7 +2,7 @@
 // @name         自动无缝翻页
 // @version      4.6.2
 // @author       X.I.U
-// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、蓝奏云、煎蛋网、糗事百科、龙的天空、起点小说、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
+// @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
 // @connect      www.ykmh.com
 // @connect      www.xuexiniu.com
@@ -3571,7 +3571,7 @@ function: {
                     replaceE: 'css;#page-container',
                     scrollD: 900
                 }
-            }, //                起点小说
+            }, //                起点中文
             qidian_read: {
                 host: 'read.qidian.com',
                 insStyle: '.admire-wrap {display: none !important;}',
@@ -3582,7 +3582,7 @@ function: {
                     replaceE: 'css;.chapter-control',
                     scrollD: 900
                 }
-            }, //           起点小说 - 阅读页
+            }, //           起点中文 - 阅读页
             baoshuu: {
                 host: 'www.baoshuu.com',
                 functionS: function() {if (indexOF('/TXT/list')) curSite = DBSite.baoshuu;},
@@ -5325,7 +5325,7 @@ function: {
                     replaceE: 'css;.pagination',
                     scrollD: 2000
                 }
-            }, //               tvv
+            }, //                 tvv
             mm131: {
                 host: ['www.mm131.net', 'www.mmm131.com'],
                 functionS: function() {if (indexOF('.html')) {curSite = DBSite.mm131;} else {curSite = DBSite.mm131_list;}},
@@ -5653,7 +5653,7 @@ function: {
                 }
             }, //          mnttz - 分类页
             kingdom: {
-                host: ['kingdom-en.com', 'www.kingdom-en.com', 'm.kingdom-en.com'],
+                host: /kingdom-en\.com/,
                 functionS: function() {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.kingdom;} else {curSite = DBSite.kingdom_list;}},
                 insStyle: '.pic_center img {min-height: 300px;} .arcmain > .title, .footer, .index-list-title, .listmain_st {display: none !important;}',
                 pager: {
@@ -5674,7 +5674,7 @@ function: {
                 }
             }, //        kingdom - 分类页
             kissgoddess: {
-                host: ['kissgoddess.com', 'tw.kissgoddess.com', 'jp.kissgoddess.com'],
+                host: /kissgoddess\./,
                 functionS: function() {if (indexOF('/album/') || indexOF('/category/')) curSite = DBSite.kissgoddess;},
                 insStyle: '.td-gallery-content > img {min-height: 300px;}',
                 pager: {
