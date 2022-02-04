@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HTML5 视频音频默认音量
-// @version      1.0.0
+// @version      1.0.1
 // @author       X.I.U
 // @description  避免被一些默认 100% 音量的视频/音频吓一跳（或社死）！且支持各网站分别记住音量...
 // @match        *://*/*
@@ -64,7 +64,11 @@
 
     // 音量变化事件（记住音量）
     function volumeChangeEvent(event) {
-        if (localStorage.getItem('html5_xiu_currentVolume') || ((event.target.volume * 100) !== GM_getValue('menu_defaultVolume', 30))) localStorage.setItem('html5_xiu_currentVolume', event.target.volume * 100)
+        if (event.target.muted) { // 判断是否静音
+            localStorage.setItem('html5_xiu_currentVolume', 0)
+        } else if (localStorage.getItem('html5_xiu_currentVolume') || ((event.target.volume * 100) !== GM_getValue('menu_defaultVolume', 30))) {
+            localStorage.setItem('html5_xiu_currentVolume', event.target.volume * 100)
+        }
     }
 
 
@@ -72,7 +76,7 @@
     function modifyVolume(_this) {
         if (!_this.controls) return; // 如果视频/音频没有默认控件，则代表是
         let nowVolume = parseFloat(localStorage.getItem('html5_xiu_currentVolume')); // 先看看 localStorage 有没有（即用户是否手动调整过音量）
-        if (!nowVolume) nowVolume = GM_getValue('menu_defaultVolume', 30); // 如果 localStorage 没有，那就从脚本配置中获取
+        if (!nowVolume && nowVolume !== 0) nowVolume = GM_getValue('menu_defaultVolume', 30); // 如果 localStorage 没有，那就从脚本配置中获取
         if (!((typeof nowVolume === 'number') && nowVolume <= 100)) nowVolume = 30; // 如果获取到的音量数值不是数字，或大于 100，则重置为 30
         _this.volume = nowVolume / 100; // 设置音量为 0~1 范围
     }
