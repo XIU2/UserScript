@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.6.3
+// @version      4.6.4
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、片库、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、极简插件、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -3657,19 +3657,19 @@ function: {
                     scrollD: 1500
                 }
             }, //                搜小说
-            _530p: {
-                host: 'www.530p.com',
-                functionS: function() {if (indexOF(/\/\d{4,}\.htm/)) {curSite = DBSite._530p;}},
+            ihuaben: {
+                host: 'www.ihuaben.com',
+                functionS: function() {if (indexOF(/\/\d{4,}\.html/)) {curSite = DBSite.ihuaben;}},
+                insStyle: '.discription > p > i, img, #container, #BDBannerBottom_PC, iframe, .navFooter {display: none !important;} .discription > p {font-size: 16px; min-height: 24px; padding-bottom: 24px;}',
                 pager: {
                     type: 1,
-                    nextL: 'css;#nextLink',
-                    pageE: 'css;#cp_content',
-                    insertP: ['css;#cp_content', 6],
-                    insertP6Br: true,
-                    replaceE: 'css;#pg_bar',
-                    scrollD: 1500
+                    nextL: 'id("preAndNextBar")/a[contains(text(), "下一章")]',
+                    pageE: 'css;#contentsource > p',
+                    insertP: ['css;.discription', 3],
+                    replaceE: 'css;#preAndNextBar',
+                    scrollD: 1000
                 }
-            }, //                 无弹窗小说网
+            }, //               话本小说网
             xineyby: {
                 host: 'www.xineyby.com',
                 functionS: function() {if (indexOF('/read/')) {
@@ -3697,6 +3697,36 @@ function: {
                     scrollD: 900
                 }
             }, //          无错小说网 - 分类/搜索页
+            _530p: {
+                host: 'www.530p.com',
+                functionS: function() {if (indexOF(/\/\d{4,}\.htm/)) {curSite = DBSite._530p;}},
+                pager: {
+                    type: 1,
+                    nextL: 'css;#nextLink',
+                    pageE: 'css;#cp_content',
+                    insertP: ['css;#cp_content', 6],
+                    insertP6Br: true,
+                    replaceE: 'css;#pg_bar',
+                    scrollD: 1500
+                }
+            }, //                 无弹窗小说网
+            xiaoshuo77: {
+                host: 'm.xiaoshuo77.net',
+                functionS: function() {if (indexOF('.html')) {curSite = DBSite.xiaoshuo77; xs_bF(getAllCSS('#novelcontent'), [/(<br>)?(&nbsp;)+内容未完，下一页.*$|【本章阅读.*$/, '<br>']);}},
+                insStyle: '#novelcontent > p, img {display: none !important;}',
+                pager: {
+                    type: 1,
+                    nextL: 'css;.page_chapter a.p4',
+                    pageE: 'css;#novelcontent',
+                    insertP: ['css;#novelcontent', 6],
+                    replaceE: 'css;.page_chapter',
+                    scrollD: 1500
+                },
+                function: {
+                    bF: xs_bF,
+                    pF: [/(<br>)?(&nbsp;)+内容未完，下一页.*$|【本章阅读.*$/, '<br>']
+                }
+            }, //            读书族小说网
             linovel: {
                 host: 'www.linovel.net',
                 functionS: function() {if (indexOF(/\/book\/\d+\/.+\.html/)) {
@@ -7243,6 +7273,13 @@ function: {
                     now.style.backgroundImage = 'url("' + now.getAttribute(css[2]) + '")';
                 });
             }
+        });
+        return pageElems
+    }
+    // 文字型插入前函数（正则过滤）
+    function xs_bF(pageElems, reg) {
+        pageElems.forEach(function (one) {
+            one.innerHTML = one.innerHTML.replace(reg[0], reg[1])
         });
         return pageElems
     }
