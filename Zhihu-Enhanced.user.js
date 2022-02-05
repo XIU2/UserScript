@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎增强
-// @version      1.9.6
+// @version      1.9.7
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起当前回答/评论（左键两侧空白处）、快捷回到顶部（右键两侧空白处）、屏蔽用户 (发布的内容)、屏蔽关键词（标题/评论）、移除高亮链接、屏蔽盐选内容、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @match        *://www.zhihu.com/*
@@ -1292,6 +1292,8 @@ function topTime_publishTop(t, _this, _class) {
     if (!t.parentNode.classList.contains(_class)) {
         let temp_time = t.cloneNode(true);
         temp_time.style.padding = '0px';
+        // 对于较短的回答，隐藏回答底部的时间
+        if (_this.offsetHeight < 400) t.style.display = 'none';
         _this.querySelector('.' + _class).insertAdjacentElement('beforeEnd', temp_time);
     }
 }
