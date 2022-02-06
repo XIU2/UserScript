@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
-// @version      1.8.0
+// @version      1.8.1
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @match        *://github.com/*
@@ -38,10 +38,11 @@
     }
     const download_url = [
         ['https://pd.zwc365.com/seturl/https://github.com', '美国 1'],
-        ['https://gh.xiu2.xyz/https://github.com', '美国 2'],
+        ['https://gh.xiu.workers.dev/https://github.com', '美国 2'],
         ['https://gh.api.99988866.xyz/https://github.com', '美国 3'],
         ['https://github.rc1844.workers.dev', '美国 4'],
-        ['https://git.yumenaka.net/https://github.com', '美国 5'],
+        ['https://gh.feizhuqwq.com/https://github.com', '美国 5'],
+        ['https://git.yumenaka.net/https://github.com', '美国 6'],
         ['https://download.fastgit.org', '日本'],
         ['https://ghproxy.com/https://github.com', '韩国']
         //['https://ghproxy.fsou.cc/https://github.com', '香港']
