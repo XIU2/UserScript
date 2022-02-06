@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         自动无缝翻页
-// @version      4.6.5
+// @version      4.6.6
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @match        *://*/*
@@ -80,9 +80,9 @@
     functionS:   匹配该网站域名时要执行的函数（一般用于根据 URL 分配相应翻页规则）
     locationC:   对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则（需要放在 functionS 中）
 
-    insStyle:    要插入网页的 CSS Style 样式
     hiddenPN:    不显示脚本左下角的页码
     history:     添加历史记录 并 修改当前 URL（默认开启，对于不支持的网站要设置为 false）
+    style:       要插入网页的 CSS Style 样式
     retry:       允许获取失败后重试
 
 pager: {
@@ -104,7 +104,7 @@ pager: {
            insertE:     用来插入元素的函数
 
        5 = 插入 iframe 方式来加载下一页，无限套娃（适用于：部分动态加载内容的网站，需要允许 iframe 且支持通过 GET/POST 直接打开下一页）
-           insStyle:    加载 iframe 前要插入的 CSS Style 样式（比如为了悬浮的样式与下一页的重叠，隐藏网页底部间距提高阅读连续性）
+           style:    加载 iframe 前要插入的 CSS Style 样式（比如为了悬浮的样式与下一页的重叠，隐藏网页底部间距提高阅读连续性）
            iframe:      这个必须加到 pager{} 外面（这样才会在该域名的 iframe 框架下运行脚本）
            forceTarget: 强制新标签页打开链接（适用于一些使用 pjax 技术的链接）
 
@@ -173,7 +173,7 @@ function: {
                 }
             }, //   Discuz! 论坛 - 图片模式的帖子列表（不带无缝加载下一页按钮的）
             discuz_thread: {
-                insStyle: '.pgbtn {display: none;}',
+                style: '.pgbtn {display: none;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
@@ -366,7 +366,7 @@ function: {
             }, //       WordPress 的 Begin 主题 - 搜索页
             biquge: {
                 functionS: function() {if (indexOF(/\d+\/\d+\.html/)) {curSite = DBSite.biquge;}},
-                insStyle: 'img, .posterror {display: none !important;}',
+                style: 'img, .posterror {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: '//a[contains(text(), "下一章") or contains(text(), "下一页")]',
@@ -380,7 +380,7 @@ function: {
             baidu: {
                 host: 'www.baidu.com',
                 functionS: function() {locationC = true; if (lp == '/s') {curSite = DBSite.baidu;} else if (location.pathname.slice(location.pathname.length - 2,location.pathname.length) == '/s') {location.hostname = 'm.baidu.com';}},
-                insStyle: '.new-pmd .c-img-border {position: initial !important;} .op-bk-polysemy-video__wrap.c-gap-bottom {display: none !important;}',
+                style: '.new-pmd .c-img-border {position: initial !important;} .op-bk-polysemy-video__wrap.c-gap-bottom {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'id("page")//a[contains(text(),"下一页")]',
@@ -392,7 +392,7 @@ function: {
             baidu_m: {
                 host: 'm.baidu.com',
                 functionS: function() {if (location.pathname.slice(location.pathname.length - 2,location.pathname.length) == '/s') curSite = DBSite.baidu_m;},
-                insStyle: 'div.result[tpl="recommend_list"], #page-copyright {display: none !important;}',
+                style: 'div.result[tpl="recommend_list"], #page-copyright {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a[class^="new-nextpage"]',
@@ -429,7 +429,7 @@ function: {
                 } else if (lp == '/academic/search') {
                     curSite = DBSite.bing_academic;
                 }},
-                insStyle: '.b_imagePair.square_mp > .inner {display: none !important;}',
+                style: '.b_imagePair.square_mp > .inner {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.sb_pagN, a.sb_halfnext, a.sb_fullnpl',
@@ -601,7 +601,7 @@ function: {
             ask: {
                 host: ['ask.com', 'www.ask.com'],
                 functionS: function() {if (lp == '/web') {curSite = DBSite.ask;}},
-                insStyle: '.PartialSearchResults-heading {display: none !important;}',
+                style: '.PartialSearchResults-heading {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;li.PartialWebPagination-next > a',
@@ -649,7 +649,7 @@ function: {
                 } else if (lp == '/f/search/res') {
                     curSite = DBSite.baidu_tieba_search;
                 }},
-                insStyle: 'img.j_retract {margin-top: 0 !important;margin-bottom: 0 !important;}', // 修复帖子列表中预览图片，在切换下一个/上一个图片时，多出来的图片上下边距
+                style: 'img.j_retract {margin-top: 0 !important;margin-bottom: 0 !important;}', // 修复帖子列表中预览图片，在切换下一个/上一个图片时，多出来的图片上下边距
                 history: false,
                 iframe: true,
                 pager: {
@@ -669,11 +669,11 @@ function: {
             }, //        百度贴吧 - 帖子列表
             baidu_tieba_post: {
                 forceTarget: true,
-                insStyle: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld, .topic_list_box.topic-fixed {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
+                style: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld, .topic_list_box.topic-fixed {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
                 pager: {
                     type: 5,
                     nextL: '//li[contains(@class,"pb_list_pager")]/a[text()="下一页"]',
-                    insStyle: 'ul.tbui_aside_float_bar, .core_title_wrap_bright.tbui_follow_fixed.core_title_absolute_bright {display: none !important;}',
+                    style: 'ul.tbui_aside_float_bar, .core_title_wrap_bright.tbui_follow_fixed.core_title_absolute_bright {display: none !important;}',
                     scrollD: 1500
                 }
             }, //   百度贴吧 - 帖子内
@@ -973,7 +973,7 @@ function: {
                 } else {
                     curSite = DBSite.jandan_comment;
                 }},
-                insStyle: '#nav_prev, #nav_next, .post.f:not(.list-post) {display: none !important;}',
+                style: '#nav_prev, #nav_next, .post.f:not(.list-post) {display: none !important;}',
                 history: false,
                 pager: {
                     type: 1,
@@ -988,7 +988,7 @@ function: {
                 }
             }, //              煎蛋网
             jandan_comment: {
-                insStyle: '#nav_prev, #nav_next {display: none !important;}',
+                style: '#nav_prev, #nav_next {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.previous-comment-page',
@@ -1177,7 +1177,7 @@ function: {
                     } else if (lp == '/facade.php') {
                         curSite = DBSite.libaclub_search;
                     }},
-                insStyle: 'li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}',
+                style: 'li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: '//div[@class="ui-crumbs-more"]/a[@class="fn-link"][1]',
@@ -1187,7 +1187,7 @@ function: {
                 }
             }, //            篱笆网论坛
             libaclub_f: {
-                insStyle: 'li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}',
+                style: 'li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.ui-paging-next',
@@ -1197,7 +1197,7 @@ function: {
                 }
             }, //          篱笆网论坛 - 各版块帖子列表
             libaclub_t: {
-                insStyle: 'li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}',
+                style: 'li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.ui-paging-next',
@@ -1208,7 +1208,7 @@ function: {
                 }
             }, //          篱笆网论坛 - 帖子内
             libaclub_prt: {
-                insStyle: 'li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}',
+                style: 'li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.ui-paging-next',
@@ -1218,7 +1218,7 @@ function: {
                 }
             }, //        篱笆网论坛 - 帖子内 - 打印版
             libaclub_search: {
-                insStyle: 'li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}',
+                style: 'li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: '//div[@class="ui-page"]/a[contains(text(), "下一页")]',
@@ -1384,7 +1384,7 @@ function: {
                 }
             }, //           中国香港社区
             discusshk_thread: {
-                insStyle: '.viewthread.mt-0:not(:first-of-type) .viewthread__head {display: none !important;}',
+                style: '.viewthread.mt-0:not(:first-of-type) .viewthread__head {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;.pagination a.next',
@@ -1405,7 +1405,7 @@ function: {
                 }
             }, //              TGFC Lifestyle
             tgfcer_thread: {
-                insStyle: '.viewthread:not(:first-of-type) h1 {display: none !important;}',
+                style: '.viewthread:not(:first-of-type) h1 {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;.pages a.next',
@@ -1420,7 +1420,7 @@ function: {
                     if (lp == '/thread.php' || lp == '/search.php') {
                         curSite = DBSite.south;
                     } else if (lp == '/thread_new.php') {
-                        curSite = DBSite.south; curSite.pager.pageE = 'css;li.dcsns-li'; curSite.pager.scrollD = 2000; curSite.function = {bF: src_bF,pF: [0, 'img[data-original]', 'data-original']}; curSite.insStyle = 'img.lazy {display: inline !important;}';
+                        curSite = DBSite.south; curSite.pager.pageE = 'css;li.dcsns-li'; curSite.pager.scrollD = 2000; curSite.function = {bF: src_bF,pF: [0, 'img[data-original]', 'data-original']}; curSite.style = 'img.lazy {display: inline !important;}';
                     } else if (GM_getValue('menu_thread') && lp == '/read.php') {
                         curSite = DBSite.south; curSite.pager.pageE = 'css;form[name=delatc] > *:not(input)';
                     } else if (lp == '/u.php' && (indexOF('action-topic-', 's') || indexOF('action-post-', 's'))) {
@@ -1503,7 +1503,7 @@ function: {
                     }
                 },
                 forceTarget: true,
-                insStyle: 'ul[class*="-1 "] > li {display: inline !important;} #root{margin-bottom: -175px;} ul > li > button[class^="sc-"], a[href^="/premium/lead/lp"] {display: none !important;}',
+                style: 'ul[class*="-1 "] > li {display: inline !important;} #root{margin-bottom: -175px;} ul > li > button[class^="sc-"], a[href^="/premium/lead/lp"] {display: none !important;}',
                 iframe: true,
                 pager: {
                     type: 5,
@@ -1516,7 +1516,7 @@ function: {
             }, //               Pixiv - 分类页
             pixiv_user: {
                 forceTarget: true,
-                insStyle: 'ul[class*="-1 "] > li {display: inline !important;} #root{margin-bottom: -125px;} ul > li > button[class^="sc-"][style="background-color: rgb(0, 0, 0);"], a[href^="/premium/lead/lp"] {display: none !important;}',
+                style: 'ul[class*="-1 "] > li {display: inline !important;} #root{margin-bottom: -125px;} ul > li > button[class^="sc-"][style="background-color: rgb(0, 0, 0);"], a[href^="/premium/lead/lp"] {display: none !important;}',
                 pager: {
                     type: 5,
                     nextL: 'css;a[aria-disabled="false"][class*="filterProps-Styled-Component"][href]:last-child',
@@ -1559,7 +1559,7 @@ function: {
                 } else if (indexOF('/c/')) {
                     curSite = DBSite._58pic_c;
                 }},
-                insStyle: '.qtw-card.place-box, .card-lazy, .is-line .is-back {display: none !important;}',
+                style: '.qtw-card.place-box, .card-lazy, .is-line .is-back {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: '//div[contains(@class,"page-box")]//a[text()="下一页"]',
@@ -1587,7 +1587,7 @@ function: {
             }, //            千图网 - 专题/收藏夹
             _588ku: {
                 host: '588ku.com',
-                insStyle: '.listlogin-box.listloginBox, .CLdialogV1, .editIndexEntry, .globalRSideB {display: none !important;}',
+                style: '.listlogin-box.listloginBox, .CLdialogV1, .editIndexEntry, .globalRSideB {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: '//ul[contains(@class, "page-list")]//a[text()="下一页"]',
@@ -1603,7 +1603,7 @@ function: {
             }, //              千库网
             nipic: {
                 host: ['www.nipic.com', 'soso.nipic.com'],
-                insStyle: 'li.search-works-item {display: none !important;}',
+                style: 'li.search-works-item {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: '//a[@title="下一页" or text()="下一页"][not(contains(@class, "search-works-nextpage"))]',
@@ -1634,7 +1634,7 @@ function: {
             ooopic: {
                 host: ['www.ooopic.com', 'so.ooopic.com', 'weili.ooopic.com'],
                 functionS: function() {if (lp != '/' && !indexOF('/weili_')) {curSite = DBSite.ooopic;}},
-                insStyle: '.overWidth.clearfix.masonry {height: auto !important;} .pic-list, .video-list {position: relative !important;float: left !important;top: auto !important;left: auto !important;}',
+                style: '.overWidth.clearfix.masonry {height: auto !important;} .pic-list, .video-list {position: relative !important;float: left !important;top: auto !important;left: auto !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.next_page, a.so-next',
@@ -1650,7 +1650,7 @@ function: {
             ibaotu: {
                 host: 'ibaotu.com',
                 functionS: function() {if (lp != '/' && !indexOF('/sucai/')) {curSite = DBSite.ibaotu;if (indexOF('/yinxiao') || indexOF('/peiyue')) {curSite.pager.pageE = 'css;ul.media-list-ul > li[pr-data-title]'} else if (indexOF('/font/')) {curSite.pager.pageE = 'css;.baotufonts-list > a'}}},
-                insStyle: '.searchAdver {display: none !important;}',
+                style: '.searchAdver {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.next',
@@ -1726,7 +1726,7 @@ function: {
                 host: 'www.iconfont.cn',
                 functionS: function() {locationC = true; if (indexOF('/search/')) curSite = DBSite.iconfont;},
                 forceTarget: true,
-                insStyle: '.footer, header .bind-tips, .block-pagination-wrap {display: none !important;}',
+                style: '.footer, header .bind-tips, .block-pagination-wrap {display: none !important;}',
                 iframe: true,
                 pager: {
                     type: 5,
@@ -1838,7 +1838,7 @@ function: {
             xiadele: {
                 host: ['www.xiadele.com', 'search.xiadele.com'],
                 functionS: function() {if (location.pathname != '/') {curSite = DBSite.xiadele;}},
-                insStyle: '.last-li-carousel-img {display: none !important;}',
+                style: '.last-li-carousel-img {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;li.next_page a[rel="next"]',
@@ -1957,7 +1957,7 @@ function: {
             }, //             游侠网 - 分类页
             ali213_gl: {
                 host: 'gl.ali213.net',
-                insStyle: '.n_show_b {display: none !important;}',
+                style: '.n_show_b {display: none !important;}',
                 pager: {
                     type: 3,
                     nextL: 'css;a.next',
@@ -1970,7 +1970,7 @@ function: {
             }, //               游侠网 - 攻略
             ali213_pic: {
                 host: 'pic.ali213.net',
-                insStyle: 'a.prev, a.next {display: none !important;}',
+                style: 'a.prev, a.next {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.next',
@@ -2031,18 +2031,29 @@ function: {
                     scrollD: 2500
                 }
             }, //              CurseForge
-            steamcommunity: {
+            steamcommunity_workshop: {
                 host: 'steamcommunity.com',
-                functionS: function() {if (indexOF('/workshop/browse')) {curSite = DBSite.steamcommunity;}},
+                functionS: function() {if (indexOF('/workshop/browse')) {curSite = DBSite.steamcommunity_workshop;} else if (indexOF(/eventcomments\/\d/)) {curSite = DBSite.steamcommunity_eventcomments;}},
                 pager: {
                     type: 1,
-                    nextL: '//a[@class="pagebtn"][last()]',
+                    nextL: '//a[@class="pagebtn" and text()=">"]',
                     pageE: 'css;.workshopBrowseItems > *',
                     replaceE: 'css;.workshopBrowsePaging',
                     scriptT: 2,
                     scrollD: 1500
                 }
-            }, //          Steam 创意工坊 - 项目列表
+            }, //      Steam 创意工坊 - 项目列表
+            steamcommunity_eventcomments: {
+                style: '.forum_paging_controls {display: none !important;}',
+                pager: {
+                    type: 1,
+                    nextL: () => getNextUP('ctp=', /ctp=\d+/, location.pathname, '2', getCSS('span.commentthread_pagelinks > a:last-child').textContent),
+                    pageE: 'css;.commentthread_comments > .commentthread_comment',
+                    replaceE: 'css;.forum_paging .forum_paging_summary',
+                    scriptT: 1,
+                    scrollD: 1500
+                }
+            }, // Steam 社区 - 活动评论
             yikm: {
                 host: 'www.yikm.net',
                 pager: {
@@ -2105,7 +2116,7 @@ function: {
             }, //        cs.rin.ru - 搜索页
             crackhub: {
                 host: 'crackhub.site',
-                insStyle: 'html.wp-dark-mode-active .inside-article {background-color: var(--wp-dark-mode-bg);}',
+                style: 'html.wp-dark-mode-active .inside-article {background-color: var(--wp-dark-mode-bg);}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.next.page-numbers',
@@ -2213,7 +2224,7 @@ function: {
             zxzj: {
                 host: ['www.zxzj.me', 'www.zxzj.fun'],
                 functionS: function() {if (location.pathname != '/' && !indexOF('/detail/') && !indexOF('/video/')) {curSite = DBSite.zxzj;}},
-                insStyle: 'div.stui-page__all {display: none !important;}',
+                style: 'div.stui-page__all {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: '//ul[contains(@class, "stui-page__item")]//a[text()="下一页"]',
@@ -2491,7 +2502,7 @@ function: {
             }, // Anime1 - 搜索页
             yinfans: {
                 host: /www\.yinfans\./,
-                insStyle: '#post_container {height: auto !important;} #post_container > li {position: static !important; float: left !important; height: 620px !important;}',
+                style: '#post_container {height: auto !important;} #post_container > li {position: static !important; float: left !important; height: 620px !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.next',
@@ -2657,21 +2668,6 @@ function: {
                     scrollD: 900
                 }
             }, //           SkrBT
-            rarbg: {
-                host: /rarbg/,
-                functionS: function() {if (lp == '/torrents.php') {curSite = DBSite.rarbg; rarbg_bF(getAllCSS('table.lista2t tr.lista2'));}},
-                insStyle: 'html::-webkit-scrollbar {height: 0 !important;}',
-                pager: {
-                    type: 1,
-                    nextL: 'css;#pager_links > a[title="next page"]',
-                    pageE: 'css;table.lista2t tr.lista2',
-                    replaceE: 'css;#pager_links',
-                    scrollD: 1200
-                },
-                function: {
-                    bF: rarbg_bF
-                }
-            }, //           RARBG
             _1337x: {
                 host: /1337x\./,
                 functionS: function() {if (indexOF('search/')) {curSite = DBSite._1337x;}},
@@ -2683,6 +2679,21 @@ function: {
                     scrollD: 1200
                 }
             }, //          1337x
+            rarbg: {
+                host: /rarbg/,
+                functionS: function() {if (lp == '/torrents.php') {curSite = DBSite.rarbg; rarbg_bF(getAllCSS('table.lista2t tr.lista2'));}},
+                style: 'html::-webkit-scrollbar {height: 0 !important;}',
+                pager: {
+                    type: 1,
+                    nextL: 'css;#pager_links > a[title="next page"]',
+                    pageE: 'css;table.lista2t tr.lista2',
+                    replaceE: 'css;#pager_links',
+                    scrollD: 1200
+                },
+                function: {
+                    bF: rarbg_bF
+                }
+            }, //           RARBG
             /*thepiratebay: {
                 host: 'thepiratebay.org',
                 functionS: function() {if (lp == '/search.php') {curSite = DBSite.thepiratebay;}},
@@ -2733,7 +2744,7 @@ function: {
                     curSite = DBSite.bthaha;
                     getAllCSS('[id^="list_top"], [id^="list_bottom"]').forEach(function (one) {one.parentElement.parentElement.hidden = true;});
                 }},
-                insStyle: '[id^="list_top"], [id^="list_bottom"] {display: none !important;}',
+                style: '[id^="list_top"], [id^="list_bottom"] {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: '//ul[@class="pagination"]/li/a[contains(text(), "下一页")]',
@@ -2823,7 +2834,7 @@ function: {
                     } else if (indexOF('/category/') || indexOF('/search')) {
                         curSite = DBSite.haoman_list;
                 }},
-                insStyle: '.rd-guess, .rd-aside, .page-index__btn {display: none !important;} .rd-article__pic {display: initial !important;} .rd-article__pic > img {margin: 0 auto;display: block;height: auto;min-height: 200px;}',
+                style: '.rd-guess, .rd-aside, .page-index__btn {display: none !important;} .rd-article__pic {display: initial !important;} .rd-article__pic > img {margin: 0 auto;display: block;height: auto;min-height: 200px;}',
                 pager: {
                     type: 1,
                     nextL: function() {if (getCSS('a.rd-aside__item.j-rd-next')) return location.origin + getCSS('a.rd-aside__item.j-rd-next').getAttribute('_href')},
@@ -2858,7 +2869,7 @@ function: {
                 } else if (location.pathname != '/') {
                     curSite = DBSite.cartoonmad_list;
                 }},
-                insStyle: 'body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:not(:first-child) {display: none !important;} body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img {max-width: 100%;height: auto;display: block !important;margin: 0 auto !important;}',
+                style: 'body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:not(:first-child) {display: none !important;} body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img {max-width: 100%;height: auto;display: block !important;margin: 0 auto !important;}',
                 pager: {
                     type: 1,
                     nextL: cartoonmad_nextL,
@@ -2886,7 +2897,7 @@ function: {
                 } else if (indexOF('/manhua/')) {
                     curSite = DBSite.dongman_list;
                 }},
-                insStyle: 'button.prePic, button.nextPic, footer, header, #left-drawer {display: none !important;} body, #app {padding: 0 !important;} .slick-track {width: 100% !important;} .lazyBox {width: 100%; display: inline-block;}',
+                style: 'button.prePic, button.nextPic, footer, header, #left-drawer {display: none !important;} body, #app {padding: 0 !important;} .slick-track {width: 100% !important;} .lazyBox {width: 100%; display: inline-block;}',
                 pager: {
                     type: 1,
                     nextL: '//footer//a[./label[text()="下一章"]]',
@@ -2923,7 +2934,7 @@ function: {
                 } else if (indexOF('/search') || indexOF('/update')) {
                     curSite = DBSite.manhuacat_search;
                 }},
-                insStyle: '#left, #right, #pull-load, .loading, .pagination, footer {display: none !important;} .img-content > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}', // 隐藏不需要的元素，调整图片
+                style: '#left, #right, #pull-load, .loading, .pagination, footer {display: none !important;} .img-content > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}', // 隐藏不需要的元素，调整图片
                 pager: {
                     type: 4,
                     nextL: manhuacat_nextL,
@@ -3026,7 +3037,7 @@ function: {
                         curSite = DBSite.imanhuaw; imanhuaw_init();
                     }
                 },
-                insStyle: '#sider-left, #sider-right, .main-left, .main-right, .w996.tc, .title > span {display: none !important;}',
+                style: '#sider-left, #sider-right, .main-left, .main-right, .w996.tc, .title > span {display: none !important;}',
                 pager: {
                     type: 4,
                     nextL: imanhuaw_nextL,
@@ -3056,7 +3067,7 @@ function: {
                 } else if (indexOF('list/') || indexOF('/s/')) {
                     curSite = DBSite.manhuagui_list;
                 }},
-                insStyle: '.sub-btn, .tc {display: none !important;} #mangaBox > img {width: auto !important;height: auto !important;display: block !important;margin: 0 auto !important;max-width: 100% !important;}',
+                style: '.sub-btn, .tc {display: none !important;} #mangaBox > img {width: auto !important;height: auto !important;display: block !important;margin: 0 auto !important;max-width: 100% !important;}',
                 pager: {
                     type: 4,
                     nextL: manhuagui_nextL,
@@ -3093,7 +3104,7 @@ function: {
                 } else if (indexOF('/search') || indexOF('/update')) {
                     curSite = DBSite.manhuacat_search;
                 }},
-                insStyle: '.row.m-0.pt-3.ad_2_wrap, .row.m-0.ad_1_wrap, .pagination.justify-content-center, #left, #right {display: none !important;}',
+                style: '.row.m-0.pt-3.ad_2_wrap, .row.m-0.ad_1_wrap, .pagination.justify-content-center, #left, #right {display: none !important;}',
                 pager: {
                     type: 4,
                     nextL: manhuadb_nextL,
@@ -3110,7 +3121,7 @@ function: {
                     setTimeout(hicomic_init, 100);
                     curSite = DBSite.hicomic;
                 }},
-                insStyle: '.content {height: auto !important;} .footer, .left_cursor, .right_cursor, .finish {display: none !important;} .content > img {display: block !important;margin: 0 auto !important;}',
+                style: '.content {height: auto !important;} .footer, .left_cursor, .right_cursor, .finish {display: none !important;} .content > img {display: block !important;margin: 0 auto !important;}',
                 pager: {
                     type: 4,
                     nextL: hicomic_nextL,
@@ -3134,7 +3145,7 @@ function: {
                 } else if (indexOF('/rank')) {
                     curSite = DBSite.dmzj_rank;
                 }},
-                insStyle: 'p.mh_curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} .comic_wraCon > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}', // 隐藏中间的页数信息
+                style: 'p.mh_curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} .comic_wraCon > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}', // 隐藏中间的页数信息
                 pager: {
                     type: 4,
                     nextL: 'css;span.next > a',
@@ -3146,7 +3157,7 @@ function: {
                 }
             }, //              动漫之家 - 原创
             dmzj_list: {
-                insStyle: '.wrap_mhlist_l.con_left, .wrap_list {height: auto!important;}',
+                style: '.wrap_mhlist_l.con_left, .wrap_list {height: auto!important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.pg_next',
@@ -3156,7 +3167,7 @@ function: {
                 }
             }, //         动漫之家 - 原创 - 分类页
             dmzj_rank: {
-                insStyle: '.wrap_mhlist_l.con_left {height: auto!important;}',
+                style: '.wrap_mhlist_l.con_left {height: auto!important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.pg_next',
@@ -3172,10 +3183,12 @@ function: {
                     if (chapterScroll && chapterScroll.textContent === '切换到上下滚动阅读') {chapterScroll.click();}
                     setTimeout(function() {dmzj_init('#center_box > .inner_img img[src]')}, 100);
                     curSite = DBSite.dmzj_manhua;
+                } else if (indexOF('/tags/')) {
+                    curSite = DBSite.dmzj_manhua_list;
                 } else if (indexOF('/update')) {
                     curSite = DBSite.dmzj_manhua_update;
                 }},
-                insStyle: 'p.curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} #center_box > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}', // 隐藏中间的页数信息
+                style: 'p.curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} #center_box > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}', // 隐藏中间的页数信息
                 pager: {
                     type: 4,
                     nextL: 'css;#next_chapter',
@@ -3186,6 +3199,14 @@ function: {
                     scrollD: 3000
                 }
             }, //       动漫之家 - 日漫
+            dmzj_manhua_list: {
+                pager: {
+                    type: 1,
+                    nextL: () => getNextUPN(/(?<=-)\d+(?=\.shtml)/, /-\d+\.shtml/, '-', '.shtml', '2', getCSS('#topage > option:last-child').value),
+                    pageE: 'css;#search_list_div ul',
+                    scrollD: 1500
+                }
+            }, //             蓝点网
             dmzj_manhua_update: {
                 pager: {
                     type: 1,
@@ -3205,7 +3226,7 @@ function: {
                         curSite = DBSite.acgn_list;
                     }
                 },
-                insStyle: '.img1 {cursor: initial !important;}',
+                style: '.img1 {cursor: initial !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;#next_chapter',
@@ -3240,7 +3261,7 @@ function: {
                 } else if (indexOF('/list') || indexOF('/search')) {
                     curSite = DBSite.ykmh_list;
                 }},
-                insStyle: 'p.img_info {display: none !important;} #images > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}',
+                style: 'p.img_info {display: none !important;} #images > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}',
                 pager: {
                     type: 4,
                     nextL: ykmh_nextL,
@@ -3267,12 +3288,12 @@ function: {
                 } else if (indexOF('/comics')) {
                     curSite = DBSite.copymanga_list;
                 }},
-                insStyle: '.upMember, .comicContainerAds, .footer {display: none !important;} body, html {height: auto !important;}',
+                style: '.upMember, .comicContainerAds, .footer {display: none !important;} body, html {height: auto !important;}',
                 iframe: true,
                 pager: {
                     type: 5,
                     nextL: 'css;.comicContent-next > a',
-                    insStyle: 'h4.header, h4.header +div[style*="fixed"] {display: none !important;}',
+                    style: 'h4.header, h4.header +div[style*="fixed"] {display: none !important;}',
                     scrollD: 3000
                 }
             }, //         拷贝漫画
@@ -3298,7 +3319,7 @@ function: {
                 } else if (indexOF(/\/(sort|rank)\//)) { // 分类页
                     curSite = DBSite.mhxqiu_list;
                 }},
-                insStyle: '.imgFloat_1, .imgFloat_2, .main_control, span.comic-ft {display: none !important;} html, body, #mainView {height: auto !important;} body.view .main ul.comic-contain li{margin:0 auto !important;} .comic-contain .loaded{box-shadow: none !important;}',
+                style: '.imgFloat_1, .imgFloat_2, .main_control, span.comic-ft {display: none !important;} html, body, #mainView {height: auto !important;} body.view .main ul.comic-contain li{margin:0 auto !important;} .comic-contain .loaded{box-shadow: none !important;}',
                 pager: {
                     type: 4,
                     nextL: 'css;#mainControlNext',
@@ -3321,7 +3342,7 @@ function: {
             fffdm: {
                 host: 'manhua.fffdm.com',
                 functionS: function() {if (location.pathname.split('/').length === 4) {curSite = DBSite.fffdm;}},
-                insStyle: '#footer, #header {display: none !important;} #mhimg0 img {display: block !important;margin: 0 auto !important;}',
+                style: '#footer, #header {display: none !important;} #mhimg0 img {display: block !important;margin: 0 auto !important;}',
                 pager: {
                     type: 4,
                     nextL: '//a[contains(text(), "下一页") or contains(text(), "下一頁") or contains(text(), "下一话") or contains(text(), "下一話")]',
@@ -3339,7 +3360,7 @@ function: {
                     } else if (indexOF('/comic/')) {
                         if (getCSS('#button_show_all_chatper')) getCSS('#button_show_all_chatper').click();
                     }},
-                insStyle: '#footer, #header {display: none !important;} .header, .bottom-bar {opacity: 0.3;}',
+                style: '#footer, #header {display: none !important;} .header, .bottom-bar {opacity: 0.3;}',
                 pager: {
                     type: 1,
                     nextL: 'css;.next_chapter > a',
@@ -3358,7 +3379,7 @@ function: {
                 } else {
                     curSite = DBSite.leyuman_list;
                 }},
-                insStyle: '.mh_select, .mh_comicpic > p, mh_headpager {display: none !important;} .mh_comicpic > img{width: 100% !important; height: auto !important;}',
+                style: '.mh_select, .mh_comicpic > p, mh_headpager {display: none !important;} .mh_comicpic > img{width: 100% !important; height: auto !important;}',
                 pager: {
                     type: 4,
                     nextL: 'css;#xurl',
@@ -3392,7 +3413,7 @@ function: {
                 } else {
                     curSite = DBSite._77mh_list;
                 }},
-                insStyle: '.page_num, #bdtopbot {display: none !important;} #comicImg > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}',
+                style: '.page_num, #bdtopbot {display: none !important;} #comicImg > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}',
                 pager: {
                     type: 4,
                     nextL: _77mh_nextL,
@@ -3430,7 +3451,7 @@ function: {
                 } else if (indexOF(/\/(update|list|search)/)) {
                     curSite = DBSite.gufengmh_list;
                 }},
-                insStyle: 'p.img_info {display: none !important;}', // 隐藏中间的页数信息
+                style: 'p.img_info {display: none !important;}', // 隐藏中间的页数信息
                 pager: {
                     type: 4,
                     nextL: gufengmh_nextL,
@@ -3460,7 +3481,7 @@ function: {
                     } else if (lp == '/szcbolist' || lp == '/update') {
                         curSite = DBSite.szcdmj_list;
                     }},
-                insStyle: '.header {opacity: 0.3 !important;}',
+                style: '.header {opacity: 0.3 !important;}',
                 pager: {
                     type: 1,
                     nextL: '//div[@class="fanye"][1]/a[@href][text()="下一页" or text()="下一话"]',
@@ -3493,7 +3514,7 @@ function: {
                 } else if (indexOF('/manga-list') || lp == '/search') {
                     curSite = DBSite.mangabz_list;
                 }},
-                insStyle: 'body > .container > div:not([id]) {display: none !important;} .top-bar {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}',
+                style: 'body > .container > div:not([id]) {display: none !important;} .top-bar {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}',
                 hiddenPN: true,
                 pager: {
                     type: 4,
@@ -3524,7 +3545,7 @@ function: {
                 } else if (indexOF('/manga-list') || lp == '/search') {
                     curSite = DBSite.xmanhua_list;
                 }},
-                insStyle: 'a.reader-bottom-page {display: none !important;} .header, .reader-bottom {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}',
+                style: 'a.reader-bottom-page {display: none !important;} .header, .reader-bottom {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}',
                 hiddenPN: true,
                 pager: {
                     type: 4,
@@ -3561,7 +3582,7 @@ function: {
                 } else if (lp == '/search') {
                     curSite = DBSite.cocomanga_search;
                 }},
-                insStyle: '.mh_readend, .mh_footpager, .mh_readmode {display: none !important;} .mh_comicpic img {cursor: unset !important;} .mh_comicpic img {min-height: 150px;}',
+                style: '.mh_readend, .mh_footpager, .mh_readmode {display: none !important;} .mh_comicpic img {cursor: unset !important;} .mh_comicpic img {min-height: 150px;}',
                 pager: {
                     type: 4,
                     nextL: '//a[contains(@class, "read_page_link") and contains(string(), "下一章")][not(contains(@href, "javascript"))]',
@@ -3611,7 +3632,7 @@ function: {
             }, //                起点中文
             qidian_read: {
                 host: 'read.qidian.com',
-                insStyle: '.admire-wrap {display: none !important;}',
+                style: '.admire-wrap {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a[id$="chapterNext"]',
@@ -3651,7 +3672,7 @@ function: {
                 } else if (indexOF('/all')) {
                     curSite = DBSite.yushubo_all;
                 }},
-                insStyle: '.readbg.mt10 {display: none !important;}',
+                style: '.readbg.mt10 {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: '//div[contains(@class, "articlebtn")]/a[contains(text(), "下一页") or contains(text(), "下一章")]',
@@ -3683,7 +3704,7 @@ function: {
             soxscc: {
                 host: 'www.soxscc.org',
                 functionS: function() {if (indexOF(/\/\d{4,}\.html/)) {curSite = DBSite.soxscc;}},
-                insStyle: '.content > p, img {display: none !important;}',
+                style: '.content > p, img {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: '//font[contains(text(), "下一章")]/following-sibling::a[1]',
@@ -3697,7 +3718,7 @@ function: {
             ihuaben: {
                 host: 'www.ihuaben.com',
                 functionS: function() {if (indexOF(/\/\d{4,}\.html/)) {curSite = DBSite.ihuaben;}},
-                insStyle: '.discription > p > i, img, #container, #BDBannerBottom_PC, iframe, .navFooter {display: none !important;} .discription > p {font-size: 16px; min-height: 24px; padding-bottom: 24px;}',
+                style: '.discription > p > i, img, #container, #BDBannerBottom_PC, iframe, .navFooter {display: none !important;} .discription > p {font-size: 16px; min-height: 24px; padding-bottom: 24px;}',
                 pager: {
                     type: 1,
                     nextL: 'id("preAndNextBar")/a[contains(text(), "下一章")]',
@@ -3750,7 +3771,7 @@ function: {
             xiaoshuo77: {
                 host: 'm.xiaoshuo77.net',
                 functionS: function() {if (indexOF('.html')) {curSite = DBSite.xiaoshuo77; xs_bF(getAllCSS('#novelcontent'), [/(<br>)?(&nbsp;)+内容未完，下一页.*$|【本章阅读.*$/, '<br>']);}},
-                insStyle: '#novelcontent > p, img {display: none !important;}',
+                style: '#novelcontent > p, img {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;.page_chapter a.p4',
@@ -3859,7 +3880,7 @@ function: {
                 } else if (indexOF('/wenku/') || indexOF('/sa/')) {
                     curSite = DBSite.linovelib_w_wenku;
                 }},
-                insStyle: 'body {min-height: 1000px;}',
+                style: 'body {min-height: 1000px;}',
                 pager: {
                     type: 1,
                     nextL: function() {if (ReadParams) {return (location.origin + ReadParams.url_next)}; return ''},
@@ -4275,7 +4296,7 @@ function: {
             sciencedirect: {
                 host: 'www.sciencedirect.com',
                 functionS: function() {locationC = true; if (lp == '/search') {curSite = DBSite.sciencedirect; setTimeout(function(){insStyle('html, body {height: ' + (document.documentElement.scrollHeight || document.body.scrollHeight) + 'px;}')}, 2000)}},
-                insStyle: 'footer {display: none !important;}',
+                style: 'footer {display: none !important;}',
                 iframe: true,
                 pager: {
                     type: 5,
@@ -4368,7 +4389,7 @@ function: {
                 }
             }, //      谷歌学术 - 其他镜像站
             bing_academic: {
-                insStyle: 'li.aca_algo_count {display: none !important;}',
+                style: 'li.aca_algo_count {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.sb_pagN',
@@ -4425,7 +4446,7 @@ function: {
             wanfangdata: {
                 host: 's.wanfangdata.com.cn',
                 functionS: function() {locationC = true; curSite = DBSite.wanfangdata;},
-                insStyle: '#zkFooter {display: none !important;}',
+                style: '#zkFooter {display: none !important;}',
                 iframe: true,
                 pager: {
                     type: 5,
@@ -4436,7 +4457,7 @@ function: {
             nsfc: {
                 host: ['output.nsfc.gov.cn', 'kd.nsfc.gov.cn'],
                 functionS: function() {if (indexOF('/conclusionProject/')) curSite = DBSite.nsfc;},
-                insStyle: '#pageNoUl {display: none !important;}',
+                style: '#pageNoUl {display: none !important;}',
                 pager: {
                     type: 4,
                     nextL: nsfc_nextL,
@@ -4448,7 +4469,7 @@ function: {
             coolkeyan: {
                 host: 'www.coolkeyan.com',
                 functionS: function() {if (location.hash.indexOf('/project/') > -1) curSite = DBSite.coolkeyan;},
-                insStyle: '.q-img {height: auto !important;} .q-img__image {max-height: 1000px !important;} .row.q-my-sm.q-gutter-sm {display: none !important;}',
+                style: '.q-img {height: auto !important;} .q-img__image {max-height: 1000px !important;} .row.q-my-sm.q-gutter-sm {display: none !important;}',
                 pager: {
                     type: 4,
                     nextL: coolkeyan_nextL,
@@ -4531,7 +4552,7 @@ function: {
             w3school_com_cn: {
                 host: 'www.w3school.com.cn',
                 functionS: function() {if (location.pathname.split('/').length > 2) {curSite = DBSite.w3school_com_cn;}},
-                insStyle: '#maincontent h1:not(:nth-of-type(1)) {margin-top: 30px;}',
+                style: '#maincontent h1:not(:nth-of-type(1)) {margin-top: 30px;}',
                 pager: {
                     type: 3,
                     nextL: function() { // 过滤部分非本页的参考手册
@@ -4550,7 +4571,7 @@ function: {
             w3cschool_cn: {
                 host: 'www.w3cschool.cn',
                 functionS: function() {if (location.pathname.split('/').length > 2) {curSite = DBSite.w3cschool_cn;}},
-                insStyle: '.widget-body, #rfbanner {display: none !important;}',
+                style: '.widget-body, #rfbanner {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;.next-link > a',
@@ -4562,7 +4583,7 @@ function: {
             runoob: {
                 host: 'www.runoob.com',
                 functionS: function() {if (location.pathname.split('/').length > 2 && getCSS('#leftcolumn')) {curSite = DBSite.runoob;}},
-                insStyle: '#comments, #postcomments, #respond, #footer {display: none !important;} .article-intro h1:not(:nth-of-type(1)) {margin: 30px 0 10px 0;}',
+                style: '#comments, #postcomments, #respond, #footer {display: none !important;} .article-intro h1:not(:nth-of-type(1)) {margin: 30px 0 10px 0;}',
                 pager: {
                     type: 1,
                     nextL: function() { // 过滤部分非本页的参考手册
@@ -4839,7 +4860,7 @@ function: {
             }, //       Github - Search 列表 - user
             oi_wiki: {
                 host: 'oi-wiki.org',
-                insStyle: 'blockquote.page-copyright, h2#__comments, form#gitalk-form {display: none !important;} article.md-content__inner{min-height: 700px;}',
+                style: 'blockquote.page-copyright, h2#__comments, form#gitalk-form {display: none !important;} article.md-content__inner{min-height: 700px;}',
                 pager: {
                     type: 1,
                     nextL: 'css;li.md-nav__item.md-nav__item--active.md-nav__item--nested li.md-nav__item--active+li a',
@@ -4858,19 +4879,10 @@ function: {
                     scrollD: 1500
                 }
             }, //               果壳网
-            expreview: {
-                host: 'www.expreview.com',
-                pager: {
-                    type: 2,
-                    nextL: 'css;#show_article_red_1SHOW',
-                    interval: 1500,
-                    scrollD: 1500
-                }
-            }, //           超能网
             landian: {
                 host: 'www.landian.vip',
                 functionS: function() {if (lp != '/' && !indexOF('/archives/') && !indexOF('/search/')) {curSite = DBSite.landian;}},
-                insStyle: '.pagination {display: none !important;}',
+                style: '.pagination {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: () => getNextUPN(/(?<=\/page\/)\d+/, /\/page\/\d+/, '/page/', '', '2', getCSS('.pagination > button.end').textContent),
@@ -4888,7 +4900,16 @@ function: {
                     replaceE: 'css;.pagebar',
                     scrollD: 3000
                 }
-            }, //             可能吧
+            }, //            可能吧
+            expreview: {
+                host: 'www.expreview.com',
+                pager: {
+                    type: 2,
+                    nextL: 'css;#show_article_red_1SHOW',
+                    interval: 1500,
+                    scrollD: 1500
+                }
+            }, //           超能网
             ithome: {
                 host: 'www.ithome.com',
                 pager: {
@@ -4967,7 +4988,7 @@ function: {
             alipanso: {
                 host: 'www.alipanso.com',
                 functionS: function() {if (lp == '/search.html') {curSite = DBSite.alipanso;}},
-                insStyle: '.pager-wrap {display: none !important;}',
+                style: '.pager-wrap {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: () => getNextUP('page=', /page=\d+/),
@@ -5205,7 +5226,7 @@ function: {
             }, //         立创开源硬件平台
             netbian: {
                 host: 'pic.netbian.com',
-                insStyle: 'li.nextpage {display: none !important;}',
+                style: 'li.nextpage {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: '//div[@class="page"]/a[contains(text(),"下一页")]',
@@ -5217,7 +5238,7 @@ function: {
             ioliu: {
                 host: 'bing.ioliu.cn',
                 functionS: function() {if (!indexOF('/photo/') && !indexOF('.html')) {curSite = DBSite.ioliu; document.head.appendChild(document.createElement('base')).target = '_blank';}},
-                insStyle: '.progressive--not-loaded {filter: none !important;}',
+                style: '.progressive--not-loaded {filter: none !important;}',
                 pager: {
                     type: 1,
                     nextL: '//div[@class="page"]/a[contains(text(), "下一页")]',
@@ -5229,7 +5250,7 @@ function: {
             konachan: {
                 host: 'konachan.net',
                 functionS: function() {if (indexOF('/post')) {curSite = DBSite.konachan; document.head.appendChild(document.createElement('base')).target = '_blank';}},
-                insStyle: 'html, body {min-height: 1000px;} .javascript-hide {display: inline-block !important;} ul#post-list-posts img, ul#post-list-posts .inner{width: auto !important; height: auto !important;} ul#post-list-posts li {width: 33% !important;} a.directlink {margin: 0 !important;}',
+                style: 'html, body {min-height: 1000px;} .javascript-hide {display: inline-block !important;} ul#post-list-posts img, ul#post-list-posts .inner{width: auto !important; height: auto !important;} ul#post-list-posts li {width: 33% !important;} a.directlink {margin: 0 !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.next_page',
@@ -5260,7 +5281,7 @@ function: {
             }, //          壁纸
             xinpianchang: {
                 host: 'www.xinpianchang.com',
-                insStyle: '.lazy-img {opacity: 1 !important;}',
+                style: '.lazy-img {opacity: 1 !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;.page > a[title="下一页"]',
@@ -5282,7 +5303,7 @@ function: {
                     } else if (location.pathname != '/' && !indexOF('/search/')) {
                         curSite = DBSite.tujigu_list;
                 }},
-                insStyle: '.content img {display: block !important;}',
+                style: '.content img {display: block !important;}',
                 pager: {
                     type: 1,
                     nextL: 'id("pages")/a[contains(text(), "下一页")]',
@@ -5388,7 +5409,7 @@ function: {
             tvv: {
                 host: /\.tvv\.tw/,
                 functionS: function() {if (lp == '/' || indexOF('/page/') || indexOF('/category/')) {curSite = DBSite.tvv;}},
-                insStyle: '.blog-masonry, .blog-masonry-4col {height: auto !important;} .blog-listing {position: relative !important;float: left !important;top: auto !important;left: auto !important;} .blog-title > a {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;} .blog-image img {min-height: 300px;}',
+                style: '.blog-masonry, .blog-masonry-4col {height: auto !important;} .blog-listing {position: relative !important;float: left !important;top: auto !important;left: auto !important;} .blog-title > a {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;} .blog-image img {min-height: 300px;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.next',
@@ -5524,7 +5545,7 @@ function: {
                 }
             }, //             fnvshen - 图片页
             fnvshen_list: {
-                insStyle: '.yalayi_box {display: none !important; margin: -4px 0 !important;}',
+                style: '.yalayi_box {display: none !important; margin: -4px 0 !important;}',
                 pager: {
                     type: 1,
                     nextL: '//div[@class="pagesYY"]//a[contains(text(), "下一页")]',
@@ -5594,7 +5615,7 @@ function: {
             jpmn8: {
                 host: 'www.jpmn8.com',
                 functionS: function() {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.jpmn8;} else if (location.pathname != '/') {curSite = DBSite.jpmn8_list;}},
-                insStyle: 'img[onload] {min-height: 500px;}',
+                style: 'img[onload] {min-height: 500px;}',
                 pager: {
                     type: 1,
                     nextL: '//div[@class="pagination1"]//a[text()="下一页"]',
@@ -5615,7 +5636,7 @@ function: {
             ku66: {
                 host: 'www.ku66.net',
                 functionS: function() {if (/\/\d+\.html/.test(location.pathname)) {curSite = DBSite.ku66;} else {curSite = DBSite.ku66_list;}},
-                insStyle: '.content img {min-height: 500px;}',
+                style: '.content img {min-height: 500px;}',
                 pager: {
                     type: 1,
                     nextL: '//div[@class="NewPages"]//a[text()="下一页"]',
@@ -5638,7 +5659,7 @@ function: {
             ku66_m: {
                 host: 'm.ku66.net',
                 functionS: function() {if (/\/\d+\.html/.test(location.pathname)) {curSite = DBSite.ku66_m;} else {curSite = DBSite.ku66_m_list;}},
-                insStyle: '.ArticleImageBox img {min-height: 200px;}',
+                style: '.ArticleImageBox img {min-height: 200px;}',
                 pager: {
                     type: 1,
                     nextL: '//div[@class="article_page"]//a[text()="下一页"]',
@@ -5659,7 +5680,7 @@ function: {
             ku137: {
                 host: 'www.ku137.net',
                 functionS: function() {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.ku137;} else if (location.pathname != '/') {curSite = DBSite.ku137_list;}},
-                insStyle: '.Title9, .dibu1, .dibu2 {display: none !important;} .content img {min-height: 500px;}',
+                style: '.Title9, .dibu1, .dibu2 {display: none !important;} .content img {min-height: 500px;}',
                 pager: {
                     type: 1,
                     nextL: '//div[@class="page"]/a[text()="下一页"]',
@@ -5680,7 +5701,7 @@ function: {
             ku137_m: {
                 host: 'm.ku137.net',
                 functionS: function() {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.ku137_m;} else if (location.pathname != '/') {curSite = DBSite.ku137_m_list;}},
-                insStyle: '.ArticleImageBox img {min-height: 300px;}',
+                style: '.ArticleImageBox img {min-height: 300px;}',
                 pager: {
                     type: 1,
                     nextL: '//div[@class="article_page"]//a[text()="下一页"]',
@@ -5701,7 +5722,7 @@ function: {
             mnttz: {
                 host: 'www.mnttz.com',
                 functionS: function() {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.mnttz;} else {curSite = DBSite.mnttz_list;}},
-                insStyle: 'img.content_img {min-height: 500px;}',
+                style: 'img.content_img {min-height: 500px;}',
                 pager: {
                     type: 1,
                     nextL: 'css;.article-paging > span+a',
@@ -5726,7 +5747,7 @@ function: {
             kingdom: {
                 host: /kingdom-en\.com/,
                 functionS: function() {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.kingdom;} else {curSite = DBSite.kingdom_list;}},
-                insStyle: '.pic_center img {min-height: 300px;} .arcmain > .title, .footer, .index-list-title, .listmain_st {display: none !important;}',
+                style: '.pic_center img {min-height: 300px;} .arcmain > .title, .footer, .index-list-title, .listmain_st {display: none !important;}',
                 pager: {
                     type: 1,
                     nextL: '//a[@class="page_next"] | //div[@class="article_page"]//a[text()="下一页"]',
@@ -5747,7 +5768,7 @@ function: {
             kissgoddess: {
                 host: /kissgoddess\./,
                 functionS: function() {if (indexOF('/album/') || indexOF('/category/')) curSite = DBSite.kissgoddess;},
-                insStyle: '.td-gallery-content > img {min-height: 300px;}',
+                style: '.td-gallery-content > img {min-height: 300px;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.a1:last-of-type',
@@ -5763,7 +5784,7 @@ function: {
             planetminecraft: {
                 host: 'www.planetminecraft.com',
                 functionS: function() {if (!indexOF('/forums/') && !indexOF('/posts/')) {curSite = DBSite.planetminecraft;}},
-                insStyle: '.resource .r-preview>a img[loading=lazy]:not(.lazyloaded) {visibility: initial !important;}',
+                style: '.resource .r-preview>a img[loading=lazy]:not(.lazyloaded) {visibility: initial !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.pagination_next',
@@ -5895,7 +5916,7 @@ function: {
                 nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
                 registerMenuCommand(); // 重新判断规则
                 //console.log(curSite);
-                if (curSite.insStyle) {insStyle(curSite.insStyle)} // 插入 Style CSS 样式
+                if (curSite.style) {insStyle(curSite.style)} // 插入 Style CSS 样式
                 curSite.pageUrl = ''; // 下一页URL
                 pageLoading(); // 自动无缝翻页
 
@@ -5908,7 +5929,7 @@ function: {
                 if (nowLocation == location.href) return
                 nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
                 DBSite.flarum.functionS(); // 重新判断规则
-                if (curSite.insStyle) {insStyle(curSite.insStyle)} // 插入 Style CSS 样式
+                if (curSite.style) {insStyle(curSite.style)} // 插入 Style CSS 样式
                 pageLoading(); // 自动无缝翻页
 
                 if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
@@ -5917,7 +5938,7 @@ function: {
         }
     }
     // 插入 Style CSS 样式
-    if (curSite.insStyle) insStyle(curSite.insStyle)
+    if (curSite.style) insStyle(curSite.style)
 
     // 对翻页模式 5 的子 iframe 添加一个跟随滚动的事件
     if (curSite.pager && curSite.pager.type === 5 && self != top) {
@@ -7134,7 +7155,7 @@ function: {
             if (delta > 0 && scrollTop + clientHeight + 10 >= scrollHeight && !getCSS('#xiu-scroll')) {
                 let newStyle = document.createElement('style'); newStyle.id = 'xiu-scroll';
                 newStyle.textContent = 'html::-webkit-scrollbar, body::-webkit-scrollbar {width: 0 !important;height: 0 !important;} html, body {scrollbar-width: none !important;}';
-                if (curSite.pager.insStyle) newStyle.textContent += curSite.pager.insStyle;
+                if (curSite.pager.style) newStyle.textContent += curSite.pager.style;
                 document.documentElement.appendChild(newStyle);
                 iframe.focus();
                 iframe.document.body.focus();
