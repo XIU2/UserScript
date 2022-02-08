@@ -1,8 +1,14 @@
 // ==UserScript==
 // @name         Github 增强 - 高速下载
+// @name:en      Github Enhancement - High Speed Download
+// @name:zh-CN   Github 增强 - 高速下载
+// @name:zh-TW   Github 增強 - 高速下載
 // @version      1.8.2
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
+// @description:en  High-speed download of Git Clone/SSH, Release, Raw, Code(ZIP) and other files, project list file quick download (☁)
+// @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
+// @description:zh-TW  高速下載 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、項目列表單文件快捷下載 (☁)
 // @match        *://github.com/*
 // @match        *://hub.fastgit.org/*
 // @icon         https://i.loli.net/2021/03/30/ULV9XunaHesqGIR.png
