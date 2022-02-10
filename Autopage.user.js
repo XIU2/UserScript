@@ -4429,7 +4429,7 @@ function: {
                 host: 'muchong.com',
                 functionS: function() {if (indexOF('/f-') || indexOF('search.php')) {
                     curSite = DBSite.muchong;
-                } else if (indexOF('/t-')) {
+                } else if (indexOF('/t-') && GM_getValue('menu_thread')) {
                     curSite = DBSite.muchong; curSite.pager.pageE = 'css;#maincontent > table > tbody:not(.header)'; curSite.pager.scrollD = 2000;
                 }},
                 style: 'tr.forum_head {display: none !important;}',
