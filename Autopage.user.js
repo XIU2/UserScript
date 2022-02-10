@@ -3115,6 +3115,40 @@ function: {
                     pF: [0, 'img[data-src]', 'data-src']
                 }
             }, //    漫画台 - 分类/搜索页
+            _36manga: {
+                host: ['36manga.com', 'www.36manga.com', '36manhua.com', 'www.36manhua.com'],
+                functionS: function() {if (indexOF(/\/manhua\/.+\/\d+\.html/)) {
+                    if (localStorage.getItem('chapterScroll') != '"pagination"') {
+                        localStorage.setItem('chapterScroll', '"pagination"'); location.reload()
+                    } else {
+                        pausePage = false;
+                        setTimeout(_36manga_init, 100);
+                        curSite = DBSite._36manga;
+                    }
+                } else if (indexOF('list/') || indexOF('/search/')) {
+                    curSite = DBSite._36manga_list;
+                }},
+                style: '#sider-left, #sider-right, p.img_info, .tc, .chapter-view + .w996 {display: none !important;} #images > img {width: auto !important;height: auto !important;display: block !important;margin: 0 auto !important;max-width: 100% !important;}',
+                pager: {
+                    type: 4,
+                    nextL: _36manga_nextL,
+                    pageE: '//body/script[contains(text(), "chapterImages")]',
+                    insertP: ['css;#images', 3],
+                    insertE: _36manga_insertE,
+                    replaceE: 'css;.title',
+                    interval: 4000,
+                    scrollD: 2500
+                }
+            }, //          36漫画
+            _36manga_list: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;ul.pagination li.next a',
+                    pageE: 'css;#contList',
+                    replaceE: 'css;ul.pagination',
+                    scrollD: 1500
+                }
+            }, //     36漫画 - 分类/搜索页
             manhuadb: {
                 host: 'www.manhuadb.com',
                 functionS: function() {if (indexOF(/\/manhua\/\d+\/.+\.html/)) {
@@ -6416,6 +6450,40 @@ function: {
         if (!(window['imgDate']) || !(imgPath)) return
         // 遍历图片文件名数组，组合为 img 标签
         for (let i = 0; i < window['imgDate'].files.length; i++) {_img += `<img src="${imgPath + window['imgDate'].files[i]}?e=${window['imgDate'].sl.e}&m=${window['imgDate'].sl.m}">`;}
+        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
+        addHistory(pageElems);
+        pageNum.now = pageNum._now + 1
+    }
+
+
+    // [36漫画] 初始化（将本话其余图片插入网页中）
+    function _36manga_init() {
+        let _img = '', imgPath = `${SinConf.resHost[0].domain[0]}${chapterPath}`;
+        if (!(chapterImages) || !(imgPath)) return
+        // 遍历图片文件名数组，组合为 img 标签
+        for (let i = 0; i < chapterImages.length; i++) {_img += `<img src="${imgPath}${chapterImages[i]}">`;}
+        // 插入并覆盖原来的一个图片
+        getOne(curSite.pager.insertP[0]).innerHTML = _img;
+        pausePage = true;
+    }
+    // [36漫画] 获取下一页地址
+    function _36manga_nextL() {
+        if (!nextChapterData.id) return
+        var url = comicUrl + nextChapterData.id + '.html'
+        if (url === curSite.pageUrl) return
+        curSite.pageUrl = url
+        getPageElems_(curSite.pageUrl);
+    }
+    // [36漫画] 插入数据
+    function _36manga_insertE(pageElems, type) {
+        if (!pageElems) return
+        // 插入并执行数据代码
+        insScript(curSite.pager.pageE, document.body, pageElems);
+        let _img = '', imgPath = `${SinConf.resHost[0].domain[0]}${chapterPath}`;
+        if (!(chapterImages) || !(imgPath)) return
+        // 遍历图片文件名数组，组合为 img 标签
+        for (let i = 0; i < chapterImages.length; i++) {_img += `<img src="${imgPath}${chapterImages[i]}">`;}
+        // 插入并覆盖原来的一个图片
         getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
         addHistory(pageElems);
         pageNum.now = pageNum._now + 1
