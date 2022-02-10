@@ -3,7 +3,7 @@
 // @name:en      AutoPager
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
-// @version      4.6.8
+// @version      4.6.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流，追求小而精），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:en  Seamlessly stitch next page content (waterfall)
@@ -4413,6 +4413,34 @@ function: {
                     scrollD: 2000
                 }
             }, //            科研通 - 帖子内
+            coolkeyan: {
+                host: 'www.coolkeyan.com',
+                functionS: function() {if (location.hash.indexOf('/project/') > -1) curSite = DBSite.coolkeyan;},
+                style: '.q-img {height: auto !important;} .q-img__image {max-height: 1000px !important;} .row.q-my-sm.q-gutter-sm {display: none !important;}',
+                pager: {
+                    type: 4,
+                    nextL: coolkeyan_nextL,
+                    insertP: ['//div[contains(@class, "q-img__image")][last()]', 4],
+                    insertE: coolkeyan_insertE,
+                    scrollD: 1500
+                }
+            }, //            酷科研
+            muchong: {
+                host: 'muchong.com',
+                functionS: function() {if (indexOF('/f-') || indexOF('search.php')) {
+                    curSite = DBSite.muchong;
+                } else if (indexOF('/t-')) {
+                    curSite = DBSite.muchong; curSite.pager.pageE = 'css;#maincontent > table > tbody:not(.header)'; curSite.pager.scrollD = 2000;
+                }},
+                style: 'tr.forum_head {display: none !important;}',
+                pager: {
+                    type: 1,
+                    nextL: '//div[contains(@class, "xmc_Pages")]//a[text()="下一页"]',
+                    pageE: 'css;.forum_body table > tbody',
+                    replaceE: 'css;.xmc_Pages',
+                    scrollD: 1500
+                }
+            }, //              小木虫
             google_scholar: {
                 host: 'scholar.google.com',
                 functionS: function() {if (lp == '/scholar') {curSite = DBSite.google_scholar;}},
@@ -4509,7 +4537,7 @@ function: {
                     nextL: () => getNextEP('css;.pager.active+span.pager', 'p=', /p=\d+/),
                     scrollD: 2000
                 }
-            }, //          万方数据知识服务平台
+            }, //          万方数据知识服务
             nsfc: {
                 host: ['output.nsfc.gov.cn', 'kd.nsfc.gov.cn'],
                 functionS: function() {if (indexOF('/conclusionProject/')) curSite = DBSite.nsfc;},
@@ -4522,18 +4550,6 @@ function: {
                     scrollD: 1500
                 }
             }, //                 国家自然科学基金
-            coolkeyan: {
-                host: 'www.coolkeyan.com',
-                functionS: function() {if (location.hash.indexOf('/project/') > -1) curSite = DBSite.coolkeyan;},
-                style: '.q-img {height: auto !important;} .q-img__image {max-height: 1000px !important;} .row.q-my-sm.q-gutter-sm {display: none !important;}',
-                pager: {
-                    type: 4,
-                    nextL: coolkeyan_nextL,
-                    insertP: ['//div[contains(@class, "q-img__image")][last()]', 4],
-                    insertE: coolkeyan_insertE,
-                    scrollD: 1500
-                }
-            }, //            酷科研
             stackoverflow: {
                 host: 'stackoverflow.com',
                 functionS: function() {if (indexOF('/questions') && !indexOF(/\/questions\/\d+\//)) {
