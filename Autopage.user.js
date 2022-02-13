@@ -3,7 +3,7 @@
 // @name:en      AutoPager
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
-// @version      4.7.0
+// @version      4.7.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流，追求小而精），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:en  Seamlessly stitch next page content (waterfall)
@@ -539,7 +539,7 @@ function: {
                     pageE: 'css;#search-result > *, style',
                     insertP: ['css;#search-result', 3],
                     replaceE: 'css;.pager',
-                    scrollD: 2000
+                    scrollD: 1500
                 }
             }, //                 Yandex 搜索
             yandex_video: {
@@ -3050,17 +3050,17 @@ function: {
                 }
             }, //     漫画皮 - 分类页
             imanhuaw: {
-                host: ['www.imanhuaw.net', 'www.imanhuaw.com'],
+                host: ['www.imanhuaw.net', 'www.imanhuaw.com', 'www.ccshwy.com'],
                 functionS: function() {
                     if (getCSS('.mh-search-result')) {
                         curSite = DBSite.imanhuaw_list;
                     } else if (getCSS('a#zhankai')) {
                         getCSS('a#zhankai').click();
-                    } else if (indexOF(/\/imanhua\/.+\/\d{3,}\.html/)) {
+                    } else if (indexOF(/\/\d{3,}\.html/)) {
                         curSite = DBSite.imanhuaw; imanhuaw_init();
                     }
                 },
-                style: '#sider-left, #sider-right, .main-left, .main-right, .w996.tc, .title > span {display: none !important;}',
+                style: '#sider-left, #sider-right, .main-left, .main-right, .w996.tc, .title > span {display: none !important;} #qTcms_Pic_middle img {max-width: 110%;height: auto;}',
                 pager: {
                     type: 4,
                     nextL: imanhuaw_nextL,
@@ -3070,7 +3070,7 @@ function: {
                     interval: 2000,
                     scrollD: 3000
                 }
-            }, //          爱漫画
+            }, //          爱漫画 + 188漫画网
             imanhuaw_list: {
                 pager: {
                     type: 1,
@@ -5011,6 +5011,15 @@ function: {
                     scrollD: 1500
                 }
             }, //             36氪 - 手机版
+            sciencealert: {
+                host: 'www.sciencealert.com',
+                pager: {
+                    type: 2,
+                    nextL: 'css;.load-more',
+                    nextTextOf: 'LOAD MORE',
+                    scrollD: 2000
+                }
+            }, //        ScienceAlert
             zhutix: {
                 host: 'zhutix.com',
                 functionS: function() {if (getCSS('#post-list')) {
@@ -5249,6 +5258,17 @@ function: {
                     scrollD: 1000
                 }
             }, //  如意了教育 - 试卷
+            koolearn: {
+                host: 'cet4.koolearn.com',
+                pager: {
+                    type: 1,
+                    nextL: 'id("page")/a[text()="下一页"]',
+                    pageE: 'css;ul.xqy_entry_list > li,.xqy_core_text > p:not([style="text-align:center"])',
+                    insertP: ['css;ul.xqy_entry_list,.xqy_core_text', 3],
+                    replaceE: 'css;#page',
+                    scrollD: 2500
+                }
+            }, //        新东方在线
             che168: {
                 host: 'www.che168.com',
                 functionS: function() {
@@ -6508,11 +6528,35 @@ function: {
     }
 
 
+    // [爱漫画] 获取全部图片
+    function imanhuaw_getIMG() {
+        let _img = '', _imgUrl;
+        for (let one of base64_decode(qTcms_S_m_murl_e).split("$qingtiandy$")) {
+            _imgUrl = one;
+            if (one.substring(0,1) == '/') {
+                _imgUrl = qTcms_m_weburl + _imgUrl;
+            } else {
+                if (qTcms_Pic_m_if != '2') {
+                    one = one.replace(/\?/gi, 'a1a1');
+                    one = one.replace(/&/gi, 'b1b1');
+                    one = one.replace(/%/gi, 'c1c1');
+                    let m_httpurl = '';
+                    if (typeof(qTcms_S_m_mhttpurl) != 'undefined') m_httpurl = base64_decode(qTcms_S_m_mhttpurl);
+                    if (location.hostname == 'www.ccshwy.com') qTcms_m_indexurl = 'http://h.ccshwy.com/';
+                    _imgUrl = qTcms_m_indexurl + 'statics/pic/?p=' + escape(one) + '&picid=' + qTcms_S_m_id + '&m_httpurl=' + escape(m_httpurl);
+                } else {
+                    _imgUrl = _imgUrl.replace('http:', '')	;
+                    _imgUrl = _imgUrl.replace('https:', '');
+                }
+            }
+            _img += `<img src="${_imgUrl}">`;
+        }
+        return _img;
+    }
     // [爱漫画] 初始化（调整本话其余图片）
     function imanhuaw_init() {
-        let _img = '';
-        for (let one of base64_decode(qTcms_S_m_murl_e).split("$qingtiandy$")) {_img += `<img src="${one}">`;}
-        getOne(curSite.pager.insertP[0]).outerHTML = _img;
+        getOne(curSite.pager.insertP[0]).outerHTML = imanhuaw_getIMG();
+        document.oncontextmenu = function(){}
     }
     // [爱漫画] 获取下一页地址
     function imanhuaw_nextL() {
@@ -6527,16 +6571,10 @@ function: {
         if (!pageElems) return
         // 插入并运行 <script>
         insScript('//head/script[not(@src)][contains(text(), "qTcms_S_m_murl_e")]', document.body, pageElems);
-
-        // 插入图片
-        let _img = '';
-        for (let one of base64_decode(qTcms_S_m_murl_e).split("$qingtiandy$")) {_img += `<img src="${one}">`;}
-        if (_img) {
-            // 将 img 标签插入到网页中
-            getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
-            addHistory(pageElems);
-            pageNum.now = pageNum._now + 1
-        }
+        // 将 img 标签插入到网页中
+        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), imanhuaw_getIMG());
+        addHistory(pageElems);
+        pageNum.now = pageNum._now + 1
     }
 
 
