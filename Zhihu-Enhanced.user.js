@@ -3,7 +3,7 @@
 // @name:en      Zhihu enhancement
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
-// @version      1.9.8
+// @version      1.9.9
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @description:en  Remove the login popup, block the homepage video, close the answer by default, quickly close the answer/comment (both sides of the left button), quickly return to the top (both sides of the right button), block users, block keywords, remove highlighted links , Shield salt selection, purify title message, expand problem description, display problem author, display time on top, complete problem time, distinguish problem article, direct problem button, default high-definition original image, default off-site direct link
@@ -443,7 +443,7 @@ function blockUsers(type) {
                 let item = item1.querySelector('.ContentItem.AnswerItem, .ContentItem.ArticleItem'); // 用户名所在元素
                 if (item) {
                     for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
-                        if (item.dataset.zop.indexOf('authorName":"' + keyword + '",') > -1) { // 找到就删除该信息流
+                        if (keyword != '' && item.dataset.zop.indexOf('authorName":"' + keyword + '",') > -1) { // 找到就删除该信息流
                             console.log(item.dataset.zop);
                             item1.hidden = true;
                             break;
@@ -467,7 +467,7 @@ function blockUsers(type) {
                         let item = target.querySelector('.ContentItem.AnswerItem, .ContentItem.ArticleItem'); // 用户名所在元素
                         if (item) {
                             for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
-                                if (item.dataset.zop.indexOf('authorName":"' + keyword + '",') > -1) { // 找到就删除该信息流
+                                if (keyword != '' && item.dataset.zop.indexOf('authorName":"' + keyword + '",') > -1) { // 找到就删除该信息流
                                     console.log(item.dataset.zop);
                                     target.hidden = true;
                                     break;
@@ -551,7 +551,7 @@ function blockUsers(type) {
                 let item = item1.querySelector('.RichText.ztext.CopyrightRichText-richText b'); // 标题所在元素
                 if (item) {
                     for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历关键词黑名单
-                        if (item.textContent === keyword) { // 找到就删除该信息流
+                        if (keyword != '' && item.textContent === keyword) { // 找到就删除该信息流
                             console.log(item.textContent);
                             item1.hidden = true;
                             break;
@@ -575,7 +575,7 @@ function blockUsers(type) {
                         let item = target.querySelector('.RichText.ztext.CopyrightRichText-richText b'); // 用户名所在元素
                         if (item) {
                             for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
-                                if (item.textContent === keyword) { // 找到就删除该信息流
+                                if (keyword != '' && item.textContent === keyword) { // 找到就删除该信息流
                                     console.log(item.textContent);
                                     target.hidden = true;
                                     break;
@@ -829,8 +829,8 @@ function blockKeywords(type) {
             let keywords = menu_value('menu_customBlockKeywords');
             for (const text of texts) {
                 for (const keyword of keywords) { // 遍历关键词黑名单
-                    if (text.indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该评论
-                        console.log(text);
+                    if (keyword != '' && text.indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该评论
+                        console.log('已屏蔽评论：' + text);
                         content.textContent = '[该评论已屏蔽]';
                         break;
                     }
@@ -857,7 +857,7 @@ function blockKeywords(type) {
         if (item) {
             for (const keyword of menu_value('menu_customBlockKeywords')) { // 遍历关键词黑名单
                 let text = item.content || item.textContent;
-                if (text.toLowerCase().indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该信息流
+                if (keyword != '' && text.toLowerCase().indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该信息流
                     console.log(text);
                     item1.hidden = true;
                     item1.style.display = 'none';
