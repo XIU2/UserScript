@@ -3,7 +3,7 @@
 // @name:en      Github Enhancement - High Speed Download
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
-// @version      1.8.3
+// @version      1.8.4
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:en  High-speed download of Git Clone/SSH, Release, Raw, Code(ZIP) and other files, project list file quick download (☁)
@@ -28,20 +28,7 @@
 
 (function() {
     'use strict';
-    var backColor = '#ffffff', fontColor = '#888888';
-    if (document.getElementsByTagName('html')[0].getAttribute('data-color-mode') === 'dark') { // 黑暗模式判断
-        if (document.getElementsByTagName('html')[0].getAttribute('data-dark-theme') === 'dark_dimmed') {
-            backColor = '#272e37'; fontColor = '#768390';
-        } else {
-            backColor = '#161a21'; fontColor = '#97a0aa';
-        }
-    } else if (document.getElementsByTagName('html')[0].getAttribute('data-color-mode') === 'auto') {
-        if (window.getComputedStyle(document.body).backgroundColor === 'rgb(34, 39, 46)') {
-            backColor = '#272e37'; fontColor = '#768390';
-        } else if (window.getComputedStyle(document.body).backgroundColor === 'rgb(13, 17, 23)') {
-            backColor = '#161a21'; fontColor = '#97a0aa';
-        }
-    }
+    var backColor = '#ffffff', fontColor = '#888888', menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'), menu_menu_raw_fast_ID, menu_feedBack_ID;
     const download_url = [
         ['https://pd.zwc365.com/seturl/https://github.com', '美国 1'],
         ['https://gh.xiu.workers.dev/https://github.com', '美国 2'],
@@ -52,7 +39,7 @@
         ['https://download.fastgit.org', '日本'],
         ['https://ghproxy.com/https://github.com', '韩国']
         //['https://ghproxy.fsou.cc/https://github.com', '香港']
-    ],
+        ],
         clone_url = [
             ['https://gitclone.com', '中国浙江'],
             ['https://github.com.cnpmjs.org', '新加坡'],
@@ -79,10 +66,9 @@
             '<svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon d-inline-block"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-inline-block d-sm-none"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg>',
             '<svg class="octicon octicon-cloud-download" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M9 12h2l-3 3-3-3h2V7h2v5zm3-8c0-.44-.91-3-4.5-3C5.08 1 3 2.92 3 5 1.02 5 0 6.52 0 8c0 1.53 1 3 3 3h3V9.7H3C1.38 9.7 1.3 8.28 1.3 8c0-.17.05-1.7 1.7-1.7h1.3V5c0-1.39 1.56-2.7 3.2-2.7 2.55 0 3.13 1.55 3.2 1.8v1.2H12c.81 0 2.7.22 2.7 2.2 0 2.09-2.25 2.2-2.7 2.2h-2V11h2c2.08 0 4-1.16 4-3.5C16 5.06 14.08 4 12 4z"></path></svg>'
         ],
-        style = ['padding:0 6px;margin-right: -1px;border-radius: 2px;background-color: '+backColor+';border-color: rgba(27, 31, 35, 0.1);font-size: 11px;color: '+fontColor+';'];
-        var menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'), menu_menu_raw_fast_ID, menu_feedBack_ID;
-    if (menu_raw_fast == null){menu_raw_fast = 1; GM_setValue('xiu2_menu_raw_fast', 1)};
+        style = ['padding:0 6px; margin-right: -1px; border-radius: 2px; background-color: var(--XIU2-back-Color); border-color: rgba(27, 31, 35, 0.1); font-size: 11px; color: var(--XIU2-font-Color);'];
 
+    if (menu_raw_fast == null){menu_raw_fast = 1; GM_setValue('xiu2_menu_raw_fast', 1)};
     registerMenuCommand();
     // 注册脚本菜单
     function registerMenuCommand() {
@@ -117,6 +103,7 @@
         return ['0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'][num]
     }
 
+    colorMode();
     addRelease(); //                     Release 加速
     setTimeout(addDownloadZIP, 2000); // Download ZIP 加速
     setTimeout(addGitClone, 2000); //    Git Clone 加速
@@ -125,6 +112,7 @@
     setTimeout(addRawDownLink, 2000); // 添加 Raw 下载链接（☁），延迟 2 秒执行，避免被 pjax 刷掉
 
     document.addEventListener('pjax:success',function(){ // pjax 事件发生后
+        colorMode();
         addRelease(); //                     Release 加速
         setTimeout(addDownloadZIP, 2000); // Download ZIP 加速
         setTimeout(addGitClone, 2000); //    Git Clone 加速
@@ -337,6 +325,32 @@
             trElm.onmouseover = mouseOverHandler;
             trElm.onmouseout = mouseOutHandler;
         });
+    }
+
+
+    // 适配白天/夜间主题模式
+    function colorMode() {
+        let style_Add;
+        if (document.getElementById('XIU2-Github')) {style_Add = document.getElementById('XIU2-Github')} else {style_Add = document.createElement('style'); style_Add.id = 'XIU2-Github'; style_Add.type = 'text/css';}
+        backColor = '#ffffff'; fontColor = '#888888';
+
+        if (document.getElementsByTagName('html')[0].getAttribute('data-color-mode') === 'dark') { // 如果是夜间模式
+            if (document.getElementsByTagName('html')[0].getAttribute('data-dark-theme') === 'dark_dimmed') {
+                backColor = '#272e37'; fontColor = '#768390';
+            } else {
+                backColor = '#161a21'; fontColor = '#97a0aa';
+            }
+        } else if (document.getElementsByTagName('html')[0].getAttribute('data-color-mode') === 'auto') { // 如果是自动模式
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches || document.getElementsByTagName('html')[0].getAttribute('data-light-theme').indexOf('dark') > -1) { // 如果浏览器是夜间模式 或 白天模式是 dark 的情况
+                if (document.getElementsByTagName('html')[0].getAttribute('data-dark-theme') === 'dark_dimmed') {
+                    backColor = '#272e37'; fontColor = '#768390';
+                } else if (document.getElementsByTagName('html')[0].getAttribute('data-dark-theme').indexOf('light') == -1) { // 排除夜间模式是 light 的情况
+                    backColor = '#161a21'; fontColor = '#97a0aa';
+                }
+            }
+        }
+
+        document.lastElementChild.appendChild(style_Add).textContent = `.XIU2-RS a {--XIU2-back-Color: ${backColor}; --XIU2-font-Color: ${fontColor};}`;
     }
 
 
