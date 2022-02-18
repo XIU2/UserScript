@@ -3,7 +3,7 @@
 // @name:en      Github Enhancement - High Speed Download
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
-// @version      1.8.4
+// @version      1.8.5
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:en  High-speed download of Git Clone/SSH, Release, Raw, Code(ZIP) and other files, project list file quick download (☁)
@@ -42,8 +42,9 @@
         ],
         clone_url = [
             ['https://gitclone.com', '中国浙江'],
-            ['https://github.com.cnpmjs.org', '新加坡'],
-            ['https://hub.fastgit.xyz', '日本东京']
+            ['https://hub.fastgit.xyz', '日本'],
+            ['https://hub.0z.gs', '美国'],
+            ['https://hub.shutcm.cf', '美国']
         ],
         clone_ssh_url = [
             ['git@hub.fastgit.xyz', '日本东京'],
