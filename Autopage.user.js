@@ -7619,13 +7619,15 @@ function: {
     // 添加历史记录
     function addHistory(pageElems, title, url) {
         if (!curSite.pageUrl) return
+        // 对于自带类似功能 或者 覆盖了 history 原生函数的网站，则跳过不再添加历史记录
+        if (window.top.history.toString() !== '[object History]') return
+
         //console.log(pageElems.querySelector('title'), curSite.pageUrl)
         title = title || pageElems.querySelector('title').textContent || window.top.document.title;
         url = url || curSite.pageUrl;
         window.top.document.title = title;
         window.top.document.xiu_nowUrl = curSite.pageUrl;
-        // 对于自带类似功能 或者覆盖了 history 原生函数的，则跳过
-        if (window.top.history.toString() === '[object History]') window.top.history.pushState('xiu_history', title, url);
+        window.top.history.pushState('xiu_history', title, url);
     }
     // 插入 <Script>
     function insScript(selector, toElement = document.body, contextNode = document) {
