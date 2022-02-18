@@ -3,7 +3,7 @@
 // @name:en      AutoPager
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
-// @version      4.7.5
+// @version      4.7.6
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流，追求小而精），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:en  Seamlessly stitch next page content (waterfall)
@@ -2003,7 +2003,12 @@ function: {
             }, //              游侠网 - 图库
             gamersky_ent: {
                 host: 'www.gamersky.com',
-                functionS: function() {if (indexOF('/ent/')) {curSite = DBSite.gamersky_ent;} else {curSite = DBSite.gamersky_gl;}},
+                functionS: function() {if (indexOF('/ent/')) {
+                    curSite = DBSite.gamersky_ent;
+                } else {
+                    curSite = DBSite.gamersky_gl;
+                    if (indexOF('/zl/') && indexOF('.shtml')) {curSite.pager.insertP = ['css;.pagecss', 1]; curSite.pager.scrollD = 400;}
+                }},
                 pager: {
                     type: 3,
                     nextL: '//div[@class="page_css"]/a[text()="下一页"]',
