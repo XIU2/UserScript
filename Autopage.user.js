@@ -7492,7 +7492,6 @@ function: {
     // 文字型插入前函数（正则过滤）
     function xs_bF(pageElems, reg) {
         pageElems.forEach(function (one) {
-            console.log(one.innerHTML)
             one.innerHTML = one.innerHTML.replace(reg[0], reg[1])
         });
         return pageElems
