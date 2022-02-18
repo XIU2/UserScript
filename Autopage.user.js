@@ -3,7 +3,7 @@
 // @name:en      AutoPager
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
-// @version      4.7.2
+// @version      4.7.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流，追求小而精），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:en  Seamlessly stitch next page content (waterfall)
@@ -4294,6 +4294,21 @@ function: {
                     bF: lrepacks_bF
                 }
             },
+            dlandroid: {
+                host: 'dlandroid.com',
+                functionS: function() {if (indexOF('/cat/') || (lp === '/' && indexOF('?s=', 's'))) curSite = DBSite.dlandroid;},
+                pager: {
+                    type: 1,
+                    nextL: 'css;a.next.page-numbers',
+                    pageE: 'css;div.post',
+                    replaceE: 'css;.navigation',
+                    scrollD: 1500
+                },
+                function: {
+                    bF: src_bF,
+                    pF: [0, 'img[data-src]', 'data-src']
+                }
+            }, //           DlAndroid
             winhelponline: {
                 host: 'www.winhelponline.com',
                 functionS: function() {if (lp == '/blog/') {curSite = DBSite.winhelponline;}},
@@ -7609,7 +7624,8 @@ function: {
         url = url || curSite.pageUrl;
         window.top.document.title = title;
         window.top.document.xiu_nowUrl = curSite.pageUrl;
-        window.top.history.pushState('xiu_history', title, url);
+        // 对于自带类似功能 或者覆盖了 history 原生函数的，则跳过
+        if (window.top.history.toString() === '[object History]') window.top.history.pushState('xiu_history', title, url);
     }
     // 插入 <Script>
     function insScript(selector, toElement = document.body, contextNode = document) {
