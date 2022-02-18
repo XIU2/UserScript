@@ -3,7 +3,7 @@
 // @name:en      AutoPager
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
-// @version      4.7.3
+// @version      4.7.4
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流，追求小而精），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:en  Seamlessly stitch next page content (waterfall)
@@ -3860,18 +3860,22 @@ function: {
             _23qb: {
                 host: 'www.23qb.net',
                 functionS: function() {if (indexOF(/\/book\/\d+\/.+\.html/)) {
-                    curSite = DBSite._23qb;
+                    curSite = DBSite._23qb; xs_bF(getAllCSS('#mlfy_main_text > *'), [/（继续下一页）.+|铅笔小说.+/, '']);
                 } else if (location.pathname != '/' && !indexOF(/\/book\/\d+\//)) {
                     curSite = DBSite._23qb_list;
                 }},
                 pager: {
                     type: 1,
                     nextL: () => (location.origin + ReadParams.url_next),
-                    pageE: 'id("mlfy_main_text")/* | //script[contains(text(), "ReadParams")]',
-                    insertP: ['css;#mlfy_main_text', 3],
-                    replaceE: 'css;title',
+                    pageE: 'id("TextContent")/p | //script[contains(text(), "ReadParams")]',
+                    insertP: ['css;#TextContent', 3],
+                    replaceE: 'css;.chepnav',
                     scriptT: 2,
                     scrollD: 1500
+                },
+                function: {
+                    bF: xs_bF,
+                    pF: [/.*继续下一页.*|.*铅笔小说.*/, '']
                 }
             }, //                 铅笔小说
             _23qb_list: {
@@ -7488,6 +7492,7 @@ function: {
     // 文字型插入前函数（正则过滤）
     function xs_bF(pageElems, reg) {
         pageElems.forEach(function (one) {
+            console.log(one.innerHTML)
             one.innerHTML = one.innerHTML.replace(reg[0], reg[1])
         });
         return pageElems
