@@ -3,7 +3,7 @@
 // @name:en      AutoPager
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
-// @version      4.8.0
+// @version      4.8.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流，追求小而精），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:en  Seamlessly stitch next page content (waterfall)
@@ -3616,12 +3616,34 @@ function: {
             mangabz_list: {
                 pager: {
                     type: 1,
-                    nextL: '//div[@class="page-pagination"]//a[contains(text(), ">")]',
+                    nextL: '//div[contains(@class,"page-pagination")]//a[contains(text(), ">")]',
                     pageE: 'css;ul.mh-list > li',
                     replaceE: 'css;.page-pagination',
                     scrollD: 800
                 }
             }, //      Mangabz 漫画 - 分类/搜索页
+            dm5: {
+                host: 'www.dm5.com',
+                functionS: ()=> {if (indexOF(/\/m\d+/)) {
+                    setTimeout(mangabz_init, 1500);
+                    curSite = DBSite.dm5;
+                } else if (indexOF('/manga-list') || lp == '/search' || getCSS('.box-body > ul.mh-list > li')) {
+                    curSite = DBSite.mangabz_list;
+                } else if (getCSS('.detail-more')) {
+                    getCSS('.detail-more').click();
+                }},
+                style: '.view-paging > .container, .view-comment {display: none !important;} .rightToolBar {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}',
+                //hiddenPN: true,
+                pager: {
+                    type: 4,
+                    nextL: dm5_nextL,
+                    insertP: ['css;#cp_img', 3],
+                    insertE: dm5_insertE,
+                    replaceE: 'css;.view-paging > .container, span.active',
+                    interval: 500,
+                    scrollD: 2000
+                }
+            }, //               动漫屋
             xmanhua: {
                 host: ['xmanhua.com', 'www.xmanhua.com'],
                 functionS: ()=> {if (indexOF(/\/m\d+/)) {
@@ -5587,6 +5609,23 @@ function: {
                     scrollD: 700
                 }
             }, //     xiurenji - 搜索页
+            jpxgmn: {
+                host: 'www.jpxgyw.net',
+                functionS: ()=> {
+                    if (indexOF('.html')) {
+                        curSite = DBSite.jpxgmn;
+                    } else if (lp != '/' && indexOF('/search/')) {
+                        curSite = DBSite.jpxgmn; curSite.pager.pageE = 'css;.related_posts > ul';
+                }},
+                pager: {
+                    type: 1,
+                    nextL: 'css;.pagination a.current+a',
+                    pageE: 'css;.article-content img',
+                    replaceE: 'css;.pagination',
+                    interval: 500,
+                    scrollD: 2000
+                }
+            }, //              jpxgmn
             tvv: {
                 host: /\.tvv\.tw/,
                 functionS: ()=> {if (lp == '/' || indexOF('/page/') || indexOF('/category/')) {curSite = DBSite.tvv;}},
@@ -6953,6 +6992,45 @@ function: {
                 replaceElems(pageElems)
                 MANGABZ_PAGE = 0;
                 mangabz_nextL();
+            }
+        }
+    }
+
+
+    // [动漫屋] 获取下一页地址
+    function dm5_nextL() {
+        var url = '';
+        if (DM5_PAGE === DM5_IMAGE_COUNT) { // 下一话
+            if (getNextE('//div[@class="view-paging"]//a[text()="下一章"]')) getPageElems_(curSite.pageUrl); // 访问下一话 URL 获取
+        } else { // 下一页
+            if (!mkey) var mkey = '';
+            url = location.origin + location.pathname + 'chapterfun.ashx' + `?cid=${DM5_CID}&page=${DM5_PAGE + 1}&key=${(mkey)}&language=1&gtk=6&_cid=${DM5_CID}&_mid=${DM5_MID}&_dt=${DM5_VIEWSIGN_DT}&_sign=${DM5_VIEWSIGN}`
+            if (url === curSite.pageUrl) return
+            curSite.pageUrl = url
+            //console.log(curSite.pageUrl)
+            getPageElems_(curSite.pageUrl, 'text', 'GET', '', 'Next'); // 访问下一页 URL 获取
+        }
+    }
+    // [动漫屋] 插入数据
+    function dm5_insertE(pageElems, type) {
+        if (pageElems) {
+            if (type === 'Next') { // 下一页
+                let imgArr = eval(pageElems),
+                    _img = '';
+                for (let now of imgArr) {_img += `<img src="${now}">`;}
+                if (_img) {
+                    getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+                    DM5_PAGE += imgArr.length;
+                    addHistory(pageElems, document.title, location.origin + DM5_CURL.substring(0, DM5_CURL.length - 1) + '-p' + DM5_PAGE + '/');
+                }
+            } else { // 下一话
+                // 插入 <script> 标签
+                insScript('css;html:not([dir]) > head > script:not([src])', document.body, pageElems);
+                addHistory(pageElems);
+                pageNum.now = pageNum._now + 1
+                replaceElems(pageElems)
+                DM5_PAGE = 0;
+                dm5_nextL();
             }
         }
     }
