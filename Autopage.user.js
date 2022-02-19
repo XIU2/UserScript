@@ -3601,7 +3601,7 @@ function: {
                 } else if (indexOF('/manga-list') || lp == '/search') {
                     curSite = DBSite.mangabz_list;
                 }},
-                style: 'body > .container > div:not([id]) {display: none !important;} .top-bar {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}',
+                style: 'body > .container > div:not([id]) {display: none !important;} .top-bar {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important; max-width: 99% !important; width: auto !important; height: auto !important;}',
                 pager: {
                     type: 4,
                     nextL: mangabz_nextL,
@@ -3631,7 +3631,7 @@ function: {
                 } else if (getCSS('.detail-more')) {
                     getCSS('.detail-more').click();
                 }},
-                style: '.view-paging > .container, .view-comment {display: none !important;} .rightToolBar {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;} body {overflow: auto !important;}',
+                style: '.view-paging > .container, .view-comment {display: none !important;} .rightToolBar {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important; max-width: 99% !important; width: auto !important; height: auto !important;} body {overflow: auto !important;}',
                 pager: {
                     type: 4,
                     nextL: dm5_nextL,
@@ -3652,7 +3652,7 @@ function: {
                 } else if (indexOF('/manga-list') || lp == '/search') {
                     curSite = DBSite.xmanhua_list;
                 }},
-                style: 'a.reader-bottom-page {display: none !important;} .header, .reader-bottom {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important;width: auto !important; height: auto !important;}',
+                style: 'a.reader-bottom-page {display: none !important;} .header, .reader-bottom {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important; max-width: 99% !important; width: auto !important; height: auto !important;}',
                 hiddenPN: true,
                 pager: {
                     type: 4,
