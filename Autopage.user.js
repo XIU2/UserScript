@@ -3,7 +3,7 @@
 // @name:en      AutoPager
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
-// @version      4.8.2
+// @version      4.8.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流，追求小而精），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:en  Seamlessly stitch next page content (waterfall)
@@ -219,6 +219,22 @@ function: {
                     scrollD: 1500
                 }
             }, //  Discuz! 论坛 - 淘帖页
+            discuz_m: {
+                pager: {
+                    type: 1,
+                    nextL: '//a[@class="nxt" or @class="next"] | //div[@class="page"]/a[text()="下一页" or contains(text(), ">")]',
+                    replaceE: 'css;.pg, .page',
+                    scrollD: 1000
+                }
+            }, //           Discuz! 论坛 - 触屏手机版
+            discuz_m_forum: {
+                pager: {
+                    type: 2,
+                    nextL: 'css;a.loadmore',
+                    interval: 500,
+                    scrollD: 1000
+                }
+            }, //     Discuz! 论坛 - 触屏手机版 - 帖子列表（自带无缝加载下一页按钮的）
             flarum: {
                 functionS: ()=> {locationC = true;if (!indexOF('/d/')) {curSite = DBSite.flarum;}},
                 pager: {
@@ -6172,6 +6188,21 @@ function: {
                 if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
                 pausePageEvent(); // 左键双击网页空白处暂停翻页
             })
+        } else if (webType === 2) {
+            window.addEventListener('urlchange', function(){
+                lp = location.pathname;
+                //console.log(nowLocation, location.href)
+                if (nowLocation == location.href) return
+                setTimeout(function(){
+                    nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
+                    discuz_(); // 重新判断规则
+                    if (curSite.style) {insStyle(curSite.style)} // 插入 Style CSS 样式
+                    pageLoading(); // 自动无缝翻页
+
+                    if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
+                    pausePageEvent(); // 左键双击网页空白处暂停翻页
+                }, 500)
+            })
         } else if (webType === 3) {
             window.addEventListener('urlchange', function(){
                 lp = location.pathname;
@@ -6216,16 +6247,36 @@ function: {
 
 
     // [Discuz! 论坛] 判断各版块帖子列表类型
-    function discuzForum() {
-        if (getCSS('#autopbn')) { //         判断是否有 [下一页] 按钮
-            curSite = DBSite.discuz_forum;
-        } else if (getCSS('#waterfall')) { //           判断是否为图片模式
-            if (!getCSS('#pgbtn, .pgbtn')) { //         如果各版块帖子列表已存在这个元素，说明自带了无缝翻页
-                curSite = DBSite.discuz_waterfall; waterfallStyle(); // 图片模式列表样式预处理
+    function discuzForum(m) {
+        if (m == 'm') { // 手机版页面
+            if (getCSS('a.loadmore')) {
+                curSite = DBSite.discuz_m_forum;
+            } else if (getCSS('.threadlist')) {
+                curSite = DBSite.discuz_m; curSite.pager.pageE = 'css;.threadlist > ul > li';
+            } else if (getCSS('[id^="normalthread_"]')) {
+                curSite = DBSite.discuz_m; curSite.pager.pageE = 'css;[id^="normalthread_"]:not(.ZDlist)';
             }
+            if (curSite.SiteTypeID !== 0 && location.hostname === 'keylol.com') {curSite.history = false; locationC = true;}
         } else {
-            curSite = DBSite.discuz_guide;
+            if (getCSS('#autopbn')) { //         判断是否有 [下一页] 按钮
+                curSite = DBSite.discuz_forum;
+            } else if (getCSS('#waterfall')) { //           判断是否为图片模式
+                if (!getCSS('#pgbtn, .pgbtn')) { //         如果各版块帖子列表已存在这个元素，说明自带了无缝翻页
+                    curSite = DBSite.discuz_waterfall; waterfallStyle(); // 图片模式列表样式预处理
+                }
+            } else {
+                curSite = DBSite.discuz_guide;
+            }
         }
+    }
+    // [Discuz! 论坛] 判断手机版帖子内
+    function discuzThreadM() {
+        if (getCSS('[id^="pid"]')) {
+            curSite = DBSite.discuz_m; curSite.pager.pageE = 'css;[id^="pid"], [id^="pid"]+div:not([id="post_new"])'
+        } else if (getCSS('[id^="post_"]')) {
+            curSite = DBSite.discuz_m; curSite.pager.pageE = 'css;[id^="post_"]';
+        }
+        if (curSite.SiteTypeID !== 0 && location.hostname === 'keylol.com') {curSite.history = false; locationC = true;}
     }
     function discuz_() {
         if (getCSS('body[id="nv_forum"][class^="pg_"][onkeydown*="27"]')) {
@@ -6243,25 +6294,45 @@ function: {
         // 如果上面没有匹配的则继续                  < 搜索结果 >
         if (curSite.SiteTypeID === 0) {
             if (indexOF('search') || getCSS('body[id="nv_search"][onkeydown*="27"]')) {
-                curSite = DBSite.discuz_search;
+                if (indexOF('mobile=2', 's')) { // 手机版页面
+                    curSite = DBSite.discuz_m; curSite.pager.pageE = 'css;.threadlist > ul > li'; locationC = true;
+                } else {
+                    curSite = DBSite.discuz_search;
+                }
             }
         }
         // 如果上面没有匹配的则继续
         if (curSite.SiteTypeID === 0) {
             if (indexOF('.html')) { //                   判断是不是静态网页（.html 结尾）
                 if (indexOF('/forum-')) { //             < 各版块帖子列表 >
-                    discuzForum();
+                    if (getXpath('//head/meta[@name="applicable-device" and @content="mobile"] | //head/title[contains(text(), "手机版")] | //head/link[contains(@href, "/mobile/")] | //head/script[contains(@src, "/mobile/")]')) { // 手机版页面
+                        discuzForum('m');
+                    } else {
+                        discuzForum();
+                    }
                 } else if (indexOF('/thread-')) { //     < 帖子内 >
-                    if (GM_getValue('menu_thread')) curSite = DBSite.discuz_thread;
+                    if (getXpath('//head/meta[@name="applicable-device" and @content="mobile"] | //head/title[contains(text(), "手机版")] | //head/link[contains(@href, "/mobile/")] | //head/script[contains(@src, "/mobile/")]')) { // 手机版页面
+                        if (GM_getValue('menu_thread')) discuzThreadM();
+                    } else {
+                        if (GM_getValue('menu_thread')) curSite = DBSite.discuz_thread;
+                    }
                 }
             }
         }
         // 如果上面没有匹配的则继续
         if (curSite.SiteTypeID === 0) {
             if (indexOF('mod=forumdisplay', 's') || indexOF('forumdisplay.php')) { //      < 各版块帖子列表 >
-                discuzForum();
+                if (indexOF('mobile=2', 's') || indexOF('mobile=yes', 's') || getXpath('//head/meta[@name="applicable-device" and @content="mobile"] | //head/title[contains(text(), "手机版")] | //head/link[contains(@href, "/mobile/")] | //head/script[contains(@src, "/mobile/")]')) { // 手机版页面
+                    discuzForum('m');
+                } else {
+                    discuzForum();
+                }
             } else if (indexOF('mod=viewthread', 's') || indexOF('viewthread.php')) { // < 帖子内 >
-                if (GM_getValue('menu_thread')) curSite = DBSite.discuz_thread;
+                if (indexOF('mobile=2', 's') || getXpath('//head/meta[@name="applicable-device" and @content="mobile"] | //head/title[contains(text(), "手机版")] | //head/link[contains(@href, "/mobile/")] | //head/script[contains(@src, "/mobile/")]')) { // 手机版页面
+                    if (GM_getValue('menu_thread')) discuzThreadM();
+                } else {
+                    if (GM_getValue('menu_thread')) curSite = DBSite.discuz_thread;
+                }
             } else if (indexOF('mod=guide', 's')) { //      < 导读帖子列表 >
                 curSite = DBSite.discuz_guide;
             } else if(indexOF('mod=space', 's') && indexOF('do=thread', 's')) { // 别人的主题/回复
@@ -6272,6 +6343,9 @@ function: {
                 discuzForum();
             } else if (getCSS('#postlist')) { //            < 部分论坛的帖子内 URL 是自定义的 >
                 if (GM_getValue('menu_thread')) curSite = DBSite.discuz_thread;
+            } else { // 手机版判断
+                discuzForum('m');
+                if (curSite.SiteTypeID === 0) discuzThreadM();
             }
         }
     }
@@ -7267,7 +7341,7 @@ function: {
             console.info('[自动无缝翻页] - 独立规则 网站'); return 1;
         } else if (self != top) {
             return -1;
-        } else if (getCSS('meta[name="author" i][content*="Discuz!" i], meta[name="generator" i][content*="Discuz!" i], body[id="nv_forum" i][class^="pg_" i][onkeydown*="27"], body[id="nv_search" i][onkeydown*="27"]') || (getCSS('a[href*="www.discuz.net" i]') && getCSS('a[href*="www.discuz.net" i]').textContent.indexOf('Discuz!') > -1) || (getCSS('#ft') && getCSS('#ft').textContent.indexOf('Discuz!') > -1)) {
+        } else if (typeof discuz_uid != 'undefined' || getCSS('meta[name="author" i][content*="Discuz!" i], meta[name="generator" i][content*="Discuz!" i], body[id="nv_forum" i][class^="pg_" i][onkeydown*="27"], body[id="nv_search" i][onkeydown*="27"]') || (getCSS('a[href*="www.discuz.net" i]') && getCSS('a[href*="www.discuz.net" i]').textContent.indexOf('Discuz!') > -1) || (getCSS('#ft') && getCSS('#ft').textContent.indexOf('Discuz!') > -1)) {
             console.info('[自动无缝翻页] - <Discuz!> 论坛'); return 2;
         } else if (getCSS('#flarum-loading')) {
             console.info('[自动无缝翻页] - <Flarum> 论坛'); return 3;
@@ -7301,12 +7375,13 @@ function: {
             method: 'GET',
             overrideMimeType: 'text/html; charset=' + document.charset,
             headers: {
-                'Referer': location.href
+                'Referer': location.href,
+                'User-Agent': navigator.userAgent
             },
             timeout: 10000,
             onload: function (response) {
                 try {
-                    //console.log('最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
+                    //console.log('URL：' + url, '最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
                     processElems(createDocumentByString(response.responseText));
                 } catch (e) {
                     console.log(e);
@@ -7334,7 +7409,8 @@ function: {
             overrideMimeType: mimeType,
             headers: {
                 'Referer': location.href,
-                'Content-Type': (method === 'POST') ? 'application/x-www-form-urlencoded':''
+                'Content-Type': (method === 'POST') ? 'application/x-www-form-urlencoded':'',
+                'User-Agent': navigator.userAgent
             },
             timeout: 10000,
             onload: function (response) {
