@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      4.8.3
+// @version      4.8.4
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流，追求小而精），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  無縫拼接下一頁內容（瀑布流，追求小而精），支持大量網站，歡迎提交申請支持~
@@ -1012,7 +1012,7 @@ function: {
                 }
             }, //              煎蛋网
             jandan_comment: {
-                style: '#nav_prev, #nav_next {display: none !important;}',
+                style: '#nav_prev, #nav_next {display: none !important;} .jandan-vote a.tucao-btn23:link {color: #c8c7cc !important;} .jandan-tucao {background-color: #fafaf9 !important;}',
                 pager: {
                     type: 1,
                     nextL: 'css;a.previous-comment-page',
@@ -1021,6 +1021,14 @@ function: {
                     replaceE: 'css;.cp-pagenavi',
                     scriptT: 2,
                     scrollD: 1500
+                },
+                function: {
+                    bF: pageElems => { // 插入前函数（修改当前网页中的 吐槽 等按钮，避免重复添加点击事件）
+                        getAllCSS('a.tucao-btn').forEach(function (now) {now.className = now.className.replace('tucao-btn', 'tucao-btn23');});
+                        getAllCSS('a.comment-like.like').forEach(function (now) {now.className = now.className.replace('comment-like', 'comment-like23');});
+                        getAllCSS('a.comment-unlike.unlike').forEach(function (now) {now.className = now.className.replace('comment-unlike', 'comment-unlike23');});
+                        return pageElems
+                    }
                 }
             }, //      煎蛋网
             jandan_dzh: {
@@ -1916,7 +1924,8 @@ function: {
                     replaceE: 'css;.pagewrap',
                     scrollE: 'css;.pagewrap',
                     scriptT: 2,
-                    scrollD: 300
+                    interval: 500,
+                    scrollD: 500
                 }
             }, //                3DM
             _3dmgame_list: {
@@ -1975,7 +1984,8 @@ function: {
                     insertP: ['css;.page_fenye', 1],
                     replaceE: 'css;.page_fenye',
                     scrollE: 'css;.page_fenye',
-                    scrollD: 0
+                    interval: 500,
+                    scrollD: 100
                 }
             }, //              游侠网
             ali213_list: {
@@ -2003,7 +2013,8 @@ function: {
                     insertP: ['css;.c-detail', 3],
                     replaceE: 'css;.page_fenye',
                     scrollE: 'css;.page_fenye',
-                    scrollD: 200
+                    interval: 500,
+                    scrollD: 300
                 }
             }, //               游侠网 - 攻略
             ali213_pic: {
@@ -2032,7 +2043,8 @@ function: {
                     insertP: ['css;.page_css', 1],
                     replaceE: 'css;.page_css',
                     scrollE: 'css;.page_css',
-                    scrollD: 0
+                    interval: 500,
+                    scrollD: 100
                 }
             }, //            游民星空
             gamersky_gl: {
@@ -2044,7 +2056,8 @@ function: {
                     replaceE: 'css;.page_css',
                     scrollE: 'css;.page_css',
                     forceHTTPS: true,
-                    scrollD: 0
+                    interval: 500,
+                    scrollD: 100
                 },
                 function: {
                     bF: pageElems => { // 插入前函数（移除下一页底部的 "更多相关内容请关注：xxx" 文字 + 加载图片）
@@ -7487,7 +7500,7 @@ function: {
         // 暂停翻页
         if (!pausePage) return
         pausePage = false
-        console.log(src)
+        //console.log(src)
         // 如果不存在，则创建一个 iframe
         let iframe = document.getElementById('xiu_iframe');
         if (!iframe) {
