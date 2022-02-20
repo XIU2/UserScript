@@ -1,8 +1,14 @@
 // ==UserScript==
 // @name         DuckDuckGo 增强
+// @name:zh-CN   DuckDuckGo 增强
+// @name:zh-TW   DuckDuckGo 增強
+// @name:en      DuckDuckGo Enhancements
 // @version      1.0.1
 // @author       X.I.U
 // @description  屏蔽指定域名、修复图标加载、链接不携来源、快捷回到顶部（右键两侧空白处）
+// @description:zh-CN  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
+// @description:zh-TW  屏蔽指定域名、修復圖標加載、鏈接不攜來源、快捷回到頂部（右鍵兩側空白處）
+// @description:en  Block the specified domain name, fix icon loading, link without source, and quickly return to the top (the blank space on both sides of the right button)...
 // @match        https://duckduckgo.com/*
 // @icon         https://duckduckgo.com/favicon.ico
 // @grant        GM_registerMenuCommand
