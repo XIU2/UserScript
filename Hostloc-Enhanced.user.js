@@ -95,7 +95,7 @@
     if (document.getElementById('um')){
         loginStatus = true;
     } else {
-        loginStatus = (discuz_uid != '0' ? true : false);
+        if (typeof discuz_uid != 'undefined') loginStatus = (discuz_uid != '0' ? true : false);
     }
 
     // 默认 ID 为 0
