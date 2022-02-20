@@ -3,9 +3,9 @@
 // @name:en      Zhihu enhancement
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
-// @version      1.9.9
+// @version      2.0.0
 // @author       X.I.U
-// @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
+// @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容、净化标题消息、净化搜索热门、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @description:en  Remove the login popup, block the homepage video, close the answer by default, quickly close the answer/comment (both sides of the left button), quickly return to the top (both sides of the right button), block users, block keywords, remove highlighted links , Shield salt selection, purify title message, expand problem description, display problem author, display time on top, complete problem time, distinguish problem article, direct problem button, default high-definition original image, default off-site direct link
 // @description:zh-CN  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @description:zh-TW  移除登錄彈窗、屏蔽首頁視頻、默認收起回答、快捷收起回答/評論（左鍵兩側）、快捷回到頂部（右鍵兩側）、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化標題消息、展開問題描述、顯示問題作者、置頂顯示時間、完整問題時間、區分問題文章、直達問題按鈕、默認高清原圖、默認站外直鏈
@@ -46,6 +46,7 @@ var menu_ALL = [
     ['menu_blockTypeSearch', '杂志文章、相关搜索等 [搜索页]', '相关搜索、杂志等（搜索页）', false],
     ['menu_blockYanXuan', '屏蔽盐选内容', '屏蔽盐选内容', false],
     ['menu_cleanTitles', '净化标题消息 (标题中的私信/消息)', '净化标题提醒', false],
+    ['menu_cleanSearch', '净化搜索热门 (默认搜索词及热门搜索)', '净化搜索热门', false],
     ['menu_questionRichTextMore', '展开问题描述', '展开问题描述', false],
     ['menu_publishTop', '置顶显示时间', '置顶显示时间', true],
     ['menu_typeTips', '区分问题文章', '区分问题文章', true],
@@ -1179,6 +1180,20 @@ function cleanTitles() {
 }
 
 
+// 净化搜索热门
+function cleanSearch() {
+    if (!menu_value('menu_cleanSearch')) return
+
+    const el = document.querySelector('.SearchBar-input > input');
+    const observer = new MutationObserver((mutationsList, observer) => {
+        if (mutationsList[0].attributeName === 'placeholder' && mutationsList[0].target.placeholder != '') mutationsList[0].target.placeholder = '';
+    });
+    el.placeholder = '';
+    observer.observe(el, { attributes: true });
+    document.documentElement.appendChild(document.createElement('style')).textContent = '.AutoComplete-group > .SearchBar-label:not(.SearchBar-label--history), .AutoComplete-group > [id^="AutoComplete2-topSearch-"] {display: none !important;}';
+}
+
+
 // 快捷关闭悬浮评论（监听点击事件，点击网页两侧空白处）
 function closeFloatingComments() {
     const closeFloatingCommentsModal = (mutationsList, observer) => {
@@ -1375,6 +1390,7 @@ function questionInvitation(){
     }
 
     function start(){
+        cleanSearch(); //                                                      净化搜索热门
         removeHighlightLink(); //                                              移除高亮链接
         if (location.hostname != 'zhuanlan.zhihu.com') {collapsedAnswer();} // 一键收起回答
         closeFloatingComments(); //                                            快捷关闭悬浮评论（监听点击事件，点击网页两侧空白处）
