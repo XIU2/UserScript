@@ -36,18 +36,18 @@
         ['https://github.rc1844.workers.dev', '美国 4'],
         ['https://ghgo.feizhuqwq.workers.dev/https://github.com', '美国 5'],
         ['https://git.yumenaka.net/https://github.com', '美国 6'],
-        ['https://download.fastgit.org', '日本'],
+        ['https://download.fastgit.org', '德国'],
         ['https://ghproxy.com/https://github.com', '韩国']
         //['https://ghproxy.fsou.cc/https://github.com', '香港']
         ],
         clone_url = [
             ['https://gitclone.com', '中国浙江'],
-            ['https://hub.fastgit.xyz', '日本'],
+            ['https://hub.fastgit.xyz', '德国'],
             ['https://hub.0z.gs', '美国'],
             ['https://hub.shutcm.cf', '美国']
         ],
         clone_ssh_url = [
-            ['git@hub.fastgit.xyz', '日本东京'],
+            ['git@ssh.fastgit.xyz', '德国'],
             ['git@git.zhlh6.cn', '美国']
         ],
         raw_url = [
@@ -57,7 +57,7 @@
             ['https://ghproxy.com/https://raw.githubusercontent.com', '韩国', ''],
             ['https://fastly.jsdelivr.net/gh','日本 1', '注意：&#10; - 该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10; - 该加速源不支持大小超过 50 MB 的文件。&#10; - 当前 分支名 为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。'],
             ['https://cdn.staticaly.com/gh','日本 2', '注意：&#10; - 该加速是全球 Anycast CDN，国内一般分配到日本节点。'],
-            ['https://raw.fastgit.org','日本 3', '注意：&#10; - 单个文件太大时可能会提示超时（实时获取中），请重试。'],
+            ['https://raw.fastgit.org','德国 3', '注意：&#10; - 单个文件太大时可能会提示超时（实时获取中），请重试。'],
             ['https://cdn.jsdelivr.net/gh','美国', '注意：&#10; - 该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10; - 该加速源不支持大小超过 50 MB 的文件。&#10; - 当前 分支名 为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。'],
             ['https://gcore.jsdelivr.net/gh','香港/日本', '适合 [移动/电信] 用户，移动走香港，电信走日本。&#10;&#10;注意：&#10; - 该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10; - 该加速源不支持大小超过 50 MB 的文件。&#10; - 当前 分支名 为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。'],
             ['https://raw.githubusercontents.com', '香港/新加坡等','该加速源有香港、新加坡、美国等服务器，并不固定。&#10; - 该加速源不支持大小超过 1 MB 的文件。']
