@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      4.8.6
+// @version      4.8.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流，追求小而美），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  無縫拼接下一頁內容（瀑布流，追求小而美），支持各種論壇、搜索引擎、漫畫網站~
@@ -386,12 +386,13 @@ function: {
                 }
             }, //       WordPress 的 Begin 主题 - 搜索页
             wp_nav_navigation: {
+                functionS: function(nextL = 'css;.nav-previous a') {if (!indexOF('/post/') && !getCSS('#comments, .comments-area, #disqus_thread')) {curSite = DBSite.wp_nav_navigation; curSite.pager.nextL = nextL;}},
                 pager: {
                     type: 1,
                     nextL: 'css;.nav-previous a',
                     pageE: 'css;article.post',
                     replaceE: 'css;nav.navigation',
-                    scrollD: 1200
+                    scrollD: 1500
                 }
             }, //  Wordpress 的 nav.navigation 规则
             biquge: {
@@ -6182,9 +6183,9 @@ function: {
             case 103: // < 所有使用 WordPress Begin 主题的网站 >
                 DBSite.begin.functionS(); break;
             case 104: // < 所有使用 WordPress nav-previous 旧文章式 主题的网站 >
-                curSite = DBSite.wp_nav_navigation; break;
+                DBSite.wp_nav_navigation.functionS(); break;
             case 105: // < 所有使用 WordPress nav-navigation 下一页式 主题的网站 >
-                curSite = DBSite.wp_nav_navigation; curSite.pager.nextL = '//nav[contains(@class, "navigation")]//a[contains(text(), "下一页") or contains(text(), ">")]'; break;
+                DBSite.wp_nav_navigation.functionS('//nav[contains(@class, "navigation")]//a[contains(text(), "下一页") or contains(text(), ">")]'); break;
             case 200: // < 所有使用 笔趣阁 模板的小说网站 >
                 DBSite.biquge.functionS(); break;
         }
