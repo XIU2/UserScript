@@ -3,7 +3,7 @@
 // @name:zh-CN   护眼模式
 // @name:zh-TW   護眼模式
 // @name:en      Dark Mode
-// @version      1.3.8
+// @version      1.3.9
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
 // @description:zh-CN  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
@@ -34,7 +34,7 @@
         ['menu_autoRecognition', '智能排除自带暗黑模式的网页 (beta)', '智能排除自带暗黑模式的网页 (beta)', true],
         ['menu_forcedToEnable', '✅ 已强制当前网站启用护眼模式 (👆)', '❌ 未强制当前网站启用护眼模式 (👆)', []],
         ['menu_darkModeType', '点击切换模式', '点击切换模式', 2],
-        ['menu_customMode', '自定义当前模式', '自定义当前模式', true], ['menu_customMode1',,,'80|70'], ['menu_customMode2',,,'80|20|70|30'], ['menu_customMode3',,,'90'],
+        ['menu_customMode', '自定义当前模式', '自定义当前模式', true], ['menu_customMode1',,,'80|70'], ['menu_customMode2',,,'80|20|70|30'], ['menu_customMode3',,,'90'], ['menu_customMode3_exclude',,,'img, .img, video, [style*="background"][style*="url"], svg'],
         ['menu_customTime', '自定义昼夜时间', '自定义昼夜时间', '6|18'],
         ['menu_autoSwitch', '晚上自动切换模式', '晚上自动切换模式', ''],
     ], menu_ID = [];
@@ -86,7 +86,7 @@
                 GM_setValue(menu_ALL[i][0], menu_ALL[i][3]);
                 menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_customTime()});
             }
-            else if (menu_ALL[i][0] === 'menu_customMode1' || menu_ALL[i][0] === 'menu_customMode2' || menu_ALL[i][0] === 'menu_customMode3')
+            else if (menu_ALL[i][0] === 'menu_customMode1' || menu_ALL[i][0] === 'menu_customMode2' || menu_ALL[i][0] === 'menu_customMode3' || menu_ALL[i][0] === 'menu_customMode3_exclude')
             { // 当前模式值
                 GM_setValue(menu_ALL[i][0], menu_ALL[i][3]);
             }
@@ -178,6 +178,19 @@
         } else if (newMods != null) {
             GM_setValue(`${name}`, newMods);
             registerMenuCommand(); // 重新注册脚本菜单
+        }
+        if (getAutoSwitch() == 3) {
+            tip = '自定义 [模式 3] 排除目标，修改后立即生效 (部分网页可能需要刷新)~\n格式：CSS 选择器 (如果不会写可以找我)\n默认：img, .img, video, [style*="background"][style*="url"], svg\n (使用英文逗号间隔，末尾不要有逗号)';
+            defaults = 'img, .img, video, [style*="background"][style*="url"], svg';
+            name = 'menu_customMode3_exclude';
+            newMods = prompt(tip, GM_getValue(`${name}`));
+            if (newMods === '') {
+                GM_setValue(`${name}`, defaults);
+                registerMenuCommand(); // 重新注册脚本菜单
+            } else if (newMods != null) {
+                GM_setValue(`${name}`, newMods);
+                registerMenuCommand(); // 重新注册脚本菜单
+            }
         }
         if (document.getElementById('XIU2DarkMode')) {
             document.getElementById('XIU2DarkMode').remove(); // 即时修改样式
@@ -341,8 +354,12 @@
             style_21_firefox = `html {filter: brightness(${style_20[0]}%) sepia(${style_20[1]}%) !important; background-image: url();}`,
             style_22 = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important;}`,
             style_22_firefox = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important; background-image: url();}`,
-            style_31 = `html {filter: invert(${style_30[0]}%) !important; text-shadow: 0 0 0 !important;} img, video, [style*="background"][style*="url"], svg {filter: invert(1) !important;} img[alt="[公式]"] {filter: none !important;}`,
-            style_31_firefox = `html {filter: invert(${style_30[0]}%) !important; background-image: url(); text-shadow: 0 0 0 !important;} img, video, [style*="background"][style*="url"], svg {filter: invert(1) !important;} img[alt="[公式]"] {filter: none !important;}`;
+            style_31 = `html {filter: invert(${style_30[0]}%) !important; text-shadow: 0 0 0 !important;}
+            ${menu_value('menu_customMode3_exclude')} {filter: invert(1) !important;}
+            img[alt="[公式]"] {filter: none !important;}`,
+            style_31_firefox = `html {filter: invert(${style_30[0]}%) !important; background-image: url(); text-shadow: 0 0 0 !important;}
+            ${menu_value('menu_customMode3_exclude')} {filter: invert(1) !important;}
+            img[alt="[公式]"] {filter: none !important;}`;
 
         // Firefox 浏览器需要特殊对待
         if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
