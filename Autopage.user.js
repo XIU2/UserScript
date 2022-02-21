@@ -3,11 +3,11 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      4.8.5
+// @version      4.8.6
 // @author       X.I.U
-// @description  无缝拼接下一页内容（瀑布流，追求小而精），目前支持：[所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP、DUX/XIU/D8/Begin(WP主题)」网站]、百度、谷歌、必应、搜狗、头条搜索、360 搜索、微信搜索、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、Pixiv、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、茶杯狐、NO视频、低端影视、奈菲影视、音范丝、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、动漫狂、漫画猫、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、PubMed、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
-// @description:zh-TW  無縫拼接下一頁內容（瀑布流，追求小而精），支持大量網站，歡迎提交申請支持~
-// @description:en  Seamlessly stitch next page content (waterfall)
+// @description  无缝拼接下一页内容（瀑布流，追求小而美），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
+// @description:zh-TW  無縫拼接下一頁內容（瀑布流，追求小而美），支持各種論壇、搜索引擎、漫畫網站~
+// @description:en  Seamlessly stitch next page content (waterfall)~
 // @match        *://*/*
 // @connect      www.ykmh.com
 // @connect      www.xuexiniu.com
@@ -385,6 +385,15 @@ function: {
                     scrollD: 1500
                 }
             }, //       WordPress 的 Begin 主题 - 搜索页
+            wp_nav_navigation: {
+                pager: {
+                    type: 1,
+                    nextL: 'css;.nav-previous a',
+                    pageE: 'css;article.post',
+                    replaceE: 'css;nav.navigation',
+                    scrollD: 1200
+                }
+            }, //  Wordpress 的 nav.navigation 规则
             biquge: {
                 functionS: ()=> {if (indexOF(/\d+\/\d+\.html/)) {curSite = DBSite.biquge;}},
                 style: 'img, .posterror {display: none !important;}',
@@ -2541,7 +2550,7 @@ function: {
             }, //    233 动漫 - 排行榜
             anime1: {
                 host: 'anime1.me',
-                functionS: ()=> {if (indexOF('s=', 's')) {curSite = DBSite.anime1_search;} else if (lp == '/') {curSite = DBSite.anime1;}},
+                functionS: ()=> {if (indexOF('s=', 's')) {curSite = DBSite.wp_nav_navigation;} else if (lp == '/') {curSite = DBSite.anime1;}},
                 history: false,
                 pager: {
                     type: 4,
@@ -2556,15 +2565,6 @@ function: {
                     scrollD: 800
                 }
             }, //        Anime1
-            anime1_search: {
-                pager: {
-                    type: 1,
-                    nextL: 'css;.nav-previous > a',
-                    pageE: 'css;#main > article',
-                    replaceE: 'css;nav.navigation',
-                    scrollD: 1200
-                }
-            }, // Anime1 - 搜索页
             yinfans: {
                 host: /www\.yinfans\./,
                 style: '#post_container {height: auto !important;} #post_container > li {position: static !important; float: left !important; height: 620px !important;}',
@@ -6181,6 +6181,10 @@ function: {
                 DBSite.dux.functionS(); delete curSite.function; break;
             case 103: // < 所有使用 WordPress Begin 主题的网站 >
                 DBSite.begin.functionS(); break;
+            case 104: // < 所有使用 WordPress nav-previous 旧文章式 主题的网站 >
+                curSite = DBSite.wp_nav_navigation; break;
+            case 105: // < 所有使用 WordPress nav-navigation 下一页式 主题的网站 >
+                curSite = DBSite.wp_nav_navigation; curSite.pager.nextL = '//nav[contains(@class, "navigation")]//a[contains(text(), "下一页") or contains(text(), ">")]'; break;
             case 200: // < 所有使用 笔趣阁 模板的小说网站 >
                 DBSite.biquge.functionS(); break;
         }
@@ -7390,6 +7394,14 @@ function: {
             console.info('[自动无缝翻页] - 使用 WordPress <D8> 主题的网站'); return 102;
         } else if (getCSS('link[href*="themes/begin" i], script[src*="themes/begin" i], img[src*="themes/begin" i]')) {
             console.info('[自动无缝翻页] - 使用 WordPress <Begin> 主题的网站'); return 103;
+        } else if (getCSS('link[href*="/wp-content/" i], script[src*="/wp-content/" i]')) {
+            if (getCSS('article.post') && getCSS('nav.navigation')) {
+                if (getCSS('.nav-previous a')) {
+                    console.info('[自动无缝翻页] - 使用 WordPress <nav-previous 旧文章式> 主题的网站'); return 104;
+                } else if (getXpath('//nav[contains(@class, "navigation")]//a[contains(text(), "下一页") or contains(text(), ">")]')) {
+                    console.info('[自动无缝翻页] - 使用 WordPress <nav-navigation> 下一页式> 主题的网站'); return 105;
+                }
+            }
         } else if ((getCSS('meta[name="description" i][content*="小说"], meta[name="description" i][content*="章节"], meta[name="description" i][content*="阅读"]') || location.hostname.indexOf('biqu') > -1 || document.title.indexOf('笔趣阁') > -1) && getCSS('#content, .content, #chaptercontent, .chaptercontent, #BookText') && getXpath('//a[contains(text(), "下一章") or contains(text(), "下一页")]')) {
             console.info('[自动无缝翻页] - <笔趣阁> 模板的小说网站'); return 200;
         }
