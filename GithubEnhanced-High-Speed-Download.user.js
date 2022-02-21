@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      1.8.5
+// @version      1.8.6
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -36,24 +36,28 @@
         ['https://github.rc1844.workers.dev', '美国 4'],
         ['https://ghgo.feizhuqwq.workers.dev/https://github.com', '美国 5'],
         ['https://git.yumenaka.net/https://github.com', '美国 6'],
+        ['https://github.do/https://github.com', '中国'],
         ['https://download.fastgit.org', '日本'],
         ['https://ghproxy.com/https://github.com', '韩国']
         //['https://ghproxy.fsou.cc/https://github.com', '香港']
         ],
         clone_url = [
-            ['https://gitclone.com', '中国浙江'],
+            ['https://github.do/https://github.com', '中国'],
+            ['https://gitclone.com', '中国'],
             ['https://hub.fastgit.xyz', '日本'],
+            ['https://ghproxy.com/https://github.com', '韩国'],
             ['https://hub.0z.gs', '美国'],
             ['https://hub.shutcm.cf', '美国']
         ],
         clone_ssh_url = [
-            ['git@hub.fastgit.xyz', '日本东京'],
+            ['git@ssh.fastgit.org', '中国香港'],
             ['git@git.zhlh6.cn', '美国']
         ],
         raw_url = [
             ['https://raw.githubusercontent.com', 'Github 原生',''],
             //['https://ghproxy.fsou.cc/https://github.com', '中国香港 1', ''],
             //['https://pd.zwc365.com/seturl/https://raw.githubusercontent.com', '中国香港 2', ''],
+            ['https://github.do/https://raw.githubusercontent.com','中国', '注意：&#10; - 首次访问速度可能较慢，后续因缓存会快很多。'],
             ['https://ghproxy.com/https://raw.githubusercontent.com', '韩国', ''],
             ['https://fastly.jsdelivr.net/gh','日本 1', '注意：&#10; - 该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10; - 该加速源不支持大小超过 50 MB 的文件。&#10; - 当前 分支名 为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。'],
             ['https://cdn.staticaly.com/gh','日本 2', '注意：&#10; - 该加速是全球 Anycast CDN，国内一般分配到日本节点。'],
@@ -221,9 +225,9 @@
             switch(i) {
                 //case 1:
                 //    url = raw_url[i][0] + href; break;
-                case 2:
-                case 5:
+                case 3:
                 case 6:
+                case 7:
                     url = raw_url[i][0] + href.replace('/blob/','@'); break;
                 default:
                     url = raw_url[i][0] + href2;
@@ -270,9 +274,9 @@
             switch(menu_raw_fast) {
                 //case 1:
                 //    url = raw_url[menu_raw_fast][0] + href; break;
-                case 2:
-                case 5:
+                case 3:
                 case 6:
+                case 7:
                     url = raw_url[menu_raw_fast][0] + href.replace('/blob/','@'); break;
                 default:
                     url = raw_url[menu_raw_fast][0] + href2;
