@@ -7715,7 +7715,7 @@ function: {
         if (getCSS('#Autopage_customRules')) return
 
         // 插入网页
-        let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.9 !important; z-index: 99999 !important; background-color: #eee !important;">
+        let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.9 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important;">
 <h3><strong>自定义翻页规则（优先于脚本内置规则）</strong></h3>
 <ul style="list-style: disc !important; margin-left: 35px !important;">
 <li>翻页规则为 JSON 格式，因此大家需要先去了解一下 JSON 的基本格式（如：两边都需要双引号、最后一个末尾不能加逗号等）。</li>
@@ -7725,7 +7725,7 @@ function: {
 </ul>
 <p style="color: #ff3535 !important;">注意：不要完全照搬脚本内置规则，因为和标准 JSON 格式有所差别，如：必须两边内容都加双引号（不能用单引号）。</p>
 
-<textarea id="Autopage_customRules_textarea" style="min-width:95% !important; min-height:300px !important; display: block !important; margin: 10px 0 10px 0; white-space:nowrap !important; overflow:scroll !important;" placeholder="留空等于默认的 {}">${JSON.stringify(GM_getValue('menu_customRules', {}), null, '\t')}</textarea>
+<textarea id="Autopage_customRules_textarea" style="min-width:95% !important; min-height:300px !important; display: block !important; margin: 10px 0 10px 0; white-space:nowrap !important; overflow:scroll !important; resize: auto !important;" placeholder="留空等于默认的 {}">${JSON.stringify(GM_getValue('menu_customRules', {}), null, '\t')}</textarea>
 <button id="Autopage_customRules_save">保存并刷新</button><button id="Autopage_customRules_cancel">取消</button>
 </div>`
         document.documentElement.insertAdjacentHTML('beforeend', _html);
