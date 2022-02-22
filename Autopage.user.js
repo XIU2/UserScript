@@ -2891,7 +2891,7 @@ function: {
                 host: 'www.iconfont.cn',
                 functionS: ()=> {locationC = true; if (indexOF('/search/')) curSite = DBSite.iconfont;},
                 forceTarget: true,
-                style: '.footer, header .bind-tips, .block-pagination-wrap {display: none !important;}',
+                style: '.footer, header .bind-tips, .block-pagination-wrap, #magix_vf_main .block-sub-banner, #J_block_sidebar {display: none !important;}',
                 iframe: true,
                 pager: {
                     type: 5,
@@ -7155,7 +7155,7 @@ function: {
             if (delta == 0) return false;
             beforeScrollTop = afterScrollTop;
 
-            //console.log(delta, scrollHeight - (scrollTop + clientHeight + 10), '1111')
+            //console.log(delta, (scrollTop + clientHeight + 10), scrollHeight, '1111')
             if (delta > 0 && scrollTop + clientHeight + 10 >= scrollHeight && !getCSS('#xiu-scroll')) {
                 let newStyle = document.createElement('style'); newStyle.id = 'xiu-scroll';
                 newStyle.textContent = 'html::-webkit-scrollbar, body::-webkit-scrollbar {width: 0 !important;height: 0 !important;} html, body {scrollbar-width: none !important;}';
