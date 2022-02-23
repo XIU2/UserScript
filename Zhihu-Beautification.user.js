@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.4.5
+// @version      1.4.6
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -352,28 +352,30 @@ html[data-theme=dark] del a {color: #E91E63 !important;}
 html[data-theme=dark] div#zh-hovercard a {color: #353535 !important;}
             `,
             style_darkMode_2 = `/* 暗黑模式（方案 2） */
-html {filter: invert(80%) !important;}
-img, .ZVideoItem-video, .ZVideo-video {filter: invert(1) !important;}
+html {filter: invert(90%) !important; text-shadow: 0 0 0 !important;}
+html[data-theme=light] body.ZVideo-body {background-color: #fff;}
+img, .ZVideoItem-video, .ZVideo-video, .VideoAnswerPlayer-video {filter: invert(1) !important;}
 .GifPlayer img, .GifPlayer.isPlaying video {filter: invert(1) !important;}
 .GifPlayer.isPlaying img.ztext-gif.GifPlayer-gif2mp4Image, img[alt="[公式]"] {filter: none !important;}
 `,
             style_darkMode_2_firefox = `/* 暗黑模式（方案 2） */
-html {filter: invert(80%) !important; background-image: url();}
-img, .ZVideoItem-video, .ZVideo-video {filter: invert(1) !important;}
+html {filter: invert(90%) !important; background-image: url(); text-shadow: 0 0 0 !important;}
+html[data-theme=light] body.ZVideo-body {background-color: #fff;}
+img, .ZVideoItem-video, .ZVideo-video, .VideoAnswerPlayer-video {filter: invert(1) !important;}
 .GifPlayer img, .GifPlayer.isPlaying video {filter: invert(1) !important;}
 .GifPlayer.isPlaying img.ztext-gif.GifPlayer-gif2mp4Image {filter: none !important;}
 `,
             style_darkMode_3 = `/* 暗黑模式（方案 3） */
-html {filter: brightness(75%) !important;}
+html {filter: brightness(70%) !important;}
 `,
             style_darkMode_3_firefox = `/* 暗黑模式（方案 3） */
-html {filter: brightness(75%) !important; background-image: url();}
+html {filter: brightness(70%) !important; background-image: url();}
 `,
             style_darkMode_4 = `/* 暗黑模式（方案 4） */
-html {filter: brightness(75%) sepia(30%) !important;}
+html {filter: brightness(65%) sepia(30%) !important;}
 `,
              style_darkMode_4_firefox = `/* 暗黑模式（方案 4） */
-html {filter: brightness(75%) sepia(30%) !important; background-image: url();}
+html {filter: brightness(65%) sepia(30%) !important; background-image: url();}
 `
         let style_Add = document.createElement('style');
 
