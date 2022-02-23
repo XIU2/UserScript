@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.4.4
+// @version      1.4.5
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -29,6 +29,7 @@
         ['menu_widescreenDisplaySearch', '搜索页、话题页、圈子', '宽屏显示', true],
         ['menu_widescreenDisplayCollection', '收藏页', '宽屏显示', true],
         ['menu_widescreenDisplayPost', '文章页', '宽屏显示', false],
+        ['menu_widescreenDisplayPeople', '用户主页', '用户主页', false],
         ['menu_widescreenDisplayWidth', '宽屏宽度', '宽屏宽度 (默认 1000)', '1000'],
         ['menu_darkMode', '暗黑模式', '暗黑模式', true],
         ['menu_darkModeType', '暗黑模式切换（1~4）', '暗黑模式切换', 1],
@@ -59,7 +60,7 @@
                 }
                 menu_ID[i] = GM_registerMenuCommand(`${menu_num(menu_ALL[i][3])} ${menu_ALL[i][1]}`, function(){menu_toggle(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
             } else if (menu_ALL[i][0] === 'menu_widescreenDisplay'){
-                    GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_setting('checkbox', menu_ALL[i][1], menu_ALL[i][2], true, [menu_ALL[i+1], menu_ALL[i+2], menu_ALL[i+3], menu_ALL[i+4], menu_ALL[i+5], menu_ALL[i+6]])});
+                    GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_setting('checkbox', menu_ALL[i][1], menu_ALL[i][2], true, [menu_ALL[i+1], menu_ALL[i+2], menu_ALL[i+3], menu_ALL[i+4], menu_ALL[i+5], menu_ALL[i+6], menu_ALL[i+7]])});
             } else if (menu_ALL[i][0].indexOf('menu_widescreenDisplay') === -1) {
                 menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
             }
@@ -221,6 +222,11 @@ html[data-theme="light"] .Button--primary.Button--blue {color: #fff !important;b
             style_widescreenDisplayPost = `/* 宽屏显示 - 文章页 */
 .Post-SideActions {left: calc(10vw) !important;}
 .Post-NormalMain .Post-Header, .Post-NormalMain>div, .Post-NormalSub>div {width: ${GM_getValue('menu_widescreenDisplayWidth')}px !important;}
+`,
+            style_widescreenDisplayPeople = `/* 宽屏显示 - 用户主页 */
+.Profile-mainColumn {width: inherit !important;}
+.Profile-sideColumn {display: none !important;}
+.Profile-main {width: ${GM_getValue('menu_widescreenDisplayWidth')}px !important;}
 `,
             style_2 = `/* 隐藏在各列表中查看文章时开头显示的大图，不影响文章、专栏页面 */
 .RichContent img.ArticleItem-image {display: none !important;}
@@ -432,6 +438,7 @@ html {filter: brightness(75%) sepia(30%) !important; background-image: url();}
         if (menu_value('menu_widescreenDisplaySearch') && (location.pathname === '/search' || location.pathname.indexOf('/club/') > -1 || location.pathname.indexOf('/topic/') > -1)) style += style_widescreenDisplaySearch;
         if (menu_value('menu_widescreenDisplayCollection') && location.pathname.indexOf('/collection/') > -1) style += style_widescreenDisplayCollection;
         if (menu_value('menu_widescreenDisplayPost') && location.hostname.indexOf('zhuanlan') > -1 && (location.pathname.indexOf('/edit') === -1 || location.pathname.indexOf('/write') === -1)) style += style_widescreenDisplayPost;
+        if (menu_value('menu_widescreenDisplayPeople') && location.pathname.indexOf('/people/') > -1) style += style_widescreenDisplayPeople;
 
         // 调整图片最大高度
         if (menu_value('menu_picHeight')) style += style_4;
