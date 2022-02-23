@@ -7765,7 +7765,7 @@ function: {
         if (getCSS('#Autopage_customRules')) return
 
         // 插入网页
-        let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.9 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important;">
+        let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.9 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important; overflow: scroll !important;">
 <h3><strong>自定义翻页规则（优先于脚本内置规则）</strong></h3>
 <details>
 <summary><kbd><strong>「 点击展开 查看示例 」（把常用规则都放在一起了，方便需要的时候可复制一份修改使用）</strong></kbd></summary>
@@ -7775,7 +7775,7 @@ function: {
 <li>该功能只适用于<strong>简单的网站</strong>，当然这类网站占<strong>大多数</strong>，我写的数百规则里大部分都是这类网站。</li>
 <li>脚本会自动格式化规则，因此<strong>无需手动缩进、换行</strong>。</li>
 </ul>
-<p style="color: #ff3535 !important;">注意：不要完全照搬脚本内置规则，因为和标准 JSON 格式等有所差别。</p>
+<p style="color: #ff3535 !important;">注意：不要完全照搬脚本内置规则，因为和标准 JSON 格式等有所差别，具体请参考下面示例。</p>
 <pre>
 "aaa": {
     "host": "aaa",
@@ -7816,7 +7816,7 @@ function: {
 <button id="Autopage_customRules_save">保存并刷新</button><button id="Autopage_customRules_cancel">取消</button>
 </div>`
         document.documentElement.insertAdjacentHTML('beforeend', _html);
-        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = document.body.style.overflow = 'hidden';
         // 点击事件
         getCSS('#Autopage_customRules_save').onclick = function () {
             let rules = getCSS('#Autopage_customRules_textarea').value;
@@ -7832,7 +7832,7 @@ function: {
                 window.alert('自定义规则存在格式错误：\n' + e + '\n\n注意事项：\n规则中冒号 : 左右的内容都需要加上双引号 " 而不能用单引号 \'，如果内容中含有双引号则需要对双引号转义（即 \" 这样）或者改用单引号');
             }
         }
-        getCSS('#Autopage_customRules_cancel').onclick = function () {document.body.style.overflow = ''; getCSS('#Autopage_customRules').remove();}
+        getCSS('#Autopage_customRules_cancel').onclick = function () {document.documentElement.style.overflow = document.body.style.overflow = ''; getCSS('#Autopage_customRules').remove();}
     }
     // 显示页码
     function pageNumber(type) {
