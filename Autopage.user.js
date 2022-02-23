@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      4.9.2
+// @version      4.9.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流，追求小而美），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  無縫拼接下一頁內容（瀑布流，追求小而美），支持各種論壇、搜索引擎、漫畫網站~
@@ -5086,6 +5086,28 @@ function: {
                     bFp: [0, 'img[data-original]', 'data-original']
                 }
             }, //     哔哩轻小说 (手机版) - 文库
+            ao3: {
+                host: 'archiveofourown.org',
+                functionS: ()=> {if (indexOF(/\/works$/) || lp == '/works/search') {
+                    curSite = DBSite.ao3;
+                } else if (indexOF(/\/works\/\d+\/chapters\//)) {
+                    curSite = DBSite.ao3_post;
+                }},
+                pager: {
+                    nextL: 'css;li.next a',
+                    pageE: 'css;li.work[id^="work_"]',
+                    replaceE: 'css;.pagination',
+                    scrollD: 2500
+                }
+            }, //                   AO3 - 列表页 + 搜索页
+            ao3_post: {
+                pager: {
+                    nextL: 'css;li.chapter.next a',
+                    pageE: 'css;#workskin > div',
+                    replaceE: 'css;#main ul.navigation, #feedback > ul.actions',
+                    scrollD: 2000
+                }
+            }, //              AO3 - 阅读页
             _423down: {
                 host: 'www.423down.com',
                 functionS: ()=> {if (!indexOF('.html')) curSite = DBSite._423down;},
@@ -6043,6 +6065,17 @@ function: {
                     scrollD: 1300
                 }
             }, //                   OI Wiki
+            dusaiphoto: {
+                host: 'www.dusaiphoto.com',
+                functionS: ()=> {if (location.pathname.indexOf('/article/') > -1) {curSite = DBSite.dusaiphoto;}},
+                style: 'h1.article-title {margin-top: 80px;}',
+                pager: {
+                    nextL: 'css;a.hvr-bounce-to-left',
+                    pageE: 'css;#main > .mt-4 >div > .mb-4, #article_body',
+                    replaceE: 'css;.col-12.font-title, #sidebar',
+                    scrollD: 1500
+                }
+            }, //                dusaiphoto
             guokr: {
                 host: 'www.guokr.com',
                 pager: {
