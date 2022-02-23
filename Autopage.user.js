@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      4.9.1
+// @version      4.9.2
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流，追求小而美），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  無縫拼接下一頁內容（瀑布流，追求小而美），支持各種論壇、搜索引擎、漫畫網站~
@@ -1176,7 +1176,7 @@
         end:
         for (let now in DBSite) { // 遍历 对象
             if (!DBSite[now].host) continue; // 如果不存在则继续下一个循环
-
+            //console.log(DBSite[now].host)
             // 如果是 数组
             if (Array.isArray(DBSite[now].host)) {
 
@@ -1189,13 +1189,13 @@
                         if (DBSite[now].functionS) {
                             if (typeof DBSite[now].functionS == 'function') {
                                 DBSite[now].functionS();
-                            } else { // 自定义翻页规则时
-                                if (new Function (DBSite[now].functionS)() === true) curSite = DBSite[now];
+                            } else { // 自定义翻页规则时，因为同域名不同页面 functionS 分开写，所以如果没找到就需要跳出当前数组循环，继续规则循环
+                                if (new Function (DBSite[now].functionS)() === true) {curSite = DBSite[now];} else {break;}
                             }
                         } else {
                             curSite = DBSite[now];
                         }
-                        support = true; break; // 如果找到了就退出循环
+                        support = true; break end; // 如果找到了就退出所有循环
                     }
                 }
 
@@ -1209,8 +1209,8 @@
                     if (DBSite[now].functionS) {
                         if (typeof DBSite[now].functionS == 'function') {
                             DBSite[now].functionS();
-                        } else { // 自定义翻页规则时
-                            if (new Function (DBSite[now].functionS)() === true) curSite = DBSite[now];
+                        } else { // 自定义翻页规则时，因为同域名不同页面 functionS 分开写，所以如果没找到就需要继续规则循环
+                            if (new Function (DBSite[now].functionS)() === true) {curSite = DBSite[now];} else {continue;}
                         }
                     } else {
                         curSite = DBSite[now];
@@ -1602,7 +1602,7 @@ function: {
             }, //             笔趣阁 模板的小说网站
             baidu: {
                 host: 'www.baidu.com',
-                functionS: ()=> {locationC = true; if (lp == '/s') {curSite = DBSite.baidu;} else if (location.pathname.slice(location.pathname.length - 2,location.pathname.length) == '/s') {location.hostname = 'm.baidu.com';}},
+                functionS: ()=> {locationC = true; if (lp == '/s') {curSite = DBSite.baidu;} else if (location.pathname.slice(location.pathname.length - 2,location.pathname.length) == '/s' || isMobile()) {location.hostname = 'm.baidu.com';}},
                 style: '.new-pmd .c-img-border {position: initial !important;} .op-bk-polysemy-video__wrap.c-gap-bottom {display: none !important;}',
                 pager: {
                     nextL: 'id("page")//a[contains(text(),"下一页")]',
@@ -1625,7 +1625,11 @@ function: {
             google: {
                 host: /^www\.google\./,
                 functionS: ()=> {if (lp == '/search' && !indexOF('tbm=isch', 's')) {
-                    curSite = DBSite.google;
+                    if (indexOF('sclient=mobile', 's') || isMobile()) {
+                        curSite = DBSite.google_m;
+                    } else {
+                        curSite = DBSite.google;
+                    }
                 } else if (lp == '/scholar') {
                     curSite = DBSite.google_scholar;
                 }},
@@ -1641,6 +1645,14 @@ function: {
                     bF: google_bF
                 }
             }, //                 谷歌 搜索
+            google_m: {
+                pager: {
+                    type: 2,
+                    nextL: 'css;a[aria-label="查看更多"], a[aria-label="See more" i]',
+                    isHidden: true,
+                    scrollD: 1000
+                }
+            }, //               谷歌 搜索 - 手机版
             bing: {
                 host: ['www.bing.com','cn.bing.com'],
                 functionS: ()=> {if (lp == '/search') {
@@ -1656,7 +1668,7 @@ function: {
                     replaceE: 'css;#b_results > .b_pag',
                     scrollD: 2000
                 }
-            }, //                   必应 搜索
+            }, //                   必应 搜索 + 手机版
             sogou: {
                 host: 'www.sogou.com',
                 functionS: ()=> {if (lp != '/') {curSite = DBSite.sogou;}},
@@ -1668,6 +1680,16 @@ function: {
                     scrollD: 2000
                 }
             }, //                  搜狗 搜索
+            sogou_m: {
+                host: ['m.sogou.com', 'wap.sogou.com'],
+                functionS: ()=> {if (lp != '/') {curSite = DBSite.sogou_m;}},
+                pager: {
+                    type: 2,
+                    nextL: 'css;#ajax_next_page',
+                    isHidden: true,
+                    scrollD: 1000
+                }
+            }, //                搜狗 搜索 - 手机版
             sogou_weixin: {
                 host: 'weixin.sogou.com',
                 functionS: ()=> {if (lp == '/') {
@@ -1692,7 +1714,13 @@ function: {
             }, //    搜狗微信 - 搜索
             toutiao: {
                 host: ['www.toutiao.com', 'so.toutiao.com'],
-                functionS: ()=> {if (location.hostname != 'www.toutiao.com' && lp == '/search') curSite = DBSite.toutiao;},
+                functionS: ()=> {if (location.hostname != 'www.toutiao.com') {
+                    if (lp == '/search/' || isMobile()) {
+                        curSite = DBSite.toutiao_m;
+                    } else if (lp == '/search') {
+                        curSite = DBSite.toutiao;
+                    }
+                }},
                 pager: {
                     nextL: '//div[contains(@class, "-pagination")]/a[string()="下一页"]',
                     pageE: 'css;div[class*="-result-list"] > .result-content[data-i]',
@@ -1706,6 +1734,14 @@ function: {
                     }
                 }
             }, //                头条 搜索
+            toutiao_m: {
+                pager: {
+                    nextL: 'css;#page-bottom a[class*="containerRight_"], #page-bottom a[class*="container_"]',
+                    pageE: 'css;#results > div',
+                    replaceE: 'css;#page-bottom',
+                    scrollD: 2000
+                }
+            }, //              头条 搜索 - 手机版
             so: {
                 host: 'www.so.com',
                 functionS: ()=> {if (lp != '/') {curSite = DBSite.so; insStyle('img {opacity: 1 !important;}')}},
@@ -1721,6 +1757,16 @@ function: {
                     bFp: [0, 'img[data-isrc]', 'data-isrc']
                 }
             }, //                     360 搜索
+            so_m: {
+                host: 'm.so.com',
+                functionS: ()=> {if (lp != '/') {curSite = DBSite.so_m;}},
+                pager: {
+                    type: 2,
+                    nextL: 'css;#load-more',
+                    isHidden: true,
+                    scrollD: 1000
+                }
+            }, //                   360 搜索 - 手机版
             duckduckgo: {
                 host: 'duckduckgo.com',
                 functionS: ()=> {
@@ -7637,6 +7683,10 @@ function: {
     function isHidden(el){
         return (el.offsetParent === null);
     }
+    // 判断是否为手机版（是则返回 true）
+    function isMobile(){
+        return (/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|MicroMessenger|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i.test(navigator.userAgent) || (window.screen.width < 500 && window.screen.height < 800));
+    }
     // 判断 URL 是否存在指定文本
     function indexOF(e, l = 'p', low = false){
         switch (l) {
@@ -7717,15 +7767,15 @@ function: {
         // 插入网页
         let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.9 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important;">
 <h3><strong>自定义翻页规则（优先于脚本内置规则）</strong></h3>
-<ul style="list-style: disc !important; margin-left: 35px !important;">
-<li>翻页规则为 JSON 格式，因此大家需要先去了解一下 JSON 的基本格式（如：两边都需要双引号、最后一个末尾不能加逗号等）。</li>
-<li>具体的翻页规则说明、示例，为了方便更新及补充，我都写到 <a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github</a> 及 <a href="https://greasyfork.org/scripts/419215" target="_blank">Greasyfork</a> 里面了。</li>
-<li>该脚本最初只是自用的，没有考虑到自定义翻页规则，因此我只能勉强实现该功能，但局限性比较多，只适用于简单的网站。</li>
-<li>脚本会自动格式化规则，因此无需手动缩进、换行。</li>
-</ul>
-<p style="color: #ff3535 !important;">注意：不要完全照搬脚本内置规则，因为和标准 JSON 格式有所差别，如：必须两边内容都加双引号（不能用单引号）。</p>
 <details>
 <summary><kbd><strong>「 点击展开 查看示例 」（把常用规则都放在一起了，方便需要的时候可复制一份修改使用）</strong></kbd></summary>
+<ul style="list-style: disc !important; margin-left: 35px !important;">
+<li>翻页规则为 JSON 格式，因此大家需要先去<strong>了解一下 JSON 的基本格式</strong>。</li>
+<li>具体的翻页规则说明、示例，为了方便更新及补充，我都写到 <strong><a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github</a> 及 <a href="https://greasyfork.org/scripts/419215" target="_blank">Greasyfork</a></strong> 里面了。</li>
+<li>该功能只适用于<strong>简单的网站</strong>，当然这类网站占<strong>大多数</strong>，我写的数百规则里大部分都是这类网站。</li>
+<li>脚本会自动格式化规则，因此<strong>无需手动缩进、换行</strong>。</li>
+</ul>
+<p style="color: #ff3535 !important;">注意：不要完全照搬脚本内置规则，因为和标准 JSON 格式等有所差别。</p>
 <pre>
 "aaa": {
     "host": "aaa",
@@ -7762,18 +7812,19 @@ function: {
 </pre>
 </details>
 
-<textarea id="Autopage_customRules_textarea" style="min-width:95% !important; min-height:300px !important; display: block !important; margin: 10px 0 10px 0; white-space:nowrap !important; overflow:scroll !important; resize: auto !important;" placeholder="留空等于默认的 {}">${JSON.stringify(GM_getValue('menu_customRules', {}), null, '\t')}</textarea>
+<textarea id="Autopage_customRules_textarea" style="min-width:95% !important; min-height:75% !important; display: block !important; margin: 10px 0 10px 0; white-space:nowrap !important; overflow:scroll !important; resize: auto !important;" placeholder="留空等于默认的 {}">${JSON.stringify(GM_getValue('menu_customRules', {}), null, '\t')}</textarea>
 <button id="Autopage_customRules_save">保存并刷新</button><button id="Autopage_customRules_cancel">取消</button>
 </div>`
         document.documentElement.insertAdjacentHTML('beforeend', _html);
+        document.body.style.overflow = 'hidden';
         // 点击事件
         getCSS('#Autopage_customRules_save').onclick = function () {
             let rules = getCSS('#Autopage_customRules_textarea').value;
-            console.log(rules)
+            //console.log(rules)
             if (!rules) rules = '{}'
             try {
                 rules = JSON.parse(rules)
-                console.log(rules)
+                //console.log(rules)
                 GM_setValue('menu_customRules', rules)
                 location.reload();
             } catch (e) {
@@ -7781,7 +7832,7 @@ function: {
                 window.alert('自定义规则存在格式错误：\n' + e + '\n\n注意事项：\n规则中冒号 : 左右的内容都需要加上双引号 " 而不能用单引号 \'，如果内容中含有双引号则需要对双引号转义（即 \" 这样）或者改用单引号');
             }
         }
-        getCSS('#Autopage_customRules_cancel').onclick = function () {getCSS('#Autopage_customRules').remove();}
+        getCSS('#Autopage_customRules_cancel').onclick = function () {document.body.style.overflow = ''; getCSS('#Autopage_customRules').remove();}
     }
     // 显示页码
     function pageNumber(type) {
