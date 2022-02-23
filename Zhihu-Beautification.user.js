@@ -226,7 +226,7 @@ html[data-theme="light"] .Button--primary.Button--blue {color: #fff !important;b
             style_widescreenDisplayPeople = `/* 宽屏显示 - 用户主页 */
 .Profile-mainColumn {width: inherit !important;}
 .Profile-sideColumn {display: none !important;}
-.Profile-main {width: ${GM_getValue('menu_widescreenDisplayWidth')}px !important;}
+.Profile-main, #ProfileHeader {width: ${GM_getValue('menu_widescreenDisplayWidth')}px !important;}
 `,
             style_2 = `/* 隐藏在各列表中查看文章时开头显示的大图，不影响文章、专栏页面 */
 .RichContent img.ArticleItem-image {display: none !important;}
