@@ -7799,7 +7799,7 @@ function: {
 
         let customRules = JSON.stringify(GM_getValue('menu_customRules', {}), null, '\t');
         if (customRules == '{}') customRules = '{\n\t\n}'; // 引导用户插入位置
-        let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.9 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important; overflow: scroll !important;">
+        let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.95 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important; overflow: scroll !important; text-align: left !important;">
 <h3><strong>自定义翻页规则（优先于脚本内置规则）-【把规则插入默认的 { } 中间】</strong></h3>
 <details>
 <summary><kbd><strong>「 点击展开 查看示例 」（把常用规则都放在一起了，方便需要的时候可复制一份修改使用）</strong></kbd></summary>
