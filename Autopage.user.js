@@ -7823,7 +7823,7 @@ function: {
 </ul>
 <p style="color: #ff3535 !important;">注意：不要完全照搬脚本内置规则，因为和标准 JSON 格式等有所差别，具体请参考下面示例。</p>
 <pre>
-// 大多数网站的规则一般都只需要像第一个 "aaa" 这样的（不要连带复制这行注释说明）：
+// 大多数网站的规则一般都只需要像第一个 "示例 1" 这样的（不要连带复制这行注释说明）：
 {
     "aaa": {
         "host": "aaa.com",
@@ -7855,7 +7855,7 @@ function: {
             "aF": "document.body.appendChild(document.createElement('script')).textContent = 'xxx'"
         }
     },
-    "ccc": {
+    "这里也可以用中文": {
         "host": "/\\.ccc\\.com/",
         "url": "if (location.pathname.indexOf('/s') > -1) {return true;}",
         "pager": {
