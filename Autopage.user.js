@@ -7814,7 +7814,7 @@ function: {
         let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.95 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important; overflow: scroll !important; text-align: left !important;">
 <h3><strong>自定义翻页规则（优先于脚本内置规则）-【把规则插入默认的 { } 中间】</strong></h3>
 <details>
-<summary><kbd><strong>「 点击展开 查看示例 」（把常用规则都放在一起了，方便需要的时候可复制一份修改使用）</strong></kbd></summary>
+<summary><kbd><strong>「 点击展开 查看示例 」（我把常用规则都塞进去了，方便需要的时候可复制一份修改/删减后使用）</strong></kbd></summary>
 <ul style="list-style: disc !important; margin-left: 35px !important;">
 <li>翻页规则为 JSON 格式，因此大家需要先去<strong>了解一下 JSON 的基本格式</strong>。</li>
 <li>具体的翻页规则说明、示例，为了方便更新及补充，我都写到 <strong><a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github</a> 及 <a href="https://greasyfork.org/scripts/419215" target="_blank">Greasyfork</a></strong> 里面了。</li>
@@ -7823,36 +7823,49 @@ function: {
 </ul>
 <p style="color: #ff3535 !important;">注意：不要完全照搬脚本内置规则，因为和标准 JSON 格式等有所差别，具体请参考下面示例。</p>
 <pre>
-"aaa": {
-    "host": "aaa",
-    "url": "/^\\/s$/",
-    "style": ".aaaa {display: none !important;}",
-    "pager": {
-        "type": 1,
-        "nextL": "id('page')//a[contains(text(),'下一页')]",
-        "pageE": "css;aaa",
-        "insertP": ["css;.bbb", 3],
-        "replaceE": "css;.page",
-        "scriptT": 2,
-        "interval": 500,
-        "scrollD": 1500
+// 大多数网站的规则一般都只需要像第一个 "aaa" 这样的（不要连带复制这行注释说明）：
+{
+    "aaa": {
+        "host": "aaa.com",
+        "url": "/xxx/",
+        "pager": {
+            "nextL": "css;xxx",
+            "pageE": "css;xxx",
+            "replaceE": "css;xxx",
+            "scrollD": 1000
+        }
     },
-    "function": {
-        "bF": "src_bF",
-        "bFp": [0, "img[data-src]", "data-src"],
-        "aF": "document.body.appendChild(document.createElement('script')).textContent = 'xxx'"
-    }
-},
-"bbb": {
-    "host": "/\.bbb\.com/",
-    "url": "if (location.pathname.indexOf('/s') > -1) {return true;}",
-    "pager": {
-        "type": 2,
-        "nextL": "css;#autopbn",
-        "nextText": "下一页",
-        "nextTextOf": "下一页",
-        "interval": 1000,
-        "scrollD": 1500
+    "bbb": {
+        "host": ["bbb1.com", "bbb2.com"],
+        "url": "/^\\/s$/",
+        "style": ".aaaa {display: none !important;}",
+        "pager": {
+            "type": 1,
+            "nextL": "id('page')//a[contains(text(),'下一页') or text()='下一页']",
+            "pageE": "css;aaa",
+            "insertP": ["css;.bbb",3],
+            "replaceE": "css;.page",
+            "scriptT": 1,
+            "interval": 500,
+            "scrollD": 1500
+        },
+        "function": {
+            "bF": "src_bF",
+            "bFp": [0,"img[data-src]","data-src"],
+            "aF": "document.body.appendChild(document.createElement('script')).textContent = 'xxx'"
+        }
+    },
+    "ccc": {
+        "host": "/\\.ccc\\.com/",
+        "url": "if (location.pathname.indexOf('/s') > -1) {return true;}",
+        "pager": {
+            "type": 2,
+            "nextL": "css;#autopbn",
+            "nextText": "下一页",
+            "nextTextOf": "下一页",
+            "interval": 1000,
+            "scrollD": 1500
+        }
     }
 }
 </pre>
