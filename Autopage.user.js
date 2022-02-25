@@ -2233,7 +2233,7 @@ function: {
                 }
             }, //              煎蛋网
             jandan_comment: {
-                style: '#nav_prev, #nav_next {display: none !important;} .jandan-vote a.tucao-btn23:link {color: #c8c7cc !important;} .jandan-tucao {background-color: #fafaf9 !important;}',
+                style: '#nav_prev, #nav_next, #tucao-gg {display: none !important;} .jandan-vote a.tucao-btn23:link {color: #c8c7cc !important;} .jandan-tucao {background-color: #fafaf9 !important;}',
                 pager: {
                     nextL: 'css;a.previous-comment-page',
                     pageE: 'css;ol.commentlist > li[id^="comment-"], script[src^="//cdn.jandan.net/static/min/"]',
