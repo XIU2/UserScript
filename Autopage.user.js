@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      4.9.7
+// @version      4.9.8
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流，追求小而美），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  無縫拼接下一頁內容（瀑布流，追求小而美），支持各種論壇、搜索引擎、漫畫網站~
@@ -7080,6 +7080,7 @@ function: {
         //console.log(GM_getValue('menu_customRules'))
         DBSite = Object.assign(GM_getValue('menu_customRules'), DBSite)
         setSiteTypeID();
+        //console.log(DBSite)
         // 用于脚本判断（针对部分特殊的网站）
         SiteType = {
             BAIDU_TIEBA: DBSite.baidu_tieba.SiteTypeID
@@ -7096,7 +7097,8 @@ function: {
         windowScroll(function (direction, e) {
             // 下滑 且 未暂停翻页 且 SiteTypeID > 0 时，才准备翻页
             if (direction != 'down' || !pausePage || curSite.SiteTypeID == 0) return
-            if (!curSite.pager.type) curSite.pager.type = 1
+            if (!curSite.pager.type) curSite.pager.type = 1; // 默认翻页模式 1
+            if (!curSite.pager.scrollD) curSite.pager.scrollD = 1500; // 默认翻页触发线 1500
             // 翻页模式 5 且为框架内时，要判断顶层是否通过页码暂停翻页了
             if (curSite.pager.type == 5 && self != top && window.top.document.xiu_pausePage == false) return
 
@@ -7817,14 +7819,15 @@ function: {
 <details>
 <summary><kbd><strong>「 点击展开 查看示例 」（我把常用规则都塞进去了，方便需要的时候可直接复制一份修改使用）</strong></kbd></summary>
 <ul style="list-style: disc !important; margin-left: 35px !important;">
-<li>翻页规则为 JSON 格式，因此大家需要先去<strong>了解一下 JSON 的基本格式</strong>。</li>
-<li>具体的翻页规则说明、示例，为了方便更新及补充，我都写到 <strong><a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github</a> 及 <a href="https://greasyfork.org/scripts/419215" target="_blank">Greasyfork</a></strong> 里面了。</li>
-<li>该功能只适用于<strong>简单的网站</strong>，当然这类网站占<strong>大多数</strong>，我写的数百规则里大部分都是这类网站。</li>
+<li>翻页规则为 JSON 格式，因此大家需要多少<strong>了解一点 JSON 的基本格式</strong>（主要就是逗号）。</li>
+<li>具体的翻页规则说明、示例、NSFW 等网站规则，为了方便更新及补充，我都写到 <strong><a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github</a> 及 <a href="https://greasyfork.org/scripts/419215" target="_blank">Greasyfork</a></strong> 里面了。</li>
 <li>脚本会自动格式化规则，因此<strong>无需手动缩进、换行</strong>，只需把规则<strong>插入默认的 { } 中间</strong>即可。</li>
+<li style="color: #ff3535 !important;">注意：不要完全照搬脚本内置规则，因为和标准 JSON 格式等有所差别，具体请对比下面示例规则。</li>
 </ul>
-<p style="color: #ff3535 !important;">注意：不要完全照搬脚本内置规则，因为和标准 JSON 格式等有所差别，具体请参考下面示例。</p>
 <pre>
-// 大多数网站一般都只需要像第一个 "aaa" 这样的规则（不要连带复制这行注释说明）：
+// 大多数网站一般都只需要像第一个 "aaa" 这样的规则（注意，不要连带着复制这几行注释说明）
+// 其中 "scrollD" 是用来控制翻页敏感度的（越大就越早触发翻页，访问速度慢的网站需要调大，可省略(注意逗号)，默认 1500）
+// 每个规则第一行的规则名（即 "aaa": { ）是唯一的，不能重复（包括与脚本内置规则），否则会被覆盖，支持中文
 {
     "aaa": {
         "host": "aaa.com",
@@ -7873,7 +7876,7 @@ function: {
 </details>
 
 <textarea id="Autopage_customRules_textarea" style="min-width:95% !important; min-height:70% !important; display: block !important; margin: 10px 0 10px 0; white-space:nowrap !important; overflow:scroll !important; resize: auto !important;" placeholder="留空等于默认的 {}，请把规则插入 {} 之间">${customRules}</textarea>
-<button id="Autopage_customRules_save">保存并刷新</button><button id="Autopage_customRules_cancel">取消</button>
+<button id="Autopage_customRules_save" style="margin-right: 20px !important;">保存并刷新</button><button id="Autopage_customRules_cancel">取消修改</button>
 </div>`
         document.documentElement.insertAdjacentHTML('beforeend', _html);
         document.documentElement.style.overflow = document.body.style.overflow = 'hidden';
