@@ -25,7 +25,7 @@
 | [<img src="https://www.v2ex.com/static/favicon.ico" height="16px" />](https://www.v2ex.com/) | **V2EX 增强** | **自动签到**、链接转图片、自动无缝翻页、新标签页打开链... | **[安装](https://greasyfork.org/zh-CN/scripts/424246)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript/V2ex-Enhanced.user.js)** |
 | [<img src="https://i.loli.net/2021/03/30/ULV9XunaHesqGIR.png" height="16px" />](https://github.com/XIU2) |  **Github 增强** | **高速下载** Git Clone/SSH、Release、Raw、Code(ZIP) ... | **[安装](https://greasyfork.org/zh-CN/scripts/412245)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript/GithubEnhanced-High-Speed-Download.user.js)** |
 | [<img src="https://ping.sx/favicon.ico" height="16px" />](https://ping.sx/ping) |  **Ping.Sx 增强** | **一键复制所有 IP**、清理 IP 链接、快捷回到顶部 ... | **[安装](https://greasyfork.org/zh-CN/scripts/438704)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript/Ping.Sx-Enhanced.user.js)** |
-| [<img src="https://user-images.githubusercontent.com/54703944/118383905-b5d32380-b634-11eb-8914-dcea8e628ed3.png" height="16px" />](https://github.com/XIU2) |  **自动无缝翻页 \*** | **所有 Discuz! 论坛**/百度/谷歌/B站/贴吧/豆瓣/漫画/千图... | **[安装](https://greasyfork.org/zh-CN/scripts/419215)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript/Autopage.user.js)** |
+| [<img src="https://user-images.githubusercontent.com/54703944/118383905-b5d32380-b634-11eb-8914-dcea8e628ed3.png" height="16px" />](https://github.com/XIU2) |  **自动无缝翻页 \*** | **所有 Discuz! / PT 论坛**/百度/谷歌/B站/贴吧/豆瓣/漫画/千图... | **[安装](https://greasyfork.org/zh-CN/scripts/419215)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript/Autopage.user.js)** |
 | [<img src="https://www.3dmgame.com/favicon.ico" height="16px" />](https://bbs.3dmgame.com) | **3DM论坛 美化** | 精简多余内容、样式优化 | **[安装](https://greasyfork.org/zh-CN/scripts/413593)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript/3dm-Beautification.user.js)** |
 | [<img src="https://www.3dmgame.com/favicon.ico" height="16px" />](https://bbs.3dmgame.com) | **3DM论坛 增强** | **自动回复**、自动无缝翻页、清理置顶帖子、自动滚至隐藏... | **[安装](https://greasyfork.org/zh-CN/scripts/412890)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript/3dm-Enhanced.user.js)** |
 | [<img src="https://www.lanzou.com/favicon.ico" height="16px" />](https://www.lanzou.com) |  **蓝奏云网盘 增强 \*** | **右键显示菜单**、直接下载文件、显示更多文件、自动密码... | **[安装](https://greasyfork.org/zh-CN/scripts/419224)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript/Lanzou-Enhanced.user.js)** |
@@ -40,7 +40,7 @@
 | [<img src="http://bbs.zhiyoo.net/favicon.ico" height="16px" />](http://bbs.zhiyoo.net/forum.php?mod=forumdisplay&fid=42&filter=author&orderby=dateline) | ~~_**智友邦论坛 美化**_~~ | ~~_精简多余内容、样式优化、宽屏显示_~~ | ~~_**[安装](https://greasyfork.org/zh-CN/scripts/412361)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript/Zhiyoo-Beautification.user.js)**_~~ |
 | [<img src="http://bbs.zhiyoo.net/favicon.ico" height="16px" />](http://bbs.zhiyoo.net/forum.php?mod=forumdisplay&fid=42&filter=author&orderby=dateline) | ~~_**智友邦论坛 增强**_~~ | ~~_自动签到、**自动回复**、自动无缝翻页、快捷回到顶部、附..._~~ | ~~_**[安装](https://greasyfork.org/zh-CN/scripts/412362)** \| **[备用](https://cdn.jsdelivr.net/gh/XIU2/UserScript/Zhiyoo-Enhanced.user.js)**_~~ |
 
-> _脚本名称末尾 **`*`** 代表该脚本为**网友主动提出需求**而写的。如果你也有需求，可以[告诉我](https://github.com/XIU2/UserScript/issues/new/choose)！_  
+> _脚本名称末尾 **`*`** 代表该脚本为**网友主动提出需求**而写的。如果你有需求，也可以[告诉我](https://github.com/XIU2/UserScript/issues/new/choose)！_  
 > _所有脚本均在 **Chrome、Firefox、Edge 浏览器 + Tampermonkey 扩展** 环境下测试通过！_
 
 ****
