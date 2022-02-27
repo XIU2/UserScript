@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.0.0
+// @version      5.0.1
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流，追求小而美），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  無縫拼接下一頁內容（瀑布流，追求小而美），支持各種論壇、搜索引擎、漫畫網站~
@@ -111,7 +111,7 @@
 
                 for (let i of DBSite[now].host) { // 遍历 数组
                     // 针对自定义翻页规则中的正则
-                    if (typeof i === 'string' && i.slice(0,1) === '/') i = new RegExp(i.slice(1,i.length-1))
+                    if (typeof i === 'string' && i.slice(0,1) === '/') i = new RegExp(i.slice(1,i.length-1), 'i')
                     if ((i instanceof RegExp && i.test(location.hostname)) || (typeof i === 'string' && i === location.hostname)) {
 
                         if (self != top) {if (!DBSite[now].iframe) break end;} // 如果当前位于 iframe 框架下，就需要判断是否需要继续执行
@@ -120,7 +120,7 @@
                                 DBSite[now].url();
                             } else { // 自定义翻页规则时，因为同域名不同页面 url 分开写，所以如果没找到就需要跳出当前数组循环，继续规则循环
                                 if (DBSite[now].url.slice(0,1) === '/') { // 如果是正则，则对 URL 路径进行匹配
-                                    if (new RegExp(DBSite[now].url.slice(1,DBSite[now].url.length-1)).test(location.pathname + location.search) === true) {curSite = DBSite[now];} else {break;}
+                                    if (new RegExp(DBSite[now].url.slice(1,DBSite[now].url.length-1), 'i').test(location.pathname + location.search) === true) {curSite = DBSite[now];} else {break;}
                                 } else { // 如果是函数，那就执行代码
                                     if (new Function (DBSite[now].url)() === true) {curSite = DBSite[now];} else {break;}
                                 }
@@ -135,7 +135,7 @@
                 // 如果是 正则/字符串
             } else {
                 // 针对自定义翻页规则中的正则
-                if (typeof DBSite[now].host === 'string' && DBSite[now].host.slice(0,1) === '/') DBSite[now].host = new RegExp(DBSite[now].host.slice(1,DBSite[now].host.length-1))
+                if (typeof DBSite[now].host === 'string' && DBSite[now].host.slice(0,1) === '/') DBSite[now].host = new RegExp(DBSite[now].host.slice(1,DBSite[now].host.length-1), 'i')
                 if ((DBSite[now].host instanceof RegExp && DBSite[now].host.test(location.hostname)) || (typeof DBSite[now].host === 'string' && DBSite[now].host === location.hostname)) {
 
                     if (self != top) {if (!DBSite[now].iframe) break;} // 如果当前位于 iframe 框架下，就需要判断是否需要继续执行
@@ -144,7 +144,7 @@
                             DBSite[now].url();
                         } else { // 自定义翻页规则时，因为同域名不同页面 url 分开写，所以如果没找到就需要继续规则循环
                             if (DBSite[now].url.slice(0,1) === '/') { // 如果是正则，则对 URL 路径进行匹配
-                                if (new RegExp(DBSite[now].url.slice(1,DBSite[now].url.length-1)).test(location.pathname + location.search) === true) {curSite = DBSite[now];} else {continue;}
+                                if (new RegExp(DBSite[now].url.slice(1,DBSite[now].url.length-1), 'i').test(location.pathname + location.search) === true) {curSite = DBSite[now];} else {continue;}
                             } else { // 如果是函数，那就执行代码
                                 if (new Function (DBSite[now].url)() === true) {curSite = DBSite[now];} else {continue;}
                             }
@@ -5449,490 +5449,6 @@ function: {
                     bFp: [0, 'img[_src]', '_src']
                 }
             }, //      新片场
-            tujigu: {
-                host: ['www.tuji001.com', 'www.tujigu.net'],
-                url: ()=> {
-                    if (indexOF('/a/')) {
-                        curSite = DBSite.tujigu;
-                    } else if (lp != '/' && !indexOF('/search/')) {
-                        curSite = DBSite.tujigu_list;
-                    }},
-                style: '.content img {display: block !important;}',
-                pager: {
-                    nextL: 'id("pages")/a[contains(text(), "下一页")]',
-                    pageE: '.content > img',
-                    replaceE: '#pages',
-                    scrollD: 2000
-                }
-            }, //              tujigu - 图片页
-            tujigu_list: {
-                pager: {
-                    nextL: 'id("pages")/a[contains(text(), "下一页")]',
-                    pageE: '.hezi > ul > li',
-                    insertP: ['//div[@class="hezi"][last()]/ul', 3],
-                    replaceE: '#pages',
-                    scrollD: 1000
-                }
-            }, //         tujigu - 分类页
-            mvtui: {
-                host: 'mvtui.com',
-                url: ()=> {if (indexOF('.html')) {curSite = DBSite.mvtui;} else {curSite = DBSite.mvtui_list;}},
-                pager: {
-                    nextL: '.article-paging span.current+a',
-                    pageE: '.article-content > p',
-                    replaceE: '.article-paging',
-                    scrollD: 3000
-                }
-            }, //               mvtui - 图片页
-            mvtui_list: {
-                pager: {
-                    nextL: 'li.next-page a',
-                    pageE: '#posts > div',
-                    replaceE: '.pagination',
-                    scrollD: 1500
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-src]', 'data-src']
-                }
-            }, //          mvtui - 分类页
-            mzitu: {
-                host: 'www.mzitu.com',
-                url: ()=> {if (indexOF(/\/\d+/)) {curSite = DBSite.mzitu;getCSS('.main-image a[href]').href = 'javascript:void(0);'} else {curSite = DBSite.mzitu_list;}},
-                pager: {
-                    nextL: '//div[@class="pagenavi"]/a[contains(string(), "下一页")]',
-                    pageE: '.main-image img',
-                    replaceE: '.pagenavi',
-                    scrollD: 1500
-                }
-            }, //               mzitu - 图片页
-            mzitu_list: {
-                pager: {
-                    nextL: '.next.page-numbers',
-                    pageE: '.postlist > ul > li',
-                    replaceE: '.pagination',
-                    scrollD: 1000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-original]', 'data-original']
-                }
-            }, //          mzitu - 分类/搜索页
-            xiurenji: {
-                host: /\.xiuren[a-z]+\./,
-                url: ()=> {insStyle('img[src$=".gif"]:not([src*="logo"]) {display: none !important;}');
-                           if (indexOF('.html') && !indexOF('/index')) {
-                               curSite = DBSite.xiurenji;
-                           } else if (indexOF('search')) {
-                               curSite = DBSite.xiurenji_search;
-                           } else {
-                               curSite = DBSite.xiurenji_list;
-                           }},
-                pager: {
-                    nextL: '//div[@class="page"]/a[text()="下页"]',
-                    pageE: 'div.content > p > *',
-                    replaceE: '.page',
-                    scrollD: 1500
-                }
-            }, //            xiurenji - 图片页
-            xiurenji_list: {
-                pager: {
-                    nextL: '//div[@class="page"]/a[text()="下页"]',
-                    pageE: 'li.i_list',
-                    replaceE: '.page',
-                    scrollD: 1000
-                }
-            }, //       xiurenji - 分类页
-            xiurenji_search: {
-                pager: {
-                    nextL: '.page > a.current+a',
-                    pageE: '.node > *',
-                    replaceE: '.page',
-                    scrollD: 700
-                }
-            }, //     xiurenji - 搜索页
-            jpxgmn: {
-                host: 'www.jpxgyw.net',
-                url: ()=> {
-                    if (indexOF('.html')) {
-                        curSite = DBSite.jpxgmn;
-                    } else if (lp != '/' && indexOF('/search/')) {
-                        curSite = DBSite.jpxgmn; curSite.pager.pageE = '.related_posts > ul';
-                    }},
-                pager: {
-                    nextL: '.pagination a.current+a',
-                    pageE: '.article-content img',
-                    replaceE: '.pagination',
-                    interval: 500,
-                    scrollD: 2000
-                }
-            }, //              jpxgmn
-            tvv: {
-                host: /\.tvv\.tw/,
-                url: ()=> {if (lp == '/' || indexOF('/page/') || indexOF('/category/')) {curSite = DBSite.tvv;}},
-                style: '.blog-masonry, .blog-masonry-4col {height: auto !important;} .blog-listing {position: relative !important;float: left !important;top: auto !important;left: auto !important;} .blog-title > a {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;} .blog-image img {min-height: 300px;}',
-                pager: {
-                    nextL: 'a.next',
-                    pageE: '.blog-listing',
-                    replaceE: '.pagination',
-                    scrollD: 2000
-                }
-            }, //                 tvv
-            mm131: {
-                host: ['www.mm131.net', 'www.mmm131.com'],
-                url: ()=> {if (indexOF('.html')) {curSite = DBSite.mm131;} else {curSite = DBSite.mm131_list;}},
-                retry: 300,
-                pager: {
-                    nextL: '//div[@class="content-page"]/a[contains(text(), "下一页")]',
-                    pageE: '.content-pic img',
-                    replaceE: '.content-page',
-                    scrollD: 2000
-                }
-            }, //               MM131 - 图片页
-            mm131_list: {
-                pager: {
-                    nextL: '//dd[@class="page"]/a[contains(text(), "下一页")]',
-                    pageE: 'dl.list-left > dd:not([class="page"])',
-                    replaceE: '.page',
-                    scrollD: 1000
-                }
-            }, //          MM131 - 分类页
-            mm131_m: {
-                host: 'm.mmm131.com',
-                url: ()=> {insStyle('.bannert, .bannerb, bannert_ios, .bannerb_ios {display: none !important;}'); if (lp == '/') {curSite = DBSite.mm131_m_;} else if (indexOF('.html')) {curSite = DBSite.mm131_m;} else {curSite = DBSite.mm131_m_list;}},
-                retry: true,
-                pager: {
-                    nextL: '//div[@class="paging"]/a[text()="下一张" or text()="下一页"]',
-                    pageE: '.post-content img',
-                    replaceE: '.paging',
-                    scrollD: 2000
-                }
-            }, //             MM131 - 手机版 - 图片页
-            mm131_m_list: {
-                pager: {
-                    nextL: '#xbtn',
-                    pageE: '#content > article',
-                    replaceE: '#webpage',
-                    scrollD: 2000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-img]', 'data-img']
-                }
-            }, //        MM131 - 手机版 - 分类页
-            mm131_m_: {
-                pager: {
-                    type: 2,
-                    nextL: '#webpage>span[onclick]',
-                    isHidden: true,
-                    interval: 500,
-                    scrollD: 2000
-                }
-            }, //            MM131 - 手机版 - 首页
-            mrcong: {
-                host: 'mrcong.com',
-                url: ()=> {if (lp == '/' || indexOF('/tag/')) {curSite = DBSite.mrcong_list;} else {curSite = DBSite.mrcong;}},
-                pager: {
-                    nextL: '.post-page-numbers.current+a.post-page-numbers',
-                    pageE: '#fukie2 > p > img',
-                    replaceE: '.page-link',
-                    scrollD: 3000
-                }
-            }, //              MrCong - 图片页
-            mrcong_list: {
-                pager: {
-                    type: 3,
-                    nextL: '.current+a.page',
-                    pageE: 'article.item-list',
-                    scrollE: '.pagination',
-                    replaceE: '.pagination',
-                    scrollD: 2000
-                }
-            }, //         MrCong - 分类页
-            buondua: {
-                host: 'buondua.com',
-                url: ()=> {if (indexOF(/-photos-\d+/)) {curSite = DBSite.buondua;} else {curSite = DBSite.buondua_list;}},
-                pager: {
-                    type: 3,
-                    nextL: '//nav[@class="pagination"]//span[./a[contains(@class, "is-current")]]/following-sibling::span[1]/a',
-                    pageE: '.article-fulltext > p',
-                    scrollE: 'nav.pagination',
-                    replaceE: 'nav.pagination',
-                    scrollD: 1500
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-src]', 'data-src']
-                }
-            }, //             Buon Dua - 图片页
-            buondua_list: {
-                pager: {
-                    type: 3,
-                    nextL: '.pagination-next',
-                    pageE: '.items-row.column, .collection-item.column',
-                    scrollE: 'nav.pagination',
-                    replaceE: 'nav.pagination',
-                    scrollD: 1200
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-src]', 'data-src']
-                }
-            }, //        Buon Dua - 分类页
-            fnvshen: {
-                host: 'www.fnvshen.com',
-                url: ()=> {
-                    if (indexOF('/gallery/') || indexOF('/tag/')) {
-                        curSite = DBSite.fnvshen_list;
-                    } else if (indexOF('/g/')) {
-                        curSite = DBSite.fnvshen;
-                    } else if (indexOF(/\/article\/\d+\//)) {
-                        curSite = DBSite.fnvshen_article;
-                    } else if (indexOF('/article/')) {
-                        curSite = DBSite.fnvshen_article_list;
-                    }},
-                pager: {
-                    nextL: '#pages > span +a:not(.a1)',
-                    pageE: '#hgallery > img',
-                    replaceE: '#pages',
-                    scrollD: 1500
-                }
-            }, //             fnvshen - 图片页
-            fnvshen_list: {
-                style: '.yalayi_box {display: none !important; margin: -4px 0 !important;}',
-                pager: {
-                    nextL: '//div[@class="pagesYY"]//a[contains(text(), "下一页")]',
-                    pageE: '#listdiv > ul > li',
-                    replaceE: '.pagesYY',
-                    scrollD: 1000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-original]', 'data-original']
-                }
-            }, //        fnvshen - 分类页
-            fnvshen_article_list: {
-                pager: {
-                    nextL: '//div[@class="pagesYY"]//a[contains(text(), "下一页")]',
-                    pageE: 'li.other_girlli',
-                    replaceE: '.pagesYY',
-                    scrollD: 1000
-                }
-            }, //fnvshen - 文章列表
-            fnvshen_article: {
-                pager: {
-                    nextL: '.pagesYY a.cur+a',
-                    pageE: '#articleDiv',
-                    insertP: ['#articleDiv', 6],
-                    replaceE: '.pagesYY',
-                    scrollD: 1000
-                }
-            }, //     fnvshen - 文章内
-            nvshen: {
-                host: 'www.99nvshen.com',
-                url: ()=> {
-                    if (indexOF('/galleryList/') || indexOF('/modelList/')) {
-                        curSite = DBSite.nvshen; curSite.pager.pageE = '.book-list > div.col-sm-4';
-                    } else if (indexOF('/gallery/')) {
-                        curSite = DBSite.nvshen; curSite.pager.interval = 1500; curSite.pager.scrollD = 2500;
-                    }},
-                pager: {
-                    nextL: 'ul.pagination a[aria-label="Next"]',
-                    pageE: 'a.gallery-detail-img',
-                    replaceE: 'ul.pagination',
-                    scrollD: 1500
-                }
-            }, //              nvshen
-            xrmn5: {
-                host: 'www.xrmn5.cc',
-                url: ()=> {if (indexOF(/\d+\.html/)) {
-                    curSite = DBSite.xrmn5;
-                } else if (indexOF('/search')) {
-                    curSite = DBSite.xrmn5_search;
-                } else {
-                    curSite = DBSite.xrmn5_list;
-                }},
-                pager: {
-                    nextL: '//div[contains(@class, "page")]//a[contains(text(), "下页")]',
-                    pageE: '.content_left > p > img',
-                    replaceE: '.page',
-                    scrollD: 3000
-                }
-            }, //               xrmn5 - 图片页
-            xrmn5_list: {
-                pager: {
-                    nextL: '//div[contains(@class, "page")]//a[contains(text(), "下页")]',
-                    pageE: 'ul.update_area_lists > li',
-                    replaceE: '.page',
-                    scrollD: 2000
-                }
-            }, //          xrmn5 - 分类页
-            xrmn5_search: {
-                pager: {
-                    nextL: '.page a.current+a',
-                    pageE: 'div.sousuo',
-                    replaceE: '.page',
-                    scrollD: 2000
-                }
-            }, //        xrmn5 - 搜索页
-            jpmn8: {
-                host: 'www.jpmn8.com',
-                url: ()=> {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.jpmn8;} else if (lp != '/') {curSite = DBSite.jpmn8_list;}},
-                style: 'img[onload] {min-height: 500px;}',
-                pager: {
-                    nextL: '//div[@class="pagination1"]//a[text()="下一页"]',
-                    pageE: 'img[onload]',
-                    replaceE: '.pagination1',
-                    scrollD: 3000
-                }
-            }, //               jpmn8 - 图片页
-            jpmn8_list: {
-                pager: {
-                    nextL: '//div[@class="pagination1"]//a[text()="下一页"]',
-                    pageE: 'article.excerpt',
-                    replaceE: '.pagination1',
-                    scrollD: 1500
-                }
-            }, //          jpmn8 - 分类页
-            ku66: {
-                host: 'www.ku66.net',
-                url: ()=> {if (/\/\d+\.html/.test(location.pathname)) {curSite = DBSite.ku66;} else {curSite = DBSite.ku66_list;}},
-                style: '.content img {min-height: 500px;}',
-                pager: {
-                    nextL: '//div[@class="NewPages"]//a[text()="下一页"]',
-                    pageE: '.content > img',
-                    insertP: ['.content', 3],
-                    replaceE: '.NewPages',
-                    scrollD: 4000
-                }
-            }, //                ku66 - 图片页
-            ku66_list: {
-                pager: {
-                    nextL: '//div[@class="NewPages"]//a[text()="下一页"]',
-                    pageE: '.TypeList > ul > li',
-                    insertP: ['.TypeList > ul', 3],
-                    replaceE: '.NewPages',
-                    scrollD: 1000
-                }
-            }, //           ku66 - 分类页
-            ku66_m: {
-                host: 'm.ku66.net',
-                url: ()=> {if (/\/\d+\.html/.test(location.pathname)) {curSite = DBSite.ku66_m;} else {curSite = DBSite.ku66_m_list;}},
-                style: '.ArticleImageBox img {min-height: 200px;}',
-                pager: {
-                    nextL: '//div[@class="article_page"]//a[text()="下一页"]',
-                    pageE: '.ArticleImageBox > *',
-                    replaceE: '.article_page',
-                    scrollD: 4000
-                }
-            }, //              ku66 - 手机版 - 图片页
-            ku66_m_list: {
-                pager: {
-                    nextL: '//div[@class="article_page"]//a[text()="下一页"]',
-                    pageE: '.PictureList > ul > li',
-                    replaceE: '.article_page',
-                    scrollD: 1000
-                }
-            }, //         ku66 - 手机版 - 分类页
-            ku137: {
-                host: 'www.ku137.net',
-                url: ()=> {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.ku137;} else if (lp != '/') {curSite = DBSite.ku137_list;}},
-                style: '.Title9, .dibu1, .dibu2 {display: none !important;} .content img {min-height: 500px;}',
-                pager: {
-                    nextL: '//div[@class="page"]/a[text()="下一页"]',
-                    pageE: '.content > img',
-                    replaceE: '.page',
-                    scrollD: 3000
-                }
-            }, //               ku137 - 图片页
-            ku137_list: {
-                pager: {
-                    nextL: '//div[@class="page"]/a[text()="下一页"]',
-                    pageE: '.m-list > ul > li',
-                    replaceE: '.page',
-                    scrollD: 1500
-                }
-            }, //          ku137 - 分类页
-            ku137_m: {
-                host: 'm.ku137.net',
-                url: ()=> {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.ku137_m;} else if (lp != '/') {curSite = DBSite.ku137_m_list;}},
-                style: '.ArticleImageBox img {min-height: 300px;}',
-                pager: {
-                    nextL: '//div[@class="article_page"]//a[text()="下一页"]',
-                    pageE: '.ArticleImageBox > *',
-                    replaceE: '.article_page',
-                    scrollD: 3000
-                }
-            }, //             ku137 - 手机版 - 图片页
-            ku137_m_list: {
-                pager: {
-                    nextL: '//div[@class="article_page"]//a[text()="下一页"]',
-                    pageE: '.PictureList > ul > li',
-                    replaceE: '.article_page',
-                    scrollD: 1500
-                }
-            }, //        ku137 - 手机版 - 分类页
-            mnttz: {
-                host: 'www.mnttz.com',
-                url: ()=> {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.mnttz;} else {curSite = DBSite.mnttz_list;}},
-                style: 'img.content_img {min-height: 500px;}',
-                pager: {
-                    nextL: '.article-paging > span+a',
-                    pageE: 'img.content_img',
-                    replaceE: '.article-paging',
-                    scrollD: 3000
-                }
-            }, //               mnttz - 图片页
-            mnttz_list: {
-                pager: {
-                    nextL: 'li.next-page > a',
-                    pageE: 'article.excerpt',
-                    replaceE: '.pagination',
-                    scrollD: 1500
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-src]', 'data-src']
-                }
-            }, //          mnttz - 分类页
-            kingdom: {
-                host: /kingdom-en\.com/,
-                url: ()=> {if (indexOF(/\/\d+\.html/)) {curSite = DBSite.kingdom;} else if (lp != '/') {curSite = DBSite.kingdom_list;}},
-                style: '.pic_center img {min-height: 300px;} .arcmain > .title, .footer, .index-list-title, .listmain_st {display: none !important;}',
-                pager: {
-                    nextL: 'a.page_next',
-                    pageE: '.pic_center img',
-                    replaceE: '.pagenav',
-                    scrollD: 4000
-                }
-            }, //             kingdom - 图片页
-            kingdom_list: {
-                pager: {
-                    nextL: 'a.page_next',
-                    pageE: 'li.media',
-                    replaceE: '.pagination',
-                    scrollD: 1000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-src]', 'data-src']
-                }
-            }, //        kingdom - 分类页
-            kissgoddess: {
-                host: /kissgoddess\./,
-                url: ()=> {if (indexOF('/album/') || indexOF('/category/')) curSite = DBSite.kissgoddess;},
-                style: '.td-gallery-content > img {min-height: 300px;}',
-                pager: {
-                    nextL: 'a.a1:last-of-type',
-                    pageE: '.td-gallery-content > img, .td-category-span',
-                    replaceE: '#pages',
-                    scrollD: 3000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-original]', 'data-original']
-                }
-            }, //         Kiss Goddess - 图片页
             planetminecraft: {
                 host: 'www.planetminecraft.com',
                 url: ()=> {if (!indexOF('/forums/') && !indexOF('/posts/')) {curSite = DBSite.planetminecraft;}},
@@ -7163,6 +6679,7 @@ function: {
                 scrollD = curSite.pager.scrollD;
             // <<<<< 翻页类型 3（依靠 [基准元素] 与 [浏览器可视区域底部] 之间的距离缩小来触发翻页）>>>>>
             if (curSite.pager.type === 3) {
+                if (!curSite.pager.scrollE) curSite.pager.scrollE = curSite.pager.replaceE; // 默认基准元素是页码
                 let scrollE = getOne(curSite.pager.scrollE);
                 //console.log(scrollE.offsetTop, scrollE.offsetTop - (scrollTop + scrollHeight), scrollD, scrollTop + scrollHeight, curSite.SiteTypeID)
                 if (scrollE.offsetTop - (scrollTop + scrollHeight) <= scrollD) {intervalPause(); checkURL(getPageElems);}
@@ -7931,7 +7448,7 @@ function: {
 </pre>
 </details>
 
-<textarea id="Autopage_customRules_textarea" style="min-width:95% !important; min-height:70% !important; display: block !important; margin: 10px 0 10px 0; white-space:nowrap !important; overflow:scroll !important; resize: auto !important;" placeholder="留空等于默认的 {}，请把规则插入 {} 之间">${customRules}</textarea>
+<textarea id="Autopage_customRules_textarea" style="min-width:95% !important; min-height:70% !important; display: block !important; margin: 10px 0 10px 0; white-space:nowrap !important; overflow:scroll !important; resize: auto !important; text-transform: initial !important;" placeholder="留空等于默认的 {}，请把规则插入 {} 之间">${customRules}</textarea>
 <button id="Autopage_customRules_save" style="margin-right: 20px !important;">保存并刷新</button><button id="Autopage_customRules_cancel">取消修改</button>
 </div>`
         document.documentElement.insertAdjacentHTML('beforeend', _html);
