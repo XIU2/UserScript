@@ -1,0 +1,106 @@
+{
+	"xvideos": {
+		"host": [
+			"www.xnxx.com",
+			"www.xvideos.com"
+		],
+		"pager": {
+			"nextL": "a.next-page, a.next",
+			"pageE": ".mozaique > *",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "src_bF",
+			"bFp": [
+				0,
+				"img[data-src]",
+				"data-src"
+			],
+			"aF": "document.body.appendChild(document.createElement('script')).textContent = 'xv.thumb_block_initiator.init_listing();';"
+		}
+	},
+	"pornhub": {
+		"host": "/\\.pornhub\\.com/",
+		"url": "/\\/video/",
+		"style": ".footerContentWrapper, .pre-footer {display: none !important;}",
+		"pager": {
+			"nextL": "li.page_next > a",
+			"pageE": "#videoSearchResult > li.pcVideoListItem, #videoCategory > li.pcVideoListItem",
+			"replaceE": ".pagination3"
+		},
+		"function": {
+			"bF": "src_bF",
+			"bFp": [
+				0,
+				"img[data-src]",
+				"data-src"
+			]
+		}
+	},
+	"91porn": {
+		"host": [
+			"91porn.com",
+			"0118.workarea7.live"
+		],
+		"url": "/\\/v\\.php/",
+		"pager": {
+			"nextL": "id('paging')//a[text()='»']",
+			"pageE": ".row .row > div",
+			"replaceE": "#paging"
+		}
+	},
+	"JavDB": {
+		"host": "/^javdb/",
+		"style": ".grid.columns {height: auto !important;} .grid-item.column{position: static !important; float: left !important; height: 313px !important;}",
+		"pager": {
+			"nextL": "a.pagination-next",
+			"pageE": ".grid-item.column, .section-container > div",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "src_bF",
+			"bFp": [
+				0,
+				"img[data-src]",
+				"data-src"
+			]
+		}
+	},
+	"JavBus": {
+		"host": "/\\.jav.+|.+jav\\./",
+		"style": "#waterfall {height: auto !important;} #waterfall > .item {position: static !important; float: left !important; height: 400px !important;}",
+		"pager": {
+			"nextL": "#next",
+			"pageE": "#waterfall > .item",
+			"replaceE": ".pagination"
+		}
+	},
+	"盖世汽车英文版": {
+		"host": "autonews.gasgoo.com",
+		"url": "if (location.pathname != '/' && location.pathname.indexOf('.html') == -1) {return true;}",
+		"pager": {
+			"nextL": "a.pageright",
+			"pageE": ".newsListShow > ul",
+			"replaceE": ".page"
+		}
+	},
+	"下书网": {
+		"host": "mip.xiashucom.com",
+		"url": "/\\/yue_/",
+		"pager": {
+			"nextL": "a.pt-nextchapter",
+			"pageE": ".pt-read-text > p",
+			"replaceE": ".pt-read-btn"
+		}
+	},
+	"24tupian": {
+		"host": "www.24tupian.org",
+		"url": "/\\/\\d{4}\\/.+\\.html/",
+		"style": "#imgshow img {max-width: 98%;}",
+		"pager": {
+			"nextL": "//div[@class='bb']//li[./img[@id='bimg']]/following-sibling::li[1]/a",
+			"pageE": "#imgshow img",
+			"replaceE": ".bb ul"
+		}
+	}
+}
