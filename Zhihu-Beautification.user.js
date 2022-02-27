@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.4.6
+// @version      1.4.7
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -433,6 +433,7 @@ html {filter: brightness(65%) sepia(30%) !important; background-image: url();}
         }
 
         if (location.pathname === '/' || location.pathname === '/hot' || location.pathname === '/follow') style += style_index;
+        if (menu_value('menu_darkModeType') === 1 && location.pathname.indexOf('/special/') > -1) style += style_darkMode_2 + 'video {filter: invert(1) !important;}';
 
         // 宽屏显示
         if (menu_value('menu_widescreenDisplayIndex')) style += style_widescreenDisplayIndex;
