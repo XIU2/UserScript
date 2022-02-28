@@ -1,7 +1,16 @@
 {
+	"ScriptCat": {
+		"host": "scriptcat.org",
+		"url": "/^\\/search/",
+		"pager": {
+			"nextL": "//a[.//i[text()='keyboard_arrow_right']]",
+			"pageE": ".q-card__section > .q-card--bordered",
+			"replaceE": ".q-pagination"
+		}
+	},
 	"盖世汽车英文版": {
 		"host": "autonews.gasgoo.com",
-		"url": "if (location.pathname != '/' && location.pathname.indexOf('.html') == -1) {return true;}",
+		"url": "return (location.pathname != '/' && location.pathname.indexOf('.html') == -1)",
 		"pager": {
 			"nextL": "a.pageright",
 			"pageE": ".newsListShow > ul",
@@ -15,6 +24,98 @@
 			"nextL": "a.pt-nextchapter",
 			"pageE": ".pt-read-text > p",
 			"replaceE": ".pt-read-btn"
+		}
+	},
+	"新东方在线": {
+		"host": "cet4.koolearn.com",
+		"pager": {
+			"nextL": "id('page')/a[text()='下一页']",
+			"pageE": "ul.xqy_entry_list > li,.xqy_core_text > p:not([style='text-align:center'])",
+			"insertP": [
+				"ul.xqy_entry_list,.xqy_core_text",
+				3
+			],
+			"replaceE": "#page",
+			"scrollD": 2000
+		}
+	},
+	"二手车之家": {
+		"host": "www.che168.com",
+		"url": "return (location.pathname != '/' && location.pathname.indexOf('/dealer/') == -1)",
+		"pager": {
+			"nextL": "a.page-item-next",
+			"pageE": "ul.viewlist_ul > li",
+			"replaceE": ".page",
+			"scrollD": 2000
+		}
+	},
+	"叽哩叽哩日报": {
+		"host": "www.jiligamefun.com",
+		"url": "/\\/category\\//",
+		"pager": {
+			"nextL": "a.poi-pager__item.poi-pager__item_next",
+			"pageE": ".inn-archive__container > article",
+			"replaceE": ".poi-pager",
+			"scrollD": 1800
+		}
+	},
+	"文档库": {
+		"host": "www.wendangku.net",
+		"url": "/\\/doc\\//",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": "#contents > *:not(.pages)",
+			"replaceE": ".pages",
+			"scrollD": 1800
+		}
+	},
+	"立创开源硬件平台": {
+		"host": "www.oshwhub.com",
+		"url": "/^\\/explore/",
+		"pager": {
+			"nextL": "a.current+a",
+			"pageE": ".each-project",
+			"replaceE": ".page",
+			"scriptT": 0,
+			"scrollD": 1200
+		}
+	},
+	"如意了教育-学校": {
+		"host": "www.ruyile.com",
+		"url": "return (location.pathname == '/xuexiao/')",
+		"pager": {
+			"nextL": "//div[@class='fy']/a[contains(text(), '下一页')]",
+			"pageE": ".xxlb > .sk",
+			"replaceE": ".fy",
+			"scrollD": 1000
+		}
+	},
+	"如意了教育-数据": {
+		"host": "www.ruyile.com",
+		"url": "return (location.pathname == '/data/')",
+		"pager": {
+			"nextL": "//div[@class='fy']/a[contains(text(), '下一页')]",
+			"pageE": ".m1_z > .lbk",
+			"insertP": [
+				".page",
+				1
+			],
+			"replaceE": ".fy",
+			"scrollD": 1000
+		}
+	},
+	"如意了教育-试卷": {
+		"host": "www.ruyile.com",
+		"url": "return (location.pathname == '/shijuan/')",
+		"pager": {
+			"nextL": "//div[@class='fy']/a[contains(text(), '下一页')]",
+			"pageE": ".m1_z > .m2_lb",
+			"insertP": [
+				".page",
+				1
+			],
+			"replaceE": ".fy",
+			"scrollD": 1000
 		}
 	},
 	"xvideos": {
@@ -164,7 +265,7 @@
 	},
 	"极品性感美女-分类页": {
 		"host": "www.jpxgyw.net",
-		"url": "if (location.pathname != '/' && location.pathname.indexOf('/search/') == -1) {return true;}",
+		"url": "return (location.pathname != '/' && location.pathname.indexOf('/search/') == -1)",
 		"pager": {
 			"nextL": ".pagination a.current+a",
 			"pageE": ".related_posts > ul",
@@ -174,7 +275,7 @@
 	},
 	"tvv": {
 		"host": "mm.tvv.tw",
-		"url": "if (location.pathname.indexOf('.html') == -1) {return true;}",
+		"url": "return (location.pathname.indexOf('.html') == -1)",
 		"style": ".blog-masonry, .blog-masonry-4col {height: auto !important;} .blog-listing {position: relative !important;float: left !important;top: auto !important;left: auto !important;} .blog-title > a {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;} .blog-image img {min-height: 300px;}",
 		"pager": {
 			"nextL": "a.next",
@@ -205,7 +306,7 @@
 	},
 	"mm131_m": {
 		"host": "m.mmm131.com",
-		"url": "if (location.pathname == '/') {return true;}",
+		"url": "return (location.pathname == '/')",
 		"style": ".bannert, .bannerb, bannert_ios, .bannerb_ios {display: none !important;}",
 		"pager": {
 			"type": 2,
@@ -246,7 +347,7 @@
 	},
 	"mrcong": {
 		"host": "mrcong.com",
-		"url": "if (location.pathname != '/' && location.pathname.indexOf('/tag/') == -1) {return true;}",
+		"url": "return (location.pathname != '/' && location.pathname.indexOf('/tag/') == -1)",
 		"pager": {
 			"nextL": ".post-page-numbers.current+a.post-page-numbers",
 			"pageE": "#fukie2 > p > img",

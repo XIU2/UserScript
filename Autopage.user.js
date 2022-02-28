@@ -3,10 +3,10 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.0.1
+// @version      5.0.2
 // @author       X.I.U
-// @description  无缝拼接下一页内容（瀑布流，追求小而美），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
-// @description:zh-TW  無縫拼接下一頁內容（瀑布流，追求小而美），支持各種論壇、搜索引擎、漫畫網站~
+// @description  无缝拼接下一页内容（瀑布流），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
+// @description:zh-TW  無縫拼接下一頁內容（瀑布流），支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎等網站~
 // @description:en  Seamlessly stitch next page content (waterfall)~
 // @match        *://*/*
 // @connect      userscript.xiu2.xyz
@@ -249,7 +249,7 @@ pager: {
            isHidden:    只有下一页按钮可见时（没有被隐藏），才会点击
 
        3 = 依靠 [基准元素] 与 [浏览器可视区域底部] 之间的距离缩小来触发翻页（适用于：主体元素下方内容太多 且 高度不固定时）
-           scrollE:     作为基准线的元素（一般为底部页码元素）
+           scrollE:     作为基准线的元素（一般为底部页码元素），和 replaceE 一样的话可以省略
            scrollD:     基准元素 - 可视区域底部
 
        4 = 动态加载类网站（适用于：简单的动态加载内容网站）
@@ -280,7 +280,7 @@ pager: {
          注意：如 pageE 中选择了多类元素，则不能省略 insertP（比如包含 `,` 与 `|` 符号）
 
     replaceE: 要替换为下一页内容的元素（比如页码）
-    scrollD： 翻页动作触发点（[滚动条] 与 [网页底部] 之间的距离），数值越大，越早开始翻页，一般是访问网页速度越慢，该值就需要越大
+    scrollD： 翻页动作触发点（[滚动条] 与 [网页底部] 之间的距离），数值越大，越早开始翻页，一般是访问网页速度越慢，该值就需要越大，省略后默认 1500
 
     scriptT:  单独插入 <script> 标签
        0 = 下一页的所有 <script> 标签
@@ -5293,96 +5293,6 @@ function: {
                     scrollD: 1500
                 }
             }, //         没得比 - 分类/搜索页
-            ruyile_xuexiao: {
-                host: 'www.ruyile.com',
-                url: ()=> {
-                    if (lp == '/xuexiao/') {
-                        curSite = DBSite.ruyile_xuexiao;
-                    } else if (lp == '/data/') {
-                        curSite = DBSite.ruyile_data;
-                    } else if (lp == '/shijuan/') {
-                        curSite = DBSite.ruyile_shijuan;
-                    }},
-                pager: {
-                    nextL: '//div[@class="fy"]/a[contains(text(), "下一页")]',
-                    pageE: '.xxlb > .sk',
-                    insertP: ['.xxlb', 3],
-                    replaceE: '.fy',
-                    scrollD: 1000
-                }
-            }, //  如意了教育 - 学校
-            ruyile_data: {
-                pager: {
-                    nextL: '//div[@class="fy"]/a[contains(text(), "下一页")]',
-                    pageE: '.m1_z > .lbk',
-                    insertP: ['.page', 1],
-                    replaceE: '.fy',
-                    scrollD: 1000
-                }
-            }, //     如意了教育 - 数据
-            ruyile_shijuan: {
-                pager: {
-                    nextL: '//div[@class="fy"]/a[contains(text(), "下一页")]',
-                    pageE: '.m1_z > .m2_lb',
-                    insertP: ['.page', 1],
-                    replaceE: '.fy',
-                    scrollD: 1000
-                }
-            }, //  如意了教育 - 试卷
-            koolearn: {
-                host: 'cet4.koolearn.com',
-                pager: {
-                    nextL: 'id("page")/a[text()="下一页"]',
-                    pageE: 'ul.xqy_entry_list > li,.xqy_core_text > p:not([style="text-align:center"])',
-                    insertP: ['ul.xqy_entry_list,.xqy_core_text', 3],
-                    replaceE: '#page',
-                    scrollD: 2500
-                }
-            }, //        新东方在线
-            che168: {
-                host: 'www.che168.com',
-                url: ()=> {
-                    if (lp != '/' && !indexOF('/dealer/')) {
-                        curSite = DBSite.che168;
-                    }},
-                pager: {
-                    nextL: 'a.page-item-next',
-                    pageE: 'ul.viewlist_ul > li',
-                    replaceE: '.page',
-                    scrollD: 2000
-                }
-            }, //          二手车之家
-            jiligamefun: {
-                host: 'www.jiligamefun.com',
-                url: ()=> {if (indexOF('/category/')) {curSite = DBSite.jiligamefun;}},
-                pager: {
-                    nextL: 'a.poi-pager__item.poi-pager__item_next',
-                    pageE: '.inn-archive__container > article',
-                    replaceE: '.poi-pager',
-                    scrollD: 1800
-                }
-            }, //     叽哩叽哩日报
-            wendangku: {
-                host: 'www.wendangku.net',
-                url: ()=> {if (indexOF('/doc/')) {curSite = DBSite.wendangku;}},
-                pager: {
-                    nextL: 'a.next',
-                    pageE: '#contents > *:not(.pages)',
-                    replaceE: '.pages',
-                    scrollD: 1800
-                }
-            }, //       文档库
-            oshwhub: {
-                host: 'www.oshwhub.com',
-                url: ()=> {if (lp == '/explore') {curSite = DBSite.oshwhub;}},
-                pager: {
-                    nextL: 'a.current+a',
-                    pageE: '.each-project',
-                    replaceE: '.page',
-                    scriptT: 0,
-                    scrollD: 1200
-                }
-            }, //         立创开源硬件平台
             netbian: {
                 host: 'pic.netbian.com',
                 style: 'li.nextpage {display: none !important;}',
@@ -5517,12 +5427,14 @@ function: {
                 }
             } //      TheSwamp - 帖子内
         };
-        // 生成 SiteTypeID
+        // 向后兼容
         if (JSON.stringify(GM_getValue('menu_customRules', {})).indexOf('functionS') > -1 || JSON.stringify(GM_getValue('menu_customRules', {})).indexOf('css;') > -1) { // 改名过渡，过段时间将其移除
             GM_setValue('menu_customRules', JSON.parse(JSON.stringify(GM_getValue('menu_customRules', {})).replaceAll('functionS', 'url').replaceAll('css;', '')))
         }
         //console.log(GM_getValue('menu_customRules'), GM_getValue('menu_rules'))
+        // 合并 自定义规则、外置规则、内置规则
         DBSite = Object.assign(GM_getValue('menu_customRules', {}), GM_getValue('menu_rules', {}), DBSite)
+        // 生成 SiteTypeID
         setSiteTypeID();
         //console.log(DBSite)
         // 用于脚本判断（针对部分特殊的网站）
@@ -7387,7 +7299,7 @@ function: {
         let customRules = JSON.stringify(GM_getValue('menu_customRules', {}), null, '\t').replaceAll('functionS', 'url').replaceAll('css;', ''); // 改名过渡，过段时间将其移除
         if (customRules == '{}') customRules = '{\n\t\n}'; // 引导用户插入位置
         let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.95 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important; overflow: scroll !important; text-align: left !important;">
-<h3><strong>自定义翻页规则（优先于脚本内置规则）-【把规则插入默认的 { } 中间】</strong></h3>
+<h3 style="font-size: 24px !important;"><strong># 自定义翻页规则（优先于脚本内置规则）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
 <details>
 <summary><kbd><strong>「 点击展开 查看示例 」（我把常用规则都塞进去了，方便需要的时候可直接复制一份修改使用）</strong></kbd></summary>
 <ul style="list-style: disc !important; margin-left: 35px !important;">
@@ -7433,7 +7345,7 @@ function: {
     },
     "这里也可以用中文": {
         "host": "/\\.ccc\\.com/",
-        "url": "if (location.pathname.indexOf('/s') > -1) {return true;}",
+        "url": "return (location.pathname.indexOf('/s') > -1)",
         "pager": {
             "type": 2,
             "nextL": "#autopbn",
