@@ -181,6 +181,7 @@
 	"t66y-帖子内": {
 		"host": "www.t66y.com",
 		"url": "/^\\/(read\\.php|htm_data|htm_mob)/",
+		"style": ".tips {display: none !important;}",
 		"thread": true,
 		"pager": {
 			"nextL": "//div[@class='pages']/a[text()='下一頁']",
