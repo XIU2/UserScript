@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.0.2
+// @version      5.0.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  無縫拼接下一頁內容（瀑布流），支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎等網站~
@@ -67,10 +67,10 @@
                 } else { // 不在禁用列表中
                     webType = doesItSupport(); // 判断网站类型（即是否支持），顺便直接赋值
                     if (webType === 0) {
-                        menuId[0] = GM_registerMenuCommand('❌ 当前网站暂不支持 [点击申请支持]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
+                        menuId[0] = GM_registerMenuCommand('❌ 当前网页暂不支持 [欢迎点击申请]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
                         menuId[1] = GM_registerMenuCommand('🔄 更新外置翻页规则', function(){getRulesUrl(true)});
                         menuId[2] = GM_registerMenuCommand('#️⃣ 自定义翻页规则', function(){customRules()});
-                        console.info('[自动无缝翻页] - 不支持当前网站 [ ' + location.href + ' ]，欢迎申请支持: https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/96880/feedback');
+                        console.info('[自动无缝翻页] - 暂不支持当前网页 [ ' + location.href + ' ]，欢迎申请支持: https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/96880/feedback');
                         return
                     } else if (webType === -1) {
                         return
@@ -230,10 +230,11 @@
     function setDBSite() {
         /*
     url:         匹配到该域名后要执行的函数/正则（一般用于根据 URL 分配相应翻页规则）
-    locationC:   对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则（需要放在 url 中）
+    locationC:   对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则（需要放在 url: 中）
 
     hiddenPN:    不显示脚本左下角的页码
     history:     添加历史记录 并 修改当前 URL（默认开启，对于不支持的网站要设置为 false）
+    thread:      对于社区类网站，要在 帖子内 的规则中加入这个，用于脚本的 [帖子内自动翻页] 功能（即用户可以选择开启/关闭所有社区类网站帖子内的自动翻页）
     style:       要插入网页的 CSS Style 样式
     retry:       允许获取失败后重试
 
@@ -324,6 +325,7 @@ function: {
                 }
             }, //   Discuz! 论坛 - 图片模式的帖子列表（不带无缝加载下一页按钮的）
             discuz_thread: {
+                thread: true,
                 style: '.pgbtn {display: none;}',
                 pager: {
                     nextL: 'a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
@@ -361,12 +363,13 @@ function: {
                 }
             }, //  Discuz! 论坛 - 淘帖页
             discuz_m: {
+                thread: true,
                 pager: {
                     nextL: '//a[@class="nxt" or @class="next"] | //div[@class="page"]/a[text()="下一页" or contains(text(), ">")]',
                     replaceE: '.pg, .page',
                     scrollD: 1000
                 }
-            }, //           Discuz! 论坛 - 触屏手机版
+            }, //           Discuz! 论坛 - 触屏手机版 - 帖子内
             discuz_m_forum: {
                 pager: {
                     type: 2,
@@ -387,7 +390,7 @@ function: {
             phpbb: {
                 url: ()=> {if (indexOF('/viewforum.php')) {
                     curSite = DBSite.phpbb;
-                } else if (indexOF('/viewtopic.php') && GM_getValue('menu_thread')) {
+                } else if (indexOF('/viewtopic.php')) {
                     curSite = DBSite.phpbb_post;
                 } else if (indexOF('/search.php')) {
                     curSite = DBSite.phpbb_search;
@@ -400,6 +403,7 @@ function: {
                 }
             }, //              phpBB 论坛 - 帖子列表
             phpbb_post: {
+                thread: true,
                 pager: {
                     nextL: '.pagination li.next a[rel="next"], .topic-actions .pagination strong~a',
                     pageE: 'div.post[id], div.post[id]+hr',
@@ -418,7 +422,7 @@ function: {
             xenforo: {
                 url: ()=> {if (indexOF(/\/(forums|f)\//)) {
                     curSite = DBSite.xenforo;
-                } else if (indexOF(/\/(threads|t)\//) && GM_getValue('menu_thread')) {
+                } else if (indexOF(/\/(threads|t)\//)) {
                     curSite = DBSite.xenforo_post;
                 } else if (indexOF('/search/')) {
                     curSite = DBSite.xenforo_search;
@@ -431,6 +435,7 @@ function: {
                 }
             }, //            XenForo 论坛 - 帖子列表
             xenforo_post: {
+                thread: true,
                 pager: {
                     nextL: 'a.pageNav-jump--next',
                     pageE: '.block-body.js-replyNewMessageContainer > article',
@@ -447,7 +452,7 @@ function: {
                 }
             }, //     XenForo 论坛 - 搜索页
             xiuno: {
-                url: ()=> {if (lp == '/' || indexOF(/\/(index|forum)/)) {curSite = DBSite.xiuno;} else if (indexOF('/thread') && GM_getValue('menu_thread')) {curSite = DBSite.xiuno_post;}},
+                url: ()=> {if (lp == '/' || indexOF(/\/(index|forum)/)) {curSite = DBSite.xiuno;} else if (indexOF('/thread')) {curSite = DBSite.xiuno_post;}},
                 pager: {
                     nextL: '//li[@class="page-item"]/a[text()="▶"]',
                     pageE: 'ul.threadlist > li',
@@ -456,6 +461,7 @@ function: {
                 }
             }, //              Xiuno 论坛 - 帖子列表
             xiuno_post: {
+                thread: true,
                 pager: {
                     nextL: '//li[@class="page-item"]/a[text()="▶"]',
                     pageE: 'li.post[data-pid]:not(.newpost)',
@@ -473,9 +479,10 @@ function: {
                     } else if (lp == '/forums.php' && indexOF('action=viewforum', 's')) {
                         curSite = DBSite.nexusphp;
                         curSite.pager.pageE = '#outer > table.main+table > tbody > tr:not(:first-of-type):not(:last-of-type)'
-                    } else if (lp == '/forums.php' && indexOF('action=viewtopic', 's') && GM_getValue('menu_thread')) {
+                    } else if (lp == '/forums.php' && indexOF('action=viewtopic', 's')) {
                         curSite = DBSite.nexusphp;
-                        curSite.pager.pageE = 'td.text > div, td.text > div+table.main'
+                        curSite.thread = true;
+                        curSite.pager.pageE = 'td.text > div, td.text > div+table.main';
                     }},
                 pager: {
                     nextL: '//a[./b[contains(text(), "下一页") or contains(text(), ">>")]]',
@@ -839,7 +846,7 @@ function: {
                            if (lp == '/f') {
                                baidu_tieba_1(); // 右侧悬浮发帖按钮点击事件（解决自动翻页导致无法发帖的问题）
                                curSite = DBSite.baidu_tieba;
-                           } else if (indexOF('/p/') && GM_getValue('menu_thread')) {
+                           } else if (indexOF('/p/')) {
                                curSite = DBSite.baidu_tieba_post;
                            } else if (lp == '/f/search/res') {
                                curSite = DBSite.baidu_tieba_search;
@@ -864,6 +871,7 @@ function: {
             }, //        百度贴吧 - 帖子列表
             baidu_tieba_post: {
                 forceTarget: true,
+                thread: true,
                 style: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld, .topic_list_box.topic-fixed {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
                 pager: {
                     type: 5,
@@ -934,7 +942,7 @@ function: {
             }, // 豆瓣 - 作品
             douban_group: {
                 host: 'www.douban.com',
-                url: ()=> {if (indexOF('/group/topic/') && GM_getValue('menu_thread')) {
+                url: ()=> {if (indexOF('/group/topic/')) {
                     curSite = DBSite.douban_group_topic;
                 } else if (indexOF('/group/explore')) {
                     curSite = DBSite.douban_group_explore;
@@ -957,6 +965,7 @@ function: {
                 }
             }, //    豆瓣 - 小组讨论精选
             douban_group_topic: {
+                thread: true,
                 pager: {
                     nextL: 'span.next > a',
                     pageE: '#comments > li',
@@ -991,7 +1000,7 @@ function: {
                 host: 'bbs.tianya.cn',
                 url: ()=> {if (indexOF('/list')) {
                     curSite = DBSite.tianya;
-                } else if (indexOF('/post') && GM_getValue('menu_thread')) {
+                } else if (indexOF('/post')) {
                     curSite = DBSite.tianya_post;
                 }},
                 pager: {
@@ -1002,6 +1011,7 @@ function: {
                 }
             }, //              天涯社区
             tianya_post: {
+                thread: true,
                 pager: {
                     nextL: 'a.js-keyboard-next',
                     pageE: '.atl-main > div[class="atl-item"]',
@@ -1012,7 +1022,7 @@ function: {
             hupu: {
                 host: 'bbs.hupu.com',
                 url: ()=> {if (indexOF('.html')) {
-                    if (GM_getValue('menu_thread')) curSite = DBSite.hupu_post;
+                    curSite = DBSite.hupu_post;
                 } else if (lp != '/' && !indexOF('/all-')) {
                     curSite = DBSite.hupu;
                 }},
@@ -1024,6 +1034,7 @@ function: {
                 }
             }, //                虎扑社区
             hupu_post: {
+                thread: true,
                 pager: {
                     nextL: 'li.hupu-rc-pagination-next > a',
                     pageE: '.post-reply-list ',
@@ -1037,7 +1048,7 @@ function: {
                 url: ()=> {locationC = true;
                            if (lp == '/thread.php') {
                                curSite = DBSite.nga_thread;
-                           } else if (lp == '/read.php' && GM_getValue('menu_thread')) {
+                           } else if (lp == '/read.php') {
                                curSite = DBSite.nga_read;
                            }},
                 pager: {
@@ -1054,6 +1065,7 @@ function: {
             }, //          NGA - 各版块帖子列表
             nga_read: {
                 history: false,
+                thread: true,
                 retry: 1000,
                 pager: {
                     nextL: '#pagebbtm a[title*="下一页"]',
@@ -1216,8 +1228,9 @@ function: {
                 host: 'www.lkong.com',
                 url: ()=> {locationC = true; if (indexOF('/forum/')) {
                     curSite = DBSite.lkong;
-                } else if (indexOF('/thread/') && GM_getValue('menu_thread')) {
+                } else if (indexOF('/thread/')) {
                     curSite = DBSite.lkong;
+                    curSite.thread = true;
                     curSite.pager.pageE = '//div[@class="main-content"]/parent::div | //head/style[@data-emotion-css]';
                     curSite.pager.insertP = ['//div[@class="main-content"][1]/parent::div/parent::div', 3];
                 }},
@@ -1242,7 +1255,7 @@ function: {
                 host: 'bbs.pediy.com',
                 url: ()=> {if (indexOF('/forum-')) {
                     curSite = DBSite.pediy_forum;
-                } else if (indexOF('/thread-') && GM_getValue('menu_thread')) {
+                } else if (indexOF('/thread-')) {
                     curSite = DBSite.pediy_thread;
                 }},
                 pager: {
@@ -1253,6 +1266,7 @@ function: {
                 }
             }, //         看雪论坛 - 各版块帖子列表
             pediy_thread: {
+                thread: true,
                 pager: {
                     nextL: '//a[@class="page-link" and text()="▶"]',
                     pageE: 'table.postlist > tbody > tr[data-pid]',
@@ -1394,7 +1408,7 @@ function: {
             taoguba: {
                 host: 'www.taoguba.com.cn',
                 url: ()=> {insStyle('#joinTGB {display: none !important;}')
-                           if (indexOF('/Article/') && GM_getValue('menu_thread')) {
+                           if (indexOF('/Article/')) {
                                curSite = DBSite.taoguba_t;
                            } else if (indexOF('/shenghuoba/')) {
                                curSite = DBSite.taoguba_;
@@ -1435,6 +1449,7 @@ function: {
             }, //            淘股吧论坛 - 生活圈
             taoguba_t: {
                 history: false,
+                thread: true,
                 pager: {
                     nextL: ()=> {
                         let next = getXpath('//div[contains(@class, "t_page01")]/a[contains(text(), "下一页")]');
@@ -1491,7 +1506,7 @@ function: {
                 url: ()=> {if (indexOF('/forum-') || indexOF('mod=forumdisplay', 's')) {
                     curSite = DBSite.flyert_forumdisplay;
                 } else if (indexOF('/forum') || indexOF('mod=viewthread', 's')) {
-                    if (GM_getValue('menu_thread')) {curSite = DBSite.flyert_viewthread;}
+                    curSite = DBSite.flyert_viewthread;
                 }},
                 pager: {
                     nextL: 'a.nxt:not([href*="javascript"])',
@@ -1501,6 +1516,7 @@ function: {
                 }
             }, // 飞客网论坛 - 各版块帖子列表
             flyert_viewthread: {
+                thread: true,
                 pager: {
                     nextL: 'a.nxt:not([href*="javascript"])',
                     pageE: '#postlist > .comiis_viewbox',
@@ -1510,7 +1526,7 @@ function: {
             }, //   飞客网论坛 - 帖子内
             cnprint: {
                 host: 'www.cnprint.org',
-                url: ()=> {if (indexOF('/forum/')) {curSite = DBSite.cnprint;} else if (indexOF('/thread/') && GM_getValue('menu_thread')) {curSite = DBSite.cnprint_thread;}},
+                url: ()=> {if (indexOF('/forum/')) {curSite = DBSite.cnprint;} else if (indexOF('/thread/')) {curSite = DBSite.cnprint_thread;}},
                 pager: {
                     nextL: 'a[rel="next"]',
                     pageE: 'tbody[id*="threadbits_forum"] > tr',
@@ -1519,6 +1535,7 @@ function: {
                 }
             }, //             CPC 中文印刷社区
             cnprint_thread: {
+                thread: true,
                 pager: {
                     nextL: 'a[rel="next"]',
                     pageE: '#posts > div:not([id])',
@@ -1528,7 +1545,7 @@ function: {
             }, //      CPC 中文印刷社区 - 帖子内
             discusshk: {
                 host: /.+\.discuss\.com\.hk/,
-                url: ()=> {if (lp == '/forumdisplay.php') {curSite = DBSite.discusshk;} else if (lp == '/viewthread.php' && GM_getValue('menu_thread')) {curSite = DBSite.discusshk_thread;}},
+                url: ()=> {if (lp == '/forumdisplay.php') {curSite = DBSite.discusshk;} else if (lp == '/viewthread.php') {curSite = DBSite.discusshk_thread;}},
                 pager: {
                     nextL: '.pagination a.next',
                     pageE: 'tbody[id^="normalthread_"]',
@@ -1537,6 +1554,7 @@ function: {
                 }
             }, //           中国香港社区
             discusshk_thread: {
+                thread: true,
                 style: '.viewthread.mt-0:not(:first-of-type) .viewthread__head {display: none !important;}',
                 pager: {
                     nextL: '.pagination a.next',
@@ -1547,7 +1565,7 @@ function: {
             }, //    中国香港论坛 - 帖子内
             tgfcer: {
                 host: 'bbs.tgfcer.com',
-                url: ()=> {if (lp == '/forumdisplay.php' || indexOF('/forum')) {curSite = DBSite.tgfcer;} else if (GM_getValue('menu_thread') && (lp == '/viewthread.php' || indexOF('/thread'))) {curSite = DBSite.tgfcer_thread;}},
+                url: ()=> {if (lp == '/forumdisplay.php' || indexOF('/forum')) {curSite = DBSite.tgfcer;} else if ((lp == '/viewthread.php' || indexOF('/thread'))) {curSite = DBSite.tgfcer_thread;}},
                 pager: {
                     nextL: '.pages a.next',
                     pageE: 'tbody[id^="normalthread_"]',
@@ -1556,6 +1574,7 @@ function: {
                 }
             }, //              TGFC Lifestyle
             tgfcer_thread: {
+                thread: true,
                 style: '.viewthread:not(:first-of-type) h1 {display: none !important;}',
                 pager: {
                     nextL: '.pages a.next',
@@ -1571,8 +1590,8 @@ function: {
                         curSite = DBSite.south;
                     } else if (lp == '/thread_new.php') {
                         curSite = DBSite.south; curSite.pager.pageE = 'li.dcsns-li'; curSite.pager.scrollD = 2000; curSite.function = {bF: src_bF,bFp: [0, 'img[data-original]', 'data-original']}; curSite.style = 'img.lazy {display: inline !important;}';
-                    } else if (GM_getValue('menu_thread') && lp == '/read.php') {
-                        curSite = DBSite.south; curSite.pager.pageE = 'form[name=delatc] > *:not(input)';
+                    } else if (lp == '/read.php') {
+                        curSite = DBSite.south; curSite.thread = true; curSite.pager.pageE = 'form[name=delatc] > *:not(input)';
                     } else if (lp == '/u.php' && (indexOF('action-topic-', 's') || indexOF('action-post-', 's'))) {
                         curSite = DBSite.south; curSite.pager.pageE = '#u-contentmain table tr';
                     }},
@@ -1589,7 +1608,7 @@ function: {
                     if (indexOF('board=', 's')) {
                         curSite = DBSite.goddessfantasy;
                     } else if (indexOF('topic=', 's')) {
-                        if (GM_getValue('menu_thread')) curSite = DBSite.goddessfantasy; curSite.pager.pageE = '#quickModForm > *';
+                        curSite = DBSite.goddessfantasy; curSite.pager.pageE = '#quickModForm > *'; curSite.thread = true;
                     }},
                 pager: {
                     nextL: '//div[contains(@class,"pagelinks")]/a[@class="navPages" and text()="»"]',
@@ -1599,16 +1618,16 @@ function: {
                 }
             }, //      纯美苹果园
             adnmb3: {
-                host: ['adnmb3.com', 'www.tnmb.org', 'nimingban.org'],
+                host: ['adnmb3.com', 'www.tnmb.org', 'nimingban.xyz', 'nimingban.org'],
                 url: ()=> {
                     if (indexOF('/m/f/')) {
                         curSite = DBSite.adnmb3_mf;
                     } else if (indexOF('/m/t/')) {
-                        if (GM_getValue('menu_thread')) curSite = DBSite.adnmb3_mt;
+                        curSite = DBSite.adnmb3_mt;
                     } else if (indexOF(/\/(f|Forum)\//)) {
                         curSite = DBSite.adnmb3;
                     } else if (indexOF('/t/')) {
-                        if (GM_getValue('menu_thread')) curSite = DBSite.adnmb3_t;
+                        curSite = DBSite.adnmb3_t;
                     }},
                 pager: {
                     nextL: '//ul[contains(@class, "pagination")]//a[text()="下一页"]',
@@ -1620,6 +1639,7 @@ function: {
                 }
             }, //              A 岛
             adnmb3_t: {
+                thread: true,
                 pager: {
                     nextL: '//ul[contains(@class, "pagination")]//a[text()="下一页"]',
                     pageE: '.h-threads-list > .h-threads-item > .h-threads-item-replys, script[src$="/h.desktop.js"]',
@@ -1640,6 +1660,7 @@ function: {
                 }
             }, //           A 岛 - 帖子列表（手机版）
             adnmb3_mt: {
+                thread: true,
                 pager: {
                     nextL: '//li[contains(@class, "pagination-next")]//a[text()="下一页"]',
                     pageE: '.h-threads-replylist > div, script[src$="/h.mobile.js"]',
@@ -1925,7 +1946,7 @@ function: {
                         } else {
                             curSite = DBSite.discuz_guide
                         }
-                    } else if (getCSS('body#nv_forum.pg_viewthread') && GM_getValue('menu_thread')) {
+                    } else if (getCSS('body#nv_forum.pg_viewthread')) {
                         curSite = DBSite.xuexiniu_thread;
                     } else if (indexOF('/search.php')) {
                         curSite = DBSite.xuexiniu_search;
@@ -1949,6 +1970,7 @@ function: {
                 }
             }, //      学犀牛 - 各板块帖子列表
             xuexiniu_thread: {
+                thread: true,
                 pager: {
                     nextL: 'a.nxt:not([href*="javascript"])',
                     pageE: '#zhanzhuai_primary > .box',
@@ -2222,7 +2244,7 @@ function: {
                 } else if (lp == '/forum/search.php') {
                     curSite = DBSite.cs_rin_ru_search;
                     if (indexOF('sr=posts', 's')) curSite.pager.pageE = '#wrapcentre > form > table.tablebg > tbody > tr[class^="row"]'
-                } else if (lp == '/forum/viewtopic.php' && GM_getValue('menu_thread')) {
+                } else if (lp == '/forum/viewtopic.php') {
                     curSite = DBSite.cs_rin_ru_list;
                 }},
                 pager: {
@@ -2239,6 +2261,7 @@ function: {
                 }
             }, //               cs.rin.ru - 各版块帖子列表
             cs_rin_ru_list: {
+                thread: true,
                 pager: {
                     nextL: 'id("pageheader")/p[@class="gensmall"]//a[text()="Next"]',
                     pageE: '#pagecontent > table.tablebg:not(:nth-last-child(2)):not(:nth-child(2))',
@@ -4485,7 +4508,7 @@ function: {
             }, //                维普网
             ablesci: {
                 host: 'www.ablesci.com',
-                url: ()=> {if (indexOF('/detail') && GM_getValue('menu_thread')) {curSite = DBSite.ablesci_p;} else if (getCSS('ul.fly-list')) {curSite = DBSite.ablesci;}},
+                url: ()=> {if (indexOF('/detail')) {curSite = DBSite.ablesci_p;} else if (getCSS('ul.fly-list')) {curSite = DBSite.ablesci;}},
                 pager: {
                     nextL: 'li.next > a',
                     pageE: 'ul.fly-list > li',
@@ -4494,6 +4517,7 @@ function: {
                 }
             }, //              科研通
             ablesci_p: {
+                thread: true,
                 pager: {
                     nextL: 'li.next > a',
                     pageE: 'ul#jieda > li',
@@ -4517,8 +4541,8 @@ function: {
                 host: 'muchong.com',
                 url: ()=> {if (indexOF('/f-') || indexOF('search.php')) {
                     curSite = DBSite.muchong;
-                } else if (indexOF('/t-') && GM_getValue('menu_thread')) {
-                    curSite = DBSite.muchong; curSite.pager.pageE = '#maincontent > table > tbody:not(.header)'; curSite.pager.scrollD = 2000;
+                } else if (indexOF('/t-')) {
+                    curSite = DBSite.muchong; curSite.pager.pageE = '#maincontent > table > tbody:not(.header)'; curSite.pager.scrollD = 2000; curSite.thread = true;
                 }},
                 style: 'tr.forum_head {display: none !important;}',
                 pager: {
@@ -5374,7 +5398,7 @@ function: {
                 url: ()=> {
                     if (indexOF('/forum/forum/')) {
                         curSite = DBSite.cadtutor;
-                    } else if (indexOF('/forum/topic/') && GM_getValue('menu_thread')) {
+                    } else if (indexOF('/forum/topic/')) {
                         curSite = DBSite.cadtutor_post;
                     } else if (indexOF('/forum/search/')) {
                         curSite = DBSite.cadtutor_search;
@@ -5387,6 +5411,7 @@ function: {
                 }
             }, //          CADTutor - 列表页
             cadtutor_post: {
+                thread: true,
                 pager: {
                     nextL: 'a[rel="next"]',
                     pageE: '#elPostFeed > form > *:not(input):not(.after-first-post)',
@@ -5408,7 +5433,7 @@ function: {
                     if (!location.search) return
                     if (indexOF('board=', 's')) {
                         curSite = DBSite.theswamp;
-                    } else if (indexOF('topic=', 's') && GM_getValue('menu_thread')) {
+                    } else if (indexOF('topic=', 's')) {
                         curSite = DBSite.theswamp_post;
                     }},
                 pager: {
@@ -5419,6 +5444,7 @@ function: {
                 }
             }, //          TheSwamp - 列表页
             theswamp_post: {
+                thread: true,
                 pager: {
                     nextL: '.pagelinks > strong+a',
                     pageE: '#forumposts form > *',
@@ -5494,6 +5520,12 @@ function: {
 
     // 判断网站类型
     webTypeIf();
+
+    // 帖子内自动翻页判断
+    if (!GM_getValue('menu_thread')) {
+        if (curSite.thread) {curSite = {SiteTypeID: 0}; pageNum.now = 1;}
+    }
+
     //console.log(curSite)
     // 显示页码
     if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');}
@@ -5520,6 +5552,10 @@ function: {
                 registerMenuCommand(); // 重新判断规则
                 //console.log(curSite);
                 if (curSite.style) {insStyle(curSite.style)} // 插入 Style CSS 样式
+                // 帖子内自动翻页判断
+                if (!GM_getValue('menu_thread')) {
+                    if (curSite.thread) {curSite = {SiteTypeID: 0}; pageNum.now = 1;}
+                }
                 curSite.pageUrl = ''; // 下一页URL
                 pageLoading(); // 自动无缝翻页
 
@@ -5534,7 +5570,14 @@ function: {
                 setTimeout(function(){
                     nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
                     discuz_(); // 重新判断规则
+
+                    // 帖子内自动翻页判断
+                    if (!GM_getValue('menu_thread')) {
+                        if (curSite.thread) {curSite = {SiteTypeID: 0}; pageNum.now = 1;}
+                    }
+
                     if (curSite.style) {insStyle(curSite.style)} // 插入 Style CSS 样式
+                    curSite.pageUrl = ''; // 下一页URL
                     pageLoading(); // 自动无缝翻页
 
                     if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
@@ -5623,7 +5666,7 @@ function: {
                 case 'pg_forumdisplay': // < 各版块帖子列表 >
                     discuzForum(); break;
                 case 'pg_viewthread': //   < 帖子内 >
-                    if (GM_getValue('menu_thread')) curSite = DBSite.discuz_thread; break;
+                    curSite = DBSite.discuz_thread; break;
                 case 'pg_guide': //        < 导读帖子列表等 >
                     curSite = DBSite.discuz_guide; break;
                 case 'pg_collection': //   < 淘贴列表 >
@@ -5651,9 +5694,9 @@ function: {
                     }
                 } else if (indexOF('/thread-')) { //     < 帖子内 >
                     if (getXpath('//head/meta[@name="applicable-device" and @content="mobile"] | //head/title[contains(text(), "手机版")] | //head/link[contains(@href, "/mobile/")] | //head/script[contains(@src, "/mobile/")]')) { // 手机版页面
-                        if (GM_getValue('menu_thread')) discuzThreadM();
+                        discuzThreadM();
                     } else {
-                        if (GM_getValue('menu_thread')) curSite = DBSite.discuz_thread;
+                        curSite = DBSite.discuz_thread;
                     }
                 }
             }
@@ -5668,9 +5711,9 @@ function: {
                 }
             } else if (indexOF('mod=viewthread', 's') || indexOF('viewthread.php')) { // < 帖子内 >
                 if (indexOF('mobile=2', 's') || getXpath('//head/meta[@name="applicable-device" and @content="mobile"] | //head/title[contains(text(), "手机版")] | //head/link[contains(@href, "/mobile/")] | //head/script[contains(@src, "/mobile/")]')) { // 手机版页面
-                    if (GM_getValue('menu_thread')) discuzThreadM();
+                    discuzThreadM();
                 } else {
-                    if (GM_getValue('menu_thread')) curSite = DBSite.discuz_thread;
+                    curSite = DBSite.discuz_thread;
                 }
             } else if (indexOF('mod=guide', 's')) { //      < 导读帖子列表 >
                 curSite = DBSite.discuz_guide;
@@ -5681,7 +5724,7 @@ function: {
             } else if (getCSS('#threadlist')) { //          < 部分论坛的各板块 URL 是自定义的 >
                 discuzForum();
             } else if (getCSS('#postlist')) { //            < 部分论坛的帖子内 URL 是自定义的 >
-                if (GM_getValue('menu_thread')) curSite = DBSite.discuz_thread;
+                curSite = DBSite.discuz_thread;
             } else { // 手机版判断
                 discuzForum('m');
                 if (curSite.SiteTypeID === 0) discuzThreadM();

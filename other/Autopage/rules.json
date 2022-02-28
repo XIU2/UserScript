@@ -168,6 +168,27 @@
 			"replaceE": "#paging"
 		}
 	},
+	"t66y-各板块帖子列表": {
+		"host": "www.t66y.com",
+		"url": "/^\\/thread/",
+		"pager": {
+			"nextL": "//div[@class='pages']/a[text()='下一頁']",
+			"pageE": "#tbody > tr, .list.t_one, .list.t_one+.line",
+			"replaceE": ".pages",
+			"scrollD": 1000
+		}
+	},
+	"t66y-帖子内": {
+		"host": "www.t66y.com",
+		"url": "/^\\/(read\\.php|htm_data|htm_mob)/",
+		"thread": true,
+		"pager": {
+			"nextL": "//div[@class='pages']/a[text()='下一頁']",
+			"pageE": "#main > .t.t2, #main > a[name],#main > form > .t.t2, #main > form > a[name], #main > div[style*='overflow:hidden'], #main > .line",
+			"replaceE": ".pages",
+			"scrollD": 1000
+		}
+	},
 	"JavDB": {
 		"host": "/^javdb/",
 		"style": ".grid.columns {height: auto !important;} .grid-item.column{position: static !important; float: left !important; height: 313px !important;}",
@@ -661,6 +682,48 @@
 			"nextL": "//div[@class='bb']//li[./img[@id='bimg']]/following-sibling::li[1]/a",
 			"pageE": "#imgshow img",
 			"replaceE": ".bb ul"
+		}
+	},
+	"爱美女-图片页": {
+		"host": "www.2meinv.com",
+		"url": "/^\\/article-/",
+		"pager": {
+			"nextL": "//div[@class='page-show']/a[text()='下一页']",
+			"pageE": ".pp.hh img",
+			"replaceE": ".page-show"
+		}
+	},
+	"爱美女-分类页": {
+		"host": "www.2meinv.com",
+		"pager": {
+			"nextL": "//div[@class='page-show']/a[text()='下一页']",
+			"pageE": "ul.detail-list > li",
+			"replaceE": ".page-show"
+		}
+	},
+	"爱美女-手机版-图片页": {
+		"host": "wap.2meinv.com",
+		"url": "/^\\/article-/",
+		"pager": {
+			"nextL": "//div[contains(@class,'article-page')]/a[text()='下一页']",
+			"pageE": ".arcmain li",
+			"replaceE": ".article-page"
+		}
+	},
+	"爱美女-手机版-分类页": {
+		"host": "wap.2meinv.com",
+		"pager": {
+			"nextL": "//div[contains(@class,'article-page')]/a[text()='下一页']",
+			"pageE": "#listcon li",
+			"replaceE": ".article-page"
+		},
+		"function": {
+			"bF": "src_bF",
+			"bFp": [
+				0,
+				"img[data-original]",
+				"data-original"
+			]
 		}
 	}
 }
