@@ -3,7 +3,7 @@
 // @name:zh-CN   护眼模式
 // @name:zh-TW   護眼模式
 // @name:en      Dark Mode
-// @version      1.3.9
+// @version      1.4.0
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
 // @description:zh-CN  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
@@ -345,7 +345,7 @@
             style_20 = menu_value('menu_customMode2').split('|'),
             style_30 = menu_value('menu_customMode3').split('|'),
             style = ``,
-            style_00 = `html, body {background-color: #ffffff;}`,
+            style_00 = `html, body {background-color: #ffffff !important;}`,
             style_11 = `html {filter: brightness(${style_10[0]}%) !important;}`,
             style_11_firefox = `html {filter: brightness(${style_10[0]}%) !important; background-image: url();}`,
             style_12 = `html {filter: brightness(${style_10[1]}%) !important;}`,
