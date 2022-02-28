@@ -231,8 +231,7 @@
 		"pager": {
 			"nextL": "li.next-page a",
 			"pageE": "#posts > div",
-			"replaceE": ".pagination",
-			"scrollD": 1500
+			"replaceE": ".pagination"
 		},
 		"function": {
 			"bF": "src_bF",
@@ -249,8 +248,7 @@
 		"pager": {
 			"nextL": "//div[@class='page']/a[text()='下页']",
 			"pageE": "div.content > p > *",
-			"replaceE": ".page",
-			"scrollD": 1500
+			"replaceE": ".page"
 		}
 	},
 	"秀人集-搜索页": {
@@ -290,8 +288,7 @@
 		"pager": {
 			"nextL": ".pagination a.current+a",
 			"pageE": ".related_posts > ul",
-			"replaceE": ".pagination",
-			"scrollD": 1500
+			"replaceE": ".pagination"
 		}
 	},
 	"tvv": {
@@ -395,8 +392,7 @@
 			"nextL": "//nav[@class='pagination']//span[./a[contains(@class, 'is-current')]]/following-sibling::span[1]/a",
 			"pageE": ".article-fulltext > p",
 			"replaceE": "nav.pagination",
-			"scrollE": ".bottom-articles",
-			"scrollD": 1500
+			"scrollE": ".bottom-articles"
 		},
 		"function": {
 			"bF": "src_bF",
@@ -413,8 +409,7 @@
 			"type": 3,
 			"nextL": ".pagination-next",
 			"pageE": ".items-row.column, .collection-item.column",
-			"replaceE": "nav.pagination",
-			"scrollD": 1500
+			"replaceE": "nav.pagination"
 		},
 		"function": {
 			"bF": "src_bF",
@@ -431,8 +426,7 @@
 		"pager": {
 			"nextL": "#pages > span +a:not(.a1)",
 			"pageE": "#hgallery > img",
-			"replaceE": "#pages",
-			"scrollD": 1500
+			"replaceE": "#pages"
 		}
 	},
 	"宅男女神-分类页": {
@@ -495,8 +489,7 @@
 		"pager": {
 			"nextL": "ul.pagination a[aria-label='Next']",
 			"pageE": ".book-list > div.col-sm-4",
-			"replaceE": "ul.pagination",
-			"scrollD": 1500
+			"replaceE": "ul.pagination"
 		}
 	},
 	"秀人美女-图片页": {
@@ -536,8 +529,7 @@
 		"pager": {
 			"nextL": "//div[@class='pagination1']//a[text()='下一页']",
 			"pageE": "article.excerpt",
-			"replaceE": ".pagination1",
-			"scrollD": 1500
+			"replaceE": ".pagination1"
 		}
 	},
 	"ku66": {
@@ -598,8 +590,7 @@
 		"pager": {
 			"nextL": "//div[@class='page']/a[text()='下一页']",
 			"pageE": ".m-list > ul > li",
-			"replaceE": ".page",
-			"scrollD": 1500
+			"replaceE": ".page"
 		}
 	},
 	"ku137_m": {
@@ -618,8 +609,7 @@
 		"pager": {
 			"nextL": "//div[@class='article_page']//a[text()='下一页']",
 			"pageE": ".PictureList > ul > li",
-			"replaceE": ".article_page",
-			"scrollD": 1500
+			"replaceE": ".article_page"
 		}
 	},
 	"kingdom": {
@@ -724,6 +714,28 @@
 				"img[data-original]",
 				"data-original"
 			]
+		}
+	},
+	"娱乐吧-手机版-图片页": {
+		"host": "m.yuleba.org",
+		"url": "/^\\/a\\//",
+		"pager": {
+			"nextL": "//div[@class='paging']/a[text()='下一页']",
+			"pageE": ".a_img > p",
+			"replaceE": ".paging",
+			"scrollD": 4000
+		}
+	},
+	"娱乐吧": {
+		"host": [
+			"www.yuleba.org",
+			"m.yuleba.org"
+		],
+		"url": "/^\\/a|b\\//",
+		"pager": {
+			"nextL": "//div[@class='paging']/a[text()='下一页']",
+			"pageE": ".b_img > ul, .picture > p",
+			"replaceE": ".paging"
 		}
 	}
 }
