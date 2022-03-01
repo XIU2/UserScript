@@ -1584,7 +1584,7 @@ function: {
                 }
             }, //       TGFC Lifestyle - 帖子内
             south: {
-                host: /((www|bbs)\.)?(soul|north|south|white|level|summer|spring|snow)-plus\.(net|org)/,
+                host: [/((www|bbs)\.)?(soul|north|south|white|level|summer|spring|snow)-plus\.(net|org)/, 'bbs.imoutolove.me'],
                 url: ()=> {
                     if (lp == '/thread.php' || lp == '/search.php') {
                         curSite = DBSite.south;
