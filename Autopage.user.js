@@ -7138,7 +7138,7 @@ function: {
     },
     "这里也可以用中文": {
         "host": "/\\.ccc\\.com/",
-        "url": "return (location.pathname.indexOf('/s') > -1)",
+        "url": "return (fun.lp() == '/' || fun.indexOF('/s'))",
         "pager": {
             "type": 2,
             "nextL": "#autopbn",
