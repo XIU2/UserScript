@@ -4334,16 +4334,6 @@ function: {
                     scrollD: 2000
                 }
             }, //     小鱼儿 yr 系统 - 搜索页
-            downg: {
-                host: 'www.downg.com',
-                url: ()=> {if (indexOF('/new/')) {curSite = DBSite.downg;}},
-                pager: {
-                    nextL: 'a.nextpage',
-                    pageE: '.ApdList > ul.ApdLi',
-                    replaceE: '.pagination',
-                    scrollD: 1500
-                }
-            }, //               绿软家园
             sordum: {
                 host: 'www.sordum.org',
                 pager: {
