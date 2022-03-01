@@ -1,4 +1,13 @@
 {
+	"绿软家园-最近更新": {
+		"host": "www.downg.com",
+		"url": "/\\/new\\//",
+		"pager": {
+			"nextL": "a.nextpage",
+			"pageE": ".ApdList > ul.ApdLi",
+			"replaceE": ".pagination"
+		}
+	},
 	"OI-Wiki": {
 		"host": "oi-wiki.org",
 		"style": "blockquote.page-copyright, h2#__comments, form#gitalk-form {display: none !important;} article.md-content__inner{min-height: 700px;}",
@@ -120,6 +129,7 @@
 	"yande": {
 		"host": [
 			"konachan.net",
+			"konachan.com",
 			"yande.re"
 		],
 		"url": "if (location.pathname.indexOf('/post') > -1) {document.head.appendChild(document.createElement('base')).target = '_blank'; return true;}",
@@ -354,6 +364,24 @@
 			"scrollD": 2000
 		}
 	},
+	"学佛网": {
+		"host": "www.xuefo.tw",
+		"pager": {
+			"nextL": "//font/a[text()='下页']",
+			"pageE": "#AutoNumber1 > tbody > tr",
+			"replaceE": "//font[./a[text()='下页']]",
+			"scrollD": 1000
+		}
+	},
+	"佛弟子文库": {
+		"host": "www.fodizi.net",
+		"pager": {
+			"nextL": "a.current+a",
+			"pageE": "div.wrap > a[href$='.html']",
+			"replaceE": ".page",
+			"scrollD": 1000
+		}
+	},
 	"xvideos": {
 		"host": [
 			"www.xnxx.com",
@@ -445,11 +473,21 @@
 	},
 	"JavBus": {
 		"host": "/\\.jav.+|.+jav\\./",
+		"url": "return (location.pathname.indexOf('/forum/') == -1)",
 		"style": "#waterfall {height: auto !important;} #waterfall > .item {position: static !important; float: left !important; height: 400px !important;}",
 		"pager": {
 			"nextL": "#next",
 			"pageE": "#waterfall > .item",
 			"replaceE": ".pagination"
+		}
+	},
+	"UraakaList": {
+		"host": "uraakalist.com",
+		"url": "/^\\/.+/",
+		"pager": {
+			"nextL": "a.next_page",
+			"pageE": ".image-list > .card, .prof-list > .prof-card",
+			"replaceE": "[id='pagenation']"
 		}
 	},
 	"美女推-图片页": {
