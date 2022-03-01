@@ -71,7 +71,7 @@
 			"36kr.com",
 			"www.36kr.com"
 		],
-		"url": "if (location.pathname != '/' && location.pathname.indexOf('/p/') == -1) {return true;}",
+		"url": "if (fun.lp() != '/' && !fun.indexOF('/p/')) {return true;}",
 		"pager": {
 			"type": 2,
 			"nextL": ".kr-loading-more-button.show",
@@ -105,6 +105,26 @@
             "scrollD": 1000
         }
     },
+	"书签地球": {
+		"host": "www.bookmarkearth.com",
+		"url": "return (fun.lp() == '/' || fun.lp() == '/page')",
+		"pager": {
+			"nextL": "js;return fun.getNextUP('currentPage=', /currentPage=\\d+/, '/page', '2', fun.getCSS('ul.pager').dataset.totalpage)",
+			"pageE": ".document-piece",
+			"replaceE": "ul.pager",
+			"scrollD": 1000
+		}
+	},
+	"书签地球-搜索页": {
+		"host": "www.bookmarkearth.com",
+		"url": "return (fun.lp() == '/s/search')",
+		"pager": {
+			"nextL": "js;return fun.getNextEP('a.cut-page-item.active+a.cut-page-item', 'currentPage=', /currentPage=\\d+/)",
+			"pageE": ".document-piece",
+			"replaceE": ".cut-page",
+			"scrollD": 1000
+		}
+	},
 	"彼岸图网": {
 		"host": "pic.netbian.com",
 		"style": "li.nextpage {display: none !important;}",
@@ -117,7 +137,7 @@
 	},
 	"必应壁纸": {
 		"host": "bing.ioliu.cn",
-		"url": "if (location.pathname.indexOf('/photo/') == -1 && location.pathname.indexOf('.html') == -1) {document.head.appendChild(document.createElement('base')).target = '_blank'; return true;}",
+		"url": "if (!fun.indexOF('/photo/') && !fun.indexOF('.html')) {document.head.appendChild(document.createElement('base')).target = '_blank'; return true;}",
 		"style": ".progressive--not-loaded {filter: none !important;}",
 		"pager": {
 			"nextL": "//div[@class='page']/a[contains(text(), '下一页')]",
@@ -132,7 +152,7 @@
 			"konachan.com",
 			"yande.re"
 		],
-		"url": "if (location.pathname.indexOf('/post') > -1) {document.head.appendChild(document.createElement('base')).target = '_blank'; return true;}",
+		"url": "if (fun.indexOF('/post')) {document.head.appendChild(document.createElement('base')).target = '_blank'; return true;}",
 		"style": "html, body {min-height: 1000px;} .javascript-hide {display: inline-block !important;} ul#post-list-posts img, ul#post-list-posts .inner{width: auto !important; height: auto !important;} ul#post-list-posts li {width: 33% !important;} a.directlink {margin: 0 !important;}",
 		"pager": {
 			"nextL": "a.next_page",
@@ -161,7 +181,7 @@
 	},
 	"新片场": {
 		"host": "www.xinpianchang.com",
-		"url": "return (location.pathname != '/')",
+		"url": "return (fun.lp() != '/')",
 		"style": ".lazy-img {opacity: 1 !important;}",
 		"pager": {
 			"nextL": ".page > a[title='下一页']",
@@ -174,17 +194,12 @@
 			"scrollD": 2000
 		},
 		"function": {
-			"bF": "src_bF",
-			"bFp": [
-				0,
-				"img[_src]",
-				"_src"
-			]
+			"bF": "return fun.src_bF(pageE, [0,'img[_src]','_src'])"
 		}
 	},
 	"Planet Minecraft": {
 		"host": "www.planetminecraft.com",
-		"url": "return (location.pathname.indexOf('/forums/') == -1 && location.pathname.indexOf('/posts/') == -1)",
+		"url": "return (!fun.indexOF('/forums/') && !fun.indexOF('/posts/'))",
 		"style": ".resource .r-preview>a img[loading=lazy]:not(.lazyloaded) {visibility: initial !important;}",
 		"pager": {
 			"nextL": "a.pagination_next",
@@ -204,7 +219,7 @@
 	},
 	"叽哩叽哩日报": {
 		"host": "www.jiligamefun.com",
-		"url": "/\\/category\\//",
+		"url": "return (fun.indexOF('/category/'))",
 		"pager": {
 			"nextL": "a.poi-pager__item.poi-pager__item_next",
 			"pageE": ".inn-archive__container > article",
@@ -223,7 +238,7 @@
 	},
 	"二手车之家": {
 		"host": "www.che168.com",
-		"url": "return (location.pathname != '/' && location.pathname.indexOf('/dealer/') == -1)",
+		"url": "return (fun.lp() != '/' && !fun.indexOF('/dealer/'))",
 		"pager": {
 			"nextL": "a.page-item-next",
 			"pageE": "ul.viewlist_ul > li",
@@ -233,7 +248,7 @@
 	},
 	"盖世汽车英文版": {
 		"host": "autonews.gasgoo.com",
-		"url": "return (location.pathname != '/' && location.pathname.indexOf('.html') == -1)",
+		"url": "return (fun.lp() != '/' && !fun.indexOF('.html'))",
 		"pager": {
 			"nextL": "a.pageright",
 			"pageE": ".newsListShow > ul",
@@ -276,7 +291,7 @@
 	},
 	"如意了教育-学校": {
 		"host": "www.ruyile.com",
-		"url": "return (location.pathname == '/xuexiao/')",
+		"url": "return (fun.lp() == '/xuexiao/')",
 		"pager": {
 			"nextL": "//div[@class='fy']/a[contains(text(), '下一页')]",
 			"pageE": ".xxlb > .sk",
@@ -286,7 +301,7 @@
 	},
 	"如意了教育-数据": {
 		"host": "www.ruyile.com",
-		"url": "return (location.pathname == '/data/')",
+		"url": "return (fun.lp() == '/data/')",
 		"pager": {
 			"nextL": "//div[@class='fy']/a[contains(text(), '下一页')]",
 			"pageE": ".m1_z > .lbk",
@@ -300,7 +315,7 @@
 	},
 	"如意了教育-试卷": {
 		"host": "www.ruyile.com",
-		"url": "return (location.pathname == '/shijuan/')",
+		"url": "return (fun.lp() == '/shijuan/')",
 		"pager": {
 			"nextL": "//div[@class='fy']/a[contains(text(), '下一页')]",
 			"pageE": ".m1_z > .m2_lb",
@@ -393,12 +408,7 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "src_bF",
-			"bFp": [
-				0,
-				"img[data-src]",
-				"data-src"
-			],
+			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])",
 			"aF": "document.body.appendChild(document.createElement('script')).textContent = 'xv.thumb_block_initiator.init_listing();';"
 		}
 	},
@@ -412,12 +422,7 @@
 			"replaceE": ".pagination3"
 		},
 		"function": {
-			"bF": "src_bF",
-			"bFp": [
-				0,
-				"img[data-src]",
-				"data-src"
-			]
+			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
 		}
 	},
 	"91porn": {
@@ -463,17 +468,12 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "src_bF",
-			"bFp": [
-				0,
-				"img[data-src]",
-				"data-src"
-			]
+			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
 		}
 	},
 	"JavBus": {
 		"host": "/\\.jav.+|.+jav\\./",
-		"url": "return (location.pathname.indexOf('/forum/') == -1)",
+		"url": "return (!fun.indexOF('/forum/'))",
 		"style": "#waterfall {height: auto !important;} #waterfall > .item {position: static !important; float: left !important; height: 400px !important;}",
 		"pager": {
 			"nextL": "#next",
@@ -509,12 +509,7 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "src_bF",
-			"bFp": [
-				0,
-				"img[data-src]",
-				"data-src"
-			]
+			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
 		}
 	},
 	"秀人集-图片页": {
@@ -559,7 +554,7 @@
 	},
 	"极品性感美女-分类页": {
 		"host": "www.jpxgyw.net",
-		"url": "return (location.pathname != '/' && location.pathname.indexOf('/search/') == -1)",
+		"url": "return (fun.lp() != '/' && !fun.indexOF('/search/'))",
 		"pager": {
 			"nextL": ".pagination a.current+a",
 			"pageE": ".related_posts > ul",
@@ -568,7 +563,7 @@
 	},
 	"tvv": {
 		"host": "mm.tvv.tw",
-		"url": "return (location.pathname.indexOf('.html') == -1)",
+		"url": "return (!fun.indexOF('.html'))",
 		"style": ".blog-masonry, .blog-masonry-4col {height: auto !important;} .blog-listing {position: relative !important;float: left !important;top: auto !important;left: auto !important;} .blog-title > a {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;} .blog-image img {min-height: 300px;}",
 		"pager": {
 			"nextL": "a.next",
@@ -599,7 +594,7 @@
 	},
 	"mm131_m": {
 		"host": "m.mmm131.com",
-		"url": "return (location.pathname == '/')",
+		"url": "return (fun.lp() == '/')",
 		"style": ".bannert, .bannerb, bannert_ios, .bannerb_ios {display: none !important;}",
 		"pager": {
 			"type": 2,
@@ -630,17 +625,12 @@
 			"scrollD": 2000
 		},
 		"function": {
-			"bF": "src_bF",
-			"bFp": [
-				0,
-				"img[data-img]",
-				"data-img"
-			]
+			"bF": "return fun.src_bF(pageE, [0,'img[data-img]','data-img'])"
 		}
 	},
 	"mrcong": {
 		"host": "mrcong.com",
-		"url": "return (location.pathname != '/' && location.pathname.indexOf('/tag/') == -1)",
+		"url": "return (fun.lp() != '/' && !fun.indexOF('/tag/'))",
 		"pager": {
 			"nextL": ".post-page-numbers.current+a.post-page-numbers",
 			"pageE": "#fukie2 > p > img",
@@ -670,12 +660,7 @@
 			"scrollE": ".bottom-articles"
 		},
 		"function": {
-			"bF": "src_bF",
-			"bFp": [
-				0,
-				"img[data-src]",
-				"data-src"
-			]
+			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
 		}
 	},
 	"buondua_list": {
@@ -687,12 +672,7 @@
 			"replaceE": "nav.pagination"
 		},
 		"function": {
-			"bF": "src_bF",
-			"bFp": [
-				0,
-				"img[data-src]",
-				"data-src"
-			]
+			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
 		}
 	},
 	"宅男女神-图片页": {
@@ -715,12 +695,7 @@
 			"scrollD": 1000
 		},
 		"function": {
-			"bF": "src_bF",
-			"bFp": [
-				0,
-				"img[data-original]",
-				"data-original"
-			]
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
 	"宅男女神-文章页": {
@@ -908,12 +883,7 @@
 			"scrollD": 1000
 		},
 		"function": {
-			"bF": "src_bF",
-			"bFp": [
-				0,
-				"img[data-src]",
-				"data-src"
-			]
+			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
 		}
 	},
 	"kissgoddess": {
@@ -931,12 +901,7 @@
 			"scrollD": 3000
 		},
 		"function": {
-			"bF": "src_bF",
-			"bFp": [
-				0,
-				"img[data-original]",
-				"data-original"
-			]
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
 	"24tupian": {
@@ -983,12 +948,7 @@
 			"replaceE": ".article-page"
 		},
 		"function": {
-			"bF": "src_bF",
-			"bFp": [
-				0,
-				"img[data-original]",
-				"data-original"
-			]
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
 	"娱乐吧-手机版-图片页": {

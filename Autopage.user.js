@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.0.6
+// @version      5.0.7
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  無縫拼接下一頁內容（瀑布流），支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎等網站~
@@ -39,9 +39,9 @@
         ['menu_page_number', '显示当前页码及点击暂停翻页', '显示当前页码及点击暂停翻页', true],
         ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false],
         ['menu_rules', '更新外置翻页规则 (每天自动)', '更新外置翻页规则 (每天自动)', {}],
-        ['menu_customRules', '自定义翻页规则', '自定义翻页规则', {}]
+        ['menu_customRules', '自定义翻页规则 (beta)', '自定义翻页规则 (beta)', {}]
     ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, locationC = false, nowLocation = '', lp = location.pathname;
-    window.autoPage = {src_bF: src_bF, xs_bF: xs_bF}
+    window.autoPage = {lp: ()=>location.pathname, indexOF: indexOF, getAll: getAll, getOne: getOne, getAllXpath: getAllXpath, getXpath: getXpath, getAllCSS: getAllCSS, getCSS: getCSS, getNextE: getNextE, getNextEP: getNextEP, getNextEPN: getNextEPN, getNextUPN: getNextUPN, getNextUP: getNextUP, getNextF: getNextF, insStyle: insStyle, src_bF: src_bF, xs_bF: xs_bF}
 
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
@@ -69,7 +69,7 @@
                     if (webType === 0) {
                         menuId[0] = GM_registerMenuCommand('❌ 当前网页暂不支持 [欢迎点击申请]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
                         menuId[1] = GM_registerMenuCommand('🔄 更新外置翻页规则', function(){getRulesUrl(true)});
-                        menuId[2] = GM_registerMenuCommand('#️⃣ 自定义翻页规则', function(){customRules()});
+                        menuId[2] = GM_registerMenuCommand('#️⃣ 自定义翻页规则 (beta)', function(){customRules()});
                         console.info('[自动无缝翻页] - 暂不支持当前网页 [ ' + location.href + ' ]，欢迎申请支持: https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/96880/feedback');
                         return
                     } else if (webType === -1) {
@@ -121,7 +121,7 @@
                                 if (DBSite[now].url.slice(0,1) === '/') { // 如果是正则，则对 URL 路径进行匹配
                                     if (new RegExp(DBSite[now].url.slice(1,DBSite[now].url.length-1), 'i').test(location.pathname + location.search) === true) {curSite = DBSite[now];} else {break;}
                                 } else { // 如果是函数，那就执行代码
-                                    if (new Function (DBSite[now].url)() === true) {curSite = DBSite[now];} else {break;}
+                                    if (new Function('fun', DBSite[now].url)(window.autoPage) === true) {curSite = DBSite[now];} else {break;}
                                 }
                             }
                         } else {
@@ -145,7 +145,7 @@
                             if (DBSite[now].url.slice(0,1) === '/') { // 如果是正则，则对 URL 路径进行匹配
                                 if (new RegExp(DBSite[now].url.slice(1,DBSite[now].url.length-1), 'i').test(location.pathname + location.search) === true) {curSite = DBSite[now];} else {continue;}
                             } else { // 如果是函数，那就执行代码
-                                if (new Function (DBSite[now].url)() === true) {curSite = DBSite[now];} else {continue;}
+                                if (new Function('fun', DBSite[now].url)(window.autoPage) === true) {curSite = DBSite[now];} else {continue;}
                             }
                         }
                     } else {
@@ -671,9 +671,9 @@ function: {
                     scrollD: 2000
                 },
                 function: {
-                    bF: pageElems => { // 插入前函数（过滤相关搜索）
-                        if (getXpath('//div[contains(@class,"-header") and string()="相关搜索"]', pageElems[pageElems.length - 1])) pageElems[pageElems.length - 1].style.display = 'none';
-                        return pageElems
+                    bF: pageE => { // 插入前函数（过滤相关搜索）
+                        if (getXpath('//div[contains(@class,"-header") and string()="相关搜索"]', pageE[pageE.length - 1])) pageE[pageE.length - 1].style.display = 'none';
+                        return pageE
                     }
                 }
             }, //                头条 搜索
@@ -856,7 +856,7 @@ function: {
                 iframe: true,
                 pager: {
                     type: 4,
-                    nextL: ()=> {if (getNextE('a.next.pagination-item')) getPageElems_(curSite.pageUrl + '&pagelets=frs-list%2Fpagelet%2Fthread&pagelets_stamp=' + new Date().getTime());},
+                    nextL: ()=> {if (getNextE('a.next.pagination-item')) getPageE_(curSite.pageUrl + '&pagelets=frs-list%2Fpagelet%2Fthread&pagelets_stamp=' + new Date().getTime());},
                     pageE: '#thread_list > li',
                     insertP: ['#thread_list', 3],
                     insertE: baidu_tieba_insertE,
@@ -1184,11 +1184,11 @@ function: {
                     scrollD: 1500
                 },
                 function: {
-                    bF: pageElems => { // 插入前函数（修改当前网页中的 吐槽 等按钮，避免重复添加点击事件）
+                    bF: pageE => { // 插入前函数（修改当前网页中的 吐槽 等按钮，避免重复添加点击事件）
                         getAllCSS('a.tucao-btn').forEach(function (now) {now.className = now.className.replace('tucao-btn', 'tucao-btn23');});
                         getAllCSS('a.comment-like.like').forEach(function (now) {now.className = now.className.replace('comment-like', 'comment-like23');});
                         getAllCSS('a.comment-unlike.unlike').forEach(function (now) {now.className = now.className.replace('comment-unlike', 'comment-unlike23');});
-                        return pageElems
+                        return pageE
                     }
                 }
             }, //      煎蛋网
@@ -1311,13 +1311,13 @@ function: {
                     scrollD: 2000
                 },
                 function: {
-                    bF: pageElems => {
-                        pageElems.forEach(function (one) {
+                    bF: pageE => {
+                        pageE.forEach(function (one) {
                             one.querySelectorAll('.g-load-img-wrap, .tw-absolute.tw-cursor-pointer, .avatar').forEach(function (now) {
                                 getCSS('noscript+img', now).src = getCSS('noscript > img', now).src;
                             });
                         });
-                        return pageElems
+                        return pageE
                     }
                 }
             }, //           懂车帝论坛
@@ -2168,9 +2168,9 @@ function: {
                     scrollD: 100
                 },
                 function: {
-                    bF: pageElems => { // 插入前函数（移除下一页底部的 "更多相关内容请关注：xxx" 文字 + 加载图片）
-                        pageElems.forEach(function (one) {if (one.tagName === 'P' && one.textContent.indexOf('更多相关内容请关注') > -1) {one.style.display = 'none';}});
-                        return src_bF(pageElems, [0, 'img[data-src]', 'data-src'])
+                    bF: pageE => { // 插入前函数（移除下一页底部的 "更多相关内容请关注：xxx" 文字 + 加载图片）
+                        pageE.forEach(function (one) {if (one.tagName === 'P' && one.textContent.indexOf('更多相关内容请关注') > -1) {one.style.display = 'none';}});
+                        return src_bF(pageE, [0, 'img[data-src]', 'data-src'])
                     }
                 }
             }, //             游民星空 - 攻略
@@ -2254,9 +2254,9 @@ function: {
                     scrollD: 1500
                 },
                 function: {
-                    bF: pageElems => { // 插入前函数（过滤置顶帖子）
-                        for (let i = 0; i < pageElems.length; i++) {if (pageElems[i].textContent.replace(/\n|	/g,'') === 'Topics') {pageElems.splice(0,i+1); break;}}
-                        return pageElems
+                    bF: pageE => { // 插入前函数（过滤置顶帖子）
+                        for (let i = 0; i < pageE.length; i++) {if (pageE[i].textContent.replace(/\n|	/g,'') === 'Topics') {pageE.splice(0,i+1); break;}}
+                        return pageE
                     }
                 }
             }, //               cs.rin.ru - 各版块帖子列表
@@ -2811,14 +2811,14 @@ function: {
                     scrollD: 1200
                 },
                 function: {
-                    bF: pageElems => { // 插入前函数（鼠标指向显示封面）
-                        pageElems.forEach(function (one) {
+                    bF: pageE => { // 插入前函数（鼠标指向显示封面）
+                        pageE.forEach(function (one) {
                             one.querySelectorAll('td > a[onmouseover][onmouseout]').forEach(function (now) {
                                 now.parentElement.parentElement.setAttribute('onmouseover', now.getAttribute('onmouseover')); now.removeAttribute('onmouseover');
                                 now.parentElement.parentElement.setAttribute('onmouseout', now.getAttribute('onmouseout')); now.removeAttribute('onmouseout');
                             });
                         });
-                        return pageElems
+                        return pageE
                     }
                 }
             }, //           RARBG
@@ -2877,9 +2877,9 @@ function: {
                     scrollD: 1000
                 },
                 function: {
-                    bF: pageElems => { // 插入前函数（隐藏底部元素）
-                        pageElems.forEach(function (one) {let now = one.querySelector('[id^="list_top"], [id^="list_bottom"]'); if (now) {one.hidden = true;};});
-                        return pageElems
+                    bF: pageE => { // 插入前函数（隐藏底部元素）
+                        pageE.forEach(function (one) {let now = one.querySelector('[id^="list_top"], [id^="list_bottom"]'); if (now) {one.hidden = true;};});
+                        return pageE
                     }
                 }
             }, //          BTHaha
@@ -4363,12 +4363,12 @@ function: {
                     scrollD: 1500
                 },
                 function: {
-                    bF: pageElems => { // 插入前函数（调整 class）
-                        pageElems.forEach(function (one) {
+                    bF: pageE => { // 插入前函数（调整 class）
+                        pageE.forEach(function (one) {
                             let now = one.querySelector('.slideUp, .elementFade');
                             if (now) now.className = now.className.replace('slideUp','slideUpRun').replace('elementFade','elementFadeRun');
                         });
-                        return pageElems
+                        return pageE
                     }
                 }
             },
@@ -4565,9 +4565,9 @@ function: {
                     scrollD: 2000
                 },
                 function: {
-                    bF: pageElems => {
+                    bF: pageE => {
                         getCSS('#gs_n').remove();
-                        return pageElems
+                        return pageE
                     }
                 }
             }, //      谷歌学术 - 其他镜像站
@@ -5167,28 +5167,6 @@ function: {
                     scrollD: 1500
                 }
             }, //          Xposed
-            bookmarkearth: {
-                host: 'www.bookmarkearth.com',
-                url: ()=> {if (lp == '/' || lp == '/page') {
-                    curSite = DBSite.bookmarkearth;
-                } else if (lp == '/s/search') {
-                    curSite = DBSite.bookmarkearth_search;
-                }},
-                pager: {
-                    nextL: ()=> getNextUP('currentPage=', /currentPage=\d+/, '/page', '2', getCSS('ul.pager').dataset.totalpage),
-                    pageE: '.document-piece',
-                    replaceE: 'ul.pager',
-                    scrollD: 1000
-                }
-            }, //        书签地球
-            bookmarkearth_search: {
-                pager: {
-                    nextL: ()=> getNextEP('a.cut-page-item.active+a.cut-page-item', 'currentPage=', /currentPage=\d+/),
-                    pageE: '.document-piece',
-                    replaceE: '.cut-page',
-                    scrollD: 1000
-                }
-            }, // 书签地球 - 搜索页
             smzdm: {
                 host: ['www.smzdm.com', 'search.smzdm.com'],
                 url: ()=> {if (location.hostname === 'search.smzdm.com' || indexOF('/fenlei/') || indexOF(/\/mall\/.+\/.+/)) {curSite = DBSite.smzdm;}},
@@ -5213,9 +5191,9 @@ function: {
             } //          没得比 - 分类/搜索页
         };
         // 向后兼容一段时间就移除
-        if (JSON.stringify(GM_getValue('menu_customRules', {})).indexOf('functionS') > -1 || JSON.stringify(GM_getValue('menu_customRules', {})).indexOf('css;') > -1) { // 改名过渡，过段时间将其移除
+        /*if (JSON.stringify(GM_getValue('menu_customRules', {})).indexOf('functionS') > -1 || JSON.stringify(GM_getValue('menu_customRules', {})).indexOf('css;') > -1) { // 改名过渡，过段时间将其移除
             GM_setValue('menu_customRules', JSON.parse(JSON.stringify(GM_getValue('menu_customRules', {})).replaceAll('functionS', 'url').replaceAll('css;', '')))
-        }
+        }*/
         //console.log(GM_getValue('menu_customRules'), GM_getValue('menu_rules'))
         // 合并 自定义规则、外置规则、内置规则
         DBSite = Object.assign(GM_getValue('menu_customRules', {}), GM_getValue('menu_rules', {}), DBSite)
@@ -5498,33 +5476,33 @@ function: {
 
 
     // [谷歌搜索] 的插入前函数（加载视频图片）
-    function google_bF(pageElems) {
+    function google_bF(pageE) {
         if (!indexOF('tbm=nws', 's')){
-            pageElems.forEach(function (one) {
+            pageE.forEach(function (one) {
                 getAllCSS('a[aria-label][href*="https://www.youtube.com/watch?v="]').forEach(function (one1) {
                     let img = getCSS('img', one1)
                     if (img) img.src = `https://i.ytimg.com/vi/${one1.href.split('?v=')[1]}/mqdefault.jpg`
                 })
             });
         }
-        return pageElems
+        return pageE
     }
 
 
     // [必应搜索] 的插入前函数（加载网站图标）
-    function bing_bF(pageElems) {
+    function bing_bF(pageE) {
         if (!getCSS('.b_title > a.sh_favicon')) {
             insStyle('.b_title > a.sh_favicon {display: none !important;}');
             delete curSite.function
             //console.log(curSite)
-            return pageElems
+            return pageE
         }
-        pageElems.forEach(function (one) {
+        pageE.forEach(function (one) {
             getAllCSS('div.rms_iac[data-src]').forEach(function (one1) {
                 one1.outerHTML = `<img src="${one1.dataset.src}" height="16" width="16" alt="全球 Web 图标" role="presentation" class="rms_img">`;
             })
         });
-        return pageElems
+        return pageE
     }
 
 
@@ -5545,10 +5523,10 @@ function: {
         }
     }
     // [百度贴吧] 插入数据
-    function baidu_tieba_insertE(pageElems, type) {
-        if (!pageElems) return
+    function baidu_tieba_insertE(pageE, type) {
+        if (!pageE) return
         // 获取 <script> 内容
-        const scriptElems = getXpath(`//script[contains(text(), 'Bigpipe.register("frs-list/pagelet/thread_list", ')]`, pageElems, pageElems);
+        const scriptElems = getXpath(`//script[contains(text(), 'Bigpipe.register("frs-list/pagelet/thread_list", ')]`, pageE, pageE);
         if (scriptElems) {
             // 从 <script> 中提取帖子列表字符串
             let scriptText = scriptElems.textContent.replace('Bigpipe.register("frs-list/pagelet/thread_list", ','');
@@ -5598,8 +5576,8 @@ function: {
         return ''
     }
     // [NexusMods] 的插入前函数（隐藏底部元素）
-    function nexusmods_bF(pageElems) {
-        pageElems.forEach(function (one) {
+    function nexusmods_bF(pageE) {
+        pageE.forEach(function (one) {
             let now = one.querySelector('.mod-tile-left');
             if (now) {
                 let downloadCount = now.querySelector('.downloadcount > span.flex-label');
@@ -5610,7 +5588,7 @@ function: {
                 }
             }
         });
-        return pageElems
+        return pageE
     }
 
 
@@ -5631,14 +5609,14 @@ function: {
         }
     }
     // [bilibili_search] 插入前函数（加载图片）
-    function bilibili_search_bF(pageElems) {
-        pageElems.forEach(function (one) {
+    function bilibili_search_bF(pageE) {
+        pageE.forEach(function (one) {
             let img = getCSS('.img > .lazy-img > img[src=""]', one)
             if (img) {
                 img.setAttribute('data-srclz', 'lazy')
             }
         });
-        return pageElems
+        return pageE
     }
     // [bilibili_search] 插入后函数（加载图片）
     function bilibili_search_aF() {
@@ -5680,28 +5658,28 @@ function: {
 
     }
     // [漫画猫] 获取下一页地址
-    function manhuacat_nextL(pageElems, type) {
+    function manhuacat_nextL(pageE, type) {
         if (type === 'url') {
-            if(pageElems.code == '0000') {
-                if (pageElems.url === curSite.pageUrl) return
-                curSite.pageUrl = pageElems.url;
-                getPageElems_(curSite.pageUrl); // 真正的下一页链接
+            if(pageE.code == '0000') {
+                if (pageE.url === curSite.pageUrl) return
+                curSite.pageUrl = pageE.url;
+                getPageE_(curSite.pageUrl); // 真正的下一页链接
             }
         } else {
             let vg_r_data = getCSS('.vg-r-data');
             if (vg_r_data) {
-                getPageElems_(`${location.origin}/chapter_num?chapter_id=${vg_r_data.dataset.chapter_num}&ctype=1&type=${vg_r_data.dataset.chapterType};`, 'json', 'GET', '', 'url');
+                getPageE_(`${location.origin}/chapter_num?chapter_id=${vg_r_data.dataset.chapter_num}&ctype=1&type=${vg_r_data.dataset.chapterType};`, 'json', 'GET', '', 'url');
             }
         }
     }
     // [漫画猫] 插入数据
-    function manhuacat_insertE(pageElems, type) {
-        if (!pageElems) return
+    function manhuacat_insertE(pageE, type) {
+        if (!pageE) return
         if (type === 'url') { // 获取下一页链接
-            manhuacat_nextL(pageElems, type); return
+            manhuacat_nextL(pageE, type); return
         }
-        addHistory(pageElems);
-        replaceElems(pageElems);
+        addHistory(pageE);
+        replaceElems(pageE);
 
         // 插入图片
         let _img = '', _img_arr = LZString.decompressFromBase64(getXpath('//body/script[not(@src)][contains(text(), "img_data")]').textContent.split('"')[1]).split(','), vg_r_data = getCSS('.vg-r-data');;
@@ -5734,20 +5712,20 @@ function: {
         var url = location.origin + location.pathname.replace(window['imgDate'].cid.toString(), window['imgDate'].nextId.toString())
         if (url === curSite.pageUrl) return
         curSite.pageUrl = url
-        getPageElems_(curSite.pageUrl);
+        getPageE_(curSite.pageUrl);
     }
     // [漫画柜] 插入数据
-    function manhuagui_insertE(pageElems, type) {
-        if (!pageElems) return
+    function manhuagui_insertE(pageE, type) {
+        if (!pageE) return
         // 重新执行本页的 imgDate 代码
-        insScript(curSite.pager.pageE, document.body, pageElems);
+        insScript(curSite.pager.pageE, document.body, pageE);
         let _img = '', imgPath = `${location.protocol}//i.hamreus.com${window['imgDate'].path}`;
         //console.log(imgPath, window['imgDate'])
         if (!(window['imgDate']) || !(imgPath)) return
         // 遍历图片文件名数组，组合为 img 标签
         for (let i = 0; i < window['imgDate'].files.length; i++) {_img += `<img src="${imgPath + window['imgDate'].files[i]}?e=${window['imgDate'].sl.e}&m=${window['imgDate'].sl.m}">`;}
         getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
-        addHistory(pageElems);
+        addHistory(pageE);
         pageNum.now = pageNum._now + 1
     }
 
@@ -5768,20 +5746,20 @@ function: {
         var url = comicUrl + nextChapterData.id + '.html'
         if (url === curSite.pageUrl) return
         curSite.pageUrl = url
-        getPageElems_(curSite.pageUrl);
+        getPageE_(curSite.pageUrl);
     }
     // [36漫画] 插入数据
-    function _36manga_insertE(pageElems, type) {
-        if (!pageElems) return
+    function _36manga_insertE(pageE, type) {
+        if (!pageE) return
         // 插入并执行数据代码
-        insScript(curSite.pager.pageE, document.body, pageElems);
+        insScript(curSite.pager.pageE, document.body, pageE);
         let _img = '', imgPath = `${SinConf.resHost[0].domain[0]}${chapterPath}`;
         if (!(chapterImages) || !(imgPath)) return
         // 遍历图片文件名数组，组合为 img 标签
         for (let i = 0; i < chapterImages.length; i++) {_img += `<img src="${imgPath}${chapterImages[i]}">`;}
         // 插入并覆盖原来的一个图片
         getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
-        addHistory(pageElems);
+        addHistory(pageE);
         pageNum.now = pageNum._now + 1
     }
 
@@ -5821,17 +5799,17 @@ function: {
         let next = location.origin + qTcms_Pic_nextArr
         if (next && next != location.origin && next != curSite.pageUrl) {
             curSite.pageUrl = next;
-            getPageElems_(curSite.pageUrl);
+            getPageE_(curSite.pageUrl);
         }
     }
     // [爱漫画] 插入数据
-    function imanhuaw_insertE(pageElems, type) {
-        if (!pageElems) return
+    function imanhuaw_insertE(pageE, type) {
+        if (!pageE) return
         // 插入并运行 <script>
-        insScript('//head/script[not(@src)][contains(text(), "qTcms_S_m_murl_e")]', document.body, pageElems);
+        insScript('//head/script[not(@src)][contains(text(), "qTcms_S_m_murl_e")]', document.body, pageE);
         // 将 img 标签插入到网页中
         getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), imanhuaw_getIMG());
-        addHistory(pageElems);
+        addHistory(pageE);
         pageNum.now = pageNum._now + 1
     }
 
@@ -5864,13 +5842,13 @@ function: {
         }
         if (url === curSite.pageUrl) return
         curSite.pageUrl = url
-        getPageElems_(curSite.pageUrl);
+        getPageE_(curSite.pageUrl);
     }
     // [漫画 DB] 插入数据
-    function manhuadb_insertE(pageElems, type) {
-        if (!pageElems) return
-        if (replaceElems(pageElems, curSite.pager.pageE, curSite.pager.pageE)) {
-            addHistory(pageElems);
+    function manhuadb_insertE(pageE, type) {
+        if (!pageE) return
+        if (replaceElems(pageE, curSite.pager.pageE, curSite.pager.pageE)) {
+            addHistory(pageE);
             pageNum.now = pageNum._now + 1
             manhuadb_init(); // 将刚刚替换的图片插入网页中
         }
@@ -5894,24 +5872,24 @@ function: {
         nextId = getCSS('.next_chapter:not(.end)')
         if (nextId && nextId.id && nextId.id != 'None') {
             curSite.pageUrl = location.href;
-            getPageElems_(`https://www.hicomic.net/api/web/chapter/${nextId.id}/contents`, 'json');
+            getPageE_(`https://www.hicomic.net/api/web/chapter/${nextId.id}/contents`, 'json');
         }
     }
     // [HiComic(嗨漫画)] 插入数据
-    function hicomic_insertE(pageElems, type) {
-        if (!pageElems || pageElems.code != 200) return
-        if (pageElems.results.chapter.next) { // 写入下一页的 UUID
-            getCSS('.next_chapter').id = pageElems.results.chapter.next;
+    function hicomic_insertE(pageE, type) {
+        if (!pageE || pageE.code != 200) return
+        if (pageE.results.chapter.next) { // 写入下一页的 UUID
+            getCSS('.next_chapter').id = pageE.results.chapter.next;
         } else {
             getCSS('.next_chapter').id = 'None';
             getCSS('.next_chapter').classList.add('end');
         }
-        curSite.pageUrl =`https://www.hicomic.net/chapters/${pageElems.results.chapter.uuid}/contents`
-        getCSS('.chapter_name').textContent = pageElems.results.chapter.name; // 修改漫画标题
-        addHistory(pageElems, window.document.title.replace(/(\(第.+\))? - HiComic/, `(${pageElems.results.chapter.name}) - HiComic`));
+        curSite.pageUrl =`https://www.hicomic.net/chapters/${pageE.results.chapter.uuid}/contents`
+        getCSS('.chapter_name').textContent = pageE.results.chapter.name; // 修改漫画标题
+        addHistory(pageE, window.document.title.replace(/(\(第.+\))? - HiComic/, `(${pageE.results.chapter.name}) - HiComic`));
         let _img = '';
-        for (let i = 0; i < pageElems.results.chapter.contents.length; i++) { // 遍历图片文件名数组，组合为 img 标签
-            let src = pageElems.results.chapter.contents[i].url;
+        for (let i = 0; i < pageE.results.chapter.contents.length; i++) { // 遍历图片文件名数组，组合为 img 标签
+            let src = pageE.results.chapter.contents[i].url;
             if (src.indexOf('!p_c_c_') === -1) src += '!p_c_c_h';
             _img += `<img src="${src}">`
         }
@@ -5927,10 +5905,10 @@ function: {
         getOne(curSite.pager.insertP[0]).innerHTML = _img;
     }
     // [动漫之家] 插入数据
-    function dmzj_insertE(pageElems, type) {
-        if (!pageElems) return
+    function dmzj_insertE(pageE, type) {
+        if (!pageE) return
         // 插入并运行 <script>
-        insScript('head > script[type]:not([src])', document.body, pageElems);
+        insScript('head > script[type]:not([src])', document.body, pageE);
 
         // 插入图片
         let _img = '', _img_arr;
@@ -5944,15 +5922,15 @@ function: {
         }
         if (_img) {
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-            addHistory(pageElems);
-            if (replaceElems(pageElems)) pageNum.now = pageNum._now + 1
+            addHistory(pageE);
+            if (replaceElems(pageE)) pageNum.now = pageNum._now + 1
         }
     }
     // [动漫之家-漫画] 插入数据
-    function dmzj_manhua_insertE(pageElems, type) {
-        if (!pageElems) return
+    function dmzj_manhua_insertE(pageE, type) {
+        if (!pageE) return
         // 插入并运行 <script>
-        insScript('head > script[type]:not([src])', document.body, pageElems);
+        insScript('head > script[type]:not([src])', document.body, pageE);
 
         // 插入图片
         let _img = '';
@@ -5961,8 +5939,8 @@ function: {
         }
         if (_img) {
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-            addHistory(pageElems);
-            if (replaceElems(pageElems)) pageNum.now = pageNum._now + 1
+            addHistory(pageE);
+            if (replaceElems(pageE)) pageNum.now = pageNum._now + 1
         }
     }
 
@@ -5980,15 +5958,15 @@ function: {
         let url = comicUrl + nextChapterData.id + '.html'
         if (url && url != '.html' && url != curSite.pageUrl) {
             curSite.pageUrl = url;
-            getPageElems_(curSite.pageUrl);
+            getPageE_(curSite.pageUrl);
         }
     }
     // [优酷漫画] 插入数据
-    function ykmh_insertE(pageElems, type) {
-        //console.log(pageElems)
-        if (!pageElems) return
+    function ykmh_insertE(pageE, type) {
+        //console.log(pageE)
+        if (!pageE) return
         // 插入并运行 <script>
-        insScript('//script[contains(text(),"chapterImages")]', document.body, pageElems);
+        insScript('//script[contains(text(),"chapterImages")]', document.body, pageE);
 
         let host = SinMH.getChapterImage(1).split('/')[0] + '//' + SinMH.getChapterImage(1).split('/')[2];
         if (!host) host = document.querySelector(curSite.pager.insertP[0]).src.split('/')[0] + '//' + document.querySelector(curSite.pager.insertP[0]).src.split('/')[2]
@@ -5997,8 +5975,8 @@ function: {
         for (let one of chapterImages) {_img += `<img src="${host}${one}">`;}
         if (_img) {
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-            addHistory(pageElems);
-            if (replaceElems(pageElems)) pageNum.now = pageNum._now + 1
+            addHistory(pageE);
+            if (replaceElems(pageE)) pageNum.now = pageNum._now + 1
         }
     }
 
@@ -6013,10 +5991,10 @@ function: {
 
 
     // [漫画星球] 插入数据
-    function mhxqiu_insertE(pageElems, type) {
-        if (!pageElems) return
+    function mhxqiu_insertE(pageE, type) {
+        if (!pageE) return
         // 插入并运行 <script>
-        insScript('//script[contains(text(), "eval") and contains(text(), "newImgs")]', document.body, pageElems);
+        insScript('//script[contains(text(), "eval") and contains(text(), "newImgs")]', document.body, pageE);
 
         // 插入图片
         let _img = '';
@@ -6024,27 +6002,27 @@ function: {
         if (_img) {
             // 将 img 标签插入到网页中
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
-            addHistory(pageElems);
+            addHistory(pageE);
             pageNum.now = pageNum._now + 1
-            replaceElems(pageElems)
+            replaceElems(pageE)
         }
     }
 
 
     // [风之动漫] 插入数据
-    function fffdm_insertE(pageElems, type) {
-        if (!pageElems) return
+    function fffdm_insertE(pageE, type) {
+        if (!pageE) return
         // 插入并运行 <script>
-        let scriptElems = getXpath('id("main")/script[contains(text(), "mhpicurl")][1]', pageElems, pageElems);
+        let scriptElems = getXpath('id("main")/script[contains(text(), "mhpicurl")][1]', pageE, pageE);
         if (scriptElems) {
             document.body.appendChild(document.createElement('script')).textContent = scriptElems.textContent.replace(/document\.write.+/, '');
 
             // 插入图片
             setTimeout(function() {
                 getOne(curSite.pager.insertP[0]).appendChild(document.createElement('img')).src = mhpicurl;
-                addHistory(pageElems);
+                addHistory(pageE);
                 pageNum.now = pageNum._now + 1
-                replaceElems(pageElems)
+                replaceElems(pageE)
             }, 100)
         }
     }
@@ -6064,10 +6042,10 @@ function: {
 
     }
     // [乐语漫画] 插入数据
-    function leyuman_insertE(pageElems, type) {
-        if (!pageElems) return
+    function leyuman_insertE(pageE, type) {
+        if (!pageE) return
         // 插入并运行 <script>
-        insScript('//body//script[not(@src)][contains(text(), "z_img=")]', document.body, pageElems);
+        insScript('//body//script[not(@src)][contains(text(), "z_img=")]', document.body, pageE);
 
         // 插入图片
         let _img = '';
@@ -6081,9 +6059,9 @@ function: {
         if (_img) {
             // 将 img 标签插入到网页中
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
-            addHistory(pageElems);
+            addHistory(pageE);
             pageNum.now = pageNum._now + 1
-            replaceElems(pageElems)
+            replaceElems(pageE)
         }
     }
 
@@ -6099,14 +6077,14 @@ function: {
         let next = nextLink_b
         if (next && next != curSite.pageUrl) {
             curSite.pageUrl = next;
-            getPageElems_(curSite.pageUrl);
+            getPageE_(curSite.pageUrl);
         }
     }
     // [新新漫画] 插入数据
-    function _77mh_insertE(pageElems, type) {
-        if (!pageElems) return
+    function _77mh_insertE(pageE, type) {
+        if (!pageE) return
         // 插入并运行 <script>
-        insScript('//script[not(@src)][contains(text(), "eval(")]', document.body, pageElems);
+        insScript('//script[not(@src)][contains(text(), "eval(")]', document.body, pageE);
 
         // 插入图片
         let _img = '';
@@ -6114,7 +6092,7 @@ function: {
         if (_img) {
             // 将 img 标签插入到网页中
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
-            addHistory(pageElems);
+            addHistory(pageE);
             pageNum.now = pageNum._now + 1
         }
     }
@@ -6122,11 +6100,11 @@ function: {
 
     // [古风漫画网] 获取下一页地址
     function gufengmh_nextL() {
-        let pageElems = getOne(curSite.pager.pageE); // 寻找数据所在元素
-        if (pageElems) {
+        let pageE = getOne(curSite.pager.pageE); // 寻找数据所在元素
+        if (pageE) {
             let comicUrl, nextId;
             var url = '';
-            pageElems.textContent.split(';').forEach(function (one){ // 分号 ; 分割为数组并遍历
+            pageE.textContent.split(';').forEach(function (one){ // 分号 ; 分割为数组并遍历
                 //console.log(one)
                 if (one.indexOf('comicUrl') > -1) { // 下一页 URL 前半部分
                     comicUrl = one.split('"')[1];
@@ -6138,25 +6116,25 @@ function: {
                 url = comicUrl + nextId + '.html'
                 if (url === curSite.pageUrl) return
                 curSite.pageUrl = url
-                getPageElems_(curSite.pageUrl); // 访问下一页 URL 获取
+                getPageE_(curSite.pageUrl); // 访问下一页 URL 获取
             }
         }
     }
     // [古风漫画网] 插入数据
-    function gufengmh_insertE(pageElems, type) {
-        if (pageElems) {
+    function gufengmh_insertE(pageE, type) {
+        if (pageE) {
             let url = curSite.pageUrl;
-            pageElems = getOne(curSite.pager.pageE, pageElems, pageElems);
+            pageE = getOne(curSite.pager.pageE, pageE, pageE);
             let chapterImages, chapterPath;
-            getOne(curSite.pager.pageE).innerText = pageElems.textContent; // 将当前网页内的数据所在元素内容改为刚刚获取的下一页数据内容，以便循环获取下一页 URL
-            pageElems.textContent.split(';').forEach(function (one){ // 分号 ; 分割为数组并遍历
+            getOne(curSite.pager.pageE).innerText = pageE.textContent; // 将当前网页内的数据所在元素内容改为刚刚获取的下一页数据内容，以便循环获取下一页 URL
+            pageE.textContent.split(';').forEach(function (one){ // 分号 ; 分割为数组并遍历
                 //console.log(one)
                 if (one.indexOf('chapterImages') > -1) { // 图片文件名数组
                     chapterImages = one.replace(/^.+\[/, '').replace(']', '').replaceAll('"', '').split(',')
                 } else if (one.indexOf('chapterPath') > -1) { // 图片文件路径
                     chapterPath = one.split('"')[1];
                 } else if (one.indexOf('pageTitle') > -1) { // 网页标题
-                    addHistory(pageElems, one.split('"')[1]);
+                    addHistory(pageE, one.split('"')[1]);
                 }
             })
             if (chapterImages && chapterPath) {
@@ -6186,34 +6164,34 @@ function: {
     function mangabz_nextL() {
         var url = '';
         if (MANGABZ_PAGE === MANGABZ_IMAGE_COUNT) { // 下一话
-            if (getNextE('//a[./img[contains(@src, "icon_xiayizhang")]]')) getPageElems_(curSite.pageUrl); // 访问下一话 URL 获取
+            if (getNextE('//a[./img[contains(@src, "icon_xiayizhang")]]')) getPageE_(curSite.pageUrl); // 访问下一话 URL 获取
         } else { // 下一页
             if (!mkey) var mkey = '';
             url = location.origin + location.pathname + 'chapterimage.ashx' + `?cid=${MANGABZ_CID}&page=${MANGABZ_PAGE + 1}&key=${(mkey)}&_cid=${MANGABZ_CID}&_mid=${MANGABZ_MID}&_dt=${MANGABZ_VIEWSIGN_DT}&_sign=${MANGABZ_VIEWSIGN}`
             if (url === curSite.pageUrl) return
             curSite.pageUrl = url
             //console.log(curSite.pageUrl)
-            getPageElems_(curSite.pageUrl, 'text', 'GET', '', 'Next'); // 访问下一页 URL 获取
+            getPageE_(curSite.pageUrl, 'text', 'GET', '', 'Next'); // 访问下一页 URL 获取
         }
     }
     // [Mangabz 漫画] 插入数据
-    function mangabz_insertE(pageElems, type) {
-        if (pageElems) {
+    function mangabz_insertE(pageE, type) {
+        if (pageE) {
             if (type === 'Next') { // 下一页
-                let imgArr = eval(pageElems),
+                let imgArr = eval(pageE),
                     _img = '';
                 for (let now of imgArr) {_img += `<img src="${now}">`;}
                 if (_img) {
                     getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
                     MANGABZ_PAGE += imgArr.length;
-                    addHistory(pageElems, document.title, location.origin + MANGABZ_CURL.substring(0, MANGABZ_CURL.length - 1) + '-p' + MANGABZ_PAGE + '/');
+                    addHistory(pageE, document.title, location.origin + MANGABZ_CURL.substring(0, MANGABZ_CURL.length - 1) + '-p' + MANGABZ_PAGE + '/');
                 }
             } else { // 下一话
                 // 插入 <script> 标签
-                insScript('html:not([dir]) > head > script:not([src])', document.body, pageElems);
-                addHistory(pageElems);
+                insScript('html:not([dir]) > head > script:not([src])', document.body, pageE);
+                addHistory(pageE);
                 pageNum.now = pageNum._now + 1
-                replaceElems(pageElems)
+                replaceElems(pageE)
                 MANGABZ_PAGE = 0;
                 mangabz_nextL();
             }
@@ -6225,34 +6203,34 @@ function: {
     function dm5_nextL() {
         var url = '';
         if (DM5_PAGE === DM5_IMAGE_COUNT) { // 下一话
-            if (getNextE('//div[@class="view-paging"]//a[text()="下一章"]')) getPageElems_(curSite.pageUrl); // 访问下一话 URL 获取
+            if (getNextE('//div[@class="view-paging"]//a[text()="下一章"]')) getPageE_(curSite.pageUrl); // 访问下一话 URL 获取
         } else { // 下一页
             if (!mkey) var mkey = '';
             url = location.origin + location.pathname + 'chapterfun.ashx' + `?cid=${DM5_CID}&page=${DM5_PAGE + 1}&key=${(mkey)}&language=1&gtk=6&_cid=${DM5_CID}&_mid=${DM5_MID}&_dt=${DM5_VIEWSIGN_DT}&_sign=${DM5_VIEWSIGN}`
             if (url === curSite.pageUrl) return
             curSite.pageUrl = url
             //console.log(curSite.pageUrl)
-            getPageElems_(curSite.pageUrl, 'text', 'GET', '', 'Next'); // 访问下一页 URL 获取
+            getPageE_(curSite.pageUrl, 'text', 'GET', '', 'Next'); // 访问下一页 URL 获取
         }
     }
     // [动漫屋] 插入数据
-    function dm5_insertE(pageElems, type) {
-        if (pageElems) {
+    function dm5_insertE(pageE, type) {
+        if (pageE) {
             if (type === 'Next') { // 下一页
-                let imgArr = eval(pageElems),
+                let imgArr = eval(pageE),
                     _img = '';
                 for (let now of imgArr) {_img += `<img src="${now}">`;}
                 if (_img) {
                     getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
                     DM5_PAGE += imgArr.length;
-                    addHistory(pageElems, document.title, location.origin + DM5_CURL.substring(0, DM5_CURL.length - 1) + '-p' + DM5_PAGE + '/');
+                    addHistory(pageE, document.title, location.origin + DM5_CURL.substring(0, DM5_CURL.length - 1) + '-p' + DM5_PAGE + '/');
                 }
             } else { // 下一话
                 // 插入 <script> 标签
-                insScript('html:not([dir]) > head > script:not([src])', document.body, pageElems);
-                addHistory(pageElems);
+                insScript('html:not([dir]) > head > script:not([src])', document.body, pageE);
+                addHistory(pageE);
                 pageNum.now = pageNum._now + 1
-                replaceElems(pageElems)
+                replaceElems(pageE)
                 DM5_PAGE = 0;
                 dm5_nextL();
             }
@@ -6264,34 +6242,34 @@ function: {
     function xmanhua_nextL() {
         var url = '';
         if (XMANHUA_PAGE === XMANHUA_IMAGE_COUNT) { // 下一话
-            if (getNextE('//a[./img[contains(@src, "reader-bottom-right-2.png")]]')) getPageElems_(curSite.pageUrl); // 访问下一话 URL 获取
+            if (getNextE('//a[./img[contains(@src, "reader-bottom-right-2.png")]]')) getPageE_(curSite.pageUrl); // 访问下一话 URL 获取
         } else { // 下一页
             if (!mkey) var mkey = '';
             url = location.origin + location.pathname + 'chapterimage.ashx' + `?cid=${XMANHUA_CID}&page=${XMANHUA_PAGE + 1}&key=${(mkey)}&_cid=${XMANHUA_CID}&_mid=${XMANHUA_MID}&_dt=${XMANHUA_VIEWSIGN_DT}&_sign=${XMANHUA_VIEWSIGN}`
             if (url === curSite.pageUrl) return
             curSite.pageUrl = url
             //console.log(curSite.pageUrl)
-            getPageElems_(curSite.pageUrl, 'text', 'GET', '', 'Next'); // 访问下一页 URL 获取
+            getPageE_(curSite.pageUrl, 'text', 'GET', '', 'Next'); // 访问下一页 URL 获取
         }
     }
     // [Xmanhua 漫画] 插入数据
-    function xmanhua_insertE(pageElems, type) {
-        if (pageElems) {
+    function xmanhua_insertE(pageE, type) {
+        if (pageE) {
             if (type === 'Next') { // 下一页
-                let imgArr = eval(pageElems),
+                let imgArr = eval(pageE),
                     _img = '';
                 for (let now of imgArr) {_img += `<img src="${now}">`;}
                 if (_img) {
                     getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
                     XMANHUA_PAGE += imgArr.length;
-                    addHistory(pageElems, document.title, location.origin + XMANHUA_CURL.substring(0, XMANHUA_CURL.length - 1) + '-p' + XMANHUA_PAGE + '/');
+                    addHistory(pageE, document.title, location.origin + XMANHUA_CURL.substring(0, XMANHUA_CURL.length - 1) + '-p' + XMANHUA_PAGE + '/');
                 }
             } else { // 下一话
                 // 插入 <script> 标签
-                insScript('html:not([dir]) > head > script:not([src])', document.body, pageElems);
-                addHistory(pageElems);
+                insScript('html:not([dir]) > head > script:not([src])', document.body, pageE);
+                addHistory(pageE);
                 pageNum.now = pageNum._now + 1
-                replaceElems(pageElems)
+                replaceElems(pageE)
                 XMANHUA_PAGE = 0;
                 xmanhua_nextL();
             }
@@ -6315,10 +6293,10 @@ function: {
         getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
     }
     // [COCOMANGA 漫画] 插入数据
-    function cocomanga_insertE(pageElems, type) {
-        if (pageElems) {
+    function cocomanga_insertE(pageE, type) {
+        if (pageE) {
             // 插入 <script> 标签
-            insScript('head > script:not([src]), script[src*="custom.js"], script[src*="dynamicjs.js"]', document.body, pageElems);
+            insScript('head > script:not([src]), script[src*="custom.js"], script[src*="dynamicjs.js"]', document.body, pageE);
 
             // 插入新图片元素
             setTimeout(function() {
@@ -6326,9 +6304,9 @@ function: {
                 if (!totalImageCount) totalImageCount = __cdecrypt('fw12558899ertyui', CryptoJS.enc.Base64.parse(mh_info.enc_code1).toString(CryptoJS.enc.Utf8));
                 cocomanga_img(parseInt(totalImageCount));
             }, 100)
-            addHistory(pageElems);
+            addHistory(pageE);
             pageNum.now = pageNum._now + 1
-            replaceElems(pageElems)
+            replaceElems(pageE)
         }
     }
 
@@ -6340,14 +6318,14 @@ function: {
         data = `id=${id}&index=${document.nowPageNum}`
         if (data === curSite.pageUrl) return
         curSite.pageUrl = data
-        getPageElems_(location.origin + '/baseQuery/data/completeProjectReport', 'json', 'POST', data); // 访问下一页 URL 获取
+        getPageE_(location.origin + '/baseQuery/data/completeProjectReport', 'json', 'POST', data); // 访问下一页 URL 获取
     }
     // [国家自然科学基金] 插入数据
-    function nsfc_insertE(pageElems, type) {
-        if (!pageElems || pageElems.code != 200) {curSite.SiteTypeID = 0; return}
-        if (!pageElems.data.hasnext) {curSite.SiteTypeID = 0} else {document.nowPageNum++}
+    function nsfc_insertE(pageE, type) {
+        if (!pageE || pageE.code != 200) {curSite.SiteTypeID = 0; return}
+        if (!pageE.data.hasnext) {curSite.SiteTypeID = 0} else {document.nowPageNum++}
         pageNum.now = pageNum._now + 1
-        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), `<img style="width: 100%;" data-magnify="gallery" data-src="${pageElems.data.url}" src="${pageElems.data.url}">`);
+        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), `<img style="width: 100%;" data-magnify="gallery" data-src="${pageE.data.url}" src="${pageE.data.url}">`);
     }
 
 
@@ -6361,15 +6339,15 @@ function: {
         data = `ratify_no=${id}&index=${document.nowPageNum}`
         if (data === curSite.pageUrl) return
         curSite.pageUrl = data
-        getPageElems_(location.origin + '/api/funds/nsfc/creport?' + data, 'json', 'GET'); // 访问下一页 URL 获取
+        getPageE_(location.origin + '/api/funds/nsfc/creport?' + data, 'json', 'GET'); // 访问下一页 URL 获取
     }
     // [酷科研] 插入数据
-    function coolkeyan_insertE(pageElems, type) {
-        if (!pageElems || pageElems == {}) {curSite.SiteTypeID = 0; return}
-        if (!pageElems.url) {curSite.SiteTypeID = 0; return} else {document.nowPageNum++}
+    function coolkeyan_insertE(pageE, type) {
+        if (!pageE || pageE == {}) {curSite.SiteTypeID = 0; return}
+        if (!pageE.url) {curSite.SiteTypeID = 0; return} else {document.nowPageNum++}
         pageNum.now = pageNum._now + 1
         getCSS('.q-img>div[style*="padding-bottom"]').style.paddingBottom = `${(document.nowPageNum * 1000) - 1000}px`
-        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), `<div class="q-img__image absolute-full" style="background-size: contain; background-position: 50% 50%; background-image: url('${pageElems.url}'); top: ${(document.nowPageNum * 1000) - 2000}px"></div>`);
+        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), `<div class="q-img__image absolute-full" style="background-size: contain; background-position: 50% 50%; background-image: url('${pageE.url}'); top: ${(document.nowPageNum * 1000) - 2000}px"></div>`);
     }
 
 
@@ -6395,12 +6373,12 @@ function: {
                 if (!curSite.pager.scrollE) curSite.pager.scrollE = curSite.pager.replaceE; // 默认基准元素是页码
                 let scrollE = getOne(curSite.pager.scrollE);
                 //console.log(scrollE.offsetTop, scrollE.offsetTop - (scrollTop + scrollHeight), scrollD, scrollTop + scrollHeight, curSite.SiteTypeID)
-                if (scrollE.offsetTop - (scrollTop + scrollHeight) <= scrollD) {intervalPause(); checkURL(getPageElems);}
+                if (scrollE.offsetTop - (scrollTop + scrollHeight) <= scrollD) {intervalPause(); checkURL(getPageE);}
 
             } else if (document.documentElement.scrollHeight <= scrollHeight + scrollTop + scrollD) {
                 // <<<<< 翻页类型 1（由脚本实现自动无缝翻页）>>>>>
                 if (curSite.pager.type === 1) {
-                    intervalPause(); checkURL(getPageElems);
+                    intervalPause(); checkURL(getPageE);
 
                     // <<<<< 翻页类型 2（网站自带了自动无缝翻页功能，只需要点击下一页按钮即可）>>>>>
                 } else if (curSite.pager.type === 2) {
@@ -6428,7 +6406,7 @@ function: {
                 } else if (curSite.pager.type === 4) {
                     // 为百度贴吧的发帖考虑，预留底部一小部分...
                     if (!(curSite.SiteTypeID === SiteType.BAIDU_TIEBA && document.documentElement.scrollHeight <= scrollHeight + scrollTop + 200)) {
-                        intervalPause(); if (typeof curSite.pager.nextL == 'function') {curSite.pager.nextL();} else if (getNextE(curSite.pager.nextL)) {getPageElems_(curSite.pageUrl);}
+                        intervalPause(); if (typeof curSite.pager.nextL == 'function') {curSite.pager.nextL();} else if (getNextE(curSite.pager.nextL)) {getPageE_(curSite.pageUrl);}
                     }
 
                     // <<<<< 翻页类型 5（插入 iframe 方式来加载下一页）>>>>>
@@ -6449,7 +6427,7 @@ function: {
     }
 
     // 翻页类型 1/3
-    function getPageElems(url) {
+    function getPageE(url) {
         GM_xmlhttpRequest({
             url: url,
             method: 'GET',
@@ -6470,7 +6448,7 @@ function: {
         });
     }
     // 翻页类型 4
-    function getPageElems_(url, type = '', method = 'GET', data = '', type2) {
+    function getPageE_(url, type = '', method = 'GET', data = '', type2) {
         let mimeType;
         switch (type) {
             case 'json':
@@ -6612,30 +6590,36 @@ function: {
     // XHR 后处理结果，插入、替换元素等（适用于翻页类型 1/3/6）
     function processElems(response) {
         if (!curSite.pager.insertP) {curSite.pager.insertP = [curSite.pager.pageE, 5]}
-        let pageElems = getAll(curSite.pager.pageE, response, response), toElement;
+        let pageE = getAll(curSite.pager.pageE, response, response), toE;
         if (curSite.pager.insertP[1] === 5) { // 插入 pageE 列表最后一个元素的后面
-            toElement = getAll(curSite.pager.insertP[0]).pop();
+            toE = getAll(curSite.pager.insertP[0]).pop();
         } else {
-            toElement = getOne(curSite.pager.insertP[0]);
+            toE = getOne(curSite.pager.insertP[0]);
         }
-        //console.log(curSite.pager.pageE, pageElems, curSite.pager.insertP, toElement)
+        //console.log(curSite.pager.pageE, pageE, curSite.pager.insertP, toE)
 
-        if (pageElems.length > 0 && toElement) {
+        if (pageE.length > 0 && toE) {
             // 如果有插入前函数就执行函数
             if (curSite.function && curSite.function.bF) {
                 if (curSite.function.bFp) { // 如果指定了参数
                     if (typeof(curSite.function.bF) == 'string') { // 如果是字符串，说明是自定义规则
-                        //console.log(curSite.function.bF, curSite.function.bFp)
-                        pageElems = window.autoPage[curSite.function.bF](pageElems, curSite.function.bFp);
+                        if (window.autoPage[curSite.function.bF]) {
+                            pageE = window.autoPage[curSite.function.bF](pageE, curSite.function.bFp);
+                        } else {
+                            pageE = new Function('pageE', 'bFp', 'fun', curSite.function.bF)(pageE, curSite.function.bFp, window.autoPage)
+                        }
                     } else {
-                        pageElems = curSite.function.bF(pageElems, curSite.function.bFp);
+                        pageE = curSite.function.bF(pageE, curSite.function.bFp);
                     }
                 } else {
-                    //console.log(curSite.function.bF)
                     if (typeof(curSite.function.bF) == 'string') { // 如果是字符串，说明是自定义规则
-                        pageElems = window.autoPage[curSite.function.bF](pageElems);
+                        if (window.autoPage[curSite.function.bF]) {
+                            pageE = window.autoPage[curSite.function.bF](pageE);
+                        } else {
+                            pageE = new Function('pageE', 'fun', curSite.function.bF)(pageE, window.autoPage)
+                        }
                     } else {
-                        pageElems = curSite.function.bF(pageElems);
+                        pageE = curSite.function.bF(pageE);
                     }
                 }
             }
@@ -6647,11 +6631,11 @@ function: {
             if (curSite.pager.insertP[1] === 6) { // 插入到目标内部末尾（针对文本，比如小说网页）
                 let afterend = '';
                 if (curSite.pager.insertP6Br) afterend += '<br/><br/>'
-                pageElems.forEach(function (one) {afterend += one.innerHTML;});
-                toElement.insertAdjacentHTML(addTo, afterend);
+                pageE.forEach(function (one) {afterend += one.innerHTML;});
+                toE.insertAdjacentHTML(addTo, afterend);
             } else {
-                if (curSite.pager.insertP[1] === 2 || curSite.pager.insertP[1] === 4 || curSite.pager.insertP[1] === 5) pageElems.reverse(); // 插入到 [元素内头部]、[目标本身后面] 时，需要反转顺序
-                pageElems.forEach(function (one) {toElement.insertAdjacentElement(addTo, one);});
+                if (curSite.pager.insertP[1] === 2 || curSite.pager.insertP[1] === 4 || curSite.pager.insertP[1] === 5) pageE.reverse(); // 插入到 [元素内头部]、[目标本身后面] 时，需要反转顺序
+                pageE.forEach(function (one) {toE.insertAdjacentElement(addTo, one);});
             }
 
             // 当前页码 + 1
@@ -6667,27 +6651,34 @@ function: {
             if (curSite.pager.scriptT || curSite.pager.scriptT == 0) {
                 switch (curSite.pager.scriptT) {
                     case 0: // 下一页的所有 <script> 标签
-                        insScript('script', toElement, response); break;
+                        insScript('script', toE, response); break;
                     case 1: // 下一页的所有 <script> 标签（不包括 src 链接）
-                        insScript('script:not([src])', toElement, response); break;
+                        insScript('script:not([src])', toE, response); break;
                     case 2: // 下一页主体元素 (pageE) 的同级 <script> 标签
-                        insScript(null, toElement, pageElems); break;
+                        insScript(null, toE, pageE); break;
                     case 3: // 下一页主体元素 (pageE) 的子元素 <script> 标签
-                        insScript('script:not([src])', toElement, pageElems); break;
+                        insScript('script:not([src])', toE, pageE); break;
                 }
             }
 
             // 如果有插入后函数就执行函数
             if (curSite.function && curSite.function.aF) {
                 if (curSite.function.aFp) { // 如果指定了参数
-                    curSite.function.aF(curSite.function.aFp);
+                    if (typeof(curSite.function.aF) == 'string') { // 如果是字符串，说明是自定义规则
+                        if (window.autoPage[curSite.function.aF]) {
+                            window.autoPage[curSite.function.aF](curSite.function.aFp);
+                        } else {
+                            new Function('aFp', 'fun', curSite.function.aF)(curSite.function.aFp, window.autoPage)
+                        }
+                    } else {
+                        curSite.function.aF(curSite.function.aFp);
+                    }
                 } else {
                     if (typeof(curSite.function.aF) == 'string') { // 如果是字符串，说明是自定义规则
-                        //console.log(curSite.function.aF)
                         if (window.autoPage[curSite.function.aF]) {
                             window.autoPage[curSite.function.aF]();
                         } else {
-                            new Function (curSite.function.aF)();
+                            new Function('fun', curSite.function.aF)(window.autoPage);
                         }
                     } else {
                         curSite.function.aF();
@@ -6695,7 +6686,7 @@ function: {
                 }
             }
         } else { // 获取主体元素失败后，尝试重新获取
-            console.log(curSite.pager.pageE, pageElems, curSite.pager.insertP, toElement)
+            console.log(curSite.pager.pageE, pageE, curSite.pager.insertP, toE)
             if (curSite.retry) {
                 console.warn('[自动无缝翻页] 获取主体元素失败，尝试重新获取...')
                 setTimeout(function(){curSite.pageUrl = '';}, curSite.retry)
@@ -6711,8 +6702,8 @@ function: {
         }
     }
     // 通用型插入前函数（加载图片）
-    function src_bF(pageElems, css) {
-        pageElems.forEach(function (one) {
+    function src_bF(pageE, css) {
+        pageE.forEach(function (one) {
             if (css[0] == 0) { // src 图片
                 if (one.tagName == 'IMG' && one.getAttribute(css[2])) one.src = one.getAttribute(css[2]);
                 one.querySelectorAll(css[1]).forEach(function (now) {
@@ -6725,14 +6716,15 @@ function: {
                 });
             }
         });
-        return pageElems
+        return pageE
     }
     // 文字型插入前函数（正则过滤）
-    function xs_bF(pageElems, reg) {
-        pageElems.forEach(function (one) {
+    function xs_bF(pageE, reg) {
+        if (typeof reg[0] === 'string' && reg[0].slice(0,1) === '/') reg[0] = new RegExp(reg[0].slice(1,reg[0].length-1), 'i')
+        pageE.forEach(function (one) {
             one.innerHTML = one.innerHTML.replace(reg[0], reg[1])
         });
-        return pageElems
+        return pageE
     }
 
     // 通用型获取下一页地址（从 元素 中获取页码）
@@ -6852,7 +6844,7 @@ function: {
             curSite.pageUrl = tempUrl;
             func(curSite.pageUrl);
         } else if (curSite.pager.nextL && curSite.pager.nextL.search(/^js;/i) === 0) { // 自定义翻页规则中执行 JavaScript 代码的
-            let tempUrl = new Function (curSite.pager.nextL.slice(3))();
+            let tempUrl = new Function('fun', curSite.pager.nextL.slice(3))(window.autoPage);
             if (!tempUrl || (tempUrl && tempUrl.slice(0,4) != 'http') || tempUrl === curSite.pageUrl ) return;
             curSite.pageUrl = tempUrl;
             func(curSite.pageUrl);
@@ -6862,33 +6854,33 @@ function: {
         //console.log(curSite.pageUrl);
     }
     // 替换元素
-    function replaceElems(pageElems, o = curSite.pager.replaceE, r = curSite.pager.replaceE) {
-        let oriE = getAll(o),
-            repE = getAll(r, pageElems, pageElems);
-        //console.log(oriE, repE)
-        if (oriE.length != 0 && repE.length != 0 && oriE.length === repE.length) {
-            for (let i = 0; i < oriE.length; i++) {
-                oriE[i].outerHTML = repE[i].outerHTML;
+    function replaceElems(pageE, o = curSite.pager.replaceE, r = curSite.pager.replaceE) {
+        let oE = getAll(o),
+            rE = getAll(r, pageE, pageE);
+        //console.log(oE, rE)
+        if (oE.length != 0 && rE.length != 0 && oE.length === rE.length) {
+            for (let i = 0; i < oE.length; i++) {
+                oE[i].outerHTML = rE[i].outerHTML;
             }
             return true
         }
         return false
     }
     // 添加历史记录
-    function addHistory(pageElems, title, url) {
+    function addHistory(pageE, title, url) {
         if (!curSite.pageUrl) return
         // 对于自带类似功能 或者 覆盖了 history 原生函数的网站，则跳过不再添加历史记录
         if (window.top.history.toString() !== '[object History]') return
 
-        //console.log(pageElems.querySelector('title'), curSite.pageUrl)
-        title = title || pageElems.querySelector('title').textContent || window.top.document.title;
+        //console.log(pageE.querySelector('title'), curSite.pageUrl)
+        title = title || pageE.querySelector('title').textContent || window.top.document.title;
         url = url || curSite.pageUrl;
         window.top.document.title = title;
         window.top.document.xiu_nowUrl = curSite.pageUrl;
         window.top.history.pushState('xiu_history', title, url);
     }
     // 插入 <Script>
-    function insScript(selector, toElement = document.body, contextNode = document) {
+    function insScript(selector, toE = document.body, contextNode = document) {
         let scriptElems = contextNode;
         if (selector) {
             if (contextNode instanceof Array) {
@@ -6900,9 +6892,9 @@ function: {
         scriptElems.forEach(function (one) {
             if (one.tagName === 'SCRIPT') {
                 if (one.src) {
-                    toElement.appendChild(document.createElement('script')).src = one.src;
+                    toE.appendChild(document.createElement('script')).src = one.src;
                 } else {
-                    toElement.appendChild(document.createElement('script')).textContent = one.textContent;
+                    toE.appendChild(document.createElement('script')).textContent = one.textContent;
                 }
             }
         });
@@ -7097,18 +7089,18 @@ function: {
     // 自定义翻页规则
     function customRules() {
         if (getCSS('#Autopage_customRules')) return
-
-        let customRules = JSON.stringify(GM_getValue('menu_customRules', {}), null, '\t').replaceAll('functionS', 'url').replaceAll('css;', ''); // 改名过渡，过段时间将其移除
+        // 改名过渡，过段时间将其移除
+        let customRules = JSON.stringify(GM_getValue('menu_customRules', {}), null, '\t').replaceAll('functionS', 'url').replaceAll('css;', '');
         if (customRules == '{}') customRules = '{\n\t\n}'; // 引导用户插入位置
         let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.95 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important; overflow: scroll !important; text-align: left !important;">
 <h3 style="font-size: 24px !important;"><strong># 自定义翻页规则（优先于脚本内置规则）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
 <details>
 <summary><kbd><strong>「 点击展开 查看示例 」（我把常用规则都塞进去了，方便需要的时候可直接复制一份修改使用）</strong></kbd></summary>
 <ul style="list-style: disc !important; margin-left: 35px !important;">
-<li>翻页规则为 JSON 格式，因此大家需要多少<strong>了解一点 JSON 的基本格式</strong>（主要就是逗号 及 双引号内不能含有双引号）。</li>
-<li>具体的翻页规则说明、示例、NSFW 等网站规则，为了方便更新及补充，我都写到 <strong><a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github</a> 及 <a href="https://greasyfork.org/scripts/419215" target="_blank">Greasyfork</a></strong> 里面了。</li>
+<li>翻页规则为 JSON 格式，因此大家需要多少<strong>了解一点 JSON 的基本格式</strong>（主要就是逗号、转义、双引号等）。</li>
+<li>具体的翻页规则说明、示例，为了方便更新及补充，我都写到 <strong><a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github</a></strong> 里面了。</li>
 <li>脚本会自动格式化规则，因此<strong>无需手动缩进、换行</strong>，只需把规则<strong>插入默认的 { } 中间</strong>即可。</li>
-<li style="color: #ff3535 !important;">注意：不要完全照搬脚本内置规则，因为和标准 JSON 格式等有所差别，具体请对比下面示例规则。</li>
+<li style="color: #ff3535 !important;">注意：目前自定义翻页规则处于 Beta 阶段，随时可能更改规则格式/语法，具体请关注上面的 Github 链接。</li>
 </ul>
 <pre>
 // 大多数网站一般都只需要像第一个 "aaa" 这样的规则（注意，不要连带着复制这几行注释说明）
@@ -7140,8 +7132,7 @@ function: {
             "scrollD": 1500
         },
         "function": {
-            "bF": "src_bF",
-            "bFp": [0,"img[data-src]","data-src"],
+            "bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])",
             "aF": "document.body.appendChild(document.createElement('script')).textContent = 'xxx'"
         }
     },
@@ -7168,7 +7159,8 @@ function: {
         document.documentElement.style.overflow = document.body.style.overflow = 'hidden';
         // 点击事件
         getCSS('#Autopage_customRules_save').onclick = function () {
-            customRules = getCSS('#Autopage_customRules_textarea').value.replaceAll('functionS', 'url').replaceAll('css;', ''); // 改名过渡，过段时间将其移除
+            // 改名过渡，过段时间将其移除
+            customRules = getCSS('#Autopage_customRules_textarea').value.replaceAll('functionS', 'url').replaceAll('css;', '');
             //console.log(customRules)
             if (!customRules) customRules = '{}'
             try {
@@ -7177,8 +7169,8 @@ function: {
                 GM_setValue('menu_customRules', customRules)
                 location.reload();
             } catch (e) {
-                console.error('自定义规则存在格式错误：\n' + e + '\n\n注意事项：\n规则中冒号 : 左右的内容都需要加上双引号 " 而不能用单引号 \'，如果内容中含有双引号则需要对双引号转义（即 \" 这样）或者改用单引号')
-                window.alert('自定义规则存在格式错误：\n' + e + '\n\n注意事项：\n规则中冒号 : 左右的内容都需要加上双引号 " 而不能用单引号 \'，如果内容中含有双引号则需要对双引号转义（即 \" 这样）或者改用单引号');
+                console.error('自定义规则存在格式错误：\n' + e + '\n\n格式错误一般为：\n· 逗号：每组 {} 中的最后一个值末尾不能加逗号\n\n· 转义：如果正则表达式中含有转义符 \\ 那就要对其再次转义为 \\\\\n\n· 双引号：规则中冒号左右的内容都需要加上双引号，如果内容中含有双引号则需要对双引号转义（即 \\" 这样），或改为单引号')
+                window.alert('自定义规则存在格式错误：\n' + e + '\n\n格式错误一般为：\n· 逗号：每组 {} 中的最后一个值末尾不能加逗号\n\n· 转义：如果正则表达式中含有转义符 \\ 那就要对其再次转义为 \\\\\n\n· 双引号：规则中冒号左右的内容都需要加上双引号，如果内容中含有双引号则需要对双引号转义（即 \\" 这样），或改为单引号');
             }
         }
         getCSS('#Autopage_customRules_cancel').onclick = function () {document.documentElement.style.overflow = document.body.style.overflow = ''; getCSS('#Autopage_customRules').remove();}
