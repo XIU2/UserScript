@@ -40,6 +40,16 @@
 			"interval": 1500
 		}
 	},
+	"蓝点网": {
+		"host": "www.landian.vip",
+		"url": "return (fun.lp() != '/' && !fun.indexOF('/archives/') && !fun.indexOF('/search/'))",
+		"style": ".pagination {display: none !important;}",
+		"pager": {
+			"nextL": "js;return fun.getNextUPN(/(?<=\\/page\\/)\\d+/, /\\/page\\/\\d+/, '/page/', '', '2', fun.getCSS('.pagination > button.end').textContent)",
+			"pageE": ".content li.color-border",
+			"scrollD": 1500
+		}
+	},
 	"可能吧": {
 		"host": "kenengba.com",
 		"url": "/(^\\/$|\\/page\\/|\\/category\\/|\\/tag\\/)/",
@@ -96,6 +106,81 @@
 			"scrollD": 2000
 		}
 	},
+	"致美化": {
+		"host": "zhutix.com",
+		"url": "if (fun.getCSS('#post-list')) return true;",
+		"pager": {
+			"nextL": "//li[@class='next-page']/a | //div[@class='btn-pager']/a[text()='❯']",
+			"pageE": "#post-list > ul > li",
+			"replaceE": ".pagination, .b2-pagenav.post-nav"
+		}
+	},
+	"致美化-分类页": {
+		"host": "zhutix.com",
+		"url": "return (fun.lp() != '/')",
+		"pager": {
+			"nextL": "li.next-page a",
+			"pageE": "#primary-home > div:not(.pagination)",
+			"replaceE": ".pagination"
+		}
+	},
+	"蓝奏云-分享链接列表": {
+		"host": "/\\.lanzou[a-z]\\./",
+		"hiddenPN": true,
+		"pager": {
+			"type": 2,
+			"nextL": "#filemore",
+			"nextTextOf": "更多",
+			"isHidden": true,
+			"scrollD": 800
+		}
+	},
+	"蓝奏云-后台": {
+		"host": "pc.woozooo.com",
+		"iframe": true,
+		"hiddenPN": true,
+		"pager": {
+			"type": 2,
+			"nextL": "#filemore > span[onclick]",
+			"nextText": "显示更多文件",
+			"isHidden": true,
+			"scrollD": 800
+		}
+	},
+	"阿里盘搜": {
+		"host": "/www\\.upyunso[0-9]?\\.com/",
+		"url": "return (fun.lp() == '/search.html')",
+		"style": ".pager-wrap {display: none !important;}",
+		"pager": {
+			"nextL": "js;return fun.getNextUP('page=', /page=\\d+/)",
+			"pageE": "#res_list > div"
+		}
+	},
+	"wikihow": {
+		"host": [
+			"www.wikihow.com",
+			"zh.wikihow.com"
+		],
+		"url": "return (fun.indexOF('/Category:'))",
+		"pager": {
+			"nextL": "a.pag_next",
+			"pageE": "#cat_all > .cat_grid > div",
+			"replaceE": "#large_pagination",
+			"scriptT": 3
+		}
+	},
+	"wikihow_search": {
+		"host": [
+			"www.wikihow.com",
+			"zh.wikihow.com"
+		],
+		"url": "return (fun.indexOF('/wikiHowTo') && fun.indexOF('?search=', 's'))",
+		"pager": {
+			"nextL": "#searchresults_footer > a.buttonright",
+			"pageE": "#searchresults_list > a",
+			"replaceE": "#searchresults_footer"
+		}
+	},
 	"afreecatv": {
         "host": "www.afreecatv.com",
         "pager": {
@@ -105,6 +190,100 @@
             "scrollD": 1000
         }
     },
+	"GreasyFork": {
+		"host": "greasyfork.org",
+		"url": "return (fun.indexOF(/\\/scripts$/) || fun.indexOF('/scripts/by-site/'))",
+		"pager": {
+			"nextL": "a.next_page",
+			"pageE": "ol#browse-script-list > li",
+			"replaceE": ".pagination",
+			"scrollD": 1300
+		}
+	},
+	"GreasyFork-反馈页": {
+		"host": "greasyfork.org",
+		"url": "return (fun.indexOF(/\\/feedback$/))",
+		"pager": {
+			"nextL": "a.next_page",
+			"pageE": ".script-discussion-list > div",
+			"replaceE": ".pagination",
+			"scrollD": 1800
+		}
+	},
+	"GreasyFork - 讨论页": {
+		"host": "greasyfork.org",
+		"url": "return (fun.indexOF('/discussions') && !fun.indexOF(/\\/\\d+/))",
+		"pager": {
+			"nextL": "a.next_page",
+			"pageE": ".discussion-list > div",
+			"replaceE": ".pagination",
+			"scrollD": 1300
+		}
+	},
+	"UserScript": {
+		"host": "www.userscript.zone",
+		"url": "return (fun.lp() == '/search')",
+		"pager": {
+			"nextL": "js;return fun.getNextF('.next > form')",
+			"pageE": ".row.script",
+			"replaceE": ".pagination",
+			"scrollD": 1000
+		}
+	},
+	"UserStyles": {
+		"host": "userstyles.world",
+		"url": "return (fun.lp() == '/explore')",
+		"pager": {
+			"nextL": "a.Pagination-button.next",
+			"pageE": ".card",
+			"replaceE": ".Pagination"
+		}
+	},
+	"Quicker": {
+		"host": "getquicker.net",
+		"url": "/\\/Share\\//",
+		"pager": {
+			"nextL": "//a[@class='page-link' and text()='下一页']",
+			"pageE": "table.table  > tbody > tr:not(:first-child), script[src^='/js/site.js']",
+			"insertP": [
+				"table.table  > tbody",
+				3
+			],
+			"replaceE": "ul.pagination",
+			"scriptT": 2,
+			"scrollD": 1000
+		}
+	},
+	"Xposed": {
+		"host": "repo.xposed.info",
+		"url": "/\\/module-overview/",
+		"pager": {
+			"nextL": "li.pager-next > a",
+			"pageE": ".view-content > table > tbody > tr",
+			"replaceE": "ul.pager"
+		}
+	},
+	"什么值得买 - 分类/搜索页": {
+		"host": [
+			"www.smzdm.com",
+			"search.smzdm.com"
+		],
+		"url": "return (location.hostname === 'search.smzdm.com' || fun.indexOF('/fenlei/') || fun.indexOF(/\\/mall\\/.+\\/.+/))",
+		"pager": {
+			"nextL": "//ul[@class='pagenation-list']//a[contains(text() ,'下一页')] | //ul[@class='pagenation-list']/li[contains(@class, 'next-page')]/a",
+			"pageE": "#feed-main-list > li",
+			"replaceE": "ul.pagenation-list"
+		}
+	},
+	"没得比-分类/搜索页": {
+		"host": "www.meidebi.com",
+		"url": "return (fun.indexOF('/fenlei/') || fun.lp == '/Search')",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": ".share-list > ul > li",
+			"replaceE": ".h-pages"
+		}
+	},
 	"书签地球": {
 		"host": "www.bookmarkearth.com",
 		"url": "return (fun.lp() == '/' || fun.lp() == '/page')",
