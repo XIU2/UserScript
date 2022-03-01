@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.0.4
+// @version      5.0.5
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  無縫拼接下一頁內容（瀑布流），支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎等網站~
@@ -5015,37 +5015,6 @@ function: {
                     pageE: '#user_search_results > div:first-child > div',
                 }
             }, //       Github - Search 列表 - user
-            oi_wiki: {
-                host: 'oi-wiki.org',
-                style: 'blockquote.page-copyright, h2#__comments, form#gitalk-form {display: none !important;} article.md-content__inner{min-height: 700px;}',
-                pager: {
-                    nextL: 'li.md-nav__item.md-nav__item--active.md-nav__item--nested li.md-nav__item--active+li a',
-                    pageE: 'article.md-content__inner',
-                    insertP: ['article.md-content__inner', 6],
-                    replaceE: '.md-sidebar.md-sidebar--primary',
-                    scrollD: 1300
-                }
-            }, //                   OI Wiki
-            dusaiphoto: {
-                host: 'www.dusaiphoto.com',
-                url: ()=> {if (location.pathname.indexOf('/article/') > -1) {curSite = DBSite.dusaiphoto;}},
-                style: 'h1.article-title {margin-top: 80px;}',
-                pager: {
-                    nextL: 'a.hvr-bounce-to-left',
-                    pageE: '#main > .mt-4 >div > .mb-4, #article_body',
-                    replaceE: '.col-12.font-title, #sidebar',
-                    scrollD: 1500
-                }
-            }, //                dusaiphoto
-            guokr: {
-                host: 'www.guokr.com',
-                pager: {
-                    type: 2,
-                    nextL: 'div[class*="LoadMoreWrap"]',
-                    interval: 1500,
-                    scrollD: 1500
-                }
-            }, //               果壳网
             landian: {
                 host: 'www.landian.vip',
                 url: ()=> {if (lp != '/' && !indexOF('/archives/') && !indexOF('/search/')) {curSite = DBSite.landian;}},
@@ -5056,62 +5025,6 @@ function: {
                     scrollD: 1500
                 }
             }, //             蓝点网
-            kenengba: {
-                host: 'kenengba.com',
-                url: ()=> {if (lp == '/' || indexOF('/page/') || indexOF('/category/') || indexOF('/tag/')) {curSite = DBSite.kenengba;}},
-                pager: {
-                    nextL: '//div[@class="pagebar"]/a[@href and text()=">>"]',
-                    pageE: 'article.post',
-                    replaceE: '.pagebar',
-                    scrollD: 3000
-                }
-            }, //            可能吧
-            expreview: {
-                host: 'www.expreview.com',
-                pager: {
-                    type: 2,
-                    nextL: '#show_article_red_1SHOW',
-                    interval: 1500,
-                    scrollD: 1500
-                }
-            }, //           超能网
-            ithome: {
-                host: 'www.ithome.com',
-                pager: {
-                    type: 2,
-                    nextL: 'a.more',
-                    interval: 1500,
-                    scrollD: 1500
-                }
-            }, //              IT之家
-            _36kr: {
-                host: ['36kr.com', 'www.36kr.com'],
-                url: ()=> {if (lp != '/' && !indexOF('/p/') && !indexOF('/newsflashes/')) {curSite = DBSite._36kr;}},
-                pager: {
-                    type: 2,
-                    nextL: '.kr-loading-more-button.show',
-                    nextText: '查看更多',
-                    scrollD: 1500
-                }
-            }, //               36氪
-            _36kr_m: {
-                host: 'm.36kr.com',
-                pager: {
-                    type: 2,
-                    nextL: '.kr-loading-more-button-default',
-                    nextText: '查看更多',
-                    scrollD: 1500
-                }
-            }, //             36氪 - 手机版
-            sciencealert: {
-                host: 'www.sciencealert.com',
-                pager: {
-                    type: 2,
-                    nextL: '.load-more',
-                    nextTextOf: 'LOAD MORE',
-                    scrollD: 2000
-                }
-            }, //        ScienceAlert
             zhutix: {
                 host: 'zhutix.com',
                 url: ()=> {if (getCSS('#post-list')) {
@@ -5190,15 +5103,6 @@ function: {
                     scrollD: 3000
                 }
             }, //  指南 - 搜索页
-            afreecatv: {
-                host: 'www.afreecatv.com',
-                pager: {
-                    type: 2,
-                    nextL: '.btn-more > button',
-                    interval: 2000,
-                    scrollD: 1000
-                }
-            }, //       直播
             greasyfork: {
                 host: 'greasyfork.org',
                 url: ()=> {if (indexOF(/\/scripts$/) || indexOF('/scripts/by-site/')) {
@@ -5316,144 +5220,9 @@ function: {
                     replaceE: '.h-pages',
                     scrollD: 1500
                 }
-            }, //         没得比 - 分类/搜索页
-            netbian: {
-                host: 'pic.netbian.com',
-                style: 'li.nextpage {display: none !important;}',
-                pager: {
-                    nextL: '//div[@class="page"]/a[contains(text(),"下一页")]',
-                    pageE: '.slist ul > li:not(.nextpage)',
-                    replaceE: '.page',
-                    scrollD: 1000
-                }
-            }, //           彼岸图网
-            ioliu: {
-                host: 'bing.ioliu.cn',
-                url: ()=> {if (!indexOF('/photo/') && !indexOF('.html')) {curSite = DBSite.ioliu; document.head.appendChild(document.createElement('base')).target = '_blank';}},
-                style: '.progressive--not-loaded {filter: none !important;}',
-                pager: {
-                    nextL: '//div[@class="page"]/a[contains(text(), "下一页")]',
-                    pageE: 'body > .container > div.item',
-                    replaceE: '.page',
-                    scrollD: 1000
-                }
-            }, //             必应壁纸
-            konachan: {
-                host: 'konachan.net',
-                url: ()=> {if (indexOF('/post')) {curSite = DBSite.konachan; document.head.appendChild(document.createElement('base')).target = '_blank';}},
-                style: 'html, body {min-height: 1000px;} .javascript-hide {display: inline-block !important;} ul#post-list-posts img, ul#post-list-posts .inner{width: auto !important; height: auto !important;} ul#post-list-posts li {width: 33% !important;} a.directlink {margin: 0 !important;}',
-                pager: {
-                    nextL: 'a.next_page',
-                    pageE: 'ul#post-list-posts > li',
-                    replaceE: '#paginator',
-                    scrollD: 1000
-                }
-            }, //          动漫壁纸
-            nastol: {
-                host: 'www.nastol.com.ua',
-                pager: {
-                    nextL: '//a[./span[@class="nav-next"]]',
-                    pageE: '#dle-content > div',
-                    replaceE: '.navigation',
-                    scrollD: 1000
-                }
-            }, //            壁纸
-            hdqwalls: {
-                host: 'hdqwalls.com',
-                pager: {
-                    nextL: 'a#next',
-                    pageE: '.wallpapers_container > div.wall-resp',
-                    replaceE: 'ul.pagination',
-                    scrollD: 1000
-                }
-            }, //          壁纸
-            xinpianchang: {
-                host: 'www.xinpianchang.com',
-                style: '.lazy-img {opacity: 1 !important;}',
-                pager: {
-                    nextL: '.page > a[title="下一页"]',
-                    pageE: 'div[class*="-container"] div[class*="-con"] > ul > li, div[class*="-container"] div[class*="-con"] > div[class*="-wrap"] > ul > li',
-                    insertP: ['div[class*="-container"] div[class*="-con"] > ul, div[class*="-container"] div[class*="-con"] > div[class*="-wrap"] > ul', 3],
-                    replaceE: '.page',
-                    scrollD: 2000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[_src]', '_src']
-                }
-            }, //      新片场
-            planetminecraft: {
-                host: 'www.planetminecraft.com',
-                url: ()=> {if (!indexOF('/forums/') && !indexOF('/posts/')) {curSite = DBSite.planetminecraft;}},
-                style: '.resource .r-preview>a img[loading=lazy]:not(.lazyloaded) {visibility: initial !important;}',
-                pager: {
-                    nextL: 'a.pagination_next',
-                    pageE: '.resource_block > ul.resource_list > li',
-                    replaceE: '.pagination',
-                    scrollD: 3000
-                }
-            }, //   Planet Minecraft
-            cadtutor: {
-                host: 'www.cadtutor.net',
-                url: ()=> {
-                    if (indexOF('/forum/forum/')) {
-                        curSite = DBSite.cadtutor;
-                    } else if (indexOF('/forum/topic/')) {
-                        curSite = DBSite.cadtutor_post;
-                    } else if (indexOF('/forum/search/')) {
-                        curSite = DBSite.cadtutor_search;
-                    }},
-                pager: {
-                    nextL: 'a[rel="next"]',
-                    pageE: 'ol.ipsDataList > li:not([data-rowid])~li',
-                    replaceE: 'ul.ipsPagination',
-                    scrollD: 2000
-                }
-            }, //          CADTutor - 列表页
-            cadtutor_post: {
-                thread: true,
-                pager: {
-                    nextL: 'a[rel="next"]',
-                    pageE: '#elPostFeed > form > *:not(input):not(.after-first-post)',
-                    replaceE: 'ul.ipsPagination',
-                    scrollD: 2000
-                }
-            }, //     CADTutor - 帖子内
-            cadtutor_search: {
-                pager: {
-                    nextL: 'a[rel="next"]',
-                    pageE: 'ol.ipsStream > li',
-                    replaceE: 'ul.ipsPagination',
-                    scrollD: 2000
-                }
-            }, //   CADTutor - 搜索页
-            theswamp: {
-                host: 'www.theswamp.org',
-                url: ()=> {
-                    if (!location.search) return
-                    if (indexOF('board=', 's')) {
-                        curSite = DBSite.theswamp;
-                    } else if (indexOF('topic=', 's')) {
-                        curSite = DBSite.theswamp_post;
-                    }},
-                pager: {
-                    nextL: '.pagelinks > strong+a',
-                    pageE: '#messageindex tbody > tr:not([class])',
-                    replaceE: '.pagelinks',
-                    scrollD: 2000
-                }
-            }, //          TheSwamp - 列表页
-            theswamp_post: {
-                thread: true,
-                pager: {
-                    nextL: '.pagelinks > strong+a',
-                    pageE: '#forumposts form > *',
-                    replaceE: '.pagelinks',
-                    scrollD: 2000
-                }
-            } //      TheSwamp - 帖子内
+            } //          没得比 - 分类/搜索页
         };
-        // 向后兼容
+        // 向后兼容一段时间就移除
         if (JSON.stringify(GM_getValue('menu_customRules', {})).indexOf('functionS') > -1 || JSON.stringify(GM_getValue('menu_customRules', {})).indexOf('css;') > -1) { // 改名过渡，过段时间将其移除
             GM_setValue('menu_customRules', JSON.parse(JSON.stringify(GM_getValue('menu_customRules', {})).replaceAll('functionS', 'url').replaceAll('css;', '')))
         }

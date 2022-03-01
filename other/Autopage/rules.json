@@ -1,4 +1,188 @@
 {
+	"OI-Wiki": {
+		"host": "oi-wiki.org",
+		"style": "blockquote.page-copyright, h2#__comments, form#gitalk-form {display: none !important;} article.md-content__inner{min-height: 700px;}",
+		"pager": {
+			"nextL": "li.md-nav__item.md-nav__item--active.md-nav__item--nested li.md-nav__item--active+li a",
+			"pageE": "article.md-content__inner",
+			"insertP": [
+				"article.md-content__inner",
+				6
+			],
+			"replaceE": ".md-sidebar.md-sidebar--primary",
+			"scrollD": 1300
+		}
+	},
+	"dusaiphoto": {
+		"host": "www.dusaiphoto.com",
+		"url": "/\\/article\\//",
+		"style": "h1.article-title {margin-top: 80px;}",
+		"pager": {
+			"nextL": "a.hvr-bounce-to-left",
+			"pageE": "#main > .mt-4 >div > .mb-4, #article_body",
+			"replaceE": ".col-12.font-title, #sidebar"
+		}
+	},
+	"果壳网": {
+		"host": "www.guokr.com",
+		"pager": {
+			"type": 2,
+			"nextL": "div[class*='LoadMoreWrap']",
+			"interval": 1500
+		}
+	},
+	"可能吧": {
+		"host": "kenengba.com",
+		"url": "/(^\\/$|\\/page\\/|\\/category\\/|\\/tag\\/)/",
+		"pager": {
+			"nextL": "//div[@class='pagebar']/a[@href and text()='>>']",
+			"pageE": "article.post",
+			"replaceE": ".pagebar",
+			"scrollD": 3000
+		}
+	},
+	"超能网": {
+		"host": "www.expreview.com",
+		"pager": {
+			"type": 2,
+			"nextL": "#show_article_red_1SHOW",
+			"interval": 1500
+		}
+	},
+	"IT之家": {
+		"host": "/\\.ithome\\.com/",
+		"pager": {
+			"type": 2,
+			"nextL": "a.more",
+			"interval": 1500
+		}
+	},
+	"36氪": {
+		"host": [
+			"36kr.com",
+			"www.36kr.com"
+		],
+		"url": "if (location.pathname != '/' && location.pathname.indexOf('/p/') == -1) {return true;}",
+		"pager": {
+			"type": 2,
+			"nextL": ".kr-loading-more-button.show",
+			"nextText": "查看更多",
+			"scrollD": 1500
+		}
+	},
+	"36氪-手机版": {
+		"host": "m.36kr.com",
+		"pager": {
+			"type": 2,
+			"nextL": ".kr-loading-more-button-default",
+			"nextText": "查看更多"
+		}
+	},
+	"ScienceAlert": {
+		"host": "www.sciencealert.com",
+		"pager": {
+			"type": 2,
+			"nextL": ".load-more",
+			"nextTextOf": "LOAD MORE",
+			"scrollD": 2000
+		}
+	},
+	"afreecatv": {
+        "host": "www.afreecatv.com",
+        "pager": {
+            "type": 2,
+            "nextL": ".btn-more > button",
+            "interval": 2000,
+            "scrollD": 1000
+        }
+    },
+	"彼岸图网": {
+		"host": "pic.netbian.com",
+		"style": "li.nextpage {display: none !important;}",
+		"pager": {
+			"nextL": "//div[@class='page']/a[contains(text(),'下一页')]",
+			"pageE": ".slist ul > li:not(.nextpage)",
+			"replaceE": ".page",
+			"scrollD": 1000
+		}
+	},
+	"必应壁纸": {
+		"host": "bing.ioliu.cn",
+		"url": "if (location.pathname.indexOf('/photo/') == -1 && location.pathname.indexOf('.html') == -1) {document.head.appendChild(document.createElement('base')).target = '_blank'; return true;}",
+		"style": ".progressive--not-loaded {filter: none !important;}",
+		"pager": {
+			"nextL": "//div[@class='page']/a[contains(text(), '下一页')]",
+			"pageE": "body > .container > div.item",
+			"replaceE": ".page",
+			"scrollD": 1000
+		}
+	},
+	"yande": {
+		"host": [
+			"konachan.net",
+			"yande.re"
+		],
+		"url": "if (location.pathname.indexOf('/post') > -1) {document.head.appendChild(document.createElement('base')).target = '_blank'; return true;}",
+		"style": "html, body {min-height: 1000px;} .javascript-hide {display: inline-block !important;} ul#post-list-posts img, ul#post-list-posts .inner{width: auto !important; height: auto !important;} ul#post-list-posts li {width: 33% !important;} a.directlink {margin: 0 !important;}",
+		"pager": {
+			"nextL": "a.next_page",
+			"pageE": "ul#post-list-posts > li",
+			"replaceE": "#paginator",
+			"scrollD": 1000
+		}
+	},
+	"nastol": {
+		"host": "www.nastol.com.ua",
+		"pager": {
+			"nextL": "//a[./span[@class='nav-next']]",
+			"pageE": "#dle-content > div",
+			"replaceE": ".navigation",
+			"scrollD": 1000
+		}
+	},
+	"hdqwalls": {
+		"host": "hdqwalls.com",
+		"pager": {
+			"nextL": "a#next",
+			"pageE": ".wallpapers_container > div.wall-resp",
+			"replaceE": "ul.pagination",
+			"scrollD": 1000
+		}
+	},
+	"新片场": {
+		"host": "www.xinpianchang.com",
+		"url": "return (location.pathname != '/')",
+		"style": ".lazy-img {opacity: 1 !important;}",
+		"pager": {
+			"nextL": ".page > a[title='下一页']",
+			"pageE": "div[class*='-container'] div[class*='-con'] > ul > li, div[class*='-container'] div[class*='-con'] > div[class*='-wrap'] > ul > li",
+			"insertP": [
+				"div[class*='-container'] div[class*='-con'] > ul, div[class*='-container'] div[class*='-con'] > div[class*='-wrap'] > ul",
+				3
+			],
+			"replaceE": ".page",
+			"scrollD": 2000
+		},
+		"function": {
+			"bF": "src_bF",
+			"bFp": [
+				0,
+				"img[_src]",
+				"_src"
+			]
+		}
+	},
+	"Planet Minecraft": {
+		"host": "www.planetminecraft.com",
+		"url": "return (location.pathname.indexOf('/forums/') == -1 && location.pathname.indexOf('/posts/') == -1)",
+		"style": ".resource .r-preview>a img[loading=lazy]:not(.lazyloaded) {visibility: initial !important;}",
+		"pager": {
+			"nextL": "a.pagination_next",
+			"pageE": ".resource_block > ul.resource_list > li",
+			"replaceE": ".pagination",
+			"scrollD": 3000
+		}
+	},
 	"ScriptCat": {
 		"host": "scriptcat.org",
 		"url": "/^\\/search/",
@@ -8,13 +192,14 @@
 			"replaceE": ".q-pagination"
 		}
 	},
-	"盖世汽车英文版": {
-		"host": "autonews.gasgoo.com",
-		"url": "return (location.pathname != '/' && location.pathname.indexOf('.html') == -1)",
+	"叽哩叽哩日报": {
+		"host": "www.jiligamefun.com",
+		"url": "/\\/category\\//",
 		"pager": {
-			"nextL": "a.pageright",
-			"pageE": ".newsListShow > ul",
-			"replaceE": ".page"
+			"nextL": "a.poi-pager__item.poi-pager__item_next",
+			"pageE": ".inn-archive__container > article",
+			"replaceE": ".poi-pager",
+			"scrollD": 1800
 		}
 	},
 	"下书网": {
@@ -24,6 +209,25 @@
 			"nextL": "a.pt-nextchapter",
 			"pageE": ".pt-read-text > p",
 			"replaceE": ".pt-read-btn"
+		}
+	},
+	"二手车之家": {
+		"host": "www.che168.com",
+		"url": "return (location.pathname != '/' && location.pathname.indexOf('/dealer/') == -1)",
+		"pager": {
+			"nextL": "a.page-item-next",
+			"pageE": "ul.viewlist_ul > li",
+			"replaceE": ".page",
+			"scrollD": 2000
+		}
+	},
+	"盖世汽车英文版": {
+		"host": "autonews.gasgoo.com",
+		"url": "return (location.pathname != '/' && location.pathname.indexOf('.html') == -1)",
+		"pager": {
+			"nextL": "a.pageright",
+			"pageE": ".newsListShow > ul",
+			"replaceE": ".page"
 		}
 	},
 	"新东方在线": {
@@ -37,26 +241,6 @@
 			],
 			"replaceE": "#page",
 			"scrollD": 2000
-		}
-	},
-	"二手车之家": {
-		"host": "www.che168.com",
-		"url": "return (location.pathname != '/' && location.pathname.indexOf('/dealer/') == -1)",
-		"pager": {
-			"nextL": "a.page-item-next",
-			"pageE": "ul.viewlist_ul > li",
-			"replaceE": ".page",
-			"scrollD": 2000
-		}
-	},
-	"叽哩叽哩日报": {
-		"host": "www.jiligamefun.com",
-		"url": "/\\/category\\//",
-		"pager": {
-			"nextL": "a.poi-pager__item.poi-pager__item_next",
-			"pageE": ".inn-archive__container > article",
-			"replaceE": ".poi-pager",
-			"scrollD": 1800
 		}
 	},
 	"文档库": {
@@ -116,6 +300,58 @@
 			],
 			"replaceE": ".fy",
 			"scrollD": 1000
+		}
+	},
+	"CADTutor-列表页": {
+		"host": "www.cadtutor.net",
+		"url": "/\\/forum\\/forum\\//",
+		"pager": {
+			"nextL": "a[rel='next']",
+			"pageE": "ol.ipsDataList > li:not([data-rowid])~li",
+			"replaceE": "ul.ipsPagination",
+			"scrollD": 2000
+		}
+	},
+	"CADTutor-帖子内": {
+		"host": "www.cadtutor.net",
+		"url": "/\\/forum\\/topic\\//",
+		"thread": true,
+		"pager": {
+			"nextL": "a[rel='next']",
+			"pageE": "#elPostFeed > form > *:not(input):not(.after-first-post)",
+			"replaceE": "ul.ipsPagination",
+			"scrollD": 2000
+		}
+	},
+	"CADTutor-搜索页": {
+		"host": "www.cadtutor.net",
+		"url": "/\\/forum\\/search\\//",
+		"pager": {
+			"nextL": "a[rel='next']",
+			"pageE": "ol.ipsStream > li",
+			"replaceE": "ul.ipsPagination",
+			"scrollD": 2000
+		}
+	},
+	"TheSwamp-列表页": {
+		"host": "www.theswamp.org",
+		"url": "/board=/",
+		"pager": {
+			"nextL": ".pagelinks > strong+a",
+			"pageE": "#messageindex tbody > tr:not([class])",
+			"replaceE": ".pagelinks",
+			"scrollD": 2000
+		}
+	},
+	"TheSwamp-帖子内": {
+		"host": "www.theswamp.org",
+		"url": "/topic=/",
+		"thread": true,
+		"pager": {
+			"nextL": ".pagelinks > strong+a",
+			"pageE": "#forumposts form > *",
+			"replaceE": ".pagelinks",
+			"scrollD": 2000
 		}
 	},
 	"xvideos": {
