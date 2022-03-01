@@ -1151,5 +1151,15 @@
 			"pageE": ".b_img > ul, .picture > p",
 			"replaceE": ".paging"
 		}
+	},
+	"五朵美女网": {
+		"host": "m.558duo.cc",
+		"url": "",
+		"pager": {
+			"nextL": "//a[contains(text(), '下一页')]",
+			"pageE": "//div[@class='PictureList']",
+			"replaceE": "//div[@class='article_page']",
+			"scrollD": 1000
+		}
 	}
 }
