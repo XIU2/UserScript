@@ -5844,19 +5844,19 @@ function: {
         let customRules = JSON.stringify(GM_getValue('menu_customRules', {}), null, '\t').replaceAll('functionS', 'url').replaceAll('css;', '');
         if (customRules == '{}') customRules = '{\n\t\n}'; // 引导用户插入位置
         let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.95 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important; overflow: scroll !important; text-align: left !important;">
-<h3 style="font-size: 24px !important;"><strong># 自定义翻页规则（优先于脚本内置规则）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
+<h3 style="font-size: 22px !important;"><strong># 自定义翻页规则（优先级最高，但前提是 "规则名" 不能重复）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
 <details>
 <summary><kbd><strong>「 点击展开 查看示例 」（我把常用规则都塞进去了，方便需要的时候可直接复制一份修改使用）</strong></kbd></summary>
 <ul style="list-style: disc !important; margin-left: 35px !important;">
 <li>翻页规则为 JSON 格式，因此大家需要多少<strong>了解一点 JSON 的基本格式</strong>（主要就是逗号、转义、双引号等）。</li>
 <li>具体的翻页规则说明、示例，为了方便更新及补充，我都写到 <strong><a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github</a></strong> 里面了。</li>
 <li>脚本会自动格式化规则，因此<strong>无需手动缩进、换行</strong>，只需把规则<strong>插入默认的 { } 中间</strong>即可。</li>
-<li style="color: #ff3535 !important;">注意：目前自定义翻页规则处于 Beta 阶段，随时可能更改规则格式/语法，具体请关注上面的 Github 链接。</li>
+<li style="color: #ff3535 !important;">注意：目前自定义翻页规则处于 Beta 阶段，随时可能调整规则格式/语法，具体请关注上面的 Github 链接。</li>
 </ul>
 <pre>
 // 大多数网站一般都只需要像第一个 "aaa" 这样的规则（注意，不要连带着复制这几行注释说明）
 // 其中 "scrollD" 是用来控制翻页敏感度的（越大就越早触发翻页，访问速度慢的网站需要调大，可省略(注意逗号)，默认 1500）
-// 每个规则第一行的规则名（即 "aaa": { ）是唯一的，不能重复（包括与脚本内置规则），否则会被覆盖，支持中文
+// 每个规则第一行的规则名（即 "aaa": { ）是唯一的！不能重复！否则会被外置/内置规则覆盖，支持中文等各种字符
 {
     "aaa": {
         "host": "aaa.com",
