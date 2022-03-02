@@ -1,4 +1,106 @@
 {
+	"CurseForge": {
+		"host": "www.curseforge.com",
+		"pager": {
+			"nextL": ".pagination-next > a",
+			"pageE": "div.my-2",
+			"replaceE": ".pagination",
+			"scrollD": 2500
+		}
+	},
+	"Steam 创意工坊 - 项目列表": {
+		"host": "steamcommunity.com",
+		"url": "return (fun.indexOF('/workshop/browse'))",
+		"pager": {
+			"nextL": "//a[@class='pagebtn' and text()='>']",
+			"pageE": ".workshopBrowseItems > *",
+			"replaceE": ".workshopBrowsePaging",
+			"scriptT": 2
+		}
+	},
+	"Steam 社区 - 活动评论": {
+		"host": "steamcommunity.com",
+		"url": "return (fun.indexOF(/eventcomments\\/\\d/))",
+		"style": ".forum_paging_controls {display: none !important;}",
+		"pager": {
+			"nextL": "js;return fun.getNextUP('ctp=', /ctp=\\d+/, location.pathname, '2', fun.getCSS('span.commentthread_pagelinks > a:last-child').textContent)",
+			"pageE": ".commentthread_comments > .commentthread_comment",
+			"replaceE": ".forum_paging .forum_paging_summary",
+			"scriptT": 1
+		}
+	},
+	"小霸王其乐无穷": {
+		"host": "www.yikm.net",
+		"pager": {
+			"nextL": "//ul[@class='pager']//a[text()='下一页']",
+			"pageE": "//h2[contains(text(), '所有游戏') or contains(text(), '搜索结果')]/following-sibling::div[1]/div",
+			"replaceE": "ul.pager"
+		}
+	},
+	"Switch520": {
+		"host": [
+			"switch520.com",
+			"switch520.net"
+		],
+		"url": "return (!fun.indexOF('.html'))",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": ".row.posts-wrapper > div",
+			"replaceE": "ul.page-numbers",
+			"scrollD": 1000
+		}
+	},
+	"cs.rin.ru - 各版块帖子列表": {
+		"host": "cs.rin.ru",
+		"url": "return (fun.lp() == '/forum/viewforum.php')",
+		"pager": {
+			"nextL": "//td[@class='gensmall'][@align='right']//a[text()='Next']",
+			"pageE": "#pagecontent > table.tablebg > tbody > tr:not([align])",
+			"replaceE": "#pagecontent > table:first-child"
+		},
+		"function": {
+			"bF": "for (let i = 0; i < pageE.length; i++) {if (pageE[i].textContent.replace(/\\n|\\t/g,'') === 'Topics') {pageE.splice(0,i+1); break;}}; return pageE;"
+		}
+	},
+	"cs.rin.ru - 帖子内": {
+		"host": "cs.rin.ru",
+		"url": "return (fun.lp() == '/forum/viewtopic.php')",
+		"thread": true,
+		"pager": {
+			"nextL": "id('pageheader')/p[@class='gensmall']//a[text()='Next']",
+			"pageE": "#pagecontent > table.tablebg:not(:nth-last-child(2)):not(:nth-child(2))",
+			"replaceE": "#pagecontent >table:not(.tablebg), #pageheader p.gensmall",
+			"scrollD": 2000
+		}
+	},
+	"cs.rin.ru - 搜索页": {
+		"host": "cs.rin.ru",
+		"url": "return (fun.lp() == '/forum/search.php')",
+		"pager": {
+			"nextL": "id('wrapcentre')/div[@class='nav']//a[text()='Next']",
+			"pageE": "#wrapcentre > form > table.tablebg > tbody > tr[class^='row'], #wrapcentre > form > table.tablebg > tbody > tr[valign]",
+			"replaceE": "#wrapcentre > div"
+		}
+	},
+	"Crackhub213": {
+		"host": "crackhub.site",
+		"style": "html.wp-dark-mode-active .inside-article {background-color: var(--wp-dark-mode-bg);}",
+		"pager": {
+			"nextL": "a.next.page-numbers",
+			"pageE": "article[id^='post-']",
+			"replaceE": "nav.paging-navigation",
+			"scrollD": 2000
+		}
+	},
+	"FitGirl Repacks": {
+		"host": "fitgirl-repacks.site",
+		"pager": {
+			"nextL": "a.next.page-numbers",
+			"pageE": "article[id^='post-']",
+			"replaceE": "nav.paging-navigation",
+			"scrollD": 2500
+		}
+	},
 	"茶杯狐": {
 		"host": "/www\\.cupfox\\./",
 		"pager": {
@@ -111,7 +213,7 @@
 			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
 		}
 	},
-	"ZzzFun 动漫-搜索页": {
+	"ZzzFun 动漫 - 搜索页": {
 		"host": "www.zzzfun.com",
 		"url": "return (fun.indexOF('/vod_search'))",
 		"pager": {
@@ -134,7 +236,7 @@
 			"scrollD": 1000
 		}
 	},
-	"吐槽弹幕网-搜索页": {
+	"吐槽弹幕网 - 搜索页": {
 		"host": "www.tucao.one",
 		"url": "return (fun.indexOF('search', 's'))",
 		"pager": {
@@ -157,7 +259,7 @@
 			"scrollD": 1000
 		}
 	},
-	"樱花动漫-搜索页等": {
+	"樱花动漫 - 搜索页等": {
 		"host": [
 			"www.imomoe.la",
 			"www.imomoe.live"
@@ -206,7 +308,7 @@
 			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
 		}
 	},
-	"AGE 动漫-全部/搜索": {
+	"AGE 动漫 - 全部/搜索": {
 		"host": [
 			"www.agemys.com",
 			"www.age.tv"
@@ -232,7 +334,7 @@
 			"scrollD": 1000
 		}
 	},
-	"AGE 动漫-排行榜": {
+	"AGE 动漫 - 排行榜": {
 		"host": [
 			"www.agemys.com",
 			"www.age.tv"
@@ -255,7 +357,7 @@
 			"scrollD": 1000
 		}
 	},
-	"233 动漫-动漫情报/资讯": {
+	"233 动漫 - 动漫情报/资讯": {
 		"host": "www.dm233.cc",
 		"url": "return (fun.lp() == '/article/')",
 		"pager": {
@@ -265,7 +367,7 @@
 			"scrollD": 1000
 		}
 	},
-	"233 动漫-排行榜": {
+	"233 动漫 - 排行榜": {
 		"host": "www.dm233.cc",
 		"url": "return (fun.lp() == '/rank/')",
 		"pager": {
@@ -458,7 +560,7 @@
 			"scrollD": 1000
 		}
 	},
-	"WebHD-搜索页": {
+	"WebHD - 搜索页": {
 		"host": "webhd.cc",
 		"url": "return (fun.indexOF('/search'))",
 		"pager": {
@@ -472,7 +574,7 @@
 			"scrollD": 1000
 		}
 	},
-	"MINI4K-论坛": {
+	"MINI4K - 论坛": {
 		"host": "www.mini4k.com",
 		"url": "return (fun.indexOF('/forum') && !fun.indexOF('/topic'))",
 		"pager": {
@@ -502,7 +604,7 @@
 			"scrollD": 1000
 		}
 	},
-	"SubHD-论坛": {
+	"SubHD - 论坛": {
 		"host": "subhd.tv",
 		"url": "return (fun.indexOF('/forum/forum') || fun.indexOF('/forum/ask'))",
 		"pager": {
@@ -540,7 +642,7 @@
 			"scrollD": 1000
 		}
 	},
-	"射手网-分类页": {
+	"射手网 - 分类页": {
 		"host": "assrt.net",
 		"url": "return (fun.indexOF('/list/'))",
 		"pager": {
@@ -550,7 +652,7 @@
 			"scrollD": 1000
 		}
 	},
-	"AO3-列表页/搜索页": {
+	"AO3 - 列表页/搜索页": {
 		"host": "archiveofourown.org",
 		"url": "return (fun.indexOF(/\\/works$/) || fun.lp() == '/works/search')",
 		"pager": {
@@ -590,7 +692,7 @@
 			"scrollD": 1000
 		}
 	},
-	"分享者-搜索页": {
+	"分享者 - 搜索页": {
 		"host": "www.sharerw.com",
 		"url": "return (fun.lp() == '/search.php')",
 		"pager": {
@@ -645,7 +747,7 @@
 			"scrollD": 5000
 		}
 	},
-	"果核剥壳-分类/搜索页": {
+	"果核剥壳 - 分类/搜索页": {
 		"host": "www.ghxi.com",
 		"pager": {
 			"nextL": "a.next",
@@ -679,7 +781,7 @@
 			"scrollD": 1000
 		}
 	},
-	"微当下载-搜索页": {
+	"微当下载 - 搜索页": {
 		"host": "www.weidown.com",
 		"url": "return (fun.indexOF('/search/'))",
 		"pager": {
@@ -773,7 +875,7 @@
 			"scrollD": 1700
 		}
 	},
-	"老殁 | 殁漂遥-搜索页/分类页": {
+	"老殁 | 殁漂遥 - 搜索页/分类页": {
 		"host": "www.mpyit.com",
 		"url": "return (fun.indexOF('/category/') || fun.indexOF('?s=', 's'))",
 		"pager": {
@@ -794,7 +896,7 @@
 			"scrollD": 1000
 		}
 	},
-	"腾龙工作室-分类/搜索页": {
+	"腾龙工作室 - 分类/搜索页": {
 		"host": "www.tenlonstudio.com",
 		"pager": {
 			"nextL": "//div[@class='btn-pager']/a[contains(text(), '❯')]",
@@ -812,7 +914,7 @@
 			"scrollD": 1000
 		}
 	},
-	"小鱼儿 yr 系统-搜索页": {
+	"小鱼儿 yr 系统 - 搜索页": {
 		"host": "www.yrxitong.com",
 		"url": "return (fun.lp() == '/sr.jsp')",
 		"pager": {
@@ -983,7 +1085,7 @@
 			"scrollD": 1500
 		}
 	},
-	"36氪-手机版": {
+	"36氪 - 手机版": {
 		"host": "m.36kr.com",
 		"pager": {
 			"type": 2,
@@ -1009,7 +1111,7 @@
 			"replaceE": ".pagination, .b2-pagenav.post-nav"
 		}
 	},
-	"致美化-分类页": {
+	"致美化 - 分类页": {
 		"host": "zhutix.com",
 		"url": "return (fun.lp() != '/')",
 		"pager": {
@@ -1018,7 +1120,7 @@
 			"replaceE": ".pagination"
 		}
 	},
-	"蓝奏云-分享链接列表": {
+	"蓝奏云 - 分享链接列表": {
 		"host": "/\\.lanzou[a-z]\\./",
 		"hiddenPN": true,
 		"pager": {
@@ -1029,7 +1131,7 @@
 			"scrollD": 800
 		}
 	},
-	"蓝奏云-后台": {
+	"蓝奏云 - 后台": {
 		"host": "pc.woozooo.com",
 		"iframe": true,
 		"hiddenPN": true,
@@ -1063,7 +1165,7 @@
 			"scriptT": 3
 		}
 	},
-	"wikihow_search": {
+	"wikihow - 搜索页": {
 		"host": [
 			"www.wikihow.com",
 			"zh.wikihow.com"
@@ -1075,7 +1177,7 @@
 			"replaceE": "#searchresults_footer"
 		}
 	},
-	"afreecatv": {
+	"AfreecaTV": {
         "host": "www.afreecatv.com",
         "pager": {
             "type": 2,
@@ -1094,7 +1196,7 @@
 			"scrollD": 1300
 		}
 	},
-	"GreasyFork-反馈页": {
+	"GreasyFork - 反馈页": {
 		"host": "greasyfork.org",
 		"url": "return (fun.indexOF(/\\/feedback$/))",
 		"pager": {
@@ -1169,7 +1271,7 @@
 			"replaceE": "ul.pagenation-list"
 		}
 	},
-	"没得比-分类/搜索页": {
+	"没得比 - 分类/搜索页": {
 		"host": "www.meidebi.com",
 		"url": "return (fun.indexOF('/fenlei/') || fun.lp == '/Search')",
 		"pager": {
@@ -1188,7 +1290,7 @@
 			"scrollD": 1000
 		}
 	},
-	"书签地球-搜索页": {
+	"书签地球 - 搜索页": {
 		"host": "www.bookmarkearth.com",
 		"url": "return (fun.lp() == '/s/search')",
 		"pager": {
@@ -1362,7 +1464,7 @@
 			"scrollD": 1200
 		}
 	},
-	"如意了教育-学校": {
+	"如意了教育 - 学校": {
 		"host": "www.ruyile.com",
 		"url": "return (fun.lp() == '/xuexiao/')",
 		"pager": {
@@ -1372,7 +1474,7 @@
 			"scrollD": 1000
 		}
 	},
-	"如意了教育-数据": {
+	"如意了教育 - 数据": {
 		"host": "www.ruyile.com",
 		"url": "return (fun.lp() == '/data/')",
 		"pager": {
@@ -1386,7 +1488,7 @@
 			"scrollD": 1000
 		}
 	},
-	"如意了教育-试卷": {
+	"如意了教育 - 试卷": {
 		"host": "www.ruyile.com",
 		"url": "return (fun.lp() == '/shijuan/')",
 		"pager": {
@@ -1400,7 +1502,7 @@
 			"scrollD": 1000
 		}
 	},
-	"CADTutor-列表页": {
+	"CADTutor - 列表页": {
 		"host": "www.cadtutor.net",
 		"url": "/\\/forum\\/forum\\//",
 		"pager": {
@@ -1410,7 +1512,7 @@
 			"scrollD": 2000
 		}
 	},
-	"CADTutor-帖子内": {
+	"CADTutor - 帖子内": {
 		"host": "www.cadtutor.net",
 		"url": "/\\/forum\\/topic\\//",
 		"thread": true,
@@ -1421,7 +1523,7 @@
 			"scrollD": 2000
 		}
 	},
-	"CADTutor-搜索页": {
+	"CADTutor - 搜索页": {
 		"host": "www.cadtutor.net",
 		"url": "/\\/forum\\/search\\//",
 		"pager": {
@@ -1431,7 +1533,7 @@
 			"scrollD": 2000
 		}
 	},
-	"TheSwamp-列表页": {
+	"TheSwamp - 列表页": {
 		"host": "www.theswamp.org",
 		"url": "/board=/",
 		"pager": {
@@ -1441,7 +1543,7 @@
 			"scrollD": 2000
 		}
 	},
-	"TheSwamp-帖子内": {
+	"TheSwamp - 帖子内": {
 		"host": "www.theswamp.org",
 		"url": "/topic=/",
 		"thread": true,
@@ -1510,7 +1612,7 @@
 			"replaceE": "#paging"
 		}
 	},
-	"t66y-各板块帖子列表": {
+	"t66y - 各板块帖子列表": {
 		"host": "www.t66y.com",
 		"url": "/^\\/thread/",
 		"pager": {
@@ -1520,7 +1622,7 @@
 			"scrollD": 1000
 		}
 	},
-	"t66y-帖子内": {
+	"t66y - 帖子内": {
 		"host": "www.t66y.com",
 		"url": "/^\\/(read\\.php|htm_data|htm_mob)/",
 		"style": ".tips {display: none !important;}",
@@ -1529,6 +1631,36 @@
 			"nextL": "//div[@class='pages']/a[text()='下一頁']",
 			"pageE": "#main > .t.t2, #main > a[name],#main > form > .t.t2, #main > form > a[name], #main > div[style*='overflow:hidden'], #main > .line",
 			"replaceE": ".pages",
+			"scrollD": 1000
+		}
+	},
+	"E-Hentai-g": {
+		"host": "e-hentai.org",
+		"url": "/^\\/g\\//",
+		"pager": {
+			"nextL": "//table[@class='ptt']//a[text()='>']",
+			"pageE": "#gdt > .gdtm",
+			"replaceE": ".ptt, .ptb",
+			"scrollD": 1000
+		}
+	},
+	"E-Hentai-s": {
+		"host": "e-hentai.org",
+		"url": "/^\\/s\\//",
+		"style": "#img {max-width: 100% !important;height: auto !important;}",
+		"pager": {
+			"nextL": "a#next",
+			"pageE": "#img",
+			"replaceE": ".sn",
+			"scrollD": 1000
+		}
+	},
+	"E-Hentai": {
+		"host": "e-hentai.org",
+		"pager": {
+			"nextL": "//table[@class='ptt']//a[text()='>']",
+			"pageE": ".itg > tbody > tr:not(:first-of-type)",
+			"replaceE": ".ptt, .ptb",
 			"scrollD": 1000
 		}
 	},
@@ -1563,7 +1695,7 @@
 			"replaceE": "[id='pagenation']"
 		}
 	},
-	"美女推-图片页": {
+	"美女推 - 图片页": {
 		"host": "mvtui.com",
 		"url": "/\\.html/",
 		"pager": {
@@ -1573,7 +1705,7 @@
 			"scrollD": 3000
 		}
 	},
-	"美女推-分类页": {
+	"美女推 - 分类页": {
 		"host": "mvtui.com",
 		"url": "/^\\/.+/",
 		"pager": {
@@ -1585,7 +1717,7 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
 		}
 	},
-	"秀人集-图片页": {
+	"秀人集 - 图片页": {
 		"host": "/\\.xiuren[a-z]+\\./",
 		"url": "/\\.html/",
 		"pager": {
@@ -1594,7 +1726,7 @@
 			"replaceE": ".page"
 		}
 	},
-	"秀人集-搜索页": {
+	"秀人集 - 搜索页": {
 		"host": "/\\.xiuren[a-z]+\\./",
 		"url": "/search/",
 		"pager": {
@@ -1604,7 +1736,7 @@
 			"scrollD": 700
 		}
 	},
-	"秀人集-分类页": {
+	"秀人集 - 分类页": {
 		"host": "/\\.xiuren[a-z]+\\./",
 		"url": "/^\\/.+/",
 		"pager": {
@@ -1614,7 +1746,7 @@
 			"scrollD": 1000
 		}
 	},
-	"极品性感美女-图片页": {
+	"极品性感美女 - 图片页": {
 		"host": "www.jpxgyw.net",
 		"url": "/\\.html/",
 		"pager": {
@@ -1625,7 +1757,7 @@
 			"scrollD": 2000
 		}
 	},
-	"极品性感美女-分类页": {
+	"极品性感美女 - 分类页": {
 		"host": "www.jpxgyw.net",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/search/'))",
 		"pager": {
@@ -1748,7 +1880,7 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
 		}
 	},
-	"宅男女神-图片页": {
+	"宅男女神 - 图片页": {
 		"host": "www.fnvshen.com",
 		"url": "/^\\/g\\//",
 		"pager": {
@@ -1757,7 +1889,7 @@
 			"replaceE": "#pages"
 		}
 	},
-	"宅男女神-分类页": {
+	"宅男女神 - 分类页": {
 		"host": "www.fnvshen.com",
 		"url": "/^\\/gallery|tag\\//",
 		"style": ".yalayi_box {display: none !important; margin: -4px 0 !important;}",
@@ -1771,7 +1903,7 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
-	"宅男女神-文章页": {
+	"宅男女神 - 文章页": {
 		"host": "www.fnvshen.com",
 		"url": "/^/article/\\d+\\//",
 		"pager": {
@@ -1785,7 +1917,7 @@
 			"scrollD": 1000
 		}
 	},
-	"宅男女神-文章分类页": {
+	"宅男女神 - 文章分类页": {
 		"host": "www.fnvshen.com",
 		"url": "/^/article//",
 		"pager": {
@@ -1795,7 +1927,7 @@
 			"scrollD": 1000
 		}
 	},
-	"爱女神-图片页": {
+	"爱女神 - 图片页": {
 		"host": "www.99nvshen.com",
 		"url": "/^\\/gallery\\//",
 		"pager": {
@@ -1806,7 +1938,7 @@
 			"scrollD": 2500
 		}
 	},
-	"爱女神-分类页": {
+	"爱女神 - 分类页": {
 		"host": "www.99nvshen.com",
 		"url": "/^\\/galleryList|modelList\\//",
 		"pager": {
@@ -1815,7 +1947,7 @@
 			"replaceE": "ul.pagination"
 		}
 	},
-	"秀人美女-图片页": {
+	"秀人美女 - 图片页": {
 		"host": "www.xrmn5.cc",
 		"url": "/\\d+\\.html/",
 		"pager": {
@@ -1825,7 +1957,7 @@
 			"scrollD": 3000
 		}
 	},
-	"秀人美女-分类页": {
+	"秀人美女 - 分类页": {
 		"host": "www.xrmn5.cc",
 		"url": "/^\\/.+/",
 		"pager": {
@@ -1835,7 +1967,7 @@
 			"scrollD": 2000
 		}
 	},
-	"精品美女吧-图片页": {
+	"精品美女吧 - 图片页": {
 		"host": "www.jpmn8.com",
 		"url": "/\\d+\\.html/",
 		"style": "img[onload] {min-height: 500px;}",
@@ -1846,7 +1978,7 @@
 			"scrollD": 3000
 		}
 	},
-	"精品美女吧-分类页": {
+	"精品美女吧 - 分类页": {
 		"host": "www.jpmn8.com",
 		"url": "/^\\/.+/",
 		"pager": {
@@ -1987,7 +2119,7 @@
 			"replaceE": ".bb ul"
 		}
 	},
-	"爱美女-图片页": {
+	"爱美女 - 图片页": {
 		"host": "www.2meinv.com",
 		"url": "/^\\/article-/",
 		"pager": {
@@ -1996,7 +2128,7 @@
 			"replaceE": ".page-show"
 		}
 	},
-	"爱美女-分类页": {
+	"爱美女 - 分类页": {
 		"host": "www.2meinv.com",
 		"pager": {
 			"nextL": "//div[@class='page-show']/a[text()='下一页']",
@@ -2004,7 +2136,7 @@
 			"replaceE": ".page-show"
 		}
 	},
-	"爱美女-手机版-图片页": {
+	"爱美女 - 手机版 - 图片页": {
 		"host": "wap.2meinv.com",
 		"url": "/^\\/article-/",
 		"pager": {
@@ -2013,7 +2145,7 @@
 			"replaceE": ".article-page"
 		}
 	},
-	"爱美女-手机版-分类页": {
+	"爱美女 - 手机版 - 分类页": {
 		"host": "wap.2meinv.com",
 		"pager": {
 			"nextL": "//div[contains(@class,'article-page')]/a[text()='下一页']",
@@ -2024,7 +2156,7 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
-	"娱乐吧-手机版-图片页": {
+	"娱乐吧 - 手机版 - 图片页": {
 		"host": "m.yuleba.org",
 		"url": "/^\\/a\\//",
 		"pager": {
