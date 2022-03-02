@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.1.1
+// @version      5.1.2
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  無縫拼接下一頁內容（瀑布流），支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎等網站~
@@ -2188,114 +2188,6 @@ function: {
                     bF: nexusmods_bF
                 }
             }, //               NexusMods
-            curseforge: {
-                host: 'www.curseforge.com',
-                pager: {
-                    nextL: '.pagination-next > a',
-                    pageE: 'div.my-2',
-                    replaceE: '.pagination',
-                    scrollD: 2500
-                }
-            }, //              CurseForge
-            steamcommunity_workshop: {
-                host: 'steamcommunity.com',
-                url: ()=> {if (indexOF('/workshop/browse')) {curSite = DBSite.steamcommunity_workshop;} else if (indexOF(/eventcomments\/\d/)) {curSite = DBSite.steamcommunity_eventcomments;}},
-                pager: {
-                    nextL: '//a[@class="pagebtn" and text()=">"]',
-                    pageE: '.workshopBrowseItems > *',
-                    replaceE: '.workshopBrowsePaging',
-                    scriptT: 2,
-                    scrollD: 1500
-                }
-            }, //      Steam 创意工坊 - 项目列表
-            steamcommunity_eventcomments: {
-                style: '.forum_paging_controls {display: none !important;}',
-                pager: {
-                    nextL: ()=> getNextUP('ctp=', /ctp=\d+/, location.pathname, '2', getCSS('span.commentthread_pagelinks > a:last-child').textContent),
-                    pageE: '.commentthread_comments > .commentthread_comment',
-                    replaceE: '.forum_paging .forum_paging_summary',
-                    scriptT: 1,
-                    scrollD: 1500
-                }
-            }, // Steam 社区 - 活动评论
-            yikm: {
-                host: 'www.yikm.net',
-                pager: {
-                    nextL: '//ul[@class="pager"]//a[text()="下一页"]',
-                    pageE: '//h2[contains(text(), "所有游戏") or contains(text(), "搜索结果")]/following-sibling::div[1]/div',
-                    replaceE: 'ul.pager',
-                    scrollD: 1500
-                }
-            }, //                    小霸王其乐无穷
-            switch520: {
-                host: 'switch520.com',
-                url: ()=> {if (!indexOF('.html')) {curSite = DBSite.switch520;}},
-                pager: {
-                    nextL: 'a.next',
-                    pageE: '.row.posts-wrapper > div',
-                    replaceE: 'ul.page-numbers',
-                    scrollD: 1000
-                }
-            }, //               Switch520
-            cs_rin_ru: {
-                host: 'cs.rin.ru',
-                url: ()=> {if (lp == '/forum/viewforum.php') {
-                    curSite = DBSite.cs_rin_ru;
-                } else if (lp == '/forum/search.php') {
-                    curSite = DBSite.cs_rin_ru_search;
-                    if (indexOF('sr=posts', 's')) curSite.pager.pageE = '#wrapcentre > form > table.tablebg > tbody > tr[class^="row"]'
-                } else if (lp == '/forum/viewtopic.php') {
-                    curSite = DBSite.cs_rin_ru_list;
-                }},
-                pager: {
-                    nextL: '//td[@class="gensmall"][@align="right"]//a[text()="Next"]',
-                    pageE: '#pagecontent > table.tablebg > tbody > tr:not([align])',
-                    replaceE: '#pagecontent > table:first-child',
-                    scrollD: 1500
-                },
-                function: {
-                    bF: pageE => { // 插入前函数（过滤置顶帖子）
-                        for (let i = 0; i < pageE.length; i++) {if (pageE[i].textContent.replace(/\n|	/g,'') === 'Topics') {pageE.splice(0,i+1); break;}}
-                        return pageE
-                    }
-                }
-            }, //               cs.rin.ru - 各版块帖子列表
-            cs_rin_ru_list: {
-                thread: true,
-                pager: {
-                    nextL: 'id("pageheader")/p[@class="gensmall"]//a[text()="Next"]',
-                    pageE: '#pagecontent > table.tablebg:not(:nth-last-child(2)):not(:nth-child(2))',
-                    replaceE: '#pagecontent >table:not(.tablebg), #pageheader p.gensmall',
-                    scrollD: 2000
-                }
-            }, //          cs.rin.ru - 帖子内
-            cs_rin_ru_search: {
-                pager: {
-                    nextL: 'id("wrapcentre")/div[@class="nav"]//a[text()="Next"]',
-                    pageE: '#wrapcentre > form > table.tablebg > tbody > tr[valign]',
-                    replaceE: '#wrapcentre > div',
-                    scrollD: 1500
-                }
-            }, //        cs.rin.ru - 搜索页
-            crackhub: {
-                host: 'crackhub.site',
-                style: 'html.wp-dark-mode-active .inside-article {background-color: var(--wp-dark-mode-bg);}',
-                pager: {
-                    nextL: 'a.next.page-numbers',
-                    pageE: 'article[id^="post-"]',
-                    replaceE: 'nav.paging-navigation',
-                    scrollD: 2000
-                }
-            }, //                Crackhub213
-            fitgirl: {
-                host: 'fitgirl-repacks.site',
-                pager: {
-                    nextL: 'a.next.page-numbers',
-                    pageE: 'article[id^="post-"]',
-                    replaceE: 'nav.paging-navigation',
-                    scrollD: 2500
-                }
-            }, //                 FitGirl Repacks
             bilibili_search: {
                 host: 'search.bilibili.com',
                 url: ()=> {
