@@ -1,10 +1,353 @@
 {
+	"AO3-列表页/搜索页": {
+		"host": "archiveofourown.org",
+		"url": "return (fun.indexOF(/\\/works$/) || fun.lp() == '/works/search')",
+		"pager": {
+			"nextL": "li.next a",
+			"pageE": "li.work[id^='work_']",
+			"replaceE": ".pagination",
+			"scrollD": 2500
+		}
+	},
+	"AO3-阅读页": {
+		"host": "archiveofourown.org",
+		"url": "return (fun.indexOF(/\\/works\\/\\d+\\/chapters\\//))",
+		"pager": {
+			"nextL": "li.chapter.next a",
+			"pageE": "#workskin > div",
+			"replaceE": "#main ul.navigation, #feedback > ul.actions",
+			"scrollD": 2000
+		}
+	},
+	"_423down": {
+		"host": "www.423down.com",
+		"url": "return (!fun.indexOF('.html'))",
+		"pager": {
+			"nextL": "//div[@class='paging']//a[contains(text(),'下一页')]",
+			"pageE": "div.content-wrap ul.excerpt > li",
+			"replaceE": "div.paging",
+			"scrollD": 2000
+		}
+	},
+	"不死鸟": {
+		"host": "iao.su",
+		"pager": {
+			"nextL": "li.next > a",
+			"pageE": "#index > article, #archive > article",
+			"replaceE": "ol.page-navigator",
+			"scriptT": 3,
+			"scrollD": 1000
+		}
+	},
+	"分享者-搜索页": {
+		"host": "www.sharerw.com",
+		"url": "return (fun.lp() == '/search.php')",
+		"pager": {
+			"nextL": "span.next > a",
+			"pageE": "#mainbox > article",
+			"replaceE": ".pagebar"
+		}
+	},
+	"分享者": {
+		"host": "www.sharerw.com",
+		"url": "return (!fun.indexOF('.html'))",
+		"pager": {
+			"nextL": "span.next > a",
+			"pageE": ".new-post > article",
+			"replaceE": ".pagebar"
+		}
+	},
+	"扩展迷": {
+		"host": "www.extfans.com",
+		"url": "/^\\/.+/",
+		"pager": {
+			"nextL": "a.page-next",
+			"pageE": ".app-item-content, .article-item-content",
+			"replaceE": ".pagination-content",
+			"scrollD": 2000
+		}
+	},
+	"小众软件": {
+		"host": "www.appinn.com",
+		"pager": {
+			"nextL": "a.next.page-numbers",
+			"pageE": "section#latest-posts > article",
+			"replaceE": "div.nav-links"
+		}
+	},
+	"乐软博客": {
+		"host": "www.isharepc.com",
+		"pager": {
+			"nextL": "a.next.page-numbers",
+			"pageE": ".content > div.post",
+			"replaceE": "nav.pagination",
+			"scrollD": 1000
+		}
+	},
+	"果核剥壳-首页": {
+		"host": "www.ghxi.com",
+		"url": "return (fun.lp() == '/' && !location.search)",
+		"pager": {
+			"type": 2,
+			"nextL": ".load-more",
+			"interval": 1000,
+			"scrollD": 5000
+		}
+	},
+	"果核剥壳-分类/搜索页": {
+		"host": "www.ghxi.com",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": "ul.post-loop > li",
+			"replaceE": "ul.pagination",
+			"scrollD": 1500
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+		}
+	},
+	"六音软件": {
+		"host": "www.6yit.com",
+		"url": "return (!fun.indexOF('.html'))",
+		"pager": {
+			"nextL": "a.next.page-numbers",
+			"pageE": "posts.posts-item.list",
+			"replaceE": ".pagenav"
+		}
+	},
+	"反斗软件": {
+		"host": [
+			"www.apprcn.com",
+			"free.apprcn.com"
+		],
+		"url": "return ((fun.lp() == '/' || fun.indexOF(/^\\/page\\//)) || fun.indexOF('/category/'))",
+		"pager": {
+			"nextL": "//div[@class='pagination']//a[contains(text(), 'Next')]",
+			"pageE": "article.article",
+			"replaceE": ".pagination",
+			"scrollD": 1000
+		}
+	},
+	"微当下载-搜索页": {
+		"host": "www.weidown.com",
+		"url": "return (fun.indexOF('/search/'))",
+		"pager": {
+			"nextL": "a.nextpage",
+			"pageE": ".articleListWrapper > .richTextItem.search",
+			"replaceE": "#pageGroup",
+			"scrollD": 700
+		}
+	},
+	"微当下载-专题页": {
+		"host": "www.weidown.com",
+		"url": "return (fun.indexOF('/special'))",
+		"pager": {
+			"nextL": "a.nextpage",
+			"pageE": ".special > .item, .articleWrapper > div",
+			"insertP": [
+				".special, .articleWrapper",
+				3
+			],
+			"replaceE": "#pageGroup",
+			"scrollD": 700
+		}
+	},
+	"微当下载": {
+		"host": "www.weidown.com",
+		"pager": {
+			"nextL": "a.nextpage",
+			"pageE": ".articleWrapper > .itemArticle, .articleWrapper > .richTextItem.search",
+			"insertP": [
+				".articleWrapper",
+				3
+			],
+			"replaceE": "#pageGroup"
+		}
+	},
 	"绿软家园-最近更新": {
 		"host": "www.downg.com",
 		"url": "/\\/new\\//",
 		"pager": {
 			"nextL": "a.nextpage",
 			"pageE": ".ApdList > ul.ApdLi",
+			"replaceE": ".pagination"
+		}
+	},
+	"发烧友绿软": {
+		"host": "fsylr.com",
+		"pager": {
+			"nextL": "a.next.page-numbers",
+			"pageE": ".posts-con > div:not([class*='posts-'])",
+			"replaceE": "nav.pagination",
+			"scrollD": 2000
+		}
+	},
+	"异次元软件-评论": {
+		"host": "www.iplaysoft.com",
+		"url": "return (fun.indexOF('.html') || fun.indexOF('/p/'))",
+		"pager": {
+			"type": 2,
+			"nextL": "#loadHistoryComments",
+			"nextTextOf": "展开后面",
+			"scrollD": 1200
+		}
+	},
+	"异次元软件": {
+		"host": "www.iplaysoft.com",
+		"pager": {
+			"nextL": ".pagenavi a[title='下一页']",
+			"pageE": "#postlist > div.entry",
+			"replaceE": ".pagenavi-button, .pagenavi",
+			"scrollD": 1200
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0, 'img[data-src]', 'data-src'])"
+		}
+	},
+	"悪魔の小站": {
+		"host": "www.mubolin.cn",
+		"pager": {
+			"nextL": "a.next.page-numbers",
+			"pageE": "#recent-content > div",
+			"replaceE": "nav.pagination"
+		}
+	},
+	"老殁 | 殁漂遥": {
+		"host": "www.mpyit.com",
+		"url": "return ((fun.lp() == '/' || fun.indexOF(/^\\/page\\//)) && !location.search)",
+		"pager": {
+			"nextL": "a.page-numbers[title='下一页']",
+			"pageE": "#post > div[id^='post-']",
+			"replaceE": "#post > #pagenavi",
+			"scrollD": 1700
+		}
+	},
+	"老殁 | 殁漂遥-搜索页/分类页": {
+		"host": "www.mpyit.com",
+		"url": "return (fun.indexOF('/category/') || fun.indexOF('?s=', 's'))",
+		"pager": {
+			"nextL": "a.page-numbers[title='下一页']",
+			"pageE": "#content > div[class^='entry_box']",
+			"replaceE": "#content > #pagenavi",
+			"scrollD": 1700
+		}
+	},
+	"腾龙工作室": {
+		"host": "www.tenlonstudio.com",
+		"url": "return (fun.lp() == '/' && !location.search)",
+		"pager": {
+			"type": 2,
+			"nextL": ".load-more",
+			"nextText": "加载更多",
+			"interval": 500,
+			"scrollD": 1000
+		}
+	},
+	"腾龙工作室-分类/搜索页": {
+		"host": "www.tenlonstudio.com",
+		"pager": {
+			"nextL": "//div[@class='btn-pager']/a[contains(text(), '❯')]",
+			"pageE": "li.post-list-item",
+			"replaceE": ".ajax-pager",
+			"scrollD": 1000
+		}
+	},
+	"异星软件空间": {
+		"host": "www.yxssp.com",
+		"pager": {
+			"nextL": "//div[contains(@class, 'page-nav')]/a[last()]",
+			"pageE": ".td-modules-container.td-module-number4 > div",
+			"replaceE": ".page-nav.td-pb-padding-side",
+			"scrollD": 1000
+		}
+	},
+	"小鱼儿 yr 系统-搜索页": {
+		"host": "www.yrxitong.com",
+		"url": "return (fun.lp() == '/sr.jsp')",
+		"pager": {
+			"nextL": "span.pageNext > a",
+			"pageE": "#containerFormsCenter .newsList > div",
+			"replaceE": ".pagenation",
+			"scrollD": 2000
+		}
+	},
+	"小鱼儿 yr 系统": {
+		"host": "www.yrxitong.com",
+		"url": "return (!fun.indexOF('/h-nd-'))",
+		"pager": {
+			"nextL": "span.pageNext > a",
+			"pageE": "#containerFormsCenter .m_news_list > div",
+			"replaceE": ".pagenation",
+			"scrollD": 1200
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [1, 'a[data-original]', 'data-original'])"
+		}
+	},
+	"sordum": {
+		"host": "www.sordum.org",
+		"pager": {
+			"nextL": "a.next.page-numbers",
+			"pageE": ".article > article",
+			"replaceE": "nav.navigation.posts-navigation"
+		}
+	},
+	"winaero": {
+		"host": "winaero.com",
+		"url": "return ((fun.lp() == '/' || fun.indexOF(/^\\/page\\//)) || fun.indexOF('/category/'))",
+		"pager": {
+			"nextL": "a.next.page-numbers",
+			"pageE": "#main > article",
+			"replaceE": ".pagination"
+		}
+	},
+	"lrepacks": {
+		"host": "lrepacks.net",
+		"url": "return (!fun.indexOF('.html'))",
+		"pager": {
+			"nextL": ".page_next > a",
+			"pageE": "#main .post-list article",
+			"replaceE": ".page_nav"
+		},
+		"function": {
+			"bF": "pageE.forEach(function (one) {let now = one.querySelector('.slideUp, .elementFade'); if (now) {now.className = now.className.replace('slideUp','slideUpRun').replace('elementFade','elementFadeRun');};}); return pageE"
+		}
+	},
+	"dlandroid": {
+		"host": "dlandroid.com",
+		"url": "return (fun.indexOF('/cat/') || (fun.lp() === '/' && fun.indexOF('?s=', 's')))",
+		"pager": {
+			"nextL": "a.next.page-numbers",
+			"pageE": "div.post",
+			"replaceE": ".navigation"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+		}
+	},
+	"winhelponline": {
+		"host": "www.winhelponline.com",
+		"pager": {
+			"nextL": "span.prev > a",
+			"pageE": "#main > article",
+			"replaceE": "nav.paging-navigation",
+			"scrollD": 2000
+		}
+	},
+	"windowslatest": {
+		"host": "www.windowslatest.com",
+		"pager": {
+			"nextL": "//div[contains(@class, 'page-nav')]/a[last()]",
+			"pageE": ".td-ss-main-content > div:not(.td-block-title-wrap):not(.page-nav)",
+			"replaceE": ".page-nav",
+			"scrollD": 2000
+		}
+	},
+	"thewindowsclub": {
+		"host": "www.thewindowsclub.com",
+		"pager": {
+			"nextL": "li.pagination-next > a",
+			"pageE": "#genesis-content > article.post",
 			"replaceE": ".pagination"
 		}
 	},
@@ -1154,11 +1497,10 @@
 	},
 	"五朵美女网": {
 		"host": "m.558duo.cc",
-		"url": "",
 		"pager": {
-			"nextL": "//a[contains(text(), '下一页')]",
-			"pageE": "//div[@class='PictureList']",
-			"replaceE": "//div[@class='article_page']",
+			"nextL": "//a[text()='下一页']",
+			"pageE": ".PictureList",
+			"replaceE": ".article_page",
 			"scrollD": 1000
 		}
 	}

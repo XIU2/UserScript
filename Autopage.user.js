@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.0.8
+// @version      5.0.9
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  無縫拼接下一頁內容（瀑布流），支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎等網站~
@@ -4046,375 +4046,6 @@ function: {
                     bFp: [0, 'img[data-original]', 'data-original']
                 }
             }, //     哔哩轻小说 (手机版) - 文库
-            ao3: {
-                host: 'archiveofourown.org',
-                url: ()=> {if (indexOF(/\/works$/) || lp == '/works/search') {
-                    curSite = DBSite.ao3;
-                } else if (indexOF(/\/works\/\d+\/chapters\//)) {
-                    curSite = DBSite.ao3_post;
-                }},
-                pager: {
-                    nextL: 'li.next a',
-                    pageE: 'li.work[id^="work_"]',
-                    replaceE: '.pagination',
-                    scrollD: 2500
-                }
-            }, //                   AO3 - 列表页 + 搜索页
-            ao3_post: {
-                pager: {
-                    nextL: 'li.chapter.next a',
-                    pageE: '#workskin > div',
-                    replaceE: '#main ul.navigation, #feedback > ul.actions',
-                    scrollD: 2000
-                }
-            }, //              AO3 - 阅读页
-            _423down: {
-                host: 'www.423down.com',
-                url: ()=> {if (!indexOF('.html')) curSite = DBSite._423down;},
-                pager: {
-                    nextL: '//div[@class="paging"]//a[contains(text(),"下一页")]',
-                    pageE: 'div.content-wrap ul.excerpt > li',
-                    replaceE: 'div.paging',
-                    scrollD: 2000
-                }
-            }, //            423Down
-            iao_su: {
-                host: 'iao.su',
-                pager: {
-                    nextL: 'li.next > a',
-                    pageE: '#index > article, #archive > article',
-                    insertP: ['ol.page-navigator', 1],
-                    replaceE: 'ol.page-navigator',
-                    scriptT: 3,
-                    scrollD: 1000
-                }
-            }, //              不死鸟
-            sharerw: {
-                host: 'www.sharerw.com',
-                url: ()=> {if (!indexOF('.html')) {if (lp == '/search.php') {curSite = DBSite.sharerw_search;} else {curSite = DBSite.sharerw;};};},
-                pager: {
-                    nextL: 'span.next > a',
-                    pageE: '.new-post > article',
-                    replaceE: '.pagebar',
-                    scrollD: 1500
-                }
-            }, //             分享者
-            sharerw_search: {
-                pager: {
-                    nextL: 'span.next > a',
-                    pageE: '#mainbox > article',
-                    replaceE: '.pagebar',
-                    scrollD: 1500
-                }
-            }, //      分享者 - 搜索页
-            extfans: {
-                host: 'www.extfans.com',
-                url: '/^\\/.+/',
-                pager: {
-                    nextL: 'a.page-next',
-                    pageE: '.app-item-content, .article-item-content',
-                    replaceE: '.pagination-content',
-                    scrollD: 2000
-                }
-            }, //             扩展迷
-            appinn: {
-                host: 'www.appinn.com',
-                pager: {
-                    nextL: 'a.next.page-numbers',
-                    pageE: 'section#latest-posts > article',
-                    replaceE: 'div.nav-links',
-                    scrollD: 1500
-                }
-            }, //              小众软件
-            isharepc: {
-                host: 'www.isharepc.com',
-                pager: {
-                    nextL: 'a.next.page-numbers',
-                    pageE: '.content > div.post',
-                    replaceE: 'nav.pagination',
-                    scrollD: 1000
-                }
-            }, //            乐软博客
-            ghxi: {
-                host: 'www.ghxi.com',
-                url: ()=> {if (lp == '/' && !location.search) {curSite = DBSite.ghxi;} else {curSite = DBSite.ghxi_list;}},
-                pager: {
-                    type: 2,
-                    nextL: '.load-more',
-                    interval: 1000,
-                    scrollD: 5000
-                }
-            }, //                果核剥壳 - 首页
-            ghxi_list: {
-                pager: {
-                    nextL: 'a.next',
-                    pageE: 'ul.post-loop > li',
-                    replaceE: 'ul.pagination',
-                    scrollD: 1500
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-original]', 'data-original']
-                }
-            }, //           果核剥壳 - 分类/搜索页
-            _6yit: {
-                host: ['www.6yit.com'],
-                url: ()=> {if (!indexOF('.html')) {curSite = DBSite._6yit;}},
-                pager: {
-                    nextL: 'a.next.page-numbers',
-                    pageE: 'posts.posts-item.list',
-                    replaceE: '.pagenav',
-                    scrollD: 1500
-                }
-            }, //               六音软件
-            apprcn: {
-                host: ['www.apprcn.com', 'free.apprcn.com'],
-                url: ()=> {if (lp == '/' || indexOF('/category/')) {curSite = DBSite.apprcn;}},
-                pager: {
-                    nextL: '//div[@class="pagination"]//a[contains(text(), "Next")]',
-                    pageE: 'article.article',
-                    replaceE: '.pagination',
-                    scrollD: 1000
-                }
-            }, //              反斗软件
-            weidown: {
-                host: 'www.weidown.com',
-                url: ()=> {if (indexOF('/search/')) { //搜索页
-                    curSite = DBSite.weidown_search;
-                } else if (indexOF('/special')) { // 专题页
-                    curSite = DBSite.weidown_special;
-                } else {
-                    curSite = DBSite.weidown;
-                }},
-                pager: {
-                    nextL: 'a.nextpage',
-                    pageE: '.articleWrapper > .itemArticle, .articleWrapper > .richTextItem.search',
-                    insertP: ['.articleWrapper', 3],
-                    replaceE: '#pageGroup',
-                    scrollD: 1500
-                }
-            }, //             微当下载
-            weidown_search: {
-                pager: {
-                    nextL: 'a.nextpage',
-                    pageE: '.articleListWrapper > .richTextItem.search',
-                    replaceE: '#pageGroup',
-                    scrollD: 700
-                }
-            }, //      微当下载 - 搜索页
-            weidown_special: {
-                pager: {
-                    nextL: 'a.nextpage',
-                    pageE: '.special > .item, .articleWrapper > div',
-                    insertP: ['.special, .articleWrapper', 3],
-                    replaceE: '#pageGroup',
-                    scrollD: 700
-                }
-            }, //     微当下载 - 专题页
-            fsylr: {
-                host: 'fsylr.com',
-                url: ()=> {if (!indexOF('.html')) {curSite = DBSite.fsylr;}},
-                pager: {
-                    nextL: 'a.next.page-numbers',
-                    pageE: '.posts-con > div:not([class*="posts-"])',
-                    replaceE: 'nav.pagination',
-                    scrollD: 2000
-                }
-            }, //               发烧友绿软
-            iplaysoft: {
-                host: 'www.iplaysoft.com',
-                url: ()=> {if (indexOF('.html') || indexOF('/p/')) {curSite = DBSite.iplaysoft_comment;} else {curSite = DBSite.iplaysoft;}},
-                pager: {
-                    nextL: '.pagenavi a[title="下一页"]',
-                    pageE: '#postlist > div.entry',
-                    replaceE: '.pagenavi-button, .pagenavi',
-                    scrollD: 1200
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-src]', 'data-src']
-                }
-            }, //           异次元软件
-            iplaysoft_comment: {
-                pager: {
-                    type: 2,
-                    nextL: '#loadHistoryComments',
-                    nextTextOf: '展开后面',
-                    scrollD: 1200
-                }
-            }, //   异次元软件 - 评论
-            mubolin: {
-                host: 'www.mubolin.cn',
-                pager: {
-                    nextL: 'a.next.page-numbers',
-                    pageE: '#recent-content > div',
-                    replaceE: 'nav.pagination',
-                    scrollD: 1500
-                }
-            }, //             悪魔の小站
-            mpyit: {
-                host: 'www.mpyit.com',
-                url: ()=> {if (lp == '/' && !location.search) {
-                    curSite = DBSite.mpyit;
-                } else if (indexOF('/category/') || indexOF('?s=', 's')) { // 搜索页 / 分类页
-                    curSite = DBSite.mpyit_category;
-                }},
-                pager: {
-                    nextL: 'a.page-numbers[title="下一页"]',
-                    pageE: '#post > div[id^="post-"]',
-                    replaceE: '#post > #pagenavi',
-                    scrollD: 1700
-                }
-            }, //               老殁 | 殁漂遥
-            mpyit_category: {
-                pager: {
-                    nextL: 'a.page-numbers[title="下一页"]',
-                    pageE: '#content > div[class^="entry_box"]',
-                    replaceE: '#content > #pagenavi',
-                    scrollD: 1700
-                }
-            }, //      老殁 | 殁漂遥 - 搜索页/分类页
-            tenlonstudio: {
-                host: 'www.tenlonstudio.com',
-                url: ()=> {if (lp == '/' && !location.search) {
-                    curSite = DBSite.tenlonstudio;
-                } else {
-                    curSite = DBSite.tenlonstudio_list;
-                }},
-                pager: {
-                    type: 2,
-                    nextL: '.load-more',
-                    nextText: '加载更多',
-                    interval: 500,
-                    scrollD: 1000
-                }
-            }, //        腾龙工作室
-            tenlonstudio_list: {
-                pager: {
-                    nextL: '//div[@class="btn-pager"]/a[contains(text(), "❯")]',
-                    pageE: 'li.post-list-item',
-                    replaceE: '.ajax-pager',
-                    scrollD: 1000
-                }
-            }, //   腾龙工作室 - 分类/搜索页
-            yxssp: {
-                host: 'www.yxssp.com',
-                pager: {
-                    nextL: '//div[contains(@class, "page-nav")]/a[last()]',
-                    pageE: '.td-modules-container.td-module-number4 > div',
-                    replaceE: '.page-nav.td-pb-padding-side',
-                    scrollD: 1000
-                }
-            }, //               异星软件空间
-            yrxitong: {
-                host: 'www.yrxitong.com',
-                url: ()=> {
-                    if (lp == '/sr.jsp') {
-                        curSite = DBSite.yrxitong_search;
-                    } else if (!indexOF('/h-nd-')) {
-                        curSite = DBSite.yrxitong;
-                    }
-                },
-                pager: {
-                    nextL: 'span.pageNext > a',
-                    pageE: '#containerFormsCenter .m_news_list > div',
-                    replaceE: '.pagenation',
-                    scrollD: 1200
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [1, 'a[data-original]', 'data-original']
-                }
-            }, //            小鱼儿 yr 系统
-            yrxitong_search: {
-                pager: {
-                    nextL: 'span.pageNext > a',
-                    pageE: '#containerFormsCenter .newsList > div',
-                    replaceE: '.pagenation',
-                    scrollD: 2000
-                }
-            }, //     小鱼儿 yr 系统 - 搜索页
-            sordum: {
-                host: 'www.sordum.org',
-                pager: {
-                    nextL: 'a.next.page-numbers',
-                    pageE: '.article > article',
-                    replaceE: 'nav.navigation.posts-navigation',
-                    scrollD: 1500
-                }
-            }, //              (下面这几个都是国外博客网站)
-            winaero: {
-                host: 'winaero.com',
-                url: ()=> {if (lp == '/' || indexOF('/category/')) curSite = DBSite.winaero;},
-                pager: {
-                    nextL: 'a.next.page-numbers',
-                    pageE: '#main > article',
-                    replaceE: '.pagination',
-                    scrollD: 1500
-                }
-            },
-            lrepacks: {
-                host: 'lrepacks.net',
-                url: ()=> {if (!indexOF('.html')) curSite = DBSite.lrepacks;},
-                pager: {
-                    nextL: '.page_next > a',
-                    pageE: '#main .post-list article',
-                    replaceE: '.page_nav',
-                    scrollD: 1500
-                },
-                function: {
-                    bF: pageE => { // 插入前函数（调整 class）
-                        pageE.forEach(function (one) {
-                            let now = one.querySelector('.slideUp, .elementFade');
-                            if (now) now.className = now.className.replace('slideUp','slideUpRun').replace('elementFade','elementFadeRun');
-                        });
-                        return pageE
-                    }
-                }
-            },
-            dlandroid: {
-                host: 'dlandroid.com',
-                url: ()=> {if (indexOF('/cat/') || (lp === '/' && indexOF('?s=', 's'))) curSite = DBSite.dlandroid;},
-                pager: {
-                    nextL: 'a.next.page-numbers',
-                    pageE: 'div.post',
-                    replaceE: '.navigation',
-                    scrollD: 1500
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-src]', 'data-src']
-                }
-            }, //           DlAndroid
-            winhelponline: {
-                host: 'www.winhelponline.com',
-                url: ()=> {if (lp == '/blog/') {curSite = DBSite.winhelponline;}},
-                pager: {
-                    nextL: 'span.prev > a',
-                    pageE: '#main > article',
-                    replaceE: 'nav.paging-navigation',
-                    scrollD: 2000
-                }
-            },
-            windowslatest: {
-                host: 'www.windowslatest.com',
-                pager: {
-                    nextL: '//div[contains(@class, "page-nav")]/a[last()]',
-                    pageE: '.td-ss-main-content > div:not(.td-block-title-wrap):not(.page-nav)',
-                    replaceE: '.page-nav',
-                    scrollD: 2000
-                }
-            },
-            thewindowsclub: {
-                host: 'www.thewindowsclub.com',
-                url: ()=> {curSite = DBSite.thewindowsclub; if (lp == '/') {curSite.pager.scrollD = 2000;}},
-                pager: {
-                    nextL: 'li.pagination-next > a',
-                    pageE: '#genesis-content > article.post',
-                    replaceE: '.pagination',
-                    scrollD: 1500
-                }
-            },
             acs: {
                 host: ['pubs.acs.org','onlinelibrary.wiley.com'],
                 url: ()=> {if (indexOF('/doSearch')) {curSite = DBSite.acs;}},
@@ -4424,7 +4055,7 @@ function: {
                     replaceE: '.pagination',
                     scrollD: 3000
                 }
-            }, //                  Wiley Online Library + ACS (Publications)
+            }, //                    Wiley Online Library + ACS (Publications)
             libgen: {
                 host: /libgen/,
                 url: ()=> {if (lp == '/search.php') {curSite = DBSite.libgen;}},
@@ -4436,7 +4067,7 @@ function: {
                     scriptT: 2,
                     scrollD: 2000
                 }
-            }, //               Library Genesis
+            }, //                 Library Genesis
             sciencedirect: {
                 host: 'www.sciencedirect.com',
                 url: ()=> {locationC = true; if (lp == '/search') {curSite = DBSite.sciencedirect; setTimeout(function(){insStyle('html, body {height: ' + (document.documentElement.scrollHeight || document.body.scrollHeight) + 'px;}')}, 2000)}},
@@ -4447,7 +4078,7 @@ function: {
                     nextL: 'a[data-aa-name="srp-next-page"]',
                     scrollD: 2000
                 }
-            }, //        ScienceDirect
+            }, //          ScienceDirect
             Z_Library: {
                 host: /(\dlib|b-ok\d?|booksc|z-lib)\./,
                 url: ()=> {if (indexOF('/s/')) {curSite = DBSite.Z_Library;}},
@@ -4463,7 +4094,7 @@ function: {
                     bF: src_bF,
                     bFp: [0, 'img[data-src]', 'data-src']
                 }
-            }, //            Z-Library
+            }, //              Z-Library
             pubmed: {
                 host: 'pubmed.ncbi.nlm.nih.gov',
                 pager: {
@@ -4472,7 +4103,7 @@ function: {
                     nextText: 'Show more results',
                     scrollD: 1500
                 }
-            }, //               PubMed
+            }, //                 PubMed
             x_mol: {
                 host: 'www.x-mol.com',
                 url: ()=> {if (indexOF('/search/q') || indexOF('/paper/')) {curSite = DBSite.x_mol;}},
@@ -4483,7 +4114,7 @@ function: {
                     replaceE: '.pagination',
                     scrollD: 2000
                 }
-            }, //                X-MOL
+            }, //                  X-MOL
             cqvip: {
                 host: 'www.cqvip.com',
                 url: ()=> {if (indexOF('/search')) {curSite = DBSite.cqvip;}},
@@ -4495,7 +4126,7 @@ function: {
                     loadTime: 1000,
                     scrollD: 2000
                 }
-            }, //                维普网
+            }, //                  维普网
             ablesci: {
                 host: 'www.ablesci.com',
                 url: ()=> {if (indexOF('/detail')) {curSite = DBSite.ablesci_p;} else if (getCSS('ul.fly-list')) {curSite = DBSite.ablesci;}},
@@ -4505,7 +4136,7 @@ function: {
                     replaceE: '.pages',
                     scrollD: 2000
                 }
-            }, //              科研通
+            }, //                科研通
             ablesci_p: {
                 thread: true,
                 pager: {
@@ -4514,7 +4145,7 @@ function: {
                     replaceE: '.pages',
                     scrollD: 2000
                 }
-            }, //            科研通 - 帖子内
+            }, //              科研通 - 帖子内
             coolkeyan: {
                 host: 'www.coolkeyan.com',
                 url: ()=> {if (location.hash.indexOf('/project/') > -1) curSite = DBSite.coolkeyan;},
@@ -4526,7 +4157,7 @@ function: {
                     insertE: coolkeyan_insertE,
                     scrollD: 1500
                 }
-            }, //            酷科研
+            }, //              酷科研
             muchong: {
                 host: 'muchong.com',
                 url: ()=> {if (indexOF('/f-') || indexOF('search.php')) {
@@ -4541,7 +4172,7 @@ function: {
                     replaceE: '.xmc_Pages',
                     scrollD: 1500
                 }
-            }, //              小木虫
+            }, //                小木虫
             google_scholar: {
                 host: 'scholar.google.com',
                 url: ()=> {if (lp == '/scholar') {curSite = DBSite.google_scholar;}},
@@ -4553,7 +4184,7 @@ function: {
                     scriptT: 1,
                     scrollD: 2000
                 }
-            }, //       谷歌学术
+            }, //         谷歌学术
             google_scholar_: {
                 host: 'sc.panda321.com',
                 pager: {
@@ -4570,7 +4201,7 @@ function: {
                         return pageE
                     }
                 }
-            }, //      谷歌学术 - 其他镜像站
+            }, //        谷歌学术 - 其他镜像站
             bing_academic: {
                 style: 'li.aca_algo_count {display: none !important;}',
                 pager: {
@@ -4579,7 +4210,7 @@ function: {
                     replaceE: '#b_results .b_pag',
                     scrollD: 1000
                 }
-            }, //        必应学术
+            }, //          必应学术
             baidu_xueshu: {
                 host: 'xueshu.baidu.com',
                 url: ()=> {if (lp == '/s') {
@@ -4595,7 +4226,7 @@ function: {
                     replaceE: '#page',
                     scrollD: 1000
                 }
-            }, //         百度学术
+            }, //           百度学术
             baidu_xueshu_journal: {
                 pager: {
                     nextL: 'a.res-page-next',
@@ -4603,7 +4234,7 @@ function: {
                     replaceE: '.res-page',
                     scrollD: 1000
                 }
-            }, // 百度学术
+            }, //   百度学术
             baidu_xueshu_paper: {
                 pager: {
                     type: 2,
@@ -4611,7 +4242,7 @@ function: {
                     nextText: '加载更多',
                     scrollD: 1000
                 }
-            }, //   百度学术
+            }, //     百度学术
             so_xueshu: {
                 host: 'xueshu.so.com',
                 url: ()=> {if (lp == '/s') {curSite = DBSite.so_xueshu;}},
@@ -4621,7 +4252,7 @@ function: {
                     replaceE: '#page',
                     scrollD: 1000
                 }
-            }, //            360 学术
+            }, //              360 学术
             wanfangdata: {
                 host: 's.wanfangdata.com.cn',
                 url: ()=> {locationC = true; curSite = DBSite.wanfangdata;},
@@ -4632,7 +4263,7 @@ function: {
                     nextL: ()=> getNextEP('.pager.active+span.pager', 'p=', /p=\d+/),
                     scrollD: 2000
                 }
-            }, //          万方数据知识服务
+            }, //            万方数据知识服务
             nsfc: {
                 host: ['output.nsfc.gov.cn', 'kd.nsfc.gov.cn'],
                 url: ()=> {if (indexOF('/conclusionProject/')) curSite = DBSite.nsfc;},
@@ -4644,7 +4275,7 @@ function: {
                     insertE: nsfc_insertE,
                     scrollD: 1500
                 }
-            }, //                 国家自然科学基金
+            }, //                   国家自然科学基金
             stackoverflow: {
                 host: 'stackoverflow.com',
                 url: ()=> {if (indexOF('/questions') && !indexOF(/\/questions\/\d+\//)) {
