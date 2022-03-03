@@ -2028,6 +2028,15 @@
 			"replaceE": "#searchresults_footer"
 		}
 	},
+	"译学馆": {
+		"host": "www.yxgapp.com",
+		"url": "/\\/(\\?s=|category)/",
+		"pager": {
+			"nextL": ".page-numbers.current+a.page-numbers",
+			"pageE": "article.post",
+			"replaceE": "nav.elementor-pagination"
+		}
+	},
 	"AfreecaTV": {
         "host": "www.afreecatv.com",
         "pager": {
