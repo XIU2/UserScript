@@ -1,4 +1,14 @@
 {
+	"轻搜": {
+		"host": "www.qingsearch.com",
+		"url": "return (fun.lp() == '/' && fun.indexOF('qings=', 's'))",
+		"pager": {
+			"type": 2,
+			"nextL": "#loadmore > span",
+			"nextText": "加载更多",
+			"scrollD": 3000
+		}
+	},
 	"Mixkit": {
 		"host": "mixkit.co",
 		"url": "/^\\/.+/",
