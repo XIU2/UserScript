@@ -8,6 +8,17 @@
 			"scrollD": 2500
 		}
 	},
+	"Planet Minecraft": {
+		"host": "www.planetminecraft.com",
+		"url": "return (!fun.indexOF('/forums/') && !fun.indexOF('/posts/'))",
+		"style": ".resource .r-preview>a img[loading=lazy]:not(.lazyloaded) {visibility: initial !important;}",
+		"pager": {
+			"nextL": "a.pagination_next",
+			"pageE": ".resource_block > ul.resource_list > li",
+			"replaceE": ".pagination",
+			"scrollD": 3000
+		}
+	},
 	"Steam 创意工坊 - 项目列表": {
 		"host": "steamcommunity.com",
 		"url": "return (fun.indexOF('/workshop/browse'))",
@@ -1665,15 +1676,23 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[_src]','_src'])"
 		}
 	},
-	"Planet Minecraft": {
-		"host": "www.planetminecraft.com",
-		"url": "return (!fun.indexOF('/forums/') && !fun.indexOF('/posts/'))",
-		"style": ".resource .r-preview>a img[loading=lazy]:not(.lazyloaded) {visibility: initial !important;}",
+	"UrleBird": {
+		"host": "urlebird.com",
+		"url": "/^\\/(trending|user|hash|song)\\//",
 		"pager": {
-			"nextL": "a.pagination_next",
-			"pageE": ".resource_block > ul.resource_list > li",
-			"replaceE": ".pagination",
-			"scrollD": 3000
+			"type": 2,
+			"nextL": "#btn_more_videos:not([disabled]), #load_more:not([disabled]), #hash_load_more:not([disabled]), #song_load_more:not([disabled])",
+			"scrollD": 1000
+		}
+	},
+	"UrleBird - videos": {
+		"host": "urlebird.com",
+		"url": "/^\\/videos\\//",
+		"pager": {
+			"nextL": "li.page-item.active+li>a",
+			"pageE": ".thumb",
+			"replaceE": "ul.pagination",
+			"scrollD": 1000
 		}
 	},
 	"ScriptCat": {

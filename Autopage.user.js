@@ -46,6 +46,7 @@
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
     }
+
     getRulesUrl();
     registerMenuCommand();
     if (menuId.length < 4) {return}
@@ -3709,7 +3710,7 @@ function: {
 
                                 if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
                                 pausePageEvent(); // 左键双击网页空白处暂停翻页
-                                GM_notification({text: '✅ 已更新外置翻页规则！如果依然无法翻页，则说明还不支持，欢迎提交申请~', timeout: 5000});
+                                GM_notification({text: '✅ 已更新外置翻页规则！\n如果依然无法翻页，则说明还不支持当前网页，欢迎点击此处提交申请~', timeout: 5000, onclick: function(){window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});}});
                             }
                         } else {
                             GM_notification({text: '❌ 更新失败，请联系作者解决...', timeout: 5000});
@@ -5295,13 +5296,13 @@ function: {
     function checkURL(func) {
         if (typeof curSite.pager.nextL == 'function') {
             let tempUrl = curSite.pager.nextL();
-            if (!tempUrl || (tempUrl && tempUrl.slice(0,4) != 'http') || tempUrl === curSite.pageUrl ) return;
+            if (!tempUrl || (tempUrl && tempUrl.slice(0,4) != 'http') || tempUrl === curSite.pageUrl) return;
             curSite.pageUrl = tempUrl;
             func(curSite.pageUrl);
         } else if (curSite.pager.nextL && curSite.pager.nextL.search(/^js;/i) === 0) { // 自定义翻页规则中执行 JavaScript 代码的
             try {
                 let tempUrl = new Function('fun', curSite.pager.nextL.slice(3))(window.autoPage);
-                if (!tempUrl || (tempUrl && tempUrl.slice(0,4) != 'http') || tempUrl === curSite.pageUrl ) return;
+                if (!tempUrl || (tempUrl && tempUrl.slice(0,4) != 'http') || tempUrl === curSite.pageUrl) return;
                 curSite.pageUrl = tempUrl;
                 func(curSite.pageUrl);
             } catch (e) {
