@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.1.2
+// @version      5.1.3
 // @author       X.I.U
 // @description  无缝拼接下一页内容（瀑布流），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  無縫拼接下一頁內容（瀑布流），支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎等網站~
@@ -121,7 +121,11 @@
                                 if (DBSite[now].url.slice(0,1) === '/') { // 如果是正则，则对 URL 路径进行匹配
                                     if (new RegExp(DBSite[now].url.slice(1,DBSite[now].url.length-1), 'i').test(location.pathname + location.search) === true) {curSite = DBSite[now];} else {break;}
                                 } else { // 如果是函数，那就执行代码
-                                    if (new Function('fun', DBSite[now].url)(window.autoPage) === true) {curSite = DBSite[now];} else {break;}
+                                    try {
+                                        if (new Function('fun', DBSite[now].url)(window.autoPage) === true) {curSite = DBSite[now];} else {break;}
+                                    } catch (e) {
+                                        console.error('[自动无缝翻页] - 当前网页规则 "url" 有误，请检查！', e);
+                                    }
                                 }
                             }
                         } else {
@@ -145,7 +149,11 @@
                             if (DBSite[now].url.slice(0,1) === '/') { // 如果是正则，则对 URL 路径进行匹配
                                 if (new RegExp(DBSite[now].url.slice(1,DBSite[now].url.length-1), 'i').test(location.pathname + location.search) === true) {curSite = DBSite[now];} else {continue;}
                             } else { // 如果是函数，那就执行代码
-                                if (new Function('fun', DBSite[now].url)(window.autoPage) === true) {curSite = DBSite[now];} else {continue;}
+                                try {
+                                    if (new Function('fun', DBSite[now].url)(window.autoPage) === true) {curSite = DBSite[now];} else {continue;}
+                                } catch (e) {
+                                    console.error('[自动无缝翻页] - 当前网页规则 "url" 有误，请检查！', e);
+                                }
                             }
                         }
                     } else {
@@ -3063,293 +3071,6 @@ function: {
                     bFp: [1, 'a[data-original]', 'data-original']
                 }
             }, //  COCOMANGA 漫画 - 搜索页
-            qidian: {
-                host: 'www.qidian.com',
-                url: ()=> {if (indexOF('/all/')) {curSite = DBSite.qidian;}},
-                pager: {
-                    nextL: 'a[class*="pagination-next"]',
-                    pageE: 'ul.all-img-list > li',
-                    replaceE: '#page-container',
-                    scrollD: 900
-                }
-            }, //                起点中文
-            qidian_read: {
-                host: 'read.qidian.com',
-                style: '.admire-wrap {display: none !important;}',
-                pager: {
-                    nextL: 'a[id$="chapterNext"]',
-                    pageE: '.main-text-wrap > div:not(.admire-wrap)',
-                    replaceE: '.chapter-control',
-                    scrollD: 900
-                }
-            }, //           起点中文 - 阅读页
-            qimao: {
-                host: 'www.qimao.com',
-                url: ()=> {if (indexOF(/\/shuku\/\d+-\d+\//) || indexOF('/reader/index/')) {curSite = DBSite.qimao;}},
-                pager: {
-                    nextL: '//div[@class="reader-footer"]/a[text()="下一章"]',
-                    pageE: '.article > p',
-                    replaceE: '.reader-footer',
-                    scrollD: 900
-                }
-            }, //                 七猫中文
-            zxcs: {
-                host: 'zxcs.me',
-                url: ()=> {if (indexOF('/sort/')) curSite = DBSite.zxcs;},
-                pager: {
-                    nextL: '#pagenavi > span+a',
-                    pageE: 'dl[id="plist"]',
-                    replaceE: '#pagenavi',
-                    scrollD: 900
-                }
-            }, //                  知轩藏书
-            baoshuu: {
-                host: 'www.baoshuu.com',
-                url: ()=> {if (indexOF('/TXT/list')) curSite = DBSite.baoshuu;},
-                pager: {
-                    nextL: '//div[@class="listl2"]//a[text()="下一页"]',
-                    pageE: '.listl2 > ul > li',
-                    replaceE: '.listl2 > dl',
-                    scrollD: 900
-                }
-            }, //               宝书网
-            baoshuu_m: {
-                host: 'm.baoshuu.com',
-                url: ()=> {if (indexOF('/TXT/list')) curSite = DBSite.baoshuu_m;},
-                pager: {
-                    nextL: '//div[@class="man_first"]//a[text()="下一页"]',
-                    pageE: '.man_first > ul > li',
-                    replaceE: '.man_first > dl',
-                    scrollD: 900
-                }
-            }, //             宝书网- 手机版
-            yushubo: {
-                host: 'www.yushubo.com',
-                url: ()=> {if (indexOF('/read_')) {
-                    curSite = DBSite.yushubo;
-                } else if (indexOF('/lists/')) {
-                    curSite = DBSite.yushubo_list;
-                } else if (indexOF('/all')) {
-                    curSite = DBSite.yushubo_all;
-                }},
-                style: '.readbg.mt10 {display: none !important;}',
-                pager: {
-                    nextL: '//div[contains(@class, "articlebtn")]/a[contains(text(), "下一页") or contains(text(), "下一章")]',
-                    pageE: '#BookText',
-                    insertP: ['#BookText', 6],
-                    insertP6Br: true,
-                    replaceE: '.articlebtn',
-                    scrollD: 1000
-                }
-            }, //               御书网
-            yushubo_list: {
-                pager: {
-                    nextL: 'id("pager")//a[contains(text(), "下一页")]',
-                    pageE: '.books-list > ul > li',
-                    replaceE: '#pager',
-                    scrollD: 1000
-                }
-            }, //          御书网 - 分类页
-            yushubo_all: {
-                pager: {
-                    nextL: 'id("pager")//a[contains(text(), "下一页")]',
-                    pageE: 'ul.search-list > li',
-                    replaceE: '#pager',
-                    scrollD: 1000
-                }
-            }, //           御书网 - 书库页
-            soxscc: {
-                host: 'www.soxscc.org',
-                url: ()=> {if (indexOF(/\/\d{4,}\.html/)) {curSite = DBSite.soxscc;}},
-                style: '.content > p, img {display: none !important;}',
-                pager: {
-                    nextL: '//font[contains(text(), "下一章")]/following-sibling::a[1]',
-                    pageE: '.content',
-                    insertP: ['.content', 6],
-                    insertP6Br: true,
-                    replaceE: '.pagego',
-                    scrollD: 1500
-                }
-            }, //                搜小说
-            ihuaben: {
-                host: 'www.ihuaben.com',
-                url: ()=> {if (indexOF(/\/\d{4,}\.html/)) {curSite = DBSite.ihuaben;}},
-                style: '.discription > p > i, img, #container, #BDBannerBottom_PC, iframe, .navFooter {display: none !important;} .discription > p {font-size: 16px; min-height: 24px; padding-bottom: 24px;}',
-                pager: {
-                    nextL: 'id("preAndNextBar")/a[contains(text(), "下一章")]',
-                    pageE: '#contentsource > p',
-                    insertP: ['.discription', 3],
-                    replaceE: '#preAndNextBar',
-                    scrollD: 1000
-                }
-            }, //               话本小说网
-            xineyby: {
-                host: 'www.xineyby.com',
-                url: ()=> {if (indexOF('/read/')) {
-                    curSite = DBSite.xineyby;
-                } else if (indexOF(/\/(list|quanben|search)/)) {
-                    curSite = DBSite.xineyby_list;
-                }},
-                pager: {
-                    nextL: 'id("footlink")/a[contains(text(), "下一页")]',
-                    pageE: '#contents',
-                    insertP: ['#contents', 6],
-                    insertP6Br: true,
-                    replaceE: '#footlink, #amain dd h1',
-                    scrollD: 900
-                }
-            }, //               无错小说网
-            xineyby_list: {
-                pager: {
-                    nextL: '#pagelink a.next',
-                    pageE: '#content > dd tbody > tr:not(:first-child)',
-                    insertP: ['#content > dd tbody', 3],
-                    replaceE: '#pagelink',
-                    scrollD: 900
-                }
-            }, //          无错小说网 - 分类/搜索页
-            _530p: {
-                host: 'www.530p.com',
-                url: ()=> {if (indexOF(/\/\d{4,}\.htm/)) {curSite = DBSite._530p;}},
-                pager: {
-                    nextL: '#nextLink',
-                    pageE: '#cp_content',
-                    insertP: ['#cp_content', 6],
-                    insertP6Br: true,
-                    replaceE: '#pg_bar',
-                    scrollD: 1500
-                }
-            }, //                 无弹窗小说网
-            xiaoshuo77: {
-                host: 'm.xiaoshuo77.net',
-                url: ()=> {if (indexOF('.html')) {curSite = DBSite.xiaoshuo77; xs_bF(getAllCSS('#novelcontent'), [/(<br>)?(&nbsp;)+内容未完，下一页.*$|【本章阅读.*$/, '<br>']);}},
-                style: '#novelcontent > p, img {display: none !important;}',
-                pager: {
-                    nextL: '.page_chapter a.p4',
-                    pageE: '#novelcontent',
-                    insertP: ['#novelcontent', 6],
-                    replaceE: '.page_chapter',
-                    scrollD: 1500
-                },
-                function: {
-                    bF: xs_bF,
-                    bFp: [/(<br>)?(&nbsp;)+内容未完，下一页.*$|【本章阅读.*$/, '<br>']
-                }
-            }, //            读书族小说网
-            linovel: {
-                host: 'www.linovel.net',
-                url: ()=> {if (indexOF(/\/book\/\d+\/.+\.html/)) {
-                    insStyle('.reward-section {display: none !important;}');
-                } else if (indexOF('/cat/')) {
-                    curSite = DBSite.linovel;
-                }},
-                pager: {
-                    nextL: '//ul[@class="pagination"]/li/a[contains(text(), "下一页")]',
-                    pageE: '.rank-book-list > div',
-                    replaceE: 'ul.pagination',
-                    scrollD: 1000
-                }
-            }, //               轻之文库
-            _23qb: {
-                host: 'www.23qb.net',
-                url: ()=> {if (indexOF(/\/book\/\d+\/.+\.html/)) {
-                    curSite = DBSite._23qb; xs_bF(getAllCSS('#mlfy_main_text > *'), [/（继续下一页）.+|铅笔小说.+/, '']);
-                } else if (lp != '/' && !indexOF(/\/book\/\d+\//)) {
-                    curSite = DBSite._23qb_list;
-                }},
-                pager: {
-                    nextL: ()=> (location.origin + ReadParams.url_next),
-                    pageE: 'id("TextContent")/p | //script[contains(text(), "ReadParams")]',
-                    insertP: ['#TextContent', 3],
-                    replaceE: '.chepnav',
-                    scriptT: 2,
-                    scrollD: 1500
-                },
-                function: {
-                    bF: xs_bF,
-                    bFp: [/.*继续下一页.*|.*铅笔小说.*/, '']
-                }
-            }, //                 铅笔小说
-            _23qb_list: {
-                pager: {
-                    nextL: '.pages a.next, .pages > strong+a',
-                    pageE: '#sitebox > dl',
-                    replaceE: '.pages',
-                    scrollD: 1000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[_src]', '_src']
-                }
-            }, //            铅笔小说 - 分类页
-            linovelib: {
-                host: 'www.linovelib.com',
-                url: ()=> {if (indexOF(/\/novel\/\d+\/.+\.html/)) {
-                    curSite = DBSite.linovelib;
-                } else if (indexOF('/wenku/')) {
-                    curSite = DBSite.linovelib_wenku;
-                } else if (indexOF('/top/') || indexOF('/topfull/') || indexOF('toplist.php')) {
-                    curSite = DBSite.linovelib_top;
-                }},
-                pager: {
-                    nextL: '//p[@class="mlfy_page"]/a[contains(text(), "下一页") or contains(text(), "下一章")]',
-                    pageE: '#mlfy_main_text > *',
-                    replaceE: 'p.mlfy_page',
-                    scrollD: 1000
-                }
-            }, //             哔哩轻小说
-            linovelib_wenku: {
-                pager: {
-                    nextL: '#pagelink > a.next',
-                    pageE: '.store_collist > div.bookbox',
-                    replaceE: '#pagelink',
-                    scrollD: 1000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-original]', 'data-original']
-                }
-            }, //       哔哩轻小说 - 文库
-            linovelib_top: {
-                pager: {
-                    nextL: '#pagelink > a.next',
-                    pageE: '.rankpage_box > div.rank_d_list',
-                    replaceE: '#pagelink',
-                    scrollD: 1000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-original]', 'data-original']
-                }
-            }, //         哔哩轻小说 - 全本
-            linovelib_w: {
-                host: 'w.linovelib.com',
-                url: ()=> {if (indexOF(/\/novel\/\d+\/.+\.html/)) {
-                    curSite = DBSite.linovelib_w;
-                } else if (indexOF('/wenku/') || indexOF('/sa/')) {
-                    curSite = DBSite.linovelib_w_wenku;
-                }},
-                style: 'body {min-height: 1000px;}',
-                pager: {
-                    nextL: ()=> {if (ReadParams) {return (location.origin + ReadParams.url_next)}; return ''},
-                    pageE: '//body/script[contains(text(), "var ReadParams")] | id("apage")/div',
-                    insertP: ['#apage', 3],
-                    scriptT: 2,
-                    scrollD: 1000
-                }
-            }, //           哔哩轻小说 (手机版)
-            linovelib_w_wenku: {
-                pager: {
-                    nextL: '#pagelink > strong+a ,#pagelink a.next',
-                    pageE: 'ol.book-ol > li',
-                    replaceE: '#pagelink',
-                    scrollD: 1000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-original]', 'data-original']
-                }
-            }, //     哔哩轻小说 (手机版) - 文库
             acs: {
                 host: ['pubs.acs.org','onlinelibrary.wiley.com'],
                 url: ()=> {if (indexOF('/doSearch')) {curSite = DBSite.acs;}},
@@ -5193,7 +4914,7 @@ function: {
                     //console.log('URL：' + url, '最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
                     processElems(createDocumentByString(response.responseText));
                 } catch (e) {
-                    console.log(e);
+                    console.error('[自动无缝翻页] - 处理获取到的下一页内容时出现问题，请检查！', e);
                 }
             }
         });
@@ -5354,21 +5075,13 @@ function: {
             if (curSite.function && curSite.function.bF) {
                 if (curSite.function.bFp) { // 如果指定了参数
                     if (typeof(curSite.function.bF) == 'string') { // 如果是字符串，说明是自定义规则
-                        if (window.autoPage[curSite.function.bF]) {
-                            pageE = window.autoPage[curSite.function.bF](pageE, curSite.function.bFp);
-                        } else {
-                            pageE = new Function('pageE', 'bFp', 'fun', curSite.function.bF)(pageE, curSite.function.bFp, window.autoPage)
-                        }
+                        pageE = new Function('pageE', 'bFp', 'fun', curSite.function.bF)(pageE, curSite.function.bFp, window.autoPage)
                     } else {
                         pageE = curSite.function.bF(pageE, curSite.function.bFp);
                     }
                 } else {
                     if (typeof(curSite.function.bF) == 'string') { // 如果是字符串，说明是自定义规则
-                        if (window.autoPage[curSite.function.bF]) {
-                            pageE = window.autoPage[curSite.function.bF](pageE);
-                        } else {
-                            pageE = new Function('pageE', 'fun', curSite.function.bF)(pageE, window.autoPage)
-                        }
+                        pageE = new Function('pageE', 'fun', curSite.function.bF)(pageE, window.autoPage)
                     } else {
                         pageE = curSite.function.bF(pageE);
                     }
@@ -5416,21 +5129,13 @@ function: {
             if (curSite.function && curSite.function.aF) {
                 if (curSite.function.aFp) { // 如果指定了参数
                     if (typeof(curSite.function.aF) == 'string') { // 如果是字符串，说明是自定义规则
-                        if (window.autoPage[curSite.function.aF]) {
-                            window.autoPage[curSite.function.aF](curSite.function.aFp);
-                        } else {
-                            new Function('aFp', 'fun', curSite.function.aF)(curSite.function.aFp, window.autoPage)
-                        }
+                        new Function('aFp', 'fun', curSite.function.aF)(curSite.function.aFp, window.autoPage)
                     } else {
                         curSite.function.aF(curSite.function.aFp);
                     }
                 } else {
                     if (typeof(curSite.function.aF) == 'string') { // 如果是字符串，说明是自定义规则
-                        if (window.autoPage[curSite.function.aF]) {
-                            window.autoPage[curSite.function.aF]();
-                        } else {
-                            new Function('fun', curSite.function.aF)(window.autoPage);
-                        }
+                        new Function('fun', curSite.function.aF)(window.autoPage);
                     } else {
                         curSite.function.aF();
                     }
@@ -5471,7 +5176,6 @@ function: {
     }
     // 文字型插入前函数（正则过滤）
     function xs_bF(pageE, reg) {
-        if (typeof reg[0] === 'string' && reg[0].slice(0,1) === '/') reg[0] = new RegExp(reg[0].slice(1,reg[0].length-1), 'i')
         pageE.forEach(function (one) {
             one.innerHTML = one.innerHTML.replace(reg[0], reg[1])
         });
@@ -5595,10 +5299,14 @@ function: {
             curSite.pageUrl = tempUrl;
             func(curSite.pageUrl);
         } else if (curSite.pager.nextL && curSite.pager.nextL.search(/^js;/i) === 0) { // 自定义翻页规则中执行 JavaScript 代码的
-            let tempUrl = new Function('fun', curSite.pager.nextL.slice(3))(window.autoPage);
-            if (!tempUrl || (tempUrl && tempUrl.slice(0,4) != 'http') || tempUrl === curSite.pageUrl ) return;
-            curSite.pageUrl = tempUrl;
-            func(curSite.pageUrl);
+            try {
+                let tempUrl = new Function('fun', curSite.pager.nextL.slice(3))(window.autoPage);
+                if (!tempUrl || (tempUrl && tempUrl.slice(0,4) != 'http') || tempUrl === curSite.pageUrl ) return;
+                curSite.pageUrl = tempUrl;
+                func(curSite.pageUrl);
+            } catch (e) {
+                console.error('[自动无缝翻页] - 当前网页规则 "nextL" 内 JS 代码有误，请检查！', e);
+            }
         } else if (getNextE()) {
             func(curSite.pageUrl);
         }
@@ -5855,8 +5563,9 @@ function: {
 </ul>
 <pre>
 // 大多数网站一般都只需要像第一个 "aaa" 这样的规则（注意，不要连带着复制这几行注释说明）
-// 其中 "scrollD" 是用来控制翻页敏感度的（越大就越早触发翻页，访问速度慢的网站需要调大，可省略(注意逗号)，默认 1500）
-// 每个规则第一行的规则名（即 "aaa": { ）是唯一的！不能重复！否则会被外置/内置规则覆盖，支持中文等各种字符
+// "aaa" 是规则名，唯一！不能重复！否则会被 外置/内置规则 覆盖，支持中文等各种字符
+// "url" 是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站
+// "scrollD" 是用来控制翻页敏感度的（越大就越早触发翻页，访问速度慢的网站需要调大，可省略(注意逗号)，默认 1500）
 {
     "aaa": {
         "host": "aaa.com",

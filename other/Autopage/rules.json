@@ -652,6 +652,299 @@
 			"scrollD": 1000
 		}
 	},
+	"起点中文": {
+		"host": "www.qidian.com",
+		"url": "return (fun.indexOF('/all/'))",
+		"pager": {
+			"nextL": "a[class*='pagination-next']",
+			"pageE": "ul.all-img-list > li",
+			"replaceE": "#page-container",
+			"scrollD": 900
+		}
+	},
+	"起点中文 - 阅读页": {
+		"host": "read.qidian.com",
+		"style": ".admire-wrap {display: none !important;}",
+		"pager": {
+			"nextL": "a[id$='chapterNext']",
+			"pageE": ".main-text-wrap > div:not(.admire-wrap)",
+			"replaceE": ".chapter-control",
+			"scrollD": 900
+		}
+	},
+	"七猫中文 - 阅读页": {
+		"host": "www.qimao.com",
+		"url": "return (fun.indexOF(/\\/shuku\\/\\d+-\\d+\\//) || fun.indexOF('/reader/index/'))",
+		"pager": {
+			"nextL": "//div[@class='reader-footer']/a[text()='下一章']",
+			"pageE": ".article > p",
+			"replaceE": ".reader-footer",
+			"scrollD": 900
+		}
+	},
+	"知轩藏书": {
+		"host": "zxcs.me",
+		"url": "return (fun.indexOF('/sort/'))",
+		"pager": {
+			"nextL": "#pagenavi > span+a",
+			"pageE": "dl[id='plist']",
+			"replaceE": "#pagenavi",
+			"scrollD": 900
+		}
+	},
+	"宝书网": {
+		"host": "www.baoshuu.com",
+		"url": "return (fun.indexOF('/TXT/list'))",
+		"pager": {
+			"nextL": "//div[@class='listl2']//a[text()='下一页']",
+			"pageE": ".listl2 > ul > li",
+			"replaceE": ".listl2 > dl",
+			"scrollD": 900
+		}
+	},
+	"宝书网- 手机版": {
+		"host": "m.baoshuu.com",
+		"url": "return (fun.indexOF('/TXT/list'))",
+		"pager": {
+			"nextL": "//div[@class='man_first']//a[text()='下一页']",
+			"pageE": ".man_first > ul > li",
+			"replaceE": ".man_first > dl",
+			"scrollD": 900
+		}
+	},
+	"御书网": {
+		"host": "www.yushubo.com",
+		"url": "return (fun.indexOF('/read_'))",
+		"style": ".readbg.mt10 {display: none !important;}",
+		"pager": {
+			"nextL": "//div[contains(@class, 'articlebtn')]/a[contains(text(), '下一页') or contains(text(), '下一章')]",
+			"pageE": "#BookText",
+			"insertP": [
+				"#BookText",
+				6
+			],
+			"replaceE": ".articlebtn",
+			"scrollD": 1000
+		}
+	},
+	"御书网 - 分类页": {
+		"host": "www.yushubo.com",
+		"url": "return (fun.indexOF('/lists/'))",
+		"pager": {
+			"nextL": "id('pager')//a[contains(text(), '下一页')]",
+			"pageE": ".books-list > ul > li",
+			"replaceE": "#pager",
+			"scrollD": 1000
+		}
+	},
+	"御书网 - 书库页": {
+		"host": "www.yushubo.com",
+		"url": "return (fun.indexOF('/all'))",
+		"pager": {
+			"nextL": "id('pager')//a[contains(text(), '下一页')]",
+			"pageE": "ul.search-list > li",
+			"replaceE": "#pager",
+			"scrollD": 1000
+		}
+	},
+	"搜小说": {
+		"host": "www.soxscc.org",
+		"url": "if (fun.indexOF(/\\/\\d{4,}.html/)) {fun.xs_bF(fun.getAllCSS('.content'), [/(<br>)?(&nbsp;)+您可以在百度.+?最新章节！/, '']); return true}",
+		"style": ".content > p, img {display: none !important;}",
+		"pager": {
+			"nextL": "//font[contains(text(), '下一章')]/following-sibling::a[1]",
+			"pageE": ".content",
+			"insertP": [
+				".content",
+				6
+			],
+			"insertP6Br": true,
+			"replaceE": ".pagego"
+		},
+		"function": {
+			"bF": "return fun.xs_bF(pageE, [/(<br>)?(&nbsp;)+您可以在百度.+?最新章节！/, ''])"
+		}
+	},
+	"无错小说网": {
+		"host": "www.xineyby.com",
+		"url": "return (fun.indexOF('/read/'))",
+		"pager": {
+			"nextL": "id('footlink')/a[contains(text(), '下一页')]",
+			"pageE": "#contents",
+			"insertP": [
+				"#contents",
+				6
+			],
+			"insertP6Br": true,
+			"replaceE": "#footlink, #amain dd h1",
+			"scrollD": 900
+		}
+	},
+	"无错小说网 - 分类/搜索页": {
+		"host": "www.xineyby.com",
+		"url": "return (fun.indexOF(/\\/(list|quanben|search)/))",
+		"pager": {
+			"nextL": "#pagelink a.next",
+			"pageE": "#content > dd tbody > tr:not(:first-child)",
+			"insertP": [
+				"#content > dd tbody",
+				3
+			],
+			"replaceE": "#pagelink",
+			"scrollD": 900
+		}
+	},
+	"无弹窗小说网": {
+		"host": "www.530p.com",
+		"url": "return (fun.indexOF(/\\/\\d{4,}\\.htm/))",
+		"pager": {
+			"nextL": "#nextLink",
+			"pageE": "#cp_content",
+			"insertP": [
+				"#cp_content",
+				6
+			],
+			"replaceE": "#pg_bar",
+			"scrollD": 1500
+		}
+	},
+	"读书族小说网": {
+		"host": "m.xiaoshuo77.net",
+		"url": "if (fun.indexOF('.html')) {fun.xs_bF(fun.getAllCSS('#novelcontent'), [/(<br>)?(&nbsp;)+内容未完，下一页.*$|【本章阅读.*$/, '<br>']); return true}",
+		"style": "#novelcontent > p, img {display: none !important;}",
+		"pager": {
+			"nextL": ".page_chapter a.p4",
+			"pageE": "#novelcontent",
+			"insertP": [
+				"#novelcontent",
+				6
+			],
+			"replaceE": ".page_chapter",
+			"scrollD": 1500
+		},
+		"function": {
+			"bF": "return fun.xs_bF(pageE, [/(<br>)?(&nbsp;)+内容未完，下一页.*$|【本章阅读.*$/, '<br>'])"
+		}
+	},
+	"铅笔小说": {
+		"host": "www.23qb.net",
+		"url": "if (fun.indexOF(/\\/book\\/\\d+\\/.+\\.html/)) {fun.xs_bF(fun.getAllCSS('#mlfy_main_text > *'), [/（继续下一页）.+|铅笔小说.+/, '']); return true}",
+		"pager": {
+			"nextL": "js;return (location.origin + ReadParams.url_next)",
+			"pageE": "id('TextContent')/p | //script[contains(text(), 'ReadParams')]",
+			"insertP": [
+				"#TextContent",
+				3
+			],
+			"replaceE": ".chepnav",
+			"scriptT": 2
+		},
+		"function": {
+			"bF": "return fun.xs_bF(pageE, [/.*继续下一页.*|.*铅笔小说.*/, ''])"
+		}
+	},
+	"铅笔小说 - 分类页": {
+		"host": "www.23qb.net",
+		"url": "return (fun.lp != '/' && !fun.indexOF(/\\/book\\/\\d+\\//))",
+		"pager": {
+			"nextL": ".pages a.next, .pages > strong+a",
+			"pageE": "#sitebox > dl",
+			"replaceE": ".pages",
+			"scrollD": 1000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0, 'img[_src]', '_src'])"
+		}
+	},
+	"轻之文库": {
+		"host": "www.linovel.net",
+		"url": "if (fun.indexOF(/\\/book\\/\\d+\\/.+\\.html/)) {fun.insStyle('.reward-section {display: none !important;}');} else if (fun.indexOF('/cat/')) {return true;}",
+		"pager": {
+			"nextL": "//ul[@class='pagination']/li/a[contains(text(), '下一页')]",
+			"pageE": ".rank-book-list > div",
+			"replaceE": "ul.pagination",
+			"scrollD": 1000
+		}
+	},
+	"话本小说网": {
+		"host": "www.ihuaben.com",
+		"url": "return (fun.indexOF(/\\/\\d{4,}.html/))",
+		"style": ".discription > p > i, img, #container, #BDBannerBottom_PC, iframe, .navFooter {display: none !important;} .discription > p {font-size: 16px; min-height: 24px; padding-bottom: 24px;}",
+		"pager": {
+			"nextL": "id('preAndNextBar')/a[contains(text(), '下一章')]",
+			"pageE": "#contentsource > p",
+			"insertP": [
+				".discription",
+				3
+			],
+			"replaceE": "#preAndNextBar",
+			"scrollD": 1000
+		}
+	},
+	"哔哩轻小说": {
+		"host": "www.linovelib.com",
+		"url": "return (fun.indexOF(/\\/novel\\/\\d+\\/.+\\.html/))",
+		"pager": {
+			"nextL": "//p[@class='mlfy_page']/a[contains(text(), '下一页') or contains(text(), '下一章')]",
+			"pageE": "#mlfy_main_text > *",
+			"replaceE": "p.mlfy_page",
+			"scrollD": 1000
+		}
+	},
+	"哔哩轻小说 - 文库": {
+		"host": "www.linovelib.com",
+		"url": "return (fun.indexOF('/wenku/'))",
+		"pager": {
+			"nextL": "#pagelink > a.next",
+			"pageE": ".store_collist > div.bookbox",
+			"replaceE": "#pagelink",
+			"scrollD": 1000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+		}
+	},
+	"哔哩轻小说 - 全本": {
+		"host": "www.linovelib.com",
+		"url": "return (fun.indexOF('/top/') || fun.indexOF('/topfull/') || fun.indexOF('toplist.php'))",
+		"pager": {
+			"nextL": "#pagelink > a.next",
+			"pageE": ".rankpage_box > div.rank_d_list",
+			"replaceE": "#pagelink",
+			"scrollD": 1000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+		}
+	},
+	"哔哩轻小说 (手机版)": {
+		"host": "w.linovelib.com",
+		"url": "return (fun.indexOF(/\\/novel\\/\\d+\\/.+\\.html/))",
+		"style": "body {min-height: 1000px;}",
+		"pager": {
+			"nextL": "js;if (ReadParams) {return (location.origin + ReadParams.url_next)}; return '';",
+			"pageE": "//body/script[contains(text(), 'var ReadParams')] | id('apage')/div",
+			"insertP": [
+				"#apage",
+				3
+			],
+			"scriptT": 2,
+			"scrollD": 1000
+		}
+	},
+	"哔哩轻小说 (手机版) - 文库": {
+		"host": "w.linovelib.com",
+		"url": "return (fun.indexOF('/wenku/') || fun.indexOF('/sa/'))",
+		"pager": {
+			"nextL": "#pagelink > strong+a ,#pagelink a.next",
+			"pageE": "ol.book-ol > li",
+			"replaceE": "#pagelink",
+			"scrollD": 1000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+		}
+	},
 	"AO3 - 列表页/搜索页": {
 		"host": "archiveofourown.org",
 		"url": "return (fun.indexOF(/\\/works$/) || fun.lp() == '/works/search')",
