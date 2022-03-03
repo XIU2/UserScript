@@ -2436,6 +2436,7 @@
 			"www.xnxx.com",
 			"www.xvideos.com"
 		],
+		"url": "if (location.hostname == 'www.xnxx.com') {if (fun.indexOF('/search/')) return true;} else {if (fun.lp() == '/' || fun.indexOF(/\\/(c|tags|lang)\\//)) return true;}",
 		"pager": {
 			"nextL": "a.next-page, a.next",
 			"pageE": ".mozaique > *",
