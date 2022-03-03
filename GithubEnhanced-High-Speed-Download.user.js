@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      1.8.7
+// @version      1.8.8
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -30,13 +30,13 @@
     'use strict';
     var backColor = '#ffffff', fontColor = '#888888', menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'), menu_menu_raw_fast_ID, menu_feedBack_ID;
     const download_url = [
-        //['https://pd.zwc365.com/seturl/https://github.com', '美国 1'],
-        ['https://gh.xiu.workers.dev/https://github.com', '美国 1'],
+        ['https://pd.zwc365.com/seturl/https://github.com', '美国 1'],
+        ['https://gh.xiu.workers.dev/https://github.com', '美国 2'],
         //['https://gh.api.99988866.xyz/https://github.com', '美国 2'],
-        ['https://github.rc1844.workers.dev', '美国 2'],
-        ['https://ghgo.feizhuqwq.workers.dev/https://github.com', '美国 3'],
-        ['https://git.yumenaka.net/https://github.com', '美国 4'],
-        ['https://gh.ddlc.top/https://github.com', '美国 5'],
+        ['https://github.rc1844.workers.dev', '美国 3'],
+        ['https://ghgo.feizhuqwq.workers.dev/https://github.com', '美国 4'],
+        ['https://git.yumenaka.net/https://github.com', '美国 5'],
+        ['https://gh.ddlc.top/https://github.com', '美国 6'],
         ['https://github.do/https://github.com', '中国国内'],
         ['https://github.ddlc.love/https://github.com', '中国香港'],
         ['https://download.fastgit.org', '日本'],
