@@ -1,4 +1,215 @@
 {
+	"Mixkit": {
+		"host": "mixkit.co",
+		"url": "/^\\/.+/",
+		"pager": {
+			"nextL": "a.pagination__link--next",
+			"pageE": ".item-grid-item",
+			"replaceE": ".pagination__wrapper",
+			"scrollD": 2000
+		}
+	},
+	"3DM - 分类页": {
+		"host": "www.3dmgame.com",
+		"url": "if (fun.getCSS('.Llist_b > div.lis')) return true",
+		"pager": {
+			"nextL": "li.next > a",
+			"pageE": ".Llist_b > div.lis",
+			"replaceE": ".pagewrap",
+			"scrollD": 1000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+		}
+	},
+	"3DM - 游戏专区 - 分类页": {
+		"host": "www.3dmgame.com",
+		"url": "if (fun.getCSS('.newsleft > ul')) return true",
+		"pager": {
+			"nextL": "li.next > a",
+			"pageE": ".newsleft > ul > li",
+			"replaceE": ".pagewrap",
+			"scrollD": 1000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+		}
+	},
+	"3DM - 游戏专区 - 资源页": {
+		"host": "www.3dmgame.com",
+		"url": "return (fun.indexOF('/resource'))",
+		"pager": {
+			"nextL": "li.next > a",
+			"pageE": ".item > ul",
+			"insertP": [
+				".item > ul:last-child",
+				1
+			],
+			"replaceE": ".pagewrap",
+			"scrollD": 800
+		}
+	},
+	"3DM": {
+		"host": "www.3dmgame.com",
+		"pager": {
+			"type": 3,
+			"nextL": "li.next > a",
+			"pageE": "script[src*='common.js'], .news_warp_center > *",
+			"insertP": [
+				".news_warp_center",
+				3
+			],
+			"replaceE": ".pagewrap",
+			"scrollE": ".pagewrap",
+			"scriptT": 2,
+			"interval": 500,
+			"scrollD": 500
+		}
+	},
+	"3DM MOD站": {
+		"host": "mod.3dmgame.com",
+		"pager": {
+			"nextL": "js;return fun.getNextEP('//li[@class=\"page-list active\"]/following-sibling::li[contains(@class, \"page-list\")]/a', 'Page=', /Page=\\d+/)",
+			"pageE": "//div[contains(@class, 'game-mod-list') or contains(@class, 'search-mod-list')] | //script[not(@src or @type)][contains(text(), '.game-mod-page') or contains(text(), '.search-mod-page')]",
+			"insertP": [
+				"//div[contains(@class, 'game-mod-wrap') or contains(@class, 'search-mod ')]",
+				3
+			],
+			"scriptT": 2,
+			"scrollD": 1200
+		}
+	},
+	"游侠网": {
+		"host": "www.ali213.net",
+		"url": "if (fun.getCSS('#after_this_page')) return true",
+		"pager": {
+			"type": 3,
+			"nextL": "#after_this_page",
+			"pageE": "#Content >*:not(.news_ding):not(.page_fenye)",
+			"insertP": [
+				".page_fenye",
+				1
+			],
+			"replaceE": ".page_fenye",
+			"scrollE": ".page_fenye",
+			"interval": 500,
+			"scrollD": 100
+		}
+	},
+	"游侠网 - 分类页 - 大侠号": {
+		"host": "www.ali213.net",
+		"url": "/^\\/news\\/zl\\//",
+		"pager": {
+			"type": 2,
+			"nextL": ".load-more:not([style*='none'])",
+			"scrollD": 1000
+		}
+	},
+	"游侠网 - 分类页": {
+		"host": "www.ali213.net",
+		"url": "/^\\/news/",
+		"pager": {
+			"nextL": "a.p_curpage+a:not(.p_redirect)",
+			"pageE": ".n_lone, .list-body-news-item",
+			"replaceE": ".p_bar",
+			"scrollD": 1000
+		}
+	},
+	"游侠网 - 下载页": {
+		"host": "down.ali213.net",
+		"url": "if (fun.getCSS('.famous-ul > .famous-li')) return true",
+		"pager": {
+			"nextL": "a.page-next",
+			"pageE": ".famous-ul > .famous-li",
+			"replaceE": ".page-container",
+			"scrollD": 1000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+		}
+	},
+	"游侠网 - 攻略页": {
+		"host": "gl.ali213.net",
+		"style": ".n_show_b, a.morezjjump {display: none !important;}",
+		"pager": {
+			"type": 3,
+			"nextL": "a.next",
+			"pageE": ".c-detail > *",
+			"insertP": [
+				".c-detail",
+				3
+			],
+			"replaceE": ".page_fenye",
+			"scrollE": ".page_fenye",
+			"interval": 500,
+			"scrollD": 300
+		}
+	},
+	"游侠网 - 图库": {
+		"host": "pic.ali213.net",
+		"style": "a.prev, a.next {display: none !important;}",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": "#image-show > img",
+			"replaceE": "#image-show > a",
+			"scrollD": 1200
+		}
+	},
+	"游民星空": {
+		"host": "www.gamersky.com",
+		"url": "/^\\/ent\\//",
+		"pager": {
+			"type": 3,
+			"nextL": "//div[@class='page_css']/a[text()='下一页']",
+			"pageE": ".Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.page_css):not(.gs_ccs_solve):not(.post_ding)",
+			"insertP": [
+				".page_css",
+				1
+			],
+			"replaceE": ".page_css",
+			"scrollE": ".page_css",
+			"interval": 500,
+			"scrollD": 100
+		}
+	},
+	"游民星空 - 攻略页": {
+		"host": "www.gamersky.com",
+		"url": "/^\\/handbook\\//",
+		"pager": {
+			"type": 3,
+			"nextL": "//div[@class='page_css']/a[text()='下一页']",
+			"pageE": ".Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.gs_ccs_solve):not(.post_ding)",
+			"insertP": [
+				".gs_nc_editor",
+				1
+			],
+			"replaceE": ".page_css",
+			"scrollE": ".page_css",
+			"forceHTTPS": true,
+			"interval": 500,
+			"scrollD": 100
+		},
+		"function": {
+			"bF": "pageE.forEach(function (one) {if (one.tagName === 'P' && one.textContent.indexOf('更多相关内容请关注') > -1) {one.style.display = 'none';}}); return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+		}
+	},
+	"游民星空 - 专栏文章页": {
+		"host": "www.gamersky.com",
+		"url": "/^\\/zl\\/.+\\.shtml/",
+		"pager": {
+			"type": 3,
+			"nextL": "//div[@class='page_css']/a[text()='下一页']",
+			"pageE": ".Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.gs_ccs_solve):not(.post_ding)",
+			"insertP": [
+				".pagecss",
+				1
+			],
+			"replaceE": ".page_css",
+			"scrollE": ".page_css",
+			"interval": 500,
+			"scrollD": 500
+		}
+	},
 	"CurseForge": {
 		"host": "www.curseforge.com",
 		"pager": {

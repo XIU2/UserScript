@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.1.3
+// @version      5.1.4
 // @author       X.I.U
 // @description  无缝追加下一页内容（瀑布流），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  無縫追加下一頁內容（瀑布流），支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎等網站~
@@ -2017,172 +2017,6 @@ function: {
                     scrollD: 2000
                 }
             }, //             下得乐
-            Mixkit: {
-                host: 'mixkit.co',
-                url: '/^\\/.+/',
-                pager: {
-                    nextL: 'a.pagination__link--next',
-                    pageE: '.item-grid-item',
-                    replaceE: '.pagination__wrapper',
-                    scrollD: 2000
-                }
-            }, //              Mixkit
-            _3dmgame: {
-                host: 'www.3dmgame.com',
-                url: ()=> {
-                    if (getCSS('.Llist_b > div.lis')) {
-                        curSite = DBSite._3dmgame_list;
-                    } else if (getCSS('.newsleft > ul')) {
-                        curSite = DBSite._3dmgame_list2;
-                    } else if (indexOF('/resource')) {
-                        curSite = DBSite._3dmgame_list3;
-                    } else {
-                        curSite = DBSite._3dmgame;
-                    }},
-                pager: {
-                    type: 3,
-                    nextL: 'li.next > a',
-                    pageE: 'script[src*="common.js"], .news_warp_center > *',
-                    insertP: ['.news_warp_center', 3],
-                    replaceE: '.pagewrap',
-                    scrollE: '.pagewrap',
-                    scriptT: 2,
-                    interval: 500,
-                    scrollD: 500
-                }
-            }, //                3DM
-            _3dmgame_list: {
-                pager: {
-                    nextL: 'li.next > a',
-                    pageE: '.Llist_b > div.lis',
-                    replaceE: '.pagewrap',
-                    scrollD: 1000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-original]', 'data-original']
-                }
-            }, //           3DM - 分类页
-            _3dmgame_list2: {
-                pager: {
-                    nextL: 'li.next > a',
-                    pageE: '.newsleft > ul > li',
-                    replaceE: '.pagewrap',
-                    scrollD: 1000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-original]', 'data-original']
-                }
-            }, //          3DM - 游戏专区 - 分类页
-            _3dmgame_list3: {
-                pager: {
-                    nextL: 'li.next > a',
-                    pageE: '.item > ul',
-                    insertP: ['.item > ul:last-child', 1],
-                    replaceE: '.pagewrap',
-                    scrollD: 800
-                }
-            }, //          3DM - 游戏专区 - 资源页
-            _3dmgame_mod: {
-                host: 'mod.3dmgame.com',
-                pager: {
-                    nextL: ()=> getNextEP('//li[@class="page-list active"]/following-sibling::li[contains(@class, "page-list")]/a', 'Page=', /Page=\d+/),
-                    pageE: '//div[contains(@class, "game-mod-list") or contains(@class, "search-mod-list")] | //script[not(@src or @type)][contains(text(), ".game-mod-page") or contains(text(), ".search-mod-page")]',
-                    insertP: ['//div[contains(@class, "game-mod-wrap") or contains(@class, "search-mod ")]', 3],
-                    scriptT: 2,
-                    scrollD: 1200
-                }
-            }, //            3DM MOD站
-            ali213_www: {
-                host: 'www.ali213.net',
-                pager: {
-                    type: 3,
-                    nextL: '#after_this_page',
-                    pageE: '#Content >*:not(.news_ding):not(.page_fenye)',
-                    insertP: ['.page_fenye', 1],
-                    replaceE: '.page_fenye',
-                    scrollE: '.page_fenye',
-                    interval: 500,
-                    scrollD: 100
-                }
-            }, //              游侠网
-            ali213_list: {
-                host: 'down.ali213.net',
-                url: ()=> {if (getCSS('.famous-ul > .famous-li')) {curSite = DBSite.ali213_list;}},
-                pager: {
-                    nextL: 'a.page-next',
-                    pageE: '.famous-ul > .famous-li',
-                    replaceE: '.page-container',
-                    scrollD: 1000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-original]', 'data-original']
-                }
-            }, //             游侠网 - 分类页
-            ali213_gl: {
-                host: 'gl.ali213.net',
-                style: '.n_show_b, a.morezjjump {display: none !important;}',
-                pager: {
-                    type: 3,
-                    nextL: 'a.next',
-                    pageE: '.c-detail > *',
-                    insertP: ['.c-detail', 3],
-                    replaceE: '.page_fenye',
-                    scrollE: '.page_fenye',
-                    interval: 500,
-                    scrollD: 300
-                }
-            }, //               游侠网 - 攻略
-            ali213_pic: {
-                host: 'pic.ali213.net',
-                style: 'a.prev, a.next {display: none !important;}',
-                pager: {
-                    nextL: 'a.next',
-                    pageE: '#image-show > img',
-                    replaceE: '#image-show > a',
-                    scrollD: 1200
-                }
-            }, //              游侠网 - 图库
-            gamersky_ent: {
-                host: 'www.gamersky.com',
-                url: ()=> {if (indexOF('/ent/')) {
-                    curSite = DBSite.gamersky_ent;
-                } else {
-                    curSite = DBSite.gamersky_gl;
-                    if (indexOF('/zl/') && indexOF('.shtml')) {curSite.pager.insertP = ['.pagecss', 1]; curSite.pager.scrollD = 400;}
-                }},
-                pager: {
-                    type: 3,
-                    nextL: '//div[@class="page_css"]/a[text()="下一页"]',
-                    pageE: '.Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.page_css):not(.gs_ccs_solve):not(.post_ding)',
-                    insertP: ['.page_css', 1],
-                    replaceE: '.page_css',
-                    scrollE: '.page_css',
-                    interval: 500,
-                    scrollD: 100
-                }
-            }, //            游民星空
-            gamersky_gl: {
-                pager: {
-                    type: 3,
-                    nextL: '//div[@class="page_css"]/a[text()="下一页"]',
-                    pageE: '.Mid2L_con > *:not(.gs_nc_editor):not(.pagecss):not(.gs_ccs_solve):not(.post_ding)',
-                    insertP: ['.gs_nc_editor', 1],
-                    replaceE: '.page_css',
-                    scrollE: '.page_css',
-                    forceHTTPS: true,
-                    interval: 500,
-                    scrollD: 100
-                },
-                function: {
-                    bF: pageE => { // 插入前函数（移除下一页底部的 "更多相关内容请关注：xxx" 文字 + 加载图片）
-                        pageE.forEach(function (one) {if (one.tagName === 'P' && one.textContent.indexOf('更多相关内容请关注') > -1) {one.style.display = 'none';}});
-                        return src_bF(pageE, [0, 'img[data-src]', 'data-src'])
-                    }
-                }
-            }, //             游民星空 - 攻略
             nexusmods: {
                 host: 'www.nexusmods.com',
                 url: ()=> {locationC = true; if (!(lp == '/' || indexOF(/\/mods\/\d+/))) {curSite = DBSite.nexusmods;}},
@@ -5656,7 +5490,7 @@ function: {
             }
             // 插入网页
             let _style = `<style>#Autopage_number {top: calc(75vh) !important;left: 0 !important;width: 32px;height: 32px;padding: 6px !important;display: flex;position: fixed !important;opacity: 0.3;transition: .2s;z-index: 9999 !important;cursor: pointer;user-select: none !important;flex-direction: column;align-items: center;justify-content: center;box-sizing: content-box;border-radius: 0 50% 50% 0;transform-origin: center !important;transform: translateX(-8px);background-color: #eee;-webkit-tap-highlight-color: transparent;box-shadow: 1px 1px 3px 0px #aaa !important;color: #000 !important;font-size: medium;} #Autopage_number:hover {opacity: 0.8;transform: translateX(0);}</style>`,
-                _html = `<div id="Autopage_number" title="1. 此处数字为 [当前页码] (可在脚本菜单中关闭)&#10;&#10;2. 鼠标左键点击此处可 [临时暂停翻页]（再次点击可恢复）">${pageNum._now}</div>`
+                _html = `<div id="Autopage_number" title="1. 此处数字为 [当前页码] (仅指脚本翻了多少页，并非实际页码，可在脚本菜单中关闭)&#10;&#10;2. 鼠标左键点击此处可 [临时暂停翻页]（再次点击可恢复）">${pageNum._now}</div>`
             document.documentElement.insertAdjacentHTML('beforeend', _style + _html);
             // 解决 远景论坛 会清理掉前面插入的 CSS 样式的问题
             if (location.hostname === 'bbs.pcbeta.com') {setTimeout(function(){document.documentElement.insertAdjacentHTML('beforeend', _style);}, 500);}
