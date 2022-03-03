@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.1.4
+// @version      5.1.5
 // @author       X.I.U
 // @description  无缝追加下一页内容（瀑布流），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌、必应、搜狗、微信、360、Yahoo、Yandex 等搜索引擎】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、糗事百科、龙的天空、起点中文、IT之家、千图网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、包子漫画、Mangabz、Xmanhua 等漫画网站】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  無縫追加下一頁內容（瀑布流），支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎等網站~
@@ -40,8 +40,8 @@
         ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false],
         ['menu_rules', '更新外置翻页规则 (每天自动)', '更新外置翻页规则 (每天自动)', {}],
         ['menu_customRules', '自定义翻页规则 (beta)', '自定义翻页规则 (beta)', {}]
-    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, locationC = false, nowLocation = '', lp = location.pathname;
-    window.autoPage = {lp: ()=>location.pathname, indexOF: indexOF, getAll: getAll, getOne: getOne, getAllXpath: getAllXpath, getXpath: getXpath, getAllCSS: getAllCSS, getCSS: getCSS, getNextE: getNextE, getNextEP: getNextEP, getNextEPN: getNextEPN, getNextUPN: getNextUPN, getNextUP: getNextUP, getNextF: getNextF, insStyle: insStyle, src_bF: src_bF, xs_bF: xs_bF}
+    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname;
+    window.autoPage = {lp: ()=>location.pathname, indexOF: indexOF, isMobile: isMobile, isUrlC: isUrlC, getAll: getAll, getOne: getOne, getAllXpath: getAllXpath, getXpath: getXpath, getAllCSS: getAllCSS, getCSS: getCSS, getNextE: getNextE, getNextEP: getNextEP, getNextEPN: getNextEPN, getNextUPN: getNextUPN, getNextUP: getNextUP, getNextF: getNextF, getCookie: getCookie, insStyle: insStyle, src_bF: src_bF, xs_bF: xs_bF}
 
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
@@ -123,7 +123,7 @@
                                     if (new RegExp(DBSite[now].url.slice(1,DBSite[now].url.length-1), 'i').test(location.pathname + location.search) === true) {curSite = DBSite[now];} else {break;}
                                 } else { // 如果是函数，那就执行代码
                                     try {
-                                        if (new Function('fun', DBSite[now].url)(window.autoPage) === true) {curSite = DBSite[now];} else {break;}
+                                        if (new Function('fun', DBSite[now].url)(window.autoPage) === true) {curSite = DBSite[now];} else {if (urlC !== true) {break;}}
                                     } catch (e) {
                                         console.error('[自动无缝翻页] - 当前网页规则 "url" 有误，请检查！', e);
                                     }
@@ -151,7 +151,7 @@
                                 if (new RegExp(DBSite[now].url.slice(1,DBSite[now].url.length-1), 'i').test(location.pathname + location.search) === true) {curSite = DBSite[now];} else {continue;}
                             } else { // 如果是函数，那就执行代码
                                 try {
-                                    if (new Function('fun', DBSite[now].url)(window.autoPage) === true) {curSite = DBSite[now];} else {continue;}
+                                    if (new Function('fun', DBSite[now].url)(window.autoPage) === true) {curSite = DBSite[now];} else {if (urlC !== true) {continue;}}
                                 } catch (e) {
                                     console.error('[自动无缝翻页] - 当前网页规则 "url" 有误，请检查！', e);
                                 }
@@ -239,7 +239,7 @@
     function setDBSite() {
         /*
     url:         匹配到该域名后要执行的函数/正则（一般用于根据 URL 分配相应翻页规则）
-    locationC:   对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则（需要放在 url: 中）
+    urlC:        对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则（需要放在 url: 中）
 
     hiddenPN:    不显示脚本左下角的页码
     history:     添加历史记录 并 修改当前 URL（默认开启，对于不支持的网站要设置为 false）
@@ -388,7 +388,7 @@ function: {
                 }
             }, //     Discuz! 论坛 - 触屏手机版 - 帖子列表（自带无缝加载下一页按钮的）
             flarum: {
-                url: ()=> {locationC = true;if (!indexOF('/d/')) {curSite = DBSite.flarum;}},
+                url: ()=> {urlC = true;if (!indexOF('/d/')) {curSite = DBSite.flarum;}},
                 pager: {
                     type: 2,
                     nextL: '.DiscussionList-loadMore > button',
@@ -552,303 +552,6 @@ function: {
                     scrollD: 1500
                 }
             }, //             笔趣阁 模板的小说网站
-            baidu: {
-                host: 'www.baidu.com',
-                url: ()=> {locationC = true; if (lp == '/s') {curSite = DBSite.baidu;} else if (location.pathname.slice(location.pathname.length - 2,location.pathname.length) == '/s' || isMobile()) {location.hostname = 'm.baidu.com';}},
-                style: '.new-pmd .c-img-border {position: initial !important;} .op-bk-polysemy-video__wrap.c-gap-bottom {display: none !important;}',
-                pager: {
-                    nextL: 'id("page")//a[contains(text(),"下一页")]',
-                    pageE: '#content_left > *',
-                    replaceE: '#page',
-                    scrollD: 2000
-                }
-            }, //                  百度 搜索
-            baidu_m: {
-                host: 'm.baidu.com',
-                url: ()=> {if (location.pathname.slice(location.pathname.length - 2,location.pathname.length) == '/s') curSite = DBSite.baidu_m;},
-                style: 'div.result[tpl="recommend_list"], #page-copyright {display: none !important;}',
-                pager: {
-                    nextL: 'a[class^="new-nextpage"]',
-                    pageE: '#results > *',
-                    replaceE: '#page-controller',
-                    scrollD: 2000
-                }
-            }, //                百度 搜索 - 手机版
-            google: {
-                host: /^www\.google\./,
-                url: ()=> {if (lp == '/search' && !indexOF('tbm=isch', 's')) {
-                    if (indexOF('sclient=mobile', 's') || isMobile()) {
-                        curSite = DBSite.google_m;
-                    } else {
-                        curSite = DBSite.google;
-                    }
-                } else if (lp == '/scholar') {
-                    curSite = DBSite.google_scholar;
-                }},
-                pager: {
-                    nextL: '#pnnext',
-                    pageE: 'id("search")/* | //style[not(contains(text(), "table,div,span,p{display:none}"))]',
-                    insertP: ['#search', 3],
-                    replaceE: 'id("navcnt") | id("rcnt")//div[@role="navigation"]',
-                    scriptT: 0,
-                    scrollD: 3000
-                },
-                function: {
-                    bF: google_bF
-                }
-            }, //                 谷歌 搜索
-            google_m: {
-                pager: {
-                    type: 2,
-                    nextL: 'a[aria-label="查看更多"], a[aria-label="See more" i]',
-                    isHidden: true,
-                    scrollD: 1000
-                }
-            }, //               谷歌 搜索 - 手机版
-            bing: {
-                host: ['www.bing.com','cn.bing.com'],
-                url: ()=> {if (lp == '/search') {
-                    curSite = DBSite.bing;
-                    curSite.function = {bF: bing_bF}
-                } else if (lp == '/academic/search') {
-                    curSite = DBSite.bing_academic;
-                }},
-                style: '.b_imagePair.square_mp > .inner {display: none !important;}',
-                pager: {
-                    nextL: 'a.sb_pagN, a.sb_halfnext, a.sb_fullnpl',
-                    pageE: '#b_results > li:not(.b_msg):not([class="b_ans"]):not(.b_pag):not(#mfa_root)',
-                    replaceE: '#b_results > .b_pag',
-                    scrollD: 2000
-                }
-            }, //                   必应 搜索 + 手机版
-            sogou: {
-                host: 'www.sogou.com',
-                url: '/^\\/.+/',
-                pager: {
-                    nextL: '#sogou_next',
-                    pageE: '.results > *',
-                    replaceE: '#pagebar_container',
-                    scriptT: 3,
-                    scrollD: 2000
-                }
-            }, //                  搜狗 搜索
-            sogou_m: {
-                host: ['m.sogou.com', 'wap.sogou.com'],
-                url: '/^\\/.+/',
-                pager: {
-                    type: 2,
-                    nextL: '#ajax_next_page',
-                    isHidden: true,
-                    scrollD: 1000
-                }
-            }, //                搜狗 搜索 - 手机版
-            sogou_weixin: {
-                host: 'weixin.sogou.com',
-                url: ()=> {if (lp == '/') {
-                    curSite = DBSite.sogou_weixin;
-                } else if (lp == '/weixin') {
-                    curSite = DBSite.sogou_weixin_search;
-                }},
-                pager: {
-                    type: 2,
-                    nextL: '#look-more',
-                    interval: 1000,
-                    scrollD: 1000
-                }
-            }, //           搜狗微信 - 首页
-            sogou_weixin_search: {
-                pager: {
-                    nextL: '#sogou_next',
-                    pageE: 'ul[class*="news-list"] > li',
-                    replaceE: '#pagebar_container',
-                    scrollD: 1200
-                }
-            }, //    搜狗微信 - 搜索
-            toutiao: {
-                host: ['www.toutiao.com', 'so.toutiao.com'],
-                url: ()=> {if (location.hostname != 'www.toutiao.com') {
-                    if (lp == '/search/' || isMobile()) {
-                        curSite = DBSite.toutiao_m;
-                    } else if (lp == '/search') {
-                        curSite = DBSite.toutiao;
-                    }
-                }},
-                pager: {
-                    nextL: '//div[contains(@class, "-pagination")]/a[string()="下一页"]',
-                    pageE: 'div[class*="-result-list"] > .result-content[data-i]',
-                    replaceE: 'div[class*="-pagination"]',
-                    scrollD: 2000
-                },
-                function: {
-                    bF: pageE => { // 插入前函数（过滤相关搜索）
-                        if (getXpath('//div[contains(@class,"-header") and string()="相关搜索"]', pageE[pageE.length - 1])) pageE[pageE.length - 1].style.display = 'none';
-                        return pageE
-                    }
-                }
-            }, //                头条 搜索
-            toutiao_m: {
-                pager: {
-                    nextL: '#page-bottom a[class*="containerRight_"], #page-bottom a[class*="container_"]',
-                    pageE: '#results > div',
-                    replaceE: '#page-bottom',
-                    scrollD: 2000
-                }
-            }, //              头条 搜索 - 手机版
-            so: {
-                host: 'www.so.com',
-                url: '/^\\/.+/',
-                style: 'img {opacity: 1 !important;}',
-                pager: {
-                    nextL: 'a#snext',
-                    pageE: 'ul.result > li, style:not(src)',
-                    insertP: ['ul.result', 3],
-                    replaceE: '#page',
-                    scrollD: 2000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-isrc]', 'data-isrc']
-                }
-            }, //                     360 搜索
-            so_m: {
-                host: 'm.so.com',
-                url: '/^\\/.+/',
-                pager: {
-                    type: 2,
-                    nextL: '#load-more',
-                    isHidden: true,
-                    scrollD: 1000
-                }
-            }, //                   360 搜索 - 手机版
-            duckduckgo: {
-                host: 'duckduckgo.com',
-                url: ()=> {
-                    if (getCookie('av') != '1') {
-                        document.cookie='av=1; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; // 写入 Cookie 强制开启自带的无缝翻页功能
-                        location.reload(); // 刷新网页
-                    }
-                },
-                history: false
-            }, //             DuckDuckGo 搜索
-            startpage: {
-                host: ['startpage.com', 'www.startpage.com'],
-                url: ()=> {if (indexOF('/search')) {curSite = DBSite.startpage;}},
-                pager: {
-                    nextL: ()=> getNextF('//div[contains(@class, "pagination ")]/form[./button[@class="pagination__next-prev-button next"]]'),
-                    pageE: 'section.w-gl--desktop > div',
-                    replaceE: '.pagination',
-                    scrollD: 2000
-                }
-            }, //              Startpage 搜索
-            yandex: {
-                host: ['yandex.com', 'yandex.ru', 'yandex.ua', 'yandex.by', 'yandex.kz', 'yandex.uz', 'yandex.com.tr'],
-                url: ()=> {if (lp == '/search/') {curSite = DBSite.yandex;} else if (lp == '/video/search') {curSite = DBSite.yandex_video;}},
-                pager: {
-                    nextL: 'a.pager__item_kind_next',
-                    pageE: '#search-result > *, style',
-                    insertP: ['#search-result', 3],
-                    replaceE: '.pager',
-                    scrollD: 1500
-                }
-            }, //                 Yandex 搜索
-            yandex_video: {
-                hiddenPN: true,
-                pager: {
-                    type: 2,
-                    nextL: 'button.more__button',
-                    interval: 1000,
-                    scrollD: 1000
-                }
-            }, //           Yandex 搜索 - 视频
-            yahoo: {
-                host: 'search.yahoo.com',
-                url: ()=> {if (indexOF('/search')) {curSite = DBSite.yahoo;}},
-                pager: {
-                    nextL: '.pagination a.next',
-                    pageE: '#web ol > li',
-                    replaceE: '.pagination',
-                    scrollD: 2000
-                }
-            }, //                  Yahoo 搜索
-            yahoo_jp: {
-                host: 'search.yahoo.co.jp',
-                url: ()=> {if (indexOF('/search')) {curSite = DBSite.yahoo_jp;}},
-                pager: {
-                    nextL: '.Pagenation__next > a',
-                    pageE: '.Contents__innerGroupBody > div',
-                    replaceE: '.Pagenation',
-                    scrollD: 2000
-                }
-            }, //               Yahoo 搜索 (JP)
-            qwant: {
-                host: 'www.qwant.com',
-                url: ()=> {locationC = true; if (indexOF('q=', 's') && indexOF('t=web', 's')) {curSite = DBSite.qwant;}},
-                pager: {
-                    type: 2,
-                    nextL: 'button[data-testid="buttonShowMore"]',
-                    interval: 500,
-                    scrollD: 2000
-                }
-            }, //                  Qwant 搜索
-            ecosia: {
-                host: 'www.ecosia.org',
-                url: ()=> {if (lp == '/search') {curSite = DBSite.ecosia;}},
-                pager: {
-                    nextL: 'nav.pagination a[aria-label="Next page"]',
-                    pageE: 'section.mainline > div:not(.related-queries)',
-                    replaceE: 'nav.pagination',
-                    scrollD: 1500
-                }
-            }, //                 Ecosia 搜索
-            magi: {
-                host: 'magi.com',
-                url: ()=> {if (lp == '/search') {curSite = DBSite.magi;}},
-                pager: {
-                    type: 2,
-                    nextL: '.card[data-type="next"]',
-                    nextText: '加载更多',
-                    scrollD: 1500
-                }
-            }, //                   Magi 搜索
-            ask: {
-                host: ['ask.com', 'www.ask.com'],
-                url: ()=> {if (lp == '/web') {curSite = DBSite.ask;}},
-                style: '.PartialSearchResults-heading {display: none !important;}',
-                pager: {
-                    nextL: 'li.PartialWebPagination-next > a',
-                    pageE: '.PartialSearchResults.mid',
-                    replaceE: '.PartialWebPagination',
-                    scrollD: 2000
-                }
-            }, //                    ASK 搜索
-            fsou: {
-                host: 'fsou.cc',
-                url: ()=> {
-                    if (lp == '/search') {
-                        if (window.screen.width < 780) {
-                            curSite = DBSite.fsou_m;
-                        } else {
-                            curSite = DBSite.fsou;
-                        }
-                    }
-                },
-                retry: 1000,
-                pager: {
-                    type: 6,
-                    nextL: ()=> getNextEP('.turn-page-num-wrap.selected', 'pageIndex=', /pageIndex=\d+/),
-                    pageE: '.organic-results > div',
-                    replaceE: '.bottom-pagination',
-                    loadTime: 1000,
-                    scrollD: 3000
-                }
-            }, //                   F 搜
-            fsou_m: {
-                pager: {
-                    type: 2,
-                    nextL: '.next-page-container',
-                    scrollD: 1500
-                }
-            }, //                 F 搜 - 手机版
             baidu_tieba: {
                 host: ['tieba.baidu.com', 'jump2.bdimg.com'],
                 url: ()=> {if (location.hostname == 'jump2.bdimg.com') location.hostname = 'tieba.baidu.com';
@@ -984,7 +687,7 @@ function: {
             }, //      豆瓣 - 小组帖子内
             zhihu: {
                 host: 'www.zhihu.com',
-                url: ()=> {locationC = true; if (indexOF(/\/people\/.+\/.+/) || indexOF('/collection/')) {curSite = DBSite.zhihu; if (self != top) insStyle('#ProfileHeader {display: none !important;}')}},
+                url: ()=> {urlC = true; if (indexOF(/\/people\/.+\/.+/) || indexOF('/collection/')) {curSite = DBSite.zhihu; if (self != top) insStyle('#ProfileHeader {display: none !important;}')}},
                 forceTarget: true,
                 iframe: true,
                 pager: {
@@ -1054,7 +757,7 @@ function: {
             nga_thread: {
                 host: ['bbs.nga.cn', 'ngabbs.com', 'nga.178.com', 'g.nga.cn'],
                 iframe: true,
-                url: ()=> {locationC = true;
+                url: ()=> {urlC = true;
                            if (lp == '/thread.php') {
                                curSite = DBSite.nga_thread;
                            } else if (lp == '/read.php') {
@@ -1235,7 +938,7 @@ function: {
             }, //        糗事百科 - 分类页
             lkong: {
                 host: 'www.lkong.com',
-                url: ()=> {locationC = true; if (indexOF('/forum/')) {
+                url: ()=> {urlC = true; if (indexOF('/forum/')) {
                     curSite = DBSite.lkong;
                 } else if (indexOF('/thread/')) {
                     curSite = DBSite.lkong;
@@ -1308,7 +1011,7 @@ function: {
             }, //     番组计划 - 小组帖子列表
             dongchedi: {
                 host: 'www.dongchedi.com',
-                url: ()=> {locationC = true;
+                url: ()=> {urlC = true;
                            if (indexOF('/community/')) {
                                curSite = DBSite.dongchedi;
                            }},
@@ -1681,7 +1384,7 @@ function: {
             }, //           A 岛 - 帖子内（手机版）
             pixiv: {
                 host: 'www.pixiv.net',
-                url: ()=> {locationC = true;
+                url: ()=> {urlC = true;
                            if (lp == '/') {
                                forceTarget();
                            } else if (indexOF('/tags/')/* && self == top*/) {
@@ -1718,7 +1421,7 @@ function: {
             }, //          Pixiv - 用户作品页
             vilipix: {
                 host: 'www.vilipix.com',
-                url: ()=> {locationC = true; if (lp == '/') {forceTarget();} else if (indexOF(/\/(tags|user|new|ranking)/)) {curSite = DBSite.vilipix;}},
+                url: ()=> {urlC = true; if (lp == '/') {forceTarget();} else if (indexOF(/\/(tags|user|new|ranking)/)) {curSite = DBSite.vilipix;}},
                 forceTarget: true,
                 pager: {
                     type: 6,
@@ -1902,7 +1605,7 @@ function: {
             }, //               PNG 搜索网
             iconfont: {
                 host: 'www.iconfont.cn',
-                url: ()=> {locationC = true; if (indexOF('/search/')) curSite = DBSite.iconfont;},
+                url: ()=> {urlC = true; if (indexOF('/search/')) curSite = DBSite.iconfont;},
                 forceTarget: true,
                 style: '.footer, header .bind-tips, .block-pagination-wrap, #magix_vf_main .block-sub-banner, #J_block_sidebar {display: none !important;}',
                 iframe: true,
@@ -2019,7 +1722,7 @@ function: {
             }, //             下得乐
             nexusmods: {
                 host: 'www.nexusmods.com',
-                url: ()=> {locationC = true; if (!(lp == '/' || indexOF(/\/mods\/\d+/))) {curSite = DBSite.nexusmods;}},
+                url: ()=> {urlC = true; if (!(lp == '/' || indexOF(/\/mods\/\d+/))) {curSite = DBSite.nexusmods;}},
                 history: false,
                 pager: {
                     nextL: nexusmods_nextL,
@@ -2034,7 +1737,7 @@ function: {
             bilibili_search: {
                 host: 'search.bilibili.com',
                 url: ()=> {
-                    locationC = true;
+                    urlC = true;
                     if (lp == '/all' || lp == '/video') {
                         curSite = DBSite.bilibili_search;
                     } else if (lp == '/article') {
@@ -2930,7 +2633,7 @@ function: {
             }, //                 Library Genesis
             sciencedirect: {
                 host: 'www.sciencedirect.com',
-                url: ()=> {locationC = true; if (lp == '/search') {curSite = DBSite.sciencedirect; setTimeout(function(){insStyle('html, body {height: ' + (document.documentElement.scrollHeight || document.body.scrollHeight) + 'px;}')}, 2000)}},
+                url: ()=> {urlC = true; if (lp == '/search') {curSite = DBSite.sciencedirect; setTimeout(function(){insStyle('html, body {height: ' + (document.documentElement.scrollHeight || document.body.scrollHeight) + 'px;}')}, 2000)}},
                 style: 'footer {display: none !important;}',
                 iframe: true,
                 pager: {
@@ -3033,44 +2736,6 @@ function: {
                     scrollD: 1500
                 }
             }, //                小木虫
-            google_scholar: {
-                host: 'scholar.google.com',
-                url: ()=> {if (lp == '/scholar') {curSite = DBSite.google_scholar;}},
-                pager: {
-                    nextL: '//a[./span[contains(@class, "next")]]',
-                    pageE: '#gs_res_ccl_mid > *',
-                    insertP: ['#gs_res_ccl_mid', 3],
-                    replaceE: '#gs_n',
-                    scriptT: 1,
-                    scrollD: 2000
-                }
-            }, //         谷歌学术
-            google_scholar_: {
-                host: 'sc.panda321.com',
-                pager: {
-                    nextL: '//a[./span[contains(@class, "next")]]',
-                    pageE: '#gs_res_ccl_mid > *',
-                    insertP: ['#gs_res_ccl_mid', 3],
-                    replaceE: '#gs_n',
-                    scriptT: 1,
-                    scrollD: 2000
-                },
-                function: {
-                    bF: pageE => {
-                        getCSS('#gs_n').remove();
-                        return pageE
-                    }
-                }
-            }, //        谷歌学术 - 其他镜像站
-            bing_academic: {
-                style: 'li.aca_algo_count {display: none !important;}',
-                pager: {
-                    nextL: 'a.sb_pagN',
-                    pageE: '#b_results > li.aca_algo',
-                    replaceE: '#b_results .b_pag',
-                    scrollD: 1000
-                }
-            }, //          必应学术
             baidu_xueshu: {
                 host: 'xueshu.baidu.com',
                 url: ()=> {if (lp == '/s') {
@@ -3115,7 +2780,7 @@ function: {
             }, //              360 学术
             wanfangdata: {
                 host: 's.wanfangdata.com.cn',
-                url: ()=> {locationC = true; curSite = DBSite.wanfangdata;},
+                url: ()=> {urlC = true; curSite = DBSite.wanfangdata;},
                 style: '#zkFooter {display: none !important;}',
                 iframe: true,
                 pager: {
@@ -3180,7 +2845,7 @@ function: {
             }, //      StackOverflow - Search
             segmentfault: {
                 host: 'segmentfault.com',
-                url: ()=> {locationC = true;
+                url: ()=> {urlC = true;
                            if (indexOF('/questions')) {
                                curSite = DBSite.segmentfault;
                            } else if (lp == '/search') {
@@ -3337,7 +3002,7 @@ function: {
             }, //              Gitee - Search 列表
             github: {
                 host: ['github.com', 'hub.fastgit.org'],
-                url: ()=> {locationC = true;
+                url: ()=> {urlC = true;
                            if (lp == '/') {
                                curSite = DBSite.github;
                            } else if (indexOF('tab=stars', 's')) {
@@ -3579,7 +3244,7 @@ function: {
     if (curSite.forceTarget) forceTarget();
 
     // 对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则
-    if (locationC) {
+    if (urlC) {
         nowLocation = location.href
         if (window.onurlchange === undefined) {addUrlChangeEvent();} // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
         if (webType === 1) {
@@ -3682,7 +3347,7 @@ function: {
             } else if (getCSS('[id^="normalthread_"]')) {
                 curSite = DBSite.discuz_m; curSite.pager.pageE = '[id^="normalthread_"]:not(.ZDlist)';
             }
-            if (curSite.SiteTypeID !== 0 && location.hostname === 'keylol.com') {curSite.history = false; locationC = true;}
+            if (curSite.SiteTypeID !== 0 && location.hostname === 'keylol.com') {curSite.history = false; urlC = true;}
         } else {
             if (getCSS('#autopbn')) { //         判断是否有 [下一页] 按钮
                 curSite = DBSite.discuz_forum;
@@ -3702,7 +3367,7 @@ function: {
         } else if (getCSS('[id^="post_"]')) {
             curSite = DBSite.discuz_m; curSite.pager.pageE = '[id^="post_"]';
         }
-        if (curSite.SiteTypeID !== 0 && location.hostname === 'keylol.com') {curSite.history = false; locationC = true;}
+        if (curSite.SiteTypeID !== 0 && location.hostname === 'keylol.com') {curSite.history = false; urlC = true;}
     }
     function discuz_() {
         if (getCSS('body[id="nv_forum"][class^="pg_"][onkeydown*="27"]')) {
@@ -3721,7 +3386,7 @@ function: {
         if (curSite.SiteTypeID === 0) {
             if (indexOF('search') || getCSS('body[id="nv_search"][onkeydown*="27"]')) {
                 if (indexOF('mobile=2', 's')) { // 手机版页面
-                    curSite = DBSite.discuz_m; curSite.pager.pageE = '.threadlist > ul > li'; locationC = true;
+                    curSite = DBSite.discuz_m; curSite.pager.pageE = '.threadlist > ul > li'; urlC = true;
                 } else {
                     curSite = DBSite.discuz_search;
                 }
@@ -4693,6 +4358,7 @@ function: {
                     if (!autopbn) return
                     if (curSite.pager.isHidden && isHidden(autopbn)) return // 如果 isHidden = true，那么需要判断元素是否隐藏
                     if (curSite.pager.nextText) {
+                        console.log(curSite.pager.nextText, autopbn.innerText, autopbn)
                         // 按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页
                         if (autopbn.innerText === curSite.pager.nextText) {autopbn.click(); pageNum.now = pageNum._now + 1;}
                     } else if (curSite.pager.nextTextOf) {
@@ -5188,7 +4854,7 @@ function: {
                 if (one.src) {
                     toE.appendChild(document.createElement('script')).src = one.src;
                 } else {
-                    toE.appendChild(document.createElement('script')).textContent = one.textContent;
+                    toE.appendChild(document.createElement('script')).textContent = one.textContent;//.replaceAll('document.write', '');
                 }
             }
         });
@@ -5306,6 +4972,10 @@ function: {
     // 判断是否为手机版（是则返回 true）
     function isMobile(){
         return (/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|MicroMessenger|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i.test(navigator.userAgent) || (window.screen.width < 500 && window.screen.height < 800));
+    }
+    // 用以自定义规则中设置 urlC = true
+    function isUrlC(){
+        urlC = true;
     }
     // 判断 URL 是否存在指定文本
     function indexOF(e, l = 'p', low = false){

@@ -1,4 +1,166 @@
 {
+	"百度搜索": {
+		"host": "www.baidu.com",
+		"url": "fun.isUrlC(); if (fun.isMobile()) {location.hostname = 'm.baidu.com';} else {return (fun.lp() == '/s')}",
+		"style": ".new-pmd .c-img-border {position: initial !important;} .op-bk-polysemy-video__wrap.c-gap-bottom {display: none !important;}",
+		"pager": {
+			"nextL": "id('page')//a[contains(text(),'下一页')]",
+			"pageE": "#content_left > *",
+			"replaceE": "#page",
+			"scrollD": 2000
+		}
+	},
+	"百度搜索 - 手机版": {
+		"host": "m.baidu.com",
+		"url": "return (location.pathname.slice(location.pathname.length - 2, location.pathname.length) == '/s')",
+		"style": "div.result[tpl='recommend_list'], #page-copyright {display: none !important;}",
+		"pager": {
+			"nextL": "a[class^='new-nextpage']",
+			"pageE": "#results > *",
+			"replaceE": "#page-controller",
+			"scrollD": 2000
+		}
+	},
+	"谷歌搜索 - 手机版": {
+		"host": "/^www\\.google\\./",
+		"url": "return (fun.lp() == '/search' && !fun.indexOF('tbm=isch', 's') && (fun.indexOF('sclient=mobile', 's') || fun.isMobile()))",
+		"pager": {
+			"type": 2,
+			"nextL": "a[aria-label='查看更多'], a[aria-label='See more' i]",
+			"isHidden": true,
+			"scrollD": 1000
+		}
+	},
+	"谷歌搜索": {
+		"host": "/^www\\.google\\./",
+		"url": "return (fun.lp() == '/search' && !fun.indexOF('tbm=isch', 's'))",
+		"pager": {
+			"nextL": "#pnnext",
+			"pageE": "id('search')/* | //style[not(contains(text(), 'table,div,span,p{display:none}'))]",
+			"insertP": [
+				"#search",
+				3
+			],
+			"replaceE": "id('navcnt') | id('rcnt')//div[@role='navigation']",
+			"scriptT": 0,
+			"scrollD": 3000
+		},
+		"function": {
+			"bF": "if (!fun.indexOF('tbm=nws', 's')){pageE.forEach(function (one) {fun.getAllCSS('a[aria-label][href*=\"https://www.youtube.com/watch?v=\"]').forEach(function (one1) {let img = fun.getCSS('img', one1); if (img) img.src = `https://i.ytimg.com/vi/${one1.href.split('?v=')[1]}/mqdefault.jpg`;})});};return pageE"
+		}
+	},
+	"必应搜索 + 手机版": {
+		"host": [
+			"www.bing.com",
+			"cn.bing.com"
+		],
+		"url": "return (fun.lp() == '/search')",
+		"style": ".b_imagePair.square_mp > .inner {display: none !important;}",
+		"pager": {
+			"nextL": "a.sb_pagN, a.sb_halfnext, a.sb_fullnpl",
+			"pageE": "#b_results > li:not(.b_msg):not([class='b_ans']):not(.b_pag):not(#mfa_root)",
+			"replaceE": "#b_results > .b_pag",
+			"scrollD": 2000
+		},
+		"function": {
+			"bF": "if (!fun.getCSS('.b_title > a.sh_favicon')) {fun.insStyle('.b_title > a.sh_favicon {display: none !important;}');return pageE;}; pageE.forEach(function (one) {fun.getAllCSS('div.rms_iac[data-src]').forEach(function (one1) {one1.outerHTML = `<img src=\"${one1.dataset.src}\" height=\"16\" width=\"16\" alt=\"全球 Web 图标\" role=\"presentation\" class=\"rms_img\">`;})});return pageE"
+		}
+	},
+	"搜狗搜索": {
+		"host": "www.sogou.com",
+		"url": "/^\\/.+/",
+		"pager": {
+			"nextL": "#sogou_next",
+			"pageE": ".results > *",
+			"replaceE": "#pagebar_container",
+			"scriptT": 3,
+			"scrollD": 2000
+		}
+	},
+	"搜狗搜索 - 手机版": {
+		"host": [
+			"m.sogou.com",
+			"wap.sogou.com"
+		],
+		"url": "/^\\/.+/",
+		"pager": {
+			"type": 2,
+			"nextL": "#ajax_next_page",
+			"isHidden": true,
+			"scrollD": 1000
+		}
+	},
+	"搜狗微信 - 首页": {
+		"host": "weixin.sogou.com",
+		"url": "return (fun.lp() == '/')",
+		"pager": {
+			"type": 2,
+			"nextL": "#look-more",
+			"interval": 1000,
+			"scrollD": 1000
+		}
+	},
+	"搜狗微信 - 搜索": {
+		"host": "weixin.sogou.com",
+		"url": "return (fun.lp() == '/weixin')",
+		"pager": {
+			"nextL": "#sogou_next",
+			"pageE": "ul[class*='news-list'] > li",
+			"replaceE": "#pagebar_container",
+			"scrollD": 1200
+		}
+	},
+	"头条搜索 - 手机版": {
+		"host": "so.toutiao.com",
+		"url": "return (fun.lp() == '/search/' || fun.isMobile())",
+		"pager": {
+			"nextL": "#page-bottom a[class*='containerRight_'], #page-bottom a[class*='container_']",
+			"pageE": "#results > div",
+			"replaceE": "#page-bottom",
+			"scrollD": 2000
+		}
+	},
+	"头条搜索": {
+		"host": "so.toutiao.com",
+		"url": "return (fun.lp() == '/search')",
+		"pager": {
+			"nextL": "//div[contains(@class, '-pagination')]/a[string()='下一页']",
+			"pageE": "div[class*='-result-list'] > .result-content[data-i]",
+			"replaceE": "div[class*='-pagination']",
+			"scrollD": 2000
+		},
+		"function": {
+			"bF": "if (fun.getXpath('//div[contains(@class,\"-header\") and string()=\"相关搜索\"]', pageE[pageE.length - 1])) {pageE[pageE.length - 1].style.display = 'none';}; return pageE"
+		}
+	},
+	"360 搜索": {
+		"host": "www.so.com",
+		"url": "/^\\/.+/",
+		"style": "img {opacity: 1 !important;}",
+		"pager": {
+			"nextL": "a#snext",
+			"pageE": "ul.result > li, style:not(src)",
+			"insertP": [
+				"ul.result",
+				3
+			],
+			"replaceE": "#page",
+			"scrollD": 2000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-isrc]','data-isrc'])"
+		}
+	},
+	"360 搜索 - 手机版": {
+		"host": "m.so.com",
+		"url": "/^\\/.+/",
+		"pager": {
+			"type": 2,
+			"nextL": "#load-more",
+			"isHidden": true,
+			"scrollD": 1000
+		}
+	},
 	"轻搜": {
 		"host": "www.qingsearch.com",
 		"url": "return (fun.lp() == '/' && fun.indexOF('qings=', 's'))",
@@ -7,6 +169,175 @@
 			"nextL": "#loadmore > span",
 			"nextText": "加载更多",
 			"scrollD": 3000
+		}
+	},
+	"DuckDuckGo 搜索": {
+		"host": "duckduckgo.com",
+		"url": "fun.isUrlC(); if (fun.getCookie('av') != '1') {document.cookie='av=1; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; location.reload();}",
+		"history": false
+	},
+	"Startpage 搜索": {
+		"host": [
+			"startpage.com",
+			"www.startpage.com"
+		],
+		"url": "/\\/search/",
+		"pager": {
+			"nextL": "js; return fun.getNextF('//div[contains(@class, 'pagination ')]/form[./button[@class='pagination__next-prev-button next']]')",
+			"pageE": "section.w-gl--desktop > div",
+			"replaceE": ".pagination",
+			"scrollD": 2000
+		}
+	},
+	"Yandex 搜索": {
+		"host": [
+			"yandex.com",
+			"yandex.ru",
+			"yandex.ua",
+			"yandex.by",
+			"yandex.kz",
+			"yandex.uz",
+			"yandex.com.tr"
+		],
+		"url": "return (fun.lp() == '/search/')",
+		"pager": {
+			"nextL": "a.pager__item_kind_next",
+			"pageE": "#search-result > *, style",
+			"insertP": [
+				"#search-result",
+				3
+			],
+			"replaceE": ".pager"
+		}
+	},
+	"Yandex 搜索 - 视频": {
+		"host": [
+			"yandex.com",
+			"yandex.ru",
+			"yandex.ua",
+			"yandex.by",
+			"yandex.kz",
+			"yandex.uz",
+			"yandex.com.tr"
+		],
+		"url": "return (fun.lp() == '/video/search')",
+		"hiddenPN": true,
+		"pager": {
+			"type": 2,
+			"nextL": "button.more__button",
+			"interval": 1000,
+			"scrollD": 1000
+		}
+	},
+	"Yahoo 搜索": {
+		"host": "search.yahoo.com",
+		"url": "/\\/search/",
+		"pager": {
+			"nextL": ".pagination a.next",
+			"pageE": "#web ol > li",
+			"replaceE": ".pagination",
+			"scrollD": 2000
+		}
+	},
+	"Yahoo 搜索 - JP": {
+		"host": "search.yahoo.co.jp",
+		"url": "/\\/search/",
+		"pager": {
+			"nextL": ".Pagenation__next > a",
+			"pageE": ".Contents__innerGroupBody > div",
+			"replaceE": ".Pagenation",
+			"scrollD": 2000
+		}
+	},
+	"Qwant 搜索": {
+		"host": "www.qwant.com",
+		"url": "fun.isUrlC(); return (fun.indexOF('q=', 's') && fun.indexOF('t=web', 's'))",
+		"pager": {
+			"type": 2,
+			"nextL": "button[data-testid='buttonShowMore']",
+			"interval": 500,
+			"scrollD": 2000
+		}
+	},
+	"Ecosia 搜索": {
+		"host": "www.ecosia.org",
+		"url": "return (fun.lp() == '/search')",
+		"pager": {
+			"nextL": "nav.pagination a[aria-label='Next page']",
+			"pageE": "section.mainline > div:not(.related-queries)",
+			"replaceE": "nav.pagination"
+		}
+	},
+	"Magi 搜索": {
+		"host": "magi.com",
+		"url": "return (fun.lp() == '/search')",
+		"pager": {
+			"type": 2,
+			"nextL": ".card[data-type='next']",
+			"nextText": "加载更多"
+		}
+	},
+	"ASK 搜索": {
+		"host": [
+			"ask.com",
+			"www.ask.com"
+		],
+		"url": "return (fun.lp() == '/web')",
+		"style": ".PartialSearchResults-heading {display: none !important;}",
+		"pager": {
+			"nextL": "li.PartialWebPagination-next > a",
+			"pageE": ".PartialSearchResults.mid",
+			"replaceE": ".PartialWebPagination",
+			"scrollD": 2000
+		}
+	},
+	"谷歌学术": {
+		"host": [
+			"scholar.google.com",
+			"/^www\\.google\\./"
+		],
+		"url": "return (fun.lp() == '/scholar')",
+		"pager": {
+			"nextL": "//a[./span[contains(@class, 'next')]]",
+			"pageE": "#gs_res_ccl_mid > *",
+			"insertP": [
+				"#gs_res_ccl_mid",
+				3
+			],
+			"replaceE": "#gs_n",
+			"scriptT": 1,
+			"scrollD": 2000
+		}
+	},
+	"谷歌学术 - 其他镜像站": {
+		"host": "sc.panda321.com",
+		"pager": {
+			"nextL": "//a[./span[contains(@class, 'next')]]",
+			"pageE": "#gs_res_ccl_mid > *",
+			"insertP": [
+				"#gs_res_ccl_mid",
+				3
+			],
+			"replaceE": "#gs_n",
+			"scriptT": 1,
+			"scrollD": 2000
+		},
+		"function": {
+			"bF": "fun.getCSS('#gs_n').remove(); return pageE"
+		}
+	},
+	"必应学术": {
+		"host": [
+			"www.bing.com",
+			"cn.bing.com"
+		],
+		"url": "return (fun.lp() == '/academic/search')",
+		"style": "li.aca_algo_count {display: none !important;}",
+		"pager": {
+			"nextL": "a.sb_pagN",
+			"pageE": "#b_results > li.aca_algo",
+			"replaceE": "#b_results .b_pag",
+			"scrollD": 1000
 		}
 	},
 	"Mixkit": {
@@ -1036,8 +1367,7 @@
 				"#cp_content",
 				6
 			],
-			"replaceE": "#pg_bar",
-			"scrollD": 1500
+			"replaceE": "#pg_bar"
 		}
 	},
 	"读书族小说网": {
@@ -1051,8 +1381,7 @@
 				"#novelcontent",
 				6
 			],
-			"replaceE": ".page_chapter",
-			"scrollD": 1500
+			"replaceE": ".page_chapter"
 		},
 		"function": {
 			"bF": "return fun.xs_bF(pageE, [/(<br>)?(&nbsp;)+内容未完，下一页.*$|【本章阅读.*$/, '<br>'])"
@@ -1277,8 +1606,7 @@
 		"pager": {
 			"nextL": "a.next",
 			"pageE": "ul.post-loop > li",
-			"replaceE": "ul.pagination",
-			"scrollD": 1500
+			"replaceE": "ul.pagination"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
@@ -1567,8 +1895,7 @@
 		"style": ".pagination {display: none !important;}",
 		"pager": {
 			"nextL": "js;return fun.getNextUPN(/(?<=\\/page\\/)\\d+/, /\\/page\\/\\d+/, '/page/', '', '2', fun.getCSS('.pagination > button.end').textContent)",
-			"pageE": ".content li.color-border",
-			"scrollD": 1500
+			"pageE": ".content li.color-border"
 		}
 	},
 	"可能吧": {
@@ -1606,8 +1933,7 @@
 		"pager": {
 			"type": 2,
 			"nextL": ".kr-loading-more-button.show",
-			"nextText": "查看更多",
-			"scrollD": 1500
+			"nextText": "查看更多"
 		}
 	},
 	"36氪 - 手机版": {
