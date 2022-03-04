@@ -2237,6 +2237,16 @@
 			"scrollD": 1000
 		}
 	},
+	"中文字幕网": {
+		"host": "cn.zimuzimu.com",
+		"url": "return (fun.lp() == '/so_zimu.htm')",
+		"pager": {
+			"nextL": "li.page-item.active+li > a",
+			"pageE": "li.thread",
+			"replaceE": ".pagination",
+			"scrollD": 1000
+		}
+	},
 	"好漫 6": {
 		"host": [
 			"www.haoman6.com",
