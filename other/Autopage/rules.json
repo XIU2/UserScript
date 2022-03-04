@@ -2089,18 +2089,6 @@
 			"replaceE": ".wp-pagenavi"
 		}
 	},
-	"Nyaa": {
-		"host": [
-			"nyaa.si",
-			"sukebei.nyaa.si"
-		],
-		"pager": {
-			"nextL": "a[rel='next'], li.next > a",
-			"pageE": "table.torrent-list > tbody > tr",
-			"replaceE": "ul.pagination",
-			"scrollD": 2000
-		}
-	},
 	"SkrBT": {
 		"host": "/skrbt/",
 		"url": "return (fun.lp() == '/search')",
@@ -2113,6 +2101,27 @@
 			],
 			"replaceE": "ul.pagination",
 			"scrollD": 900
+		}
+	},
+	"Nyaa": {
+		"host": [
+			"nyaa.si",
+			"sukebei.nyaa.si"
+		],
+		"pager": {
+			"nextL": "a[rel='next'], li.next > a",
+			"pageE": "table.torrent-list > tbody > tr",
+			"replaceE": "ul.pagination",
+			"scrollD": 2000
+		}
+	},
+	"YTS": {
+		"host": "yts.mx",
+		"url": "/^\\/browse-movies/",
+		"pager": {
+			"nextL": "//li/a[text()='Next »']",
+			"pageE": ".browse-movie-wrap",
+			"replaceE": ".tsc_pagination"
 		}
 	},
 	"1337x": {
