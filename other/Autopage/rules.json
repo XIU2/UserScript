@@ -2368,6 +2368,27 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
 		}
 	},
+	"木马漫画 - 阅读页": {
+		"host": "www.omyschool.com",
+		"url": "/\\/article_detail\\//",
+		"pager": {
+			"type": 6,
+			"nextL": "a.nav_button.next",
+			"pageE": ".wrap_img[data-id]",
+			"replaceE": ".chapter_nav",
+			"loadTime": 2000,
+			"scrollD": 3000
+		}
+	},
+	"木马漫画 - 分类页": {
+		"host": "www.omyschool.com",
+		"url": "return (!fun.indexOF('/article_list/'))",
+		"pager": {
+			"nextL": "a.next.page-numbers",
+			"pageE": "#book_list > .item",
+			"replaceE": ".uk-pagination"
+		}
+	},
 	"包子漫画": {
 		"host": [
 			"www.webmota.com",
