@@ -37,10 +37,6 @@
 		"pager": {
 			"nextL": "#pnnext",
 			"pageE": "id('search')/* | //style[not(contains(text(), 'table,div,span,p{display:none}'))]",
-			"insertP": [
-				"#search",
-				3
-			],
 			"replaceE": "id('navcnt') | id('rcnt')//div[@role='navigation']",
 			"scriptT": 0,
 			"scrollD": 3000
@@ -140,10 +136,6 @@
 		"pager": {
 			"nextL": "a#snext",
 			"pageE": "ul.result > li, style:not(src)",
-			"insertP": [
-				"ul.result",
-				3
-			],
 			"replaceE": "#page",
 			"scrollD": 2000
 		},
@@ -203,10 +195,6 @@
 		"pager": {
 			"nextL": "a.pager__item_kind_next",
 			"pageE": "#search-result > *, style",
-			"insertP": [
-				"#search-result",
-				3
-			],
 			"replaceE": ".pager"
 		}
 	},
@@ -291,33 +279,748 @@
 			"scrollD": 2000
 		}
 	},
-	"谷歌学术": {
+	"豆瓣 - 短评": {
+		"host": "movie.douban.com",
+		"url": "return (fun.indexOF('/subject/') && fun.indexOF('/comments'))",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": "#comments > .comment-item",
+			"replaceE": "#paginator"
+		}
+	},
+	"豆瓣 - 分集短评": {
+		"host": "movie.douban.com",
+		"url": "return (fun.indexOF('/subject/') && (fun.indexOF('/episode') || fun.indexOF('/tv_discuss')))",
+		"pager": {
+			"nextL": "link[rel='next']",
+			"pageE": "#comments > div",
+			"replaceE": ".paginator"
+		}
+	},
+	"豆瓣 - 剧评影评": {
+		"host": "movie.douban.com",
+		"url": "return (fun.indexOF('/subject/') && fun.indexOF('/reviews'))",
+		"pager": {
+			"nextL": "link[rel='next']",
+			"pageE": ".review-list > div",
+			"replaceE": ".paginator"
+		}
+	},
+	"豆瓣 - 看过的电影": {
+		"host": "movie.douban.com",
+		"url": "return (fun.indexOF('/people/') && fun.indexOF('/collect'))",
+		"pager": {
+			"nextL": "link[rel='next']",
+			"pageE": ".grid-view > div",
+			"replaceE": ".paginator"
+		}
+	},
+	"豆瓣 - 作品": {
+		"host": "movie.douban.com",
+		"url": "return (fun.indexOF('/celebrity/') && fun.indexOF('/movies'))",
+		"pager": {
+			"nextL": "link[rel='next']",
+			"pageE": ".grid_view > ul > li",
+			"replaceE": ".paginator"
+		}
+	},
+	"豆瓣 - 小组讨论精选": {
+		"host": "www.douban.com",
+		"url": "return (fun.indexOF('/group/explore'))",
+		"pager": {
+			"nextL": "span.next > a",
+			"pageE": "#content .article > div > .channel-item",
+			"replaceE": ".paginator"
+		}
+	},
+	"豆瓣 - 小组帖子内": {
+		"host": "www.douban.com",
+		"url": "return (fun.indexOF('/group/topic/'))",
+		"thread": true,
+		"pager": {
+			"nextL": "span.next > a",
+			"pageE": "#comments > li",
+			"replaceE": ".paginator"
+		}
+	},
+	"豆瓣 - 小组": {
+		"host": "www.douban.com",
+		"url": "return (fun.indexOF('/group/') && fun.indexOF('/discussion'))",
+		"pager": {
+			"nextL": "span.next > a",
+			"pageE": "table.olt > tbody > tr:not(.th)",
+			"replaceE": ".paginator"
+		}
+	},
+	"知乎 - 用户主页/收藏夹": {
+		"host": "www.zhihu.com",
+		"url": "fun.isUrlC(); if (fun.indexOF(/\\/people\\/.+\\/.+/) || fun.indexOF('/collection/')) {if (self != top) {fun.insStyle('#ProfileHeader {display: none !important;}')}; return true;}",
+		"forceTarget": true,
+		"iframe": true,
+		"pager": {
+			"type": 5,
+			"nextL": "js;let next = fun.getCSS('.Pagination .PaginationButton--current+button:not(.PaginationButton-next)');if (next) return (location.origin + location.pathname + '?page=' + next.textContent)",
+			"scrollD": 2000
+		}
+	},
+	"微博评论": {
+		"host": "weibo.com",
+		"pager": {
+			"type": 2,
+			"nextL": "a[action-type='click_more_comment']",
+			"nextTextOf": "查看更多",
+			"scrollD": 1000
+		}
+	},
+	"天涯社区": {
+		"host": "bbs.tianya.cn",
+		"url": "/\\/list/",
+		"pager": {
+			"nextL": "//div[contains(@class, 'pages')]/div[@class='links']/a[text()='下一页']",
+			"pageE": ".tab-bbs-list > tbody:not(:first-of-type)",
+			"replaceE": "//div[contains(@class, 'pages')]"
+		}
+	},
+	"天涯社区 - 帖子内": {
+		"host": "bbs.tianya.cn",
+		"url": "/\\/post/",
+		"thread": true,
+		"pager": {
+			"nextL": "a.js-keyboard-next",
+			"pageE": ".atl-main > div[class='atl-item']",
+			"replaceE": ".atl-pages > form",
+			"scrollD": 2000
+		}
+	},
+	"虎扑社区 - 帖子内": {
+		"host": "bbs.hupu.com",
+		"url": "return (fun.indexOF('.html'))",
+		"thread": true,
+		"pager": {
+			"nextL": "li.hupu-rc-pagination-next > a",
+			"pageE": ".post-reply-list ",
+			"replaceE": "ul.hupu-rc-pagination",
+			"scrollD": 2000
+		}
+	},
+	"虎扑社区": {
+		"host": "bbs.hupu.com",
+		"url": "return (fun.lp() != '/' && !fun.indexOF('/all-'))",
+		"pager": {
+			"nextL": "js;let next = fun.getCSS('li.hupu-rc-pagination-item-active+li.hupu-rc-pagination-item > a');if (next) {return (location.origin + location.pathname.replace(/-\\d+/,'') + '-' + next.textContent)} else {return ''}",
+			"pageE": "li.bbs-sl-web-post-body",
+			"replaceE": "ul.hupu-rc-pagination"
+		}
+	},
+	"NGA": {
 		"host": [
-			"scholar.google.com",
-			"/^www\\.google\\./"
+			"bbs.nga.cn",
+			"ngabbs.com",
+			"nga.178.com",
+			"g.nga.cn"
 		],
+		"url": "fun.isUrlC(); return (fun.lp() == '/thread.php')",
+		"iframe": true,
+		"pager": {
+			"nextL": "#pagebbtm a[title='下一页']",
+			"pageE": "#topicrows > tbody, #topicrows > script",
+			"replaceE": "div[name='pageball']",
+			"scriptT": 2,
+			"scrollD": 1000
+		},
+		"function": {
+			"aF": "document.body.appendChild(document.createElement('script')).textContent = 'commonui.topicArg.loadAll();';"
+		}
+	},
+	"NGA - 帖子内": {
+		"host": [
+			"bbs.nga.cn",
+			"ngabbs.com",
+			"nga.178.com",
+			"g.nga.cn"
+		],
+		"url": "return (fun.lp() == '/read.php')",
+		"iframe": true,
+		"history": false,
+		"thread": true,
+		"retry": 1000,
+		"pager": {
+			"nextL": "#pagebbtm a[title*='下一页']",
+			"pageE": "id('m_posts_c')/table | id('m_posts_c')/script | //script[contains(text(), 'commonui.userInfo.setAll')]",
+			"replaceE": "div[name='pageball']",
+			"scriptT": 2,
+			"scrollD": 1000
+		}
+	},
+	"V2EX - 最近主题页": {
+		"host": [
+			"v2ex.com",
+			"www.v2ex.com"
+		],
+		"url": "return (fun.lp() == '/recent')",
+		"pager": {
+			"nextL": "a.page_current+a.page_normal",
+			"pageE": ".cell.item",
+			"replaceE": "#Main > .box > .cell[style]:not(.item) > table"
+		}
+	},
+	"V2EX - 提醒消息页": {
+		"host": [
+			"v2ex.com",
+			"www.v2ex.com"
+		],
+		"url": "return (fun.lp() == '/notifications')",
+		"pager": {
+			"nextL": "a.page_current+a.page_normal",
+			"pageE": "#notifications > div",
+			"replaceE": "#Main > .box > .cell[style] > table"
+		}
+	},
+	"V2EX - 用户回复页": {
+		"host": [
+			"v2ex.com",
+			"www.v2ex.com"
+		],
+		"url": "/\\/replies/",
+		"pager": {
+			"nextL": "a.page_current+a.page_normal",
+			"pageE": "//div[@id='Main']//div[@class='box']//div[@class='dock_area'] | //*[@id='Main']//div[@class='box']//div[@class='inner'] | //*[@id='Main']//div[@class='box']//div[@class='dock_area'][last()]/following-sibling::div[@class='cell'][1]",
+			"insertP": [
+				"//div[@id='Main']//div[@class='box']//div[@class='cell'][last()]",
+				1
+			],
+			"replaceE": "#Main > .box > .cell[style] > table"
+		}
+	},
+	"V2EX - 分类主题页": {
+		"host": [
+			"v2ex.com",
+			"www.v2ex.com"
+		],
+		"url": "/\\/go\\//",
+		"pager": {
+			"nextL": "a.page_current+a.page_normal",
+			"pageE": "#TopicsNode > div",
+			"replaceE": "#Main > .box > .cell[style] > table"
+		}
+	},
+	"V2EX - 账户余额页": {
+		"host": [
+			"v2ex.com",
+			"www.v2ex.com"
+		],
+		"url": "return (fun.lp() == '/balance')",
+		"pager": {
+			"nextL": "a.page_current+a.page_normal",
+			"pageE": "#Main .box > div:not(.cell) > table > tbody > tr:not(:first-child)",
+			"replaceE": "#Main > .box > .cell[style] > table"
+		}
+	},
+	"煎蛋网": {
+		"host": "jandan.net",
+		"url": "return (fun.lp() == '/' || fun.indexOF('/page/'))",
+		"style": "#nav_prev, #nav_next, .post.f:not(.list-post) {display: none !important;}",
+		"history": false,
+		"pager": {
+			"nextL": "//div[@class='wp-pagenavi']/a[contains(text(), '下一页') or contains(text(), '更多文章')]",
+			"pageE": "#content > .list-post",
+			"replaceE": ".wp-pagenavi"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+		}
+	},
+	"煎蛋网 - 大杂烩": {
+		"host": "jandan.net",
+		"url": "return (fun.lp() == '/dzh')",
+		"history": false,
+		"pager": {
+			"type": 2,
+			"nextL": ".show_more",
+			"interval": 1500
+		}
+	},
+	"煎蛋网 - 吐槽": {
+		"host": "jandan.net",
+		"style": "#nav_prev, #nav_next, #tucao-gg {display: none !important;} .jandan-vote a.tucao-btn23:link {color: #c8c7cc !important;} .jandan-tucao {background-color: #fafaf9 !important;}",
+		"pager": {
+			"nextL": "a.previous-comment-page",
+			"pageE": "ol.commentlist > li[id^='comment-'], script[src^='//cdn.jandan.net/static/min/']",
+			"replaceE": ".cp-pagenavi",
+			"scriptT": 2
+		},
+		"function": {
+			"bF": "fun.getAllCSS('a.tucao-btn, a.comment-like.like, a.comment-unlike.unlike').forEach(function (now) {now.className = now.className.replace('tucao-btn', 'tucao-btn23').replace('comment-unlike', 'comment-unlike23').replace('comment-like', 'comment-like23');}); return pageE"
+		}
+	},
+	"龙的天空": {
+		"host": "www.lkong.com",
+		"url": "fun.isUrlC(); return (fun.indexOF('/forum/'))",
+		"history": false,
+		"pager": {
+			"nextL": "js;let next = fun.getCSS('li.ant-pagination-next'), page; if (next && next.getAttribute('aria-disabled') === 'false') { page = fun.getCSS('li.ant-pagination-item-active[title]'); if (page && page.title) {return (location.origin + location.pathname + '?page=' + ++page.title);}}; return '';",
+			"pageE": "//div[@class='main-title']/parent::div/parent::div | //head/style[@data-emotion-css]",
+			"replaceE": "ul.ant-pagination",
+			"interval": 500,
+			"scrollD": 1200
+		}
+	},
+	"龙的天空 - 帖子内": {
+		"host": "www.lkong.com",
+		"url": "/\\/thread\\//",
+		"thread": true,
+		"history": false,
+		"pager": {
+			"nextL": "js;let next = fun.getCSS('li.ant-pagination-next'), page; if (next && next.getAttribute('aria-disabled') === 'false') { page = fun.getCSS('li.ant-pagination-item-active[title]'); if (page && page.title) {return (location.origin + location.pathname + '?page=' + ++page.title);}}; return '';",
+			"pageE": "//div[@class='main-content']/parent::div | //head/style[@data-emotion-css]",
+			"replaceE": "ul.ant-pagination",
+			"interval": 500,
+			"scrollD": 1200
+		}
+	},
+	"看雪论坛": {
+		"host": "bbs.pediy.com",
+		"url": "/\\/forum-/",
+		"pager": {
+			"nextL": "//a[@class='page-link' and text()='▶']",
+			"pageE": "table.threadlist > tbody > tr",
+			"replaceE": "ul.pagination"
+		}
+	},
+	"看雪论坛 - 帖子内": {
+		"host": "bbs.pediy.com",
+		"url": "/\\/thread-/",
+		"thread": true,
+		"pager": {
+			"nextL": "//a[@class='page-link' and text()='▶']",
+			"pageE": "table.postlist > tbody > tr[data-pid]",
+			"replaceE": "ul.pagination"
+		}
+	},
+	"番组计划": {
+		"host": "bangumi.tv",
+		"url": "/\\/(browser|subject_search|tag)/",
+		"pager": {
+			"nextL": "//div[@class='page_inner']/a[text()='››']",
+			"pageE": "ul#browserItemList > li",
+			"replaceE": ".page_inner"
+		}
+	},
+	"番组计划 - 小组帖子列表": {
+		"host": "bangumi.tv",
+		"url": "/\\/forum/",
+		"pager": {
+			"nextL": "//div[@class='page_inner']/a[text()='››']",
+			"pageE": ".topic_list > tbody:last-of-type > tr.topic",
+			"replaceE": ".page_inner"
+		}
+	},
+	"懂车帝论坛": {
+		"host": "www.dongchedi.com",
+		"url": "fun.isUrlC(); return (fun.indexOF('/community/'))",
+		"pager": {
+			"nextL": "li.pagination-item.is-active+li > a",
+			"pageE": ".data-wrapper > section.community-card, style",
+			"replaceE": "//ul[./li[contains(@class, 'pagination-item')]]",
+			"scrollD": 2000
+		},
+		"function": {
+			"bF": "pageE.forEach(function (one) { one.querySelectorAll('.g-load-img-wrap, .tw-absolute.tw-cursor-pointer, .avatar').forEach(function (now) { fun.getCSS('noscript+img', now).src = fun.getCSS('noscript > img', now).src; }); }); return pageE"
+		}
+	},
+	"宽带山论坛": {
+		"host": "club.kdslife.com",
+		"url": "return (fun.indexOF('/f_'))",
+		"pager": {
+			"nextL": "//div[@class='fr i3_r']/a[text()='后一页']",
+			"pageE": "ul.main_List > li.i2:not(.h_bg)",
+			"replaceE": "ul.main_List > li.i3",
+			"scrollD": 1000
+		}
+	},
+	"宽带山论坛 - 帖子内": {
+		"host": "club.kdslife.com",
+		"url": "return (fun.indexOF('/t_'))",
+		"thread": true,
+		"pager": {
+			"nextL": "//div[@class='pages']/a[text()='>>']",
+			"pageE": "#reply_list_panel > *, script[src*='ui/js/kds.js']",
+			"replaceE": ".pages",
+			"scriptT": 2,
+			"scrollD": 1000
+		}
+	},
+	"篱笆网论坛": {
+		"host": "www.libaclub.com",
+		"url": "fun.insStyle('li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}'); return (fun.lp() == '/' || fun.indexOF('/date_'))",
+		"pager": {
+			"nextL": "//div[@class='ui-crumbs-more']/a[@class='fn-link'][1]",
+			"pageE": "ul.ui-list > li:not(.ui-list-item-head):not(.ui-list-merchant-ad)",
+			"replaceE": "div.ui-crumbs-more",
+			"scrollD": 1200
+		}
+	},
+	"篱笆网论坛 - 各版块帖子列表": {
+		"host": "www.libaclub.com",
+		"url": "/\\/f_/",
+		"pager": {
+			"nextL": "a.ui-paging-next",
+			"pageE": "ul.ui-list > li:not(.ui-list-item-head):not(.ui-list-merchant-ad)",
+			"replaceE": "div.ui-paging",
+			"scrollD": 1200
+		}
+	},
+	"篱笆网论坛 - 帖子内": {
+		"host": "www.libaclub.com",
+		"url": "/\\/(t|reply)_/",
+		"thread": true,
+		"pager": {
+			"nextL": "a.ui-paging-next",
+			"pageE": ".ui-box-content > div.ui-topic, .ui-box-content > a[name]",
+			"insertP": [
+				".ui-box-content",
+				3
+			],
+			"replaceE": "div.ui-paging"
+		}
+	},
+	"篱笆网论坛 - 帖子内 - 打印版": {
+		"host": "www.libaclub.com",
+		"url": "/\\/prt_/",
+		"thread": true,
+		"pager": {
+			"nextL": "a.ui-paging-next",
+			"pageE": "ul.ui-list > li",
+			"replaceE": "div.ui-paging",
+			"scrollD": 2000
+		}
+	},
+	"篱笆网论坛 - 搜索页": {
+		"host": "www.libaclub.com",
+		"url": "return (fun.lp() == '/facade.php')",
+		"pager": {
+			"nextL": "//div[@class='ui-page']/a[contains(text(), '下一页')]",
+			"pageE": ".ui-box-main > ul.ui-list > li",
+			"replaceE": "div.ui-page",
+			"scrollD": 1200
+		}
+	},
+	"淘股吧论坛 - 生活圈": {
+		"host": "www.taoguba.com.cn",
+		"url": "/\\/shenghuoba\\//",
+		"style": "#joinTGB {display: none !important;}",
+		"history": false,
+		"pager": {
+			"nextL": "js;let next = fun.getCSS('#N_go_pageBtn'), next_ = location.pathname.split('/')[2].split('-')[0]; if (next && (parseInt(next.dataset.now) + 1 <= parseInt(next.dataset.total))) {if (!next_) next_ = 'H'; return (`${location.origin}/shenghuoba/${next_}-${parseInt(next.dataset.now) + 1}`)}; return '';",
+			"pageE": ".lifeContent-topicList-item",
+			"replaceE": ".N_sortPage ",
+			"scrollD": 1000
+		}
+	},
+	"淘股吧论坛 - 帖子内": {
+		"host": "www.taoguba.com.cn",
+		"url": "/\\/Article\\//",
+		"style": "#joinTGB {display: none !important;}",
+		"history": false,
+		"thread": true,
+		"pager": {
+			"nextL": "js;let next = fun.getXpath('//div[contains(@class, \"t_page01\")]/a[contains(text(), \"下一页\")]');if (next) {next = next.getAttribute('onclick').replace('gotoPageTopic(','').replace(')','').split(','); if (parseInt(next[0]) <= parseInt(next[1])) {return (`${location.origin}/Article/${fun.getCSS(\"#looktopicID\").value}/${next[0]}`)}}; return '';",
+			"pageE": "div[id^='reply_']",
+			"replaceE": ".t_page",
+			"scrollD": 1000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+		}
+	},
+	"淘股吧论坛": {
+		"host": "www.taoguba.com.cn",
+		"url": "/\\/(bbs|zongban|dianzan|jinghua)\\//",
+		"style": "#joinTGB {display: none !important;}",
+		"history": false,
+		"pager": {
+			"nextL": "js;let next = fun.getXpath('//div[contains(@class, \"t_page01\")]/a[contains(text(), \"下一页\")]'), next_ = '/'; if (next) {next = next.getAttribute('onclick').replace('gotoPage(','').replace(')','').split(','); if (fun.indexOF(/\\/dianzan|jinghua\\//)) next_ = '-'; if (parseInt(next[0]) <= parseInt(next[2])) {return (`${location.origin}/${location.pathname.split('/')[1]}/${next[0]}${next_}${next[1]}`)};}; return '';",
+			"pageE": ".p_list > .p_list01[class*='user_']",
+			"replaceE": ".t_page",
+			"scrollD": 1000
+		}
+	},
+	"芥子空间论坛": {
+		"host": "bbs.lieyou888.com",
+		"url": "/\\/forum/",
+		"pager": {
+			"nextL": "//div[contains(@class, '_pageNav')]/a[text()='下一页']",
+			"pageE": "ul.gb-bbs-list > li",
+			"replaceE": "._pageNav",
+			"scrollD": 1000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0, 'img[original]', 'original'])"
+		}
+	},
+	"爱卡汽车网论坛": {
+		"host": "www.xcar.com.cn",
+		"url": "return (fun.lp() == '/bbs/forumdisplay.php')",
+		"pager": {
+			"nextL": "a.page_down",
+			"pageE": ".table-section > dl:not(.table_head)",
+			"replaceE": ".forumList_page",
+			"scrollD": 2000
+		}
+	},
+	"飞客网论坛": {
+		"host": "www.flyert.com",
+		"url": "return (fun.indexOF('/forum-') || fun.indexOF('mod=forumdisplay', 's'))",
+		"pager": {
+			"nextL": "a.nxt:not([href*='javascript'])",
+			"pageE": "#threadlist table > tbody[id^='normalthread_']",
+			"replaceE": ".pg",
+			"scrollD": 2500
+		}
+	},
+	"飞客网论坛 - 帖子内": {
+		"host": "www.flyert.com",
+		"url": "return (fun.indexOF('/forum') || fun.indexOF('mod=viewthread', 's'))",
+		"thread": true,
+		"pager": {
+			"nextL": "a.nxt:not([href*='javascript'])",
+			"pageE": "#postlist > .comiis_viewbox",
+			"replaceE": ".comiis_pgs > .pg",
+			"scrollD": 3000
+		}
+	},
+	"CPC 中文印刷社区": {
+		"host": "www.cnprint.org",
+		"url": "/\\/forum\\//",
+		"pager": {
+			"nextL": "a[rel='next']",
+			"pageE": "tbody[id*='threadbits_forum'] > tr",
+			"replaceE": ".pagenav",
+			"scrollD": 2500
+		}
+	},
+	"CPC 中文印刷社区 - 帖子内": {
+		"host": "www.cnprint.org",
+		"url": "/\\/thread\\//",
+		"thread": true,
+		"pager": {
+			"nextL": "a[rel='next']",
+			"pageE": "#posts > div:not([id])",
+			"replaceE": ".pagenav",
+			"scrollD": 2000
+		}
+	},
+	"中国香港社区": {
+		"host": "/^.+\\.discuss\\.com\\.hk$/",
+		"url": "return (fun.lp() == '/forumdisplay.php')",
+		"pager": {
+			"nextL": ".pagination a.next",
+			"pageE": "tbody[id^='normalthread_']",
+			"replaceE": ".pagination",
+			"scrollD": 2000
+		}
+	},
+	"中国香港论坛 - 帖子内": {
+		"host": "/^.+\\.discuss\\.com\\.hk$/",
+		"url": "return (fun.lp() == '/viewthread.php')",
+		"thread": true,
+		"style": ".viewthread.mt-0:not(:first-of-type) .viewthread__head {display: none !important;}",
+		"pager": {
+			"nextL": ".pagination a.next",
+			"pageE": ".viewthread",
+			"replaceE": ".pagination",
+			"scrollD": 2000
+		}
+	},
+	"TGFC Lifestyle": {
+		"host": "bbs.tgfcer.com",
+		"url": "return (fun.lp() == '/forumdisplay.php' || fun.indexOF('/forum'))",
+		"pager": {
+			"nextL": ".pages a.next",
+			"pageE": "tbody[id^='normalthread_']",
+			"replaceE": ".pages",
+			"scrollD": 2000
+		}
+	},
+	"TGFC Lifestyle - 帖子内": {
+		"host": "bbs.tgfcer.com",
+		"url": "return ((fun.lp() == '/viewthread.php' || fun.indexOF('/thread')))",
+		"thread": true,
+		"style": ".viewthread:not(:first-of-type) h1 {display: none !important;}",
+		"pager": {
+			"nextL": ".pages a.next",
+			"pageE": ".viewthread",
+			"replaceE": ".pages",
+			"scrollD": 2000
+		}
+	},
+	"北+": {
+		"host": [
+			"/^((www|bbs)\\.)?(soul|north|south|white|level|summer|spring|snow)-plus\\.(net|org)$/",
+			"bbs.imoutolove.me"
+		],
+		"url": "return (fun.lp() == '/thread.php' || fun.lp() == '/search.php')",
+		"pager": {
+			"nextL": "//div[@class='pages']/ul/li[./b]/following-sibling::li[1][not(@class)]/a[not(text()='»')]",
+			"pageE": "tr.tr3",
+			"replaceE": ".pages"
+		}
+	},
+	"北+ - 图墙": {
+		"host": [
+			"/^((www|bbs)\\.)?(soul|north|south|white|level|summer|spring|snow)-plus\\.(net|org)$/",
+			"bbs.imoutolove.me"
+		],
+		"url": "return (fun.lp() == '/thread_new.php')",
+		"style": "img.lazy {display: inline !important;}",
+		"pager": {
+			"nextL": "//div[@class='pages']/ul/li[./b]/following-sibling::li[1][not(@class)]/a[not(text()='»')]",
+			"pageE": "li.dcsns-li",
+			"replaceE": ".pages",
+			"scrollD": 2000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+		}
+	},
+	"北+ - 帖子内": {
+		"host": [
+			"/^((www|bbs)\\.)?(soul|north|south|white|level|summer|spring|snow)-plus\\.(net|org)$/",
+			"bbs.imoutolove.me"
+		],
+		"url": "return (fun.lp() == '/read.php')",
+		"thread": true,
+		"pager": {
+			"nextL": "//div[@class='pages']/ul/li[./b]/following-sibling::li[1][not(@class)]/a[not(text()='»')]",
+			"pageE": "form[name=delatc] > *:not(input)",
+			"replaceE": ".pages"
+		}
+	},
+	"北+ - 用户页": {
+		"host": [
+			"/^((www|bbs)\\.)?(soul|north|south|white|level|summer|spring|snow)-plus\\.(net|org)$/",
+			"bbs.imoutolove.me"
+		],
+		"url": "return (fun.lp() == '/u.php' && (fun.indexOF('action-topic-', 's') || fun.indexOF('action-post-', 's')))",
+		"pager": {
+			"nextL": "//div[@class='pages']/ul/li[./b]/following-sibling::li[1][not(@class)]/a[not(text()='»')]",
+			"pageE": "#u-contentmain table tr",
+			"replaceE": ".pages"
+		}
+	},
+	"纯美苹果园": {
+		"host": "www.goddessfantasy.net",
+		"url": "return (fun.indexOF('board=', 's'))",
+		"pager": {
+			"nextL": "//div[contains(@class,'pagelinks')]/a[@class='navPages' and text()='»']",
+			"pageE": ".table_grid > tbody > tr",
+			"replaceE": ".pagelinks"
+		}
+	},
+	"纯美苹果园 - 帖子内": {
+		"host": "www.goddessfantasy.net",
+		"url": "return (fun.indexOF('topic=', 's'))",
+		"thread": true,
+		"pager": {
+			"nextL": "//div[contains(@class,'pagelinks')]/a[@class='navPages' and text()='»']",
+			"pageE": "#quickModForm > *",
+			"replaceE": ".pagelinks"
+		}
+	},
+	"A 岛 - 手机版 - 帖子列表": {
+		"host": [
+			"adnmb3.com",
+			"www.tnmb.org",
+			"nimingban.xyz",
+			"nimingban.org"
+		],
+		"url": "/\\/m\\/f\\//",
+		"pager": {
+			"nextL": "//li[contains(@class, 'pagination-next')]//a[text()='下一页']",
+			"pageE": ".h-middle > div[id^='threads_'], .h-middle > hr.h-middle > div[id^='threads_'], .h-middle > hr:nth-of-type(n+2), script[src$='/h.mobile.js']",
+			"insertP": [
+				"#h-threads-pagination",
+				1
+			],
+			"replaceE": "#h-threads-pagination",
+			"scriptT": 2,
+			"scrollD": 2500
+		}
+	},
+	"A 岛 - 手机版 - 帖子内": {
+		"host": [
+			"adnmb3.com",
+			"www.tnmb.org",
+			"nimingban.xyz",
+			"nimingban.org"
+		],
+		"url": "/\\/m\\/t\\//",
+		"thread": true,
+		"pager": {
+			"nextL": "//li[contains(@class, 'pagination-next')]//a[text()='下一页']",
+			"pageE": ".h-threads-replylist > div, script[src$='/h.mobile.js']",
+			"replaceE": "#h-threads-pagination",
+			"scriptT": 2,
+			"scrollD": 2500
+		}
+	},
+	"A 岛": {
+		"host": [
+			"adnmb3.com",
+			"www.tnmb.org",
+			"nimingban.xyz",
+			"nimingban.org"
+		],
+		"url": "/\\/(f|Forum)\\//",
+		"pager": {
+			"nextL": "//ul[contains(@class, 'pagination')]//a[text()='下一页']",
+			"pageE": ".h-threads-list > *, script[src$='/h.desktop.js']",
+			"replaceE": "//ul[contains(@class, 'pagination')]",
+			"scriptT": 2,
+			"scrollD": 2500
+		}
+	},
+	"A 岛 - 帖子内": {
+		"host": [
+			"adnmb3.com",
+			"www.tnmb.org",
+			"nimingban.xyz",
+			"nimingban.org"
+		],
+		"url": "/\\/t\\//",
+		"thread": true,
+		"pager": {
+			"nextL": "//ul[contains(@class, 'pagination')]//a[text()='下一页']",
+			"pageE": ".h-threads-list > .h-threads-item > .h-threads-item-replys, script[src$='/h.desktop.js']",
+			"replaceE": "//ul[contains(@class, 'pagination')]",
+			"scriptT": 2,
+			"scrollD": 2500
+		}
+	},
+	"LowEndTalk": {
+		"host": "lowendtalk.com",
+		"pager": {
+			"nextL": "a.Next",
+			"pageE": "ul.DataList > li",
+			"replaceE": ".Pager"
+		}
+	},
+	"谷歌学术": {
+		"host": "scholar.google.com",
 		"url": "return (fun.lp() == '/scholar')",
 		"pager": {
 			"nextL": "//a[./span[contains(@class, 'next')]]",
 			"pageE": "#gs_res_ccl_mid > *",
-			"insertP": [
-				"#gs_res_ccl_mid",
-				3
-			],
 			"replaceE": "#gs_n",
 			"scriptT": 1,
 			"scrollD": 2000
 		}
 	},
-	"谷歌学术 - 其他镜像站": {
+	"谷歌学术 - 熊猫学术": {
 		"host": "sc.panda321.com",
 		"pager": {
 			"nextL": "//a[./span[contains(@class, 'next')]]",
 			"pageE": "#gs_res_ccl_mid > *",
-			"insertP": [
-				"#gs_res_ccl_mid",
-				3
-			],
 			"replaceE": "#gs_n",
 			"scriptT": 1,
 			"scrollD": 2000
@@ -395,11 +1098,7 @@
 		"pager": {
 			"type": 3,
 			"nextL": "li.next > a",
-			"pageE": "script[src*='common.js'], .news_warp_center > *",
-			"insertP": [
-				".news_warp_center",
-				3
-			],
+			"pageE": ".news_warp_center > *, script[src*='common.js']",
 			"replaceE": ".pagewrap",
 			"scrollE": ".pagewrap",
 			"scriptT": 2,
@@ -412,10 +1111,6 @@
 		"pager": {
 			"nextL": "js;return fun.getNextEP('//li[@class=\"page-list active\"]/following-sibling::li[contains(@class, \"page-list\")]/a', 'Page=', /Page=\\d+/)",
 			"pageE": "//div[contains(@class, 'game-mod-list') or contains(@class, 'search-mod-list')] | //script[not(@src or @type)][contains(text(), '.game-mod-page') or contains(text(), '.search-mod-page')]",
-			"insertP": [
-				"//div[contains(@class, 'game-mod-wrap') or contains(@class, 'search-mod ')]",
-				3
-			],
 			"scriptT": 2,
 			"scrollD": 1200
 		}
@@ -476,10 +1171,6 @@
 			"type": 3,
 			"nextL": "a.next",
 			"pageE": ".c-detail > *",
-			"insertP": [
-				".c-detail",
-				3
-			],
 			"replaceE": ".page_fenye",
 			"scrollE": ".page_fenye",
 			"interval": 500,
@@ -1350,10 +2041,6 @@
 		"pager": {
 			"nextL": "#pagelink a.next",
 			"pageE": "#content > dd tbody > tr:not(:first-child)",
-			"insertP": [
-				"#content > dd tbody",
-				3
-			],
 			"replaceE": "#pagelink",
 			"scrollD": 900
 		}
@@ -1394,10 +2081,6 @@
 		"pager": {
 			"nextL": "js;return (location.origin + ReadParams.url_next)",
 			"pageE": "id('TextContent')/p | //script[contains(text(), 'ReadParams')]",
-			"insertP": [
-				"#TextContent",
-				3
-			],
 			"replaceE": ".chepnav",
 			"scriptT": 2
 		},
@@ -1479,22 +2162,18 @@
 			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
 		}
 	},
-	"哔哩轻小说 (手机版)": {
+	"哔哩轻小说 - 手机版": {
 		"host": "w.linovelib.com",
 		"url": "return (fun.indexOF(/\\/novel\\/\\d+\\/.+\\.html/))",
 		"style": "body {min-height: 1000px;}",
 		"pager": {
 			"nextL": "js;if (ReadParams) {return (location.origin + ReadParams.url_next)}; return '';",
-			"pageE": "//body/script[contains(text(), 'var ReadParams')] | id('apage')/div",
-			"insertP": [
-				"#apage",
-				3
-			],
+			"pageE": "id('apage')/div | //body/script[contains(text(), 'var ReadParams')]",
 			"scriptT": 2,
 			"scrollD": 1000
 		}
 	},
-	"哔哩轻小说 (手机版) - 文库": {
+	"哔哩轻小说 - 手机版 - 文库": {
 		"host": "w.linovelib.com",
 		"url": "return (fun.indexOF('/wenku/') || fun.indexOF('/sa/'))",
 		"pager": {
@@ -2102,10 +2781,6 @@
 		"pager": {
 			"nextL": "//a[@class='page-link' and text()='下一页']",
 			"pageE": "table.table  > tbody > tr:not(:first-child), script[src^='/js/site.js']",
-			"insertP": [
-				"table.table  > tbody",
-				3
-			],
 			"replaceE": "ul.pagination",
 			"scriptT": 2,
 			"scrollD": 1000
