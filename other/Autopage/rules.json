@@ -1205,8 +1205,7 @@
 		"pager": {
 			"type": 2,
 			"nextL": "button.so-pablo-button",
-			"interval": 1500,
-			"scrollD": 1500
+			"interval": 1500
 		}
 	},
 	"素材中国": {
@@ -1283,8 +1282,7 @@
 		"pager": {
 			"nextL": "li.next > a",
 			"pageE": ".collect-list > div",
-			"replaceE": ".pagerbar",
-			"scrollD": 1500
+			"replaceE": ".pagerbar"
 		}
 	},
 	"普象网 - 作品集/搜索页": {
