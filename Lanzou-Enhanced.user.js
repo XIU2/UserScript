@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.3.8
+// @version      1.3.9
 // @author       X.I.U
 // @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @include      /^https:\/\/.+\.lanzou[a-z]\.com\/.*$/
@@ -38,7 +38,7 @@
         ['menu_copy_fileSha', '自动复制分享链接', '自动复制分享链接', true],
         ['menu_refreshCorrection', '刷新不返回根目录', '刷新不返回根目录', true],
         ['menu_rightClickMenu', '右键文件显示菜单', '右键文件显示菜单', true],
-        ['menu_directDownload', '点击直接下载文件', '点击直接下载文件', true],
+        ['menu_directDownload', '点击直接下载文件 (分享链接列表页)', '点击直接下载文件', true],
         ['menu_folderDescdesMenu', '调整描述（话说）编辑框大小', '调整描述（话说）编辑框大小', true]
     ], menu_ID = [], lastFolderID;
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
@@ -287,7 +287,7 @@
                     window.top.close(); // 关闭该后台标签页
                     clearInterval(timer);
                 }
-            }, 1);
+            }, 10);
         }
     }
 
@@ -358,7 +358,7 @@
                 // 复制分享链接（并已复制的提示信息）
                 if (menu_value('menu_copy_fileSha')) {f_sha.style.display = 'none';GM_setClipboard(f_sha1.textContent, 'text');GM_notification({text: '已复制分享链接~', timeout: 2000});}
                 // 直接下载文件
-                if (menu_value('menu_directDownload')) {f_sha.style.display = 'none';GM_openInTab(f_sha1.textContent + '#download', {active: false,insert: true,setParent: true});}
+                //if (menu_value('menu_directDownload')) {f_sha.style.display = 'none';GM_openInTab(f_sha1.textContent + '#download', {active: false,insert: true,setParent: true});}
             }
         }
     }
@@ -449,6 +449,7 @@
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType != 1) return
                     if (target.className === 'f_view') {
+                        //console.log(target)
                         let f_viewtop = target.querySelector('.f_viewtop');
                         if (f_viewtop && f_viewtop.textContent === '外链分享地址') {
                             if (menu_value('menu_open_fileSha') && menu_value('menu_copy_fileSha')) {
