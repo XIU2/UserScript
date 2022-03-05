@@ -448,7 +448,7 @@
 		"retry": 1000,
 		"pager": {
 			"nextL": "#pagebbtm a[title*='下一页']",
-			"pageE": "id('m_posts_c')/table | id('m_posts_c')/script | //script[contains(text(), 'commonui.userInfo.setAll')]",
+			"pageE": "id('m_posts_c')/* | //script[contains(text(), 'commonui.userInfo.setAll')]",
 			"replaceE": "div[name='pageball']",
 			"scriptT": 2,
 			"scrollD": 1000
@@ -3227,7 +3227,10 @@
 		}
 	},
 	"谷歌学术": {
-		"host": ["scholar.google.com", "xs2.dailyheadlines.cc"],
+		"host": [
+			"scholar.google.com", 
+			"xs2.dailyheadlines.cc"
+		],
 		"pager": {
 			"nextL": "//a[./span[contains(@class, 'next')]]",
 			"pageE": "#gs_res_ccl_mid > *",

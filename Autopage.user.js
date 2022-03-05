@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.1.9
+// @version      5.2.0
 // @author       X.I.U
 // @description  无缝追加下一页内容（瀑布流），目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、龙的天空、起点中文、IT之家、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  無縫追加下一頁內容（瀑布流），支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -1442,7 +1442,7 @@ function: {
                 if (curSite.history !== false && window.top.document.xiu_nowUrl === location.href) {nowLocation = location.href; return}
                 if (nowLocation == location.href) return
                 if (curSite.pager && curSite.pager.type == 5) {
-                    if (self != top) {window.top.location.href = location.href;} else {if (getCSS('iframe#xiu_iframe')) {getCSS('iframe#xiu_iframe').remove();}}
+                    if (self != top) {window.top.location.href = location.href;} else {if (getCSS('iframe#Autopage_iframe')) {getCSS('iframe#Autopage_iframe').remove();}}
                     pausePage = true;
                 } // 对于翻页模式 5，如果是 iframe 框架内 URL 变动，则升级为顶级页面，如果是顶级页面的 URL 变动，则清理 iframe 框架
                 nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
@@ -1499,7 +1499,7 @@ function: {
     if (curSite.style) insStyle(curSite.style)
 
     // 对翻页模式 5 的子 iframe 添加一个跟随滚动的事件
-    if (curSite.pager && curSite.pager.type === 5 && self != top) {
+    /*if (curSite.pager && curSite.pager.type === 5 && self != top) {
         var beforeScrollTop = document.documentElement.scrollTop || document.body.scrollTop
         window.addEventListener('scroll', function (e) {
             let scrollTop = window.parent.document.documentElement.scrollTop || window.parent.document.body.scrollTop,
@@ -1511,10 +1511,10 @@ function: {
             beforeScrollTop = afterScrollTop;
             //console.log(delta, scrollHeight - (scrollTop + clientHeight), '2222')
             if (delta > 0 && scrollTop + clientHeight < scrollHeight) {
-                window.parent.scrollBy(0, delta*2);
+                window.parent.scrollBy(0, delta);
             }
         }, false);
-    }
+    }*/
 
     // 下一页URL
     curSite.pageUrl = '';
@@ -2622,7 +2622,7 @@ function: {
         // 创建 iframe
         let iframe = document.createElement('iframe');
         iframe.style = 'position: absolute; width: 100%; height: 100%; border: none;';
-        iframe.id = 'xiu_iframe';
+        iframe.id = 'Autopage_iframe';
         iframe.src = src;
 
         var beforeScrollTop = document.documentElement.scrollTop || document.body.scrollTop
@@ -2637,21 +2637,35 @@ function: {
             beforeScrollTop = afterScrollTop;
 
             //console.log(delta, (scrollTop + clientHeight + 10), scrollHeight, '1111')
-            if (delta > 0 && scrollTop + clientHeight + 10 >= scrollHeight && !getCSS('#xiu-scroll')) {
-                let newStyle = document.createElement('style'); newStyle.id = 'xiu-scroll';
+            if (delta > 0 && scrollTop + clientHeight + 10 >= scrollHeight && !getCSS('#Autopage_iframe-scroll')) {
+                let newStyle = document.createElement('style'); newStyle.id = 'Autopage_iframe-scroll';
                 newStyle.textContent = 'html::-webkit-scrollbar, body::-webkit-scrollbar {width: 0 !important;height: 0 !important;} html, body {scrollbar-width: none !important;}';
                 if (curSite.pager.style) newStyle.textContent += curSite.pager.style;
                 document.documentElement.appendChild(newStyle);
+
+                // 恢复 iframe 的滚动条
+                if (iframe.contentWindow.document.querySelector('#Autopage_iframe-scroll-hidden')) iframe.contentWindow.document.querySelector('#Autopage_iframe-scroll-hidden').remove();
+
+                // 给予 iframe 焦点
                 iframe.focus();
-                iframe.document.body.focus();
-                //iframe.document.body.click();
-            } else if (delta < 0 && getCSS('#xiu-scroll')) {
-                getCSS('#xiu-scroll').remove();
+                if (iframe.contentWindow.document.body) {iframe.contentWindow.document.body.focus(); iframe.contentWindow.document.body.click();}
+            } else if (delta < 0 && scrollTop + clientHeight + 10 <= scrollHeight && getCSS('#Autopage_iframe-scroll')) {
+                getCSS('#Autopage_iframe-scroll').remove();
+
+                // 再次禁用 iframe 的滚动条
+                let newStyle = document.createElement('style'); newStyle.id = 'Autopage_iframe-scroll-hidden';
+                newStyle.textContent = 'html, body {overflow: hidden !important;}';
+                iframe.contentWindow.document.documentElement.appendChild(newStyle);
             }
         }, false);
 
         // 加载完成后才继续
         iframe.onload = function() {
+            // 暂时禁用 iframe 的滚动条
+            let newStyle = document.createElement('style'); newStyle.id = 'Autopage_iframe-scroll-hidden';
+            newStyle.textContent = 'html, body {overflow: hidden !important;}';
+            iframe.contentWindow.document.documentElement.appendChild(newStyle);
+
             // 添加历史记录
             if (curSite.history !== false) addHistory(iframe.contentWindow.document, iframe.contentWindow.document.title);
             // 当前页码 + 1
@@ -2671,11 +2685,12 @@ function: {
         pausePage = false
         //console.log(src)
         // 如果不存在，则创建一个 iframe
-        let iframe = document.getElementById('xiu_iframe');
+        let iframe = document.getElementById('Autopage_iframe');
         if (!iframe) {
             iframe = document.createElement('iframe');
             iframe.style = 'position: absolute; top: -9999px; left: -9999px; width: 100%; height: 100%; border: none; z-index: -999; /*visibility: hidden;*/';
-            iframe.id = 'xiu_iframe';
+            //iframe.sandbox = 'allow-same-origin allow-scripts allow-popups allow-forms';
+            iframe.id = 'Autopage_iframe';
             iframe.src = src;
         }
 
@@ -2702,7 +2717,7 @@ function: {
         }
 
         // 插入 iframe（如果已存在则直接改 src）
-        if (document.getElementById('xiu_iframe')) {
+        if (document.getElementById('Autopage_iframe')) {
             iframe.src = src;
         } else {
             document.documentElement.appendChild(iframe);
@@ -2770,8 +2785,10 @@ function: {
                     case 1: // 下一页的所有 <script> 标签（不包括 src 链接）
                         insScript('script:not([src])', toE, response); break;
                     case 2: // 下一页主体元素 (pageE) 的同级 <script> 标签
+                        if (curSite.pager.insertP[1] === 2 || curSite.pager.insertP[1] === 4 || curSite.pager.insertP[1] === 5) pageE.reverse(); // 为了避免 JS 执行顺序反了，还需要再给反转回去
                         insScript(null, toE, pageE); break;
                     case 3: // 下一页主体元素 (pageE) 的子元素 <script> 标签
+                        if (curSite.pager.insertP[1] === 2 || curSite.pager.insertP[1] === 4 || curSite.pager.insertP[1] === 5) pageE.reverse(); // 为了避免 JS 执行顺序反了，还需要再给反转回去
                         insScript('script:not([src])', toE, pageE); break;
                 }
             }
@@ -2999,6 +3016,7 @@ function: {
                 scriptElems = getAll(selector, contextNode, contextNode);
             }
         }
+
         scriptElems.forEach(function (one) {
             if (one.tagName === 'SCRIPT') {
                 if (one.src) {
@@ -3209,21 +3227,21 @@ function: {
         let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.95 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important; overflow: scroll !important; text-align: left !important;">
 <h3 style="font-size: 22px !important;"><strong># 自定义翻页规则（优先级最高，但前提是 "规则名" 不能重复）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
 <details>
-<summary><kbd><strong>「 点击展开 查看示例 」（我把常用规则都塞进去了，方便需要的时候可直接复制一份修改使用）</strong></kbd></summary>
+<summary><kbd><strong>「 点击展开 查看示例 」（为了避免需要的时候还要找，我干脆把常用规则都一股脑塞进去了）</strong></kbd></summary>
 <ul style="list-style: disc !important; margin-left: 35px !important;">
 <li>翻页规则为 JSON 格式，因此大家需要多少<strong>了解一点 JSON 的基本格式</strong>（主要就是逗号、转义、双引号等）。</li>
 <li>具体的翻页规则说明、示例，为了方便更新及补充，我都写到 <strong><a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github</a></strong> 里面了。</li>
 <li>脚本会自动格式化规则，因此<strong>无需手动缩进、换行</strong>，只需把规则<strong>插入默认的 { } 中间</strong>即可。</li>
 </ul>
 <pre>
-// 大多数网站一般都只需要像第一个 "aaa" 这样的规则（注意，不要连带着复制这几行注释说明）
+// 下面示例是把所有规则都塞进去了，但实际上大都用不上，大多数网站只需要像第一个 "aaa" 这样的规则
 // "aaa" 是规则名，唯一！不能重复！否则会被 外置/内置规则 覆盖，支持中文等各种字符
 // "url" 是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站
 // "scrollD" 是用来控制翻页敏感度的（越大就越早触发翻页，访问速度慢的网站需要调大，可省略(注意逗号)，默认 1500）
 {
     "aaa": {
-        "host": "aaa.com",
-        "url": "/xxx/",
+        "host": "aaaa",
+        "url": "xxxx",
         "pager": {
             "nextL": "xxx",
             "pageE": "xxx",
@@ -3235,9 +3253,14 @@ function: {
         "host": ["bbb1.com", "bbb2.com"],
         "url": "/^\\/s$/",
         "style": ".aaaa {display: none !important;}",
+        "forceTarget": true,
+        "hiddenPN": true,
+        "history": false
+        "thread": true,
+        "iframe": true,
         "pager": {
             "type": 1,
-            "nextL": "id('page')//a[contains(text(),'下一页') or text()='下一页']",
+            "nextL": "id('page')//a[contains(text(),'下一页')] || id('page2')//a[text()='下一页']",
             "pageE": "aaa",
             "insertP": [".bbb",3],
             "replaceE": ".page",
@@ -3252,7 +3275,7 @@ function: {
     },
     "这里也可以用中文": {
         "host": "/\\.ccc\\.com/",
-        "url": "return (fun.lp() == '/' || fun.indexOF('/s'))",
+        "url": "fun.UrlC(); return (fun.lp() == '/' || fun.indexOF('/s'))",
         "pager": {
             "type": 2,
             "nextL": "#autopbn",
