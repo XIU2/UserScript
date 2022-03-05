@@ -1666,6 +1666,24 @@
 			"replaceE": "#wrapcentre > div"
 		}
 	},
+	"GBAtemp - 帖子内": {
+		"host": "gbatemp.net",
+		"url": "/^\\/threads\\//",
+		"thread": true,
+		"pager": {
+			"nextL": "a.pageNav-jump--next",
+			"pageE": "article.message",
+			"replaceE": ".pageNav"
+		}
+	},
+	"GBAtemp": {
+		"host": "gbatemp.net",
+		"pager": {
+			"nextL": "a.pageNav-jump--next",
+			"pageE": ".structItemContainer > div",
+			"replaceE": ".pageNav"
+		}
+	},
 	"Crackhub213": {
 		"host": "crackhub.site",
 		"style": "html.wp-dark-mode-active .inside-article {background-color: var(--wp-dark-mode-bg);}",
