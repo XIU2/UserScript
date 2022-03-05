@@ -2546,6 +2546,22 @@
 			"bF": "return fun.xs_bF(pageE, [/(<br>)?(&nbsp;)+您可以在百度.+?最新章节！/, ''])"
 		}
 	},
+	"owlook": {
+		"host": [
+			"www.owlook.com.cn",
+			"www1.owlook.com.cn"
+		],
+		"url": "return (fun.lp() == '/owllook_content')",
+		"pager": {
+			"nextL": "//div[@class='pre_next']/a[contains(text(), '下一')]",
+			"pageE": "#content",
+			"insertP": [
+				"#content",
+				6
+			],
+			"replaceE": ".pre_next"
+		}
+	},
 	"无错小说网": {
 		"host": "www.xineyby.com",
 		"url": "return (fun.indexOF('/read/'))",
