@@ -333,23 +333,25 @@
 			"replaceE": ".paginator"
 		}
 	},
-	"豆瓣 - 小组帖子内": {
-		"host": "www.douban.com",
-		"url": "return (fun.indexOF('/group/topic/'))",
+	"豆瓣 - 小组/讨论区 - 帖子内": {
+		"host": ["www.douban.com", "movie.douban.com"],
+		"url": "return (fun.indexOF('/group/topic/') || fun.indexOF(/\\/subject\\/\\d+\\/discussion\\/\\d+/))",
 		"thread": true,
 		"pager": {
 			"nextL": "span.next > a",
-			"pageE": "#comments > li",
-			"replaceE": ".paginator"
+			"pageE": "#comments > .comment-item",
+			"replaceE": ".paginator",
+			"scrollD": 2500
 		}
 	},
-	"豆瓣 - 小组": {
-		"host": "www.douban.com",
-		"url": "return (fun.indexOF('/group/') && fun.indexOF('/discussion'))",
+	"豆瓣 - 小组/讨论区": {
+		"host": ["www.douban.com", "movie.douban.com"],
+		"url": "return ((fun.indexOF('/group/') || fun.indexOF('/subject/')) && fun.indexOF('/discussion'))",
 		"pager": {
 			"nextL": "span.next > a",
-			"pageE": "table.olt > tbody > tr:not(.th)",
-			"replaceE": ".paginator"
+			"pageE": "table.olt > tbody > tr:not(:first-of-type)",
+			"replaceE": ".paginator",
+			"scrollD": 1000
 		}
 	},
 	"知乎 - 用户主页/收藏夹": {
