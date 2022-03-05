@@ -3227,8 +3227,7 @@
 		}
 	},
 	"谷歌学术": {
-		"host": "scholar.google.com",
-		"url": "return (fun.lp() == '/scholar')",
+		"host": ["scholar.google.com", "xs2.dailyheadlines.cc"],
 		"pager": {
 			"nextL": "//a[./span[contains(@class, 'next')]]",
 			"pageE": "#gs_res_ccl_mid > *",
@@ -3237,7 +3236,7 @@
 			"scrollD": 2000
 		}
 	},
-	"谷歌学术 - 熊猫学术": {
+	"谷歌学术 - 镜像站": {
 		"host": "sc.panda321.com",
 		"pager": {
 			"nextL": "//a[./span[contains(@class, 'next')]]",
