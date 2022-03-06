@@ -2796,6 +2796,18 @@
 			"scrollD": 2000
 		}
 	},
+	"MacWK": {
+		"host": "www.macwk.com",
+		"url": "fun.isUrlC(); return (fun.indexOF(/^\\/(soft|article)\\/.+\\/p\\d/))",
+		"style": ".app-content-bottom {display: none !important;}",
+		"pager": {
+			"nextL": "js;return fun.getNextUPN(/(?<=\\/p)\\d*$/, /p\\d*$/, 'p', '', '2', 'li.number:not(.active):last-of-type')",
+			"pageE": ".list-animation-leftIn"
+		},
+		"function": {
+			"bF": "pageE.forEach(function (one) {if (fun.getCSS('.macwk-app__header--icon--content[style^=\"--img:\"] + img:not(src)', one)){fun.getCSS('.macwk-app__header--icon--content[style^=\"--img:\"] + img:not(src)', one).src = /(?<=\\().+(?=\\))/.exec(fun.getCSS('.macwk-app__header--icon--content[style^=\"--img:\"]', one).style.cssText)[0].replaceAll('\\\\','');}}); return pageE"
+		}
+	},
 	"小众软件": {
 		"host": "www.appinn.com",
 		"pager": {
