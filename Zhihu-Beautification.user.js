@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.4.7
+// @version      1.4.8
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -383,6 +383,13 @@ html {filter: brightness(65%) sepia(30%) !important; background-image: url();}
 
         // 如果开启了 [暗黑模式]
         if (menu_value('menu_darkMode')) {
+            // firefox 浏览器
+            if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+                style_darkMode_2 = style_darkMode_2_firefox
+                style_darkMode_3 = style_darkMode_3_firefox
+                style_darkMode_4 = style_darkMode_4_firefox
+            }
+
             // 如果开启了 [暗黑模式跟随浏览器] 且 当前浏览器是暗黑模式
             if (menu_value('menu_darkModeAuto') && !window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 // 如果是暗黑模式，则需要改为白天模式
@@ -404,11 +411,6 @@ html {filter: brightness(65%) sepia(30%) !important; background-image: url();}
                 } else { // 如果是其他暗黑模式，则需要确保为白天模式
                     if (getTheme() === 'dark') {
                         setTheme('light');
-                    }
-                    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-                        style_darkMode_2 = style_darkMode_2_firefox
-                        style_darkMode_3 = style_darkMode_3_firefox
-                        style_darkMode_4 = style_darkMode_4_firefox
                     }
                 }
                 switch(menu_value('menu_darkModeType')) {
