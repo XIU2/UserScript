@@ -1350,11 +1350,6 @@ function: {
                 }
             } //                   国家自然科学基金
         };
-        // 向后兼容一段时间就移除
-        /*if (JSON.stringify(GM_getValue('menu_customRules', {})).indexOf('functionS') > -1 || JSON.stringify(GM_getValue('menu_customRules', {})).indexOf('css;') > -1) { // 改名过渡，过段时间将其移除
-            GM_setValue('menu_customRules', JSON.parse(JSON.stringify(GM_getValue('menu_customRules', {})).replaceAll('functionS', 'url').replaceAll('css;', '')))
-        }*/
-        //console.log(GM_getValue('menu_customRules'), GM_getValue('menu_rules'))
         // 合并 自定义规则、外置规则、内置规则
         DBSite = Object.assign(GM_getValue('menu_customRules', {}), GM_getValue('menu_rules', {}), DBSite)
         // 生成 SiteTypeID
@@ -3231,8 +3226,8 @@ function: {
     // 自定义翻页规则
     function customRules() {
         if (getCSS('#Autopage_customRules')) return
-        // 改名过渡，过段时间将其移除
-        let customRules = JSON.stringify(GM_getValue('menu_customRules', {}), null, '\t').replaceAll('functionS', 'url').replaceAll('css;', '');
+
+        let customRules = JSON.stringify(GM_getValue('menu_customRules', {}), null, '\t');
         if (customRules == '{}') customRules = '{\n\t\n}'; // 引导用户插入位置
         let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.95 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important; overflow: scroll !important; text-align: left !important;">
 <h3 style="font-size: 22px !important;"><strong># 自定义翻页规则（优先级最高，但前提是 "规则名" 不能重复）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
@@ -3306,8 +3301,7 @@ function: {
         document.documentElement.style.overflow = document.body.style.overflow = 'hidden';
         // 点击事件
         getCSS('#Autopage_customRules_save').onclick = function () {
-            // 改名过渡，过段时间将其移除
-            customRules = getCSS('#Autopage_customRules_textarea').value.replaceAll('functionS', 'url').replaceAll('css;', '');
+            customRules = getCSS('#Autopage_customRules_textarea').value;
             //console.log(customRules)
             if (!customRules) customRules = '{}'
             try {
