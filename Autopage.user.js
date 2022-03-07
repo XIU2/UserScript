@@ -69,7 +69,7 @@
                     webType = doesItSupport(); // 判断网站类型（即是否支持），顺便直接赋值
                     if (webType === 0) {
                         menuId[0] = GM_registerMenuCommand('❌ 当前网页暂不支持 [欢迎点击申请]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
-                        menuId[1] = GM_registerMenuCommand('🔄 更新外置翻页规则', function(){getRulesUrl(true)});
+                        menuId[1] = GM_registerMenuCommand('🔄 更新外置翻页规则 (每天自动)', function(){getRulesUrl(true)});
                         menuId[2] = GM_registerMenuCommand('#️⃣ 自定义翻页规则', function(){customRules()});
                         console.info('[自动无缝翻页] - 暂不支持当前网页 [ ' + location.href + ' ]，欢迎申请支持: https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/96880/feedback');
                         return
