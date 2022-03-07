@@ -1054,6 +1054,15 @@
 			"scrollD": 2000
 		}
 	},
+	"站酷 - 首页推荐": {
+		"host": "www.zcool.com.cn",
+		"url": "return (fun.lp() == '/' || fun.lp() == '/home')",
+		"pager": {
+			"nextL": "a.laypage_next",
+			"pageE": ".card-box",
+			"replaceE": ".pageturning"
+		}
+	},
 	"千图网 - 分类/搜索页": {
 		"host": "www.58pic.com",
 		"url": "if (fun.indexOF(/\\/(tupian|piccate|pmulti|scene)\\//)) {if (fun.indexOF('/piccate/') && fun.getCSS('.card-grid-box .qt-card-box[style*=\"width:\"]')) {fun.insStyle('.card-grid-box .qt-card-box {display: block;height: 300px;min-height: 250px;}')}; return true}",
