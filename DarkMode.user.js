@@ -3,7 +3,7 @@
 // @name:zh-CN   护眼模式
 // @name:zh-TW   護眼模式
 // @name:en      Dark Mode
-// @version      1.4.1
+// @version      1.4.2
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
 // @description:zh-CN  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
@@ -35,13 +35,17 @@
         ['menu_forcedToEnable', '✅ 已强制当前网站启用护眼模式 (👆)', '❌ 未强制当前网站启用护眼模式 (👆)', []],
         ['menu_darkModeType', '点击切换模式', '点击切换模式', 2],
         ['menu_customMode', '自定义当前模式', '自定义当前模式', true], ['menu_customMode1',,,'80|70'], ['menu_customMode2',,,'80|20|70|30'], ['menu_customMode3',,,'90'], ['menu_customMode3_exclude',,,'img, .img, video, [style*="background"][style*="url"], svg'],
-        ['menu_customTime', '自定义昼夜时间', '自定义昼夜时间', '6|18'],
+        ['menu_customTime', '自定义昼夜时间', '自定义昼夜时间', '6:00|18:00'],
         ['menu_autoSwitch', '晚上自动切换模式', '晚上自动切换模式', ''],
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
     }
     registerMenuCommand();
+
+    // 自定义昼夜时间 过渡性调整（精确到分钟），过段时间移除
+    if (GM_getValue('menu_customTime', '').indexOf(':') === -1) GM_setValue('menu_customTime', GM_getValue('menu_customTime', '6|18').replace('|',':00|') + ':00')
+
     if (menu_ID.length > 1) {addStyle();}
 
 
@@ -141,7 +145,7 @@
     function getAutoSwitch() {
         let darkModeType = GM_getValue('menu_darkModeType'), hours = new Date().getHours(), time = GM_getValue('menu_customTime').split('|').map(Number);
         if (GM_getValue('menu_autoSwitch') != '') { // 晚上自动切换模式
-            if (hours > time[0] && hours < time[1]) { // 白天
+            if (isDaytime()) { // 白天
                 darkModeType = GM_getValue('menu_autoSwitch').split('|')[0];
             } else { // 晚上
                 darkModeType = GM_getValue('menu_autoSwitch').split('|')[1];
@@ -201,9 +205,9 @@
 
     // 自定义昼夜时间
     function menu_customTime() {
-        let newMods = prompt('自定义脚本内和白天/晚上相关的时间，修改后刷新网页生效~\n格式：6|18 (即 6:00 ~ 18:00 之间是白天时间)', GM_getValue('menu_customTime'));
+        let newMods = prompt('自定义脚本内和白天/晚上相关的时间，修改后刷新网页生效~\n格式：6:01|18:30 (即 6:01 ~ 18:30 之间是白天时间)', GM_getValue('menu_customTime'));
         if (newMods === '') {
-            GM_setValue('menu_customTime', '6|18');
+            GM_setValue('menu_customTime', '6:00|18:00');
             registerMenuCommand(); // 重新注册脚本菜单
         } else if (newMods != null) {
             GM_setValue('menu_customTime', newMods);
@@ -340,7 +344,6 @@
     function addStyle() {
         let remove = false, style_Add = document.createElement('style'),
             hours = new Date().getHours(),
-            time = GM_getValue('menu_customTime').split('|').map(Number),
             style_10 = menu_value('menu_customMode1').split('|'),
             style_20 = menu_value('menu_customMode2').split('|'),
             style_30 = menu_value('menu_customMode3').split('|'),
@@ -371,7 +374,7 @@
         }
 
         // 白天
-        if (hours > time[0] && hours < time[1]) {
+        if (isDaytime()) {
             if (menu_value('menu_runDuringTheDay')) {
                 style_12 = style_11
                 style_22 = style_21
@@ -476,5 +479,16 @@
     function getColorValue(e) {
         let rgbValueArry = window.getComputedStyle(e).backgroundColor.replace(/rgba|rgb|\(|\)| /g, '').split (',')
         return parseInt(rgbValueArry[0] + rgbValueArry[1] + rgbValueArry[2])
+    }
+
+
+    // 判断当前是白天还是晚上
+    function isDaytime() {
+        let nowTime = new Date('2022-03-07 ' + new Date().getHours() + ':' + new Date().getMinutes() + ':00').getTime()/1000, time = GM_getValue('menu_customTime').split('|');
+        time[0] = new Date('2022-03-07 ' + time[0] + ':00').getTime()/1000;
+        time[1] = new Date('2022-03-07 ' + time[1] + ':00').getTime()/1000;
+
+        if (nowTime > time[0] && nowTime < time[1]) return true
+        return false
     }
 })();
