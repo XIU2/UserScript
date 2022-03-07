@@ -1056,7 +1056,7 @@
 	},
 	"站酷 - 首页推荐": {
 		"host": "www.zcool.com.cn",
-		"url": "return (fun.lp() == '/' || fun.lp() == '/home')",
+		"url": "return (fun.lp() == '/' || fun.lp() == '/home' || fun.lp() == '/focus')",
 		"pager": {
 			"nextL": "a.laypage_next",
 			"pageE": ".card-box",
