@@ -1677,6 +1677,25 @@
 			"replaceE": "#wrapcentre > div"
 		}
 	},
+	"RuTracker - 各版块帖子列表": {
+		"host": "rutracker.org",
+		"url": "/viewforum\\.php/",
+		"pager": {
+			"nextL": "#pagination b~a.pg",
+			"pageE": "tr[id^='tr-']",
+			"replaceE": "#pagination"
+		}
+	},
+	"RuTracker - 帖子内": {
+		"host": "rutracker.org",
+		"url": "/viewtopic\\.php/",
+		"thread": true,
+		"pager": {
+			"nextL": "#pagination b~a.pg",
+			"pageE": "tbody[id^='post_']",
+			"replaceE": "#pagination"
+		}
+	},
 	"GBAtemp - 帖子内": {
 		"host": "gbatemp.net",
 		"url": "/^\\/threads\\//",
