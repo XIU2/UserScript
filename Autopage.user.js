@@ -2520,7 +2520,7 @@ function: {
                     if (!autopbn) return
                     if (curSite.pager.isHidden && isHidden(autopbn)) return // 如果 isHidden = true，那么需要判断元素是否隐藏
                     if (curSite.pager.nextText) {
-                        console.log(curSite.pager.nextText, autopbn.innerText, autopbn)
+                        //console.log(curSite.pager.nextText, autopbn.innerText, autopbn)
                         // 按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页
                         if (autopbn.innerText === curSite.pager.nextText) {autopbn.click(); pageNum.now = pageNum._now + 1;}
                     } else if (curSite.pager.nextTextOf) {
@@ -2530,8 +2530,8 @@ function: {
                         // 按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页
                         if (autopbn.innerHTML === curSite.pager.nextHTML) {autopbn.click(); pageNum.now = pageNum._now + 1;}
                     } else {
-                        // 对于没有按钮文字变化的按钮，可以指定间隔时间（默认 300ms）
-                        if (!curSite.pager.interval) curSite.pager.interval = 300;
+                        // 对于没有按钮文字变化的按钮，可以指定间隔时间（默认 500ms）
+                        if (!curSite.pager.interval) curSite.pager.interval = 500;
                         intervalPause();
                         // 如果没有指定按钮文字就直接点击
                         autopbn.click(); pageNum.now = pageNum._now + 1;
