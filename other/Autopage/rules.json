@@ -1735,23 +1735,21 @@
 			"replaceE": ".pageNav"
 		}
 	},
-	"Crackhub213": {
-		"host": "crackhub.site",
-		"style": "html.wp-dark-mode-active .inside-article {background-color: var(--wp-dark-mode-bg);}",
+	"国外重新包装游戏": {
+		"host": [
+			"crackhub.site",
+			"fitgirl-repacks.site",
+			"masquerade.site"
+		],
+		"style": "html.wp-dark-mode-active .inside-article, #nav-below {background-color: var(--wp-dark-mode-bg);}",
 		"pager": {
-			"nextL": "a.next.page-numbers",
+			"nextL": "a.next",
 			"pageE": "article[id^='post-']",
-			"replaceE": "nav.paging-navigation",
+			"replaceE": "nav.paging-navigation, nav.pagination",
 			"scrollD": 2000
-		}
-	},
-	"FitGirl Repacks": {
-		"host": "fitgirl-repacks.site",
-		"pager": {
-			"nextL": "a.next.page-numbers",
-			"pageE": "article[id^='post-']",
-			"replaceE": "nav.paging-navigation",
-			"scrollD": 2500
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0, 'img[data-src]', 'data-src'])"
 		}
 	},
 	"茶杯狐": {
@@ -2855,6 +2853,62 @@
 		},
 		"function": {
 			"bF": "pageE.forEach(function (one) {if (fun.getCSS('.macwk-app__header--icon--content[style^=\"--img:\"] + img:not(src)', one)){fun.getCSS('.macwk-app__header--icon--content[style^=\"--img:\"] + img:not(src)', one).src = /(?<=\\().+(?=\\))/.exec(fun.getCSS('.macwk-app__header--icon--content[style^=\"--img:\"]', one).style.cssText)[0].replaceAll('\\\\','');}}); return pageE"
+		}
+	},
+	"轻狂志 - 文章评论": {
+		"host": "www.flighty.cn",
+		"url": "return (fun.indexOF(/\\/\\d+_\\d+\\.html/))",
+		"pager": {
+			"type": 2,
+			"nextL": ".cmt-more-wrap-gw"
+		}
+	},
+	"轻狂志": {
+		"host": "www.flighty.cn",
+		"url": "return (fun.lp() != '/')",
+		"pager": {
+			"nextL": "//div[@class='pages']//a[text()='下一页']",
+			"pageE": ".items",
+			"replaceE": ".pages"
+		}
+	},
+	"黑域基地": {
+		"host": "www.hybase.com",
+		"url": "return (!fun.indexOF(/\\/\\d+\\.html/))",
+		"pager": {
+			"nextL": "id('pages')/a[text()='下一页']",
+			"pageE": ".entry",
+			"replaceE": "#pages"
+		}
+	},
+	"盒子部落 - 首页": {
+		"host": "www.hezibuluo.com",
+		"url": "/^\\/$/",
+		"pager": {
+			"type": 2,
+			"nextL": ".load-more:not(.loading)"
+		}
+	},
+	"盒子部落": {
+		"host": "www.hezibuluo.com",
+		"url": "return (!fun.indexOF(/\\/\\d+\\.html/))",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": ".main li.item",
+			"replaceE": ".pagination",
+			"scrollD": 2000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+		}
+	},
+	"QiuQuan's Blog": {
+		"host": "www.qiuquan.cc",
+		"url": "return (!fun.indexOF('.html'))",
+		"pager": {
+			"nextL": "li.next-page > a",
+			"pageE": "article",
+			"replaceE": ".pagination"
 		}
 	},
 	"小众软件": {
