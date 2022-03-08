@@ -354,6 +354,27 @@
 			"scrollD": 1000
 		}
 	},
+	"烂番茄": {
+		"host": "www.rottentomatoes.com",
+		"url": "/\\/browse\\//",
+		"pager": {
+			"type": 2,
+			"nextL": "#show-more-btn > button"
+		}
+	},
+	"IMDb": {
+		"host": "www.imdb.com",
+		"url": "/\\/search\\//",
+		"pager": {
+			"nextL": ".next-page",
+			"pageE": ".lister-item",
+			"replaceE": ".desc",
+			"scrollD": 2500
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[loadlate]','loadlate'])"
+		}
+	},
 	"知乎 - 用户主页/收藏夹": {
 		"host": "www.zhihu.com",
 		"url": "fun.isUrlC(); if (fun.indexOF(/\\/people\\/.+\\/.+/) || fun.indexOF('/collection/')) {if (self != top) {fun.insStyle('#ProfileHeader {display: none !important;}')}; return true;}",
@@ -3511,8 +3532,7 @@
 		"pager": {
 			"type": 2,
 			"nextL": ".ajax-pagination-btn",
-			"nextText": "More",
-			"scrollD": 2500
+			"scrollD": 2000
 		}
 	},
 	"Github - 用户 Star 列表": {
@@ -3845,7 +3865,6 @@
 		"pager": {
 			"type": 2,
 			"nextL": ".load-more",
-			"nextTextOf": "LOAD MORE",
 			"scrollD": 2000
 		}
 	},
