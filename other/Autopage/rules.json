@@ -1548,6 +1548,7 @@
 			],
 			"replaceE": ".page_fenye",
 			"scrollE": ".page_fenye",
+			"scriptT": 2,
 			"interval": 500,
 			"scrollD": 100
 		}
