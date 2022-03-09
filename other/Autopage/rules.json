@@ -1129,6 +1129,19 @@
 			"replaceE": ".tcdPageCode"
 		}
 	},
+	"图怪兽": {
+		"host": "818ps.com",
+		"url": "/^\\/search\\//",
+		"style": ".footer > div {background-color: #fff !important;}",
+		"pager": {
+			"nextL": "li.toppage > a",
+			"pageE": "#masonry",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+		}
+	},
 	"千图网 - 分类/搜索页": {
 		"host": "www.58pic.com",
 		"url": "if (fun.indexOF(/\\/(tupian|piccate|pmulti|scene)\\//)) {if (fun.indexOF('/piccate/') && fun.getCSS('.card-grid-box .qt-card-box[style*=\"width:\"]')) {fun.insStyle('.card-grid-box .qt-card-box {display: block;height: 300px;min-height: 250px;}')}; return true}",
