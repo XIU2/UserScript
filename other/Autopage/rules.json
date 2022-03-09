@@ -1084,6 +1084,51 @@
 			"replaceE": ".pageturning"
 		}
 	},
+	"古田路9号": {
+		"host": "www.gtn9.com",
+		"url": "/^\\/(index|work_list|activity_list|perspectives_list)\\.aspx/",
+		"style": ".collects {display: block;}",
+		"pager": {
+			"nextL": ".tcdPageCode > span.current+a.tcdNumber",
+			"pageE": ".content_list_box",
+			"replaceE": ".tcdPageCode"
+		}
+	},
+	"古田路9号 - 搜索页": {
+		"host": "www.gtn9.com",
+		"url": "/^\\/search_list\\.aspx/",
+		"style": ".collects {display: block;}",
+		"pager": {
+			"nextL": ".tcdPageCode > span.current+a.tcdNumber",
+			"pageE": "//div[@class='content_list_box'] | //body/script[contains(text(), 'function loadcount()')]",
+			"replaceE": ".tcdPageCode",
+			"scriptT": 2
+		},
+		"function": {
+			"aF": "document.body.appendChild(document.createElement('script')).textContent = 'loadcount()'"
+		}
+	},
+	"古田路9号 - 毕设展": {
+		"host": "www.gtn9.com",
+		"url": "/^\\/exhibition_list_new\\.aspx/",
+		"style": ".collects {display: block;}",
+		"pager": {
+			"nextL": ".tcdPageCode > span.current+a.tcdNumber",
+			"pageE": ".activityBox >*",
+			"replaceE": ".tcdPageCode",
+			"scriptT": 2
+		}
+	},
+	"古田路9号 - 毕设展2": {
+		"host": "www.gtn9.com",
+		"url": "/^\\/exhibition_list\\.aspx/",
+		"style": ".collectss {display: block;} .list_tan_box {display: none !important;}",
+		"pager": {
+			"nextL": ".tcdPageCode > span.current+a.tcdNumber",
+			"pageE": ".content_lists_box",
+			"replaceE": ".tcdPageCode"
+		}
+	},
 	"千图网 - 分类/搜索页": {
 		"host": "www.58pic.com",
 		"url": "if (fun.indexOF(/\\/(tupian|piccate|pmulti|scene)\\//)) {if (fun.indexOF('/piccate/') && fun.getCSS('.card-grid-box .qt-card-box[style*=\"width:\"]')) {fun.insStyle('.card-grid-box .qt-card-box {display: block;height: 300px;min-height: 250px;}')}; return true}",
