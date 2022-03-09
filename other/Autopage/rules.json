@@ -2748,6 +2748,28 @@
 			"bF": "return fun.src_bF(pageE, [0, 'img[_src]', '_src'])"
 		}
 	},
+	"皇帝之家": {
+		"host": "www.huangdizhijia.com",
+		"url": "/chapter-\\d+\\.html/",
+		"pager": {
+			"nextL": "//div[contains(@class, 'tag-view-type')]//a[text()='下一章']",
+			"pageE": ".tagCol > p",
+			"insertP": [
+				".tagCol > p",
+				6
+			],
+			"replaceE": ".tag-view-type"
+		}
+	},
+	"皇帝之家 - 分类页": {
+		"host": "www.huangdizhijia.com",
+		"url": "/^\\/(male|tags\\.php)/",
+		"pager": {
+			"nextL": "//div[@class='paginator']//a[text()='下一页>']",
+			"pageE": "li.subject-item",
+			"replaceE": ".paginator"
+		}
+	},
 	"轻之文库": {
 		"host": "www.linovel.net",
 		"url": "if (fun.indexOF(/\\/book\\/\\d+\\/.+\\.html/)) {fun.insStyle('.reward-section {display: none !important;}');} else if (fun.indexOF('/cat/')) {return true;}",
