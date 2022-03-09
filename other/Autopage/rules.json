@@ -13,7 +13,7 @@
 	"百度搜索 - 手机版": {
 		"host": "m.baidu.com",
 		"url": "return (location.pathname.slice(location.pathname.length - 2, location.pathname.length) == '/s')",
-		"style": "div.result[tpl='recommend_list'], #page-copyright {display: none !important;}",
+		"style": "div.result[tpl='recommend_list'], #page-copyright, .hint-fold-results-box {display: none !important;}",
 		"pager": {
 			"nextL": "a[class^='new-nextpage']",
 			"pageE": "#results > *",
@@ -2665,7 +2665,7 @@
 		}
 	},
 	"铅笔小说": {
-		"host": "www.23qb.net",
+		"host": "www.23qb.com",
 		"url": "if (fun.indexOF(/\\/book\\/\\d+\\/.+\\.html/)) {fun.xs_bF(fun.getAllCSS('#mlfy_main_text > *'), [/（继续下一页）.+|铅笔小说.+/, '']); return true}",
 		"pager": {
 			"nextL": "js;return (location.origin + ReadParams.url_next)",
@@ -2678,7 +2678,7 @@
 		}
 	},
 	"铅笔小说 - 分类页": {
-		"host": "www.23qb.net",
+		"host": "www.23qb.com",
 		"url": "return (fun.lp != '/' && !fun.indexOF(/\\/book\\/\\d+\\//))",
 		"pager": {
 			"nextL": ".pages a.next, .pages > strong+a",
@@ -4130,10 +4130,10 @@
 	},
 	"彼岸图网": {
 		"host": "pic.netbian.com",
-		"style": "li.nextpage {display: none !important;}",
+		"style": "li.nextpage {display: none !important;} .alist > ul {height: auto !important;} .alist > ul > li {position: static !important; float: left !important; height: 550px !important;}",
 		"pager": {
-			"nextL": "//div[@class='page']/a[contains(text(),'下一页')]",
-			"pageE": ".slist ul > li:not(.nextpage)",
+			"nextL": "//div[@class='page']/a[text()='下一页']",
+			"pageE": ".slist > ul > li:not(.nextpage), .alist > ul > li",
 			"replaceE": ".page",
 			"scrollD": 1000
 		}
