@@ -2761,11 +2761,11 @@
 			"replaceE": ".tag-view-type"
 		}
 	},
-	"皇帝之家 - 分类页": {
+	"皇帝之家 - 分类标签搜索页": {
 		"host": "www.huangdizhijia.com",
-		"url": "/^\\/(male|tags\\.php)/",
+		"url": "return (fun.indexOF('/male/') || fun.indexOF('/tags.php') || fun.indexOF('/search.php'))",
 		"pager": {
-			"nextL": "//div[@class='paginator']//a[text()='下一页>']",
+			"nextL": "//div[contains(@class,'paginator')]//a[contains(text(),'下一页')]",
 			"pageE": "li.subject-item",
 			"replaceE": ".paginator"
 		}
