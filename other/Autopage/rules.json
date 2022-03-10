@@ -3995,6 +3995,15 @@
 			"nextText": "查看更多"
 		}
 	},
+	"少数派": {
+		"host": "sspai.com",
+		"url": "/\\/(matrix|column)/",
+		"pager": {
+			"type": 2,
+			"nextL": ".button-show-more",
+			"nextText": "加载更多"
+		}
+	},
 	"观察者网": {
 		"host": "www.guancha.cn",
 		"url": "/\\/list_/",
