@@ -2929,7 +2929,7 @@
 		"url": "fun.isUrlC(); return (fun.indexOF(/^\\/(soft|article)\\/.+\\/p\\d/))",
 		"style": ".app-content-bottom {display: none !important;}",
 		"pager": {
-			"nextL": "js;return fun.getNextUPN(/(?<=\\/p)\\d*$/, /p\\d*$/, 'p', '', '2', 'li.number:not(.active):last-of-type')",
+			"nextL": "js;return fun.getNextUPN(/(?<=\\/p)\\d*$/, /p\\d*$/, 'p', '', '2', fun.getCSS('li.number:not(.active):last-of-type').textContent)",
 			"pageE": ".list-animation-leftIn"
 		},
 		"function": {
@@ -3993,6 +3993,15 @@
 			"type": 2,
 			"nextL": ".kr-loading-more-button-default",
 			"nextText": "查看更多"
+		}
+	},
+	"观察者网": {
+		"host": "www.guancha.cn",
+		"url": "/\\/list_/",
+		"pager": {
+			"nextL": "js;return fun.getNextUPN(/(?<=\\/list_)\\d+(?=\\.shtml)/, /\\/list_.+/, '/list_', '.shtml', '2', fun.getXpath('id(\"Pagination\")/*[contains(@class,\"next\")]/preceding-sibling::*[1]').textContent)",
+			"pageE": ".column-list > li",
+			"scrollD": 1000
 		}
 	},
 	"ScienceAlert": {
@@ -5103,6 +5112,32 @@
 			"pageE": ".PictureList",
 			"replaceE": ".article_page",
 			"scrollD": 1000
+		}
+	},
+	"凹凸吧": {
+		"host": [
+			"www.tuaom.cc",
+			"www.tuaow.xyz"
+		],
+		"url": "/^\\/post/",
+		"pager": {
+			"nextL": "li.next-page > a",
+			"pageE": ".entry img, .article-content img",
+			"replaceE": "#dm-fy",
+			"scrollD": 4000
+		}
+	},
+	"高清尤物网": {
+		"host": [
+			"www.gqywt.com",
+			"www.jjtaotu.com"
+		],
+		"url": "/\\/\\d{8}\\/\\d{3,}/",
+		"pager": {
+			"nextL": "//div[@class='pagelist']//a[text()='下一页']",
+			"pageE": "#picg img",
+			"replaceE": ".page .pagelist",
+			"scrollD": 4500
 		}
 	}
 }
