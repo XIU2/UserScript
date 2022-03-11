@@ -5158,5 +5158,25 @@
 			"replaceE": ".page .pagelist",
 			"scrollD": 4500
 		}
+	},
+	"仙女图": {
+		"host": "www.xiannvtu.com",
+		"url": "/\\/v\\//",
+		"pager": {
+			"nextL": "//div[@class='page']//a[text()='下一页']",
+			"pageE": ".picbox img",
+			"replaceE": ".page",
+			"scrollD": 2000
+		}
+	},
+	"仙女图 - 手机版": {
+		"host": "m.xiannvtu.com",
+		"url": "/\\/v\\//",
+		"pager": {
+			"nextL": "//div[@class='fenye']//a[text()='下一页']",
+			"pageE": "#content > .post > .post-content img",
+			"replaceE": ".fenye",
+			"scrollD": 3500
+		}
 	}
 }

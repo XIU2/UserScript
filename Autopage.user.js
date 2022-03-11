@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.2.7
+// @version      5.2.8
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、龙的天空、起点中文、IT之家、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -258,7 +258,7 @@ pager: {
            nextText:    按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页（避免一瞬间加载太多次下一页，下同）
            nextTextOf:  按钮文本的一部分，当按钮文本包含该文本时，才会点击按钮加载下一页
            nextHTML:    按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页
-           interval:    点击间隔时间，对于没有按钮文字变化的按钮，可以手动指定间隔时间（单位 ms，默认 300，当指定上面三个时，会忽略 interval）
+           interval:    点击间隔时间，对于没有按钮文字变化的按钮，可以手动指定间隔时间（单位 ms，默认 500，当指定上面三个时，会忽略 interval）
            isHidden:    只有下一页按钮可见时（没有被隐藏），才会点击
 
        3 = 依靠 [基准元素] 与 [浏览器可视区域底部] 之间的距离缩小来触发翻页（适用于：主体元素下方内容太多 且 高度不固定时）
@@ -2867,7 +2867,7 @@ function: {
     function getNextE(css) {
         if (!css) css = curSite.pager.nextL;
         let next = getOne(css);
-        if (next && next.nodeType === 1 && next.href && next.href.slice(0,4) === 'http') {
+        if (next && next.nodeType === 1 && next.href && next.href.slice(0,4) === 'http' && next.getAttribute('href').slice(0,1) !== '#') {
             if (next.href != curSite.pageUrl) {
                 if (curSite.pager.forceHTTPS && location.protocol === 'https:') {
                     if (next.href.replace(/^http:/,'https:') === curSite.pageUrl) {
@@ -2983,13 +2983,13 @@ function: {
     function checkURL(func) {
         if (typeof curSite.pager.nextL == 'function') {
             let tempUrl = curSite.pager.nextL();
-            if (!tempUrl || (tempUrl && tempUrl.slice(0,4) != 'http') || tempUrl === curSite.pageUrl) return;
+            if (!tempUrl || tempUrl === curSite.pageUrl || tempUrl.slice(0,4) !== 'http') return
             curSite.pageUrl = tempUrl;
             func(curSite.pageUrl);
         } else if (curSite.pager.nextL && curSite.pager.nextL.search(/^js;/i) === 0) { // 自定义翻页规则中执行 JavaScript 代码的
             try {
                 let tempUrl = new Function('fun', curSite.pager.nextL.slice(3))(window.autoPage);
-                if (!tempUrl || (tempUrl && tempUrl.slice(0,4) != 'http') || tempUrl === curSite.pageUrl) return;
+                if (!tempUrl || tempUrl === curSite.pageUrl || tempUrl.slice(0,4) !== 'http') return
                 curSite.pageUrl = tempUrl;
                 func(curSite.pageUrl);
             } catch (e) {
