@@ -50,11 +50,11 @@
 			"www.bing.com",
 			"cn.bing.com"
 		],
-		"url": "return (fun.lp() == '/search')",
-		"style": ".b_imagePair.square_mp > .inner {display: none !important;}",
+		"url": "if (fun.lp() == '/search') {if (fun.isMobile() && document.documentElement.lang != 'zh') {return false;} else {return true;}}",
+		"style": "#b_footer, .b_imagePair.square_mp > .inner, .b_msg, #b_results > [class='b_ans'] {display: none !important;}",
 		"pager": {
 			"nextL": "a.sb_pagN, a.sb_halfnext, a.sb_fullnpl",
-			"pageE": "#b_results > li:not(.b_msg):not([class='b_ans']):not(.b_pag):not(#mfa_root)",
+			"pageE": "#b_results > li.b_algo",
 			"replaceE": "#b_results > .b_pag",
 			"scrollD": 2000
 		},
