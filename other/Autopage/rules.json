@@ -5133,17 +5133,18 @@
 			"scrollD": 1000
 		}
 	},
-	"凹凸吧": {
+	"凸凹吧/撸女吧": {
 		"host": [
 			"www.tuaom.cc",
-			"www.tuaow.xyz"
+			"www.tuaow.xyz",
+			"www.lunu.cc"
 		],
-		"url": "/^\\/post/",
+		"url": "/^\\/(post|web)\\//",
 		"pager": {
 			"nextL": "li.next-page > a",
 			"pageE": ".entry img, .article-content img",
 			"replaceE": "#dm-fy",
-			"scrollD": 4000
+			"scrollD": 4500
 		}
 	},
 	"高清尤物网": {
