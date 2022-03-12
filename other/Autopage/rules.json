@@ -5201,5 +5201,15 @@
 			"replaceE": ".page-links",
 			"scrollD": 3000
 		}
+	},
+	"imn5_net": {
+		"host": "www.imn5.net",
+		"url": "/^/[a-zA-Z]+/[a-zA-Z]+/\\w+\\.html$/",
+		"pager": {
+			"nextL": "//a[text()='下页']",
+			"pageE": ".imgwebp",
+			"replaceE": ".page",
+			"scrollD": 1500
+		}
 	}
 }
