@@ -5201,5 +5201,15 @@
 			"replaceE": ".page-links",
 			"scrollD": 3000
 		}
+	},
+	"imn5_net": {
+		"host": "www.imn5.net",
+		"url": "/\\/\\d+(_\\d+)?\\.html$/",
+		"pager": {
+			"nextL": "a.current+a",
+			"pageE": ".imgwebp",
+			"replaceE": ".page",
+			"scrollD": 2000
+		}
 	}
 }
