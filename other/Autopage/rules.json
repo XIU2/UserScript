@@ -1663,6 +1663,15 @@
 			"scrollD": 500
 		}
 	},
+	"SpigotMC": {
+		"host": "www.spigotmc.org",
+		"url": "/\\/resources\\/(categories|authors)?/",
+		"pager": {
+			"nextL": "//a[@class='text' and contains(text(), '>')]",
+			"pageE": "li.resourceListItem",
+			"replaceE": ".PageNav"
+		}
+	},
 	"CurseForge": {
 		"host": "www.curseforge.com",
 		"pager": {
