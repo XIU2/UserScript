@@ -5178,5 +5178,28 @@
 		"function": {
 			"bF": "return fun.src_bF(pageE, [0,'img[data-lazy-src]','data-lazy-src'])"
 		}
+	},
+	"ROSIMM 写真": {
+		"host": [
+			"www.rosi3.cc",
+			"www.rosimm3.com"
+		],
+		"url": "/\\.html$/",
+		"pager": {
+			"nextL": "//div[@class='pagination2']/li/a[text()='下一页']",
+			"pageE": "article img",
+			"replaceE": ".pagination2",
+			"scrollD": 2000
+		}
+	},
+	"ROSI 小莉写真": {
+		"host": "www.xiaoli8.cc",
+		"url": "/\\/\\d+$/",
+		"pager": {
+			"nextL": "span.post-page-numbers.current+a.post-page-numbers",
+			"pageE": "li.blocks-gallery-item",
+			"replaceE": ".page-links",
+			"scrollD": 3000
+		}
 	}
 }
