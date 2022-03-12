@@ -5204,12 +5204,12 @@
 	},
 	"imn5_net": {
 		"host": "www.imn5.net",
-		"url": "/^/[a-zA-Z]+/[a-zA-Z]+/\\d+\\.html$/",
+		"url": "/\\/\\d+(_\\d+)?\\.html$/",
 		"pager": {
-			"nextL": "//a[text()='下页']",
+			"nextL": "a.current+a",
 			"pageE": ".imgwebp",
 			"replaceE": ".page",
-			"scrollD": 1500
+			"scrollD": 2000
 		}
 	}
 }
