@@ -1794,23 +1794,6 @@
 			"replaceE": ".pageNav"
 		}
 	},
-	"国外重新包装游戏": {
-		"host": [
-			"crackhub.site",
-			"fitgirl-repacks.site",
-			"masquerade.site"
-		],
-		"style": "html.wp-dark-mode-active .inside-article, #nav-below {background-color: var(--wp-dark-mode-bg);}",
-		"pager": {
-			"nextL": "a.next",
-			"pageE": "article[id^='post-']",
-			"replaceE": "nav.paging-navigation, nav.pagination",
-			"scrollD": 2000
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-src]', 'data-src'])"
-		}
-	},
 	"茶杯狐": {
 		"host": "/www\\.cupfox\\./",
 		"pager": {
@@ -5178,6 +5161,22 @@
 			"pageE": "#content > .post > .post-content img",
 			"replaceE": ".fenye",
 			"scrollD": 3500
+		}
+	},
+	"177 漫画/xxiav": {
+		"host": [
+			"www.177picyy.com",
+			"www.xxiav.com"
+		],
+		"url": "/\\d+\\.html/",
+		"pager": {
+			"nextL": "//div[@class='page-links']/a[./span[./i[@class='be be-arrowright']]]",
+			"pageE": ".single-content > p",
+			"replaceE": ".page-links",
+			"scrollD": 3000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-lazy-src]','data-lazy-src'])"
 		}
 	}
 }
