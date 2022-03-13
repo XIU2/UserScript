@@ -2984,15 +2984,6 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
-	"QiuQuan's Blog": {
-		"host": "www.qiuquan.cc",
-		"url": "return (!fun.indexOF('.html'))",
-		"pager": {
-			"nextL": "li.next-page > a",
-			"pageE": "article",
-			"replaceE": ".pagination"
-		}
-	},
 	"小众软件": {
 		"host": "www.appinn.com",
 		"pager": {
