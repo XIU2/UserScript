@@ -1767,7 +1767,7 @@
 		}
 	},
 	"RuTracker - 帖子列表": {
-		"host": "rutracker.org",
+		"host": ["rutracker.org", "rutracker.net"],
 		"url": "/viewforum\\.php/",
 		"pager": {
 			"nextL": "#pagination b~a.pg",
@@ -1776,13 +1776,22 @@
 		}
 	},
 	"RuTracker - 帖子内": {
-		"host": "rutracker.org",
+		"host": ["rutracker.org", "rutracker.net"],
 		"url": "/viewtopic\\.php/",
 		"thread": true,
 		"pager": {
 			"nextL": "#pagination b~a.pg",
 			"pageE": "tbody[id^='post_']",
 			"replaceE": "#pagination"
+		}
+	},
+	"RuTrackerIN - 帖子列表": {
+		"host": "rutracker.in",
+		"url": "/viewforum\\.php/",
+		"pager": {
+			"nextL": ".gensmall[align='right'] strong~a",
+			"pageE": "//table[@class='tablebg']/tbody/tr[./td[@class='row1']]",
+			"replaceE": ".gensmall[align='right']"
 		}
 	},
 	"GBAtemp - 帖子内": {
@@ -4600,6 +4609,27 @@
 			"pageE": ".itg > tbody > tr:not(:first-of-type)",
 			"replaceE": ".ptt, .ptb",
 			"scrollD": 1000
+		}
+	},
+	"nhentai": {
+		"host": "nhentai.net",
+		"url": "return (fun.lp() == '/' || fun.lp() == '/search/' || fun.indexOF(/\\/(tag|artist|character)\\//))",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": ".gallery",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+		}
+	},
+	"nhentai - 图片页": {
+		"host": "nhentai.net",
+		"url": "/\\/g\\/\\d+\\/\\d+\\//",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": "#image-container img",
+			"replaceE": ".reader-pagination"
 		}
 	},
 	"JavDB": {
