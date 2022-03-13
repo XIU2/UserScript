@@ -5232,6 +5232,19 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-lazy-src]','data-lazy-src'])"
 		}
 	},
+	"18 禁漫": {
+		"host": "www.18mh.cc",
+		"url": "/^\\/index-look/",
+		"style": ".e img {display: block; margin: 0 auto;}",
+		"pager": {
+			"nextL": "//div[@class='c']/a[text()='下一頁' or text()='下一章'][not(@class='n fanye')]",
+			"pageE": ".e > img:not([style='display:none;'])",
+			"replaceE": ".c, .b"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
+		}
+	},
 	"ROSIMM 写真": {
 		"host": [
 			"www.rosi3.cc",
