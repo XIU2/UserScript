@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.3.2
+// @version      5.3.3
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -2529,7 +2529,7 @@ function: {
 
     // 自动无缝翻页
     function pageLoading() {
-        if (curSite.SiteTypeID == 0) return
+        if (curSite.SiteTypeID === 0 || !curSite.pager) return
         if (curSite.pager.type === undefined) curSite.pager.type = 1; // 默认翻页模式 1
         if (curSite.pager.scrollD === undefined) curSite.pager.scrollD = 1500; // 默认翻页触发线 1500
         if (curSite.pager.interval === undefined) curSite.pager.interval = 500; // 默认间隔时间 500ms
@@ -3020,12 +3020,13 @@ function: {
 
     // 检查 URL
     function checkURL(func) {
+        if (!curSite.pager.nextL) return
         if (typeof curSite.pager.nextL == 'function') {
             let tempUrl = curSite.pager.nextL();
             if (!tempUrl || tempUrl === curSite.pageUrl || tempUrl.slice(0,4) !== 'http') return
             curSite.pageUrl = tempUrl;
             func(curSite.pageUrl);
-        } else if (curSite.pager.nextL && curSite.pager.nextL.search(/^js;/i) === 0) { // 自定义翻页规则中执行 JavaScript 代码的
+        } else if (curSite.pager.nextL.search(/^js;/i) === 0) { // 自定义翻页规则中执行 JavaScript 代码的
             try {
                 let tempUrl = new Function('fun', curSite.pager.nextL.slice(3))(window.autoPage);
                 if (!tempUrl || tempUrl === curSite.pageUrl || tempUrl.slice(0,4) !== 'http') return
@@ -3043,7 +3044,6 @@ function: {
     function replaceElems(pageE, o = curSite.pager.replaceE, r = curSite.pager.replaceE) {
         let oE = getAll(o),
             rE = getAll(r, pageE, pageE);
-        //console.log(oE, rE)
         if (oE.length != 0 && rE.length != 0 && oE.length === rE.length) {
             for (let i = 0; i < oE.length; i++) {
                 oE[i].outerHTML = rE[i].outerHTML;
