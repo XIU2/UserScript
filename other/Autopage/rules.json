@@ -5312,5 +5312,31 @@
 			"replaceE": ".pagelist",
 			"scrollD": 2000
 		}
+	},
+	"推图网": {
+		"host": "m.tuiimg.com",
+		"url": "return (fun.lp() == '/')",
+		"hiddenPN": true,
+		"pager": {
+			"nextL": "js;showmore()",
+			"interval": 3000
+		}
+	},
+	"推图网 - 图片页": {
+		"host": ["m.tuiimg.com", "www.tuiimg.com"],
+		"url": "if (fun.indexOF(/\\/\\d+\\/$/)) {let _img=''; for (_pd[2]=1;_pd[2]<=_pd[3];_pd[2]++){_img += `<img src=\"${fileurl}${_pd[2]}.jpg\">`;}; document.getElementById('content').innerHTML = _img; return true;}",
+		"style": "#page, #tips{display: none !important;}",
+		"hiddenPN": true
+	},
+	"推图网 - 分类页": {
+		"host": ["m.tuiimg.com", "www.tuiimg.com"],
+		"pager": {
+			"nextL": ".page > .now + a, .page > em+a",
+			"pageE": "#main > li, .beauty > ul > li",
+			"replaceE": ".page"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[realsrc]','realsrc'])"
+		}
 	}
 }
