@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.3.1
+// @version      5.3.2
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -234,7 +234,7 @@
                     console.info('[自动无缝翻页] - 部分使用 WordPress 的网站 (li.next-page > a)'); return 151;
                 } else if (getCSS('.nav-previous a')) {
                     console.info('[自动无缝翻页] - 部分使用 WordPress 的网站 (旧文章)'); return 152;
-                } else if (getXpath('//nav[contains(@class, "navigation")]//a[contains(text(), "下一页") or contains(text(), ">")]')) {
+                } else if (getXpath('//nav[contains(@class, "navigation")]//a/text()[contains(., "下一页") or contains(., ">") or contains(translate(.,"NEXT","next"), "next")]')) {
                     console.info('[自动无缝翻页] - 部分使用 WordPress 的网站 (下一页)'); return 153;
                 }
             }
@@ -274,7 +274,7 @@
                 case 152: // < 部分使用 WordPress 的网站 (旧文章) >
                     DBSite.wp_article.url('.nav-previous a'); break;
                 case 153: // < 部分使用 WordPress 的网站 (下一页) >
-                    DBSite.wp_article.url('//nav[contains(@class, "navigation")]//a[contains(text(), "下一页") or contains(text(), ">")]'); break;
+                    DBSite.wp_article.url('//nav[contains(@class, "navigation")]//a/text()[contains(., "下一页") or contains(., ">") or contains(translate(.,"NEXT","next"), "next")]'); break;
                 case 200: // < 所有使用 笔趣阁 模板的小说网站 >
                     DBSite.biquge.url(); break;
             }

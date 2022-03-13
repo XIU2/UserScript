@@ -1738,9 +1738,9 @@
 		"host": "cs.rin.ru",
 		"url": "return (fun.lp() == '/forum/viewforum.php')",
 		"pager": {
-			"nextL": "//td[@class='gensmall'][@align='right']//a[text()='Next']",
+			"nextL": "#pagecontent .gensmall[align='right'] strong~a",
 			"pageE": "#pagecontent > table.tablebg > tbody > tr:not([align])",
-			"replaceE": "#pagecontent > table:first-child"
+			"replaceE": "#pagecontent .gensmall[align='right']"
 		},
 		"function": {
 			"bF": "for (let i = 0; i < pageE.length; i++) {if (pageE[i].textContent.replace(/\\n|\\t/g,'') === 'Topics') {pageE.splice(0,i+1); break;}}; return pageE;"
@@ -1751,7 +1751,7 @@
 		"url": "return (fun.lp() == '/forum/viewtopic.php')",
 		"thread": true,
 		"pager": {
-			"nextL": "id('pageheader')/p[@class='gensmall']//a[text()='Next']",
+			"nextL": "#pageheader .gensmall strong~a",
 			"pageE": "#pagecontent > table.tablebg:not(:nth-last-child(2)):not(:nth-child(2))",
 			"replaceE": "#pagecontent >table:not(.tablebg), #pageheader p.gensmall",
 			"scrollD": 2000
@@ -1761,7 +1761,7 @@
 		"host": "cs.rin.ru",
 		"url": "return (fun.lp() == '/forum/search.php')",
 		"pager": {
-			"nextL": "id('wrapcentre')/div[@class='nav']//a[text()='Next']",
+			"nextL": "#wrapcentre > .nav strong~a",
 			"pageE": "#wrapcentre > form > table.tablebg > tbody > tr[class^='row'], #wrapcentre > form > table.tablebg > tbody > tr[valign]",
 			"replaceE": "#wrapcentre > div"
 		}
@@ -2246,7 +2246,7 @@
 		"host": "yts.mx",
 		"url": "/^\\/browse-movies/",
 		"pager": {
-			"nextL": "//li/a[text()='Next »']",
+			"nextL": "//ul[contains(@class, 'tsc_pagination')]/li[./a[@class='current']]/following-sibling::li[1]/a",
 			"pageE": ".browse-movie-wrap",
 			"replaceE": ".tsc_pagination"
 		}
@@ -3038,7 +3038,7 @@
 		],
 		"url": "return ((fun.lp() == '/' || fun.indexOF(/^\\/page\\//)) || fun.indexOF('/category/'))",
 		"pager": {
-			"nextL": "//div[@class='pagination']//a[contains(text(), 'Next')]",
+			"nextL": ".pagination li.current+li>a",
 			"pageE": "article.article",
 			"replaceE": ".pagination",
 			"scrollD": 1000
@@ -3669,7 +3669,7 @@
 		],
 		"url": "/tab=stars/",
 		"pager": {
-			"nextL": "//div[@class='paginate-container']//a[contains(text(), 'Next')]",
+			"nextL": "//div[@class='paginate-container']/div/*[last()]",
 			"pageE": "#js-pjax-container .position-relative div[class^='col-lg-'] > div:not(.position-relative):not(.paginate-container)",
 			"insertP": [
 				".paginate-container",
@@ -3686,7 +3686,7 @@
 		],
 		"url": "/tab=repositories/",
 		"pager": {
-			"nextL": "//div[@class='paginate-container']//a[contains(text(), 'Next')]",
+			"nextL": "//div[@class='paginate-container']/div/*[last()]",
 			"pageE": "#user-repositories-list > ul > li",
 			"replaceE": ".paginate-container",
 			"scrollD": 3000
@@ -3738,7 +3738,7 @@
 		],
 		"url": "return (fun.indexOF(/\\/tags$/))",
 		"pager": {
-			"nextL": "//div[@class='pagination']/a[contains(text(), 'Next')]",
+			"nextL": "//div[@class='pagination']/*[last()]",
 			"pageE": ".Box-body > div.Box-row",
 			"replaceE": ".pagination",
 			"scrollD": 3000
@@ -3751,7 +3751,7 @@
 		],
 		"url": "/\\/commits/",
 		"pager": {
-			"nextL": "//div[@class='paginate-container']//a[contains(text(), 'Older')]",
+			"nextL": "//div[@class='paginate-container']/div/*[last()]",
 			"pageE": "div.js-navigation-container > div",
 			"replaceE": ".paginate-container",
 			"scrollD": 3000
