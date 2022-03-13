@@ -2540,6 +2540,29 @@
 			"scrollD": 2000
 		}
 	},
+	"鬼罗丽漫画": {
+		"host": [
+			"www.gllmh8.com",
+			"m.gllmh8.com"
+		],
+		"url": "/\\/\\d+(_\\d+)?\\.html$/",
+		"style": ".article-content img {visibility: visible; opacity: 1;} .swiper-container {display: none !important;}",
+		"pager": {
+			"nextL": "li.thisclass+li > a",
+			"pageE": ".article-content p, #newsArticle p",
+			"replaceE": ".pagination, .pages",
+			"scrollD": 5500
+		}
+	},
+	"鬼罗丽漫画 - 分类页": {
+		"host": "www.gllmh8.com",
+		"pager": {
+			"nextL": "li.thisclass+li > a",
+			"pageE": ".listl > ul > li",
+			"replaceE": ".page",
+			"scrollD": 2000
+		}
+	},
 	"起点中文": {
 		"host": "www.qidian.com",
 		"url": "return (fun.indexOF('/all/'))",
