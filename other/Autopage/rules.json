@@ -683,7 +683,7 @@
 			"scrollD": 1200
 		}
 	},
-	"篱笆网论坛 - 各版块帖子列表": {
+	"篱笆网论坛 - 帖子列表": {
 		"host": "www.libaclub.com",
 		"url": "/\\/f_/",
 		"pager": {
@@ -1384,7 +1384,7 @@
 			"replaceE": ".pagerbar"
 		}
 	},
-	"学犀牛 - 各板块帖子列表": {
+	"学犀牛 - 帖子列表": {
 		"host": [
 			"www.xuexiniu.com",
 			"bbs.xuexiniu.com"
@@ -1396,7 +1396,7 @@
 			"replaceE": ".pg"
 		}
 	},
-	"学犀牛 - 各板块帖子列表2": {
+	"学犀牛 - 帖子列表2": {
 		"host": [
 			"www.xuexiniu.com",
 			"bbs.xuexiniu.com"
@@ -1734,7 +1734,7 @@
 			"scrollD": 1000
 		}
 	},
-	"cs.rin.ru - 各版块帖子列表": {
+	"cs.rin.ru - 帖子列表": {
 		"host": "cs.rin.ru",
 		"url": "return (fun.lp() == '/forum/viewforum.php')",
 		"pager": {
@@ -1766,7 +1766,7 @@
 			"replaceE": "#wrapcentre > div"
 		}
 	},
-	"RuTracker - 各版块帖子列表": {
+	"RuTracker - 帖子列表": {
 		"host": "rutracker.org",
 		"url": "/viewforum\\.php/",
 		"pager": {
@@ -4550,7 +4550,7 @@
 			"replaceE": "#paging"
 		}
 	},
-	"t66y - 各板块帖子列表": {
+	"t66y - 帖子列表": {
 		"host": "www.t66y.com",
 		"url": "/^\\/thread/",
 		"pager": {
@@ -5219,6 +5219,43 @@
 			"pageE": ".imgwebp",
 			"replaceE": ".page",
 			"scrollD": 2000
+		}
+	},
+	"Hentai Cosplays - 手机版": {
+		"host": "hentai-cosplays.com",
+		"url": "return (fun.indexOF('/image/') && fun.isMobile())",
+		"style": ".icon-good-thumbnail, .icon-bad-thumbnail {display: none !important;}",
+		"pager": {
+			"nextL": "a.paginator_page[rel='next']",
+			"pageE": "#detail_list > li",
+			"replaceE": ".paginator_area",
+			"scrollD": 3500
+		}
+	},
+	"Hentai Cosplays": {
+		"host": "hentai-cosplays.com",
+		"url": "/^\\/image\\//",
+		"style": ".icon-good-thumbnail, .icon-bad-thumbnail {display: none !important;}",
+		"pager": {
+			"nextL": "id('paginator')//a[contains(text(), '>')]",
+			"pageE": ".icon-overlay",
+			"replaceE": "#paginator",
+			"scrollD": 3000
+		}
+	},
+	"24FA": {
+		"host": [
+			"www.24fa.com",
+			"www.24faa.com",
+			"/www\\.\\d{3}w\\.cc/"
+		],
+		"url": "/^\\/m?n\\d+/",
+		"style": ".moreR {display: none;} #content img {width: auto; max-width: 99%; height: auto; display: block; margin: 0 auto;}",
+		"pager": {
+			"nextL": "li.p_current+li>a",
+			"pageE": "#content img",
+			"replaceE": ".pager",
+			"scrollD": 3000
 		}
 	}
 }
