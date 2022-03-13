@@ -5301,5 +5301,16 @@
 			"replaceE": ".pager",
 			"scrollD": 3000
 		}
+	},
+	"遛无写真": {
+		"host": "www.6evu.com",
+		"url": "/^\\/\\d+\\.html/",
+		"style": "#post_content > .code-block, .single-ad, .single-adphone {display: none !important;}",
+		"pager": {
+			"nextL": ".pagelist > span+a",
+			"pageE": "#post_content",
+			"replaceE": ".pagelist",
+			"scrollD": 2000
+		}
 	}
 }
