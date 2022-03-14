@@ -2409,6 +2409,15 @@
 			"scrollD": 1000
 		}
 	},
+	"点点字幕": {
+		"host": "www.ddzimu.com",
+		"url": "/\\/xslist\\.php/",
+		"pager": {
+			"nextL": "li.disabled+li>a",
+			"pageE": ".list > ul > li:not(.first)",
+			"replaceE": ".pagination"
+		}
+	},
 	"好漫 6": {
 		"host": [
 			"www.haoman6.com",
