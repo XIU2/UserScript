@@ -21,6 +21,16 @@
 			"scrollD": 2000
 		}
 	},
+	"百度站内搜索": {
+		"host": "zhannei.baidu.com",
+		"url": "return (fun.lp() == '/cse/site')",
+		"pager": {
+			"nextL": "a.pager-next-foot",
+			"pageE": ".result",
+			"replaceE": "#pageFooter",
+			"scrollD": 1000
+		}
+	},
 	"谷歌搜索 - 手机版": {
 		"host": "/^www\\.google\\./",
 		"url": "return (fun.lp() == '/search' && !fun.indexOF('tbm=isch', 's') && (fun.indexOF('sclient=mobile', 's') || fun.isMobile()))",
