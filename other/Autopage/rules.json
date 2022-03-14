@@ -4567,6 +4567,19 @@
 			"scrollD": 1000
 		}
 	},
+	"东方资讯": {
+		"host": "mini.eastday.com",
+		"url": "/\\/nsa\\//",
+		"pager": {
+			"type": 3,
+			"nextL": "a.cur+a",
+			"pageE": "#J-contain_detail_cnt",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
+		}
+	},
 	"xvideos": {
 		"host": [
 			"www.xnxx.com",
