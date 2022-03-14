@@ -566,7 +566,6 @@
 	"煎蛋网 - 大杂烩": {
 		"host": "jandan.net",
 		"url": "return (fun.lp() == '/dzh')",
-		"history": false,
 		"pager": {
 			"type": 2,
 			"nextL": ".show_more",

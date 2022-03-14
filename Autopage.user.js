@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.3.3
+// @version      5.3.4
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、B 站(Bilibili)、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -201,7 +201,6 @@
                 }
             }
         }
-
         if (support) {
             console.info('[自动无缝翻页] - 独立规则 网站'); return 1;
         } else if (self != top) {
@@ -218,6 +217,8 @@
             console.info('[自动无缝翻页] - <XenForo> 论坛'); return 6;
         } else if (getCSS('head meta[name="generator" i][content="nexusphp" i]') || getXpath('id("footer")[contains(string(), "NexusPHP")]')) {
             console.info('[自动无缝翻页] - <NexusPHP> 论坛'); return 7;
+        } else if (getAllCSS('.load-more, #loadmore, #load-more, .show_more').length === 1) {
+            console.info('[自动无缝翻页] - 部分自带 自动无缝翻页 的网站'); return 8;
         } else if (getCSS('link[href*="themes/dux" i], script[src*="themes/dux" i]')) {
             console.info('[自动无缝翻页] - 使用 WordPress <DUX> 主题的网站'); return 100;
         } else if (getCSS('link[href*="themes/xiu" i], script[src*="themes/xiu" i]')) {
@@ -229,13 +230,13 @@
         } else if (getCSS('link[href*="/wp-content/" i], script[src*="/wp-content/" i]')) {
             if (getAllCSS('article').length > 2 && getCSS('.pagination, .paging-navigation')) {
                 if (getCSS('a.next')) {
-                    console.info('[自动无缝翻页] - 部分使用 WordPress 的网站 (a.next)'); return 150;
+                    console.info('[自动无缝翻页] - 部分使用 WordPress 的网站 (a.next)'); return 104;
                 } else if (getCSS('li.next-page > a')) {
-                    console.info('[自动无缝翻页] - 部分使用 WordPress 的网站 (li.next-page > a)'); return 151;
+                    console.info('[自动无缝翻页] - 部分使用 WordPress 的网站 (li.next-page > a)'); return 105;
                 } else if (getCSS('.nav-previous a')) {
-                    console.info('[自动无缝翻页] - 部分使用 WordPress 的网站 (旧文章)'); return 152;
+                    console.info('[自动无缝翻页] - 部分使用 WordPress 的网站 (旧文章)'); return 106;
                 } else if (getXpath('//nav[contains(@class, "navigation")]//a/text()[contains(., "下一页") or contains(., ">") or contains(translate(.,"NEXT","next"), "next")]')) {
-                    console.info('[自动无缝翻页] - 部分使用 WordPress 的网站 (下一页)'); return 153;
+                    console.info('[自动无缝翻页] - 部分使用 WordPress 的网站 (下一页)'); return 107;
                 }
             }
         } else if ((getCSS('meta[name="description" i][content*="小说"], meta[name="description" i][content*="章节"], meta[name="description" i][content*="阅读"]') || location.hostname.indexOf('biqu') > -1 || document.title.indexOf('笔趣阁') > -1) && getCSS('#content, .content, #chaptercontent, .chaptercontent, #BookText') && getXpath('//a[contains(text(), "下一章") or contains(text(), "下一页")]')) {
@@ -259,6 +260,8 @@
                     DBSite.xenforo.url(); break;
                 case 7: //   < 所有 NexusPHP 论坛 >
                     DBSite.nexusphp.url(); break;
+                case 8: // < 部分自带 自动无缝翻页 的网站 >
+                    curSite = DBSite.loadmore; break;
                 case 100: // < 所有使用 WordPress DUX 主题的网站 >
                     DBSite.dux.url(); if (location.hostname === 'apphot.cc') {curSite.pager.scrollD = 2500;}; break;
                 case 101: // < 所有使用 WordPress XIU 主题的网站 >
@@ -267,13 +270,13 @@
                     DBSite.dux.url(); delete curSite.function; break;
                 case 103: // < 所有使用 WordPress Begin 主题的网站 >
                     DBSite.begin.url(); break;
-                case 150: // < 部分使用 WordPress 的网站 (a.next) >
+                case 104: // < 部分使用 WordPress 的网站 (a.next) >
                     DBSite.wp_article.url(); break;
-                case 151: // < 部分使用 WordPress 的网站 (li.next-page > a) >
+                case 105: // < 部分使用 WordPress 的网站 (li.next-page > a) >
                     DBSite.wp_article.url('li.next-page > a'); break;
-                case 152: // < 部分使用 WordPress 的网站 (旧文章) >
+                case 106: // < 部分使用 WordPress 的网站 (旧文章) >
                     DBSite.wp_article.url('.nav-previous a'); break;
-                case 153: // < 部分使用 WordPress 的网站 (下一页) >
+                case 107: // < 部分使用 WordPress 的网站 (下一页) >
                     DBSite.wp_article.url('//nav[contains(@class, "navigation")]//a/text()[contains(., "下一页") or contains(., ">") or contains(translate(.,"NEXT","next"), "next")]'); break;
                 case 200: // < 所有使用 笔趣阁 模板的小说网站 >
                     DBSite.biquge.url(); break;
@@ -353,12 +356,20 @@ function: {
 }
     */ //<<< 规则简单说明 >>>
         DBSite = {
+            loadmore: {
+                pager: {
+                    type: 2,
+                    nextL: '.load-more, #loadmore, #load-more, .show_more',
+                    isHidden: true,
+                    interval: 1000,
+                    scrollD: 2500
+                }
+            }, //           部分自带 自动无缝翻页 的网站
             discuz_forum: {
                 pager: {
                     type: 2,
                     nextL: '#autopbn',
-                    nextTextOf: '下一',
-                    scrollD: 1500
+                    nextTextOf: '下一'
                 }
             }, //       Discuz! 论坛 - 帖子列表（自带无缝加载下一页按钮的）
             discuz_guide: {
@@ -366,8 +377,7 @@ function: {
                     nextL: 'a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'id("threadlist")//table[./tbody[contains(@id, "normalthread_")]]/tbody[not(@id="separatorline")]',
                     replaceE: '.pg, .pages',
-                    forceHTTPS: true,
-                    scrollD: 1500
+                    forceHTTPS: true
                 }
             }, //       Discuz! 论坛 - 导读页 及 帖子列表（不带无缝加载下一页按钮的）
             discuz_waterfall: {
@@ -375,8 +385,7 @@ function: {
                     nextL: 'a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: '#waterfall > li',
                     replaceE: '.pg, .pages',
-                    forceHTTPS: true,
-                    scrollD: 1500
+                    forceHTTPS: true
                 }
             }, //   Discuz! 论坛 - 图片模式的帖子列表（不带无缝加载下一页按钮的）
             discuz_thread: {
@@ -386,8 +395,7 @@ function: {
                     nextL: 'a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: '#postlist > div[id^="post_"]',
                     replaceE: '//div[contains(@class,"pg") or contains(@class,"pages")][./a[contains(@class,"nxt") or contains(@class,"next") or contains(@class,"prev")][not(contains(@href,"javascript") or contains(@href,"commentmore"))]]',
-                    forceHTTPS: true,
-                    scrollD: 1500
+                    forceHTTPS: true
                 },
                 function: {
                     bF: src_bF,
@@ -399,8 +407,7 @@ function: {
                     nextL: 'a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: '#threadlist > ul',
                     replaceE: '.pg, .pages',
-                    forceHTTPS: true,
-                    scrollD: 1500
+                    forceHTTPS: true
                 }
             }, //      Discuz! 论坛 - 搜索页
             discuz_youspace: {
@@ -408,8 +415,7 @@ function: {
                     nextL: 'a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: 'form:not([action^="search.php?"]) tbody > tr:not(.th)',
                     replaceE: '.pg, .pages',
-                    forceHTTPS: true,
-                    scrollD: 1500
+                    forceHTTPS: true
                 }
             }, //    Discuz! 论坛 - 回复页、主题页（别人的）
             discuz_collection: {
@@ -417,8 +423,7 @@ function: {
                     nextL: 'a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
                     pageE: '#ct .bm_c table > tbody',
                     replaceE: '.pg, .pages',
-                    forceHTTPS: true,
-                    scrollD: 1500
+                    forceHTTPS: true
                 }
             }, //  Discuz! 论坛 - 淘帖页
             discuz_m: {
@@ -443,8 +448,7 @@ function: {
                 pager: {
                     type: 2,
                     nextL: '.DiscussionList-loadMore > button',
-                    isHidden: true,
-                    scrollD: 1500
+                    isHidden: true
                 }
             }, //             Flarum 论坛
             phpbb: {
@@ -516,8 +520,7 @@ function: {
                 pager: {
                     nextL: '//li[@class="page-item"]/a[text()="▶"]',
                     pageE: 'ul.threadlist > li',
-                    replaceE: 'ul.pagination',
-                    scrollD: 1500
+                    replaceE: 'ul.pagination'
                 }
             }, //              Xiuno 论坛 - 帖子列表
             xiuno_post: {
@@ -525,8 +528,7 @@ function: {
                 pager: {
                     nextL: '//li[@class="page-item"]/a[text()="▶"]',
                     pageE: 'li.post[data-pid]:not(.newpost)',
-                    replaceE: 'ul.pagination',
-                    scrollD: 1500
+                    replaceE: 'ul.pagination'
                 }
             }, //         Xiuno 论坛 - 帖子内
             nexusphp: {
@@ -547,8 +549,7 @@ function: {
                 pager: {
                     nextL: '//a[./b[contains(text(), "下一页") or contains(text(), ">>")]]',
                     pageE: 'table.torrents > tbody > tr:not(:first-of-type)',
-                    replaceE: '//p[@align][./font[@class="gray"]]',
-                    scrollD: 1500
+                    replaceE: '//p[@align][./font[@class="gray"]]'
                 }
             }, //           NexusPHP 论坛
             dux: {
@@ -557,8 +558,7 @@ function: {
                 pager: {
                     nextL: 'li.next-page > a',
                     pageE: '.content > article',
-                    replaceE: '.content > .pagination',
-                    scrollD: 1500
+                    replaceE: '.content > .pagination'
                 },
                 function: {
                     bF: src_bF,
@@ -570,16 +570,14 @@ function: {
                 pager: {
                     type: 2,
                     nextL: 'div[id^="ias_trigger_"]',
-                    interval: 500,
-                    scrollD: 1500
+                    interval: 500
                 }
             }, //              WordPress 的 Begin 主题
             begin_search: {
                 pager: {
                     nextL: 'a.next',
                     pageE: '#main > ul > li',
-                    replaceE: 'nav.pagination',
-                    scrollD: 1500
+                    replaceE: 'nav.pagination'
                 }
             }, //       WordPress 的 Begin 主题 - 搜索页
             wp_article: {
@@ -599,8 +597,7 @@ function: {
                     pageE: '#content, .content, #chaptercontent, .chaptercontent, #BookText',
                     insertP: ['#content, .content, #chaptercontent, .chaptercontent, #BookText', 6],
                     insertP6Br: true,
-                    replaceE: '//*[./a[contains(text(), "下一章") or contains(text(), "下一页")]]',
-                    scrollD: 1500
+                    replaceE: '//*[./a[contains(text(), "下一章") or contains(text(), "下一页")]]'
                 }
             }, //             笔趣阁 模板的小说网站
             baidu_tieba: {
@@ -639,8 +636,7 @@ function: {
                 pager: {
                     type: 5,
                     nextL: '//li[contains(@class,"pb_list_pager")]/a[text()="下一页"]',
-                    style: 'ul.tbui_aside_float_bar, .core_title_wrap_bright.tbui_follow_fixed.core_title_absolute_bright {display: none !important;}',
-                    scrollD: 1500
+                    style: 'ul.tbui_aside_float_bar, .core_title_wrap_bright.tbui_follow_fixed.core_title_absolute_bright {display: none !important;}'
                 }
             }, //   百度贴吧 - 帖子内
             baidu_tieba_search: {
@@ -821,8 +817,7 @@ function: {
                 pager: {
                     nextL: '//div[@class="NewPages"]//a[text()="下一页"]',
                     pageE: 'ul.mh-search-list > li',
-                    replaceE: '.NewPages',
-                    scrollD: 1500
+                    replaceE: '.NewPages'
                 }
             }, //     爱漫画 - 分类页
             manhuagui: {
@@ -852,8 +847,7 @@ function: {
                     nextL: '//div[@class="pager"]/a[text()="下一页" or text()="下一頁"]',
                     pageE: '.book-result > ul > li, .book-list > ul > li',
                     insertP: ['.book-result > ul, .book-list > ul', 3],
-                    replaceE: '.pager',
-                    scrollD: 1500
+                    replaceE: '.pager'
                 },
                 function: {
                     bF: src_bF,
@@ -889,8 +883,7 @@ function: {
                 pager: {
                     nextL: 'ul.pagination li.next a',
                     pageE: '#contList',
-                    replaceE: 'ul.pagination',
-                    scrollD: 1500
+                    replaceE: 'ul.pagination'
                 }
             }, //     36漫画 - 分类/搜索页
             manhuadb: {
@@ -1000,8 +993,7 @@ function: {
             /*dmzj_manhua_list: {
                 pager: {
                     nextL: ()=> getNextUPN(/(?<=-)\d+(?=\.shtml)/, /-\d+\.shtml/, '-', '.shtml', '2', getCSS('#topage > option:last-child').value),
-                    pageE: '#search_list_div ul',
-                    scrollD: 1500
+                    pageE: '#search_list_div ul'
                 }
             },*/ //  动漫之家 - 日漫 - 分类页
             dmzj_manhua_update: {
@@ -1383,8 +1375,7 @@ function: {
                     type: 4,
                     nextL: coolkeyan_nextL,
                     insertP: ['//div[contains(@class, "q-img__image")][last()]', 4],
-                    insertE: coolkeyan_insertE,
-                    scrollD: 1500
+                    insertE: coolkeyan_insertE
                 }
             }, //             酷科研
             nsfc: {
@@ -1395,8 +1386,7 @@ function: {
                     type: 4,
                     nextL: nsfc_nextL,
                     insertP: ['#pageNoUl', 1],
-                    insertE: nsfc_insertE,
-                    scrollD: 1500
+                    insertE: nsfc_insertE
                 }
             } //                   国家自然科学基金
         };
@@ -3303,9 +3293,9 @@ function: {
         "host": "aaaa",
         "url": "xxxx",
         "pager": {
-            "nextL": "xxx",
-            "pageE": "xxx",
-            "replaceE": "xxx",
+            "nextL": "xxxx",
+            "pageE": "xxxx",
+            "replaceE": "xxxx",
             "scrollD": 1000
         }
     },
@@ -3335,7 +3325,7 @@ function: {
     },
     "这里也可以用中文": {
         "host": "/\\.ccc\\.com/",
-        "url": "fun.UrlC(); return (fun.lp() == '/' || fun.indexOF('/s'))",
+        "url": "fun.UrlC(); return (fun.lp() == '/' || fun.indexOF('/s') || fun.isMobile())",
         "pager": {
             "type": 2,
             "nextL": "#autopbn",
