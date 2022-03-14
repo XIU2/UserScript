@@ -5186,10 +5186,10 @@
 		],
 		"url": "/^\\/(post|web)\\//",
 		"pager": {
+			"type": 3,
 			"nextL": "li.next-page > a",
 			"pageE": ".entry img, .article-content img",
-			"replaceE": "#dm-fy",
-			"scrollD": 4500
+			"replaceE": "#dm-fy"
 		}
 	},
 	"高清尤物网": {
