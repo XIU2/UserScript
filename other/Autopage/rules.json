@@ -2107,7 +2107,7 @@
 		}
 	},
 	"BT 之家": {
-		"host": "/btbtt/",
+		"host": "/\\d?btbtt\\d?/",
 		"pager": {
 			"nextL": "//div[@class='page']/a[contains(text(), '▶') or contains(text(), '下一页')]",
 			"pageE": "#threadlist > *",
@@ -2138,6 +2138,7 @@
 		"host": [
 			"www.kisssub.org",
 			"www.comicat.org",
+			"www.anix.moe",
 			"/(share|www)\\.acgnx\\./"
 		],
 		"pager": {
@@ -2324,7 +2325,7 @@
 			"scrollD": 2000
 		}
 	},
-	"A4k字幕网": {
+	"A4k 字幕网": {
 		"host": "www.a4k.net",
 		"url": "return (!fun.indexOF('/subtitle/'))",
 		"pager": {
@@ -2358,7 +2359,7 @@
 			"scrollD": 1000
 		}
 	},
-	"射手网": {
+	"伪射手网": {
 		"host": "assrt.net",
 		"url": "return (fun.lp() === '/sub/')",
 		"pager": {
@@ -2372,7 +2373,7 @@
 			"scrollD": 1000
 		}
 	},
-	"射手网 - 分类页": {
+	"伪射手网 - 分类页": {
 		"host": "assrt.net",
 		"url": "return (fun.indexOF('/list/'))",
 		"pager": {
@@ -2382,7 +2383,23 @@
 			"scrollD": 1000
 		}
 	},
-	"中文字幕网": {
+	"字幕库 zmk": {
+		"host": [
+			"zmk.pw",
+			"zimuku.org",
+			"zimuku.pw"
+		],
+		"url": "if (!fun.indexOF('/detail/')) {if (fun.lp() == '/') {fun.getCSS('.box > .table').insertAdjacentHTML('beforebegin', '<div class=\"pagination\"></div>')}; return true;}",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": ".item, .box > .table > tbody > tr",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+		}
+	},
+	"中文字幕网 zimuzimu": {
 		"host": "cn.zimuzimu.com",
 		"url": "return (fun.lp() == '/so_zimu.htm')",
 		"pager": {
@@ -4657,6 +4674,7 @@
 	},
 	"JavDB": {
 		"host": "/^javdb/",
+		"url": "return (document.title.indexOf('JavDB') > -1)",
 		"style": ".grid.columns {height: auto !important;} .grid-item.column{position: static !important; float: left !important; height: 313px !important;}",
 		"pager": {
 			"nextL": "a.pagination-next",
@@ -4668,13 +4686,52 @@
 		}
 	},
 	"JavBus": {
-		"host": "/\\.jav.+|.+jav\\./",
-		"url": "return (!fun.indexOF('/forum/'))",
+		"host": "/^www\\.(jav.+|.+jav)\\./",
+		"url": "return (document.title.indexOf('JavBus') > -1 && !fun.indexOF('/forum/'))",
 		"style": "#waterfall {height: auto !important;} #waterfall > .item {position: static !important; float: left !important; height: 400px !important;}",
 		"pager": {
 			"nextL": "#next",
 			"pageE": "#waterfall > .item",
 			"replaceE": ".pagination"
+		}
+	},
+	"Javbooks": {
+		"host": [
+			"javbooks.com",
+			"jmvbt.com",
+			"/^[a-z]{2}\\d{4}\\.com$/"
+		],
+		"url": "return (document.title.indexOf('Javbooks') > -1 && !fun.indexOF('/content_'))",
+		"pager": {
+			"nextL": "span.pageback > a",
+			"pageE": ".Po_topic, .Po_u_topic",
+			"replaceE": ".PageBar"
+		}
+	},
+	"JAV Library": {
+		"host": [
+			"www.javlib.com",
+			"www.javlibrary.com",
+			"www.o58c.com"
+		],
+		"url": "/\\/vl_/",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": ".video",
+			"replaceE": ".page_selector"
+		}
+	},
+	"JAV Library - 论坛": {
+		"host": [
+			"www.javlib.com",
+			"www.javlibrary.com",
+			"www.o58c.com"
+		],
+		"url": "/\\/public/",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": "table.pubgroup > tbody > tr:not(#header), table.post",
+			"replaceE": ".page_selector"
 		}
 	},
 	"UraakaList": {
