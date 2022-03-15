@@ -3021,14 +3021,6 @@
 			"replaceE": "#pages"
 		}
 	},
-	"盒子部落 - 首页": {
-		"host": "www.hezibuluo.com",
-		"url": "/^\\/$/",
-		"pager": {
-			"type": 2,
-			"nextL": ".load-more:not(.loading)"
-		}
-	},
 	"盒子部落": {
 		"host": "www.hezibuluo.com",
 		"url": "return (!fun.indexOF(/\\/\\d+\\.html/))",
@@ -3044,6 +3036,7 @@
 	},
 	"小众软件": {
 		"host": "www.appinn.com",
+		"url": "return (fun.lp() == '/' || fun.indexOF('/category/'))",
 		"pager": {
 			"nextL": "a.next.page-numbers",
 			"pageE": "section#latest-posts > article",
@@ -3208,21 +3201,20 @@
 	},
 	"腾龙工作室": {
 		"host": "www.tenlonstudio.com",
-		"url": "return (fun.lp() == '/' && !location.search)",
-		"pager": {
-			"type": 2,
-			"nextL": ".load-more",
-			"nextText": "加载更多",
-			"interval": 500,
-			"scrollD": 1000
-		}
-	},
-	"腾龙工作室 - 分类/搜索页": {
-		"host": "www.tenlonstudio.com",
+		"url": "return (fun.lp() !== '/' && !fun.indexOF('.html') && fun.getXpath('//div[@class=\"btn-pager\"]/a[contains(text(), \"❯\")]') != null)",
 		"pager": {
 			"nextL": "//div[@class='btn-pager']/a[contains(text(), '❯')]",
 			"pageE": "li.post-list-item",
 			"replaceE": ".ajax-pager",
+			"scrollD": 1000
+		}
+	},
+	"腾龙工作室 - 动态加载": {
+		"host": "www.tenlonstudio.com",
+		"url": "return (fun.lp() !== '/' && !fun.indexOF('.html'))",
+		"pager": {
+			"nextL": "js;return fun.getNextUPN(/(?<=\\/page\\/)\\d+/, /\\/page\\/\\d+/, '/page/', '', '2', fun.getCSS('.btn-group > button:last-of-type').textContent)",
+			"pageE": "li.post-list-item",
 			"scrollD": 1000
 		}
 	},
@@ -4310,6 +4302,26 @@
 			"nextL": "a.next_page",
 			"pageE": "ul#post-list-posts > li",
 			"replaceE": "#paginator",
+			"scrollD": 1000
+		}
+	},
+	"Gelbooru": {
+		"host": "gelbooru.com",
+		"url": "/page=post&s=list/",
+		"pager": {
+			"nextL": "#paginator > a[alt='next']",
+			"pageE": ".thumbnail-preview",
+			"replaceE": "#paginator",
+			"scrollD": 1000
+		}
+	},
+	"Danbooru": {
+		"host": "danbooru.donmai.us",
+		"url": "return (fun.lp() == '/' || fun.lp() == '/posts')",
+		"pager": {
+			"nextL": "a.paginator-next",
+			"pageE": ".post-preview",
+			"replaceE": ".paginator",
 			"scrollD": 1000
 		}
 	},
