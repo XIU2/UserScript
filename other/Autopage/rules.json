@@ -153,16 +153,6 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-isrc]','data-isrc'])"
 		}
 	},
-	"360 搜索 - 手机版": {
-		"host": "m.so.com",
-		"url": "/^\\/.+/",
-		"pager": {
-			"type": 2,
-			"nextL": "#load-more",
-			"isHidden": true,
-			"scrollD": 1000
-		}
-	},
 	"轻搜": {
 		"host": "www.qingsearch.com",
 		"url": "return (fun.lp() == '/' && fun.indexOF('qings=', 's'))",
@@ -1819,15 +1809,6 @@
 			"nextL": "a.pageNav-jump--next",
 			"pageE": ".structItemContainer > div",
 			"replaceE": ".pageNav"
-		}
-	},
-	"茶杯狐": {
-		"host": "/www\\.cupfox\\./",
-		"pager": {
-			"type": 2,
-			"nextL": ".load-more",
-			"nextText": "点击加载更多",
-			"scrollD": 700
 		}
 	},
 	"NO视频": {
@@ -4053,14 +4034,6 @@
 			"nextL": "js;return fun.getNextUPN(/(?<=\\/list_)\\d+(?=\\.shtml)/, /\\/list_.+/, '/list_', '.shtml', '2', fun.getXpath('id(\"Pagination\")/*[contains(@class,\"next\")]/preceding-sibling::*[1]').textContent)",
 			"pageE": ".column-list > li",
 			"scrollD": 1000
-		}
-	},
-	"ScienceAlert": {
-		"host": "www.sciencealert.com",
-		"pager": {
-			"type": 2,
-			"nextL": ".load-more",
-			"scrollD": 2000
 		}
 	},
 	"致美化": {

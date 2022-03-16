@@ -366,7 +366,7 @@ function: {
                     type: 2,
                     isHidden: true,
                     interval: 1000,
-                    scrollD: 2500
+                    scrollD: 2000
                 }
             }, //           部分自带 自动无缝翻页 的网站
             discuz_forum: {
