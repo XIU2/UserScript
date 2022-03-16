@@ -2095,6 +2095,31 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"磁力狗": {
+		"host": [
+			"clg.im",
+			"ciligou.top",
+			"clg00.site"
+		],
+		"url": "/^\\/search/",
+		"style": "body, html {overflow-x: initial !important;}",
+		"pager": {
+			"nextL": ".pagination > li.active + li > a",
+			"pageE": "#Search_list_wrapper > li",
+			"replaceE": ".pagination",
+			"scrollD": 1000
+		}
+	},
+	"雨花阁": {
+		"host": "/^www\\.yuhuage\\d{2}\\.xyz$/",
+		"url": "/\\/search\\//",
+		"pager": {
+			"nextL": "a[title='下一页']",
+			"pageE": ".search-item",
+			"replaceE": ".bottom-pager",
+			"scrollD": 1000
+		}
+	},
 	"BT 之家": {
 		"host": "/\\d?btbtt\\d?/",
 		"pager": {
@@ -2268,6 +2293,15 @@
 			"pageE": "table.lista2t tr.lista2",
 			"replaceE": "#pager_links",
 			"scrollD": 1200
+		}
+	},
+	"Zooqle": {
+		"host": "zooqle.com",
+		"url": "return (fun.lp() == '/search' || fun.indexOF('/browse/') || fun.indexOF('/mov/'))",
+		"pager": {
+			"nextL": "a[aria-label='Next']",
+			"pageE": ".table > tbody > tr",
+			"replaceE": ".pagination"
 		}
 	},
 	"WebHD": {
@@ -3214,6 +3248,18 @@
 			"pageE": ".td-modules-container.td-module-number4 > div",
 			"replaceE": ".page-nav.td-pb-padding-side",
 			"scrollD": 1000
+		}
+	},
+	"Nite07 的小窝": {
+		"host": "www.nite07.com",
+		"url": "return (fun.lp() == '/' || fun.indexOF('/page/'))",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": ".recent-post-item:not(.swiper)",
+			"replaceE": "#pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-lazy-src]','data-lazy-src'])"
 		}
 	},
 	"小鱼儿 yr 系统 - 搜索页": {
