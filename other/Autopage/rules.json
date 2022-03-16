@@ -1082,6 +1082,46 @@
 			"scrollD": 2000
 		}
 	},
+	"Iwara": {
+		"host": [
+			"www.iwara.tv",
+			"ecchi.iwara.tv"
+		],
+		"url": "/\\/(images|videos|search)/",
+		"pager": {
+			"nextL": "li.pager-next > a",
+			"pageE": ".views-row",
+			"replaceE": ".pager",
+			"scrollD": 2500
+		}
+	},
+	"Iwara - 论坛": {
+		"host": [
+			"www.iwara.tv",
+			"ecchi.iwara.tv"
+		],
+		"url": "return (fun.indexOF('/forums/') && fun.getCSS('#forum') != null)",
+		"pager": {
+			"nextL": "li.pager-next > a",
+			"pageE": ".forum-table > tbody > tr",
+			"replaceE": ".pager",
+			"scrollD": 2500
+		}
+	},
+	"Iwara - 帖子内": {
+		"host": [
+			"www.iwara.tv",
+			"ecchi.iwara.tv"
+		],
+		"url": "/^\\/forums/",
+		"thread": true,
+		"pager": {
+			"nextL": "li.pager-next > a",
+			"pageE": "#forum-comments > *:not(.item-list):not(.element-invisible)",
+			"replaceE": ".pager",
+			"scrollD": 2500
+		}
+	},
 	"站酷 - 首页推荐": {
 		"host": "www.zcool.com.cn",
 		"url": "return (fun.lp() == '/' || fun.lp() == '/home' || fun.lp() == '/focus')",
