@@ -3643,6 +3643,28 @@
 			"scrollD": 600
 		}
 	},
+	"菜鸟教程 - 分类页": {
+		"host": "www.runoob.com",
+		"url": "return (fun.indexOF('/w3cnote') && !fun.indexOF('.html'))",
+		"pager": {
+			"nextL": "li.next-page > a",
+			"pageE": ".archive-list > .archive-list-item",
+			"replaceE": "#wp_page_numbers",
+			"forceHTTPS": true,
+			"scrollD": 1000
+		}
+	},
+	"菜鸟教程 - 文章页": {
+		"host": "www.runoob.com",
+		"url": "/^\\/w3cnote\\/.+\\.html$/",
+		"pager": {
+			"nextL": "//ul[@class='membership']/li[not(a)]/following-sibling::li[1]/a",
+			"pageE": ".article-heading, .article-body",
+			"replaceE": ".right-column ul.membership",
+			"forceHTTPS": true,
+			"scrollD": 2000
+		}
+	},
 	"菜鸟教程": {
 		"host": "www.runoob.com",
 		"url": "if (location.pathname.split('/').length > 2 && fun.getCSS('#leftcolumn')) return true",
