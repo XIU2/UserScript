@@ -139,6 +139,14 @@
 			"bF": "if (fun.getXpath('//div[contains(@class,\"-header\") and string()=\"相关搜索\"]', pageE[pageE.length - 1])) {pageE[pageE.length - 1].style.display = 'none';}; return pageE"
 		}
 	},
+	"神马搜索": {
+		"host": "m.sm.cn",
+		"url": "/^\\/s/",
+		"pager": {
+			"type": 2,
+			"nextL": "#pager:not(.loading)"
+		}
+	},
 	"360 搜索": {
 		"host": "www.so.com",
 		"url": "/^\\/.+/",
