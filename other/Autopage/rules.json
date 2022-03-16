@@ -5468,7 +5468,10 @@
 		}
 	},
 	"Hentai Cosplays - 手机版": {
-		"host": "hentai-cosplays.com",
+		"host": [
+			"hentai-cosplays.com",
+			"porn-images-xxx.com"
+		],
 		"url": "return (fun.indexOF('/image/') && fun.isMobile())",
 		"style": ".icon-good-thumbnail, .icon-bad-thumbnail {display: none !important;}",
 		"pager": {
@@ -5479,7 +5482,10 @@
 		}
 	},
 	"Hentai Cosplays": {
-		"host": "hentai-cosplays.com",
+		"host": [
+			"hentai-cosplays.com",
+			"porn-images-xxx.com"
+		],
 		"url": "/^\\/image\\//",
 		"style": ".icon-good-thumbnail, .icon-bad-thumbnail {display: none !important;}",
 		"pager": {
