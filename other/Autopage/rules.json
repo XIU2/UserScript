@@ -4371,10 +4371,9 @@
 		"host": "pic.netbian.com",
 		"style": "li.nextpage {display: none !important;} .alist > ul {height: auto !important;} .alist > ul > li {position: static !important; float: left !important; height: 550px !important;}",
 		"pager": {
-			"nextL": "//div[@class='page']/a[text()='下一页']",
+			"nextL": "//div[@class='page']/a[contains(text(),'下一页')]",
 			"pageE": ".slist > ul > li:not(.nextpage), .alist > ul > li",
-			"replaceE": ".page",
-			"scrollD": 1000
+			"replaceE": ".page"
 		}
 	},
 	"必应壁纸": {
@@ -5554,6 +5553,17 @@
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [0,'img[realsrc]','realsrc'])"
+		}
+	},
+	"Hit-x-Hot": {
+		"host": "hitxhot.com",
+		"url": "/\\/gallerys/",
+		"style": ".contain.refill:not(.relatedvideos) {display: none !important;}",
+		"pager": {
+			"nextL": "//a[@class='page-numbers' and text()='Next >']",
+			"pageE": ".contentme",
+			"replaceE": ".pagination-site",
+			"scrollD": 4000
 		}
 	}
 }
