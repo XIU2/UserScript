@@ -3203,6 +3203,15 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"天翼小站": {
+		"host": "yun.hei521.cn",
+		"url": "return (!fun.indexOF('.html'))",
+		"pager": {
+			"nextL": "li.page-item.active+li.page-item>a, li.next>a",
+			"pageE": "article",
+			"replaceE": ".pagination, .page-navigator"
+		}
+	},
 	"发烧友绿软": {
 		"host": "fsylr.com",
 		"pager": {
