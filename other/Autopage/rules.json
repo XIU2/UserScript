@@ -3998,6 +3998,15 @@
 			"replaceE": "ul.pager"
 		}
 	},
+	"asciinema": {
+		"host": "asciinema.org",
+		"url": "/^\\/explore/",
+		"pager": {
+			"nextL": "a.page-link[rel='next']",
+			"pageE": ".asciicast-list",
+			"replaceE": ".pagination"
+		}
+	},
 	"什么值得买 - 分类/搜索页": {
 		"host": ["www.smzdm.com","search.smzdm.com"],
 		"url": "return (location.hostname === 'search.smzdm.com' || fun.indexOF('/fenlei/') || fun.indexOF(/\\/mall\\/.+\\/.+/))",
