@@ -2327,6 +2327,29 @@
 			"scrollD": 2000
 		}
 	},
+	"言耽社": {
+		"host": "yandanshe.com",
+		"url": "/^\\/\\d+\\//",
+		"pager": {
+			"nextL": "id('navigation')/ul/li[./span]/following-sibling::li[1]/a",
+			"pageE": ".post-content > p",
+			"replaceE": "#navigation",
+			"scrollD": 2000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+		}
+	},
+	"言耽社 - 分类页": {
+		"host": "yandanshe.com",
+		"url": "/^\\/b/",
+		"pager": {
+			"nextL": "a.next.page-numbers",
+			"pageE": ".list-grouped > div",
+			"replaceE": ".nav-links",
+			"scrollD": 1500
+		}
+	},
 	"漫画皮": {
 		"host": "www.manhuapi.com",
 		"url": "/\\/chapter\\//",
@@ -5136,6 +5159,16 @@
 			"pageE": ".contentme",
 			"replaceE": ".pagination-site",
 			"scrollD": 4000
+		}
+	},
+	"美图网 tuli": {
+		"host": ["www.tuli.cc","m.tuli.cc"],
+		"url": "/\\/\\d+(_\\d+)?\\.html$/",
+		"pager": {
+			"nextL": "li.thisclass + li > a",
+			"pageE": ".bodyintroduce, .picbox > img",
+			"replaceE": ".pageart > ul",
+			"scrollD": 3000
 		}
 	}
 }
