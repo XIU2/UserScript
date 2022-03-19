@@ -2332,9 +2332,9 @@
 		"url": "/^\\/\\d+\\//",
 		"pager": {
 			"nextL": "id('navigation')/ul/li[./span]/following-sibling::li[1]/a",
-			"pageE": ".post-content > p",
+			"pageE": ".post-content",
 			"replaceE": "#navigation",
-			"scrollD": 2000
+			"scrollD": 3000
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
@@ -2346,8 +2346,7 @@
 		"pager": {
 			"nextL": "a.next.page-numbers",
 			"pageE": ".list-grouped > div",
-			"replaceE": ".nav-links",
-			"scrollD": 1500
+			"replaceE": ".nav-links"
 		}
 	},
 	"漫画皮": {
