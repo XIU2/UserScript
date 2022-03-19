@@ -2737,7 +2737,6 @@
 	"哔哩轻小说 - 手机版": {
 		"host": "w.linovelib.com",
 		"url": "return (fun.indexOF(/\\/novel\\/\\d+\\/.+\\.html/))",
-		"style": "body {min-height: 1000px;}",
 		"pager": {
 			"nextL": "js;if (ReadParams) {return (location.origin + ReadParams.url_next)}; return '';",
 			"pageE": "id('apage')/div | //body/script[contains(text(), 'var ReadParams')]",
@@ -3746,7 +3745,7 @@
 	},
 	"OI-Wiki": {
 		"host": "oi-wiki.org",
-		"style": "blockquote.page-copyright, h2#__comments, form#gitalk-form {display: none !important;} article.md-content__inner{min-height: 700px;}",
+		"style": "blockquote.page-copyright, h2#__comments, form#gitalk-form {display: none !important;}",
 		"pager": {
 			"nextL": "li.md-nav__item.md-nav__item--active.md-nav__item--nested li.md-nav__item--active+li a",
 			"pageE": "article.md-content__inner",
@@ -4060,7 +4059,7 @@
 	"yande": {
 		"host": ["konachan.net","konachan.com","yande.re"],
 		"url": "if (fun.indexOF('/post')) {document.head.appendChild(document.createElement('base')).target = '_blank'; return true;}",
-		"style": "html, body {min-height: 1000px;} .javascript-hide {display: inline-block !important;} ul#post-list-posts img, ul#post-list-posts .inner{width: auto !important; height: auto !important;} ul#post-list-posts li {width: 33% !important;} a.directlink {margin: 0 !important;}",
+		"style": ".javascript-hide {display: inline-block !important;} ul#post-list-posts img, ul#post-list-posts .inner{width: auto !important; height: auto !important;} ul#post-list-posts li {width: 33% !important;} a.directlink {margin: 0 !important;}",
 		"pager": {
 			"nextL": "a.next_page",
 			"pageE": "ul#post-list-posts > li",
