@@ -259,6 +259,15 @@
 			"scrollD": 2000
 		}
 	},
+	"WebCrawler 搜索": {
+		"host": "www.webcrawler.com",
+		"url": "return (fun.indexOF('qc=web','s') || !fun.indexOF('qc=','s'))",
+		"pager": {
+			"nextL": "a.pagination__num--next",
+			"pageE": ".web-google__result",
+			"replaceE": ".pagination"
+		}
+	},
 	"豆瓣 - 短评": {
 		"host": "movie.douban.com",
 		"url": "return (fun.indexOF('/subject/') && fun.indexOF('/comments'))",
