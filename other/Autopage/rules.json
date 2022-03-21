@@ -985,7 +985,7 @@
 	},
 	"Pixiv - 手机版 - 分类页": {
 		"host": "www.pixiv.net",
-		"url": "fun.isUrlC(); if (!fun.isMobile()) {return false}; if (fun.indexOF('/tags/')) {if (self != top) {fun.insStyle('.search-header {display: none !important;}')}; return true;} else if (fun.indexOF('/artworks/')) {setTimeout(function(){fun.getCSS('.work-details-thumb-buttons > .button-link').click();}, 3000)}",
+		"url": "if (!fun.isMobile()) {return false}; if (fun.indexOF('/tags/')) {if (self != top) {fun.insStyle('.search-header {display: none !important;}')}; return true;} else if (fun.indexOF('/artworks/')) {setTimeout(function(){fun.getCSS('.work-details-thumb-buttons > .button-link').click();}, 3000)}",
 		"style": ".banner-ad-footer-scale, footer {display: none !important;}",
 		"iframe": true,
 		"pager": {
@@ -3002,6 +3002,15 @@
 			"nextL": "a.nextpage",
 			"pageE": ".ApdList > ul.ApdLi",
 			"replaceE": ".pagination"
+		}
+	},
+	"华军软件园": {
+		"host": "www.onlinedown.net",
+		"url": "/^\\/(sort\\/.+|search)/",
+		"pager": {
+			"nextL": ".g-pages a.z-cur+a",
+			"pageE": ".m-list, .m-list2",
+			"replaceE": ".g-pages"
 		}
 	},
 	"天翼小站": {
