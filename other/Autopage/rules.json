@@ -1,6 +1,6 @@
 {
 	"百度搜索": {
-		"host": "www.baidu.com",
+		"host": ["www.baidu.com", "ipv6.baidu.com"],
 		"url": "fun.isUrlC(); if (fun.isMobile()) {location.hostname = 'm.baidu.com';} else {return (fun.lp() == '/s')}",
 		"style": ".new-pmd .c-img-border {position: initial !important;} .op-bk-polysemy-video__wrap.c-gap-bottom {display: none !important;}",
 		"pager": {
@@ -266,6 +266,15 @@
 			"nextL": "a.pagination__num--next",
 			"pageE": ".web-google__result",
 			"replaceE": ".pagination"
+		}
+	},
+	"Goobe": {
+		"host": "goobe.io",
+		"url": "/^\\/search\\.aspx/",
+		"pager": {
+			"nextL": ".PageSelector > .NextPageBTN",
+			"pageE": ".ContentItem",
+			"replaceE": ".PageSelector"
 		}
 	},
 	"豆瓣 - 短评": {
@@ -952,7 +961,7 @@
 	},
 	"Pixiv - 分类页": {
 		"host": "www.pixiv.net",
-		"url": "fun.isUrlC(); if (fun.lp() == '/') {fun.forceTarget();} else if (fun.indexOF('/tags/')) {return true;} else if (fun.indexOF('/artworks/')) {setTimeout(function(){fun.getXpath('//button[contains(string(), \"查看全部\") or contains(string(), \"See all\") or contains(string(), \"すべて見る\") or contains(string(), \"모두 보기\")]').click();}, 1000)}",
+		"url": "fun.isUrlC(); if (fun.isMobile()) {return false}; if (fun.lp() == '/') {fun.forceTarget();} else if (fun.indexOF('/tags/')) {return true;} else if (fun.indexOF('/artworks/')) {setTimeout(function(){fun.getXpath('//button[contains(string(), \"查看全部\") or contains(string(), \"See all\") or contains(string(), \"すべて見る\") or contains(string(), \"모두 보기\")]').click();}, 3000)}",
 		"forceTarget": true,
 		"style": "ul[class*='-1 '] > li {display: inline !important;} #root{margin-bottom: -175px;} ul > li > button[class^='sc-'], a[href^='/premium/lead/lp'] {display: none !important;}",
 		"iframe": true,
@@ -964,13 +973,35 @@
 	},
 	"Pixiv - 用户作品页": {
 		"host": "www.pixiv.net",
-		"url": "return (fun.indexOF('/users/') && fun.indexOF(/\\/(artworks|illustrations|manga)/))",
+		"url": "if (fun.isMobile()) {return false}; return (fun.indexOF('/users/') && fun.indexOF(/\\/(artworks|illustrations|manga)/))",
 		"forceTarget": true,
 		"iframe": true,
 		"style": "ul[class*='-1 '] > li {display: inline !important;} #root{margin-bottom: -125px;} ul > li > button[class^='sc-'][style='background-color: rgb(0, 0, 0);'], a[href^='/premium/lead/lp'] {display: none !important;}",
 		"pager": {
 			"type": 5,
 			"nextL": "a[aria-disabled='false'][class*='filterProps-Styled-Component'][href]:last-child",
+			"scrollD": 2000
+		}
+	},
+	"Pixiv - 手机版 - 分类页": {
+		"host": "www.pixiv.net",
+		"url": "fun.isUrlC(); if (!fun.isMobile()) {return false}; if (fun.indexOF('/tags/')) {if (self != top) {fun.insStyle('.search-header {display: none !important;}')}; return true;} else if (fun.indexOF('/artworks/')) {setTimeout(function(){fun.getCSS('.work-details-thumb-buttons > .button-link').click();}, 3000)}",
+		"style": ".banner-ad-footer-scale, footer {display: none !important;}",
+		"iframe": true,
+		"pager": {
+			"type": 5,
+			"nextL": "a.next",
+			"scrollD": 2000
+		}
+	},
+	"Pixiv - 手机版 - 用户作品页": {
+		"host": "www.pixiv.net",
+		"url": "if (!fun.isMobile()) {return false}; if (fun.indexOF('/users/') && fun.indexOF(/\\/(artworks|illustrations|manga)/)) {if (self != top) {fun.insStyle('.masthead.cover-bg, .user-details {display: none !important;}')}; return true}",
+		"style": ".banner-ad-footer-scale, footer {display: none !important;} .user-details {margin-top: 0 !important;}",
+		"iframe": true,
+		"pager": {
+			"type": 5,
+			"nextL": "a.next",
 			"scrollD": 2000
 		}
 	},
@@ -3290,6 +3321,15 @@
 			"scrollD": 2000
 		}
 	},
+	"小木虫 - 考研调剂": {
+		"host": "muchong.com",
+		"url": "return (fun.lp() == '/bbs/kaoyan.php')",
+		"pager": {
+			"nextL": "//div[contains(@class, 'xmc_Pages')]//a[text()='下一页']",
+			"pageE": ".forum_body_manage",
+			"replaceE": ".xmc_Pages"
+		}
+	},
 	"百度学术": {
 		"host": "xueshu.baidu.com",
 		"url": "return (fun.lp() == '/s')",
@@ -3436,7 +3476,7 @@
 			"replaceE": "ul.prenext, #navsecond",
 			"scrollE": "id('bpn') | //div[contains(@class, 'prenextnav')][last()]",
 			"forceHTTPS": true,
-			"scrollD": 600
+			"scrollD": 800
 		}
 	},
 	"菜鸟教程 - 分类页": {
@@ -3501,6 +3541,98 @@
 			"pageE": "div.searchItem",
 			"replaceE": ".pager",
 			"scrollD": 1000
+		}
+	},
+	"力扣": {
+		"host": "leetcode-cn.com",
+		"url": "return (fun.lp() == '/')",
+		"style": "html, body {height: 100%; overflow: unset !important;}",
+		"pager": {
+			"type": 2,
+			"nextL": "button[class*='-LoadMoreButton']"
+		}
+	},
+	"CNodeJS": {
+        "host": "cnodejs.org",
+        "url": "return (fun.lp() == '/')",
+        "pager": {
+            "nextL": "li.disabled+li:not(.disabled)>a",
+            "pageE": "#topic_list",
+            "replaceE": ".pagination"
+        }
+    },
+	"Go 语言中文网": {
+		"host": "studygolang.com",
+		"url": "return (fun.lp() == '/' || fun.indexOF(/^\\/(go|topics|articles|projects|resources)/))",
+		"pager": {
+			"nextL": "li.next > a",
+			"pageE": ".cell.item, .topic, .article, .resources",
+			"replaceE": ".pagination",
+			"scrollD": 1000
+		}
+	},
+	"Ruby China": {
+		"host": "ruby-china.org",
+		"url": "fun.isUrlC(); return (fun.lp() == '/' || fun.lp() == '/jobs' || fun.lp() == '/search' || (fun.indexOF('/topics') && !fun.indexOF(/^\\/topics\\/\\d+/)))",
+		"pager": {
+			"nextL": "li.next > a",
+			"pageE": ".item-list, .result",
+			"replaceE": ".pagination"
+		}
+	},
+	"51CTO": {
+		"host": "www.51cto.com",
+		"url": "return (fun.lp() == '/' || fun.lp() == '/dev')",
+		"pager": {
+			"type": 2,
+			"nextL": ".more-btn"
+		}
+	},
+	"51CTO - 分类页": {
+		"host": ["www.51cto.com","os.51cto.com","server.51cto.com","network.51cto.com","developer.51cto.com","www.cioage.com"],
+		"url": "return (!fun.indexOF('/article/'))",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": ".topic-list-content",
+			"replaceE": ".topic-page"
+		}
+	},
+	"51CTO - 博客 - 分类页": {
+		"host": "blog.51cto.com",
+		"url": "/^\\/nav/",
+		"pager": {
+			"nextL": "li.next > a",
+			"pageE": ".date-list",
+			"replaceE": ".pagination"
+		}
+	},
+	"51CTO - 博客": {
+		"host": "blog.51cto.com",
+		"url": "return (fun.indexOF(/^\\/u_\\d+/) && !fun.indexOF(/^\\/u_\\d+\\/\\d+/))",
+		"pager": {
+			"nextL": "li.next > a",
+			"pageE": "#common-article-listbox-1",
+			"replaceE": ".pagination"
+		}
+	},
+	"51CTO - 博客 - 其他": {
+		"host": "blog.51cto.com",
+		"url": "/^\\/(topic|search)\\//",
+		"pager": {
+			"nextL": "li.next > a",
+			"pageE": "ul.search-artical",
+			"replaceE": ".pagination"
+		}
+	},
+	"Chrome Debelopers 文档": {
+		"host": "developer.chrome.com",
+		"url": "/^\\/docs\\/.+\\/.+\\//",
+		"style": ".visibility-hidden {visibility: unset !important;} h1.type--h2 {margin-top: 80px;}",
+		"pager": {
+			"nextL": "//main//a[@class='navigation-tree__link' and @data-state='active']/following-sibling::a[@class='navigation-tree__link'][not(@target='_blank')] | //main//a[@class='navigation-tree__link' and @data-state='active']/following-sibling::div[@class='navigation-tree__nested']/a[@class='navigation-tree__link'][not(@target='_blank')] | //main//a[@class='navigation-tree__link' and @data-state='active']/parent::div/following-sibling::div[@class='navigation-tree__nested']/a[@class='navigation-tree__link'][not(@target='_blank')]",
+			"pageE": "main article > *",
+			"replaceE": "main navigation-tree, main .scrollbar",
+			"scrollD": 1500
 		}
 	},
 	"Gitee - Explore 列表": {
@@ -4045,6 +4177,14 @@
 			"scrollD": 1000
 		}
 	},
+	"古诗文网": {
+		"host": ["www.gushiwen.cn","so.gushiwen.cn","m.gushiwen.cn"],
+		"pager": {
+			"nextL": "a.amore",
+			"pageE": ".left .sons:not([id]), .sonspic",
+			"replaceE": ".pagesright"
+		}
+	},
 	"彼岸图网": {
 		"host": "pic.netbian.com",
 		"style": "li.nextpage {display: none !important;} .alist > ul {height: auto !important;} .alist > ul > li {position: static !important; float: left !important; height: 550px !important;}",
@@ -4507,6 +4647,19 @@
 			"nextL": "a.next",
 			"pageE": "table.pubgroup > tbody > tr:not(#header), table.post",
 			"replaceE": ".page_selector"
+		}
+	},
+	"JavTorrent": {
+		"host": [
+			"ijavtorrent.com",
+			"projectjav.com"
+		],
+		"url": "return (!fun.indexOF('/movie/') && !fun.indexOF('/article/') && !fun.indexOF('/actress/'))",
+		"pager": {
+			"nextL": "a.gonext",
+			"pageE": ".movie-list, .articles-list, .actress-list",
+			"replaceE": "//a[contains(@class, 'gonext')]/parent::div",
+			"scrollD": 2500
 		}
 	},
 	"UraakaList": {
