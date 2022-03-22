@@ -3,9 +3,10 @@
 		"host": ["www.baidu.com", "ipv6.baidu.com"],
 		"url": "fun.isUrlC(); if (fun.isMobile()) {location.hostname = 'm.baidu.com';} else {return (fun.lp() == '/s')}",
 		"style": ".new-pmd .c-img-border {position: initial !important;} .op-bk-polysemy-video__wrap.c-gap-bottom {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": "id('page')//a[contains(text(),'下一页')]",
-			"pageE": "#content_left > *",
+			"pageE": "#content_left",
 			"replaceE": "#page",
 			"scrollD": 2000
 		}
@@ -14,9 +15,10 @@
 		"host": "m.baidu.com",
 		"url": "return (location.pathname.slice(location.pathname.length - 2, location.pathname.length) == '/s')",
 		"style": "div.result[tpl='recommend_list'], #page-copyright, .hint-fold-results-box {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": "a[class^='new-nextpage']",
-			"pageE": "#results > *",
+			"pageE": "#results",
 			"replaceE": "#page-controller",
 			"scrollD": 2000
 		}
@@ -24,6 +26,7 @@
 	"百度站内搜索": {
 		"host": "zhannei.baidu.com",
 		"url": "return (fun.lp() == '/cse/site')",
+		"history": true,
 		"pager": {
 			"nextL": "a.pager-next-foot",
 			"pageE": ".result",
@@ -44,9 +47,10 @@
 	"谷歌搜索": {
 		"host": "/^www\\.google\\./",
 		"url": "return (fun.lp() == '/search' && !fun.indexOF('tbm=isch', 's'))",
+		"history": true,
 		"pager": {
 			"nextL": "#pnnext",
-			"pageE": "id('search')/* | //style[not(contains(text(), 'table,div,span,p{display:none}'))]",
+			"pageE": "id('search') | //style[not(contains(text(), 'table,div,span,p{display:none}'))]",
 			"replaceE": "id('navcnt') | id('rcnt')//div[@role='navigation']",
 			"scriptT": 0,
 			"scrollD": 3000
@@ -59,6 +63,7 @@
 		"host": ["www.bing.com","cn.bing.com"],
 		"url": "if (fun.lp() == '/search') {if (fun.isMobile() && document.documentElement.lang != 'zh') {return false;} else {return true;}}",
 		"style": "#b_footer, .b_imagePair.square_mp > .inner, .b_msg, #b_results > [class='b_ans'] {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": "a.sb_pagN, a.sb_halfnext, a.sb_fullnpl",
 			"pageE": "#b_results > li.b_algo",
@@ -72,9 +77,10 @@
 	"搜狗搜索": {
 		"host": "www.sogou.com",
 		"url": "/^\\/.+/",
+		"history": true,
 		"pager": {
 			"nextL": "#sogou_next",
-			"pageE": ".results > *",
+			"pageE": ".results",
 			"replaceE": "#pagebar_container",
 			"scriptT": 3,
 			"scrollD": 2000
@@ -103,6 +109,7 @@
 	"搜狗微信 - 搜索": {
 		"host": "weixin.sogou.com",
 		"url": "return (fun.lp() == '/weixin')",
+		"history": true,
 		"pager": {
 			"nextL": "#sogou_next",
 			"pageE": "ul[class*='news-list'] > li",
@@ -113,6 +120,7 @@
 	"头条搜索 - 手机版": {
 		"host": "so.toutiao.com",
 		"url": "return (fun.lp() == '/search/' || fun.isMobile())",
+		"history": true,
 		"pager": {
 			"nextL": "#page-bottom a[class*='containerRight_'], #page-bottom a[class*='container_']",
 			"pageE": "#results > div",
@@ -123,6 +131,7 @@
 	"头条搜索": {
 		"host": "so.toutiao.com",
 		"url": "return (fun.lp() == '/search')",
+		"history": true,
 		"pager": {
 			"nextL": "//div[contains(@class, '-pagination')]/a[string()='下一页']",
 			"pageE": "div[class*='-result-list'] > .result-content[data-i]",
@@ -145,6 +154,7 @@
 		"host": "www.wuzhuiso.com",
 		"url": "if (fun.isMobile()) {return}; fun.isUrlC(); return (fun.lp() == '/s' && !fun.indexOF('a=image','s'))",
 		"style": ".so-lazyimg{opacity: 1 !important;} .result {border: none !important;}",
+		"history": true,
 		"noReferer": true,
 		"pager": {
 			"nextL": "#snext",
@@ -159,6 +169,7 @@
 		"host": "www.so.com",
 		"url": "/^\\/.+/",
 		"style": "img {opacity: 1 !important;}",
+		"history": true,
 		"pager": {
 			"nextL": "a#snext",
 			"pageE": "ul.result > li, style:not(src)",
@@ -187,6 +198,7 @@
 	"Startpage 搜索": {
 		"host": ["startpage.com","www.startpage.com"],
 		"url": "/\\/search/",
+		"history": true,
 		"pager": {
 			"nextL": "js; return fun.getNextF('//div[contains(@class, 'pagination ')]/form[./button[@class='pagination__next-prev-button next']]')",
 			"pageE": "section.w-gl--desktop > div",
@@ -197,9 +209,10 @@
 	"Yandex 搜索": {
 		"host": ["yandex.com","yandex.ru","yandex.ua","yandex.by","yandex.kz","yandex.uz","yandex.com.tr"],
 		"url": "return (fun.lp() == '/search/')",
+		"history": true,
 		"pager": {
 			"nextL": "a.pager__item_kind_next",
-			"pageE": "#search-result > *, style",
+			"pageE": "#search-result, style",
 			"replaceE": ".pager"
 		}
 	},
@@ -217,6 +230,7 @@
 	"Yahoo 搜索": {
 		"host": "search.yahoo.com",
 		"url": "/\\/search/",
+		"history": true,
 		"pager": {
 			"nextL": ".pagination a.next",
 			"pageE": "#web ol > li",
@@ -227,6 +241,7 @@
 	"Yahoo 搜索 - JP": {
 		"host": "search.yahoo.co.jp",
 		"url": "/\\/search/",
+		"history": true,
 		"pager": {
 			"nextL": ".Pagenation__next > a",
 			"pageE": ".Contents__innerGroupBody > div",
@@ -247,6 +262,7 @@
 	"Ecosia 搜索": {
 		"host": "www.ecosia.org",
 		"url": "return (fun.lp() == '/search')",
+		"history": true,
 		"pager": {
 			"nextL": "nav.pagination a[aria-label='Next page']",
 			"pageE": "section.mainline > div:not(.related-queries)",
@@ -266,6 +282,7 @@
 		"host": ["ask.com","www.ask.com"],
 		"url": "return (fun.lp() == '/web')",
 		"style": ".PartialSearchResults-heading {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": "li.PartialWebPagination-next > a",
 			"pageE": ".PartialSearchResults.mid",
@@ -276,6 +293,7 @@
 	"WebCrawler 搜索": {
 		"host": "www.webcrawler.com",
 		"url": "return (fun.indexOF('qc=web','s') || !fun.indexOF('qc=','s'))",
+		"history": true,
 		"pager": {
 			"nextL": "a.pagination__num--next",
 			"pageE": ".web-google__result",
@@ -285,10 +303,25 @@
 	"Goobe": {
 		"host": "goobe.io",
 		"url": "/^\\/search\\.aspx/",
+		"history": true,
 		"pager": {
 			"nextL": ".PageSelector > .NextPageBTN",
 			"pageE": ".ContentItem",
 			"replaceE": ".PageSelector"
+		}
+	},
+	"萌搜": {
+		"host": "mengso.com",
+		"url": "/^\\/search/",
+		"style": ".res_cell[style*='height:90px'] {display: none !important;}",
+		"history": true,
+		"pager": {
+			"type": 6,
+			"nextL": "#next_page > a, a#next_page_a",
+			"pageE": ".res_cell",
+			"insertP": ["#page_menu_box",1],
+			"replaceE": "#page_menu_box",
+			"loadTime": 1000
 		}
 	},
 	"豆瓣 - 短评": {
@@ -2331,6 +2364,7 @@
 		"host": ["www.haoman6.com","www.g-lens.com"],
 		"url": "/\\/chapter\\//",
 		"style": ".rd-guess, .rd-aside, .page-index__btn {display: none !important;} .rd-article__pic {display: initial !important;} .rd-article__pic > img {margin: 0 auto;display: block;height: auto;min-height: 200px;}",
+		"history": true,
 		"pager": {
 			"nextL": "js;if (fun.getCSS('a.rd-aside__item.j-rd-next')) return location.origin + fun.getCSS('a.rd-aside__item.j-rd-next').getAttribute('_href')",
 			"pageE": ".rd-article-wr > div",
@@ -2359,6 +2393,7 @@
 		"host": "www.dongman.la",
 		"url": "if (fun.indexOF('/chapter/')) {fun.src_bF(fun.getAllCSS('img.mdui-img-fluid[data-srcset]:not([src])'), [0,'img[data-srcset]','data-srcset']); return true}",
 		"style": "button.prePic, button.nextPic, footer, header, #left-drawer {display: none !important;} body, #app {padding: 0 !important;} .slick-track {width: 100% !important;} .lazyBox {width: 100%; display: inline-block;}",
+		"history": true,
 		"pager": {
 			"nextL": "//footer//a[./label[text()='下一章']]",
 			"pageE": ".lazyBox",
@@ -2384,6 +2419,7 @@
 	"言耽社": {
 		"host": "yandanshe.com",
 		"url": "/^\\/\\d+\\//",
+		"history": true,
 		"pager": {
 			"nextL": "id('navigation')/ul/li[./span]/following-sibling::li[1]/a",
 			"pageE": ".post-content",
@@ -2406,6 +2442,7 @@
 	"漫画皮": {
 		"host": "www.manhuapi.com",
 		"url": "/\\/chapter\\//",
+		"history": true,
 		"pager": {
 			"nextL": "//div[@class='page']/a[text()='下一页' or text()='下一章']",
 			"pageE": ".mh_list img[src]",
@@ -2464,6 +2501,7 @@
 	"木马漫画 - 阅读页": {
 		"host": "www.omyschool.com",
 		"url": "/\\/article_detail\\//",
+		"history": true,
 		"pager": {
 			"type": 6,
 			"nextL": "a.nav_button.next",
@@ -2486,6 +2524,7 @@
 		"host": ["www.webmota.com","cn.webmota.com","cn.baozimh.com"],
 		"url": "if (fun.indexOF('/chapter/')) {return true;} else if (fun.indexOF('/comic/')) {if (fun.getCSS('#button_show_all_chatper')) {fun.getCSS('#button_show_all_chatper').click();}}",
 		"style": "#footer, #header {display: none !important;} .header, .bottom-bar {opacity: 0.3;}",
+		"history": true,
 		"pager": {
 			"nextL": ".next_chapter > a",
 			"pageE": ".comic-contain > amp-img",
@@ -2497,6 +2536,7 @@
 		"host": ["www.gllmh8.com","m.gllmh8.com"],
 		"url": "/\\/\\d+(_\\d+)?\\.html$/",
 		"style": ".article-content img {visibility: visible; opacity: 1;} .swiper-container {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": "li.thisclass+li > a",
 			"pageE": ".article-content p, #newsArticle p",
@@ -2526,6 +2566,7 @@
 	"起点中文 - 阅读页": {
 		"host": "read.qidian.com",
 		"style": ".admire-wrap {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": "a[id$='chapterNext']",
 			"pageE": ".main-text-wrap > div:not(.admire-wrap)",
@@ -2536,6 +2577,7 @@
 	"七猫中文 - 阅读页": {
 		"host": "www.qimao.com",
 		"url": "return (fun.indexOF(/\\/shuku\\/\\d+-\\d+\\//) || fun.indexOF('/reader/index/'))",
+		"history": true,
 		"pager": {
 			"nextL": "//div[@class='reader-footer']/a[text()='下一章']",
 			"pageE": ".article > p",
@@ -2573,10 +2615,31 @@
 			"scrollD": 900
 		}
 	},
+	"下书网": {
+		"host": "mip.xiashucom.com",
+		"url": "/\\/yue_/",
+		"history": true,
+		"pager": {
+			"nextL": "a.pt-nextchapter",
+			"pageE": ".pt-read-text > p",
+			"replaceE": ".pt-read-btn"
+		}
+	},
+	"下书网 - 手机版": {
+		"host": "wap.xiashucom.com",
+		"url": "/\\/yue_/",
+		"history": true,
+		"pager": {
+			"nextL": ".pt-nextchapter > a",
+			"pageE": "#pt-pop",
+			"replaceE": ".border-c"
+		}
+	},
 	"御书网": {
 		"host": "www.yushubo.com",
 		"url": "return (fun.indexOF('/read_'))",
 		"style": ".readbg.mt10 {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": "//div[contains(@class, 'articlebtn')]/a[contains(text(), '下一页') or contains(text(), '下一章')]",
 			"pageE": "#BookText",
@@ -2609,6 +2672,7 @@
 		"host": "www.soxscc.org",
 		"url": "if (fun.indexOF(/\\/\\d{4,}.html/)) {fun.xs_bF(fun.getAllCSS('.content'), [/(<br>)?(&nbsp;)+您可以在百度.+?最新章节！/, '']); return true}",
 		"style": ".content > p, img {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": "//font[contains(text(), '下一章')]/following-sibling::a[1]",
 			"pageE": ".content",
@@ -2623,6 +2687,7 @@
 	"owlook": {
 		"host": ["www.owlook.com.cn","www1.owlook.com.cn"],
 		"url": "return (fun.lp() == '/owllook_content')",
+		"history": true,
 		"pager": {
 			"nextL": "//div[@class='pre_next']/a[contains(text(), '下一')]",
 			"pageE": "#content",
@@ -2633,6 +2698,7 @@
 	"无错小说网": {
 		"host": "www.xineyby.com",
 		"url": "return (fun.indexOF('/read/'))",
+		"history": true,
 		"pager": {
 			"nextL": "id('footlink')/a[contains(text(), '下一页')]",
 			"pageE": "#contents",
@@ -2655,6 +2721,7 @@
 	"无弹窗小说网": {
 		"host": "www.530p.com",
 		"url": "return (fun.indexOF(/\\/\\d{4,}\\.htm/))",
+		"history": true,
 		"pager": {
 			"nextL": "#nextLink",
 			"pageE": "#cp_content",
@@ -2666,6 +2733,7 @@
 		"host": "m.xiaoshuo77.net",
 		"url": "if (fun.indexOF('.html')) {fun.xs_bF(fun.getAllCSS('#novelcontent'), [/(<br>)?(&nbsp;)+内容未完，下一页.*$|【本章阅读.*$/, '<br>']); return true}",
 		"style": "#novelcontent > p, img {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": ".page_chapter a.p4",
 			"pageE": "#novelcontent",
@@ -2679,6 +2747,7 @@
 	"铅笔小说": {
 		"host": "www.23qb.com",
 		"url": "if (fun.indexOF(/\\/book\\/\\d+\\/.+\\.html/)) {fun.xs_bF(fun.getAllCSS('#mlfy_main_text > *'), [/（继续下一页）.+|铅笔小说.+/, '']); return true}",
+		"history": true,
 		"pager": {
 			"nextL": "js;return (location.origin + ReadParams.url_next)",
 			"pageE": "id('TextContent')/p | //script[contains(text(), 'ReadParams')]",
@@ -2705,6 +2774,7 @@
 	"皇帝之家": {
 		"host": "www.huangdizhijia.com",
 		"url": "/chapter-\\d+\\.html/",
+		"history": true,
 		"pager": {
 			"nextL": "//div[contains(@class, 'tag-view-type')]//a[text()='下一章']",
 			"pageE": ".tagCol > p",
@@ -2724,6 +2794,7 @@
 	"轻之文库": {
 		"host": "www.linovel.net",
 		"url": "if (fun.indexOF(/\\/book\\/\\d+\\/.+\\.html/)) {fun.insStyle('.reward-section {display: none !important;}');} else if (fun.indexOF('/cat/')) {return true;}",
+		"history": true,
 		"pager": {
 			"nextL": "//ul[@class='pagination']/li/a[contains(text(), '下一页')]",
 			"pageE": ".rank-book-list > div",
@@ -2735,6 +2806,7 @@
 		"host": "www.ihuaben.com",
 		"url": "return (fun.indexOF(/\\/\\d{4,}.html/))",
 		"style": ".discription > p > i, img, #container, #BDBannerBottom_PC, iframe, .navFooter {display: none !important;} .discription > p {font-size: 16px; min-height: 24px; padding-bottom: 24px;}",
+		"history": true,
 		"pager": {
 			"nextL": "id('preAndNextBar')/a[contains(text(), '下一章')]",
 			"pageE": "#contentsource > p",
@@ -2746,6 +2818,7 @@
 	"哔哩轻小说": {
 		"host": "www.linovelib.com",
 		"url": "return (fun.indexOF(/\\/novel\\/\\d+\\/.+\\.html/))",
+		"history": true,
 		"pager": {
 			"nextL": "//p[@class='mlfy_page']/a[contains(text(), '下一页') or contains(text(), '下一章')]",
 			"pageE": "#mlfy_main_text > *",
@@ -2782,6 +2855,7 @@
 	"哔哩轻小说 - 手机版": {
 		"host": "w.linovelib.com",
 		"url": "return (fun.indexOF(/\\/novel\\/\\d+\\/.+\\.html/))",
+		"history": true,
 		"pager": {
 			"nextL": "js;if (ReadParams) {return (location.origin + ReadParams.url_next)}; return '';",
 			"pageE": "id('apage')/div | //body/script[contains(text(), 'var ReadParams')]",
@@ -2815,6 +2889,7 @@
 	"AO3-阅读页": {
 		"host": "archiveofourown.org",
 		"url": "return (fun.indexOF(/\\/works\\/\\d+\\/chapters\\//))",
+		"history": true,
 		"pager": {
 			"nextL": "li.chapter.next a",
 			"pageE": "#workskin > div",
@@ -3226,6 +3301,7 @@
 	"Wiley Online Library + ACS (Publications)": {
 		"host": ["pubs.acs.org","onlinelibrary.wiley.com"],
 		"url": "/\\/doSearch/",
+		"history": true,
 		"pager": {
 			"nextL": "a.pagination__btn--next",
 			"pageE": "ul.items-results > *",
@@ -3236,6 +3312,7 @@
 	"Library Genesis": {
 		"host": "/libgen/",
 		"url": "return (fun.lp() == '/search.php')",
+		"history": true,
 		"pager": {
 			"nextL": "//font/a[contains(text(), '►')]",
 			"pageE": "table[rules='rows'] > tbody > tr:nth-of-type(n+2), .paginator+script:not([src])",
@@ -3259,6 +3336,7 @@
 	"Z-Library": {
 		"host": "/(\\dlib|b-ok\\d?|booksc|z-lib)\\./",
 		"url": "/\\/s\\//",
+		"history": true,
 		"pager": {
 			"nextL": "//div[@class='paginator']//span/strong/parent::span/parent::td/following-sibling::td[1]//a",
 			"pageE": "id('searchResultBox')/div | //script[contains(string(), 'pagerOptions')]",
@@ -3281,6 +3359,7 @@
 	"X-MOL": {
 		"host": "www.x-mol.com",
 		"url": "return (fun.indexOF('/search/q') || fun.indexOF('/paper/'))",
+		"history": true,
 		"pager": {
 			"nextL": "js;return fun.getNextEP('.pagination li.active+li > a', 'pageIndex=', /pageIndex=\\d+/)",
 			"pageE": ".magazine-senior-search-results-list > ul > li, .magazine-model-content-new > ul > li",
@@ -3356,6 +3435,7 @@
 	"百度学术": {
 		"host": "xueshu.baidu.com",
 		"url": "return (fun.lp() == '/s')",
+		"history": true,
 		"pager": {
 			"nextL": "id('page')/a[./i[@class='c-icon-pager-next']]",
 			"pageE": "#bdxs_result_lists > div.result",
@@ -3366,6 +3446,7 @@
 	"百度学术 - journal": {
 		"host": "xueshu.baidu.com",
 		"url": "/journal\\/navigation/",
+		"history": true,
 		"pager": {
 			"nextL": "a.res-page-next",
 			"pageE": "#journaldetail > div",
@@ -3376,6 +3457,7 @@
 	"百度学术 - paper": {
 		"host": "xueshu.baidu.com",
 		"url": "/paper\\/show/",
+		"history": true,
 		"pager": {
 			"type": 2,
 			"nextL": "div:not([style*='display: none']) > .more_btn",
@@ -3385,6 +3467,7 @@
 	},
 	"谷歌学术": {
 		"host": ["scholar.google.com", "xs2.dailyheadlines.cc"],
+		"history": true,
 		"pager": {
 			"nextL": "//a[./span[contains(@class, 'next')]]",
 			"pageE": "#gs_res_ccl_mid > *",
@@ -3395,6 +3478,7 @@
 	},
 	"谷歌学术 - 镜像站": {
 		"host": "sc.panda321.com",
+		"history": true,
 		"pager": {
 			"nextL": "//a[./span[contains(@class, 'next')]]",
 			"pageE": "#gs_res_ccl_mid > *",
@@ -3410,6 +3494,7 @@
 		"host": ["www.bing.com","cn.bing.com"],
 		"url": "return (fun.lp() == '/academic/search')",
 		"style": "li.aca_algo_count {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": "a.sb_pagN",
 			"pageE": "#b_results > li.aca_algo",
@@ -3481,6 +3566,7 @@
 		"host": "www.w3cschool.cn",
 		"url": "return (location.pathname.split('/').length > 2)",
 		"style": ".widget-body, #rfbanner {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": ".next-link > a",
 			"pageE": "#pro-mian-header, .content-bg",
@@ -3491,6 +3577,7 @@
 		"host": "www.w3school.com.cn",
 		"url": "return (location.pathname.split('/').length > 2)",
 		"style": "#maincontent h1:not(:nth-of-type(1)) {margin-top: 30px;}",
+		"history": true,
 		"pager": {
 			"type": 3,
 			"nextL": "js;let next = fun.getCSS('li.next > a[href]'); if (next && next.href.indexOf('/index.') === -1) {return next.href;}; return ''",
@@ -3516,6 +3603,7 @@
 	"菜鸟教程 - 文章页": {
 		"host": "www.runoob.com",
 		"url": "/^\\/w3cnote\\/.+\\.html$/",
+		"history": true,
 		"pager": {
 			"nextL": "//ul[@class='membership']/li[not(a)]/following-sibling::li[1]/a",
 			"pageE": ".article-heading, .article-body",
@@ -3528,6 +3616,7 @@
 		"host": "www.runoob.com",
 		"url": "if (location.pathname.split('/').length > 2 && fun.getCSS('#leftcolumn')) return true",
 		"style": "#comments, #postcomments, #respond, #footer {display: none !important;} .article-intro h1:not(:nth-of-type(1)) {margin: 30px 0 10px 0;}",
+		"history": true,
 		"pager": {
 			"nextL": "js;let next = fun.getCSS('#leftcolumn > a[style]~a[href]'); if (next && next.href.split('/').length === location.href.split('/').length && next.href.split('/')[3] === location.href.split('/')[3]) {return next.href;}; next.href = location.href; return ''",
 			"pageE": "#content > *, script[src*='assets/js/main.min.js']",
@@ -3651,6 +3740,7 @@
 		"host": "developer.chrome.com",
 		"url": "/^\\/docs\\/.+\\/.+\\//",
 		"style": ".visibility-hidden {visibility: unset !important;} h1.type--h2 {margin-top: 80px;}",
+		"history": true,
 		"pager": {
 			"nextL": "//main//a[@class='navigation-tree__link' and @data-state='active']/following-sibling::a[@class='navigation-tree__link'][not(@target='_blank')] | //main//a[@class='navigation-tree__link' and @data-state='active']/following-sibling::div[@class='navigation-tree__nested']/a[@class='navigation-tree__link'][not(@target='_blank')] | //main//a[@class='navigation-tree__link' and @data-state='active']/parent::div/following-sibling::div[@class='navigation-tree__nested']/a[@class='navigation-tree__link'][not(@target='_blank')]",
 			"pageE": "main article > *",
@@ -3901,6 +3991,7 @@
 	"OI-Wiki": {
 		"host": "oi-wiki.org",
 		"style": "blockquote.page-copyright, h2#__comments, form#gitalk-form {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": "li.md-nav__item.md-nav__item--active.md-nav__item--nested li.md-nav__item--active+li a",
 			"pageE": "article.md-content__inner",
@@ -3912,6 +4003,7 @@
 		"host": "www.dusaiphoto.com",
 		"url": "/\\/article\\//",
 		"style": "h1.article-title {margin-top: 80px;}",
+		"history": true,
 		"pager": {
 			"nextL": "a.hvr-bounce-to-left",
 			"pageE": "#main > .mt-4 >div > .mb-4, #article_body",
@@ -4328,15 +4420,6 @@
 			"pageE": ".inn-archive__container > article",
 			"replaceE": ".poi-pager",
 			"scrollD": 1800
-		}
-	},
-	"下书网": {
-		"host": "mip.xiashucom.com",
-		"url": "/\\/yue_/",
-		"pager": {
-			"nextL": "a.pt-nextchapter",
-			"pageE": ".pt-read-text > p",
-			"replaceE": ".pt-read-btn"
 		}
 	},
 	"二手车之家": {

@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.4.3
+// @version      5.4.4
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -73,6 +73,7 @@
         ['menu_thread', '帖子内自动翻页 (社区类网站)', '帖子内自动翻页 (社区类网站)', true],
         ['menu_page_number', '显示当前页码及点击暂停翻页', '显示当前页码及点击暂停翻页', true],
         ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false],
+        ['menu_history', '添加历史记录+修改地址/标题', '添加历史记录+修改地址/标题', true],
         ['menu_rules', '更新外置翻页规则 (每天自动)', '更新外置翻页规则 (每天自动)', {}],
         ['menu_customRules', '自定义翻页规则', '自定义翻页规则', {}]
     ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname;
@@ -1414,7 +1415,7 @@ function: {
             GM_setValue('menu_ruleUpdateTime', parseInt(+new Date()/1000)); // 写入当前时间戳
             getRulesUrl_(update, true); // 立即更新规则
         } else { // 自动更新
-            if (parseInt(+new Date()/1000) - GM_getValue('menu_ruleUpdateTime', 0) > 172800) getRulesUrl_(); // 距离上次检查更新超过 48 小时，则对比远程时间戳
+            if (parseInt(+new Date()/1000) - GM_getValue('menu_ruleUpdateTime', 0) > 86400) getRulesUrl_(); // 距离上次检查更新超过 24 小时，则对比远程时间戳
         }
 
         function getRulesUrl_(update = false, notification = false) {
@@ -2697,7 +2698,11 @@ function: {
             iframe.contentWindow.document.documentElement.appendChild(newStyle);
 
             // 添加历史记录
-            if (curSite.history !== false) addHistory(iframe.contentWindow.document, iframe.contentWindow.document.title);
+            if (curSite.history === undefined) {
+                if (GM_getValue('menu_history', true)) addHistory(iframe.contentWindow.document, iframe.contentWindow.document.title);
+            } else {
+                if (curSite.history) addHistory(iframe.contentWindow.document, iframe.contentWindow.document.title);
+            }
             // 当前页码 + 1
             if (!curSite.hiddenPN) {
                 let autopageNumber = getCSS('#Autopage_number', window.top.document)
@@ -2802,7 +2807,11 @@ function: {
             pageNum.now = pageNum._now + 1
 
             // 添加历史记录
-            if (curSite.history !== false) addHistory(response);
+            if (curSite.history === undefined) {
+                if (GM_getValue('menu_history', true)) addHistory(response);
+            } else {
+                if (curSite.history) addHistory(response);
+            }
 
             // 替换待替换元素
             if (curSite.pager.replaceE) replaceElems(response);
@@ -2848,8 +2857,14 @@ function: {
                 if (curSite.pager.replaceE) {
                     if (replaceElems(response)) { // 如果替换成功
                         console.log('[自动无缝翻页] 获取主体元素失败，尝试替换元素成功！')
-                        pageNum.now = pageNum._now + 1; // 当前页码 + 1
-                        if (curSite.history !== false) addHistory(response); // 添加历史记录
+                        // 当前页码 + 1
+                        pageNum.now = pageNum._now + 1;
+                        // 添加历史记录
+                        if (curSite.history === undefined) {
+                            if (GM_getValue('menu_history', true)) addHistory(response);
+                        } else {
+                            if (curSite.history) addHistory(response);
+                        }
                     } else {console.error('[自动无缝翻页] 获取主体元素失败，尝试替换元素失败...')}
                 }
             }
