@@ -1677,6 +1677,15 @@
 			"scrollD": 3000
 		}
 	},
+	"异星工厂 Mod": {
+		"host": "mods.factorio.com",
+		"url": "return (!fun.indexOF(/^\\/mod\\//))",
+		"pager": {
+			"nextL": "a.active+a:not(.disabled)",
+			"pageE": ".mod-list",
+			"replaceE": "//a[contains(@class,'active')]/parent::div"
+		}
+	},
 	"Steam 创意工坊 - 项目列表": {
 		"host": "steamcommunity.com",
 		"url": "return (fun.indexOF('/workshop/browse'))",
