@@ -134,11 +134,25 @@
 		}
 	},
 	"神马搜索": {
-		"host": "m.sm.cn",
+		"host": ["m.sm.cn","quark.sm.cn"],
 		"url": "/^\\/s/",
 		"pager": {
 			"type": 2,
 			"nextL": "#pager:not(.loading)"
+		}
+	},
+	"无追搜索": {
+		"host": "www.wuzhuiso.com",
+		"url": "if (fun.isMobile()) {return}; fun.isUrlC(); return (fun.lp() == '/s' && !fun.indexOF('a=image','s'))",
+		"style": ".so-lazyimg{opacity: 1 !important;} .result {border: none !important;}",
+		"noReferer": true,
+		"pager": {
+			"nextL": "#snext",
+			"pageE": ".result",
+			"replaceE": "#page"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-isrc]','data-isrc'])"
 		}
 	},
 	"360 搜索": {
