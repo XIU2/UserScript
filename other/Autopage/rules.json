@@ -4737,6 +4737,15 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"Javhd": {
+		"host": "javhd.today",
+		"url": "return (fun.lp() != '/' && fun.lp() != '/channels/')",
+		"pager": {
+			"nextL": ".pagination > li.active + li > a",
+			"pageE": "ul.videos, ul.playlists, div.models",
+			"replaceE": ".pagination"
+		}
+	},
 	"Javbooks": {
 		"host": ["javbooks.com","jmvbt.com","/^[a-z]{2}\\d{4}\\.com$/"],
 		"url": "return (document.title.indexOf('Javbooks') > -1 && !fun.indexOF('/content_'))",
