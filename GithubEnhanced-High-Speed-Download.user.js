@@ -3,14 +3,14 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      1.9.0
+// @version      1.9.1
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-TW  高速下載 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、項目列表單文件快捷下載 (☁)
 // @description:en  High-speed download of Git Clone/SSH, Release, Raw, Code(ZIP) and other files, project list file quick download (☁)
 // @match        *://github.com/*
-// @match        *://hub.fastgit.org/*
+// @match        *://hub.fastgit.xyz/*
 // @icon         https://i.loli.net/2021/03/30/ULV9XunaHesqGIR.png
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
@@ -34,6 +34,7 @@
         ['https://gh.xiu.workers.dev/https://github.com', '美国 2', '美国 Cloudflare CDN - 该公益加速源由 XIU2(本脚本作者) 提供'],
         //['https://gh.api.99988866.xyz/https://github.com', '美国 2', '美国 Cloudflare CDN'],
         //['https://github.rc1844.workers.dev', '美国 3', '美国 Cloudflare CDN'],
+        //['https://gh-rep.mirr.one', '美国', '美国 Cloudflare CDN'],
         ['https://ghgo.feizhuqwq.workers.dev/https://github.com', '美国 3', '美国 Cloudflare CDN'],
         ['https://git.yumenaka.net/https://github.com', '美国 4', '美国 圣何塞'],
         ['https://gh.ddlc.top/https://github.com', '美国 5', '美国 Cloudflare CDN - 该公益加速源由 @mtr-static-official 提供'],
@@ -44,10 +45,11 @@
         ],
         clone_url = [
             ['https://github.do/https://github.com', '国内', '中国 国内 - 该公益加速源由 小麦云服 提供'],
-            //['https://gitclone.com', '国内', ''],
+            //['https://gitclone.com', '国内', '中国 国内'],
             ['https://api.mtr.pub', '香港', '中国 香港 - 该公益加速源由 @mtr-static-official 提供'],
             ['https://hub.fastgit.xyz', '日本', '日本 东京 - 该公益加速源由 FastGit 提供'],
             ['https://ghproxy.com/https://github.com', '韩国', '韩国 首尔'],
+            ['https://gh.gcdn.mirr.one', '俄罗斯', '俄罗斯 G-Core Labs CDN'],
             ['https://hub.0z.gs', '美国', '美国 Cloudflare CDN'],
             ['https://hub.shutcm.cf', '美国', '美国 Cloudflare CDN']
         ],
@@ -68,6 +70,7 @@
             ['https://raw.fastgit.org', '日本 3', '日本 东京 - 该公益加速源由 FastGit 提供&#10;&#10;注意：&#10; - 单个文件太大时可能会提示超时（实时获取中），请重试。'],
             //['https://cdn.jsdelivr.net/gh', '美国', '注意：&#10; - 该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10; - 该加速源不支持大小超过 50 MB 的文件。&#10; - 当前 分支名 为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。'],
             ['https://gcore.jsdelivr.net/gh', '其他 1', '该公益加速源由 JSDelivr 提供&#10;&#10;适合 [移动/电信] 用户，移动走香港，电信走日本。&#10;&#10;注意：&#10; - 该加速源存在缓存机制（24小时），所以文件可能不是最新。&#10; - 该加速源不支持大小超过 50 MB 的文件。&#10; - 当前 分支名 为版本号格式时（如 v1.2.3），该高速下载链接因格式限制不可用。'],
+            //['https://raw-gh.gcdn.mirr.one', '俄罗斯', '俄罗斯 G-Core Labs CDN'],
             ['https://raw.githubusercontents.com', '其他 2', '该加速源有香港、新加坡、美国等服务器，并不固定。&#10; - 该加速源不支持大小超过 1 MB 的文件。']
         ],
         svg = [
@@ -153,7 +156,7 @@
                 // 循环生成 HTML 标签
                 for (let i=0;i<download_url.length;i++) {
                     url = download_url[i][0] + href[1]
-                    if (location.host === 'hub.fastgit.org') url = url.replace('hub.fastgit.org','github.com')
+                    if (location.host === 'hub.fastgit.xyz') url = url.replace('hub.fastgit.xyz','github.com')
                     if (download_url[i][0] === 'https://download.fastgit.org' && url.indexOf('/archive/') > -1) url = url.replace('https://download.fastgit.org','https://archive.fastgit.org')
 
                     _html += `<a style="${style[0]}" class="btn" href="${url}" title="${download_url[i][2]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
@@ -174,7 +177,7 @@
         for (let i=0;i<download_url.length;i++) {
             if (download_url[i][0] === 'https://github.ddlc.love/https://github.com') continue
             url = download_url[i][0] + href.split(location.host)[1]
-            if (location.host === 'hub.fastgit.org') url = url.replace('hub.fastgit.org','github.com')
+            if (location.host === 'hub.fastgit.xyz') url = url.replace('hub.fastgit.xyz','github.com')
             if (download_url[i][0] === 'https://download.fastgit.org' && url.indexOf('/archive/') > -1) url = url.replace('https://download.fastgit.org','https://archive.fastgit.org')
 
             _html += `<li class="Box-row Box-row--hover-gray p-3 mt-0 XIU2-DZ"><a class="d-flex flex-items-center color-fg-default text-bold no-underline" rel="noreferrer noopener nofollow" href="${url}" title="${download_url[i][2]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
