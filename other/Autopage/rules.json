@@ -4575,6 +4575,25 @@
 			"scrollD": 2000
 		}
 	},
+	"Ventoy 论坛": {
+		"host": "forums.ventoy.net",
+		"url": "/^\\/(forumdisplay|search)\\.php/",
+		"pager": {
+			"nextL": ".pagination_next",
+			"pageE": ".tborder > tbody > tr.inline_row",
+			"replaceE": ".pagination"
+		}
+	},
+	"Ventoy 论坛 - 帖子内": {
+		"host": "forums.ventoy.net",
+		"url": "/^\\/showthread\\.php/",
+		"thread": true,
+		"pager": {
+			"nextL": ".pagination:not(#breadcrumb_multipage_popup) .pagination_next",
+			"pageE": "#posts > *",
+			"replaceE": ".pagination:not(#breadcrumb_multipage_popup)"
+		}
+	},
 	"学佛网": {
 		"host": "www.xuefo.tw",
 		"pager": {
