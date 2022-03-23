@@ -195,12 +195,23 @@
 		"url": "fun.isUrlC(); if (fun.getCookie('av') != '1') {document.cookie='av=1; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; location.reload();}",
 		"history": false
 	},
+	"Searxng 搜索": {
+		"host": "searx.owlook.com.cn",
+		"url": "/^\\/search/",
+		"history": false,
+		"pager": {
+			"nextL": "js; return fun.getNextF('.next_page')",
+			"pageE": "article.result",
+			"replaceE": "#pagination",
+			"scrollD": 2000
+		}
+	},
 	"Startpage 搜索": {
 		"host": ["startpage.com","www.startpage.com"],
 		"url": "/\\/search/",
-		"history": true,
+		"history": false,
 		"pager": {
-			"nextL": "js; return fun.getNextF('//div[contains(@class, 'pagination ')]/form[./button[@class='pagination__next-prev-button next']]')",
+			"nextL": "js; return fun.getNextF('//div[contains(@class, \"pagination\")]/form[./button[@class=\"pagination__next-prev-button next\"]]')",
 			"pageE": "section.w-gl--desktop > div",
 			"replaceE": ".pagination",
 			"scrollD": 2000
