@@ -3028,9 +3028,9 @@
 		"url": "return (fun.lp() == '/' && !location.search)",
 		"pager": {
 			"type": 2,
-			"nextL": ".load-more",
+			"nextL": ".active .load-more",
 			"interval": 1000,
-			"scrollD": 5000
+			"scrollD": 4000
 		}
 	},
 	"果核剥壳 - 分类/搜索页": {
