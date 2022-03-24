@@ -1798,6 +1798,15 @@
 			"replaceE": ".gensmall[align='right']"
 		}
 	},
+	"byrutor": {
+		"host": "byrut.org",
+		"url": "return (!fun.indexOF(/^\\/\\d+-/))",
+		"pager": {
+			"nextL": "//span[@class='pnext']/parent::a",
+			"pageE": ".short_item",
+			"replaceE": ".bottom-page"
+		}
+	},
 	"GBAtemp - 帖子内": {
 		"host": "gbatemp.net",
 		"url": "/^\\/threads\\//",
