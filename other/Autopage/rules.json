@@ -337,77 +337,94 @@
 	},
 	"豆瓣 - 短评": {
 		"host": "movie.douban.com",
-		"url": "return (fun.indexOF('/subject/') && fun.indexOF('/comments'))",
+		"url": "/^\\/subject\\/\\d+\\/comments/",
 		"pager": {
 			"nextL": "a.next",
-			"pageE": "#comments > .comment-item",
+			"pageE": ".comment-item",
 			"replaceE": "#paginator"
 		}
 	},
 	"豆瓣 - 分集短评": {
 		"host": "movie.douban.com",
-		"url": "return (fun.indexOF('/subject/') && (fun.indexOF('/episode') || fun.indexOF('/tv_discuss')))",
+		"url": "/^\\/subject\\/\\d+\\/(episode|tv_discuss)/",
 		"pager": {
 			"nextL": "link[rel='next']",
-			"pageE": "#comments > div",
+			"pageE": "#comments",
 			"replaceE": ".paginator"
 		}
 	},
 	"豆瓣 - 剧评影评": {
 		"host": "movie.douban.com",
-		"url": "return (fun.indexOF('/subject/') && fun.indexOF('/reviews'))",
+		"url": "/^\\/subject\\/\\d+\\/reviews/",
 		"pager": {
 			"nextL": "link[rel='next']",
-			"pageE": ".review-list > div",
+			"pageE": ".review-list",
 			"replaceE": ".paginator"
 		}
 	},
-	"豆瓣 - 看过的电影": {
+	"豆瓣 - 在看/想看/看过的电影": {
 		"host": "movie.douban.com",
-		"url": "return (fun.indexOF('/people/') && fun.indexOF('/collect'))",
+		"url": "/^\\/people\\/\\d+\\/(do|wish|collect)/",
 		"pager": {
 			"nextL": "link[rel='next']",
-			"pageE": ".grid-view > div",
+			"pageE": ".grid-view",
 			"replaceE": ".paginator"
 		}
 	},
 	"豆瓣 - 作品": {
 		"host": "movie.douban.com",
-		"url": "return (fun.indexOF('/celebrity/') && fun.indexOF('/movies'))",
+		"url": "/^\\/celebrity\\/\\d+\\/movies/",
 		"pager": {
 			"nextL": "link[rel='next']",
 			"pageE": ".grid_view > ul > li",
 			"replaceE": ".paginator"
 		}
 	},
+	"豆瓣 - 片单": {
+		"host": "www.douban.com",
+		"url": "/^\\/doulist\\//",
+		"pager": {
+			"nextL": "link[rel='next']",
+			"pageE": ".doulist-item",
+			"replaceE": ".paginator"
+		}
+	},
+	"豆瓣 - 标签": {
+		"host": "www.douban.com",
+		"url": "/^\\/tag\\//",
+		"pager": {
+			"nextL": "link[rel='next']",
+			"pageE": ".article > .mod",
+			"replaceE": ".paginator"
+		}
+	},
 	"豆瓣 - 小组讨论精选": {
 		"host": "www.douban.com",
-		"url": "return (fun.indexOF('/group/explore'))",
+		"url": "/^\\/group\\/explore/",
 		"pager": {
 			"nextL": "span.next > a",
-			"pageE": "#content .article > div > .channel-item",
+			"pageE": ".channel-item",
 			"replaceE": ".paginator"
 		}
 	},
 	"豆瓣 - 小组/讨论区 - 帖子内": {
 		"host": ["www.douban.com", "movie.douban.com"],
-		"url": "return (fun.indexOF('/group/topic/') || fun.indexOF(/\\/subject\\/\\d+\\/discussion\\/\\d+/))",
+		"url": "return (fun.indexOF('/group/topic/') || fun.indexOF(/^\\/subject\\/\\d+\\/discussion\\/\\d+/))",
 		"thread": true,
 		"pager": {
-			"nextL": "span.next > a",
-			"pageE": "#comments > .comment-item",
+			"nextL": "link[rel='next']",
+			"pageE": ".comment-item",
 			"replaceE": ".paginator",
 			"scrollD": 2500
 		}
 	},
 	"豆瓣 - 小组/讨论区": {
 		"host": ["www.douban.com", "movie.douban.com"],
-		"url": "return ((fun.indexOF('/group/') || fun.indexOF('/subject/')) && fun.indexOF('/discussion'))",
+		"url": "/^\\/(group|subject)\\/\\d+\\/discussion/",
 		"pager": {
-			"nextL": "span.next > a",
+			"nextL": "link[rel='next']",
 			"pageE": "table.olt > tbody > tr:not(:first-of-type)",
-			"replaceE": ".paginator",
-			"scrollD": 1000
+			"replaceE": ".paginator"
 		}
 	},
 	"烂番茄": {
