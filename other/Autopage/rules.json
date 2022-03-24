@@ -1536,6 +1536,7 @@
 	},
 	"3DM MOD站": {
 		"host": "mod.3dmgame.com",
+		"history": true,
 		"pager": {
 			"nextL": "js;return fun.getNextEP('//li[@class=\"page-list active\"]/following-sibling::li[contains(@class, \"page-list\")]/a', 'Page=', /Page=\\d+/)",
 			"pageE": "//div[contains(@class, 'game-mod-list') or contains(@class, 'search-mod-list')] | //script[not(@src or @type)][contains(text(), '.game-mod-page') or contains(text(), '.search-mod-page')]",
@@ -1711,6 +1712,7 @@
 		"host": "steamcommunity.com",
 		"url": "return (fun.indexOF(/eventcomments\\/\\d/))",
 		"style": ".forum_paging_controls {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": "js;return fun.getNextUP('ctp=', /ctp=\\d+/, location.pathname, '2', fun.getCSS('span.commentthread_pagelinks > a:last-child').textContent)",
 			"pageE": ".commentthread_comments > .commentthread_comment",
@@ -2201,6 +2203,7 @@
 	"SkrBT": {
 		"host": "/skrbt/",
 		"url": "return (fun.lp() == '/search')",
+		"history": true,
 		"pager": {
 			"nextL": "js;let page = fun.getCSS('a[onclick][aria-label=\"Next\"]'); if (page) {page = /(?<=\\()\\d+(?=\\))/.exec(page.onclick)[0];} else {return '';}; if (page) {return fun.getNextF('#search-form').replace(/p=\\d+/,'p=' + page)} else {return '';}",
 			"pageE": "div[class='row'] > .col-md-6 > ul",
@@ -2331,6 +2334,7 @@
 	"伪射手网": {
 		"host": "assrt.net",
 		"url": "return (fun.lp() === '/sub/')",
+		"history": true,
 		"pager": {
 			"nextL": "js;return fun.getNextEP('#pl-current+a[href]:not([id])', 'page=', /page=\\d+/)",
 			"pageE": ".resultcard > div:not(#top-banner):not(#bottom-banner):not(.pagelinkcard)",
@@ -2969,6 +2973,7 @@
 		"host": "www.macwk.com",
 		"url": "fun.isUrlC(); return (fun.indexOF(/^\\/(soft|article)\\/.+\\/p\\d/))",
 		"style": ".app-content-bottom {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": "js;return fun.getNextUPN(/(?<=\\/p)\\d*$/, /p\\d*$/, 'p', '', '2', fun.getCSS('li.number:not(.active):last-of-type').textContent)",
 			"pageE": ".list-animation-leftIn"
@@ -3201,6 +3206,7 @@
 	"腾龙工作室 - 动态加载": {
 		"host": "www.tenlonstudio.com",
 		"url": "return (fun.lp() !== '/' && !fun.indexOF('.html'))",
+		"history": true,
 		"pager": {
 			"nextL": "js;return fun.getNextUPN(/(?<=\\/page\\/)\\d+/, /\\/page\\/\\d+/, '/page/', '', '2', fun.getCSS('.btn-group > button:last-of-type').textContent)",
 			"pageE": "li.post-list-item",
@@ -4042,6 +4048,7 @@
 		"host": "www.landian.vip",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/archives/') && !fun.indexOF('/search/'))",
 		"style": ".pagination {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": "js;return fun.getNextUPN(/(?<=\\/page\\/)\\d+/, /\\/page\\/\\d+/, '/page/', '', '2', fun.getCSS('.pagination > button.end').textContent)",
 			"pageE": ".content li.color-border"
@@ -4102,6 +4109,7 @@
 	"观察者网": {
 		"host": "www.guancha.cn",
 		"url": "/\\/list_/",
+		"history": true,
 		"pager": {
 			"nextL": "js;return fun.getNextUPN(/(?<=\\/list_)\\d+(?=\\.shtml)/, /\\/list_.+/, '/list_', '.shtml', '2', fun.getXpath('id(\"Pagination\")/*[contains(@class,\"next\")]/preceding-sibling::*[1]').textContent)",
 			"pageE": ".column-list > li",
@@ -4153,6 +4161,7 @@
 		"host": "/www\\.upyunso[0-9]?\\.com/",
 		"url": "return (fun.lp() == '/search.html')",
 		"style": ".pager-wrap {display: none !important;}",
+		"history": true,
 		"pager": {
 			"nextL": "js;return fun.getNextUP('page=', /page=\\d+/)",
 			"pageE": "#res_list > div"
@@ -4295,6 +4304,7 @@
 	"书签地球": {
 		"host": "www.bookmarkearth.com",
 		"url": "return (fun.lp() == '/' || fun.lp() == '/page')",
+		"history": true,
 		"pager": {
 			"nextL": "js;return fun.getNextUP('currentPage=', /currentPage=\\d+/, '/page', '2', fun.getCSS('ul.pager').dataset.totalpage)",
 			"pageE": ".document-piece",
@@ -4305,6 +4315,7 @@
 	"书签地球 - 搜索页": {
 		"host": "www.bookmarkearth.com",
 		"url": "return (fun.lp() == '/s/search')",
+		"history": true,
 		"pager": {
 			"nextL": "js;return fun.getNextEP('a.cut-page-item.active+a.cut-page-item', 'currentPage=', /currentPage=\\d+/)",
 			"pageE": ".document-piece",
@@ -4823,6 +4834,20 @@
 			"nextL": "a.next_page",
 			"pageE": ".image-list > .card, .prof-list > .prof-card",
 			"replaceE": "[id='pagenation']"
+		}
+	},
+	"绅士仓库": {
+		"host": "cangku.icu",
+		"url": "fun.isUrlC(); return (fun.lp() == '/' || fun.indexOF('/category/'))",
+		"pager": {
+			"type": 6,
+			"nextL": "js;return fun.getNextEP('li.number.active+li.number', 'page=', /page=\\d+/)",
+			"pageE": "#post-list > .row, .category-post > .row",
+			"replaceE": ".el-pager",
+			"loadTime": 1000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [1,'div[data-src]','data-src'])"
 		}
 	},
 	"美女推 - 图片页": {
@@ -5493,5 +5518,20 @@
 			"replaceE": ".pageart > ul",
 			"scrollD": 3000
 		}
+	},
+	"7mmtv": {
+		"host": ["7mmtv.tv","cc4871.com"],
+		"url": "return (fun.lp() != '/' && !fun.indexOF('_content/'))",
+		"pager": {
+			"nextL": "li.page-item.current + li.page-item > a",
+			"pageE": ".latest-korean-slider > .row:first-of-type > div",
+			"replaceE": ".pagination-row"
+		}
+	},
+	"7mmtv - 漫画": {
+		"host": "gw24sy.cc4871.com",
+		"url": "if (fun.indexOF('/hcomic_content/')) {let _img=''; for (let i=1;i<=Large_cgurl.length;i++){_img += `<li><img src=\"${Large_cgurl[i]}\" class=\"img-responsive\"></li>`;}; document.getElementById('show_cg_html').innerHTML = _img; return true;}",
+		"style": ".video-introduction-images-row > center > *:not(#content) {display: none !important;}",
+		"hiddenPN": true
 	}
 }
