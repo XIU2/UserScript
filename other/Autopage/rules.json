@@ -1904,7 +1904,7 @@
 	},
 	"91 美剧网": {
 		"host": "/mjw\\d+\\.com/",
-		"url": "return (!fun.indexOF('/w/') && !fun.indexOF('/dp/'))",
+		"url": "return (document.title.indexOf('91美剧') > -1 && !fun.indexOF('/w/') && !fun.indexOF('/dp/'))",
 		"pager": {
 			"nextL": ".next-page > a",
 			"pageE": ".m-movies > article",
@@ -2218,8 +2218,8 @@
 		}
 	},
 	"琉璃神社": {
-		"host": "/\\.hacg\\./",
-		"url": "return (fun.indexOF('/wp/') && !fun.indexOF(/d+.html/))",
+		"host": "/^www\\.hacg\\./",
+		"url": "return (fun.indexOF('/wp/') && !fun.indexOF(/\\d+\\.html/))",
 		"pager": {
 			"nextL": "a.nextpostslink",
 			"pageE": "article[id^='post-']",
@@ -2258,7 +2258,7 @@
 	},
 	"1337x": {
 		"host": "/1337x\\./",
-		"url": "return (fun.indexOF('search/'))",
+		"url": "return (document.title.indexOf('1337x') > -1 && fun.indexOF('search/'))",
 		"pager": {
 			"nextL": "//div[@class='pagination']//a[text()='>>']",
 			"pageE": "table.table-list > tbody > tr",
@@ -2268,7 +2268,7 @@
 	},
 	"RARBG": {
 		"host": "/rarbg/",
-		"url": "return (fun.lp() == '/torrents.php')",
+		"url": "return (document.title.indexOf('RARBG') > -1 && fun.lp() == '/torrents.php')",
 		"pager": {
 			"nextL": "#pager_links > a[title='next page']",
 			"pageE": "table.lista2t tr.lista2",
@@ -3363,13 +3363,12 @@
 	},
 	"Library Genesis": {
 		"host": "/libgen/",
-		"url": "return (fun.lp() == '/search.php')",
+		"url": "return (document.title.indexOf('Library Genesis') > -1 && fun.lp() == '/index.php' && fun.indexOF('req=','s'))",
 		"history": true,
 		"pager": {
-			"nextL": "//font/a[contains(text(), '►')]",
-			"pageE": "table[rules='rows'] > tbody > tr:nth-of-type(n+2), .paginator+script:not([src])",
-			"insertP": ["table[rules='rows'] > tbody",3],
-			"replaceE": "//td[./font/a[contains(text(), '►')]]",
+			"nextL": "//div[@class='paginator']//span/strong/parent::span/parent::td/following-sibling::td[1]//a",
+			"pageE": "#tablelibgen > tbody > tr, .paginator+script:not([src])",
+			"replaceE": ".paginator",
 			"scriptT": 2,
 			"scrollD": 2000
 		}
@@ -3387,12 +3386,11 @@
 	},
 	"Z-Library": {
 		"host": "/(\\dlib|b-ok\\d?|booksc|z-lib)\\./",
-		"url": "/\\/s\\//",
+		"url": "return (document.title.indexOf('Z-Library') > -1 && fun.indexOF('/s/'))",
 		"history": true,
 		"pager": {
 			"nextL": "//div[@class='paginator']//span/strong/parent::span/parent::td/following-sibling::td[1]//a",
-			"pageE": "id('searchResultBox')/div | //script[contains(string(), 'pagerOptions')]",
-			"insertP": ["#searchResultBox",3],
+			"pageE": "id('searchResultBox') | //script[contains(string(), 'pagerOptions')]",
 			"replaceE": ".paginator",
 			"scriptT": 2,
 			"scrollD": 2000
@@ -4796,7 +4794,7 @@
 	},
 	"JavBus": {
 		"host": "/^www\\.(jav.+|.+jav)\\./",
-		"url": "return (document.title.indexOf('JavBus') > -1 && !fun.indexOF('/forum/'))",
+		"url": "return (fun.getCSS('img[alt=\"JavBus\" i]') && !fun.indexOF('/forum/'))",
 		"style": "#waterfall {height: auto !important;} #waterfall > .item {position: static !important; float: left !important; height: 400px !important;}",
 		"pager": {
 			"nextL": "#next",
@@ -4874,11 +4872,11 @@
 	},
 	"绅士仓库": {
 		"host": "cangku.icu",
-		"url": "fun.isUrlC(); return (fun.lp() == '/' || fun.indexOF('/category/'))",
+		"url": "fun.isUrlC(); if (fun.indexOF('/category/')){fun.forceTarget()}; return (fun.lp() == '/' || fun.indexOF('/category/') || fun.indexOF('/user/'))",
 		"pager": {
 			"type": 6,
 			"nextL": "js;return fun.getNextEP('li.number.active+li.number', 'page=', /page=\\d+/)",
-			"pageE": ".post-list > .row, .category-post > .row",
+			"pageE": ".post-list > .row, .category-post > .row, #user-post > .row, #user-favorite > .row, #user-comment .comment-list",
 			"replaceE": ".el-pager",
 			"loadTime": 1500
 		},
