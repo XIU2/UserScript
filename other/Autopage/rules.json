@@ -4813,6 +4813,16 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"Jable.TV": {
+		"host": "jable.tv",
+		"url": "return (fun.lp() != '/' && !fun.indexOF('/videos/'))",
+		"history": false,
+		"pager": {
+			"nextL": "js; let next = fun.getXpath(\"//li[@class='page-item' and ./span[contains(@class,'active')]]/following-sibling::li/a\"); if (next) {return `${location.origin}${location.pathname}?mode=async&function=get_block&block_id=${next.dataset.blockId}&${next.dataset.parameters.replace('from_videos+','from_videos=' + next.textContent + '&').replaceAll(':','=').replaceAll(';','&').replaceAll('+','&')}&_=${+new Date()}`;}",
+			"pageE": "section > .row",
+			"replaceE": ".pagination"
+		}
+	},
 	"Javbooks": {
 		"host": ["javbooks.com","jmvbt.com","/^[a-z]{2}\\d{4}\\.com$/"],
 		"url": "return (document.title.indexOf('Javbooks') > -1 && !fun.indexOF('/content_'))",
@@ -4868,12 +4878,20 @@
 		"pager": {
 			"type": 6,
 			"nextL": "js;return fun.getNextEP('li.number.active+li.number', 'page=', /page=\\d+/)",
-			"pageE": "#post-list > .row, .category-post > .row",
+			"pageE": ".post-list > .row, .category-post > .row",
 			"replaceE": ".el-pager",
-			"loadTime": 1000
+			"loadTime": 1500
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [1,'div[data-src]','data-src'])"
+		}
+	},
+	"绅士仓库 - 排行/作者墙": {
+		"host": "cangku.icu",
+		"url": "/^\\/(rank|author)/",
+		"pager": {
+			"type": 2,
+			"nextL": ".container .el-button:not(.is-loading)"
 		}
 	},
 	"美女推 - 图片页": {
