@@ -2128,7 +2128,7 @@
 		}
 	},
 	"BD 影视": {
-		"host": "www.bd2020.com",
+		"host": ["www.bd2020.com","www.bd2020.co"],
 		"url": "return (fun.lp() != '/' && !fun.indexOF(/\\/d+.htm/))",
 		"pager": {
 			"type": 2,
