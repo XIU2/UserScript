@@ -4038,6 +4038,16 @@
 			"scrollD": 3000
 		}
 	},
+	"Github - Gist - Search": {
+		"host": "gist.github.com",
+		"url": "return (fun.lp() == '/search' && location.search != '')",
+		"pager": {
+			"nextL": "a.next_page",
+			"pageE": ".gist-snippet",
+			"replaceE": ".pagination",
+			"scrollD": 2000
+		}
+	},
 	"OI-Wiki": {
 		"host": "oi-wiki.org",
 		"style": "blockquote.page-copyright, h2#__comments, form#gitalk-form {display: none !important;}",
@@ -4871,12 +4881,13 @@
 		}
 	},
 	"绅士仓库": {
-		"host": "cangku.icu",
-		"url": "fun.isUrlC(); if (fun.indexOF('/category/')){fun.forceTarget()}; return (fun.lp() == '/' || fun.indexOF('/category/') || fun.indexOF('/user/'))",
+		"host": "/^cangku\\./",
+		"url": "if (document.title.indexOf('绅士') == -1){return} fun.isUrlC(); return (fun.lp() == '/' || fun.indexOF('/user/'))",
+		"history": true,
 		"pager": {
 			"type": 6,
 			"nextL": "js;return fun.getNextEP('li.number.active+li.number', 'page=', /page=\\d+/)",
-			"pageE": ".post-list > .row, .category-post > .row, #user-post > .row, #user-favorite > .row, #user-comment .comment-list",
+			"pageE": ".post-list > .row, #user-post > .row, #user-favorite > .row, #user-comment .comment-list",
 			"replaceE": ".el-pager",
 			"loadTime": 1500
 		},
@@ -4885,8 +4896,8 @@
 		}
 	},
 	"绅士仓库 - 排行/作者墙": {
-		"host": "cangku.icu",
-		"url": "/^\\/(rank|author)/",
+		"host": "/^cangku\\./",
+		"url": "return (document.title.indexOf('绅士') > -1 && (fun.lp() == '/rank' || fun.lp() == '/author'))",
 		"pager": {
 			"type": 2,
 			"nextL": ".container .el-button:not(.is-loading)"
