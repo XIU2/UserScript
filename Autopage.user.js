@@ -1427,6 +1427,7 @@ function: {
         //'https://github.do/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json'
 
         if (update) { // 手动更新（或安装后首次更新）
+            GM_notification({text: '🔄 更新外置翻页规则中，请勿操作网页...', timeout: 3000});
             getRulesUrl_(true);
         } else if (parseInt(+new Date()/1000) - GM_getValue('menu_ruleUpdateTime', 0) > 259200) { // 自动更新，距离上次检查更新超过 3 天，则立即更新规则
             getRulesUrl_();
