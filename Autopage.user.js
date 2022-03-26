@@ -3,13 +3,16 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.4.5
+// @version      5.4.6
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
 // @description:en  Append the next page content to the bottom seamlessly (like a waterfall)~
 // @match        *://*/*
 // @connect      userscript.xiu2.xyz
+// @connect      raw.iqiq.io
+// @connect      raw.fastgit.org
+// @connect      hk1.monika.love
 // @connect      www.xuexiniu.com
 // @connect      bbs.xuexiniu.com
 // @connect      weili.ooopic.com
@@ -232,16 +235,16 @@
         } else if (getCSS('link[href*="themes/begin" i], script[src*="themes/begin" i], img[src*="themes/begin" i]')) {
             console.info(`[自动无缝翻页] - 使用 WordPress <Begin> 主题的网站`); return 103;
         } else if (getCSS('link[href*="/wp-content/" i], script[src*="/wp-content/" i]')) {
-            if (getAllCSS('article[class]').length > 2 && getCSS('#nav-below, nav.navigation, nav.pagination, ul.pagination, nav.paging-navigation')) {
+            if (getAllCSS('article[class]').length > 2 && getCSS('#nav-below, nav.navigation, nav.pagination, ul.pagination, nav.paging-navigation, .wp-pagenavi, .pagenavi')) {
                 if (getCSS('a.next')) {
                     console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (a.next)`); return 104;
-                } else if (getCSS('a[rel="next"], a[aria-label="Next Page"]')) {
+                } else if (getCSS('a[rel="next" i], a[aria-label="Next Page" i], a[aria-label="下一页"]')) {
                     console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (a[rel="next"])`); return 105;
                 } else if (getCSS('li.next-page > a')) {
                     console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (li.next-page > a)`); return 106;
                 } else if (getCSS('.nav-previous a')) {
                     console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (旧文章)`); return 107;
-                } else if (getXpath('//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]', getCSS('#nav-below, nav.navigation, nav.pagination, ul.pagination, nav.paging-navigation'))) {
+                } else if (getXpath('//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]', getCSS('#nav-below, nav.navigation, nav.pagination, ul.pagination, nav.paging-navigation, .wp-pagenavi, .pagenavi'))) {
                     console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (下一页)`); return 108;
                 }
             }
@@ -281,13 +284,13 @@
                 case 104: // < 部分使用 WordPress 的网站 (a.next) >
                     DBSite.wp_article.url('a.next'); break;
                 case 105: // < 部分使用 WordPress 的网站 (a[rel="next"]) >
-                    DBSite.wp_article.url('a[rel="next"], a[aria-label="Next Page"]'); break;
+                    DBSite.wp_article.url('a[rel="next" i], a[aria-label="Next Page" i], a[aria-label="下一页"]'); break;
                 case 106: // < 部分使用 WordPress 的网站 (li.next-page > a) >
                     DBSite.wp_article.url('li.next-page > a'); break;
                 case 107: // < 部分使用 WordPress 的网站 (旧文章) >
                     DBSite.wp_article.url('.nav-previous a'); break;
                 case 108: // < 部分使用 WordPress 的网站 (下一页) >
-                    DBSite.wp_article.url('//nav[@id="nav-below" or contains(@class, "navigation") or contains(@class, "pagination")]//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")] | //ul[contains(@class, "pagination")]//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]'); break;
+                    DBSite.wp_article.url('//nav[@id="nav-below" or contains(@class, "navigation") or contains(@class, "pagination")]//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")] | //ul[contains(@class, "pagination")]//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")] | //div[contains(@class, "pagenavi")]//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]'); break;
                 case 200: // < 所有使用 笔趣阁 模板的小说网站 >
                     DBSite.biquge.url(); break;
             }
@@ -595,7 +598,7 @@ function: {
                 url: function(nextL) {if (!indexOF('/post/') && !getCSS('#comments, .comments-area, #disqus_thread')) {curSite = DBSite.wp_article; curSite.pager.nextL = nextL; if (getCSS('img[data-src]')) {curSite.function = {bF: "return fun.src_bF(pageE, [0, 'img[data-src]', 'data-src'])"};} else if (getCSS('img[data-original]')) {curSite.function = {bF: "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"};}}},
                 pager: {
                     pageE: 'article[class]',
-                    replaceE: '#nav-below, nav.navigation, nav.pagination, ul.pagination, nav.paging-navigation',
+                    replaceE: '#nav-below, nav.navigation, nav.pagination, ul.pagination, nav.paging-navigation, .wp-pagenavi, .pagenavi',
                     scrollD: 2000
                 }
             }, //  Wordpress 的 nav.navigation 规则
@@ -1415,52 +1418,58 @@ function: {
         // 如果是原来的时间格式 或 刚安装脚本，则需要立即更新
         if (typeof(GM_getValue('menu_ruleUpdateTime', '')) == 'string') update = true
 
+        let urlArr = ['https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
+                      'https://hk1.monika.love/XIU2/UserScript/master/other/Autopage/rules.json',
+                      'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json']
+        //'https://cdn.staticaly.com/gh/XIU2/UserScript/master/other/Autopage/rules.json',
+        //'https://cdn.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
+        //'https://fastly.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
+        //'https://github.do/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json'
+
         if (update) { // 手动更新（或安装后首次更新）
-            GM_setValue('menu_ruleUpdateTime', parseInt(+new Date()/1000)); // 写入当前时间戳
-            getRulesUrl_(update, true); // 立即更新规则
-        } else { // 自动更新
-            if (parseInt(+new Date()/1000) - GM_getValue('menu_ruleUpdateTime', 0) > 86400) getRulesUrl_(); // 距离上次检查更新超过 24 小时，则对比远程时间戳
+            getRulesUrl_(true);
+        } else if (parseInt(+new Date()/1000) - GM_getValue('menu_ruleUpdateTime', 0) > 259200) { // 自动更新，距离上次检查更新超过 3 天，则立即更新规则
+            getRulesUrl_();
         }
 
-        function getRulesUrl_(update = false, notification = false) {
+        function getRulesUrl_(n = false) {
+            let url = urlArr[Math.floor(Math.random()*urlArr.length)];
+            if (n) url = 'https://userscript.xiu2.xyz/other/Autopage/rules.json'
             GM_xmlhttpRequest({
-                url: (update === true) ? 'https://userscript.xiu2.xyz/other/Autopage/rules.json' : 'https://userscript.xiu2.xyz/other/Autopage/ruleUpdateTime.json',
+                url: url,
                 method: 'GET',
-                responseType: (update === true) ? 'json' : 'text',
-                overrideMimeType: (update === true) ? 'application/json; charset=utf-8' : 'text/plain; charset=utf-8',
+                responseType: 'json',
+                overrideMimeType: 'application/json; charset=utf-8',
                 timeout: 5000,
                 onload: function (response) {
                     try {
-                        //console.log('最终 URL：' + response.finalUrl, '返回内容：',response.response)
+                        //console.log('最终 URL：' + response.finalUrl, '返回内容：',response.response, response.responseHeaders)
                         if (response.response) {
+                            GM_setValue('menu_rules', response.response); // 写入最新规则
+                            GM_setValue('menu_ruleUpdateTime', parseInt(+new Date()/1000)); // 写入当前时间戳
 
-                            if (!update) { // 获取远程时间戳并对比
-                                if (parseInt(response.response) && parseInt(response.response) > GM_getValue('menu_ruleUpdateTime', 0)) {
-                                    GM_setValue('menu_ruleUpdateTime', parseInt(+new Date()/1000)); // 写入当前时间戳
-                                    getRulesUrl_(true);
-                                } else {GM_setValue('menu_ruleUpdateTime', parseInt(+new Date()/1000));}
+                            curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
+                            registerMenuCommand(); // 重新判断规则
+                            if (curSite.style) {insStyle(curSite.style)} // 插入 Style CSS 样式
+                            pageLoading(); // 自动无缝翻页
 
-                            } else { // 写入最新规则
+                            if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
+                            pausePageEvent(); // 左键双击网页空白处暂停翻页
 
-                                GM_setValue('menu_rules', response.response);
-
-                                curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
-                                registerMenuCommand(); // 重新判断规则
-                                if (curSite.style) {insStyle(curSite.style)} // 插入 Style CSS 样式
-                                pageLoading(); // 自动无缝翻页
-
-                                if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
-                                pausePageEvent(); // 左键双击网页空白处暂停翻页
-
-                                if (notification) GM_notification({text: '✅ 已更新外置翻页规则！\n如果依然无法翻页，则说明还不支持当前网页，欢迎点击此处提交申请~', timeout: 5000, onclick: function(){window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});}});
-                            }
+                            if (n) GM_notification({text: '✅ 已更新外置翻页规则！\n如果依然无法翻页，则说明还不支持当前网页，欢迎点击此处提交申请~', timeout: 5000, onclick: function(){window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});}});
                         } else {
-                            GM_notification({text: '❌ 更新失败，请联系作者解决...', timeout: 5000});
+                            GM_notification({text: '❌ 为空！更新失败，请联系作者解决...', timeout: 5000});
                         }
                     } catch (e) {
                         console.log(e);
-                        GM_notification({text: '❌ 更新失败，请联系作者解决...', timeout: 5000});
+                        GM_notification({text: '❌ 报错！更新失败，请联系作者解决...', timeout: 5000});
                     }
+                },
+                onerror: function (response) {
+                    GM_notification({text: '❌ 错误！更新失败，请联系作者解决...', timeout: 5000});
+                },
+                ontimeout: function (response) {
+                    GM_notification({text: '❌ 超时！更新失败，请联系作者解决...', timeout: 5000});
                 }
             })
         }
@@ -3312,7 +3321,7 @@ function: {
         "style": ".aaaa {display: none !important;}",
         "forceTarget": true,
         "hiddenPN": true,
-        "history": false
+        "history": false,
         "thread": true,
         "iframe": true,
         "pager": {
