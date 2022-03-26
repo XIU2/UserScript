@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         新标签页打开链接
-// @version      1.0.6
+// @version      1.0.7
 // @author       X.I.U
 // @description  将网页中所有链接改为新标签页打开~
 // @match        *://*/*
@@ -15,7 +15,7 @@
 
 (function() {
     'use strict';
-    targetBlank(); //  修改为新标签页打开
+    forceTarget(); //  修改为新标签页打开
     targetDiscuz(); // 针对 Discuz! 论坛的帖子
     aObserver(); //    针对动态加载内容中的 a 标签
 
@@ -31,6 +31,33 @@
         document.querySelectorAll('form').forEach(function (_this) { // 排除 form 标签
             if (!_this.target) {_this.target = '_self'}
         });
+    }
+    function forceTarget() {
+        document.body.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A') {
+                forceTarget_(e.target, e);
+            } else {
+                let path = e.path || e.composedPath();
+                for (let i = 1; i < path.length - 4; i++) {
+                    //console.log(path[i])
+                    if (path[i].tagName === 'A') {
+                        forceTarget_(path[i], e);
+                        break;
+                    }
+                }
+            }
+        });
+
+        function forceTarget_(target, e){
+            if (target.href && target.target != '_blank' && !(target.getAttribute('onclick')) && target.href.slice(0,4) == 'http' && target.getAttribute('href').slice(0,1) != '#') {
+                e.preventDefault(); // 阻止默认打开链接事件
+                e.stopImmediatePropagation();
+                //console.log(target.href);
+                //window.top.location.href = target.href;
+                window.GM_openInTab(target.href, {active: true,insert: true,setParent: true});
+            }
+        }
+        //document.head.appendChild(document.createElement('base')).target = '_top';
     }
 
 

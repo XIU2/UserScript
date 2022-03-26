@@ -1037,7 +1037,7 @@
 	},
 	"Pixiv - 分类页": {
 		"host": "www.pixiv.net",
-		"url": "fun.isUrlC(); if (fun.isMobile()) {return false}; if (fun.lp() == '/') {fun.forceTarget();} else if (fun.indexOF('/tags/')) {return true;} else if (fun.indexOF('/artworks/')) {setTimeout(function(){fun.getXpath('//button[contains(string(), \"查看全部\") or contains(string(), \"See all\") or contains(string(), \"すべて見る\") or contains(string(), \"모두 보기\")]').click();}, 3000)}",
+		"url": "fun.isUrlC(); if (fun.isMobile()) {return false}; if (fun.lp() == '/') {fun.blank();} else if (fun.indexOF('/tags/')) {return true;} else if (fun.indexOF('/artworks/')) {setTimeout(function(){fun.getXpath('//button[contains(string(), \"查看全部\") or contains(string(), \"See all\") or contains(string(), \"すべて見る\") or contains(string(), \"모두 보기\")]').click();}, 3000)}",
 		"blank": 2,
 		"style": "ul[class*='-1 '] > li {display: inline !important;} #root{margin-bottom: -175px;} ul > li > button[class^='sc-'], a[href^='/premium/lead/lp'] {display: none !important;}",
 		"iframe": true,
@@ -1083,7 +1083,7 @@
 	},
 	"Vilipix": {
 		"host": "www.vilipix.com",
-		"url": "fun.isUrlC(); if (fun.lp() == '/') {forceTarget();} else if (fun.indexOF(/\\/(tags|user|new|ranking)/)) {return true;}",
+		"url": "fun.isUrlC(); if (fun.lp() == '/') {fun.blank();} else if (fun.indexOF(/\\/(tags|user|new|ranking)/)) {return true;}",
 		"blank": 2,
 		"pager": {
 			"type": 6,
@@ -3710,7 +3710,7 @@
 	},
 	"博客园 - 文章列表": {
 		"host": "www.cnblogs.com",
-		"url": "if (fun.getCSS('#post_list')) return true",
+		"url": "return (fun.getCSS('#post_list') != null)",
 		"pager": {
 			"nextL": "//div[@class='pager']//a[contains(text(), '>')]",
 			"pageE": "#post_list > article",
@@ -3720,7 +3720,8 @@
 	},
 	"博客园 - 文章列表 - 个人": {
 		"host": "www.cnblogs.com",
-		"url": "if (location.pathname.split('/').length === 3 && fun.getCSS('.topicListFooter')) { if (!fun.getCSS('#homepage_top_pager')) {fun.getCSS('#centercontent, .forFlow').insertAdjacentHTML('afterbegin', '<div id=\"homepage_top_pager\" class=\"topicListFooter\"></div>'); fun.getCSS('#centercontent, .forFlow').insertAdjacentHTML('beforeend', '<div id=\"homepage_bottom_pager\" class=\"topicListFooter\"></div>');}; return true}",
+		"url": "if (location.pathname.split('/').length === 3 && fun.getCSS('.topicListFooter') != null) { if (!fun.getCSS('#homepage_top_pager')) {fun.getCSS('#centercontent, .forFlow').insertAdjacentHTML('afterbegin', '<div id=\"homepage_top_pager\" class=\"topicListFooter\"></div>'); fun.getCSS('#centercontent, .forFlow').insertAdjacentHTML('beforeend', '<div id=\"homepage_bottom_pager\" class=\"topicListFooter\"></div>');}; return true}",
+		"blank": 1,
 		"pager": {
 			"nextL": "//div[@class='topicListFooter']//a[contains(text(), '下一页')]",
 			"pageE": "div.day",
@@ -3826,8 +3827,7 @@
 		"pager": {
 			"nextL": "//main//a[@class='navigation-tree__link' and @data-state='active']/following-sibling::a[@class='navigation-tree__link'][not(@target='_blank')] | //main//a[@class='navigation-tree__link' and @data-state='active']/following-sibling::div[@class='navigation-tree__nested']/a[@class='navigation-tree__link'][not(@target='_blank')] | //main//a[@class='navigation-tree__link' and @data-state='active']/parent::div/following-sibling::div[@class='navigation-tree__nested']/a[@class='navigation-tree__link'][not(@target='_blank')]",
 			"pageE": "main article > *",
-			"replaceE": "main navigation-tree, main .scrollbar",
-			"scrollD": 1500
+			"replaceE": "main navigation-tree, main .scrollbar"
 		}
 	},
 	"Gitee - Explore 列表": {
@@ -5137,8 +5137,7 @@
 		"pager": {
 			"nextL": "li.next-page > a",
 			"pageE": "article[class]:not(.excerpt-minic-index)",
-			"replaceE": ".pagination",
-			"scrollD": 1500
+			"replaceE": ".pagination"
 		}
 	},
 	"美女推 - 图片页": {
@@ -5212,7 +5211,7 @@
 			"replaceE": ".pagination"
 		}
 	},
-	"tvv": {
+	"mm.tvv.tw": {
 		"host": "mm.tvv.tw",
 		"url": "return (!fun.indexOF('.html'))",
 		"style": ".blog-masonry, .blog-masonry-4col {height: auto !important;} .blog-listing {position: relative !important;float: left !important;top: auto !important;left: auto !important;} .blog-title > a {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;} .blog-image img {min-height: 300px;}",
