@@ -2119,10 +2119,11 @@
 		}
 	},
 	"BT 之家": {
-		"host": "/\\d?btbtt\\d?/",
+		"host": "/btbtt/",
+		"url": "return (fun.getCSS(\".logo>a[title='BT之家']\") != null && (fun.lp() == '/' || fun.indexOF(/^\\/(index|forum|search)-/)))",
 		"pager": {
-			"nextL": "//div[@class='page']/a[contains(text(), '▶') or contains(text(), '下一页')]",
-			"pageE": "#threadlist > *",
+			"nextL": "//div[@class='page']/a[text()='▶' or text()='下一页']",
+			"pageE": "#threadlist",
 			"replaceE": ".page",
 			"scrollD": 2000
 		}
@@ -2167,7 +2168,7 @@
 		}
 	},
 	"扶她动漫": {
-		"host": "/futaacg\\./",
+		"host": ["futaacg.com", "www.futaacg.com"],
 		"pager": {
 			"nextL": "ul.pagination a[rel='next']",
 			"pageE": ".topic-list > div",
@@ -2217,18 +2218,9 @@
 			"replaceE": ".wp-pagenavi"
 		}
 	},
-	"琉璃神社": {
-		"host": "/^www\\.hacg\\./",
-		"url": "return (fun.indexOF('/wp/') && !fun.indexOF(/\\d+\\.html/))",
-		"pager": {
-			"nextL": "a.nextpostslink",
-			"pageE": "article[id^='post-']",
-			"replaceE": ".wp-pagenavi"
-		}
-	},
 	"SkrBT": {
 		"host": "/skrbt/",
-		"url": "return (fun.lp() == '/search')",
+		"url": "return (fun.getCSS(\"link[href*='/skrbt/'], img[src*='/skrbt/']\") != null && fun.lp() == '/search')",
 		"history": true,
 		"pager": {
 			"nextL": "js;let page = fun.getCSS('a[onclick][aria-label=\"Next\"]'); if (page) {page = /(?<=\\()\\d+(?=\\))/.exec(page.onclick)[0];} else {return '';}; if (page) {return fun.getNextF('#search-form').replace(/p=\\d+/,'p=' + page)} else {return '';}",
