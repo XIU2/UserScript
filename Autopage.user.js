@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.4.8
+// @version      5.4.9
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -596,12 +596,13 @@ function: {
             }, //       WordPress 的 Begin 主题 - 搜索页
             wp_article: {
                 url: function(nextL) {if (!indexOF('/post/') && !getCSS('#comments, .comments-area, #disqus_thread')) {curSite = DBSite.wp_article; curSite.pager.nextL = nextL; if (getCSS('img[data-src]')) {curSite.function = {bF: "return fun.src_bF(pageE, [0, 'img[data-src]', 'data-src'])"};} else if (getCSS('img[data-original]')) {curSite.function = {bF: "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"};}}},
+                blank: 1,
                 pager: {
                     pageE: 'article[class]',
                     replaceE: '#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi',
                     scrollD: 2000
                 }
-            }, //  Wordpress 的 nav.navigation 规则
+            }, //         Wordpress 的 nav.navigation 规则
             biquge: {
                 url: ()=> {if (indexOF(/\d+\/\d+\.html/)) {curSite = DBSite.biquge;}},
                 style: 'img, .posterror {display: none !important;}',
@@ -663,6 +664,7 @@ function: {
             nexusmods: {
                 host: 'www.nexusmods.com',
                 url: ()=> {urlC = true; if (!(lp == '/' || indexOF(/\/mods\/\d+/))) {curSite = DBSite.nexusmods;}},
+                blank: 1,
                 history: false,
                 pager: {
                     nextL: nexusmods_nextL,
@@ -752,6 +754,7 @@ function: {
                 }
             }, //        动漫狂
             cartoonmad_list: {
+                blank: 1,
                 pager: {
                     nextL: '//a[@class="pages"][contains(text(), "下一頁")]',
                     pageE: 'td[background="/image/content_box4.gif"]+td > table > tbody > tr',
@@ -785,6 +788,7 @@ function: {
                 }
             }, //         漫画猫
             manhuacat_list: {
+                blank: 1,
                 pager: {
                     nextL: '//div[contains(@class, "pagination")]//a[contains(text(), "下一页") or contains(text(), "下页")]',
                     pageE: '.comic-main-section > *',
@@ -827,6 +831,7 @@ function: {
                 }
             }, //          爱漫画 + 188漫画网
             imanhuaw_list: {
+                blank: 1,
                 pager: {
                     nextL: '//div[@class="NewPages"]//a[text()="下一页"]',
                     pageE: 'ul.mh-search-list > li',
@@ -856,6 +861,7 @@ function: {
                 }
             }, //         漫画柜
             manhuagui_list: {
+                blank: 1,
                 pager: {
                     nextL: '//div[@class="pager"]/a[text()="下一页" or text()="下一頁"]',
                     pageE: '.book-result > ul > li, .book-list > ul > li',
@@ -893,6 +899,7 @@ function: {
                 }
             }, //          36漫画
             _36manga_list: {
+                blank: 1,
                 pager: {
                     nextL: 'ul.pagination li.next a',
                     pageE: '#contList',
@@ -964,6 +971,7 @@ function: {
             }, //              动漫之家 - 原创
             dmzj_list: {
                 style: '.wrap_mhlist_l.con_left, .wrap_list {height: auto!important;}',
+                blank: 1,
                 pager: {
                     nextL: 'a.pg_next',
                     pageE: 'ul.list_con_li > li',
@@ -1010,6 +1018,7 @@ function: {
                 }
             },*/ //  动漫之家 - 日漫 - 分类页
             dmzj_manhua_update: {
+                blank: 1,
                 pager: {
                     nextL: '//div[@class="pages"]/a[contains(text(), "下一页")]',
                     pageE: '.newpic_content > *:not(.pages)',
@@ -1040,6 +1049,7 @@ function: {
                 }
             }, //              动漫戏说
             acgn_list: {
+                blank: 1,
                 pager: {
                     nextL: 'a[rel="next"]',
                     pageE: 'ul#display > li',
@@ -1072,6 +1082,7 @@ function: {
                 }
             }, //              优酷漫画
             ykmh_list: {
+                blank: 1,
                 pager: {
                     nextL: 'li.next > a',
                     pageE: 'li.list-comic',
@@ -1100,6 +1111,7 @@ function: {
                 }
             }, //            漫画星球
             mhxqiu_list: {
+                blank: 1,
                 pager: {
                     nextL: '//div[@class="NewPages"]//a[contains(text(), "下一页")]',
                     pageE: '.cy_list_mh > ul',
@@ -1142,6 +1154,7 @@ function: {
                 }
             }, //           乐语漫画
             leyuman_list: {
+                blank: 1,
                 pager: {
                     nextL: '//a[@class="page-link"][contains(text(), "下一页")]',
                     pageE: '.works_recommend.classification_works > ul',
@@ -1174,6 +1187,7 @@ function: {
                 }
             }, //             新新漫画
             _77mh_list: {
+                blank: 1,
                 pager: {
                     nextL: '//div[@class="pages_s"]/a[text()="下一页"]',
                     pageE: '.ar_list_co > ul > li',
@@ -1183,6 +1197,7 @@ function: {
             }, //        新新漫画 - 分类页
             _77mh_search: {
                 host: 'so.77mh.cc',
+                blank: 1,
                 pager: {
                     nextL: 'a.next',
                     pageE: '.ar_list_co > ul > dl',
@@ -1211,6 +1226,7 @@ function: {
                 }
             }, //          古风漫画网
             gufengmh_list: {
+                blank: 1,
                 pager: {
                     nextL: 'li.next > a',
                     pageE: 'ul.book-list > li',
@@ -1242,6 +1258,7 @@ function: {
                 }
             }, //            砂之船动漫家
             szcdmj_list: {
+                blank: 1,
                 pager: {
                     nextL: '#nextPage',
                     pageE: 'ul.mh-list > li',
@@ -1271,6 +1288,7 @@ function: {
                 }
             }, //           Mangabz 漫画
             mangabz_list: {
+                blank: 1,
                 pager: {
                     nextL: '//div[contains(@class,"page-pagination")]//a[contains(text(), ">")]',
                     pageE: 'ul.mh-list > li',
@@ -1322,6 +1340,7 @@ function: {
                 }
             }, //           Xmanhua 漫画
             xmanhua_list: {
+                blank: 1,
                 pager: {
                     nextL: '//div[@class="page-pagination"]//a[contains(text(), ">")]',
                     pageE: 'ul.mh-list > li',
@@ -1357,6 +1376,7 @@ function: {
                 }
             }, //         COCOMANGA 漫画
             cocomanga_list: {
+                blank: 1,
                 pager: {
                     nextL: ()=> getNextEP('.fed-page-info a.fed-btns-green+a[onclick]', 'page=', /page=\d+/),
                     pageE: 'ul.fed-list-info > li',
@@ -1369,6 +1389,7 @@ function: {
                 }
             }, //    COCOMANGA 漫画 - 分类页
             cocomanga_search: {
+                blank: 1,
                 pager: {
                     nextL: ()=> getNextEP('.fed-page-info a.fed-btns-green+a[onclick]', 'page=', /page=\d+/),
                     pageE: 'dl.fed-deta-info',
