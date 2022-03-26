@@ -5470,12 +5470,12 @@
 	"kingdom": {
 		"host": "www.kingdom-en.com",
 		"url": "/\\d+\\.html/",
-		"style": ".pic_center img {min-height: 300px;} .arcmain > .title, .footer, .index-list-title, .listmain_st {display: none !important;}",
+		"style": ".pic_center img {min-height: 300px;}",
 		"pager": {
-			"nextL": "a.page_next",
+			"nextL": "//div[@class='pages2' or @class='article_page']//a[text()='下一页']",
 			"pageE": ".pic_center img",
-			"replaceE": ".pagenav",
-			"scrollD": 4000
+			"replaceE": ".pages2, .article_page",
+			"scrollD": 3000
 		}
 	},
 	"kingdom_list": {
@@ -5483,12 +5483,8 @@
 		"url": "/^\\/.+/",
 		"pager": {
 			"nextL": "a.page_next",
-			"pageE": "li.media",
-			"replaceE": ".pagination",
-			"scrollD": 1000
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+			"pageE": ".channel_list3 > ul",
+			"replaceE": ".pages"
 		}
 	},
 	"kissgoddess": {
