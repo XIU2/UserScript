@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.4.6
+// @version      5.4.8
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -80,7 +80,7 @@
         ['menu_rules', '更新外置翻页规则 (每天自动)', '更新外置翻页规则 (每天自动)', {}],
         ['menu_customRules', '自定义翻页规则', '自定义翻页规则', {}]
     ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname;
-    window.autoPage = {lp: ()=>location.pathname, indexOF: indexOF, isMobile: isMobile, isUrlC: isUrlC, forceTarget: forceTarget, getAll: getAll, getOne: getOne, getAllXpath: getAllXpath, getXpath: getXpath, getAllCSS: getAllCSS, getCSS: getCSS, getNextE: getNextE, getNextEP: getNextEP, getNextEPN: getNextEPN, getNextUPN: getNextUPN, getNextUP: getNextUP, getNextF: getNextF, getCookie: getCookie, insStyle: insStyle, insScript: insScript, src_bF: src_bF, xs_bF: xs_bF}
+    window.autoPage = {lp: ()=>location.pathname, indexOF: indexOF, isMobile: isMobile, isUrlC: isUrlC, blank: forceTarget, getAll: getAll, getOne: getOne, getAllXpath: getAllXpath, getXpath: getXpath, getAllCSS: getAllCSS, getCSS: getCSS, getNextE: getNextE, getNextEP: getNextEP, getNextEPN: getNextEPN, getNextUPN: getNextUPN, getNextUP: getNextUP, getNextF: getNextF, getCookie: getCookie, insStyle: insStyle, insScript: insScript, src_bF: src_bF, xs_bF: xs_bF}
 
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
@@ -235,7 +235,7 @@
         } else if (getCSS('link[href*="themes/begin" i], script[src*="themes/begin" i], img[src*="themes/begin" i]')) {
             console.info(`[自动无缝翻页] - 使用 WordPress <Begin> 主题的网站`); return 103;
         } else if (getCSS('link[href*="/wp-content/" i], script[src*="/wp-content/" i]')) {
-            if (getAllCSS('article[class]').length > 2 && getCSS('#nav-below, nav.navigation, nav.pagination, ul.pagination, nav.paging-navigation, .wp-pagenavi, .pagenavi')) {
+            if (getAllCSS('article[class]').length > 2 && getCSS('#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi')) {
                 if (getCSS('a.next')) {
                     console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (a.next)`); return 104;
                 } else if (getCSS('a[rel="next" i], a[aria-label="Next Page" i], a[aria-label="下一页"]')) {
@@ -244,7 +244,7 @@
                     console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (li.next-page > a)`); return 106;
                 } else if (getCSS('.nav-previous a')) {
                     console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (旧文章)`); return 107;
-                } else if (getXpath('//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]', getCSS('#nav-below, nav.navigation, nav.pagination, ul.pagination, nav.paging-navigation, .wp-pagenavi, .pagenavi'))) {
+                } else if (getXpath('//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]', getCSS('#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi'))) {
                     console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (下一页)`); return 108;
                 }
             }
@@ -290,7 +290,7 @@
                 case 107: // < 部分使用 WordPress 的网站 (旧文章) >
                     DBSite.wp_article.url('.nav-previous a'); break;
                 case 108: // < 部分使用 WordPress 的网站 (下一页) >
-                    DBSite.wp_article.url('//nav[@id="nav-below" or contains(@class, "navigation") or contains(@class, "pagination")]//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")] | //ul[contains(@class, "pagination")]//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")] | //div[contains(@class, "pagenavi")]//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]'); break;
+                    DBSite.wp_article.url('//*[self::ul or self::nav or self::div][@id="nav-below" or contains(@class, "navigation") or contains(@class, "pagination") or contains(@class, "pagenavi")]//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]'); break;
                 case 200: // < 所有使用 笔趣阁 模板的小说网站 >
                     DBSite.biquge.url(); break;
             }
@@ -302,13 +302,13 @@
     url:         匹配到该域名后要执行的函数/正则（一般用于根据 URL 分配相应翻页规则）
     urlC:        对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则（需要放在 url: 中，自定义规则的话需要使用 fun.isUrlC()）
 
-    forceTarget: 强制新标签页打开链接
     noReferer:   获取下一页内容时，不携带 Referer（部分网站携带与不携带可能不一样）
     hiddenPN:    不显示脚本左下角的页码
     history:     添加历史记录 并 修改当前 URL（默认开启，对于不支持的网站要设置为 false）
     thread:      对于社区类网站，要在 帖子内 的规则中加入这个，用于脚本的 [帖子内自动翻页] 功能（即用户可以选择开启/关闭所有社区类网站帖子内的自动翻页）
     style:       要插入网页的 CSS Style 样式
     retry:       允许获取失败后重试
+    blank:       强制新标签页打开链接（1 = base 方式，2 = 点击委托事件方式）
 
 pager: {
     type:     翻页模式
@@ -598,7 +598,7 @@ function: {
                 url: function(nextL) {if (!indexOF('/post/') && !getCSS('#comments, .comments-area, #disqus_thread')) {curSite = DBSite.wp_article; curSite.pager.nextL = nextL; if (getCSS('img[data-src]')) {curSite.function = {bF: "return fun.src_bF(pageE, [0, 'img[data-src]', 'data-src'])"};} else if (getCSS('img[data-original]')) {curSite.function = {bF: "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"};}}},
                 pager: {
                     pageE: 'article[class]',
-                    replaceE: '#nav-below, nav.navigation, nav.pagination, ul.pagination, nav.paging-navigation, .wp-pagenavi, .pagenavi',
+                    replaceE: '#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi',
                     scrollD: 2000
                 }
             }, //  Wordpress 的 nav.navigation 规则
@@ -643,7 +643,7 @@ function: {
                 }
             }, //        百度贴吧 - 帖子列表
             baidu_tieba_post: {
-                forceTarget: true,
+                blank: true,
                 thread: true,
                 style: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld, .topic_list_box.topic-fixed {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
                 pager: {
@@ -1467,9 +1467,11 @@ function: {
                     }
                 },
                 onerror: function (response) {
+                    console.log(response)
                     GM_notification({text: '❌ 错误！更新失败，请联系作者解决...', timeout: 5000});
                 },
                 ontimeout: function (response) {
+                    console.log(response)
                     GM_notification({text: '❌ 超时！更新失败，请联系作者解决...', timeout: 5000});
                 }
             })
@@ -1493,8 +1495,8 @@ function: {
     if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');}
     // 左键双击网页空白处暂停翻页
     pausePageEvent();
-    // 强制新标签页打开链接（翻页模式 5/6）
-    if (curSite.forceTarget) forceTarget();
+    // 强制新标签页打开链接
+    if (curSite.blank != undefined || curSite.forceTarget != undefined) forceTarget();
 
     // 对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则
     if (urlC) {
@@ -2612,6 +2614,14 @@ function: {
                 } catch (e) {
                     console.error('[自动无缝翻页] - 处理获取到的下一页内容时出现问题，请检查！', e);
                 }
+            },
+            onerror: function (response) {
+                console.log(response)
+                GM_notification({text: '❌ 获取下一页失败...', timeout: 5000});
+            },
+            ontimeout: function (response) {
+                console.log(response)
+                GM_notification({text: '❌ 获取下一页超时...', timeout: 5000});
             }
         });
     }
@@ -2655,6 +2665,14 @@ function: {
                 } catch (e) {
                     console.log(e);
                 }
+            },
+            onerror: function (response) {
+                console.log(response)
+                GM_notification({text: '❌ 获取下一页失败...', timeout: 5000});
+            },
+            ontimeout: function (response) {
+                console.log(response)
+                GM_notification({text: '❌ 获取下一页超时...', timeout: 5000});
             }
         });
     }
@@ -3173,32 +3191,38 @@ function: {
     }
 
 
-    // 强制新标签页打开链接（翻页模式 5/6）
+    // 强制新标签页打开链接
     function forceTarget() {
-        document.body.addEventListener('click', function(e) {
-            if (e.target.tagName === 'A') {
-                forceTarget_(e.target, e);
-            } else {
-                let path = e.path || e.composedPath();
-                for (let i = 1; i < path.length - 3; i++) {
-                    //console.log(path[i])
-                    if (path[i].tagName === 'A') {
-                        forceTarget_(path[i], e);
-                        break;
+        // 过渡
+        if (curSite.forceTarget != undefined && curSite.blank == undefined) curSite.blank = curSite.forceTarget
+        if (curSite.blank === 1) {
+            document.head.appendChild(document.createElement('base')).target = '_blank';
+        } else if (curSite.blank === 2 || curSite.blank === true) {
+            document.body.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    forceTarget_(e.target, e);
+                } else {
+                    let path = e.path || e.composedPath();
+                    for (let i = 1; i < path.length - 3; i++) {
+                        //console.log(path[i])
+                        if (path[i].tagName === 'A') {
+                            forceTarget_(path[i], e);
+                            break;
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        function forceTarget_(target, e){
-            if (target.href && target.target != '_blank' && !(target.getAttribute('onclick')) && target.href.slice(0,4) == 'http' && target.getAttribute('href').slice(0,1) != '#') {
-                e.preventDefault(); // 阻止默认打开链接事件
-                //console.log(target.href);
-                //window.top.location.href = target.href;
-                window.GM_openInTab(target.href, {active: true,insert: true,setParent: true});
+            function forceTarget_(target, e){
+                if (target.href && target.target != '_blank' && !(target.getAttribute('onclick')) && target.href.slice(0,4) == 'http' && target.getAttribute('href').slice(0,1) != '#') {
+                    e.preventDefault(); // 阻止默认打开链接事件
+                    //console.log(target.href);
+                    //window.top.location.href = target.href;
+                    window.GM_openInTab(target.href, {active: true,insert: true,setParent: true});
+                }
             }
+            //document.head.appendChild(document.createElement('base')).target = '_top';
         }
-        //document.head.appendChild(document.createElement('base')).target = '_top';
     }
     // 判断元素是否隐藏（隐藏返回 true）
     function isHidden(el){
@@ -3320,7 +3344,7 @@ function: {
         "host": ["bbb1.com", "bbb2.com"],
         "url": "/^\\/s$/",
         "style": ".aaaa {display: none !important;}",
-        "forceTarget": true,
+        "blank": 1,
         "hiddenPN": true,
         "history": false,
         "thread": true,
