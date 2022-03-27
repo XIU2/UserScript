@@ -2201,6 +2201,15 @@
 			"aF": "document.body.appendChild(document.createElement('script')).textContent = `$('#topic_list > tbody > tr:even:not(.even):not(.odd)').addClass('even'); $('#topic_list > tbody > tr:odd:not(.even):not(.odd)').addClass('odd');`"
 		}
 	},
+	"蜜柑计划 - Mikan": {
+		"host": "mikanani.me",
+		"url": "/^\\/Home\\/Classic/",
+		"pager": {
+			"nextL": "js; return fun.getNextEPN('.pagination > li.active+li:not([style]):not([class])>a', /\\/\\d+$/, '/')",
+			"pageE": "//table/tbody/tr | //body/script[contains(text(),'.classic-view-pagination')]",
+			"scriptT": 2
+		}
+	},
 	"扶她动漫": {
 		"host": ["futaacg.com", "www.futaacg.com"],
 		"pager": {
@@ -4594,6 +4603,16 @@
 			"pageE": ".m1_z > .m2_lb",
 			"insertP": [".page",1],
 			"replaceE": ".fy",
+			"scrollD": 1000
+		}
+	},
+	"资本市场电子化信息披露平台": {
+		"host": "eid.csrc.gov.cn",
+		"url": "/\\/\\d+\\/index/",
+		"pager": {
+			"nextL": "js; if (fun.getCSS('li.on+li:not(.click) > a') == null) {return}; if (fun.indexOF('_f.html')) {fun.getCSS('#channelFilterForm').action = `index_${fun.getCSS('li.on+li:not(.click) > a').textContent}_f.html`; return fun.getNextF('#channelFilterForm');} else {return fun.getCSS('img[src$=\"location.png\"]~a:last-of-type').href.replace('.html',`_${fun.getCSS('li.on+li:not(.click) > a').textContent}.html`);}",
+			"pageE": "table > tbody > tr:not(:first-of-type)",
+			"replaceE": "ul.g-ul",
 			"scrollD": 1000
 		}
 	},
