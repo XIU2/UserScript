@@ -2857,12 +2857,11 @@
 	},
 	"铅笔小说 - 分类页": {
 		"host": "www.23qb.com",
-		"url": "return (fun.lp != '/' && !fun.indexOF(/\\/book\\/\\d+\\//))",
+		"url": "return (fun.lp() != '/' && !fun.indexOF(/\\/book\\/\\d+\\//))",
 		"pager": {
 			"nextL": ".pages a.next, .pages > strong+a",
 			"pageE": "#sitebox > dl",
-			"replaceE": ".pages",
-			"scrollD": 1000
+			"replaceE": ".pages"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [0, 'img[_src]', '_src'])"
@@ -4386,7 +4385,7 @@
 	},
 	"没得比 - 分类/搜索页": {
 		"host": "www.meidebi.com",
-		"url": "return (fun.indexOF('/fenlei/') || fun.lp == '/Search')",
+		"url": "return (fun.indexOF('/fenlei/') || fun.lp() == '/Search')",
 		"pager": {
 			"nextL": "a.next",
 			"pageE": ".share-list > ul > li",
