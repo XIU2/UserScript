@@ -1028,7 +1028,7 @@
 	},
 	"LowEndTalk": {
 		"host": "lowendtalk.com",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.Next",
 			"pageE": "ul.DataList > li",
@@ -1381,7 +1381,7 @@
 	"IconArchive": {
 		"host": "iconarchive.com",
 		"url": "/\\/(tag|search|category)/",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
 			"pageE": ".icondetail",
@@ -1741,7 +1741,7 @@
 	},
 	"小霸王其乐无穷": {
 		"host": "www.yikm.net",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//ul[@class='pager']//a[text()='下一页']",
 			"pageE": "//h2[contains(text(), '所有游戏') or contains(text(), '搜索结果')]/following-sibling::div[1]/div",
@@ -1751,7 +1751,7 @@
 	"Switch520": {
 		"host": ["switch520.com","switch520.net"],
 		"url": "return (!fun.indexOF('.html'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
 			"pageE": ".row.posts-wrapper > div",
@@ -1794,7 +1794,7 @@
 	"RuTracker - 帖子列表": {
 		"host": ["rutracker.org", "rutracker.net"],
 		"url": "/viewforum\\.php/",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "#pagination b~a.pg",
 			"pageE": "tr[id^='tr-']",
@@ -1814,7 +1814,7 @@
 	"RuTrackerIN - 帖子列表": {
 		"host": "rutracker.in",
 		"url": "/viewforum\\.php/",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": ".gensmall[align='right'] strong~a",
 			"pageE": "//table[@class='tablebg']/tbody/tr[./td[@class='row1']]",
@@ -1824,7 +1824,7 @@
 	"byrut.org": {
 		"host": "byrut.org",
 		"url": "return (!fun.indexOF(/^\\/\\d+-/))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//span[@class='pnext']/parent::a",
 			"pageE": ".short_item",
@@ -1878,7 +1878,7 @@
 	"低端影视": {
 		"host": ["ddrk.me","ddys.tv"],
 		"url": "return (fun.lp() == '/' || fun.indexOF(/^\\/page\\//) || fun.indexOF(/\\/(category|tag)\\//))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
 			"pageE": ".post-box-list > article",
@@ -1901,7 +1901,7 @@
 		"host": "www.zxzjtv.com",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/detail/') && !fun.indexOF('/video/'))",
 		"style": "div.stui-page__all {display: none !important;}",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//ul[contains(@class, 'stui-page__item')]//a[text()='下一页']",
 			"pageE": "ul.stui-vodlist > li",
@@ -1915,7 +1915,7 @@
 	"嗯哩嗯哩": {
 		"host": "enlienli.com",
 		"url": "return (fun.indexOF('/show/') || fun.indexOF('/search') || (fun.indexOF('/type/') && fun.getCSS('#page') != null))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.page-number.page-next",
 			"pageE": ".module-items > *",
@@ -1929,7 +1929,7 @@
 	"91 美剧网": {
 		"host": "/mjw\\d+\\.com/",
 		"url": "return (document.title.indexOf('91美剧') > -1 && !fun.indexOF('/w/') && !fun.indexOF('/dp/'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": ".next-page > a",
 			"pageE": ".m-movies > article",
@@ -1942,7 +1942,7 @@
 	"真不卡影院": {
 		"host": "/www\\.zhenbuka\\d\\.com/",
 		"url": "return (fun.indexOF('/vodtype/'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//ul[contains(@class, 'stui-page')]/li/a[text()='下一页']",
 			"pageE": "ul.stui-vodlist > li",
@@ -2001,7 +2001,7 @@
 	"樱花动漫": {
 		"host": ["www.imomoe.la","www.imomoe.live"],
 		"url": "return (fun.indexOF('/list/'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//div[@class='pages']/a[text()='下一页']",
 			"pageE": "#contrainer > .img> ul > li",
@@ -2012,7 +2012,7 @@
 	"樱花动漫 - 搜索页等": {
 		"host": ["www.imomoe.la","www.imomoe.live"],
 		"url": "return (fun.lp() == '/so.asp' || fun.lp() == '/search.asp')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//div[@class='pages']/a[text()='下一页']",
 			"pageE": "#contrainer .fire .pics > ul > li",
@@ -2046,7 +2046,7 @@
 	"漫岛动漫": {
 		"host": "www.mandao.tv",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/man'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//div[contains(@class, 'page')]/a[text()='>']",
 			"pageE": ".index-tj > ul > li",
@@ -2060,7 +2060,7 @@
 	"AGE 动漫 - 全部/搜索": {
 		"host": ["www.agemys.com","www.age.tv"],
 		"url": "return (fun.indexOF('/catalog/') || fun.lp() == '/search')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "id('container')//div[@class='blockcontent']/div[@style][not(@class)]/li/a[contains(text(), '下一页')]",
 			"pageE": "#container .blockcontent1 > div",
@@ -2071,7 +2071,7 @@
 	"AGE 动漫 - 其他页": {
 		"host": ["www.agemys.com","www.age.tv"],
 		"url": "return (fun.lp() == '/recommend' || fun.lp() == '/update')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "id('container')//div[@class='blockcontent']/div[@style][not(@class)]/li/a[contains(text(), '下一页')]",
 			"pageE": "#container .blockcontent > ul > li",
@@ -2082,7 +2082,7 @@
 	"AGE 动漫 - 排行榜": {
 		"host": ["www.agemys.com","www.age.tv"],
 		"url": "return (fun.lp() == '/rank')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "id('container')/ul[@style][not(@class)]/li/a[contains(text(), '下一页')]",
 			"pageE": "#container > .div_right  .blockcontent.div_right_r_3 > ul",
@@ -2092,7 +2092,7 @@
 	"233 动漫": {
 		"host": "www.dm233.cc",
 		"url": "return (fun.indexOF('/catalog/') || fun.lp() == '/recommend/' || fun.lp() == '/search')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//div[@class='pagelist']//a[contains(text(), '下一页') or contains(text(), '下一頁')]",
 			"pageE": ".dhnew ul > li",
@@ -2103,7 +2103,7 @@
 	"233 动漫 - 动漫情报/资讯": {
 		"host": "www.dm233.cc",
 		"url": "return (fun.lp() == '/article/')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//div[@class='pagelist']//a[contains(text(), '下一页') or contains(text(), '下一頁')]",
 			"pageE": ".xgyd ul > li",
@@ -2113,7 +2113,7 @@
 	"233 动漫 - 排行榜": {
 		"host": "www.dm233.cc",
 		"url": "return (fun.lp() == '/rank/')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//div[@class='pagelist']//a[contains(text(), '下一页') or contains(text(), '下一頁')]",
 			"pageE": ".side-update.normal-wai > .normal-nei",
@@ -2133,7 +2133,7 @@
 		"host": ["clg.im","ciligou.top","clg00.site"],
 		"url": "/^\\/search/",
 		"style": "body, html {overflow-x: initial !important;}",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": ".pagination > li.active + li > a",
 			"pageE": "#Search_list_wrapper > li",
@@ -2228,7 +2228,7 @@
 	"ACG.RIP": {
 		"host": "acg.rip",
 		"url": "return (!fun.indexOF('/t/'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "li.next>a",
 			"pageE": "table.post-index > tbody > tr",
@@ -2284,7 +2284,7 @@
 	},
 	"Nyaa": {
 		"host": ["nyaa.si","sukebei.nyaa.si"],
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a[rel='next'], li.next > a",
 			"pageE": "table.torrent-list > tbody > tr",
@@ -2294,7 +2294,7 @@
 	"YTS": {
 		"host": "yts.mx",
 		"url": "/^\\/browse-movies/",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//ul[contains(@class, 'tsc_pagination')]/li[./a[@class='current']]/following-sibling::li[1]/a",
 			"pageE": ".browse-movie-wrap",
@@ -2304,7 +2304,7 @@
 	"1337x": {
 		"host": "/1337x\\./",
 		"url": "return (document.title.indexOf('1337x') > -1 && fun.indexOF('search/'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//div[@class='pagination']//a[text()='>>']",
 			"pageE": "table.table-list > tbody > tr",
@@ -2314,7 +2314,7 @@
 	"RARBG": {
 		"host": "/rarbg/",
 		"url": "return (document.title.indexOf('RARBG') > -1 && fun.lp() == '/torrents.php')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "#pager_links > a[title='next page']",
 			"pageE": "table.lista2t tr.lista2",
@@ -2324,7 +2324,7 @@
 	"Zooqle": {
 		"host": "zooqle.com",
 		"url": "return (fun.lp() == '/search' || fun.indexOF('/browse/') || fun.indexOF('/mov/'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a[aria-label='Next']",
 			"pageE": ".table > tbody > tr",
@@ -2344,7 +2344,7 @@
 	"WebHD - 搜索页": {
 		"host": "webhd.cc",
 		"url": "return (fun.indexOF('/search'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//a[@class='page-link'][contains(text(), '下一页')]",
 			"pageE": ".col-lg-9 .bg-white.shadow-sm.rounded-3",
@@ -2356,7 +2356,7 @@
 	"MINI4K - 论坛": {
 		"host": "www.mini4k.com",
 		"url": "return (fun.indexOF('/forum') && !fun.indexOF('/topic'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.pager__item--next",
 			"pageE": "#block-white-content tbody > tr",
@@ -2367,7 +2367,7 @@
 	"MINI4K": {
 		"host": "www.mini4k.com",
 		"url": "return (fun.lp() != '/' && !fun.indexOF(/\\/\\d{3,}/))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.pager__item--next",
 			"pageE": "div[class*='-item-list'] > ul > li",
@@ -2378,7 +2378,7 @@
 	"A4k 字幕网": {
 		"host": "www.a4k.net",
 		"url": "return (!fun.indexOF('/subtitle/'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.pager__item--next",
 			"pageE": "ul.list > li",
@@ -2444,7 +2444,7 @@
 	"中文字幕网 zimuzimu": {
 		"host": "cn.zimuzimu.com",
 		"url": "return (fun.lp() == '/so_zimu.htm')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "li.page-item.active+li > a",
 			"pageE": "li.thread",
@@ -3403,7 +3403,7 @@
 	"Wiley Online Library + ACS (Publications)": {
 		"host": ["pubs.acs.org","onlinelibrary.wiley.com"],
 		"url": "/\\/doSearch/",
-		"blank": 1,
+		"blank": 3,
 		"history": true,
 		"pager": {
 			"nextL": "a.pagination__btn--next",
@@ -3415,7 +3415,7 @@
 	"Library Genesis": {
 		"host": "/libgen/",
 		"url": "return (document.title.indexOf('Library Genesis') > -1 && fun.lp() == '/index.php' && fun.indexOF('req=','s'))",
-		"blank": 1,
+		"blank": 3,
 		"history": true,
 		"pager": {
 			"nextL": "//div[@class='paginator']//span/strong/parent::span/parent::td/following-sibling::td[1]//a",
@@ -3429,7 +3429,7 @@
 		"host": "www.sciencedirect.com",
 		"url": "fun.isUrlC(); if (fun.lp() == '/search') {setTimeout(function(){fun.insStyle('html, body {height: ' + (document.documentElement.scrollHeight || document.body.scrollHeight) + 'px;}')}, 2000); return true}",
 		"style": "footer {display: none !important;}",
-		"blank": 1,
+		"blank": 3,
 		"iframe": true,
 		"pager": {
 			"type": 5,
@@ -3440,7 +3440,7 @@
 	"Z-Library": {
 		"host": "/(\\dlib|b-ok\\d?|booksc|z-lib)\\./",
 		"url": "return (document.title.indexOf('Z-Library') > -1 && fun.indexOF('/s/'))",
-		"blank": 1,
+		"blank": 3,
 		"history": true,
 		"pager": {
 			"nextL": "//div[@class='paginator']//span/strong/parent::span/parent::td/following-sibling::td[1]//a",
@@ -3609,7 +3609,7 @@
 	"StackOverflow - Questions": {
 		"host": "stackoverflow.com",
 		"url": "return (fun.lp() == '/questions')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a[rel='next']",
 			"pageE": "#questions > div",
@@ -3620,7 +3620,7 @@
 	"StackOverflow - Search": {
 		"host": "stackoverflow.com",
 		"url": "return (fun.lp() == '/search')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a[rel='next']",
 			"pageE": ".js-search-results > div:first-child > div",
@@ -3631,7 +3631,7 @@
 	"StackOverflow - Tags": {
 		"host": "stackoverflow.com",
 		"url": "return (fun.lp() == '/tags')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a[rel='next']",
 			"pageE": "#tags-browser > div",
@@ -3642,7 +3642,7 @@
 	"StackOverflow - Users": {
 		"host": "stackoverflow.com",
 		"url": "return (fun.lp() == '/users')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a[rel='next']",
 			"pageE": "#user-browser > div:first-child > div",
@@ -3747,7 +3747,7 @@
 	"博客园 - 文章列表 - 个人": {
 		"host": "www.cnblogs.com",
 		"url": "if (location.pathname.split('/').length === 3 && fun.getCSS('.topicListFooter') != null) { if (!fun.getCSS('#homepage_top_pager')) {fun.getCSS('#centercontent, .forFlow').insertAdjacentHTML('afterbegin', '<div id=\"homepage_top_pager\" class=\"topicListFooter\"></div>'); fun.getCSS('#centercontent, .forFlow').insertAdjacentHTML('beforeend', '<div id=\"homepage_bottom_pager\" class=\"topicListFooter\"></div>');}; return true}",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//div[@class='topicListFooter']//a[contains(text(), '下一页')]",
 			"pageE": "div.day",
@@ -4299,7 +4299,7 @@
 	"GreasyFork": {
 		"host": "greasyfork.org",
 		"url": "return (fun.indexOF(/\\/scripts$/) || fun.indexOF('/scripts/by-site/'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next_page",
 			"pageE": "ol#browse-script-list > li",
@@ -4309,7 +4309,7 @@
 	"GreasyFork - 反馈页": {
 		"host": "greasyfork.org",
 		"url": "return (fun.indexOF(/\\/feedback$/))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next_page",
 			"pageE": ".script-discussion-list > div",
@@ -4320,7 +4320,7 @@
 	"GreasyFork - 讨论页": {
 		"host": "greasyfork.org",
 		"url": "return (fun.indexOF('/discussions') && !fun.indexOF(/\\/\\d+/))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next_page",
 			"pageE": ".discussion-list > div",
@@ -4330,7 +4330,7 @@
 	"UserScript": {
 		"host": "www.userscript.zone",
 		"url": "return (fun.lp() == '/search')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "js;return fun.getNextF('.next > form')",
 			"pageE": ".row.script",
@@ -4340,7 +4340,7 @@
 	"UserStyles": {
 		"host": "userstyles.world",
 		"url": "return (fun.lp() == '/explore')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.Pagination-button.next",
 			"pageE": ".card",
@@ -4350,7 +4350,7 @@
 	"Quicker": {
 		"host": "getquicker.net",
 		"url": "/\\/Share\\//",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//a[@class='page-link' and text()='下一页']",
 			"pageE": "table.table  > tbody > tr:not(:first-child), script[src^='/js/site.js']",
@@ -4362,7 +4362,7 @@
 	"Xposed": {
 		"host": "repo.xposed.info",
 		"url": "/\\/module-overview/",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "li.pager-next > a",
 			"pageE": ".view-content > table > tbody > tr",
@@ -4439,7 +4439,7 @@
 		"host": "bing.ioliu.cn",
 		"url": "return (!fun.indexOF('/photo/') && !fun.indexOF('.html'))",
 		"style": ".progressive--not-loaded {filter: none !important;}",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//div[@class='page']/a[contains(text(), '下一页')]",
 			"pageE": "body > .container > div.item",
@@ -4448,7 +4448,7 @@
 	},
 	"nastol": {
 		"host": "www.nastol.com.ua",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "//a[./span[@class='nav-next']]",
 			"pageE": "#dle-content > div",
@@ -4457,7 +4457,7 @@
 	},
 	"hdqwalls": {
 		"host": "hdqwalls.com",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a#next",
 			"pageE": ".wallpapers_container > div.wall-resp",
@@ -4467,7 +4467,7 @@
 	"Anime Pictures": {
 		"host": "anime-pictures.net",
 		"url": "return (fun.indexOF('/pictures/') && !fun.indexOF('/view_post/'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": ".active+a",
 			"pageE": ".posts_block, .image_body, table.all_tags, table.scores, table#comments",
@@ -4734,7 +4734,7 @@
 	"xvideos": {
 		"host": ["www.xnxx.com","www.xvideos.com"],
 		"url": "if (location.hostname == 'www.xnxx.com') {if (fun.indexOF('/search/')) return true;} else {if (fun.lp() == '/' || fun.indexOF(/\\/(c|tags|lang)\\//)) return true;}",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next-page, a.next",
 			"pageE": ".mozaique > *",
@@ -4749,7 +4749,7 @@
 		"host": "/\\.pornhub\\.com/",
 		"url": "/\\/video/",
 		"style": ".footerContentWrapper, .pre-footer {display: none !important;}",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "li.page_next > a",
 			"pageE": "#videoSearchResult > li.pcVideoListItem, #videoCategory > li.pcVideoListItem",
@@ -4762,7 +4762,7 @@
 	"91porn": {
 		"host": ["91porn.com","0118.workarea7.live"],
 		"url": "/\\/v\\.php/",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "id('paging')//a[text()='»']",
 			"pageE": ".row .row > div",
@@ -4804,7 +4804,7 @@
 	"ACG RW": {
 		"host": "www.acg.rw",
 		"url": "return (!fun.indexOF('.html'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
 			"pageE": ".uk-animation-slide-bottom-small",
@@ -4817,7 +4817,7 @@
 	"Latino Hentai": {
 		"host": "latinohentai.com",
 		"url": "return (!fun.indexOF('/ver/'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": ".current+a",
 			"pageE": ".items",
@@ -4827,7 +4827,7 @@
 	"妖次元里番": {
 		"host": "www.ycylf.men",
 		"url": "return (fun.lp() == '/search.php' || fun.indexOF('.html'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "li.active.hidden-xs+li.hidden-xs>a",
 			"pageE": ".stui-vodlist",
@@ -4840,7 +4840,7 @@
 	"Hentai Anime Zone": {
 		"host": "hentaianimezone.com",
 		"url": "return (!fun.indexOF('.html'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": ".navigation>span+a",
 			"pageE": ".thumb",
@@ -4850,14 +4850,14 @@
 	"Avbebe": {
 		"host": "avbebe.com",
 		"url": "return (!fun.indexOF(/^\\/archives\\/\\d/))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "li.active_page+li>a, .navigation > .floatleft > a",
 			"pageE": "#index-news > .posts-default, #archive-posts > .posts-default",
 			"replaceE": "#wp_page_numbers, .navigation"
 		}
 	},
-	"H次元": {
+	"H 次元": {
 		"host": "h-ciyuan.com",
 		"url": "return (fun.lp() == '/' ||fun.indexOF('/category/') || fun.indexOF('/tag/'))",
 		"pager": {
@@ -4871,7 +4871,7 @@
 		"host": "/^javdb/",
 		"url": "return (document.title.indexOf('JavDB') > -1)",
 		"style": ".grid.columns {height: auto !important;} .grid-item.column{position: static !important; float: left !important; height: 313px !important;}",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.pagination-next",
 			"pageE": ".grid-item.column, .section-container > div",
@@ -4885,17 +4885,17 @@
 		"host": "/^www\\.(jav.+|.+jav)\\./",
 		"url": "return (fun.getCSS('img[alt=\"JavBus\" i]') && !fun.indexOF('/forum/'))",
 		"style": "#waterfall {height: auto !important;} #waterfall > .item {position: static !important; float: left !important; height: 400px !important;}",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "#next",
 			"pageE": "#waterfall > .item",
 			"replaceE": ".pagination"
 		}
 	},
-	"Javhd": {
+	"Javhd.today": {
 		"host": "javhd.today",
 		"url": "return (fun.lp() != '/' && fun.lp() != '/channels/')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": ".pagination > li.active + li > a",
 			"pageE": "ul.videos, ul.playlists, div.models",
@@ -4905,7 +4905,7 @@
 	"Jable.TV": {
 		"host": "jable.tv",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/videos/'))",
-		"blank": 1,
+		"blank": 3,
 		"history": false,
 		"pager": {
 			"nextL": "js; let next = fun.getXpath(\"//li[@class='page-item' and ./span[contains(@class,'active')]]/following-sibling::li/a\"); if (next) {return `${location.origin}${location.pathname}?mode=async&function=get_block&block_id=${next.dataset.blockId}&${next.dataset.parameters.replace('from_videos+','from_videos=' + next.textContent + '&').replaceAll(':','=').replaceAll(';','&').replaceAll('+','&')}&_=${+new Date()}`;}",
@@ -4913,10 +4913,23 @@
 			"replaceE": ".pagination"
 		}
 	},
-	"Javbooks": {
+	"JavDisk": {
+		"host": ["javdisk.com","javtrust.com"],
+		"url": "return (fun.lp() != '/' && (fun.indexOF('/movie/hot') || !fun.indexOF('/movie/')))",
+		"blank": 3,
+		"pager": {
+			"nextL": "li.active + li > a",
+			"pageE": ".main-item",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+		}
+	},
+	"JavBooks": {
 		"host": ["javbooks.com","jmvbt.com","/^[a-z]{2}\\d{4}\\.com$/"],
 		"url": "return (document.title.indexOf('Javbooks') > -1 && !fun.indexOF('/content_'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "span.pageback > a",
 			"pageE": ".Po_topic, .Po_u_topic",
@@ -4926,6 +4939,7 @@
 	"JAV Library": {
 		"host": ["www.javlib.com","www.javlibrary.com","www.o58c.com"],
 		"url": "/\\/vl_/",
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
 			"pageE": ".video",
@@ -4935,6 +4949,7 @@
 	"JAV Library - 论坛": {
 		"host": ["www.javlib.com","www.javlibrary.com","www.o58c.com"],
 		"url": "/\\/public/",
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
 			"pageE": "table.pubgroup > tbody > tr:not(#header), table.post",
@@ -4942,11 +4957,9 @@
 		}
 	},
 	"JavTorrent": {
-		"host": [
-			"ijavtorrent.com",
-			"projectjav.com"
-		],
+		"host": ["ijavtorrent.com","projectjav.com"],
 		"url": "return (!fun.indexOF('/movie/') && !fun.indexOF('/article/') && !fun.indexOF('/actress/'))",
+		"blank": 3,
 		"pager": {
 			"nextL": "a.gonext",
 			"pageE": ".movie-list, .articles-list, .actress-list",
@@ -4957,6 +4970,7 @@
 	"UraakaList": {
 		"host": "uraakalist.com",
 		"url": "/^\\/.+/",
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next_page",
 			"pageE": ".image-list > .card, .prof-list > .prof-card",
@@ -4966,7 +4980,7 @@
 	"俺の3Dエロ動画": {
 		"host": "oreno3d.com",
 		"url": "return (!fun.indexOF('/movies/'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a[rel='next']",
 			"pageE": ".g-main-grid > article",
@@ -4977,7 +4991,7 @@
 	"hanime1": {
 		"host": "hanime1.me",
 		"url": "return (fun.lp() == '/search')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a[rel='next']",
 			"pageE": ".home-rows-videos-wrapper",
@@ -4991,7 +5005,7 @@
 	"hanime1 - 漫画 - 分类页": {
 		"host": "hanime1.me",
 		"url": "return (fun.lp() == '/comics' || fun.indexOF(/^\\/(tags|artists|characters|parodies|groups)\\//))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a[rel='next']",
 			"pageE": ".comic-rows-videos-div",
@@ -5068,7 +5082,7 @@
 		"host": ["konachan.net","konachan.com","yande.re"],
 		"url": "return (fun.lp() == '/post')",
 		"style": ".javascript-hide {display: inline-block !important;} ul#post-list-posts img, ul#post-list-posts .inner{width: auto !important; height: auto !important;} ul#post-list-posts li {width: 33% !important;} a.directlink {margin: 0 !important;}",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next_page",
 			"pageE": "ul#post-list-posts",
@@ -5078,7 +5092,7 @@
 	"Gelbooru": {
 		"host": ["gelbooru.com","tbib.org","safebooru.org","illusioncards.booru.org"],
 		"url": "/s=list/",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a[alt='next']",
 			"pageE": ".thumbnail-container, span.thumb",
@@ -5088,7 +5102,7 @@
 	"Danbooru": {
 		"host": "danbooru.donmai.us",
 		"url": "return (fun.lp() == '/' || fun.lp() == '/posts')",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "a.paginator-next",
 			"pageE": ".posts-container",
@@ -5120,7 +5134,7 @@
 	"Hentai Cosplays - 手机版 - 分类页": {
 		"host": ["hentai-cosplays.com","porn-images-xxx.com","hentai-img.com"],
 		"url": "return (fun.isMobile())",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"type": 3,
 			"nextL": "a.paginator_page[rel='next']",
@@ -5134,7 +5148,7 @@
 	},
 	"Hentai Cosplays - 分类页": {
 		"host": ["hentai-cosplays.com","porn-images-xxx.com","hentai-img.com"],
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"type": 3,
 			"nextL": "a.nextpostslink",
@@ -5169,7 +5183,7 @@
 	"绅士会所": {
 		"host": ["www.hentaiclub.net","/^www\\.sshs\\./"],
 		"url": "return (document.title.indexOf('绅士会所') > -1 && !fun.indexOF('/archives/'))",
-		"blank": 1,
+		"blank": 3,
 		"pager": {
 			"nextL": "li.next-page > a",
 			"pageE": "article[class]:not(.excerpt-minic-index)",
