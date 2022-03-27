@@ -1821,7 +1821,7 @@
 			"replaceE": ".gensmall[align='right']"
 		}
 	},
-	"byrutor": {
+	"byrut.org": {
 		"host": "byrut.org",
 		"url": "return (!fun.indexOF(/^\\/\\d+-/))",
 		"blank": 1,
@@ -1829,6 +1829,20 @@
 			"nextL": "//span[@class='pnext']/parent::a",
 			"pageE": ".short_item",
 			"replaceE": ".bottom-page"
+		}
+	},
+	"s1.byrutor.com": {
+		"host": "s1.byrutor.com",
+		"url": "return (!fun.indexOF('do=search','s') && fun.getCSS('.paging-wrapper-bottom') != null)",
+		"blank": 3,
+		"pager": {
+			"nextL": ".paging-wrapper-bottom > span + a",
+			"pageE": "div[id^='entryID']",
+			"replaceE": ".paging-wrapper-bottom",
+			"scrollD": 2000
+		},
+		"function": {
+			"bF": "pageE.forEach(function (one) {let now = one.querySelector('span.hilink');if (now) {now.outerHTML = now.outerHTML.replace('data-link=','href=').replaceAll('span','a');};}); return pageE"
 		}
 	},
 	"GBAtemp - 帖子内": {
