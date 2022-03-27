@@ -2086,8 +2086,7 @@
 		"pager": {
 			"nextL": "id('container')/ul[@style][not(@class)]/li/a[contains(text(), '下一页')]",
 			"pageE": "#container > .div_right  .blockcontent.div_right_r_3 > ul",
-			"replaceE": "#container > ul[style]:not([class])",
-			"scrollD": 1000
+			"replaceE": "#container > ul[style]:not([class])"
 		}
 	},
 	"233 动漫": {
@@ -2108,8 +2107,7 @@
 		"pager": {
 			"nextL": "//div[@class='pagelist']//a[contains(text(), '下一页') or contains(text(), '下一頁')]",
 			"pageE": ".xgyd ul > li",
-			"replaceE": ".pagelist",
-			"scrollD": 1000
+			"replaceE": ".pagelist"
 		}
 	},
 	"233 动漫 - 排行榜": {
@@ -2119,8 +2117,7 @@
 		"pager": {
 			"nextL": "//div[@class='pagelist']//a[contains(text(), '下一页') or contains(text(), '下一頁')]",
 			"pageE": ".side-update.normal-wai > .normal-nei",
-			"replaceE": ".pagelist",
-			"scrollD": 1000
+			"replaceE": ".pagelist"
 		}
 	},
 	"音范丝": {
@@ -2218,6 +2215,16 @@
 			"replaceE": "ul.pagination"
 		}
 	},
+	"AniRena": {
+		"host": "www.anirena.com",
+		"url": "return (fun.lp() == '/' || fun.lp() == '/index.php')",
+		"pager": {
+			"nextL": "a.disabled+a:not(.disabled)",
+			"pageE": ".full2, .full2+script",
+			"replaceE": ".full3.buttons",
+			"scriptT": 2
+		}
+	},
 	"ACG.RIP": {
 		"host": "acg.rip",
 		"url": "return (!fun.indexOF('/t/'))",
@@ -2281,8 +2288,7 @@
 		"pager": {
 			"nextL": "a[rel='next'], li.next > a",
 			"pageE": "table.torrent-list > tbody > tr",
-			"replaceE": "ul.pagination",
-			"scrollD": 2000
+			"replaceE": "ul.pagination"
 		}
 	},
 	"YTS": {
@@ -2302,8 +2308,7 @@
 		"pager": {
 			"nextL": "//div[@class='pagination']//a[text()='>>']",
 			"pageE": "table.table-list > tbody > tr",
-			"replaceE": ".pagination",
-			"scrollD": 1200
+			"replaceE": ".pagination"
 		}
 	},
 	"RARBG": {
@@ -2313,8 +2318,7 @@
 		"pager": {
 			"nextL": "#pager_links > a[title='next page']",
 			"pageE": "table.lista2t tr.lista2",
-			"replaceE": "#pager_links",
-			"scrollD": 1200
+			"replaceE": "#pager_links"
 		}
 	},
 	"Zooqle": {
