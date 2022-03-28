@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.5.2
+// @version      5.5.3
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -213,40 +213,40 @@
             return -1;
         } else if (typeof discuz_uid != 'undefined' || getCSS('meta[name="author" i][content*="Discuz!" i], meta[name="generator" i][content*="Discuz!" i], body[id="nv_forum" i][class^="pg_" i][onkeydown*="27"], body[id="nv_search" i][onkeydown*="27"]') || getXpath('id("ft")[contains(string(),"Discuz!")]')) {
             console.info(`[自动无缝翻页] - <Discuz!> 论坛`); return 2;
+
         } else if (typeof flarum != 'undefined' || getCSS('#flarum-loading')) {
             console.info(`[自动无缝翻页] - <Flarum> 论坛`); return 3;
+
         } else if (typeof phpbb != 'undefined' || getCSS('body#phpbb')) {
             console.info(`[自动无缝翻页] - <phpBB> 论坛`); return 4;
+
         } else if (typeof xn != 'undefined' && getXpath('//footer//a[contains(string(), "Xiuno")] | //link[contains(@href, "xiuno")] | //script[contains(@src, "xiuno")]')) {
             console.info(`[自动无缝翻页] - <Xiuno> 论坛`); return 5;
+
         } else if (typeof XF != 'undefined') {
             console.info(`[自动无缝翻页] - <XenForo> 论坛`); return 6;
+
         } else if (getCSS('head meta[name="generator" i][content="nexusphp" i]') || getXpath('id("footer")[contains(string(), "NexusPHP")]')) {
             console.info(`[自动无缝翻页] - <NexusPHP> 论坛`); return 7;
+
         } else if (getAllCSS('.load-more, .loadmore, #load-more, #loadmore, .show_more').length === 1) {
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 1`); return 8;
+
         } else if (getAllXpath('//*[@onclick][text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]').length === 1) {
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 2`); return 9;
-        } else if (getCSS('link[href*="themes/dux" i], script[src*="themes/dux" i]')) {
-            console.info(`[自动无缝翻页] - 使用 WordPress <DUX> 主题的网站`); return 100;
-        } else if (getCSS('link[href*="themes/xiu" i], script[src*="themes/xiu" i]')) {
-            console.info(`[自动无缝翻页] - 使用 WordPress <XIU> 主题的网站`); return 101;
-        } else if (getCSS('link[href*="themes/d8" i], script[src*="themes/d8" i]')) {
-            console.info(`[自动无缝翻页] - 使用 WordPress <D8> 主题的网站`); return 102;
-        } else if (getCSS('link[href*="themes/begin" i], script[src*="themes/begin" i], img[src*="themes/begin" i]')) {
-            console.info(`[自动无缝翻页] - 使用 WordPress <Begin> 主题的网站`); return 103;
+
         } else if (getCSS('link[href*="/wp-content/" i], script[src*="/wp-content/" i]')) {
             if (getAllCSS('article[class], div[id^="post-"]').length > 2 && getCSS('#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi')) {
-                if (getCSS('a.next')) {
-                    console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (a.next)`); return 104;
+                if (getCSS('a.next, a.next-page')) {
+                    console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (a.next)`); return 100;
                 } else if (getCSS('a[rel="next" i], a[aria-label="Next Page" i], a[aria-label="下一页"]')) {
-                    console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (a[rel="next"])`); return 105;
+                    console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (a[rel="next"])`); return 101;
                 } else if (getCSS('li.next-page > a')) {
-                    console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (li.next-page > a)`); return 106;
-                } else if (getCSS('.nav-previous a')) {
-                    console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (旧文章)`); return 107;
+                    console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (li.next-page > a)`); return 102;
+                } else if (getCSS('.nav-previous a, a.nav-previous')) {
+                    console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (旧文章)`); return 103;
                 } else if (getXpath('//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]', getCSS('#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi'))) {
-                    console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (下一页)`); return 108;
+                    console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (下一页)`); return 104;
                 }
             }
         } else if (getCSS('meta[name="description" i][content*="小说"], meta[name="description" i][content*="章节"], meta[name="description" i][content*="阅读"]') || location.hostname.indexOf('biqu') > -1 || document.title.indexOf('笔趣阁') > -1) {
@@ -278,23 +278,15 @@
                     DBSite.loadmore.url('.load-more, .loadmore, #load-more, #loadmore, .show_more'); break;
                 case 9: // < 部分自带 自动无缝翻页 的网站 2 >
                     DBSite.loadmore.url('//*[@onclick][text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]'); break;
-                case 100: // < 所有使用 WordPress DUX 主题的网站 >
-                    DBSite.dux.url(); if (location.hostname === 'apphot.cc') {curSite.pager.scrollD = 2500;}; break;
-                case 101: // < 所有使用 WordPress XIU 主题的网站 >
-                    DBSite.dux.url(); curSite.function = {bF: src_bF, bFp: [0, 'img.thumb[data-original]', 'data-original']}; break;
-                case 102: // < 所有使用 WordPress D8 主题的网站 >
-                    DBSite.dux.url(); delete curSite.function; break;
-                case 103: // < 所有使用 WordPress Begin 主题的网站 >
-                    DBSite.begin.url(); break;
-                case 104: // < 部分使用 WordPress 的网站 (a.next) >
-                    DBSite.wp_article.url('a.next'); break;
-                case 105: // < 部分使用 WordPress 的网站 (a[rel="next"]) >
+                case 100: // < 部分使用 WordPress 的网站 (a.next) >
+                    DBSite.wp_article.url('a.next, a.next-page'); break;
+                case 101: // < 部分使用 WordPress 的网站 (a[rel="next"]) >
                     DBSite.wp_article.url('a[rel="next" i], a[aria-label="Next Page" i], a[aria-label="下一页"]'); break;
-                case 106: // < 部分使用 WordPress 的网站 (li.next-page > a) >
+                case 102: // < 部分使用 WordPress 的网站 (li.next-page > a) >
                     DBSite.wp_article.url('li.next-page > a'); break;
-                case 107: // < 部分使用 WordPress 的网站 (旧文章) >
-                    DBSite.wp_article.url('.nav-previous a'); break;
-                case 108: // < 部分使用 WordPress 的网站 (下一页) >
+                case 103: // < 部分使用 WordPress 的网站 (旧文章) >
+                    DBSite.wp_article.url('.nav-previous a, a.nav-previous'); break;
+                case 104: // < 部分使用 WordPress 的网站 (下一页) >
                     DBSite.wp_article.url('//*[self::ul or self::nav or self::div][@id="nav-below" or contains(@class, "navigation") or contains(@class, "pagination") or contains(@class, "pagenavi")]//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]'); break;
                 case 200: // < 所有使用 笔趣阁 1 模板的小说网站 >
                     curSite = DBSite.biquge; break;
@@ -386,6 +378,15 @@ function: {
                     scrollD: 2000
                 }
             }, //           部分自带 自动无缝翻页 的网站
+            wp_article: {
+                url: function(nextL) {if (!indexOF('/post/') && !getCSS('#comments, .comments-area, #disqus_thread')) {curSite = DBSite.wp_article; curSite.pager.nextL = nextL; if (getCSS('img[data-src]')) {curSite.function = {bF: "return fun.src_bF(pageE, [0, 'img[data-src]', 'data-src'])"};} else if (getCSS('img[data-original]')) {curSite.function = {bF: "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"};}}},
+                blank: 1,
+                pager: {
+                    pageE: 'article[class], div[id^="post-"]',
+                    replaceE: '#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi',
+                    scrollD: 2000
+                }
+            }, //         Wordpress 的 nav.navigation 规则
             discuz_forum: {
                 pager: {
                     type: 2,
@@ -573,43 +574,6 @@ function: {
                     replaceE: '//p[@align][./font[@class="gray"]]'
                 }
             }, //           NexusPHP 论坛
-            dux: {
-                host: 'www.puresys.net',
-                url: ()=> {if (!indexOF('.html')) curSite = DBSite.dux;},
-                pager: {
-                    nextL: 'li.next-page > a',
-                    pageE: '.content > article',
-                    replaceE: '.content > .pagination'
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img.thumb[data-src]', 'data-src']
-                }
-            }, //                WordPress 的 DUX、XIU、D8 主题
-            begin: {
-                url: ()=> {if (location.search.slice(0,3) === '?s=') {curSite = DBSite.begin_search;} else if (!indexOF('.html')) {curSite = DBSite.begin;}},
-                pager: {
-                    type: 2,
-                    nextL: 'div[id^="ias_trigger_"]',
-                    interval: 500
-                }
-            }, //              WordPress 的 Begin 主题
-            begin_search: {
-                pager: {
-                    nextL: 'a.next',
-                    pageE: '#main > ul > li',
-                    replaceE: 'nav.pagination'
-                }
-            }, //       WordPress 的 Begin 主题 - 搜索页
-            wp_article: {
-                url: function(nextL) {if (!indexOF('/post/') && !getCSS('#comments, .comments-area, #disqus_thread')) {curSite = DBSite.wp_article; curSite.pager.nextL = nextL; if (getCSS('img[data-src]')) {curSite.function = {bF: "return fun.src_bF(pageE, [0, 'img[data-src]', 'data-src'])"};} else if (getCSS('img[data-original]')) {curSite.function = {bF: "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"};}}},
-                blank: 1,
-                pager: {
-                    pageE: 'article[class], div[id^="post-"]',
-                    replaceE: '#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi',
-                    scrollD: 2000
-                }
-            }, //         Wordpress 的 nav.navigation 规则
             biquge: {
                 style: 'img, .posterror, a[href*="posterror()"], [style*="url("] {display: none !important;}',
                 history: true,
@@ -622,7 +586,7 @@ function: {
                 }
             }, //             笔趣阁 模板的小说网站
             biquge2: {
-                url: ()=> {if (isMobile() || getCSS('.chapter-page-btn')) {curSite = DBSite.biquge2_m;} else {curSite = DBSite.biquge2;}},
+                url: ()=> {if (isMobile() || getCSS('.chapter-page-btn') != null) {curSite = DBSite.biquge2_m;} else {curSite = DBSite.biquge2;}},
                 style: 'img, .posterror, a[href*="posterror()"], [style*="url("], #txt > *:not(br) {display: none !important;}',
                 history: true,
                 pager: {
