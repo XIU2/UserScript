@@ -2261,15 +2261,6 @@
 			"replaceE": ".pages"
 		}
 	},
-	"灵梦御所": {
-		"host": "blog.reimu.net",
-		"url": "return (fun.lp() == '/' || fun.indexOF('/category') || fun.indexOF('/tag'))",
-		"pager": {
-			"nextL": "span.current+a.sfwppa-current-page",
-			"pageE": "article[id^='post-']",
-			"replaceE": ".wp-pagenavi"
-		}
-	},
 	"SkrBT": {
 		"host": "/skrbt/",
 		"url": "return (fun.getCSS(\"link[href*='/skrbt/'], img[src*='/skrbt/']\") != null && fun.lp() == '/search')",
@@ -4772,6 +4763,7 @@
 	"xHamster": {
 		"host": "/xhamster(\\d+)?\\.com/",
 		"url": "return (document.title.indexOf('xHamster') > -1 && !fun.indexOF('/videos/'))",
+		"blank": 3,
 		"pager": {
 			"nextL": "li.next > a",
 			"pageE": ".thumb-list",
@@ -4865,6 +4857,15 @@
 			"pageE": ".gridview-posts",
 			"replaceE": ".category",
 			"scrollD": 2000
+		}
+	},
+	"灵梦御所": {
+		"host": "blog.reimu.net",
+		"url": "return (fun.lp() == '/' || fun.indexOF('/category') || fun.indexOF('/tag'))",
+		"pager": {
+			"nextL": "span.current+a.sfwppa-current-page",
+			"pageE": "article[id^='post-']",
+			"replaceE": ".wp-pagenavi"
 		}
 	},
 	"JavDB": {
