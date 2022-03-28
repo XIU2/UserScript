@@ -2861,21 +2861,6 @@
 			"replaceE": ".nav-bottom"
 		}
 	},
-	"笔趣阁 - whzh-xs.com": {
-		"host": "www.whzh-xs.com",
-		"url": "/\\d+\\/\\d+\\.html/",
-		"style": "a[href='javascript:posterror();'] {display: none !important;}",
-		"history": true,
-		"pager": {
-			"type": 6,
-			"nextL": "#pb_next",
-			"pageE": "#txt",
-			"insertP": ["#txt",6],
-			"replaceE": ".chapter-control",
-			"loadTime": 1500,
-			"scrollD": 3000
-		}
-	},
 	"铅笔小说": {
 		"host": "www.23qb.com",
 		"url": "if (fun.indexOF(/\\/book\\/\\d+\\/.+\\.html/)) {fun.xs_bF(fun.getAllCSS('#mlfy_main_text > *'), [/（继续下一页）.+|铅笔小说.+/, '']); return true}",
