@@ -1926,6 +1926,18 @@
 			"bF": "return fun.src_bF(pageE, [0, 'img[data-src]', 'data-src'])"
 		}
 	},
+	"核桃影院": {
+		"host": ["123456.li","video.tf"],
+		"url": "/^\\/category-/",
+		"pager": {
+			"nextL": "a[title='下一页 ›']",
+			"pageE": ".wrapbox > ul > li",
+			"replaceE": "#pagenavi"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+		}
+	},
 	"91 美剧网": {
 		"host": "/mjw\\d+\\.com/",
 		"url": "return (document.title.indexOf('91美剧') > -1 && !fun.indexOF('/w/') && !fun.indexOF('/dp/'))",
