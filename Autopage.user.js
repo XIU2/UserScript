@@ -236,7 +236,7 @@
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 2`); return 9;
 
         } else if (getCSS('link[href*="/wp-content/" i], script[src*="/wp-content/" i]')) {
-            if (getAllCSS('article[class], div[id^="post-"]').length > 2 && getCSS('#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi')) {
+            if (getAllCSS('article[class], div[id^="post-"], ul[class*="post"] > li.item').length > 2 && getCSS('#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi')) {
                 if (getCSS('a.next, a.next-page')) {
                     console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (a.next)`); return 100;
                 } else if (getCSS('a[rel="next" i], a[aria-label="Next Page" i], a[aria-label="下一页"]')) {
@@ -382,7 +382,7 @@ function: {
                 url: function(nextL) {if (!indexOF('/post/') && !getCSS('#comments, .comments-area, #disqus_thread')) {curSite = DBSite.wp_article; curSite.pager.nextL = nextL; if (getCSS('img[data-src]')) {curSite.function = {bF: "return fun.src_bF(pageE, [0, 'img[data-src]', 'data-src'])"};} else if (getCSS('img[data-original]')) {curSite.function = {bF: "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"};}}},
                 blank: 1,
                 pager: {
-                    pageE: 'article[class], div[id^="post-"]',
+                    pageE: 'article[class], div[id^="post-"], ul[class*="post"] > li.item',
                     replaceE: '#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi',
                     scrollD: 2000
                 }
