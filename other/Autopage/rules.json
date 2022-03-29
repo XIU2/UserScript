@@ -5707,8 +5707,9 @@
 		}
 	},
 	"凸凹吧/撸女吧": {
-		"host": ["www.tuaom.cc","www.tuaow.xyz","www.lunu.cc"],
+		"host": ["www.tuao8.com","www.tuao8.xyz","www.tuaow.xyz","www.tuaom.cc","www.lunu.cc"],
 		"url": "/^\\/(post|web)\\//",
+		"style": "img[src$='.gif'] {display: none !important;}",
 		"pager": {
 			"type": 3,
 			"nextL": "li.next-page>a",
