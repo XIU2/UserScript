@@ -2134,7 +2134,7 @@
 	},
 	"音范丝": {
 		"host": "/www\\.yinfans\\./",
-		"style": "#post_container {height: auto !important;} #post_container>li {position: static !important; float: left !important; height: 620px !important;}",
+		"style": "#post_container>li {position: static !important; float: left !important; height: 620px !important;}",
 		"pager": {
 			"nextL": "a.next",
 			"pageE": "#post_container>li",
@@ -4908,7 +4908,7 @@
 	"JavDB": {
 		"host": "/^javdb/",
 		"url": "return (document.title.indexOf('JavDB') > -1)",
-		"style": ".grid.columns {height: auto !important;} .grid-item.column{position: static !important; float: left !important; height: 313px !important;}",
+		"style": ".grid-item.column{position: static !important; float: left !important; height: 313px !important;}",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.pagination-next",
@@ -4922,7 +4922,7 @@
 	"JavBus": {
 		"host": "/^www\\.(jav.+|.+jav)\\./",
 		"url": "return (fun.getCSS('img[alt=\"JavBus\" i]') && !fun.indexOF('/forum/'))",
-		"style": "#waterfall {height: auto !important;} #waterfall>.item {position: static !important; float: left !important; height: 400px !important;}",
+		"style": "#waterfall>.item {position: static !important; float: left !important; height: 400px !important;}",
 		"blank": 3,
 		"pager": {
 			"nextL": "#next",
@@ -5013,6 +5013,16 @@
 			"nextL": "a.next_page",
 			"pageE": ".image-list>.card, .prof-list>.prof-card",
 			"replaceE": "[id='pagenation']"
+		}
+	},
+	"Sex Nori": {
+		"host": "www.sexnori19.me",
+		"url": "return (fun.lp() == '/bbs/board.php' && !fun.indexOF(/bo_table=(free|yasul|adv|notice)/,'s'))",
+		"style": ".gallery-item {position: static !important;float: left !important;}",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": ".gallery-item",
+			"replaceE": ".eb-pagination"
 		}
 	},
 	"俺の3Dエロ動画": {
@@ -5302,7 +5312,7 @@
 	"mm.tvv.tw": {
 		"host": "mm.tvv.tw",
 		"url": "return (!fun.indexOF('.html'))",
-		"style": ".blog-masonry, .blog-masonry-4col {height: auto !important;} .blog-listing {position: relative !important;float: left !important;top: auto !important;left: auto !important;} .blog-title>a {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;} .blog-image img {min-height: 300px;}",
+		"style": ".blog-listing {position: relative !important;float: left !important;top: auto !important;left: auto !important;} .blog-title>a {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;} .blog-image img {min-height: 300px;}",
 		"pager": {
 			"nextL": "a.next",
 			"pageE": ".blog-listing",
