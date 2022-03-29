@@ -1697,7 +1697,7 @@ function: {
                 discuzForum();
             } else if (getCSS('#postlist')) { //            < 部分论坛的帖子内 URL 是自定义的 >
                 curSite = DBSite.discuz_thread;
-            } else { // 手机版判断
+            } else if (isMobile()) { //                     手机版判断
                 discuzForum('m');
                 if (curSite.SiteTypeID === 0) discuzThreadM();
             }
