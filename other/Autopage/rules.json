@@ -4799,7 +4799,7 @@
 	},
 	"xHamster": {
 		"host": "/xhamster(\\d+)?\\.com/",
-		"url": "return (document.title.indexOf('xHamster') > -1 && !fun.indexOF('/videos/'))",
+		"url": "return (document.title.indexOf('xHamster') > -1 && !fun.indexOF('/videos/') && !fun.indexOF('/photos/'))",
 		"blank": 3,
 		"pager": {
 			"nextL": "li.next>a",
