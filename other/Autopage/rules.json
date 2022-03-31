@@ -3241,6 +3241,15 @@
 			"replaceE": "#pageGroup"
 		}
 	},
+	"大眼仔旭": {
+		"host": "www.dayanzai.me",
+		"url": "return (!fun.indexOF('.html') && (fun.lp() != '/' || fun.indexOF('s=','s')))",
+		"pager": {
+			"nextL": ".page>span+a",
+			"pageE": "ul.c-news",
+			"replaceE": ".page"
+		}
+	},
 	"绿软家园-最近更新": {
 		"host": "www.downg.com",
 		"url": "/\\/new\\//",
