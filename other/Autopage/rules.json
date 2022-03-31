@@ -1759,9 +1759,20 @@
 			"scrollD": 1000
 		}
 	},
+	"4K 游戏网": {
+		"host": "4k-w.com",
+		"url": "return (fun.indexOF('/game/') || fun.indexOF('s=','s'))",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.selected.disabled+a",
+			"pageE": "#post-list",
+			"replaceE": ".ajax-pager"
+		}
+	},
 	"cs.rin.ru - 帖子列表": {
 		"host": "cs.rin.ru",
 		"url": "return (fun.lp() == '/forum/viewforum.php')",
+		"blank": 3,
 		"pager": {
 			"nextL": "#pagecontent .gensmall[align='right'] strong~a",
 			"pageE": "#pagecontent>table.tablebg>tbody>tr:not([align])",
@@ -1785,6 +1796,7 @@
 	"cs.rin.ru - 搜索页": {
 		"host": "cs.rin.ru",
 		"url": "return (fun.lp() == '/forum/search.php')",
+		"blank": 3,
 		"pager": {
 			"nextL": "#wrapcentre>.nav strong~a",
 			"pageE": "#wrapcentre>form>table.tablebg>tbody>tr[class^='row'], #wrapcentre>form>table.tablebg>tbody>tr[valign]",
