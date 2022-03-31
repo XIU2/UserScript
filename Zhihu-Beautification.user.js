@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.4.8
+// @version      1.4.9
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -14,7 +14,6 @@
 // @grant        GM_notification
 // @license      GPL-3.0 License
 // @run-at       document-start
-// @incompatible safari
 // @namespace    https://greasyfork.org/scripts/412212
 // @supportURL   https://github.com/XIU2/UserScript
 // @homepageURL  https://github.com/XIU2/UserScript
@@ -176,8 +175,8 @@
     function addStyle() {
         let style = `/* 屏蔽登录提示（问题页中间的元素） */
 .Question-mainColumnLogin {display: none !important;}
-/* 屏蔽回答页广告 */
-.Pc-card.Card {display: none !important;}
+/* 屏蔽回答页/首页广告 */
+.Pc-card.Card, .Pc-Business-Card-PcTopFeedBanner {display: none !important;}
 /* 屏蔽文章页推荐文章 */
 .Recommendations-Main {display: none !important;}
 /* 解除盐选内容选中复制限制 */
@@ -435,7 +434,7 @@ html {filter: brightness(65%) sepia(30%) !important; background-image: url();}
         }
 
         if (location.pathname === '/' || location.pathname === '/hot' || location.pathname === '/follow') style += style_index;
-        if (menu_value('menu_darkModeType') === 1 && location.pathname.indexOf('/special/') > -1) style += style_darkMode_2 + 'video {filter: invert(1) !important;}';
+        if (menu_value('menu_darkModeType') === 1 && (location.pathname.indexOf('/special/') > -1 || location.pathname.indexOf('/pub/') > -1)) style += style_darkMode_2 + 'video {filter: invert(1) !important;}';
 
         // 宽屏显示
         if (menu_value('menu_widescreenDisplayIndex')) style += style_widescreenDisplayIndex;
