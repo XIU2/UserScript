@@ -665,7 +665,7 @@
 		}
 	},
 	"番组计划": {
-		"host": "bangumi.tv",
+		"host": ["bgm.tv","bangumi.tv"],
 		"url": "/\\/(browser|subject_search|tag)/",
 		"pager": {
 			"nextL": "//div[@class='page_inner']/a[text()='››']",
@@ -674,7 +674,7 @@
 		}
 	},
 	"番组计划 - 小组帖子列表": {
-		"host": "bangumi.tv",
+		"host": ["bgm.tv","bangumi.tv"],
 		"url": "/\\/forum/",
 		"pager": {
 			"nextL": "//div[@class='page_inner']/a[text()='››']",
@@ -2360,6 +2360,26 @@
 			"nextL": "a.active+a",
 			"pageE": "table.data.frontPageWidget>tbody>tr:not(.firstr)",
 			"replaceE": ".pages"
+		}
+	},
+	"TorrentGalaxy.": {
+		"host": "torrentgalaxy.to",
+		"url": "/^\\/torrents\\.php/",
+		"blank": 3,
+		"pager": {
+			"nextL": "li.page-item.active+li.page-item>a",
+			"pageE": ".tgxtable",
+			"replaceE": ".pagination"
+		}
+	},
+	"LimeTorrents": {
+		"host": "/^www\\.limetorrents\\./",
+		"url": "return (document.title.indexOf('LimeTorrents') > -1  && (fun.indexOF('/search/') || fun.indexOF('/browse-torrents')))",
+		"blank": 3,
+		"pager": {
+			"nextL": "a#next",
+			"pageE": "table.table2>tbody>tr:not(:first-of-type)",
+			"replaceE": ".search_stat"
 		}
 	},
 	"WebHD": {
