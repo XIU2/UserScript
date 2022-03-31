@@ -1909,21 +1909,6 @@
 			"bF": "return fun.src_bF(pageE, [1, 'a[data-original]', 'data-original'])"
 		}
 	},
-	"在线之家": {
-		"host": "www.zxzjtv.com",
-		"url": "return (fun.lp() != '/' && !fun.indexOF('/detail/') && !fun.indexOF('/video/'))",
-		"style": "div.stui-page__all {display: none !important;}",
-		"blank": 3,
-		"pager": {
-			"nextL": "//ul[contains(@class, 'stui-page__item')]//a[text()='下一页']",
-			"pageE": "ul.stui-vodlist>li",
-			"replaceE": "ul.stui-page__item",
-			"scrollD": 1000
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [1, 'a[data-original]', 'data-original'])"
-		}
-	},
 	"嗯哩嗯哩": {
 		"host": "enlienli.com",
 		"url": "return (fun.indexOF('/show/') || fun.indexOF('/search') || (fun.indexOF('/type/') && fun.getCSS('#page') != null))",
@@ -1950,21 +1935,6 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
-	"片吧影院": {
-		"host": "www.pianba.tv",
-		"url": "return (fun.indexOF(/^\\/(so|class)\\//) || fun.indexOF('/sort/all'))",
-		"style": ".stui-page__all{display: none !important;}",
-		"blank": 3,
-		"pager": {
-			"nextL": "li.active.hidden-xs+li.hidden-xs>a",
-			"pageE": ".stui-vodlist",
-			"replaceE": ".stui-page__item",
-			"scrollD": 1000
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [1,'a[data-original]','data-original'])"
-		}
-	},
 	"91 美剧网": {
 		"host": "/mjw\\d+\\.com/",
 		"url": "return (document.title.indexOf('91美剧') > -1 && !fun.indexOF('/w/') && !fun.indexOF('/dp/'))",
@@ -1976,19 +1946,6 @@
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
-		}
-	},
-	"真不卡影院": {
-		"host": "/www\\.zhenbuka\\d\\.com/",
-		"url": "return (fun.indexOF('/vodtype/'))",
-		"blank": 3,
-		"pager": {
-			"nextL": "//ul[contains(@class, 'stui-page')]/li/a[text()='下一页']",
-			"pageE": "ul.stui-vodlist>li",
-			"replaceE": "ul.stui-page"
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [1, 'a[data-original]', 'data-original'])"
 		}
 	},
 	"ZzzFun 动漫": {
@@ -2168,28 +2125,6 @@
 			"replaceE": ".pagination"
 		}
 	},
-	"磁力狗": {
-		"host": ["clg.im","ciligou.top","clg00.site"],
-		"url": "/^\\/search/",
-		"style": "body, html {overflow-x: initial !important;}",
-		"blank": 3,
-		"pager": {
-			"nextL": ".pagination>li.active+li>a",
-			"pageE": "#Search_list_wrapper>li",
-			"replaceE": ".pagination",
-			"scrollD": 1000
-		}
-	},
-	"雨花阁": {
-		"host": "/^www\\.yuhuage\\d{2}\\.xyz$/",
-		"url": "/\\/search\\//",
-		"pager": {
-			"nextL": "a[title='下一页']",
-			"pageE": ".search-item",
-			"replaceE": ".bottom-pager",
-			"scrollD": 1000
-		}
-	},
 	"片源网": {
 		"host": "pianyuan.org",
 		"url": "return (fun.lp() == '/')",
@@ -2213,6 +2148,28 @@
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+		}
+	},
+	"磁力狗": {
+		"host": ["clg.im","ciligou.top","clg00.site"],
+		"url": "/^\\/search/",
+		"style": "body, html {overflow-x: initial !important;}",
+		"blank": 3,
+		"pager": {
+			"nextL": ".pagination>li.active+li>a",
+			"pageE": "#Search_list_wrapper>li",
+			"replaceE": ".pagination",
+			"scrollD": 1000
+		}
+	},
+	"雨花阁": {
+		"host": "/^www\\.yuhuage\\d{2}\\.xyz$/",
+		"url": "/\\/search\\//",
+		"pager": {
+			"nextL": "a[title='下一页']",
+			"pageE": ".search-item",
+			"replaceE": ".bottom-pager",
+			"scrollD": 1000
 		}
 	},
 	"BT 之家": {
@@ -4922,19 +4879,6 @@
 			"nextL": ".current+a",
 			"pageE": ".items",
 			"replaceE": ".pagination"
-		}
-	},
-	"妖次元里番": {
-		"host": "www.ycylf.men",
-		"url": "return (fun.lp() == '/search.php' || fun.indexOF('.html'))",
-		"blank": 3,
-		"pager": {
-			"nextL": "li.active.hidden-xs+li.hidden-xs>a",
-			"pageE": ".stui-vodlist",
-			"replaceE": ".stui-page"
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [1,'a[data-original]','data-original'])"
 		}
 	},
 	"Hentai Anime Zone": {
