@@ -1950,6 +1950,21 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
+	"片吧影院": {
+		"host": "www.pianba.tv",
+		"url": "return (fun.indexOF(/^\\/(so|class)\\//) || fun.indexOF('/sort/all'))",
+		"style": ".stui-page__all{display: none !important;}",
+		"blank": 3,
+		"pager": {
+			"nextL": "li.active.hidden-xs+li.hidden-xs>a",
+			"pageE": ".stui-vodlist",
+			"replaceE": ".stui-page__item",
+			"scrollD": 1000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [1,'a[data-original]','data-original'])"
+		}
+	},
 	"91 美剧网": {
 		"host": "/mjw\\d+\\.com/",
 		"url": "return (document.title.indexOf('91美剧') > -1 && !fun.indexOF('/w/') && !fun.indexOF('/dp/'))",
@@ -2175,6 +2190,31 @@
 			"scrollD": 1000
 		}
 	},
+	"片源网": {
+		"host": "pianyuan.org",
+		"url": "return (fun.lp() == '/')",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": "table>tbody>tr:not(.firstr)",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])",
+			"aF": "document.body.appendChild(document.createElement('script')).textContent = 'this.imagePreview()'"
+		}
+	},
+	"片源网 - 分类/搜索页": {
+		"host": "pianyuan.org",
+		"url": "return (!fun.indexOF('.html'))",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": "div[role='main']>div:not(.pagelist)",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+		}
+	},
 	"BT 之家": {
 		"host": "/btbtt/",
 		"url": "return (fun.getCSS(\".logo>a[title='BT之家']\") != null && (fun.lp() == '/' || fun.indexOF(/^\\/(index|forum|search)-/)))",
@@ -2285,6 +2325,15 @@
 			"replaceE": ".pages"
 		}
 	},
+	"零度动漫": {
+		"host": "bt.acgzero.com",
+		"url": "return (fun.lp() == '/')",
+		"pager": {
+			"nextL": "li.active.page-item+li.page-item>a",
+			"pageE": "table>tbody",
+			"replaceE": ".pagination"
+		}
+	},
 	"SkrBT": {
 		"host": "/skrbt/",
 		"url": "return (fun.getCSS(\"link[href*='/skrbt/'], img[src*='/skrbt/']\") != null && fun.lp() == '/search')",
@@ -2344,6 +2393,16 @@
 			"nextL": "a[aria-label='Next']",
 			"pageE": ".table>tbody>tr",
 			"replaceE": ".pagination"
+		}
+	},
+	"Kickass Torrents": {
+		"host": "kickasss.to",
+		"url": "return (fun.lp() != '/' && !fun.indexOF('.html') && !fun.indexOF('/popular'))",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.active+a",
+			"pageE": "table.data.frontPageWidget>tbody>tr:not(.firstr)",
+			"replaceE": ".pages"
 		}
 	},
 	"WebHD": {
@@ -4974,6 +5033,19 @@
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+		}
+	},
+	"SupJav": {
+		"host": "supjav.com",
+		"url": "return (fun.indexOF('/category/') || fun.indexOF('/tag/') || fun.indexOF('/popular') || fun.indexOF('s=','s'))",
+		"blank": 3,
+		"pager": {
+			"nextL": "li.active+li > a",
+			"pageE": ".posts",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
 	"JavBooks": {
