@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      1.9.3
+// @version      1.9.4
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -59,10 +59,10 @@
         ],
         raw_url = [
             ['https://raw.githubusercontent.com', 'Github 原生', '[日本 东京]'],
-            //['https://ghproxy.fsou.cc/https://github.com', '香港 1', '[中国 香港]'],
-            //['https://pd.zwc365.com/seturl/https://raw.githubusercontent.com', '香港 2', '[中国 香港]'],
             ['https://github.do/https://raw.githubusercontent.com', '国内', '[中国 国内] - 该公益加速源由 [小麦云服] 提供&#10;&#10; - 缓存：有'],
-            ['https://raw.iqiq.io', '香港 1', '[中国 香港] - 该公益加速源由 [iQDNS/iQZone] 提供&#10;&#10; - 缓存：无（或时间很短）'],
+            ['https://ghproxy.fsofso.com/https://github.com', '香港 1', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
+            //['https://pd.zwc365.com/seturl/https://raw.githubusercontent.com', '香港 2', '[中国 香港]'],
+            //['https://raw.iqiq.io', '香港 1', '[中国 香港] - 该公益加速源由 [iQDNS/iQZone] 提供&#10;&#10; - 缓存：无（或时间很短）'],
             ['https://hk1.monika.love', '香港 2', '[中国 香港] - 该公益加速源由 [@mtr-static-official] 提供&#10;&#10; - 缓存：无（或时间很短）'],
             //['https://ghproxy.com/https://raw.githubusercontent.com', '韩国', '[韩国 首尔]'],
             ['https://fastly.jsdelivr.net/gh', '日本 1', '[日本 东京] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
@@ -230,15 +230,12 @@
             url = '', _html = '';
 
         for (let i=1;i<raw_url.length;i++) {
-            switch(i) {
-                //case 1: // ghproxy.fsou.cc
-                //    url = raw_url[i][0] + href; break;
-                case 4: // fastly.jsdelivr.net
-                case 7: // gcore.jsdelivr.net
-                //case 6: // cdn.jsdelivr.net
-                    url = raw_url[i][0] + href.replace('/blob/','@'); break;
-                default:
-                    url = raw_url[i][0] + href2;
+            if (raw_url[i][0].indexOf('jsdelivr.net') != -1) {
+                url = raw_url[i][0] + href.replace('/blob/','@');
+            } else if (raw_url[i][0].indexOf('fsofso.com') != -1) {
+                url = raw_url[i][0] + href;
+            } else {
+                url = raw_url[i][0] + href2;
             }
             _html += `<a href="${url}" title="${raw_url[i][2]}" target="_blank" role="button" rel="noreferrer noopener nofollow" class="btn-sm btn BtnGroup-item XIU2-RF">${raw_url[i][1]}</a>`
         }
@@ -273,22 +270,20 @@
         // 循环添加
         files.forEach(function(fileElm, i) {
             let trElm = fileElm.parentNode.parentNode,
-                cntElm_a = trElm.querySelector('.css-truncate.css-truncate-target.d-block.width-fit a'),
+                cntElm_a = trElm.querySelector('[role="rowheader"] > .css-truncate.css-truncate-target.d-block.width-fit > a'),
                 cntElm_svg = trElm.querySelector('.mr-3.flex-shrink-0 svg.octicon.octicon-file'),
                 Name = cntElm_a.innerText,
-                href = cntElm_a.attributes.href.nodeValue.replace(`https://${location.host}`,''),
+                href = cntElm_a.getAttribute('href'),
                 href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
 
-            switch(menu_raw_fast) {
-                //case 1: // ghproxy.fsou.cc
-                //    url = raw_url[menu_raw_fast][0] + href; break;
-                case 4: // fastly.jsdelivr.net
-                case 7: // gcore.jsdelivr.net
-                //case 6: // cdn.jsdelivr.net
-                    url = raw_url[menu_raw_fast][0] + href.replace('/blob/','@'); break;
-                default:
-                    url = raw_url[menu_raw_fast][0] + href2;
+            if (raw_url[menu_raw_fast][0].indexOf('jsdelivr.net') != -1) {
+                url = raw_url[menu_raw_fast][0] + href.replace('/blob/','@');
+            } else if (raw_url[menu_raw_fast][0].indexOf('fsofso.com') != -1) {
+                url = raw_url[menu_raw_fast][0] + href;
+            } else {
+                url = raw_url[menu_raw_fast][0] + href2;
             }
+
             url_name = raw_url[menu_raw_fast][1]; url_tip = raw_url[menu_raw_fast][2];
             cntElm_svg.insertAdjacentHTML('afterend', `<a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url[menu_raw_fast][1]} ] 加速源 (☁) 即可切换。">${svg[2]}</a>`);
             // 绑定鼠标事件
