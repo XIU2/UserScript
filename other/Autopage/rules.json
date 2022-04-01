@@ -5021,6 +5021,16 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
+	"141 JAV": {
+		"host": ["www.141jav.com","www.141ppv.com"],
+		"url": "if(fun.lp()=='/'){setTimeout(`document.getElementById('button-load-more').click()`,2000);}else if(!fun.indexOF('torrent')){return true;}",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.pagination-next",
+			"pageE": "body>.container>.card, body>.container>.columns",
+			"replaceE": ".pagination"
+		}
+	},
 	"JavBooks": {
 		"host": ["javbooks.com","jmvbt.com","/^[a-z]{2}\\d{4}\\.com$/"],
 		"url": "return (document.title.indexOf('Javbooks') > -1 && !fun.indexOF('/content_'))",
