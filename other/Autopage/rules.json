@@ -266,7 +266,6 @@
 		"pager": {
 			"type": 2,
 			"nextL": "button[data-testid='buttonShowMore']",
-			"interval": 500,
 			"scrollD": 2000
 		}
 	},
@@ -2114,6 +2113,15 @@
 			"nextL": "//div[@class='pagelist']//a[contains(text(), '下一页') or contains(text(), '下一頁')]",
 			"pageE": ".side-update.normal-wai>.normal-nei",
 			"replaceE": ".pagelist"
+		}
+	},
+	"初音社": {
+		"host": "www.mikuclub.cc",
+		"url": "/^\\/[a-z]/",
+		"pager": {
+			"type": 2,
+			"nextL": "button.get-next-page:not([disabled]), .wpf-more-topics>a",
+			"interval": 1000
 		}
 	},
 	"音范丝": {
@@ -5415,7 +5423,6 @@
 			"type": 2,
 			"nextL": "#webpage>span[onclick]",
 			"isHidden": true,
-			"interval": 500,
 			"scrollD": 2000
 		}
 	},
