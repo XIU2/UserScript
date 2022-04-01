@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      1.9.2
+// @version      1.9.3
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -31,7 +31,7 @@
     var backColor = '#ffffff', fontColor = '#888888', menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'), menu_menu_raw_fast_ID, menu_feedBack_ID;
     const download_url = [
         ['https://pd.zwc365.com/seturl/https://github.com', '美国 1', '[美国 Cloudflare CDN]'],
-        ['https://gh.xiu.workers.dev/https://github.com', '美国 2', '[美国 Cloudflare CDN] - 该公益加速源由 [本脚本作者 X.I.U/XIU2] 提供'],
+        ['https://gh.gh2233.ml/https://github.com', '美国 2', '[美国 Cloudflare CDN] - 该公益加速源由 [本脚本作者 X.I.U/XIU2] 提供'],
         //['https://gh.api.99988866.xyz/https://github.com', '美国 2', '[美国 Cloudflare CDN]'],
         //['https://github.rc1844.workers.dev', '美国 3', '[美国 Cloudflare CDN]'],
         //['https://gh-rep.mirr.one', '美国', '[美国 Cloudflare CDN]'],
