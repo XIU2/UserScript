@@ -1908,8 +1908,8 @@
 			"bF": "return fun.src_bF(pageE, [1, 'a[data-original]', 'data-original'])"
 		}
 	},
-	"嗯哩嗯哩": {
-		"host": "enlienli.com",
+	"嗯哩嗯哩/森之屋动漫": {
+		"host": ["enlienli.com","www.senfun.net"],
 		"url": "return (fun.indexOF('/show/') || fun.indexOF('/search') || (fun.indexOF('/type/') && fun.getCSS('#page') != null))",
 		"blank": 3,
 		"pager": {
