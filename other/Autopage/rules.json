@@ -1718,7 +1718,7 @@
 	},
 	"Steam 创意工坊 - 项目列表": {
 		"host": "steamcommunity.com",
-		"url": "return (fun.indexOF('/workshop/browse'))",
+		"url": "return (fun.indexOF('/workshop/browse') || fun.indexOF('/myworkshopfiles/'))",
 		"pager": {
 			"nextL": "//a[@class='pagebtn' and text()='>']",
 			"pageE": ".workshopBrowseItems>*",
@@ -2920,20 +2920,6 @@
 		},
 		"function": {
 			"bF": "return fun.xs_bF(pageE, [/(<br>)?(&nbsp;)+内容未完，下一页.*$|【本章阅读.*$/, '<br>'])"
-		}
-	},
-	"零点看书": {
-		"host": "www.ldksw.cc",
-		"url": "/\\d+\\/\\d+\\.html/",
-		"history": true,
-		"pager": {
-			"nextL": "//div[@class='page_chapter']//a[text()='下一章']",
-			"pageE": "#content",
-			"insertP": ["#content",6],
-			"replaceE": ".page_chapter"
-		},
-		"function": {
-			"bF": "return fun.xs_bF(pageE, [/<br>(　)+天才一秒记住本站地址.+/, ''])"
 		}
 	},
 	"笔趣阁 - cnhxfilm.com": {
