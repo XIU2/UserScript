@@ -2619,6 +2619,24 @@
 			"replaceE": ".pages"
 		}
 	},
+	"漫画人": {
+		"host": "www.manhuaren.com",
+		"url": "if (fun.indexOF(/^\\/m\\d/)) {let _img=''; for (let i=0;i<newImgs.length;i++){_img += `<img src=\"${newImgs[i]}\">`;}; document.getElementById('cp_img').innerHTML = _img; return true;}",
+		"style": "#cp_img > img {min-height: 200px;}",
+		"history": true,
+		"pager": {
+			"nextL": "js; let next = fun.getXpath(\"//ul[@class='view-bottom-bar']//a[text()='下一章' and not(contains(@href,'-end'))]\"); if (next && next.href) {return (location.origin + next.href.split(\"'\")[1]);}",
+			"pageE": "//body/script[starts-with(text(),'eval(')]",
+			"insertP": ["body",3],
+			"replaceE": ".view-bottom-bar, .winnextchapter, .view-fix-bottom-bar",
+			"scriptT": 2,
+			"interval": 5000,
+			"scrollD": 2000
+		},
+		"function": {
+			"aF": "let _img=''; for (let i=0;i<newImgs.length;i++){_img += `<img src=\"${newImgs[i]}\">`;}; document.getElementById('cp_img').insertAdjacentHTML('beforeend', _img);"
+		}
+	},
 	"拷贝漫画": {
 		"host": "/copymanga\\./",
 		"url": "/\\/chapter\\//",
