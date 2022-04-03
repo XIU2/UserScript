@@ -2576,6 +2576,19 @@
 			"scrollD": 2000
 		}
 	},
+	"漫漫聚": {
+		"host": "www.manmanju.com",
+		"url": "/^\\/comiclist\\/\\d+\\/\\d+\\/\\d+\\.htm$/",
+		"history": true,
+		"pager": {
+			"type": 6,
+			"nextL": "//a[./img[@src='/images/d.gif']][not(@href='/exit/exit.htm')]",
+			"pageE": "//a/img[@src][not(contains(@src,'.gif'))]",
+			"replaceE": "//a[./img[@src='/images/d.gif']]",
+			"loadTime": 200,
+			"scrollD": 2000
+		}
+	},
 	"言耽社": {
 		"host": "yandanshe.com",
 		"url": "/^\\/\\d+\\//",
