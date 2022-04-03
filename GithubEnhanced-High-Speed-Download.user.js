@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      1.9.5
+// @version      1.9.6
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -30,14 +30,14 @@
     'use strict';
     var backColor = '#ffffff', fontColor = '#888888', menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'), menu_menu_raw_fast_ID, menu_feedBack_ID;
     const download_url = [
-        ['https://pd.zwc365.com/seturl/https://github.com', '美国 1', '[美国 Cloudflare CDN]'],
-        ['https://gh.gh2233.ml/https://github.com', '美国 2', '[美国 Cloudflare CDN] - 该公益加速源由 [本脚本作者 X.I.U/XIU2] 提供'],
-        //['https://gh.api.99988866.xyz/https://github.com', '美国 2', '[美国 Cloudflare CDN]'],
-        //['https://github.rc1844.workers.dev', '美国 3', '[美国 Cloudflare CDN]'],
+        ['https://pd.zwc365.com/seturl/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        ['https://gh.gh2233.ml/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [本脚本作者 X.I.U/XIU2] 提供'],
+        //['https://gh.api.99988866.xyz/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        //['https://github.rc1844.workers.dev', '美国', '[美国 Cloudflare CDN]'],
         //['https://gh-rep.mirr.one', '美国', '[美国 Cloudflare CDN]'],
-        ['https://ghgo.feizhuqwq.workers.dev/https://github.com', '美国 3', '[美国 Cloudflare CDN]'],
-        ['https://git.yumenaka.net/https://github.com', '美国 4', '[美国 圣何塞]'],
-        ['https://gh.ddlc.top/https://github.com', '美国 5', '[美国 Cloudflare CDN] - 该公益加速源由 [@mtr-static-official] 提供'],
+        ['https://ghgo.feizhuqwq.workers.dev/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        ['https://gh.ddlc.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@mtr-static-official] 提供'],
+        ['https://git.yumenaka.net/https://github.com', '美国', '[美国 圣何塞]'],
         ['https://github.do/https://github.com', '国内', '[中国 国内] - 该公益加速源由 [小麦云服] 提供'],
         ['https://ghproxy.fsofso.com/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://github.ddlc.love/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [@mtr-static-official] 提供'],
@@ -239,7 +239,7 @@
             } else {
                 url = raw_url[i][0] + href2;
             }
-            _html += `<a href="${url}" title="${raw_url[i][2]}" target="_blank" role="button" rel="noreferrer noopener nofollow" class="btn-sm btn BtnGroup-item XIU2-RF">${raw_url[i][1]}</a>`
+            _html += `<a href="${url}" title="${raw_url[i][2]}" target="_blank" role="button" rel="noreferrer noopener nofollow" class="btn-sm btn BtnGroup-item XIU2-RF">${raw_url[i][1].replace(/ \d/,'')}</a>`
         }
         html.insertAdjacentHTML('afterend', _html);
     }
