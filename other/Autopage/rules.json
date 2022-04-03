@@ -4739,6 +4739,15 @@
 			"scrollD": 2500
 		}
 	},
+	"CocoaControls": {
+		"host": "www.cocoacontrols.com",
+		"url": "fun.isUrlC(); return (fun.lp()=='/' || fun.indexOF('/controls'))",
+		"pager": {
+			"nextL": ".next>a",
+			"pageE": ".cc-inner-page-frame>.grid",
+			"replaceE": ".pagination"
+		}
+	},
 	"CADTutor - 列表页": {
 		"host": "www.cadtutor.net",
 		"url": "/\\/forum\\/forum\\//",
