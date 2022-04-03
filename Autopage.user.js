@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.6.0
+// @version      5.6.1
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -1146,6 +1146,7 @@ function: {
                 pager: {
                     type: 4,
                     nextL: ykmh_nextL,
+                    pageE: '//script[contains(text(),"chapterImages")]',
                     insertP: ['#images', 3],
                     insertE: ykmh_insertE,
                     replaceE: '.head_title, span.head_wz',
@@ -1278,7 +1279,7 @@ function: {
                 }
             }, //      新新漫画 - 搜索页
             gufengmh: {
-                host: /gufengmh/,
+                host: /^www\.gufengmh\d/,
                 url: ()=> {if (indexOF(/\/\d+.+\.html/)) {
                     let chapterScroll = getCSS('#chapter-scroll') // 强制为 [下拉阅读] 模式
                     if (chapterScroll && chapterScroll.className === '') {chapterScroll.click();}
@@ -1289,8 +1290,8 @@ function: {
                 style: 'p.img_info {display: none !important;}', // 隐藏中间的页数信息
                 pager: {
                     type: 4,
-                    nextL: gufengmh_nextL,
-                    pageE: 'body > script:first-child',
+                    nextL: ykmh_nextL,
+                    pageE: '//script[contains(text(),"chapterImages")]',
                     insertP: ['#images', 3],
                     insertE: gufengmh_insertE,
                     interval: 5000,
@@ -1515,7 +1516,7 @@ function: {
         if (typeof(GM_getValue('menu_ruleUpdateTime', '')) == 'string') update = true
 
         let urlArr = [//'https://userscript.gh2233.ml/other/Autopage/rules.json',
-                      //'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
+                      'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
                       'https://hk1.monika.love/XIU2/UserScript/master/other/Autopage/rules.json',
                       'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
                       'https://ghproxy.fsofso.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
@@ -2222,17 +2223,16 @@ function: {
     // [优酷漫画] 获取下一页地址
     function ykmh_nextL() {
         let url = comicUrl + nextChapterData.id + '.html'
-        if (url && url != '.html' && url != curSite.pageUrl) {
+        if (nextChapterData.id != null && url && url != '.html' && url != curSite.pageUrl) {
             curSite.pageUrl = url;
             getPageE_(curSite.pageUrl);
         }
     }
     // [优酷漫画] 插入数据
     function ykmh_insertE(pageE, type) {
-        //console.log(pageE)
         if (!pageE) return
         // 插入并运行 <script>
-        insScript('//script[contains(text(),"chapterImages")]', pageE);
+        insScript(curSite.pager.pageE, pageE);
 
         let host = SinMH.getChapterImage(1).split('/')[0] + '//' + SinMH.getChapterImage(1).split('/')[2];
         if (!host) host = document.querySelector(curSite.pager.insertP[0]).src.split('/')[0] + '//' + document.querySelector(curSite.pager.insertP[0]).src.split('/')[2]
@@ -2241,7 +2241,7 @@ function: {
         for (let one of chapterImages) {_img += `<img src="${host}${one}">`;}
         if (_img) {
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-            addHistory(pageE);
+            addHistory(document, pageTitle + ' - 优酷漫画');
             if (replaceElems(pageE)) pageNum.now = pageNum._now + 1
         }
     }
@@ -2363,52 +2363,17 @@ function: {
         }
     }
 
-
-    // [古风漫画网] 获取下一页地址
-    function gufengmh_nextL() {
-        let pageE = getOne(curSite.pager.pageE); // 寻找数据所在元素
-        if (pageE) {
-            let comicUrl, nextId;
-            var url = '';
-            pageE.textContent.split(';').forEach(function (one){ // 分号 ; 分割为数组并遍历
-                //console.log(one)
-                if (one.indexOf('comicUrl') > -1) { // 下一页 URL 前半部分
-                    comicUrl = one.split('"')[1];
-                } else if (one.indexOf('nextChapterData') > -1) { // 下一页 URL 的后半部分 ID
-                    nextId = one.split('"id":')[1].split(',')[0];
-                }
-            })
-            if (comicUrl && nextId && nextId != 'null') { // 组合到一起就是下一页 URL
-                url = comicUrl + nextId + '.html'
-                if (url === curSite.pageUrl) return
-                curSite.pageUrl = url
-                getPageE_(curSite.pageUrl); // 访问下一页 URL 获取
-            }
-        }
-    }
     // [古风漫画网] 插入数据
     function gufengmh_insertE(pageE, type) {
-        if (pageE) {
-            let url = curSite.pageUrl;
-            pageE = getOne(curSite.pager.pageE, pageE, pageE);
-            let chapterImages, chapterPath;
-            getOne(curSite.pager.pageE).innerText = pageE.textContent; // 将当前网页内的数据所在元素内容改为刚刚获取的下一页数据内容，以便循环获取下一页 URL
-            pageE.textContent.split(';').forEach(function (one){ // 分号 ; 分割为数组并遍历
-                //console.log(one)
-                if (one.indexOf('chapterImages') > -1) { // 图片文件名数组
-                    chapterImages = one.replace(/^.+\[/, '').replace(']', '').replaceAll('"', '').split(',')
-                } else if (one.indexOf('chapterPath') > -1) { // 图片文件路径
-                    chapterPath = one.split('"')[1];
-                } else if (one.indexOf('pageTitle') > -1) { // 网页标题
-                    addHistory(pageE, one.split('"')[1]);
-                }
-            })
-            if (chapterImages && chapterPath) {
-                let _img = '';
-                chapterImages.forEach(function (one2){_img += '<img src="https://res.xiaoqinre.com/' + chapterPath + one2 + '" data-index="0" style="display: inline-block;">';})
-                getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-                pageNum.now = pageNum._now + 1
-            }
+        if (!pageE) return
+        // 插入并运行 <script>
+        insScript(curSite.pager.pageE, pageE);
+        let _img = '';
+        for (let one of chapterImages) {_img += `<img src="https://res.xiaoqinre.com/${chapterPath}${one}" data-index="0" style="display: inline-block;">`;}
+        if (_img) {
+            getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
+            addHistory(document, pageTitle + '-古风漫画网');
+            pageNum.now = pageNum._now + 1
         }
     }
 
@@ -3183,8 +3148,7 @@ function: {
         if (!curSite.pageUrl) return
         // 对于自带类似功能 或者 覆盖了 history 原生函数的网站，则跳过不再添加历史记录
         if (window.top.history.toString() !== '[object History]') return
-
-        title = title || (pageE.querySelector('title')) ? pageE.querySelector('title').textContent : window.top.document.title;
+        title = title || ((pageE.querySelector('title')) ? pageE.querySelector('title').textContent : window.top.document.title);
         url = url || curSite.pageUrl;
         window.top.document.Autopage_nowUrl = curSite.pageUrl;
         // 对于下一页 URL 和当前网页 URL 的协议不同时，跳过
