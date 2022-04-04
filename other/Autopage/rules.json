@@ -1025,6 +1025,16 @@
 			"scrollD": 2500
 		}
 	},
+	"4 Chan": {
+		"host": ["boards.4chan.org","boards.4channel.org"],
+		"url": "return (!fun.indexOF('/search') && !fun.indexOF('/thread/'))",
+		"blank": 3,
+		"pager": {
+			"nextL": ".pagelist strong+a",
+			"pageE": ".thread,.thread+hr",
+			"replaceE": ".pagelist"
+		}
+	},
 	"LowEndTalk": {
 		"host": "lowendtalk.com",
 		"blank": 3,
@@ -4875,7 +4885,7 @@
 	},
 	"pornhub": {
 		"host": "/\\.pornhub\\.com/",
-		"url": "/\\/video/",
+		"url": "/^\\/video/",
 		"style": ".footerContentWrapper, .pre-footer {display: none !important;}",
 		"blank": 3,
 		"pager": {
@@ -5657,26 +5667,6 @@
 			"scrollD": 1000
 		}
 	},
-	"ku66_m": {
-		"host": "m.ku66.net",
-		"url": "/\\d+\\.html/",
-		"style": ".ArticleImageBox img {min-height: 200px;}",
-		"pager": {
-			"nextL": "//div[@class='article_page']//a[text()='下一页']",
-			"pageE": ".ArticleImageBox>*",
-			"replaceE": ".article_page",
-			"scrollD": 4000
-		}
-	},
-	"ku66_m_list": {
-		"host": "m.ku66.net",
-		"pager": {
-			"nextL": "//div[@class='article_page']//a[text()='下一页']",
-			"pageE": ".PictureList>ul>li",
-			"replaceE": ".article_page",
-			"scrollD": 1000
-		}
-	},
 	"ku137": {
 		"host": "www.ku137.net",
 		"url": "/\\d+\\.html/",
@@ -5695,25 +5685,6 @@
 			"nextL": "//div[@class='page']/a[text()='下一页']",
 			"pageE": ".m-list>ul>li",
 			"replaceE": ".page"
-		}
-	},
-	"ku137_m": {
-		"host": "m.ku137.net",
-		"url": "/\\d+\\.html/",
-		"style": ".ArticleImageBox img {min-height: 300px;}",
-		"pager": {
-			"nextL": "//div[@class='article_page']//a[text()='下一页']",
-			"pageE": ".ArticleImageBox>*",
-			"replaceE": ".article_page",
-			"scrollD": 3000
-		}
-	},
-	"ku137_m_list": {
-		"host": "m.ku137.net",
-		"pager": {
-			"nextL": "//div[@class='article_page']//a[text()='下一页']",
-			"pageE": ".PictureList>ul>li",
-			"replaceE": ".article_page"
 		}
 	},
 	"kingdom": {
@@ -5814,15 +5785,6 @@
 			"nextL": "//div[@class='paging']/a[text()='下一页']",
 			"pageE": ".b_img>ul, .picture>p",
 			"replaceE": ".paging"
-		}
-	},
-	"五朵美女网": {
-		"host": "m.558duo.cc",
-		"pager": {
-			"nextL": "//a[text()='下一页']",
-			"pageE": ".PictureList",
-			"replaceE": ".article_page",
-			"scrollD": 1000
 		}
 	},
 	"凸凹吧/撸女吧": {
@@ -6034,6 +5996,26 @@
 			"nextL": "//div[@class='fanye1']//a[text()='下一页' or text()='下☆页']",
 			"pageE": "#nr234img img",
 			"replaceE": ".fanye1",
+			"scrollD": 2000
+		}
+	},
+	"美女写真网 - hh1234": {
+		"host": "www.hh1234.cc",
+		"url": "/\\/\\d+(_\\d+)?\\.html$/",
+		"pager": {
+			"nextL": ".current+a",
+			"pageE": ".content>img",
+			"replaceE": ".page-list",
+			"scrollD": 2000
+		}
+	},
+	"全图网 - quantuwang1.com": {
+		"host": ["qq.quantuwang1.com","q.quantuwang1.com"],
+		"url": "/^\\/m\\//",
+		"pager": {
+			"nextL": ".index_c_page>span+a",
+			"pageE": "body>.box>.index_c>.index_c_img",
+			"replaceE": ".index_c_page",
 			"scrollD": 2000
 		}
 	}
