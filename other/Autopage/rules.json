@@ -6015,8 +6015,17 @@
 		"pager": {
 			"nextL": "li.page-item.active+li.page-item>a",
 			"pageE": ".photo-list",
-			"replaceE": ".pagination",
-			"scrollD": 1500
+			"replaceE": ".pagination"
+		}
+	},
+	"邪恶道 - xacazj": {
+		"host": "m.xacazj.com",
+		"url": "/\\/\\d+(_\\d+)?\\.html$/",
+		"pager": {
+			"nextL": "//div[@class='fanye1']//a[text()='下一页' or text()='下☆页']",
+			"pageE": "#nr234img img",
+			"replaceE": ".fanye1",
+			"scrollD": 2000
 		}
 	}
 }
