@@ -4729,6 +4729,15 @@
 			"scrollD": 1000
 		}
 	},
+	"美团技术团队": {
+		"host": "tech.meituan.com",
+		"url": "/^\\/($|page|tags)/",
+		"pager": {
+			"nextL": "a[aria-label='Next'], a.home-browser-more-btn",
+			"pageE": ".post-container-wrapper",
+			"replaceE": ".pagination, .home-more-container"
+		}
+	},
 	"医学考研网": {
 		"host": "info.medkaoyan.net",
 		"url": "/\\/archives/",
