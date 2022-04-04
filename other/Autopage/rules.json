@@ -6007,5 +6007,16 @@
 			"replaceE": ".paging",
 			"scrollD": 1000
 		}
+	},
+	"美女目录网": {
+		"host": "www.mnmulu.com",
+		"url": "/^\\/(index|photos)\\//",
+		"blank": 3,
+		"pager": {
+			"nextL": "li.page-item.active+li.page-item>a",
+			"pageE": ".photo-list",
+			"replaceE": ".pagination",
+			"scrollD": 1500
+		}
 	}
 }
