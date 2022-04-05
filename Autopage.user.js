@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.6.4
+// @version      5.6.5
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -11,6 +11,8 @@
 // @match        *://*/*
 // @connect      userscript.xiu2.xyz
 // @connect      userscript.gh2233.ml
+// @connect      github-do.panbaidu.cn
+// @connect      github.do
 // @connect      raw.iqiq.io
 // @connect      hk1.monika.love
 // @connect      raw.fastgit.org
@@ -117,7 +119,7 @@
                         menuId[0] = GM_registerMenuCommand('❌ 当前网页暂不支持 [欢迎点击申请]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
                         menuId[1] = GM_registerMenuCommand('🔄 更新外置翻页规则 (每天自动)', function(){getRulesUrl(true)});
                         menuId[2] = GM_registerMenuCommand('#️⃣ 自定义翻页规则', function(){customRules()});
-                        console.info('[自动无缝翻页] - 暂不支持当前网页 [ ' + location.href + ' ]，欢迎申请支持: https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/96880/feedback');
+                        console.info('[自动无缝翻页] - 暂不支持当前网页 [ ' + location.href + ' ]，欢迎申请支持: https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/419215/feedback');
                         return
                     } else if (webType === -1) {
                         return
@@ -1533,6 +1535,7 @@ function: {
         if (typeof(GM_getValue('menu_ruleUpdateTime', '')) == 'string') update = true
 
         let urlArr = [//'https://userscript.gh2233.ml/other/Autopage/rules.json',
+                      //'https://github-do.panbaidu.cn/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
                       'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
                       'https://hk1.monika.love/XIU2/UserScript/master/other/Autopage/rules.json',
                       'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
@@ -1551,8 +1554,8 @@ function: {
         }
 
         function getRulesUrl_(n = false) {
-            let url = urlArr[Math.floor(Math.random()*urlArr.length)];
-            if (n) url = 'https://userscript.xiu2.xyz/other/Autopage/rules.json'
+            let url;
+            if (n) {url = 'https://userscript.xiu2.xyz/other/Autopage/rules.json'} else {url = urlArr[Math.floor(Math.random()*urlArr.length)];}
             GM_xmlhttpRequest({
                 url: url,
                 method: 'GET',
@@ -2767,7 +2770,7 @@ function: {
 
         // 创建 iframe
         let iframe = document.createElement('iframe');
-        iframe.style = 'position: absolute; width: 100%; height: 100%; border: none;';
+        iframe.style = 'position: absolute !important; width: 100% !important; height: 100% !important; border: none !important;';
         iframe.id = 'Autopage_iframe';
         iframe.src = src;
 
@@ -2838,7 +2841,7 @@ function: {
         let iframe = document.getElementById('Autopage_iframe');
         if (!iframe) {
             iframe = document.createElement('iframe');
-            iframe.style = 'position: absolute; top: -9999px; left: -9999px; width: 100%; height: 100%; border: none; z-index: -999; /*visibility: hidden;*/';
+            iframe.style = 'position: absolute !important; top: -9999px !important; left: -9999px !important; width: 100% !important; height: 100% !important; border: none !important; z-index: -999 !important; /*visibility: hidden;*/';
             //iframe.sandbox = 'allow-same-origin allow-scripts allow-popups allow-forms';
             iframe.id = 'Autopage_iframe';
             iframe.src = src;
