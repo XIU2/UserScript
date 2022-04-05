@@ -6020,5 +6020,16 @@
 			"replaceE": ".index_c_page",
 			"scrollD": 2000
 		}
+	},
+	"爱看图吧": {
+		"host": "www.9iktb.com",
+		"url": "/^\\/gallery\\//",
+		"style": ".gallery-detail-img>img {min-height: 300px;}",
+		"pager": {
+			"type": 3,
+			"nextL": "li.active+li>a",
+			"pageE": ".gallery-detail-content",
+			"replaceE": ".pagination"
+		}
 	}
 }
