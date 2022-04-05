@@ -5196,19 +5196,18 @@
 		}
 	},
 	"E-Hentai-g": {
-		"host": "e-hentai.org",
+		"host": ["e-hentai.org","exhentai.org"],
 		"url": "/^\\/g\\//",
 		"pager": {
 			"nextL": "//table[@class='ptt']//a[text()='>']",
-			"pageE": "#gdt>.gdtm",
-			"replaceE": ".ptt, .ptb",
-			"scrollD": 1000
+			"pageE": "#gdt>div:not(.c)",
+			"replaceE": ".ptt, .ptb"
 		}
 	},
 	"E-Hentai-s": {
-		"host": "e-hentai.org",
+		"host": ["e-hentai.org","exhentai.org"],
 		"url": "/^\\/s\\//",
-		"style": "#img {max-width: 100% !important;height: auto !important;}",
+		"style": "#img {max-width: 100% !important;height: auto !important;min-height: 400px;}",
 		"pager": {
 			"nextL": "a#next",
 			"pageE": "#img",
@@ -5217,12 +5216,11 @@
 		}
 	},
 	"E-Hentai": {
-		"host": "e-hentai.org",
+		"host": ["e-hentai.org","exhentai.org"],
 		"pager": {
 			"nextL": "//table[@class='ptt']//a[text()='>']",
-			"pageE": ".itg>tbody>tr:not(:first-of-type)",
-			"replaceE": ".ptt, .ptb",
-			"scrollD": 1000
+			"pageE": ".itg>div, .itg>tbody>tr:not(:first-of-type)",
+			"replaceE": ".ptt, .ptb"
 		}
 	},
 	"nhentai": {
