@@ -5278,29 +5278,31 @@
 		}
 	},
 	"Hentai Cosplays - 手机版 - 图片页": {
-		"host": ["hentai-cosplays.com","porn-images-xxx.com","hentai-img.com"],
+		"host": ["/hentai-cosplays\\.com$/","/porn-images-xxx\\.com$/","/hentai-img\\.com$/"],
 		"url": "return (fun.indexOF('/image/') && fun.isMobile())",
 		"style": ".icon-good-thumbnail, .icon-bad-thumbnail {display: none !important;}",
 		"pager": {
+			"type": 3,
 			"nextL": "a.paginator_page[rel='next']",
 			"pageE": "#detail_list",
 			"replaceE": ".paginator_area",
-			"scrollD": 3500
+			"scrollD": 1000
 		}
 	},
 	"Hentai Cosplays - 图片页": {
-		"host": ["hentai-cosplays.com","porn-images-xxx.com","hentai-img.com"],
+		"host": ["/hentai-cosplays\\.com$/","/porn-images-xxx\\.com$/","/hentai-img\\.com$/"],
 		"url": "/^\\/image\\//",
 		"style": ".icon-good-thumbnail, .icon-bad-thumbnail {display: none !important;}",
 		"pager": {
+			"type": 3,
 			"nextL": "id('paginator')//a[contains(text(), '>')]",
 			"pageE": ".icon-overlay",
 			"replaceE": "#paginator",
-			"scrollD": 3000
+			"scrollD": 1000
 		}
 	},
 	"Hentai Cosplays - 手机版 - 分类页": {
-		"host": ["hentai-cosplays.com","porn-images-xxx.com","hentai-img.com"],
+		"host": ["/hentai-cosplays\\.com$/","/porn-images-xxx\\.com$/","/hentai-img\\.com$/"],
 		"url": "return (fun.isMobile())",
 		"blank": 3,
 		"pager": {
@@ -5308,21 +5310,21 @@
 			"nextL": "a.paginator_page[rel='next']",
 			"pageE": "#page>#right_sidebar>#entry_list",
 			"replaceE": "#page>#page_nation",
-			"scrollD": 700
+			"scrollD": 1000
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
 	"Hentai Cosplays - 分类页": {
-		"host": ["hentai-cosplays.com","porn-images-xxx.com","hentai-img.com"],
+		"host": ["/hentai-cosplays\\.com$/","/porn-images-xxx\\.com$/","/hentai-img\\.com$/"],
 		"blank": 3,
 		"pager": {
 			"type": 3,
 			"nextL": "a.nextpostslink",
 			"pageE": "#center>#display_area_image>#image-list",
 			"replaceE": ".wp-pagenavi",
-			"scrollD": 700
+			"scrollD": 1000
 		}
 	},
 	"绅士仓库": {
