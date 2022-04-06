@@ -343,66 +343,21 @@
 			"replaceE": "#paginator"
 		}
 	},
-	"豆瓣 - 分集短评": {
+	"豆瓣 - 分集短评/剧评影评/在看/想看/看过的电影/作品": {
 		"host": "movie.douban.com",
-		"url": "/^\\/subject\\/\\d+\\/(episode|tv_discuss)/",
+		"url": "return (fun.indexOF(/^\\/subject\\/\\d+\\/(episode|tv_discuss)/) || fun.indexOF(/^\\/subject\\/\\d+\\/reviews/) || fun.indexOF(/^\\/people\\/\\d+\\/(do|wish|collect)/) || fun.indexOF(/^\\/celebrity\\/\\d+\\/movies/))",
 		"pager": {
 			"nextL": "link[rel='next']",
-			"pageE": "#comments",
+			"pageE": "#comments, .review-list, .grid-view, .grid_view>ul>li",
 			"replaceE": ".paginator"
 		}
 	},
-	"豆瓣 - 剧评影评": {
-		"host": "movie.douban.com",
-		"url": "/^\\/subject\\/\\d+\\/reviews/",
-		"pager": {
-			"nextL": "link[rel='next']",
-			"pageE": ".review-list",
-			"replaceE": ".paginator"
-		}
-	},
-	"豆瓣 - 在看/想看/看过的电影": {
-		"host": "movie.douban.com",
-		"url": "/^\\/people\\/\\d+\\/(do|wish|collect)/",
-		"pager": {
-			"nextL": "link[rel='next']",
-			"pageE": ".grid-view",
-			"replaceE": ".paginator"
-		}
-	},
-	"豆瓣 - 作品": {
-		"host": "movie.douban.com",
-		"url": "/^\\/celebrity\\/\\d+\\/movies/",
-		"pager": {
-			"nextL": "link[rel='next']",
-			"pageE": ".grid_view>ul>li",
-			"replaceE": ".paginator"
-		}
-	},
-	"豆瓣 - 片单": {
+	"豆瓣 - 片单/标签/小组讨论精选": {
 		"host": "www.douban.com",
-		"url": "/^\\/doulist\\//",
+		"url": "/^\\/((doulist|tag)\\/|group\\/explore)/",
 		"pager": {
 			"nextL": "link[rel='next']",
-			"pageE": ".doulist-item",
-			"replaceE": ".paginator"
-		}
-	},
-	"豆瓣 - 标签": {
-		"host": "www.douban.com",
-		"url": "/^\\/tag\\//",
-		"pager": {
-			"nextL": "link[rel='next']",
-			"pageE": ".article>.mod",
-			"replaceE": ".paginator"
-		}
-	},
-	"豆瓣 - 小组讨论精选": {
-		"host": "www.douban.com",
-		"url": "/^\\/group\\/explore/",
-		"pager": {
-			"nextL": "span.next>a",
-			"pageE": ".channel-item",
+			"pageE": ".doulist-item, .article>.mod:not([id='doulist-info']), .channel-item",
 			"replaceE": ".paginator"
 		}
 	},
@@ -1983,23 +1938,10 @@
 	},
 	"ZzzFun 动漫": {
 		"host": "www.zzzfun.com",
-		"url": "return (fun.indexOF('/vod_type') || fun.indexOF('/vod_show'))",
+		"url": "/^\\/vod_(type|show|search)/",
 		"pager": {
 			"nextL": "#page a[title='下一页']",
-			"pageE": "ul.search-result>a",
-			"replaceE": "#page",
-			"scrollD": 1000
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
-		}
-	},
-	"ZzzFun 动漫 - 搜索页": {
-		"host": "www.zzzfun.com",
-		"url": "return (fun.indexOF('/vod_search'))",
-		"pager": {
-			"nextL": "#page a[title='下一页']",
-			"pageE": "ul.show-list>li",
+			"pageE": "ul.search-result>a, ul.show-list>li",
 			"replaceE": "#page",
 			"scrollD": 1000
 		},
@@ -2086,24 +2028,13 @@
 			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
 		}
 	},
-	"AGE 动漫 - 全部/搜索": {
+	"AGE 动漫": {
 		"host": ["www.agemys.com","www.age.tv"],
-		"url": "return (fun.indexOF('/catalog/') || fun.lp() == '/search')",
+		"url": "return (fun.indexOF('/catalog/') || fun.lp() == '/search' || fun.lp() == '/recommend' || fun.lp() == '/update')",
 		"blank": 3,
 		"pager": {
 			"nextL": "id('container')//div[@class='blockcontent']/div[@style][not(@class)]/li/a[contains(text(), '下一页')]",
-			"pageE": "#container .blockcontent1>div",
-			"replaceE": "#container .blockcontent>div[style]:not([class])",
-			"scrollD": 1000
-		}
-	},
-	"AGE 动漫 - 其他页": {
-		"host": ["www.agemys.com","www.age.tv"],
-		"url": "return (fun.lp() == '/recommend' || fun.lp() == '/update')",
-		"blank": 3,
-		"pager": {
-			"nextL": "id('container')//div[@class='blockcontent']/div[@style][not(@class)]/li/a[contains(text(), '下一页')]",
-			"pageE": "#container .blockcontent>ul>li",
+			"pageE": "#container .blockcontent1>div, #container .blockcontent>ul:not(.search-list)>li",
 			"replaceE": "#container .blockcontent>div[style]:not([class])",
 			"scrollD": 1000
 		}
@@ -2120,23 +2051,13 @@
 	},
 	"233 动漫": {
 		"host": "www.dm233.cc",
-		"url": "return (fun.indexOF('/catalog/') || fun.lp() == '/recommend/' || fun.lp() == '/search')",
+		"url": "return (fun.indexOF('/catalog/') || fun.lp() == '/article/' || fun.lp() == '/recommend/' || fun.lp() == '/search')",
 		"blank": 3,
 		"pager": {
 			"nextL": "//div[@class='pagelist']//a[contains(text(), '下一页') or contains(text(), '下一頁')]",
-			"pageE": ".dhnew ul>li",
+			"pageE": ".dhnew ul>li, .xgyd ul>li",
 			"replaceE": ".pagelist",
 			"scrollD": 1000
-		}
-	},
-	"233 动漫 - 动漫情报/资讯": {
-		"host": "www.dm233.cc",
-		"url": "return (fun.lp() == '/article/')",
-		"blank": 3,
-		"pager": {
-			"nextL": "//div[@class='pagelist']//a[contains(text(), '下一页') or contains(text(), '下一頁')]",
-			"pageE": ".xgyd ul>li",
-			"replaceE": ".pagelist"
 		}
 	},
 	"233 动漫 - 排行榜": {
@@ -3750,66 +3671,23 @@
 			"scrollD": 1000
 		}
 	},
-	"StackOverflow - Questions": {
+	"StackOverflow": {
 		"host": "stackoverflow.com",
-		"url": "return (fun.lp() == '/questions')",
+		"url": "return (fun.lp() == '/search' || (fun.indexOF(/^\\/questions/) && !fun.indexOF(/^\\/questions\\/\\d+/)) || fun.lp() == '/tags' || fun.lp() == '/users')",
 		"blank": 3,
 		"pager": {
 			"nextL": "a[rel='next']",
-			"pageE": "#questions>div",
+			"pageE": "#questions>div, .js-search-results>div:first-child>div, #tags-browser>div, #user-browser>div:first-child>div",
 			"replaceE": ".pager",
 			"scrollD": 2000
 		}
 	},
-	"StackOverflow - Search": {
-		"host": "stackoverflow.com",
-		"url": "return (fun.lp() == '/search')",
-		"blank": 3,
-		"pager": {
-			"nextL": "a[rel='next']",
-			"pageE": ".js-search-results>div:first-child>div",
-			"replaceE": ".pager",
-			"scrollD": 2000
-		}
-	},
-	"StackOverflow - Tags": {
-		"host": "stackoverflow.com",
-		"url": "return (fun.lp() == '/tags')",
-		"blank": 3,
-		"pager": {
-			"nextL": "a[rel='next']",
-			"pageE": "#tags-browser>div",
-			"replaceE": ".pager",
-			"scrollD": 2000
-		}
-	},
-	"StackOverflow - Users": {
-		"host": "stackoverflow.com",
-		"url": "return (fun.lp() == '/users')",
-		"blank": 3,
-		"pager": {
-			"nextL": "a[rel='next']",
-			"pageE": "#user-browser>div:first-child>div",
-			"replaceE": ".pager",
-			"scrollD": 2000
-		}
-	},
-	"SegmentFault - Questions": {
+	"SegmentFault": {
 		"host": "segmentfault.com",
-		"url": "fun.isUrlC(); return (fun.indexOF('/questions'))",
+		"url": "fun.isUrlC(); return (fun.lp() == '/search' || fun.indexOF('/questions'))",
 		"pager": {
 			"nextL": "//a[@class='page-link'][text()='下一页']",
-			"pageE": "ul.list-group>li",
-			"replaceE": "ul.pagination",
-			"scrollD": 1000
-		}
-	},
-	"SegmentFault - Search": {
-		"host": "segmentfault.com",
-		"url": "return (fun.lp() == '/search')",
-		"pager": {
-			"nextL": "//a[@class='page-link'][text()='下一页']",
-			"pageE": "li.list-group-item",
+			"pageE": "ul.list-group>li, li.list-group-item",
 			"replaceE": "ul.pagination",
 			"scrollD": 1000
 		}
@@ -3962,30 +3840,12 @@
 			"replaceE": ".topic-page"
 		}
 	},
-	"51CTO - 博客 - 分类页": {
-		"host": "blog.51cto.com",
-		"url": "/^\\/nav/",
-		"pager": {
-			"nextL": "li.next>a",
-			"pageE": ".date-list",
-			"replaceE": ".pagination"
-		}
-	},
 	"51CTO - 博客": {
 		"host": "blog.51cto.com",
-		"url": "return (fun.indexOF(/^\\/u_\\d+/) && !fun.indexOF(/^\\/u_\\d+\\/\\d+/))",
+		"url": "return (fun.indexOF(/^\\/(nav|topic)/) || (fun.indexOF(/^\\/u_\\d+/) && !fun.indexOF(/^\\/u_\\d+\\/\\d+/)))",
 		"pager": {
 			"nextL": "li.next>a",
-			"pageE": "#common-article-listbox-1",
-			"replaceE": ".pagination"
-		}
-	},
-	"51CTO - 博客 - 其他": {
-		"host": "blog.51cto.com",
-		"url": "/^\\/(topic|search)\\//",
-		"pager": {
-			"nextL": "li.next>a",
-			"pageE": "ul.search-artical",
+			"pageE": ".date-list, #common-article-listbox-1, ul.search-artical",
 			"replaceE": ".pagination"
 		}
 	},
@@ -4000,57 +3860,27 @@
 			"replaceE": "main navigation-tree, main .scrollbar"
 		}
 	},
-	"Gitee - Explore 列表": {
+	"Gitee - Explore/Issues/Pulls/Releases/Tags": {
 		"host": "gitee.com",
-		"url": "/\\/explore\\//",
+		"url": "return (fun.indexOF('/explore/') || fun.indexOF(/\\/(issues|pulls|releases|tags)$/))",
 		"pager": {
 			"nextL": "a[rel='next']",
-			"pageE": ".items>.item",
+			"pageE": ".items>.item, .issue-wrapper, .pull-request__wrapper, .release-tag-item, .tag-item",
 			"replaceE": ".pagination",
 			"scrollD": 2500
 		}
 	},
-	"Gitee - Issues 列表": {
-		"host": "gitee.com",
-		"url": "return (fun.indexOF(/\\/issues$/))",
-		"pager": {
-			"nextL": "a[rel='next']",
-			"pageE": ".issue-wrapper",
-			"replaceE": ".pagination",
-			"scrollD": 2500
-		}
-	},
-	"Gitee - Releases 列表": {
-		"host": "gitee.com",
-		"url": "/\\/releases/",
-		"pager": {
-			"nextL": "a[rel='next']",
-			"pageE": ".release-tag-item",
-			"replaceE": ".pagination",
-			"scrollD": 2500
-		}
-	},
-	"Gitee - Tags 列表": {
-		"host": "gitee.com",
-		"url": "/\\/tags/",
-		"pager": {
-			"nextL": "a[rel='next']",
-			"pageE": ".tag-item",
-			"replaceE": ".pagination",
-			"scrollD": 2500
-		}
-	},
-	"Gitee - 搜索页": {
+	"Gitee - Search": {
 		"host": "search.gitee.com",
-		"url": "return (location.search)",
+		"url": "return (location.search != '')",
 		"pager": {
 			"nextL": "li.next:not(.disabled)>a",
 			"pageE": "#hits-list>div",
-			"replaceE": "ul.pagination",
+			"replaceE": ".pagination",
 			"scrollD": 1000
 		}
 	},
-	"Github - 首页": {
+	"Github": {
 		"host": ["github.com","hub.fastgit.xyz"],
 		"url": "fun.isUrlC(); return (fun.lp() == '/')",
 		"pager": {
@@ -4059,183 +3889,52 @@
 			"scrollD": 2000
 		}
 	},
-	"Github - 用户 Star 列表": {
+	"Github - Star/Repositories/Commits": {
 		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "/tab=stars/",
+		"url": "/(tab=(stars|repositories)|\\/commits)/",
 		"pager": {
 			"nextL": "//div[@class='paginate-container']/div/*[last()]",
-			"pageE": "#js-pjax-container .position-relative div[class^='col-lg-']>div:not(.position-relative):not(.paginate-container)",
-			"insertP": [".paginate-container",1],
+			"pageE": "#js-pjax-container .position-relative div[class^='col-lg-']>div:not(.position-relative):not(.paginate-container), #user-repositories-list>ul>li, .js-navigation-container>div",
 			"replaceE": ".paginate-container",
-			"scrollD": 3000
+			"scrollD": 2500
 		}
 	},
-	"Github - 用户 Repositories 列表": {
+	"Github - Issues/Pull/Discussions/Releases": {
 		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "/tab=repositories/",
-		"pager": {
-			"nextL": "//div[@class='paginate-container']/div/*[last()]",
-			"pageE": "#user-repositories-list>ul>li",
-			"replaceE": ".paginate-container",
-			"scrollD": 3000
-		}
-	},
-	"Github - Issues 列表 / PR 列表": {
-		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "return (fun.indexOF(/\\/(issues|pulls)$/))",
+		"url": "return (fun.indexOF(/\\/(issues|pulls|discussions|releases)$/) || fun.indexOF('/discussions/categories'))",
 		"pager": {
 			"nextL": "a.next_page",
-			"pageE": ".js-navigation-container.js-active-navigation-container>div[id^='issue_']",
+			"pageE": "div[id^='issue_'], ul[aria-labelledby='discussions-list']>li, #repo-content-pjax-container>div>div[data-pjax]>div:not(.paginate-container)",
 			"replaceE": ".pagination",
-			"scrollD": 3000
+			"scrollD": 2500
 		}
 	},
-	"Github - Discussions 列表": {
-		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "return (fun.indexOF(/\\/discussions$/) || fun.indexOF('/discussions/categories'))",
-		"pager": {
-			"nextL": "a.next_page",
-			"pageE": "ul[aria-labelledby='discussions-list']>li",
-			"replaceE": ".pagination",
-			"scrollD": 3000
-		}
-	},
-	"Github - Releases 列表": {
-		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "return (fun.indexOF(/\\/releases$/))",
-		"pager": {
-			"nextL": "a.next_page",
-			"pageE": "#repo-content-pjax-container>div[data-pjax]>div:not(.paginate-container)",
-			"replaceE": ".pagination",
-			"scrollD": 3000
-		}
-	},
-	"Github - Tags 列表": {
+	"Github - Tags": {
 		"host": ["github.com","hub.fastgit.xyz"],
 		"url": "return (fun.indexOF(/\\/tags$/))",
 		"pager": {
 			"nextL": "//div[@class='pagination']/*[last()]",
 			"pageE": ".Box-body>div.Box-row",
 			"replaceE": ".pagination",
-			"scrollD": 3000
+			"scrollD": 2500
 		}
 	},
-	"Github - Commits 列表": {
-		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "/\\/commits/",
-		"pager": {
-			"nextL": "//div[@class='paginate-container']/div/*[last()]",
-			"pageE": "div.js-navigation-container>div",
-			"replaceE": ".paginate-container",
-			"scrollD": 3000
-		}
-	},
-	"Github - Notifications 列表": {
+	"Github - Notifications": {
 		"host": ["github.com","hub.fastgit.xyz"],
 		"url": "/\\/notifications/",
 		"pager": {
 			"nextL": "nav.paginate-container>a[aria-label='Next']",
 			"pageE": "li.notifications-list-item",
 			"replaceE": "nav.paginate-container, .js-notifications-list-paginator-counts",
-			"scrollD": 3000
+			"scrollD": 2500
 		}
 	},
-	"Github - Search 列表 - Repositories": {
+	"Github - Search": {
 		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "return (fun.lp() == '/search' && location.search && (!fun.indexOF('type=', 's') || fun.indexOF('type=repositories', 's')))",
+		"url": "/\\/search\\?/",
 		"pager": {
 			"nextL": "a.next_page",
-			"pageE": "ul.repo-list>li",
-			"replaceE": ".pagination",
-			"scrollD": 3000
-		}
-	},
-	"Github - Search 列表 - Code": {
-		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "return (fun.indexOF('/search') && location.search && (!fun.indexOF('type=', 's') || fun.indexOF('type=code', 's')))",
-		"pager": {
-			"nextL": "a.next_page",
-			"pageE": ".code-list-item",
-			"replaceE": ".pagination",
-			"scrollD": 3000
-		}
-	},
-	"Github - Search 列表 - Commit": {
-		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "return (fun.indexOF('/search') && location.search && fun.indexOF('type=commits', 's'))",
-		"pager": {
-			"nextL": "a.next_page",
-			"pageE": "#commit_search_results>div",
-			"replaceE": ".pagination",
-			"scrollD": 3000
-		}
-	},
-	"Github - Search 列表 - Issues": {
-		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "return (fun.indexOF('/search') && location.search && fun.indexOF('type=issues', 's'))",
-		"pager": {
-			"nextL": "a.next_page",
-			"pageE": ".issue-list-item",
-			"replaceE": ".pagination",
-			"scrollD": 3000
-		}
-	},
-	"Github - Search 列表 - Discussions": {
-		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "return (fun.indexOF('/search') && location.search && fun.indexOF('type=discussions', 's'))",
-		"pager": {
-			"nextL": "a.next_page",
-			"pageE": ".discussion-list-item",
-			"replaceE": ".pagination",
-			"scrollD": 3000
-		}
-	},
-	"Github - Search 列表 - Package": {
-		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "return (fun.indexOF('/search') && location.search && fun.indexOF('type=registrypackages', 's'))",
-		"pager": {
-			"nextL": "a.next_page",
-			"pageE": "#package_search_results>div",
-			"replaceE": ".pagination",
-			"scrollD": 3000
-		}
-	},
-	"Github - Search 列表 - Marketplace": {
-		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "return (fun.indexOF('/search') && location.search && fun.indexOF('type=marketplace', 's'))",
-		"pager": {
-			"nextL": "a.next_page",
-			"pageE": "#marketplace_search_results>div:first-child>div",
-			"replaceE": ".pagination",
-			"scrollD": 3000
-		}
-	},
-	"Github - Search 列表 - Topics": {
-		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "return (fun.indexOF('/search') && location.search && fun.indexOF('type=topics', 's'))",
-		"pager": {
-			"nextL": "a.next_page",
-			"pageE": ".topic-list-item",
-			"replaceE": ".pagination",
-			"scrollD": 3000
-		}
-	},
-	"Github - Search 列表 - wiki": {
-		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "return (fun.indexOF('/search') && location.search && fun.indexOF('type=wikis', 's'))",
-		"pager": {
-			"nextL": "a.next_page",
-			"pageE": "#wiki_search_results>div:first-child>div",
-			"replaceE": ".pagination",
-			"scrollD": 3000
-		}
-	},
-	"Github - Search 列表 - user": {
-		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "return (fun.indexOF('/search') && location.search && fun.indexOF('type=users', 's'))",
-		"pager": {
-			"nextL": "a.next_page",
-			"pageE": "#user_search_results>div:first-child>div",
+			"pageE": ".repo-list>li, .code-list-item, #commit_search_results>div, .issue-list-item, .discussion-list-item, #package_search_results>div, #marketplace_search_results>div:first-child>div, .topic-list-item, #wiki_search_results>div:first-child>div, #user_search_results>div:first-child>div",
 			"replaceE": ".pagination",
 			"scrollD": 3000
 		}
