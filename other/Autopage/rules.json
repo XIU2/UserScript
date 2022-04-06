@@ -1266,6 +1266,21 @@
 			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
 		}
 	},
+	"摄图网": {
+		"host": ["699pic.com","xsj.699pic.com"],
+		"url": "return (fun.getCSS('.pagelist') != null)",
+		"style": ".lastNavItem, .yaoxinAct-rukou {display: none !important;}",
+		"pager": {
+			"nextL": ".downPage",
+			"pageE": ".swipeboxEx>*, .search-video-wrap>.video-list>ul, ul.music-list, #all-fonts-box, .img-list>.img-list-box, .video-list-box",
+			"replaceE": ".pagelist",
+			"scriptT": 2,
+			"scrollD": 2000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+		}
+	},
 	"众图网": {
 		"host": "www.ztupic.com",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/sucai/'))",
