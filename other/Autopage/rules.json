@@ -357,7 +357,7 @@
 		"url": "return (fun.indexOF(/^\\/people\\/.+\\/status/) && (!fun.indexOF('tab=','s') || fun.indexOF('tab=comment','s')))",
 		"pager": {
 			"type": 6,
-			"nextL": "js; let a=fun.getCSS('a.next');if(a && a.href){return a.href.replace('#comments','')}",
+			"nextL": "js; let a=fun.getCSS('a.next');if(a && a.href){return a.href.replace(/#.+$/,'')}",
 			"pageE": ".comment-list-wrapper, .list",
 			"replaceE": ".paginator",
 			"loadTime": 1000
