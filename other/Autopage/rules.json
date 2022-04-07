@@ -5050,7 +5050,7 @@
 	},
 	"绅士仓库": {
 		"host": "/^cangku\\./",
-		"url": "if (document.title.indexOf('绅士') == -1){return}; fun.isUrlC(); setTimeout(`document.querySelectorAll('#header, .simple-navbar').forEach(function (o) {o.innerHTML = o.innerHTML; console.log(o);});`, 1500); return (fun.lp() == '/' || fun.indexOF('/category/') || fun.indexOF('/user/'))",
+		"url": "if (document.title.indexOf('绅士') == -1){return}; fun.isUrlC(); setTimeout(`let a='.mr-auto,.navbar-brand.active,.simple-navbar';if(location.pathname.indexOf('/search/')!=-1){a='.mr-auto,.navbar-brand.active'};document.querySelectorAll(a).forEach(function (o) {o.innerHTML = o.innerHTML;})`, 1500); return (fun.lp() == '/' || fun.indexOF('/category/') || fun.indexOF('/user/'))",
 		"history": true,
 		"pager": {
 			"type": 6,
