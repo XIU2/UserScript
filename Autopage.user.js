@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.6.6
+// @version      5.6.7
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -1520,7 +1520,15 @@ function: {
             } //                   国家自然科学基金
         };
         // 合并 自定义规则、外置规则、内置规则
-        DBSite = Object.assign(GM_getValue('menu_customRules', {}), GM_getValue('menu_rules', {}), DBSite)
+        if (Object.keys(GM_getValue('menu_customRules', {})).length === 0) {
+            DBSite = Object.assign(GM_getValue('menu_customRules', {}), GM_getValue('menu_rules', {}), DBSite)
+        } else { // 自定义规则 覆盖 同名的外置规则
+            let a = GM_getValue('menu_customRules', {}), a1 = Object.keys(a),
+                b = GM_getValue('menu_rules', {}), b1 = Object.keys(b)
+            for (let i = 0; i < a1.length; i++) {if(b1.indexOf(a1[i]) != -1) {delete b[a1[i]]};}
+            DBSite = Object.assign(a, b, DBSite)
+        }
+
         // 生成 SiteTypeID
         setSiteTypeID();
         //console.log(DBSite)
@@ -2858,21 +2866,14 @@ function: {
 
         // 加载完成后才继续
         iframe.onload = function() {
-            //iframe.contentWindow.scrollTo(0, 999999); // 滚动到底部，以触发网页的滚动条相关加载事件
-            //iframe.contentWindow.scrollTo({top: 9999999, behavior: 'smooth'});
-            if (!curSite.pager.loadTime) curSite.pager.loadTime = 100; // 默认 100ms
-            //console.log(curSite.pager.loadTime, curSite.pager.loadTime/30)
-            //console.time('sort');
+            if (!curSite.pager.loadTime) curSite.pager.loadTime = 300; // 默认 300ms
             let time1 = 0 ,time2 = setInterval(function(){
                 let scrollHeight = (iframe.contentWindow.document.documentElement.scrollHeight || iframe.contentWindow.document.body.scrollHeight)/10
                 iframe.contentWindow.scrollTo(0, 999999);
                 iframe.contentWindow.scrollTo(0, scrollHeight*time1);
-                //console.log(time1, iframe.contentWindow.document.documentElement.scrollHeight || iframe.contentWindow.document.body.scrollHeight)
                 if (++time1 == 10) {
-                    //console.timeEnd('sort');
                     clearInterval(time2);
                     processElems(iframe.contentWindow.document); // 插入/替换元素等
-                    //console.log(iframe.contentWindow.document.documentElement.scrollHeight || iframe.contentWindow.document.body.scrollHeight)
                     pausePage = true; //      恢复翻页
                 }
             }, curSite.pager.loadTime/10)
@@ -3415,8 +3416,7 @@ function: {
         if (customRules == '{}') customRules = '{\n\t\n}'; // 引导用户插入位置
         let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.95 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important; overflow: scroll !important; text-align: left !important;">
 <h3 style="font-size: 22px !important;"><strong># 自定义翻页规则（优先级最高，但前提是 "规则名" 不能重复）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
-<details>
-<summary><kbd><strong>「 点击展开 查看示例 」（为了避免需要的时候还要找，我干脆把常用规则都一股脑塞进去了）</strong></kbd></summary>
+<details><summary style="cursor: pointer;"><kbd><strong>「 点击展开 查看规则示例 」（为了避免需要的时候还要找，我干脆把常用规则都一股脑塞进去了）</strong></kbd></summary>
 <ul style="list-style: disc !important; margin-left: 35px !important;">
 <li>翻页规则为 JSON 格式，因此大家需要多少<strong>了解一点 JSON 的基本格式</strong>（主要就是逗号、转义、双引号等）。</li>
 <li>具体的翻页规则说明、示例，为了方便更新及补充，我都写到 <strong><a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github</a></strong> 里面了。</li>
@@ -3435,7 +3435,7 @@ function: {
             "nextL": "xxxx",
             "pageE": "xxxx",
             "replaceE": "xxxx",
-            "scrollD": 1000
+            "scrollD": 1500
         }
     },
     "bbb": {
@@ -3477,8 +3477,11 @@ function: {
         }
     }
 }
-</pre>
-</details>
+</pre></details>
+<details><summary style="cursor: pointer;"><kbd><strong>「 点击展开 查看所有规则 」（可 Ctrl+F 搜索规则名、域名等信息来寻找，规则顺序为：自定义、外置、内置）</strong></kbd></summary>
+<pre style="overflow: scroll !important;height: 500px !important;">
+${JSON.stringify(DBSite, null, '\t')}
+</pre></details>
 
 <textarea id="Autopage_customRules_textarea" style="min-width:95% !important; min-height:70% !important; display: block !important; margin: 10px 0 10px 0; white-space:nowrap !important; overflow:scroll !important; resize: auto !important; text-transform: initial !important;" placeholder="留空等于默认的 {}，请把规则插入 {} 之间">${customRules}</textarea>
 <button id="Autopage_customRules_save" style="margin-right: 20px !important;">保存并刷新</button><button id="Autopage_customRules_cancel">取消修改</button>
