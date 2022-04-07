@@ -352,12 +352,23 @@
 			"replaceE": ".paginator"
 		}
 	},
-	"豆瓣 - 片单/标签/小组讨论精选": {
+	"豆瓣 - 广播": {
 		"host": "www.douban.com",
-		"url": "/^\\/((doulist|tag)\\/|group\\/explore)/",
+		"url": "return (fun.indexOF(/^\\/people\\/\\d+\\/status/) && (!fun.indexOF('tab=','s') || fun.indexOF('tab=comment','s')))",
+		"pager": {
+			"type": 6,
+			"nextL": "a.next",
+			"pageE": ".comment-list-wrapper, .list",
+			"replaceE": ".paginator",
+			"loadTime": 1000
+		}
+	},
+	"豆瓣 - 片单/标签/小组讨论精选/广播": {
+		"host": "www.douban.com",
+		"url": "return (fun.indexOF(/^\\/(doulist|tag)\\//) || fun.lp() == '/group/explore' || (fun.indexOF(/^\\/people\\/\\d+\\/status/) && fun.indexOF('tab=','s') && !fun.indexOF('tab=collect','s')))",
 		"pager": {
 			"nextL": "link[rel='next']",
-			"pageE": ".doulist-item, .article>.mod:not([id='doulist-info']), .channel-item",
+			"pageE": ".doulist-item, .article>.mod:not([id='doulist-info']), .channel-item, .list",
 			"replaceE": ".paginator"
 		}
 	},
@@ -4409,6 +4420,16 @@
 			"scrollD": 1800
 		}
 	},
+	"答题无忧": {
+		"host": "www.dati56.com",
+		"url": "/^\\/post\\//",
+		"pager": {
+			"nextL": "//a[@class='cur']/parent::li/following-sibling::li/a",
+			"pageE": ".content>p",
+			"replaceE": ".ipage",
+			"scrollD": 3000
+		}
+	},
 	"立创开源硬件平台": {
 		"host": "www.oshwhub.com",
 		"url": "/^\\/explore/",
@@ -4877,6 +4898,17 @@
 			"pageE": ".g-main-grid>article",
 			"replaceE": ".pagination",
 			"scrollD": 2500
+		}
+	},
+	"FC2 电子市场": {
+		"host": "adult.contents.fc2.com",
+		"url": "/^\\/search\\//",
+		"blank": 3,
+		"pager": {
+			"nextL": "span.items+a[data-link-name='pager']",
+			"pageE": ".c-cntCard-110-f",
+			"replaceE": ".c-pager-101",
+			"scrollD": 2000
 		}
 	},
 	"hanime1": {
