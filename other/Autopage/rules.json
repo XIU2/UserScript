@@ -354,10 +354,10 @@
 	},
 	"豆瓣 - 广播": {
 		"host": "www.douban.com",
-		"url": "return (fun.indexOF(/^\\/people\\/\\d+\\/status/) && (!fun.indexOF('tab=','s') || fun.indexOF('tab=comment','s')))",
+		"url": "return (fun.indexOF(/^\\/people\\/.+\\/status/) && (!fun.indexOF('tab=','s') || fun.indexOF('tab=comment','s')))",
 		"pager": {
 			"type": 6,
-			"nextL": "a.next",
+			"nextL": "js; let a=fun.getCSS('a.next');if(a && a.href){return a.href.replace('#comments','')}",
 			"pageE": ".comment-list-wrapper, .list",
 			"replaceE": ".paginator",
 			"loadTime": 1000
@@ -365,7 +365,7 @@
 	},
 	"豆瓣 - 片单/标签/小组讨论精选/广播": {
 		"host": "www.douban.com",
-		"url": "return (fun.indexOF(/^\\/(doulist|tag)\\//) || fun.lp() == '/group/explore' || (fun.indexOF(/^\\/people\\/\\d+\\/status/) && fun.indexOF('tab=','s') && !fun.indexOF('tab=collect','s')))",
+		"url": "return (fun.indexOF(/^\\/(doulist|tag)\\//) || fun.lp() == '/group/explore' || (fun.indexOF(/^\\/people\\/.+\\/status/) && fun.indexOF('tab=','s') && !fun.indexOF('tab=collect','s')))",
 		"pager": {
 			"nextL": "link[rel='next']",
 			"pageE": ".doulist-item, .article>.mod:not([id='doulist-info']), .channel-item, .list",
