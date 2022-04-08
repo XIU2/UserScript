@@ -86,7 +86,7 @@
         ['menu_history', '添加历史记录+修改地址/标题', '添加历史记录+修改地址/标题', true],
         ['menu_rules', '更新外置翻页规则 (每天自动)', '更新外置翻页规则 (每天自动)', {}],
         ['menu_customRules', '自定义翻页规则', '自定义翻页规则', {}]
-    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname;
+    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, DBSite2, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname;
     window.autoPage = {lp: ()=>location.pathname, indexOF: indexOF, isMobile: isMobile, isUrlC: isUrlC, blank: forceTarget, getAll: getAll, getOne: getOne, getAllXpath: getAllXpath, getXpath: getXpath, getAllCSS: getAllCSS, getCSS: getCSS, getNextE: getNextE, getNextEP: getNextEP, getNextEPN: getNextEPN, getNextUPN: getNextUPN, getNextUP: getNextUP, getNextF: getNextF, getCookie: getCookie, insStyle: insStyle, insScript: insScript, src_bF: src_bF, xs_bF: xs_bF}
 
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
@@ -1466,12 +1466,14 @@ function: {
         };
         // 合并 自定义规则、外置规则、内置规则
         if (Object.keys(GM_getValue('menu_customRules', {})).length === 0) {
-            DBSite = Object.assign(GM_getValue('menu_customRules', {}), GM_getValue('menu_rules', {}), DBSite)
+            DBSite = Object.assign(GM_getValue('menu_customRules', {}), GM_getValue('menu_rules', {}), DBSite);
+            DBSite2 = GM_getValue('menu_rules', {})
         } else { // 自定义规则 覆盖 同名的外置规则
             let a = GM_getValue('menu_customRules', {}), a1 = Object.keys(a),
                 b = GM_getValue('menu_rules', {}), b1 = Object.keys(b)
             for (let i = 0; i < a1.length; i++) {if(b1.indexOf(a1[i]) != -1) {delete b[a1[i]]};}
-            DBSite = Object.assign(a, b, DBSite)
+            DBSite = Object.assign(a, b, DBSite);
+            DBSite2 = Object.assign(a, b);
         }
 
         // 生成 SiteTypeID
@@ -3388,16 +3390,15 @@ function: {
     }
 }
 </pre></details>
-<details><summary style="cursor: pointer;"><kbd><strong>「 点击展开 查看所有规则 」（可 Ctrl+F 搜索规则名、域名等信息来寻找，规则顺序为：自定义、外置、内置）</strong></kbd></summary>
-<pre id="Autopage_customRules_all" style="overflow-y: scroll !important; overflow-x: hidden !important; height: 500px !important; word-break: break-word !important; white-space: pre-wrap !important;">
-</pre></details>
+<details><summary style="cursor: pointer;"><kbd><strong>「 点击展开 查看所有规则 」（可 Ctrl+F 搜索 pageUrl 查看当前网页所用规则，内置规则因格式无法列出）</strong></kbd></summary>
+<pre id="Autopage_customRules_all" style="overflow-y: scroll !important; overflow-x: hidden !important; height: 500px !important; word-break: break-word !important; white-space: pre-wrap !important;"> </pre></details>
 
 <textarea id="Autopage_customRules_textarea" style="min-width:95% !important; min-height:70% !important; display: block !important; margin: 10px 0 10px 0; white-space:nowrap !important; overflow:scroll !important; resize: auto !important; text-transform: initial !important;" placeholder="留空等于默认的 {}，请把规则插入 {} 之间">${customRules}</textarea>
 <button id="Autopage_customRules_save" style="margin-right: 20px !important;">保存并刷新</button><button id="Autopage_customRules_cancel">取消修改</button>
 </div>`
         document.documentElement.insertAdjacentHTML('beforeend', _html); // 插入元素
         document.documentElement.style.overflow = document.body.style.overflow = 'hidden'; // 避免网页本身滚动
-        getCSS('#Autopage_customRules_all').textContent = JSON.stringify(DBSite, null, '\t'); // 单独插入全部规则列表，避免被 insertAdjacentHTML 语义化 HTML 标签
+        getCSS('#Autopage_customRules_all').textContent = JSON.stringify(DBSite2, null, '\t'); // 单独插入全部规则列表，避免被 insertAdjacentHTML 语义化 HTML 标签
         // 点击事件
         getCSS('#Autopage_customRules_save').onclick = function () {
             customRules = getCSS('#Autopage_customRules_textarea').value;
