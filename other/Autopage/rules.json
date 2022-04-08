@@ -2736,6 +2736,32 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
 		}
 	},
+	"COCOMANGA 漫画": {
+		"host": "www.cocomanga.com",
+		"url": "if (fun.indexOF('.html')){if (!(fun.getCookie('mh_readmode') === '' || fun.getCookie('mh_readmode') === '3')) {document.cookie='mh_readmode=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; location.reload();}; return true;} else if (fun.indexOF(/\\/\\d+\\/$/)) {setTimeout(function(){if (document.querySelector('a.website-display-all')) document.querySelector('a.website-display-all').click();}, 300);}",
+		"style": ".mh_readend, .mh_footpager, .mh_readmode {display: none !important;}",
+		"iframe": true,
+		"pager": {
+			"type": 5,
+			"nextL": "//a[contains(@class, 'read_page_link') and contains(string(), '下一章')][not(contains(@href, 'javascript'))]",
+			"interval": 5000,
+			"scrollD": 2000
+		}
+	},
+	"COCOMANGA 漫画 - 分类页": {
+		"host": "www.cocomanga.com",
+		"url": "return (fun.lp() == '/show' || fun.lp() == '/search')",
+		"blank": 1,
+		"pager": {
+			"nextL": "js;return fun.getNextEP('.fed-page-info a.fed-btns-green+a[onclick]', 'page=', /page=\\d+/)",
+			"pageE": "ul.fed-list-info > li, dl.fed-deta-info",
+			"replaceE": ".fed-page-info",
+			"scrollD": 1000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [1,'a[data-original]','data-original'])"
+		}
+	},
 	"木马漫画 - 阅读页": {
 		"host": "www.omyschool.com",
 		"url": "/\\/article_detail\\//",
