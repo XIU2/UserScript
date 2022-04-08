@@ -5067,50 +5067,29 @@
 			"replaceE": ".paginator"
 		}
 	},
-	"Hentai Cosplays - 手机版 - 图片页": {
-		"host": ["/hentai-cosplays\\.com$/","/porn-images-xxx\\.com$/","/hentai-img\\.com$/"],
-		"url": "return (fun.indexOF('/image/') && fun.isMobile())",
-		"style": ".icon-good-thumbnail, .icon-bad-thumbnail {display: none !important;}",
-		"pager": {
-			"type": 3,
-			"nextL": "a.paginator_page[rel='next']",
-			"pageE": "#detail_list",
-			"replaceE": ".paginator_area"
-		}
-	},
 	"Hentai Cosplays - 图片页": {
 		"host": ["/hentai-cosplays\\.com$/","/porn-images-xxx\\.com$/","/hentai-img\\.com$/"],
 		"url": "/^\\/image\\//",
-		"style": ".icon-good-thumbnail, .icon-bad-thumbnail {display: none !important;}",
+		"style": ".icon-good-thumbnail, .icon-bad-thumbnail {display: none !important;} .icon-overlay img {min-height: 200px;}",
 		"pager": {
 			"type": 3,
-			"nextL": "id('paginator')//a[contains(text(), '>')]",
-			"pageE": ".icon-overlay",
-			"replaceE": "#paginator"
-		}
-	},
-	"Hentai Cosplays - 手机版 - 分类页": {
-		"host": ["/hentai-cosplays\\.com$/","/porn-images-xxx\\.com$/","/hentai-img\\.com$/"],
-		"url": "return (fun.isMobile())",
-		"blank": 3,
-		"pager": {
-			"type": 3,
-			"nextL": "a.paginator_page[rel='next']",
-			"pageE": "#page>#right_sidebar>#entry_list",
-			"replaceE": "#page>#page_nation"
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+			"nextL": "id('paginator')//a[contains(text(), '>')] | //a[@rel='next']",
+			"pageE": "#detail_list, #display_image_detail>.icon-overlay",
+			"replaceE": "#paginator, .paginator_area"
 		}
 	},
 	"Hentai Cosplays - 分类页": {
 		"host": ["/hentai-cosplays\\.com$/","/porn-images-xxx\\.com$/","/hentai-img\\.com$/"],
+		"url": "/^\\/./",
 		"blank": 3,
 		"pager": {
 			"type": 3,
-			"nextL": "a.nextpostslink",
-			"pageE": "#center>#display_area_image>#image-list",
-			"replaceE": ".wp-pagenavi"
+			"nextL": "a.nextpostslink, a.paginator_page[rel='next']",
+			"pageE": "#center>#display_area_image>#image-list, #page>#right_sidebar>#entry_list",
+			"replaceE": ".wp-pagenavi, #page>#page_nation"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
 	"绅士仓库": {
