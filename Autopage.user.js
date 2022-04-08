@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.6.8
+// @version      5.6.9
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -11,8 +11,6 @@
 // @match        *://*/*
 // @connect      userscript.xiu2.xyz
 // @connect      userscript.gh2233.ml
-// @connect      github-do.panbaidu.cn
-// @connect      github.do
 // @connect      raw.iqiq.io
 // @connect      hk1.monika.love
 // @connect      raw.fastgit.org
@@ -1490,7 +1488,6 @@ function: {
         if (typeof(GM_getValue('menu_ruleUpdateTime', '')) == 'string') update = true
 
         let urlArr = [//'https://userscript.gh2233.ml/other/Autopage/rules.json',
-                      //'https://github-do.panbaidu.cn/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
                       'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
                       'https://hk1.monika.love/XIU2/UserScript/master/other/Autopage/rules.json',
                       'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
@@ -1508,7 +1505,7 @@ function: {
                       'https://ghproxy.fsofso.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json']
 
         if (update) { // 手动更新（或安装后首次更新）
-            GM_notification({text: '🔄 更新外置翻页规则中，请勿操作网页...', timeout: 3000});
+            GM_notification({text: '🔄 更新外置翻页规则中，请勿操作网页...', timeout: 5000});
             getRulesUrl_(true);
         } else if (parseInt(+new Date()/1000) - GM_getValue('menu_ruleUpdateTime', 0) > 172800) { // 自动更新，距离上次检查更新超过 2 天，则立即更新规则
             getRulesUrl_();
@@ -1537,7 +1534,7 @@ function: {
                             if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
                             pausePageEvent(); // 左键双击网页空白处暂停翻页
 
-                            if (n) GM_notification({text: '✅ 已更新外置翻页规则！\n如果依然无法翻页，则说明还不支持当前网页，欢迎点击此处提交申请~', timeout: 5000, onclick: function(){window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});}});
+                            if (n) GM_notification({text: '✅ 已更新外置翻页规则！\n如果依然无法翻页，说明还不支持当前网页，欢迎点击此处提交申请~', timeout: 5000, onclick: function(){window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});}});
                         } else {
                             GM_notification({text: '❌ 为空！更新失败，请联系作者解决...', timeout: 5000});
                         }
@@ -3326,7 +3323,7 @@ function: {
         if (getCSS('#Autopage_customRules')) return
 
         let customRules = JSON.stringify(GM_getValue('menu_customRules', {}), null, '\t');
-        if (customRules == '{}') customRules = '{\n\t\n}'; // 引导用户插入位置
+        if (customRules == '{}') customRules = '{\n\t\n}'; // 引导用户插入规则的位置
         let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.95 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important; overflow: scroll !important; text-align: left !important;">
 <h3 style="font-size: 22px !important;"><strong># 自定义翻页规则（优先级最高，但前提是 "规则名" 不能重复）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
 <details><summary style="cursor: pointer;"><kbd><strong>「 点击展开 查看规则示例 」（为了避免需要的时候还要找，我干脆把常用规则都一股脑塞进去了）</strong></kbd></summary>
@@ -3392,15 +3389,15 @@ function: {
 }
 </pre></details>
 <details><summary style="cursor: pointer;"><kbd><strong>「 点击展开 查看所有规则 」（可 Ctrl+F 搜索规则名、域名等信息来寻找，规则顺序为：自定义、外置、内置）</strong></kbd></summary>
-<pre style="overflow: scroll !important;height: 500px !important;">
-${JSON.stringify(DBSite, null, '\t')}
+<pre id="Autopage_customRules_all" style="overflow-y: scroll !important; overflow-x: hidden !important; height: 500px !important; word-break: break-word !important; white-space: pre-wrap !important;">
 </pre></details>
 
 <textarea id="Autopage_customRules_textarea" style="min-width:95% !important; min-height:70% !important; display: block !important; margin: 10px 0 10px 0; white-space:nowrap !important; overflow:scroll !important; resize: auto !important; text-transform: initial !important;" placeholder="留空等于默认的 {}，请把规则插入 {} 之间">${customRules}</textarea>
 <button id="Autopage_customRules_save" style="margin-right: 20px !important;">保存并刷新</button><button id="Autopage_customRules_cancel">取消修改</button>
 </div>`
-        document.documentElement.insertAdjacentHTML('beforeend', _html);
-        document.documentElement.style.overflow = document.body.style.overflow = 'hidden';
+        document.documentElement.insertAdjacentHTML('beforeend', _html); // 插入元素
+        document.documentElement.style.overflow = document.body.style.overflow = 'hidden'; // 避免网页本身滚动
+        getCSS('#Autopage_customRules_all').textContent = JSON.stringify(DBSite, null, '\t'); // 单独插入全部规则列表，避免被 insertAdjacentHTML 语义化 HTML 标签
         // 点击事件
         getCSS('#Autopage_customRules_save').onclick = function () {
             customRules = getCSS('#Autopage_customRules_textarea').value;
