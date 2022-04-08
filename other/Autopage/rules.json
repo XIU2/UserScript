@@ -352,20 +352,20 @@
 			"replaceE": ".paginator"
 		}
 	},
-	"豆瓣 - 广播": {
+	"豆瓣 - 广播/日记": {
 		"host": "www.douban.com",
-		"url": "return (fun.indexOF(/^\\/people\\/.+\\/status/) && (!fun.indexOF('tab=','s') || fun.indexOF('tab=comment','s')))",
+		"url": "return ((fun.indexOF(/^\\/people\\/.+\\/status/) && (!fun.indexOF('tab=','s') || fun.indexOF('tab=comment','s')))  || (fun.indexOF(/^\\/note\\/\\d+\\//) && !fun.indexOF('type=','s')))",
 		"pager": {
 			"type": 6,
 			"nextL": "js; let a=fun.getCSS('a.next');if(a && a.href){return a.href.replace(/#.+$/,'')}",
-			"pageE": ".comment-list-wrapper, .list",
+			"pageE": ".comment-list-wrapper",
 			"replaceE": ".paginator",
 			"loadTime": 1000
 		}
 	},
-	"豆瓣 - 片单/标签/小组讨论精选/广播": {
+	"豆瓣 - 片单/标签/小组讨论精选/广播/日记": {
 		"host": "www.douban.com",
-		"url": "return (fun.indexOF(/^\\/(doulist|tag)\\//) || fun.lp() == '/group/explore' || (fun.indexOF(/^\\/people\\/.+\\/status/) && fun.indexOF('tab=','s') && !fun.indexOF('tab=collect','s')))",
+		"url": "return (fun.indexOF(/^\\/(doulist|tag)\\//) || fun.lp() == '/group/explore' || ((fun.indexOF(/^\\/people\\/.+\\/status/) && fun.indexOF('tab=','s') && !fun.indexOF('tab=collect','s')))  || (fun.indexOF(/^\\/note\\/\\d+\\//) && fun.indexOF('type=','s')))",
 		"pager": {
 			"nextL": "link[rel='next']",
 			"pageE": ".doulist-item, .article>.mod:not([id='doulist-info']), .channel-item, .list",
@@ -1008,6 +1008,77 @@
 			"nextL": "a.Next",
 			"pageE": "ul.DataList>li",
 			"replaceE": ".Pager"
+		}
+	},
+	"CADTutor - 列表页": {
+		"host": "www.cadtutor.net",
+		"url": "/\\/forum\\/forum\\//",
+		"pager": {
+			"nextL": "a[rel='next']",
+			"pageE": "ol.ipsDataList>li:not([data-rowid])~li",
+			"replaceE": "ul.ipsPagination",
+			"scrollD": 2000
+		}
+	},
+	"CADTutor - 帖子内": {
+		"host": "www.cadtutor.net",
+		"url": "/\\/forum\\/topic\\//",
+		"thread": true,
+		"pager": {
+			"nextL": "a[rel='next']",
+			"pageE": "#elPostFeed>form>*:not(input):not(.after-first-post)",
+			"replaceE": "ul.ipsPagination",
+			"scrollD": 2000
+		}
+	},
+	"CADTutor - 搜索页": {
+		"host": "www.cadtutor.net",
+		"url": "/\\/forum\\/search\\//",
+		"pager": {
+			"nextL": "a[rel='next']",
+			"pageE": "ol.ipsStream>li",
+			"replaceE": "ul.ipsPagination",
+			"scrollD": 2000
+		}
+	},
+	"TheSwamp - 列表页": {
+		"host": "www.theswamp.org",
+		"url": "/board=/",
+		"pager": {
+			"nextL": ".pagelinks>strong+a",
+			"pageE": "#messageindex tbody>tr:not([class])",
+			"replaceE": ".pagelinks",
+			"scrollD": 2000
+		}
+	},
+	"TheSwamp - 帖子内": {
+		"host": "www.theswamp.org",
+		"url": "/topic=/",
+		"thread": true,
+		"pager": {
+			"nextL": ".pagelinks>strong+a",
+			"pageE": "#forumposts form>*",
+			"replaceE": ".pagelinks",
+			"scrollD": 2000
+		}
+	},
+	"Ventoy 论坛": {
+		"host": "forums.ventoy.net",
+		"url": "/^\\/(forumdisplay|search)\\.php/",
+		"pager": {
+			"nextL": ".pagination_next",
+			"pageE": ".tborder>tbody>tr.inline_row",
+			"replaceE": ".pagination"
+		}
+	},
+	"Ventoy 论坛 - 帖子内": {
+		"host": "forums.ventoy.net",
+		"url": "/^\\/showthread\\.php/",
+		"thread": true,
+		"pager": {
+			"nextL": ".pagination:not(#breadcrumb_multipage_popup) .pagination_next",
+			"pageE": "#posts>*",
+			"replaceE": ".pagination:not(#breadcrumb_multipage_popup)"
 		}
 	},
 	"Pixiv - 分类页": {
@@ -2398,6 +2469,16 @@
 			"pageE": "div[class*='-item-list']>ul>li",
 			"replaceE": ".pagination",
 			"scrollD": 2000
+		}
+	},
+	"HDSay 高清乐园": {
+		"host": "www.hdsay.net",
+		"url": "/^\\/forum\\/plate/",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.current+a.item",
+			"pageE": "//tr[@class='row-split'][2]/following-sibling::tr",
+			"replaceE": ".hpaging"
 		}
 	},
 	"A4k 字幕网": {
@@ -4272,14 +4353,6 @@
 			"scrollD": 1000
 		}
 	},
-	"古诗文网": {
-		"host": ["www.gushiwen.cn","so.gushiwen.cn","m.gushiwen.cn"],
-		"pager": {
-			"nextL": "a.amore",
-			"pageE": ".left .sons:not([id]), .sonspic",
-			"replaceE": ".pagesright"
-		}
-	},
 	"彼岸图网": {
 		"host": "pic.netbian.com",
 		"style": "li.nextpage {display: none !important;} .alist>ul {height: auto !important;} .alist>ul>li {position: static !important; float: left !important; height: 550px !important;}",
@@ -4381,6 +4454,27 @@
 			"scrollD": 1800
 		}
 	},
+	"立创开源硬件平台": {
+		"host": "www.oshwhub.com",
+		"url": "/^\\/explore/",
+		"pager": {
+			"nextL": "a.current+a",
+			"pageE": ".each-project",
+			"replaceE": ".page",
+			"scriptT": 0,
+			"scrollD": 1200
+		}
+	},
+	"资本市场电子化信息披露平台": {
+		"host": "eid.csrc.gov.cn",
+		"url": "/\\/\\d+\\/index/",
+		"pager": {
+			"nextL": "js; if (fun.getCSS('li.on+li:not(.click)>a') == null) {return}; if (fun.indexOF('_f.html')) {fun.getCSS('#channelFilterForm').action = `index_${fun.getCSS('li.on+li:not(.click)>a').textContent}_f.html`; return fun.getNextF('#channelFilterForm');} else {return fun.getCSS('img[src$=\"location.png\"]~a:last-of-type').href.replace('.html',`_${fun.getCSS('li.on+li:not(.click)>a').textContent}.html`);}",
+			"pageE": "table>tbody>tr:not(:first-of-type)",
+			"replaceE": "ul.g-ul",
+			"scrollD": 1000
+		}
+	},
 	"二手车之家": {
 		"host": "www.che168.com",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/dealer/'))",
@@ -4410,6 +4504,14 @@
 			"scrollD": 2000
 		}
 	},
+	"古诗文网": {
+		"host": ["www.gushiwen.cn","so.gushiwen.cn","m.gushiwen.cn"],
+		"pager": {
+			"nextL": "a.amore",
+			"pageE": ".left .sons:not([id]), .sonspic",
+			"replaceE": ".pagesright"
+		}
+	},
 	"文档库": {
 		"host": "www.wendangku.net",
 		"url": "/\\/doc\\//",
@@ -4428,17 +4530,6 @@
 			"pageE": ".content>p",
 			"replaceE": ".ipage",
 			"scrollD": 3000
-		}
-	},
-	"立创开源硬件平台": {
-		"host": "www.oshwhub.com",
-		"url": "/^\\/explore/",
-		"pager": {
-			"nextL": "a.current+a",
-			"pageE": ".each-project",
-			"replaceE": ".page",
-			"scriptT": 0,
-			"scrollD": 1200
 		}
 	},
 	"如意了教育 - 学校": {
@@ -4473,16 +4564,6 @@
 			"scrollD": 1000
 		}
 	},
-	"资本市场电子化信息披露平台": {
-		"host": "eid.csrc.gov.cn",
-		"url": "/\\/\\d+\\/index/",
-		"pager": {
-			"nextL": "js; if (fun.getCSS('li.on+li:not(.click)>a') == null) {return}; if (fun.indexOF('_f.html')) {fun.getCSS('#channelFilterForm').action = `index_${fun.getCSS('li.on+li:not(.click)>a').textContent}_f.html`; return fun.getNextF('#channelFilterForm');} else {return fun.getCSS('img[src$=\"location.png\"]~a:last-of-type').href.replace('.html',`_${fun.getCSS('li.on+li:not(.click)>a').textContent}.html`);}",
-			"pageE": "table>tbody>tr:not(:first-of-type)",
-			"replaceE": "ul.g-ul",
-			"scrollD": 1000
-		}
-	},
 	"美团技术团队": {
 		"host": "tech.meituan.com",
 		"url": "/^\\/($|page|tags)/",
@@ -4509,77 +4590,6 @@
 			"nextL": ".next>a",
 			"pageE": ".cc-inner-page-frame>.grid",
 			"replaceE": ".pagination"
-		}
-	},
-	"CADTutor - 列表页": {
-		"host": "www.cadtutor.net",
-		"url": "/\\/forum\\/forum\\//",
-		"pager": {
-			"nextL": "a[rel='next']",
-			"pageE": "ol.ipsDataList>li:not([data-rowid])~li",
-			"replaceE": "ul.ipsPagination",
-			"scrollD": 2000
-		}
-	},
-	"CADTutor - 帖子内": {
-		"host": "www.cadtutor.net",
-		"url": "/\\/forum\\/topic\\//",
-		"thread": true,
-		"pager": {
-			"nextL": "a[rel='next']",
-			"pageE": "#elPostFeed>form>*:not(input):not(.after-first-post)",
-			"replaceE": "ul.ipsPagination",
-			"scrollD": 2000
-		}
-	},
-	"CADTutor - 搜索页": {
-		"host": "www.cadtutor.net",
-		"url": "/\\/forum\\/search\\//",
-		"pager": {
-			"nextL": "a[rel='next']",
-			"pageE": "ol.ipsStream>li",
-			"replaceE": "ul.ipsPagination",
-			"scrollD": 2000
-		}
-	},
-	"TheSwamp - 列表页": {
-		"host": "www.theswamp.org",
-		"url": "/board=/",
-		"pager": {
-			"nextL": ".pagelinks>strong+a",
-			"pageE": "#messageindex tbody>tr:not([class])",
-			"replaceE": ".pagelinks",
-			"scrollD": 2000
-		}
-	},
-	"TheSwamp - 帖子内": {
-		"host": "www.theswamp.org",
-		"url": "/topic=/",
-		"thread": true,
-		"pager": {
-			"nextL": ".pagelinks>strong+a",
-			"pageE": "#forumposts form>*",
-			"replaceE": ".pagelinks",
-			"scrollD": 2000
-		}
-	},
-	"Ventoy 论坛": {
-		"host": "forums.ventoy.net",
-		"url": "/^\\/(forumdisplay|search)\\.php/",
-		"pager": {
-			"nextL": ".pagination_next",
-			"pageE": ".tborder>tbody>tr.inline_row",
-			"replaceE": ".pagination"
-		}
-	},
-	"Ventoy 论坛 - 帖子内": {
-		"host": "forums.ventoy.net",
-		"url": "/^\\/showthread\\.php/",
-		"thread": true,
-		"pager": {
-			"nextL": ".pagination:not(#breadcrumb_multipage_popup) .pagination_next",
-			"pageE": "#posts>*",
-			"replaceE": ".pagination:not(#breadcrumb_multipage_popup)"
 		}
 	},
 	"学佛网": {
@@ -4954,6 +4964,7 @@
 		"host": ["e-hentai.org","exhentai.org"],
 		"url": "/^\\/g\\//",
 		"pager": {
+			"type": 3,
 			"nextL": "//table[@class='ptt']//a[text()='>']",
 			"pageE": "#gdt>div:not(.c)",
 			"replaceE": ".ptt, .ptb"
@@ -5038,8 +5049,7 @@
 			"type": 3,
 			"nextL": "a.paginator_page[rel='next']",
 			"pageE": "#detail_list",
-			"replaceE": ".paginator_area",
-			"scrollD": 1000
+			"replaceE": ".paginator_area"
 		}
 	},
 	"Hentai Cosplays - 图片页": {
@@ -5050,8 +5060,7 @@
 			"type": 3,
 			"nextL": "id('paginator')//a[contains(text(), '>')]",
 			"pageE": ".icon-overlay",
-			"replaceE": "#paginator",
-			"scrollD": 1000
+			"replaceE": "#paginator"
 		}
 	},
 	"Hentai Cosplays - 手机版 - 分类页": {
@@ -5062,8 +5071,7 @@
 			"type": 3,
 			"nextL": "a.paginator_page[rel='next']",
 			"pageE": "#page>#right_sidebar>#entry_list",
-			"replaceE": "#page>#page_nation",
-			"scrollD": 1000
+			"replaceE": "#page>#page_nation"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
@@ -5076,8 +5084,7 @@
 			"type": 3,
 			"nextL": "a.nextpostslink",
 			"pageE": "#center>#display_area_image>#image-list",
-			"replaceE": ".wp-pagenavi",
-			"scrollD": 1000
+			"replaceE": ".wp-pagenavi"
 		}
 	},
 	"绅士仓库": {
