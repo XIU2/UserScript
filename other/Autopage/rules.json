@@ -1315,7 +1315,7 @@
 			"scrollD": 2000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+			"bF": "pageE.forEach(function (one) {if (one.className === 'list' && one.dataset.w != undefined) {one.style.width = `${one.dataset.w}px`;}}); return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
 	"众图网": {
