@@ -1749,6 +1749,15 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"Modrinth": {
+		"host": "modrinth.com",
+		"url": "fun.isUrlC(); return (fun.lp() == '/mods')",
+		"pager": {
+			"nextL": "js; let n = fun.getCSS('.page-number-container:not(.page-number)+.page-number-container>button'), m = fun.getSearch('m')||'20'; if (n && n.innerText){return fun.getNextSP((parseInt(n.innerText)-1)*parseInt(m), 'o=', /o=\\d+/);}",
+			"pageE": ".project-card.card",
+			"replaceE": ".paginates"
+		}
+	},
 	"SpigotMC": {
 		"host": "www.spigotmc.org",
 		"url": "/\\/resources\\/(categories|authors)?/",
@@ -4984,6 +4993,36 @@
 			"nextL": "a.comic-show-content-nav-item-wrapper.arrow-right",
 			"pageE": "img#current-page-image",
 			"replaceE": ".comic-show-content-nav"
+		}
+	},
+	"禁漫天堂": {
+		"host": ["jmcomic.mobi","jmcomic1.mobi","18comic.vip","18comic.org"],
+		"url": "/^\\/photo\\//",
+		"style": "[data-group], div[data-page], .thumb-overlay-albums>*:not(.scramble-page) {display: none !important;}",
+		"pager": {
+			"nextL": "#next_series>a[href]",
+			"pageE": ".scramble-page",
+			"replaceE": ".menu-bolock-ul, #next_series",
+			"scriptT": 0,
+			"interval": 5000,
+			"scrollD": 1000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+		}
+	},
+	"禁漫天堂 - 分类页": {
+		"host": ["jmcomic.mobi","jmcomic1.mobi","18comic.vip","18comic.org"],
+		"url": "/^\\/(albums|search|blogs|videos|movies)/",
+		"style": ".row>[style='z-index: 0;'], .col-lg-3.col-md-3.col-sm-3.col-xs-6 {display: none !important;}",
+		"blank": 3,
+		"pager": {
+			"nextL": "#wrapper>.container>div:not(.row)>.pagination .prevnext",
+			"pageE": "#wrapper>.container>.row:not(:last-of-type):not(.visible-xs)",
+			"replaceE": "#wrapper>.container>div:not(.row)>.pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
 	"E-Hentai-g": {
