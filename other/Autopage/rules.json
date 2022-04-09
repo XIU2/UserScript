@@ -1081,6 +1081,16 @@
 			"replaceE": ".pagination:not(#breadcrumb_multipage_popup)"
 		}
 	},
+	"Microsoft Community - 帖子内": {
+		"host": "answers.microsoft.com",
+		"url": "/\\/forum\\/all\\//",
+		"pager": {
+			"nextL": "js;return fun.getNextEP('.pageNumberLayout.selectedPageNumber+span.pageNumberLayout>a', 'page=', /page=\\d+/)",
+			"pageE": ".thread-message",
+			"replaceE": ".pagingControl",
+			"scrollD": 2200
+		}
+	},
 	"Pixiv - 分类页": {
 		"host": "www.pixiv.net",
 		"url": "fun.isUrlC(); if (fun.isMobile()) {return false}; if (fun.lp() == '/') {fun.blank();} else if (fun.indexOF('/tags/')) {return true;} else if (fun.indexOF('/artworks/')) {setTimeout(function(){fun.getXpath('//button[contains(string(), \"查看全部\") or contains(string(), \"See all\") or contains(string(), \"すべて見る\") or contains(string(), \"모두 보기\")]').click();}, 3000)}",
