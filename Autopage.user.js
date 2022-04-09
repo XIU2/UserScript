@@ -87,7 +87,7 @@
         ['menu_rules', '更新外置翻页规则 (每天自动)', '更新外置翻页规则 (每天自动)', {}],
         ['menu_customRules', '自定义翻页规则', '自定义翻页规则', {}]
     ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, DBSite2, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname;
-    window.autoPage = {lp: ()=>location.pathname, indexOF: indexOF, isMobile: isMobile, isUrlC: isUrlC, blank: forceTarget, getAll: getAll, getOne: getOne, getAllXpath: getAllXpath, getXpath: getXpath, getAllCSS: getAllCSS, getCSS: getCSS, getNextE: getNextE, getNextEP: getNextEP, getNextEPN: getNextEPN, getNextUPN: getNextUPN, getNextUP: getNextUP, getNextF: getNextF, getCookie: getCookie, insStyle: insStyle, insScript: insScript, src_bF: src_bF, xs_bF: xs_bF}
+    window.autoPage = {lp: ()=>location.pathname, indexOF: indexOF, isMobile: isMobile, isUrlC: isUrlC, blank: forceTarget, getAll: getAll, getOne: getOne, getAllXpath: getAllXpath, getXpath: getXpath, getAllCSS: getAllCSS, getCSS: getCSS, getNextE: getNextE, getNextEP: getNextEP, getNextSP: getNextSP, getNextEPN: getNextEPN, getNextUPN: getNextUPN, getNextUP: getNextUP, getNextF: getNextF, getSearch: getSearch, getCookie: getCookie, insStyle: insStyle, insScript: insScript, src_bF: src_bF, xs_bF: xs_bF}
 
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
@@ -2974,6 +2974,22 @@ function: {
             url = location.origin + location.pathname + url;
         }
         return url
+    }
+    // 通用型获取下一页地址（直接给定页码，URL 替换 page= 参数）
+    function getNextSP(page, pf, reg) {
+        let url = '';
+        if (!page) return url
+        if (typeof page === 'number') page = page.toString()
+        if (location.search) {
+            if (indexOF(pf, 's')) {
+                url = location.search.replace(reg, pf + page);
+            } else {
+                url = location.search + '&' + pf + page;
+            }
+        } else {
+            url = '?' + pf + page;
+        }
+        return (location.origin + location.pathname + url)
     }
     // 通用型获取下一页地址（从 元素 中获取页码，URL 替换 pathname 路径）
     function getNextEPN(css, reg, a, b = '') {
