@@ -4849,6 +4849,18 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
 		}
 	},
+	"JavDove 番号鸽": {
+		"host": "/^(www\\.)?javdove/",
+		"url": "/\\/videos/",
+		"pager": {
+			"nextL": ".prevnext[rel='next']",
+			"pageE": ".row>.col-video",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+		}
+	},
 	"SupJav": {
 		"host": "supjav.com",
 		"url": "return (fun.indexOF('/category/') || fun.indexOF('/tag/') || fun.indexOF('/popular') || fun.indexOF('s=','s'))",
