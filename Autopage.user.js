@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.6.9
+// @version      5.7.0
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -86,6 +86,24 @@
         ['menu_history', '添加历史记录+修改地址/标题', '添加历史记录+修改地址/标题', true],
         ['menu_rules', '更新外置翻页规则 (每天自动)', '更新外置翻页规则 (每天自动)', {}],
         ['menu_customRules', '自定义翻页规则', '自定义翻页规则', {}]
+    ], urlArr = [
+        'https://userscript.gh2233.ml/other/Autopage/rules.json',
+        'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://hk1.monika.love/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
+        //'https://ghproxy.fsofso.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
+        'https://raw-gh.gcdn.mirr.one/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://cdn.staticaly.com/gh/XIU2/UserScript/master/other/Autopage/rules.json',
+        //'https://cdn.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
+        'https://gcore.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
+        'https://fastly.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json'
+    ], urlArr2 = [
+        'https://userscript.gh2233.ml/other/Autopage/rules.json',
+        'https://userscript.xiu2.xyz/other/Autopage/rules.json',
+        'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://hk1.monika.love/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json'
+        //'https://ghproxy.fsofso.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json'
     ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, DBSite2, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname;
     window.autoPage = {lp: ()=>location.pathname, indexOF: indexOF, isMobile: isMobile, isUrlC: isUrlC, blank: forceTarget, getAll: getAll, getOne: getOne, getAllXpath: getAllXpath, getXpath: getXpath, getAllCSS: getAllCSS, getCSS: getCSS, getNextE: getNextE, getNextEP: getNextEP, getNextSP: getNextSP, getNextEPN: getNextEPN, getNextUPN: getNextUPN, getNextUP: getNextUP, getNextF: getNextF, getSearch: getSearch, getCookie: getCookie, insStyle: insStyle, insScript: insScript, src_bF: src_bF, xs_bF: xs_bF}
 
@@ -1489,23 +1507,6 @@ function: {
         // 如果是原来的时间格式 或 刚安装脚本，则需要立即更新
         if (typeof(GM_getValue('menu_ruleUpdateTime', '')) == 'string') update = true
 
-        let urlArr = [//'https://userscript.gh2233.ml/other/Autopage/rules.json',
-                      'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
-                      'https://hk1.monika.love/XIU2/UserScript/master/other/Autopage/rules.json',
-                      'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
-                      'https://ghproxy.fsofso.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
-                      'https://raw-gh.gcdn.mirr.one/XIU2/UserScript/master/other/Autopage/rules.json',
-                      'https://cdn.staticaly.com/gh/XIU2/UserScript/master/other/Autopage/rules.json',
-                      //'https://cdn.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
-                      'https://gcore.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
-                      'https://fastly.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json'],
-            urlArr2 = [//'https://userscript.gh2233.ml/other/Autopage/rules.json',
-                      'https://userscript.xiu2.xyz/other/Autopage/rules.json',
-                      'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
-                      'https://hk1.monika.love/XIU2/UserScript/master/other/Autopage/rules.json',
-                      'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
-                      'https://ghproxy.fsofso.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json']
-
         if (update) { // 手动更新（或安装后首次更新）
             GM_notification({text: '🔄 更新外置翻页规则中，请勿操作网页...', timeout: 5000});
             getRulesUrl_(true);
@@ -1538,20 +1539,25 @@ function: {
 
                             if (n) GM_notification({text: '✅ 已更新外置翻页规则！\n如果依然无法翻页，说明还不支持当前网页，欢迎点击此处提交申请~', timeout: 5000, onclick: function(){window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});}});
                         } else {
-                            GM_notification({text: '❌ 为空！更新失败，请联系作者解决...', timeout: 5000});
+                            console.log('URL：' + url);
+                            GM_notification({text: '❌ 为空！更新失败，请再试几次...\n如果依然更新失败，请联系作者解决...', timeout: 5000});
+                            if (n) {urlArr2.splice(urlArr2.indexOf(url), 1)} else {urlArr.splice(urlArr.indexOf(url), 1)}
                         }
                     } catch (e) {
                         console.log('URL：' + url, e);
-                        GM_notification({text: '❌ 报错！更新失败，请联系作者解决...', timeout: 5000});
+                        GM_notification({text: '❌ 报错！更新失败，请再试几次...\n如果依然更新失败，请联系作者解决...', timeout: 5000});
+                        if (n) {urlArr2.splice(urlArr2.indexOf(url), 1)} else {urlArr.splice(urlArr.indexOf(url), 1)}
                     }
                 },
                 onerror: function (response) {
                     console.log('URL：' + url, response)
-                    GM_notification({text: '❌ 错误！更新失败，请几分钟后重试...', timeout: 5000});
+                    GM_notification({text: '❌ 错误！更新失败，请再试几次...\n如果依然更新失败，请联系作者解决...', timeout: 5000});
+                    if (n) {urlArr2.splice(urlArr2.indexOf(url), 1)} else {urlArr.splice(urlArr.indexOf(url), 1)}
                 },
                 ontimeout: function (response) {
                     console.log('URL：' + url, response)
-                    GM_notification({text: '❌ 超时！更新失败，请几分钟后重试...', timeout: 5000});
+                    GM_notification({text: '❌ 超时！更新失败，请再试几次...\n如果依然更新失败，请联系作者解决...', timeout: 5000});
+                    if (n) {urlArr2.splice(urlArr2.indexOf(url), 1)} else {urlArr.splice(urlArr.indexOf(url), 1)}
                 }
             })
         }
