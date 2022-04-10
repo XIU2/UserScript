@@ -1574,6 +1574,16 @@
 			"scrollD": 2000
 		}
 	},
+	"字客网": {
+		"host": "www.fontke.com",
+		"url": "return ((fun.indexOF('/list/') && fun.getCSS('.index-family') != null) || fun.indexOF('/search/'))",
+		"pager": {
+			"nextL": ".next>a",
+			"pageE": ".index-family ul:not(.page)>li:not(.head), script[src*='base.js'], .inform-list>ul>li",
+			"replaceE": ".page",
+			"scriptT": 2
+		}
+	},
 	"3DM - 分类页": {
 		"host": "www.3dmgame.com",
 		"url": "if (fun.getCSS('.Llist_b>div.lis')) return true",
@@ -4278,32 +4288,11 @@
     },
 	"GreasyFork": {
 		"host": "greasyfork.org",
-		"url": "return (fun.indexOF(/\\/scripts$/) || fun.indexOF('/scripts/by-site/'))",
+		"url": "return (fun.indexOF(/\\/(scripts|feedback)$/) || fun.indexOF(/\\/scripts\\/(by-site|libraries|code-search)/) || (fun.indexOF('/discussions') && !fun.indexOF(/\\/\\d+/)))",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next_page",
-			"pageE": "ol#browse-script-list>li",
-			"replaceE": ".pagination"
-		}
-	},
-	"GreasyFork - 反馈页": {
-		"host": "greasyfork.org",
-		"url": "return (fun.indexOF(/\\/feedback$/))",
-		"blank": 3,
-		"pager": {
-			"nextL": "a.next_page",
-			"pageE": ".script-discussion-list>div",
-			"replaceE": ".pagination",
-			"scrollD": 1800
-		}
-	},
-	"GreasyFork - 讨论页": {
-		"host": "greasyfork.org",
-		"url": "return (fun.indexOF('/discussions') && !fun.indexOF(/\\/\\d+/))",
-		"blank": 3,
-		"pager": {
-			"nextL": "a.next_page",
-			"pageE": ".discussion-list>div",
+			"pageE": "ol#browse-script-list>li, .script-discussion-list, .discussion-list>div",
 			"replaceE": ".pagination"
 		}
 	},
