@@ -5008,17 +5008,18 @@
 	"禁漫天堂": {
 		"host": ["jmcomic.mobi","jmcomic1.mobi","18comic.vip","18comic.org"],
 		"url": "/^\\/photo\\//",
-		"style": "[data-group], div[data-page], .thumb-overlay-albums>*:not(.scramble-page) {display: none !important;}",
+		"style": "[data-group], div[data-page], .thumb-overlay-albums>*:not(.scramble-page) {display: none !important;} #Comic_Top_Nav[style*='display: block'] {opacity: 0.3;}",
+		"history": true,
 		"pager": {
 			"nextL": "#next_series>a[href]",
 			"pageE": ".scramble-page",
 			"replaceE": ".menu-bolock-ul, #next_series",
 			"scriptT": 0,
 			"interval": 5000,
-			"scrollD": 1000
+			"scrollD": 2000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+			"aF": "setTimeout(function(){document.body.appendChild(document.createElement('script')).textContent = `var old_onImageLoaded = onImageLoaded; onImageLoaded = function(e){aid = parseInt(/photos\\\\/\\\\d+/.exec(e.src)[0].replace('photos/','')); old_onImageLoaded(e);}`}, 500)"
 		}
 	},
 	"禁漫天堂 - 分类页": {
