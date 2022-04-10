@@ -1516,6 +1516,7 @@ function: {
 
         function getRulesUrl_(n = false, url) {
             if (n) {url = urlArr2[Math.floor(Math.random()*urlArr2.length)];} else {url = urlArr[Math.floor(Math.random()*urlArr.length)];}
+            if (url === undefined) {GM_notification({text: '❌ 所有更新地址均以试过，已无可用地址，请联系作者解决...', timeout: 5000}); return}
             GM_xmlhttpRequest({
                 url: url,
                 method: 'GET',
