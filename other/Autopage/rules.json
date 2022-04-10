@@ -352,9 +352,9 @@
 			"replaceE": ".paginator"
 		}
 	},
-	"豆瓣 - 广播/日记": {
-		"host": "www.douban.com",
-		"url": "return ((fun.indexOF(/^\\/people\\/.+\\/status/) && (!fun.indexOF('tab=','s') || fun.indexOF('tab=comment','s')))  || (fun.indexOF(/^\\/note\\/\\d+\\//) && !fun.indexOF('type=','s')))",
+	"豆瓣 - 广播/日记/书评": {
+		"host": ["www.douban.com","book.douban.com"],
+		"url": "return ((fun.indexOF(/^\\/people\\/.+\\/status/) && (!fun.indexOF('tab=','s') || fun.indexOF('tab=comment','s')))  || (fun.indexOF(/^\\/note\\/\\d+\\//) && !fun.indexOF('type=','s')) || fun.indexOF(/^\\/review\\/\\d+\\//))",
 		"pager": {
 			"type": 6,
 			"nextL": "js; let a=fun.getCSS('a.next');if(a && a.href){return a.href.replace(/#.+$/,'')}",
