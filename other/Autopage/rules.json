@@ -5020,6 +5020,7 @@
 			"scrollD": 2000
 		},
 		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])",
 			"aF": "setTimeout(function(){document.body.appendChild(document.createElement('script')).textContent = `var old_onImageLoaded = onImageLoaded; onImageLoaded = function(e){aid = parseInt(/photos\\\\/\\\\d+/.exec(e.src)[0].replace('photos/','')); old_onImageLoaded(e);}`}, 500)"
 		}
 	},
