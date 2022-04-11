@@ -3350,8 +3350,8 @@ function: {
         let customRules = JSON.stringify(GM_getValue('menu_customRules', {}), null, '\t');
         if (customRules == '{}') customRules = '{\n\t\n}'; // 引导用户插入规则的位置
         let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.95 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important; overflow: scroll !important; text-align: left !important;">
-<h3 style="font-size: 22px !important;"><strong># 自定义翻页规则（优先级最高，但前提是 "规则名" 不能重复）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
-<details><summary style="cursor: pointer;"><kbd><strong>「 点击展开 查看规则示例 」（为了避免需要的时候还要找，我干脆把常用规则都一股脑塞进去了）</strong></kbd></summary>
+<h3 style="font-size: 22px !important;overflow: hidden !important;text-overflow: ellipsis !important;white-space: nowrap !important;"><strong># 自定义翻页规则（优先级最高，会覆盖同名的外置翻页规则）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
+<details><summary style="cursor: pointer;overflow: hidden !important;text-overflow: ellipsis !important;white-space: nowrap !important;"><kbd><strong>「 点击展开 查看规则示例 」（为了避免需要的时候还要找，我干脆把常用规则都一股脑塞进去了）</strong></kbd></summary>
 <ul style="list-style: disc !important; margin-left: 35px !important;">
 <li>翻页规则为 JSON 格式，因此大家需要多少<strong>了解一点 JSON 的基本格式</strong>（主要就是逗号、转义、双引号等）。</li>
 <li>具体的翻页规则说明、示例，为了方便更新及补充，我都写到 <strong><a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github</a></strong> 里面了。</li>
@@ -3413,7 +3413,7 @@ function: {
     }
 }
 </pre></details>
-<details><summary style="cursor: pointer;"><kbd><strong>「 点击展开 查看所有规则 」（可 Ctrl+F 搜索 pageUrl 查看当前网页所用规则，内置规则因格式无法列出）</strong></kbd></summary>
+<details><summary style="cursor: pointer;overflow: hidden !important;text-overflow: ellipsis !important;white-space: nowrap !important;"><kbd><strong>「 点击展开 查看所有规则 」（可按 Ctrl+F 搜索 pageUrl 查看当前网页规则，内置规则无法列出）</strong></kbd></summary>
 <pre id="Autopage_customRules_all" style="overflow-y: scroll !important; overflow-x: hidden !important; height: 500px !important; word-break: break-word !important; white-space: pre-wrap !important;"> </pre></details>
 
 <textarea id="Autopage_customRules_textarea" style="min-width:95% !important; min-height:70% !important; display: block !important; margin: 10px 0 10px 0; white-space:nowrap !important; overflow:scroll !important; resize: auto !important; text-transform: initial !important;" placeholder="留空等于默认的 {}，请把规则插入 {} 之间">${customRules}</textarea>
@@ -3422,6 +3422,8 @@ function: {
         document.documentElement.insertAdjacentHTML('beforeend', _html); // 插入元素
         document.documentElement.style.overflow = document.body.style.overflow = 'hidden'; // 避免网页本身滚动
         getCSS('#Autopage_customRules_all').textContent = JSON.stringify(DBSite2, null, '\t'); // 单独插入全部规则列表，避免被 insertAdjacentHTML 语义化 HTML 标签
+        //let b=Object.entries(DBSite2)
+        //for (var i = 0; i < b.length; i++) {console.log(b[i][0], b[i][1].host);}
         // 点击事件
         getCSS('#Autopage_customRules_save').onclick = function () {
             customRules = getCSS('#Autopage_customRules_textarea').value;
