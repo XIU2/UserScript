@@ -4566,36 +4566,13 @@
 			"scrollD": 3000
 		}
 	},
-	"如意了教育 - 学校": {
+	"如意了教育 - 学校/数据/试卷": {
 		"host": "www.ruyile.com",
-		"url": "return (fun.lp() == '/xuexiao/')",
+		"url": "/^\\/(xuexiao|data|shijuan)\\/($|\\?|p)/",
 		"pager": {
-			"nextL": "//div[@class='fy']/a[contains(text(), '下一页')]",
-			"pageE": ".xxlb>.sk",
-			"replaceE": ".fy",
-			"scrollD": 1000
-		}
-	},
-	"如意了教育 - 数据": {
-		"host": "www.ruyile.com",
-		"url": "return (fun.lp() == '/data/')",
-		"pager": {
-			"nextL": "//div[@class='fy']/a[contains(text(), '下一页')]",
-			"pageE": ".m1_z>.lbk",
-			"insertP": [".page",1],
-			"replaceE": ".fy",
-			"scrollD": 1000
-		}
-	},
-	"如意了教育 - 试卷": {
-		"host": "www.ruyile.com",
-		"url": "return (fun.lp() == '/shijuan/')",
-		"pager": {
-			"nextL": "//div[@class='fy']/a[contains(text(), '下一页')]",
-			"pageE": ".m1_z>.m2_lb",
-			"insertP": [".page",1],
-			"replaceE": ".fy",
-			"scrollD": 1000
+			"nextL": ".fy>strong+a",
+			"pageE": ".xxlb>.sk, .m1_z>.lbk, .m1_z>.m2_lb",
+			"replaceE": ".fy"
 		}
 	},
 	"美团技术团队": {
@@ -4631,8 +4608,7 @@
 		"pager": {
 			"nextL": "//font/a[text()='下页']",
 			"pageE": "#AutoNumber1>tbody>tr",
-			"replaceE": "//font[./a[text()='下页']]",
-			"scrollD": 1000
+			"replaceE": "//font[./a[text()='下页']]"
 		}
 	},
 	"佛弟子文库": {
@@ -4640,8 +4616,7 @@
 		"pager": {
 			"nextL": "a.current+a",
 			"pageE": "div.wrap>a[href$='.html']",
-			"replaceE": ".page",
-			"scrollD": 1000
+			"replaceE": ".page"
 		}
 	},
 	"东方资讯": {
@@ -4909,21 +4884,11 @@
 	},
 	"JAV Library": {
 		"host": ["www.javlib.com","www.javlibrary.com","www.o58c.com"],
-		"url": "/\\/vl_/",
+		"url": "/\\/(vl_|public)/",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
-			"pageE": ".video",
-			"replaceE": ".page_selector"
-		}
-	},
-	"JAV Library - 论坛": {
-		"host": ["www.javlib.com","www.javlibrary.com","www.o58c.com"],
-		"url": "/\\/public/",
-		"blank": 3,
-		"pager": {
-			"nextL": "a.next",
-			"pageE": "table.pubgroup>tbody>tr:not(#header), table.post",
+			"pageE": ".video, table.pubgroup>tbody>tr:not(#header), table.post",
 			"replaceE": ".page_selector"
 		}
 	},
@@ -5049,6 +5014,32 @@
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+		}
+	},
+	"177 漫画/xxiav": {
+		"host": ["www.177picyy.com","www.xxiav.com"],
+		"url": "/\\d+\\.html/",
+		"pager": {
+			"nextL": "//div[@class='page-links']/a[./span[./i[@class='be be-arrowright']]]",
+			"pageE": ".single-content>p",
+			"replaceE": ".page-links",
+			"scrollD": 3000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-lazy-src]','data-lazy-src'])"
+		}
+	},
+	"18 禁漫": {
+		"host": "www.18mh.cc",
+		"url": "/^\\/index-look/",
+		"style": ".e img {display: block; margin: 0 auto;}",
+		"pager": {
+			"nextL": "//div[@class='c']/a[text()='下一頁' or text()='下一章'][not(@class='n fanye')]",
+			"pageE": ".e>img:not([style='display:none;'])",
+			"replaceE": ".c, .b"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
 		}
 	},
 	"E-Hentai-g": {
@@ -5190,75 +5181,35 @@
 			"replaceE": ".pagination"
 		}
 	},
-	"美女推 - 图片页": {
+	"美女推": {
 		"host": "mvtui.com",
-		"url": "/\\.html/",
+		"url": "/^\\/./",
 		"pager": {
-			"nextL": ".article-paging span.current+a",
-			"pageE": ".article-content>p",
-			"replaceE": ".article-paging",
-			"scrollD": 3000
-		}
-	},
-	"美女推 - 分类页": {
-		"host": "mvtui.com",
-		"url": "/^\\/.+/",
-		"pager": {
-			"nextL": "li.next-page a",
-			"pageE": "#posts>div",
-			"replaceE": ".pagination"
+			"nextL": ".article-paging span.current+a, li.next-page a",
+			"pageE": ".article-content>p, #posts",
+			"replaceE": ".article-paging, .pagination"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
 		}
 	},
-	"秀人集 - 图片页": {
+	"秀人集": {
 		"host": "/\\.xiuren[a-z]+\\./",
-		"url": "/\\.html/",
+		"url": "return (fun.lp() != '/' && !fun.indexOF('/search/'))",
 		"pager": {
-			"nextL": "//div[@class='page']/a[text()='下页']",
-			"pageE": "div.content>p>*",
+			"nextL": ".current+a",
+			"pageE": ".content>p, .update_area li.i_list",
 			"replaceE": ".page"
 		}
 	},
-	"秀人集 - 搜索页": {
-		"host": "/\\.xiuren[a-z]+\\./",
-		"url": "/search/",
-		"pager": {
-			"nextL": ".page>a.current+a",
-			"pageE": ".node>*",
-			"replaceE": ".page",
-			"scrollD": 700
-		}
-	},
-	"秀人集 - 分类页": {
-		"host": "/\\.xiuren[a-z]+\\./",
-		"url": "/^\\/.+/",
-		"pager": {
-			"nextL": "//div[@class='page']/a[text()='下页']",
-			"pageE": "li.i_list",
-			"replaceE": ".page",
-			"scrollD": 1000
-		}
-	},
-	"极品性感美女 - 图片页": {
-		"host": "www.jpxgyw.net",
-		"url": "/\\.html/",
-		"pager": {
-			"nextL": ".pagination a.current+a",
-			"pageE": ".article-content img",
-			"replaceE": ".pagination",
-			"interval": 500,
-			"scrollD": 2000
-		}
-	},
-	"极品性感美女 - 分类页": {
+	"极品性感美女": {
 		"host": "www.jpxgyw.net",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/search/'))",
 		"pager": {
-			"nextL": ".pagination a.current+a",
-			"pageE": ".related_posts>ul",
-			"replaceE": ".pagination"
+			"nextL": ".current+a",
+			"pageE": ".article-content>p, body.home .related_posts>ul",
+			"replaceE": ".pagination",
+			"scrollD": 2000
 		}
 	},
 	"mm.tvv.tw": {
@@ -5273,28 +5224,17 @@
 		}
 	},
 	"mm131": {
-		"host": "www.mmm131.com",
-		"url": "/\\.html/",
+		"host": ["www.mmm131.com","m.mmm131.com"],
+		"url": "return (fun.lp() != '/')",
 		"pager": {
-			"nextL": "//div[@class='content-page']/a[contains(text(), '下一页')]",
-			"pageE": ".content-pic img",
-			"replaceE": ".content-page",
+			"nextL": ".page_now+a, .paging>a:not(.rw), #xbtn",
+			"pageE": ".content-pic, dl.list-left>dd:not([class='page']), article:not([id])>.single-post-content img, #content>article[id]",
+			"replaceE": ".content-page, .page, .paging, #webpage",
 			"scrollD": 2000
-		}
-	},
-	"mm131_list": {
-		"host": "www.mmm131.com",
-		"url": "/^\\/.+/",
-		"pager": {
-			"nextL": "//dd[@class='page']/a[contains(text(), '下一页')]",
-			"pageE": "dl.list-left>dd:not([class='page'])",
-			"replaceE": ".page",
-			"scrollD": 1000
 		}
 	},
 	"mm131_m": {
 		"host": "m.mmm131.com",
-		"url": "return (fun.lp() == '/')",
 		"style": ".bannert, .bannerb, bannert_ios, .bannerb_ios {display: none !important;}",
 		"pager": {
 			"type": 2,
@@ -5303,240 +5243,93 @@
 			"scrollD": 2000
 		}
 	},
-	"mm131_m_": {
-		"host": "m.mmm131.com",
-		"url": "/\\.html/",
-		"style": ".bannert, .bannerb, bannert_ios, .bannerb_ios {display: none !important;}",
-		"pager": {
-			"nextL": "//div[@class='paging']/a[text()='下一张' or text()='下一页']",
-			"pageE": ".post-content img",
-			"replaceE": ".paging",
-			"scrollD": 2000
-		}
-	},
-	"mm131_m_list": {
-		"host": "m.mmm131.com",
-		"style": ".bannert, .bannerb, bannert_ios, .bannerb_ios {display: none !important;}",
-		"pager": {
-			"nextL": "#xbtn",
-			"pageE": "#content>article",
-			"replaceE": "#webpage",
-			"scrollD": 2000
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-img]','data-img'])"
-		}
-	},
-	"mrcong": {
+	"MrCong": {
 		"host": "mrcong.com",
-		"url": "return (fun.lp() != '/' && !fun.indexOF('/tag/'))",
 		"pager": {
-			"nextL": ".post-page-numbers.current+a.post-page-numbers",
-			"pageE": "#fukie2>p>img",
-			"replaceE": ".page-link",
+			"nextL": ".current+a",
+			"pageE": "#fukie2>p>img, article.item-list",
+			"replaceE": ".page-link, .pagination",
 			"scrollD": 3000
-		}
-	},
-	"mrcong_list": {
-		"host": "mrcong.com",
-		"pager": {
-			"type": 3,
-			"nextL": ".current+a.page",
-			"pageE": "article.item-list",
-			"scrollE": ".pagination",
-			"replaceE": ".pagination",
-			"scrollD": 2000
 		}
 	},
 	"buondua": {
 		"host": "buondua.com",
-		"url": "/-photos-\\d+/",
 		"pager": {
 			"type": 3,
-			"nextL": "//nav[@class='pagination']//span[./a[contains(@class, 'is-current')]]/following-sibling::span[1]/a",
-			"pageE": ".article-fulltext>p",
-			"replaceE": "nav.pagination",
-			"scrollE": ".bottom-articles"
+			"nextL": "//a[@class='pagination-next']|//a[@class='pagination-link is-current']/parent::span/following-sibling::span[1]/a",
+			"pageE": ".article-fulltext, .main-body>.blog.columns",
+			"replaceE": ".pagination",
+			"scrollE": ".pagination[role='navigation'], .article-fulltext~.pagination"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
 		}
 	},
-	"buondua_list": {
-		"host": "buondua.com",
-		"pager": {
-			"type": 3,
-			"nextL": ".pagination-next",
-			"pageE": ".items-row.column, .collection-item.column",
-			"replaceE": "nav.pagination"
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
-		}
-	},
-	"宅男女神 - 图片页": {
+	"宅男女神": {
 		"host": "www.fnvshen.com",
-		"url": "/^\\/g\\//",
+		"url": "/^\\/(g|gallery|tag)\\//",
 		"pager": {
-			"nextL": "#pages>span +a:not(.a1)",
-			"pageE": "#hgallery>img",
-			"replaceE": "#pages"
-		}
-	},
-	"宅男女神 - 分类页": {
-		"host": "www.fnvshen.com",
-		"url": "/^\\/gallery|tag\\//",
-		"style": ".yalayi_box {display: none !important; margin: -4px 0 !important;}",
-		"pager": {
-			"nextL": "//div[@class='pagesYY']//a[contains(text(), '下一页')]",
-			"pageE": "#listdiv>ul>li",
-			"replaceE": ".pagesYY",
-			"scrollD": 1000
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
-		}
-	},
-	"宅男女神 - 文章页": {
-		"host": "www.fnvshen.com",
-		"url": "/^/article/\\d+\\//",
-		"pager": {
-			"nextL": ".pagesYY a.cur+a",
-			"pageE": "#articleDiv",
-			"insertP": ["#articleDiv",6],
-			"replaceE": ".pagesYY",
-			"scrollD": 1000
-		}
-	},
-	"宅男女神 - 文章分类页": {
-		"host": "www.fnvshen.com",
-		"url": "/^/article//",
-		"pager": {
-			"nextL": "//div[@class='pagesYY']//a[contains(text(), '下一页')]",
-			"pageE": "li.other_girlli",
-			"replaceE": ".pagesYY",
-			"scrollD": 1000
+			"nextL": "#pages>span +a:not(.a1), a.cur+a",
+			"pageE": "#hgallery>img, #listdiv>ul>li",
+			"replaceE": "#pages, .pagesYY"
 		}
 	},
 	"爱女神 - 图片页": {
 		"host": "www.99nvshen.com",
-		"url": "/^\\/gallery\\//",
+		"url": "/^\\/(gallery|galleryList|modelList)\\//",
 		"pager": {
-			"nextL": "ul.pagination a[aria-label='Next']",
-			"pageE": "a.gallery-detail-img",
-			"replaceE": "ul.pagination",
-			"interval": 1500,
-			"scrollD": 2500
-		}
-	},
-	"爱女神 - 分类页": {
-		"host": "www.99nvshen.com",
-		"url": "/^\\/galleryList|modelList\\//",
-		"pager": {
-			"nextL": "ul.pagination a[aria-label='Next']",
-			"pageE": ".book-list>div.col-sm-4",
-			"replaceE": "ul.pagination"
-		}
-	},
-	"秀人美女 - 图片页": {
-		"host": "www.xrmn5.cc",
-		"url": "/\\d+\\.html/",
-		"pager": {
-			"nextL": "//div[contains(@class, 'page')]//a[contains(text(), '下页')]",
-			"pageE": ".content_left>p>img",
-			"replaceE": ".page",
-			"scrollD": 3000
-		}
-	},
-	"秀人美女 - 分类页": {
-		"host": "www.xrmn5.cc",
-		"url": "/^\\/.+/",
-		"pager": {
-			"nextL": "//div[contains(@class, 'page')]//a[contains(text(), '下页')]",
-			"pageE": "ul.update_area_lists>li",
-			"replaceE": ".page",
-			"scrollD": 2000
-		}
-	},
-	"精品美女吧 - 图片页": {
-		"host": "www.jpmn8.com",
-		"url": "/\\d+\\.html/",
-		"style": "img[onload] {min-height: 500px;}",
-		"pager": {
-			"nextL": "//div[@class='pagination1']//a[text()='下一页']",
-			"pageE": "img[onload]",
-			"replaceE": ".pagination1",
-			"scrollD": 3000
-		}
-	},
-	"精品美女吧 - 分类页": {
-		"host": "www.jpmn8.com",
-		"url": "/^\\/.+/",
-		"pager": {
-			"nextL": "//div[@class='pagination1']//a[text()='下一页']",
-			"pageE": "article.excerpt",
-			"replaceE": ".pagination1"
-		}
-	},
-	"ku66": {
-		"host": "www.ku66.net",
-		"url": "/\\d+\\.html/",
-		"style": ".content img {min-height: 500px;}",
-		"pager": {
-			"nextL": "//div[@class='NewPages']//a[text()='下一页']",
-			"pageE": ".content>img",
-			"replaceE": ".NewPages",
-			"scrollD": 4000
-		}
-	},
-	"ku66_list": {
-		"host": "www.ku66.net",
-		"url": "/^\\/.+/",
-		"pager": {
-			"nextL": "//div[@class='NewPages']//a[text()='下一页']",
-			"pageE": ".TypeList>ul>li",
-			"replaceE": ".NewPages",
+			"type": 3,
+			"nextL": "a[aria-label='Next']",
+			"pageE": "//nav[@class='pagination-box']/preceding-sibling::div[1][@class='book-list']",
+			"replaceE": ".pagination",
 			"scrollD": 1000
 		}
 	},
-	"ku137": {
-		"host": "www.ku137.net",
-		"url": "/\\d+\\.html/",
-		"style": ".Title9, .dibu1, .dibu2 {display: none !important;} .content img {min-height: 500px;}",
+	"秀人美女": {
+		"host": "www.xrmn5.cc",
+		"url": "/(^\\/.)|(\\d+\\.html$)/",
 		"pager": {
-			"nextL": "//div[@class='page']/a[text()='下一页']",
-			"pageE": ".content>img",
+			"type": 3,
+			"nextL": "a.current+a",
+			"pageE": ".content_left>p, .update_area ul.update_area_lists>li",
 			"replaceE": ".page",
-			"scrollD": 3000
+			"scrollD": 1000
 		}
 	},
-	"ku137_list": {
-		"host": "www.ku137.net",
-		"url": "/^\\/.+/",
+	"精品美女吧": {
+		"host": "www.jpmn8.com",
+		"url": "/(^\\/.)|(\\d+\\.html$)/",
+		"style": "img[onload] {min-height: 500px;}",
 		"pager": {
-			"nextL": "//div[@class='page']/a[text()='下一页']",
-			"pageE": ".m-list>ul>li",
-			"replaceE": ".page"
+			"type": 3,
+			"nextL": ".current+a",
+			"pageE": "img[onload], article.excerpt",
+			"replaceE": ".pagination1",
+			"scrollD": 1000
+		}
+	},
+	"ku66": {
+		"host": ["www.ku66.net","www.ku138.cc"],
+		"url": "/(^\\/.)|(\\d+\\.html$)/",
+		"style": ".content img {min-height: 500px;} .Title9, .dibu1, .dibu2 {display: none !important;}",
+		"pager": {
+			"type": 3,
+			"nextL": ".thisclass+li>a, .this-page+a:not(.no-page)",
+			"pageE": ".content, .TypeList, .m-list.ml1",
+			"replaceE": ".NewPages, .page",
+			"scrollD": 1000
 		}
 	},
 	"kingdom": {
 		"host": "www.kingdom-en.com",
-		"url": "/\\d+\\.html/",
+		"url": "/(^\\/.)|(\\d+\\.html$)/",
 		"style": ".pic_center img {min-height: 300px;}",
 		"pager": {
-			"nextL": "//div[@class='pages2' or @class='article_page']//a[text()='下一页']",
-			"pageE": ".pic_center img",
-			"replaceE": ".pages2, .article_page",
-			"scrollD": 3000
-		}
-	},
-	"kingdom_list": {
-		"host": "www.kingdom-en.com",
-		"url": "/^\\/.+/",
-		"pager": {
-			"nextL": "a.page_next",
-			"pageE": ".channel_list3>ul",
-			"replaceE": ".pages"
+			"type": 3,
+			"nextL": ".page_nowindex+a, a.page_next",
+			"pageE": ".pic_center, .channel_list3",
+			"replaceE": ".pages2, .article_page, .pages",
+			"scrollD": 1000
 		}
 	},
 	"kissgoddess": {
@@ -5563,60 +5356,24 @@
 			"replaceE": ".bb ul"
 		}
 	},
-	"爱美女 - 图片页": {
-		"host": "www.2meinv.com",
-		"url": "/^\\/article-/",
+	"爱美女": {
+		"host": ["www.2meinv.com","wap.2meinv.com"],
 		"pager": {
-			"nextL": "//div[@class='page-show']/a[text()='下一页']",
-			"pageE": ".pp.hh img",
-			"replaceE": ".page-show"
-		}
-	},
-	"爱美女 - 分类页": {
-		"host": "www.2meinv.com",
-		"pager": {
-			"nextL": "//div[@class='page-show']/a[text()='下一页']",
-			"pageE": "ul.detail-list>li",
-			"replaceE": ".page-show"
-		}
-	},
-	"爱美女 - 手机版 - 图片页": {
-		"host": "wap.2meinv.com",
-		"url": "/^\\/article-/",
-		"pager": {
-			"nextL": "//div[contains(@class,'article-page')]/a[text()='下一页']",
-			"pageE": ".arcmain li",
-			"replaceE": ".article-page"
-		}
-	},
-	"爱美女 - 手机版 - 分类页": {
-		"host": "wap.2meinv.com",
-		"pager": {
-			"nextL": "//div[contains(@class,'article-page')]/a[text()='下一页']",
-			"pageE": "#listcon li",
-			"replaceE": ".article-page"
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
-		}
-	},
-	"娱乐吧 - 手机版 - 图片页": {
-		"host": "m.yuleba.org",
-		"url": "/^\\/a\\//",
-		"pager": {
-			"nextL": "//div[@class='paging']/a[text()='下一页']",
-			"pageE": ".a_img>p",
-			"replaceE": ".paging",
-			"scrollD": 4000
+			"nextL": "//div[@class='page-show' or contains(@class,'article-page')]/a[text()='下一页']",
+			"pageE": ".pp.hh img, ul.detail-list, .arcmain li, #listcon>ul",
+			"replaceE": ".page-show, .article-page"
 		}
 	},
 	"娱乐吧": {
 		"host": ["www.yuleba.org","m.yuleba.org"],
 		"url": "/^\\/a|b\\//",
+		"style": ".b_img>.paging {float: left;}",
 		"pager": {
+			"type": 3,
 			"nextL": "//div[@class='paging']/a[text()='下一页']",
-			"pageE": ".b_img>ul, .picture>p",
-			"replaceE": ".paging"
+			"pageE": ".b_img:not(:nth-child(7))>ul, .picture>p, .a_img>p",
+			"replaceE": ".paging",
+			"scrollD": 1000
 		}
 	},
 	"凸凹吧/撸女吧": {
@@ -5641,49 +5398,14 @@
 		}
 	},
 	"仙女图": {
-		"host": "www.xiannvtu.com",
-		"url": "/\\/v\\//",
+		"host": ["www.xiannvtu.com","m.xiannvtu.com"],
+		"url": "/^\\/v\\//",
 		"pager": {
-			"nextL": "//div[@class='page']//a[text()='下一页']",
-			"pageE": ".picbox img",
-			"replaceE": ".page",
-			"scrollD": 2000
-		}
-	},
-	"仙女图 - 手机版": {
-		"host": "m.xiannvtu.com",
-		"url": "/\\/v\\//",
-		"pager": {
-			"nextL": "//div[@class='fenye']//a[text()='下一页']",
-			"pageE": "#content>.post>.post-content img",
-			"replaceE": ".fenye",
-			"scrollD": 3500
-		}
-	},
-	"177 漫画/xxiav": {
-		"host": ["www.177picyy.com","www.xxiav.com"],
-		"url": "/\\d+\\.html/",
-		"pager": {
-			"nextL": "//div[@class='page-links']/a[./span[./i[@class='be be-arrowright']]]",
-			"pageE": ".single-content>p",
-			"replaceE": ".page-links",
-			"scrollD": 3000
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-lazy-src]','data-lazy-src'])"
-		}
-	},
-	"18 禁漫": {
-		"host": "www.18mh.cc",
-		"url": "/^\\/index-look/",
-		"style": ".e img {display: block; margin: 0 auto;}",
-		"pager": {
-			"nextL": "//div[@class='c']/a[text()='下一頁' or text()='下一章'][not(@class='n fanye')]",
-			"pageE": ".e>img:not([style='display:none;'])",
-			"replaceE": ".c, .b"
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
+			"type": 3,
+			"nextL": "//div[@class='page' or @class='fenye']//a[text()='下一页']",
+			"pageE": ".picbox img, #content>.post>.post-content img",
+			"replaceE": ".page, .fenye",
+			"scrollD": 1000
 		}
 	},
 	"ROSIMM 写真": {
