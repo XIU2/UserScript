@@ -3249,7 +3249,7 @@
 		}
 	},
 	"MacWK": {
-		"host": "www.macwk.com",
+		"host": ["macwk.com","www.macwk.com"],
 		"url": "fun.isUrlC(); return (fun.indexOF(/^\\/(soft|article)\\/.+\\/p\\d/))",
 		"style": ".app-content-bottom {display: none !important;}",
 		"history": true,
