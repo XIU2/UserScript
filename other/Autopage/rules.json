@@ -4861,6 +4861,19 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
+	"HuangboAV": {
+		"host": "huangboav.com",
+		"url": "return (fun.indexOF(/^\\/(category|tag)\\//) || fun.indexOF('s=','s'))",
+		"style": "img[data-src] {opacity: 1 !important;}",
+		"pager": {
+			"nextL": "//a[@class='current']/parent::li/following-sibling::li[1]/a",
+			"pageE": ".page-header~div:not(.pagination)",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+		}
+	},
 	"SupJav": {
 		"host": "supjav.com",
 		"url": "return (fun.indexOF('/category/') || fun.indexOF('/tag/') || fun.indexOF('/popular') || fun.indexOF('s=','s'))",
