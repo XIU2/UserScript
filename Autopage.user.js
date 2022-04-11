@@ -256,7 +256,7 @@
         } else if (getAllCSS('.load-more, .loadmore, #load-more, #loadmore, .show_more').length === 1) {
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 1`); return 8;
 
-        } else if (getAllXpath('//*[@onclick][text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]').length === 1) {
+        } else if (getAllXpath('//*[text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]').length === 1) {
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 2`); return 9;
 
         } else if (getCSS('link[href*="/wp-content/" i], script[src*="/wp-content/" i]')) {
@@ -314,7 +314,7 @@
                 case 8: // < 部分自带 自动无缝翻页 的网站 1 >
                     DBSite.loadmore.url('.load-more, .loadmore, #load-more, #loadmore, .show_more'); break;
                 case 9: // < 部分自带 自动无缝翻页 的网站 2 >
-                    DBSite.loadmore.url('//*[@onclick][text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]'); break;
+                    DBSite.loadmore.url('//*[text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]'); break;
                 case 100: // < 部分使用 WordPress 的网站 (a.next) >
                     DBSite.wp_article.url('a.next, a.next-page'); break;
                 case 101: // < 部分使用 WordPress 的网站 (a[rel="next"]) >
