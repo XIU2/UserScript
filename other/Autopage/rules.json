@@ -4827,6 +4827,7 @@
 	"JavDove 番号鸽": {
 		"host": "/^(www\\.)?javdove/",
 		"url": "/\\/videos/",
+		"blank": 3,
 		"pager": {
 			"nextL": ".prevnext[rel='next']",
 			"pageE": ".row>.col-video",
@@ -4838,11 +4839,12 @@
 	},
 	"HuangboAV": {
 		"host": "huangboav.com",
-		"url": "return (fun.indexOF(/^\\/(category|tag)\\//) || fun.indexOF('s=','s'))",
+		"url": "return (fun.indexOF(/^\\/(category|tag)\\//) || location.search != '')",
 		"style": "img[data-src] {opacity: 1 !important;}",
+		"blank": 3,
 		"pager": {
 			"nextL": "//a[@class='current']/parent::li/following-sibling::li[1]/a",
-			"pageE": ".page-header~div:not(.pagination)",
+			"pageE": ".page-header~div:not(.pagination):not(.clear)",
 			"replaceE": ".pagination"
 		},
 		"function": {
