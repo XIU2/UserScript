@@ -4988,7 +4988,7 @@
 	},
 	"禁漫天堂": {
 		"host": ["jmcomic.mobi","jmcomic1.mobi","18comic.vip","18comic.org"],
-		"url": "/^\\/photo\\//",
+		"url": "if (fun.indexOF(/^\\/photo\\//)){fun.src_bF(fun.getAllCSS('.scramble-page'), [0,'img[data-original]:not(.lazy-loaded)','data-original']); return true}",
 		"style": "[data-group], div[data-page], .thumb-overlay-albums>*:not(.scramble-page) {display: none !important;} #Comic_Top_Nav[style*='display: block'] {opacity: 0.3;}",
 		"history": true,
 		"pager": {
