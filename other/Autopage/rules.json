@@ -3200,14 +3200,12 @@
 			"scrollD": 2000
 		}
 	},
-	"_423down": {
+	"423down": {
 		"host": "www.423down.com",
-		"url": "return (!fun.indexOF('.html'))",
 		"pager": {
-			"nextL": "//div[@class='paging']//a[contains(text(),'下一页')]",
-			"pageE": "div.content-wrap ul.excerpt>li",
-			"replaceE": "div.paging",
-			"scrollD": 2000
+			"nextL": "//span[@class='current']/following-sibling::a[1] | //span[@class='page-numbers current']/preceding-sibling::a[1]",
+			"pageE": ".content>.excerpt, .commentlist>li",
+			"replaceE": ".paging, .pagenav"
 		}
 	},
 	"不死鸟": {
@@ -3271,18 +3269,18 @@
 	},
 	"轻狂志": {
 		"host": "www.flighty.cn",
-		"url": "return (fun.lp() != '/')",
+		"url": "/^\\/./",
 		"pager": {
-			"nextL": "//div[@class='pages']//a[text()='下一页']",
+			"nextL": ".pages .thisclass+li>a",
 			"pageE": ".items",
 			"replaceE": ".pages"
 		}
 	},
 	"黑域基地": {
 		"host": "www.hybase.com",
-		"url": "return (!fun.indexOF(/\\/\\d+\\.html/))",
+		"url": "return (fun.getCSS('#pages') != null)",
 		"pager": {
-			"nextL": "id('pages')/a[text()='下一页']",
+			"nextL": "#pages>b+a",
 			"pageE": ".entry",
 			"replaceE": "#pages"
 		}
