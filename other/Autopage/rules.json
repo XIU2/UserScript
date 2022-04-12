@@ -560,7 +560,7 @@
 			"replaceE": ".wp-pagenavi"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"煎蛋网 - 大杂烩": {
@@ -759,7 +759,7 @@
 			"scrollD": 1000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"淘股吧论坛": {
@@ -903,7 +903,7 @@
 			"scrollD": 2000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"北+ - 帖子内": {
@@ -1269,7 +1269,7 @@
 			"scrollD": 2500
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"千图网 - 专题/收藏夹": {
@@ -1283,7 +1283,7 @@
 			"scrollD": 4000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"千库网": {
@@ -1297,7 +1297,7 @@
 			"scrollD": 2000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"昵图网": {
@@ -1310,7 +1310,7 @@
 			"scrollD": 2000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"摄图网": {
@@ -1338,7 +1338,7 @@
 			"scrollD": 2000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-src]', 'data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"我图网": {
@@ -1353,7 +1353,7 @@
 			"scrollD": 2000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"包图网 - 音乐页": {
@@ -1594,7 +1594,7 @@
 			"scrollD": 1000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"3DM - 游戏专区 - 分类页": {
@@ -1607,7 +1607,7 @@
 			"scrollD": 1000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"3DM - 游戏专区 - 资源页": {
@@ -1688,7 +1688,7 @@
 			"scrollD": 1000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"游侠网 - 攻略页": {
@@ -1743,7 +1743,7 @@
 			"scrollD": 100
 		},
 		"function": {
-			"bF": "pageE.forEach(function (one) {if (one.tagName === 'P' && one.textContent.indexOf('更多相关内容请关注') > -1) {one.style.display = 'none';}}); return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "pageE.forEach(function (one) {if (one.tagName === 'P' && one.textContent.indexOf('更多相关内容请关注') > -1) {one.style.display = 'none';}}); return fun.src_bF(pageE)"
 		}
 	},
 	"游民星空 - 专栏文章页": {
@@ -1983,7 +1983,7 @@
 			"replaceE": ".wp-pagenavi"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"低端影视": {
@@ -2019,7 +2019,7 @@
 			"scrollD": 1000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-src]', 'data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"核桃影院": {
@@ -2044,7 +2044,7 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"ZzzFun 动漫": {
@@ -2057,7 +2057,7 @@
 			"scrollD": 1000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"吐槽弹幕网": {
@@ -2122,7 +2122,7 @@
 			"scrollD": 1000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"漫岛动漫": {
@@ -2136,7 +2136,7 @@
 			"scrollD": 1000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"AGE 动漫": {
@@ -2726,6 +2726,54 @@
 			"aF": "let _img=''; for (let i=0;i<newImgs.length;i++){_img += `<img src=\"${newImgs[i]}\">`;}; document.getElementById('cp_img').insertAdjacentHTML('beforeend', _img);"
 		}
 	},
+	"漫画DB": {
+		"host": "www.manhuadb.com",
+		"url": "if (fun.indexOF(/^\\/manhua\\/\\d+\\/.+\\.html/)) {if (fun.getCSS('img.img-fluid.show-pic')){fun.getCSS('img.img-fluid.show-pic').style.display = 'none';}; setTimeout(function(){let _img = '', data = document.querySelector('.vg-r-data'), imgDate = JSON.parse(atob(img_data));for (let i = 0; i < imgDate.length; i++) {_img += `<img class=\"img-fluid show-pic\" src=\"${data.dataset.host + data.dataset.img_pre + imgDate[i].img}\">`;};document.querySelector('.pjax-container').insertAdjacentHTML('beforeend', _img);},100); return true;}",
+		"style": ".row.m-0.pt-3.ad_2_wrap, .row.m-0.ad_1_wrap, .pagination.justify-content-center, #left, #right {display: none !important;}  .pjax-container>img {min-height: 300px;}",
+		"history": true,
+		"pager": {
+			"nextL": "//ol[@class='links-of-books num_div']//a[@class='active ']/parent::li/following-sibling::li[1]/a",
+			"pageE": "//body/script[starts-with(text(),'var img_data')]",
+			"insertP": ["body",3],
+			"replaceE": ".vg-r-data, ol.links-of-books",
+			"scriptT": 2,
+			"interval": 5000,
+			"scrollD": 2000
+		},
+		"function": {
+			"aF": "let _img = '', data = fun.getCSS('.vg-r-data'), imgDate = JSON.parse(atob(img_data));for (let i = 0; i < imgDate.length; i++) {_img += `<img class=\"img-fluid show-pic\" src=\"${data.dataset.host + data.dataset.img_pre + imgDate[i].img}\">`;};fun.getCSS('.pjax-container').insertAdjacentHTML('beforeend', _img)"
+		}
+	},
+	"漫画DB - 分类页": {
+		"host": ["www.manhuadb.com","www.manhuacat.com","www.maofly.com","www.kanbook.net"],
+		"url": "/\\/(list|update|search)/",
+		"blank": 3,
+		"pager": {
+			"nextL": "//div[contains(@class, 'pagination')]//a[contains(text(), '下一页') or contains(text(), '下页')]",
+			"pageE": ".comic-main-section",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
+	"快岸漫画": {
+		"host": "www.kanbook.net",
+		"url": "if (fun.indexOF(/^\\/\\d+\\/\\d+\\/\\d+/)) {if (fun.getCSS('img.img-fluid')){fun.getCSS('img.img-fluid').style.display = 'none';}; setTimeout(function(){let _img = '';for (let i = 0; i < imagesUrlArr.length; i++) {_img += `<img class=\"img-fluid d-md-block mx-auto\" src=\"${host + imagesUrlArr[i]}\">`;};document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', _img);},100); return true;}",
+		"style": ".pagination.justify-content-center, #left, #right, p[id^='page_c_'] {display: none !important;} .content-wrapper>img {min-height: 300px;}",
+		"history": true,
+		"pager": {
+			"nextL": "js; if (next_part != '') return (location.origin + next_part)",
+			"pageE": "//body/script[not(@src)]",
+			"insertP": ["body",3],
+			"scriptT": 2,
+			"interval": 5000,
+			"scrollD": 2000
+		},
+		"function": {
+			"aF": "let _img = '';for (let i = 0; i < imagesUrlArr.length; i++) {_img += `<img class=\"img-fluid d-md-block mx-auto\" src=\"${host + imagesUrlArr[i]}\">`;};fun.getCSS('.content-wrapper').insertAdjacentHTML('beforeend', _img);"
+		}
+	},
 	"拷贝漫画": {
 		"host": "/copymanga\\./",
 		"url": "/\\/chapter\\//",
@@ -3139,7 +3187,7 @@
 			"scrollD": 1000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"哔哩轻小说 - 全本": {
@@ -3152,7 +3200,7 @@
 			"scrollD": 1000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"哔哩轻小说 - 手机版": {
@@ -3176,7 +3224,7 @@
 			"scrollD": 1000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"AO3 - 列表页/搜索页": {
@@ -3334,7 +3382,7 @@
 			"replaceE": "ul.pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"六音软件": {
@@ -3450,7 +3498,7 @@
 			"scrollD": 1200
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-src]', 'data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"悪魔の小站": {

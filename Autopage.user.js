@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.7.4
+// @version      5.7.5
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -426,12 +426,15 @@ function: {
                 }
             }, //           部分自带 自动无缝翻页 的网站
             wp_article: {
-                url: function(nextL) {if (!indexOF('/post/') && !getCSS('#comments, .comments-area, #disqus_thread')) {curSite = DBSite.wp_article; curSite.pager.nextL = nextL; if (getCSS('img[data-src]')) {curSite.function = {bF: "return fun.src_bF(pageE, [0, 'img[data-src]', 'data-src'])"};} else if (getCSS('img[data-original]')) {curSite.function = {bF: "return fun.src_bF(pageE, [0, 'img[data-original]', 'data-original'])"};}}},
+                url: function(nextL) {if (!indexOF('/post/') && !getCSS('#comments, .comments-area, #disqus_thread')) {curSite = DBSite.wp_article; curSite.pager.nextL = nextL;}},
                 blank: 1,
                 pager: {
                     pageE: 'article[class], div[id^="post-"], ul[class*="post"] > li.item',
                     replaceE: '#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi',
                     scrollD: 2000
+                },
+                function: {
+                    bF: "return fun.src_bF(pageE)"
                 }
             }, //         部分使用 WordPress 的网站
             typecho_handsome: {
@@ -878,10 +881,6 @@ function: {
                     }
                     setTimeout(manhuacat_init, 100);
                     curSite = DBSite.manhuacat;
-                } else if (indexOF('/list')) {
-                    curSite = DBSite.manhuacat_list;
-                } else if (indexOF('/search') || indexOF('/update')) {
-                    curSite = DBSite.manhuacat_search;
                 }},
                 style: '#left, #right, #pull-load, .loading, .pagination, footer {display: none !important;} .img-content > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}', // 隐藏不需要的元素，调整图片
                 pager: {
@@ -894,27 +893,6 @@ function: {
                     scrollD: 3000
                 }
             }, //         漫画猫
-            manhuacat_list: {
-                blank: 1,
-                pager: {
-                    nextL: '//div[contains(@class, "pagination")]//a[contains(text(), "下一页") or contains(text(), "下页")]',
-                    pageE: '.comic-main-section > *',
-                    replaceE: '.pagination',
-                    scrollD: 1000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-original]', 'data-original']
-                }
-            }, //    漫画猫 - 分类页
-            manhuacat_search: {
-                pager: {
-                    nextL: '//div[contains(@class, "pagination")]//a[contains(text(), "下一页") or contains(text(), "下页")]',
-                    pageE: '.comic-main-section .row > div',
-                    replaceE: '.pagination',
-                    scrollD: 1000
-                }
-            }, //  漫画猫 - 搜索页
             imanhuaw: {
                 host: ['www.imanhuaw.net', 'www.imanhuaw.com', 'www.ccshwy.com'],
                 url: ()=> {
@@ -1013,28 +991,6 @@ function: {
                     replaceE: 'ul.pagination'
                 }
             }, //     36漫画 - 分类/搜索页
-            manhuadb: {
-                host: 'www.manhuadb.com',
-                url: ()=> {if (indexOF(/\/manhua\/\d+\/.+\.html/)) {
-                    if (getCSS('img.img-fluid.show-pic')) getCSS('img.img-fluid.show-pic').style.display = 'none'; // 隐藏第一个图片（避免重复）
-                    setTimeout(manhuadb_init, 100);
-                    curSite = DBSite.manhuadb;
-                } else if (indexOF('/list')) {
-                    curSite = DBSite.manhuacat_list;
-                } else if (indexOF('/search') || indexOF('/update')) {
-                    curSite = DBSite.manhuacat_search;
-                }},
-                style: '.row.m-0.pt-3.ad_2_wrap, .row.m-0.ad_1_wrap, .pagination.justify-content-center, #left, #right {display: none !important;}',
-                pager: {
-                    type: 4,
-                    nextL: manhuadb_nextL,
-                    pageE: 'body > script:not([type]):not([src]), .vg-r-data, ol.links-of-books.num_div',
-                    insertP: ['.pjax-container', 3],
-                    insertE: manhuadb_insertE,
-                    interval: 5000,
-                    scrollD: 3000
-                }
-            }, //          漫画 DB
             hicomic: {
                 host: 'www.hicomic.net',
                 url: ()=> {if (indexOF('/chapters/')) {
@@ -2071,47 +2027,6 @@ function: {
     }
 
 
-    // [漫画 DB] 初始化（将本话其余图片插入网页中）
-    function manhuadb_init() {
-        let _img = '', data = getCSS('.vg-r-data'), imgDate;
-        if (!data) return
-        getAllCSS(curSite.pager.pageE.replace('', '')).forEach(function (one) {
-            if (one.tagName === 'SCRIPT' && one.textContent.indexOf('var img_data =') > -1) {
-                let json = JSON.parse(window.atob(one.textContent.split("'")[1]));
-                if (json) {
-                    let _img = '';
-                    for (let i = 0; i < json.length; i++) {_img += `<img class="img-fluid show-pic" src="${data.dataset.host + data.dataset.img_pre + json[i].img}">`;}
-                    getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-                }
-            }
-        })
-    }
-    // [漫画 DB] 获取下一页地址
-    function manhuadb_nextL() {
-        let nextArr = getAllCSS('a.fixed-a-es'), next;
-        var url = '';
-        if (nextArr.length == 0) return
-        for (let i = 0; i < nextArr.length; i++) {
-            if (nextArr[i].className.indexOf('active') > -1) {
-                if (nextArr[i+1]) url = nextArr[i+1].href;
-                break;
-            }
-        }
-        if (url === curSite.pageUrl) return
-        curSite.pageUrl = url
-        getPageE_(curSite.pageUrl);
-    }
-    // [漫画 DB] 插入数据
-    function manhuadb_insertE(pageE, type) {
-        if (!pageE) return
-        if (replaceElems(pageE, curSite.pager.pageE, curSite.pager.pageE)) {
-            addHistory(pageE);
-            pageNum.now = pageNum._now + 1
-            manhuadb_init(); // 将刚刚替换的图片插入网页中
-        }
-    }
-
-
     // [HiComic(嗨漫画)] 初始化（将本话其余图片插入网页中）
     function hicomic_init() {
         let _img = '';
@@ -2920,18 +2835,21 @@ function: {
         }
     }
     // 通用型插入前函数（加载图片）
-    function src_bF(pageE, css) {
+    function src_bF(pageE, css = [0, 'img[data-original], img[data-src]', 'data-original']) {
+        if (css[2] === undefined) css[2] = 'data-original'
         pageE.forEach(function (one) {
             if (css[0] == 0) { // src 图片
-                if (one.tagName == 'IMG' && one.getAttribute(css[2])) one.src = one.getAttribute(css[2]);
-                one.querySelectorAll(css[1]).forEach(function (now) {
-                    now.src = now.getAttribute(css[2]);
-                });
+                if (one.tagName === 'IMG') {
+                    if (one.getAttribute(css[2])){one.src = one.getAttribute(css[2]);}else if (one.dataset.src){one.src = one.dataset.src;}
+                } else {
+                    one.querySelectorAll(css[1]).forEach(function (now) {if (now.getAttribute(css[2])){now.src = now.getAttribute(css[2]);}else if (now.dataset.src){now.src = now.dataset.src;};});
+                }
             } else if (css[0] == 1) { // 背景图片
-                if (one.tagName == 'IMG' && one.getAttribute(css[2])) one.style.backgroundImage = 'url("' + one.getAttribute(css[2]) + '")';
-                one.querySelectorAll(css[1]).forEach(function (now) {
-                    now.style.backgroundImage = 'url("' + now.getAttribute(css[2]) + '")';
-                });
+                if (one.tagName === 'IMG') {
+                    if (one.getAttribute(css[2])){one.style.backgroundImage = 'url("' + one.getAttribute(css[2]) + '")';}else if (one.dataset.src){one.style.backgroundImage = 'url("' + one.dataset.src + '")';}
+                } else {
+                    one.querySelectorAll(css[1]).forEach(function (now) {if (now.getAttribute(css[2])){now.style.backgroundImage = 'url("' + now.getAttribute(css[2]) + '")';}else if (now.dataset.src){now.style.backgroundImage = 'url("' + now.dataset.src + '")';};});
+                }
             }
         });
         return pageE
