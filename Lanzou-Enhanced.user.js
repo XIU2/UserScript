@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.4.1
+// @version      1.4.2
 // @author       X.I.U
 // @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、一键复制所有分享链接、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @include      /^https:\/\/.+\.lanzou[a-z]\.com\/.*$/
@@ -284,11 +284,16 @@
             iframe = iframe.contentWindow;
             let timer = setInterval(function(){
                 if (iframe.document.querySelector('#go a[href]')) {
-                    iframe.document.querySelector('#go a[href]').target = '_top'
-                    iframe.document.querySelector('#go a[href]').click();
-                    //GM_openInTab(iframe.document.querySelector('#go a[href]').href, {active: false, insert: true, setParent: false}); // 后台打开
+                    //iframe.document.querySelector('#go a[href]').target = '_top'
+                    //iframe.document.querySelector('#go a[href]').click();
+                    GM_openInTab(iframe.document.querySelector('#go a[href]').href, {active: false, insert: true, setParent: false}); // 后台打开
                     clearInterval(timer);
-                    setTimeout(function(){window.top.close();},200)// 关闭该后台标签页
+                    // 关闭该后台标签页
+                    if (GM_info.scriptHandler === 'Violentmonkey') { // Violentmonkey 需要延迟一会儿
+                        setTimeout(function(){window.top.close();}, 500)
+                    } else {
+                        window.top.close();
+                    }
                 }
             }, 10);
         }
