@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.7.3
+// @version      5.7.4
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -445,7 +445,7 @@ function: {
             }, //   部分使用 Typecho 的网站 (handsome)
             biquge1: {
                 url: ()=> {curSite = DBSite.biquge1;xs_bF(getAllCSS('.content > #content'),[/<br>.{0,10}秒记住.+$/, '']);},
-                style: 'img, .posterror, a[href*="posterror()"], [style*="url("], #content > *:not(br):not(p) {display: none !important;}',
+                style: 'img, .posterror, a[href*="posterror()"], [style*="background"][style*="url("]:not(html):not(body), #content > *:not(br):not(p) {display: none !important;}',
                 history: true,
                 pager: {
                     nextL: '//div[@class="page_chapter"]//a[text()="下一章"]',
@@ -459,7 +459,7 @@ function: {
                 }
             }, //            笔趣阁 1 模板的小说网站
             biquge1_m: {
-                style: 'img, .posterror, .show-app2, a[href*="posterror()"], [onclick*="location.href"], [style*="url("], #nr1>*:not(br):not(p), #chaptercontent>*:not(br):not(p), .Readarea>*:not(br):not(p), .ReadAjax_content>*:not(br):not(p) {display: none !important;}',
+                style: 'img, .posterror, .show-app2, a[href*="posterror()"], [onclick*="location.href"], [style*="background"][style*="url("]:not(html):not(body), #nr1>*:not(br):not(p), #chaptercontent>*:not(br):not(p), .Readarea>*:not(br):not(p), .ReadAjax_content>*:not(br):not(p) {display: none !important;}',
                 history: true,
                 pager: {
                     nextL: '#pb_next',
@@ -470,7 +470,7 @@ function: {
             }, //          笔趣阁 2 - 手机版 模板的小说网站
             biquge2: {
                 url: ()=> {if (isMobile() || getCSS('.chapter-page-btn') != null) {curSite = DBSite.biquge2_m;} else {curSite = DBSite.biquge2;}},
-                style: 'img, .posterror, a[href*="posterror()"], [style*="url("], #txt > *:not(br):not(p) {display: none !important;}',
+                style: 'img, .posterror, a[href*="posterror()"], [style*="background"][style*="url("]:not(html):not(body), #txt > *:not(br):not(p) {display: none !important;}',
                 history: true,
                 pager: {
                     type: 6,
@@ -483,7 +483,7 @@ function: {
                 }
             }, //            笔趣阁 3 模板的小说网站
             biquge2_m: {
-                style: 'img, .posterror, a[href*="posterror()"], [style*="url("], #txt > *:not(br):not(p) {display: none !important;}',
+                style: 'img, .posterror, a[href*="posterror()"], [style*="background"][style*="url("]:not(html):not(body), #txt > *:not(br):not(p) {display: none !important;}',
                 history: true,
                 pager: {
                     nextL: '#pb_next, .url_next',
@@ -494,7 +494,7 @@ function: {
                 }
             }, //          笔趣阁 3 - 手机版 模板的小说网站
             biquge3: {
-                style: 'img, .posterror, a[href*="posterror()"], [style*="url("], script+div[style="padding:15px;"] {display: none !important;}',
+                style: 'img, .posterror, a[href*="posterror()"], [style*="background"][style*="url("]:not(html):not(body), script+div[style="padding:15px;"] {display: none !important;}',
                 history: true,
                 pager: {
                     nextL: '//a[contains(text(), "下一章") or contains(text(), "下一页")]',
