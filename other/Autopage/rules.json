@@ -352,8 +352,8 @@
 			"replaceE": ".paginator"
 		}
 	},
-	"豆瓣 - 广播/日记/书评": {
-		"host": ["www.douban.com","book.douban.com"],
+	"豆瓣 - 广播/日记/书评/影评评论": {
+		"host": ["www.douban.com","book.douban.com","movie.douban.com"],
 		"url": "return ((fun.indexOF(/^\\/people\\/.+\\/status/) && (!fun.indexOF('tab=','s') || fun.indexOF('tab=comment','s')))  || (fun.indexOF(/^\\/note\\/\\d+\\//) && !fun.indexOF('type=','s')) || fun.indexOF(/^\\/review\\/\\d+\\//))",
 		"pager": {
 			"type": 6,
