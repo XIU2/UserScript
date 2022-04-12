@@ -1010,6 +1010,25 @@
 			"replaceE": ".Pager"
 		}
 	},
+	"盘友社区 - 帖子内": {
+		"host": "www.panyoubbs.com",
+		"url": "/^\\/thread\\//",
+		"thread": true,
+		"pager": {
+			"nextL": ".active+li:not(.disabled)>a",
+			"pageE": ".thread-list",
+			"replaceE": ".page"
+		}
+	},
+	"盘友社区": {
+		"host": "www.panyoubbs.com",
+		"pager": {
+			"nextL": ".active+li:not(.disabled)>a",
+			"pageE": ".list",
+			"replaceE": ".page",
+			"scrollD": 2000
+		}
+	},
 	"CADTutor - 列表页": {
 		"host": "www.cadtutor.net",
 		"url": "/\\/forum\\/forum\\//",
