@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.7.6
+// @version      5.7.7
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -819,32 +819,6 @@ function: {
                     scrollD: 1000
                 }
             }, // B 站(Bilibili) - 搜索页 - 专栏
-            cartoonmad: {
-                host: ['www.cartoonmad.com','www.cartoonmad.cc'],
-                url: ()=> {if (indexOF('/comic/')) {
-                    getCSS('body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child > a').href = 'javascript:void(0);'; // 清理图片上的链接
-                    curSite = DBSite.cartoonmad;
-                } else if (lp != '/') {
-                    curSite = DBSite.cartoonmad_list;
-                }},
-                style: 'body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:not(:first-child) {display: none !important;} body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img {max-width: 100%;height: auto;display: block !important;margin: 0 auto !important;}',
-                pager: {
-                    nextL: cartoonmad_nextL,
-                    pageE: 'body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img',
-                    replaceE: 'body > table > tbody > tr:nth-child(2), body > table > tbody > tr:nth-child(5)',
-                    interval: 0,
-                    scrollD: 2000
-                }
-            }, //        动漫狂
-            cartoonmad_list: {
-                blank: 1,
-                pager: {
-                    nextL: '//a[@class="pages"][contains(text(), "下一頁")]',
-                    pageE: 'td[background="/image/content_box4.gif"]+td > table > tbody > tr',
-                    replaceE: '//a[@class="pages"]/parent::td/parent::tr | //font[contains(text(), "目前在第")]',
-                    scrollD: 1000
-                }
-            }, //   动漫狂 - 分类/搜索页
             manhuacat: {
                 host: ['www.manhuacat.com', 'www.maofly.com'],
                 url: ()=> {if (indexOF(/\/manga\/\d+\/.+\.html/)) {
@@ -1062,37 +1036,6 @@ function: {
                     scrollD: 1000
                 }
             }, //动漫之家 - 日漫 - 最新更新
-            acgn: {
-                host: 'comic.acgn.cc',
-                url: ()=> {
-                    if (indexOF('/view-')) {
-                        curSite = DBSite.acgn;
-                        acgn_aF();
-                    } else if (indexOF('/cate-') || indexOF('/pinyin-')) {
-                        curSite = DBSite.acgn_list;
-                    }
-                },
-                style: '.img1 {cursor: initial !important;}',
-                pager: {
-                    nextL: '#next_chapter',
-                    pageE: '.pic[_src]',
-                    replaceE: '[class^="display_"]',
-                    interval: 2000,
-                    scrollD: 2000
-                },
-                function: {
-                    aF: acgn_aF
-                }
-            }, //              动漫戏说
-            acgn_list: {
-                blank: 1,
-                pager: {
-                    nextL: 'a[rel="next"]',
-                    pageE: 'ul#display > li',
-                    replaceE: '#pagination',
-                    scrollD: 1000
-                }
-            }, //         动漫戏说 - 分类页
             ykmh: {
                 host: 'www.ykmh.com',
                 url: ()=> {if (indexOF(/\/\d+\.html/)) {
@@ -1819,23 +1762,6 @@ function: {
     }
 
 
-    // [漫画狂] 获取下一页地址
-    function cartoonmad_nextL() {
-        let url = getXpath('//a[@class="pages"][contains(text(),"下一頁")]');
-        if (url) {
-            if (url.getAttribute('href') === 'thend.asp') {
-                url = getXpath('//a[@class="pages"][contains(string(),"下一話")]')
-                if (url) return url.href;
-                pausePage = false;
-                GM_notification({text: `注意：该网站早期漫画章节，因为网站自身问题而无法翻至下一话（仅限于显示为 [第 X 卷]/[下一卷] 的）。\n因此需要手动去 [目录页] 进入下一卷！`, timeout: 10000});
-            } else {
-                return url.href;
-            }
-        }
-        return '';
-    }
-
-
     // [漫画猫] 初始化（显示本话所以图片）
     function manhuacat_init() {
         let _img = '';
@@ -2121,15 +2047,6 @@ function: {
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
             addHistory(document, pageTitle + ' - 优酷漫画');
             if (replaceElems(pageE)) pageNum.now = pageNum._now + 1
-        }
-    }
-
-
-    // [动漫戏说] 插入后函数（加载图片）
-    function acgn_aF() {
-        let old = getAllCSS('.pic[_src][id]'), _img = '';
-        if (old.length > 0) {
-            for (let now of old) {now.outerHTML = `<div class="pic" _src="${now.getAttribute('_src')}"><img src="${now.getAttribute('_src')}" class="img1"></div>`;}
         }
     }
 
@@ -2784,7 +2701,7 @@ function: {
                 }
             }
         } else { // 获取主体元素失败后，尝试重新获取
-            console.log(curSite.pager.pageE, pageE, curSite.pager.insertP, toE)
+            console.log(curSite.pager.pageE, pageE, curSite.pager.insertP, toE, response)
             if (curSite.retry) {
                 console.warn('[自动无缝翻页] 获取主体元素失败，尝试重新获取...')
                 setTimeout(function(){curSite.pageUrl = '';}, curSite.retry)

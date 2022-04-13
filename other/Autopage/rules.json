@@ -1029,38 +1029,28 @@
 			"scrollD": 2000
 		}
 	},
-	"CADTutor - 列表页": {
-		"host": "www.cadtutor.net",
-		"url": "/\\/forum\\/forum\\//",
+	"CADTutor/LoversLab": {
+		"host": ["www.cadtutor.net","www.loverslab.com"],
+		"url": "/\\/(forum\\/\\d)|search/",
 		"pager": {
-			"nextL": "a[rel='next']",
-			"pageE": "ol.ipsDataList>li:not([data-rowid])~li",
+			"nextL": "li.ipsPagination_next:not(.ipsPagination_inactive)>a",
+			"pageE": "ol.ipsDataList>li[data-rowid], ol.ipsStream>li",
 			"replaceE": "ul.ipsPagination",
 			"scrollD": 2000
 		}
 	},
-	"CADTutor - 帖子内": {
-		"host": "www.cadtutor.net",
-		"url": "/\\/forum\\/topic\\//",
+	"CADTutor/LoversLab - 帖子内": {
+		"host": ["www.cadtutor.net","www.loverslab.com"],
+		"url": "/\\/topic\\//",
 		"thread": true,
 		"pager": {
-			"nextL": "a[rel='next']",
-			"pageE": "#elPostFeed>form>*:not(input):not(.after-first-post)",
+			"nextL": "li.ipsPagination_next:not(.ipsPagination_inactive)>a",
+			"pageE": "#elPostFeed>form>*:not(input):not(div)",
 			"replaceE": "ul.ipsPagination",
 			"scrollD": 2000
 		}
 	},
-	"CADTutor - 搜索页": {
-		"host": "www.cadtutor.net",
-		"url": "/\\/forum\\/search\\//",
-		"pager": {
-			"nextL": "a[rel='next']",
-			"pageE": "ol.ipsStream>li",
-			"replaceE": "ul.ipsPagination",
-			"scrollD": 2000
-		}
-	},
-	"TheSwamp - 列表页": {
+	"TheSwamp": {
 		"host": "www.theswamp.org",
 		"url": "/board=/",
 		"pager": {
@@ -2738,6 +2728,27 @@
 			"aF": "let _img=''; for (let i=0;i<newImgs.length;i++){_img += `<li><img src=\"${newImgs[i]}\"></li>`;}; document.getElementById('comicContain').insertAdjacentHTML('beforeend', _img);"
 		}
 	},
+	"动漫狂": {
+		"host": "www.cartoonmad.cc",
+		"style": "body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:not(:first-child) {display: none !important;} body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img {max-width: 100%;height: auto;display: block !important;margin: 0 auto !important;}",
+		"pager": {
+			"nextL": "js; let next=fun.getXpath(\"//a[@class='pages'][contains(text(),'下一頁')][not(@href='thend.asp')]\");if (next) {return next.href;} else {next=fun.getXpath(\"//a[@class='pages'][contains(string(),'下一話')]\");if (next) return next.href;}",
+			"pageE": "img[onload]",
+			"replaceE": "body > table > tbody > tr:nth-child(2), body > table > tbody > tr:nth-child(5)",
+			"interval": 0,
+			"scrollD": 2000
+		}
+	},
+	"动漫狂 - 分类/搜索页": {
+		"host": "www.cartoonmad.com",
+		"url": "/^\\/./",
+		"blank": 3,
+		"pager": {
+			"nextL": "//a[@class='pages'][contains(text(), '下一頁')]",
+			"pageE": "td[background='/image/content_box4.gif']+td > table > tbody > tr",
+			"replaceE": "//a[@class='pages']/parent::td/parent::tr | //font[contains(text(), '目前在第')]"
+		}
+	},
 	"漫画皮": {
 		"host": "www.manhuapi.com",
 		"url": "/\\/chapter\\//",
@@ -2822,6 +2833,32 @@
 		},
 		"function": {
 			"aF": "let _img = '';for (let i = 0; i < imagesUrlArr.length; i++) {_img += `<img class=\"img-fluid d-md-block mx-auto\" src=\"${host + imagesUrlArr[i]}\">`;};fun.getCSS('.content-wrapper').insertAdjacentHTML('beforeend', _img);"
+		}
+	},
+	"动漫戏说": {
+		"host": "comic.acgn.cc",
+		"url": "if(fun.indexOF('/view-')){fun.getAllCSS('.pic[_src][id]').forEach(e => {e.outerHTML = `<div class='pic' _src><img src='${e.getAttribute('_src')}' class='img1'></div>`;}); return true;}",
+		"style": ".img1 {cursor: initial !important;} .btn_wrap, #ss-toolbar {display: none !important;}",
+		"pager": {
+			"nextL": "#next_chapter",
+			"pageE": ".pic[_src]",
+			"replaceE": "[class^='display_']",
+			"interval": 5000,
+			"scrollD": 2000
+		},
+		"function": {
+			"aF": "fun.getAllCSS('.pic[_src][id]').forEach(e => {e.outerHTML = `<div class='pic' _src><img src='${e.getAttribute('_src')}' class='img1'></div>`;});"
+		}
+	},
+	"动漫戏说 - 分类页": {
+		"host": "comic.acgn.cc",
+		"url": "/^\\/(cate|pinyin)-/",
+		"blank": 3,
+		"pager": {
+			"nextL": "a[rel='next']",
+			"pageE": "ul#display > li",
+			"replaceE": "#pagination",
+			"scrollD": 1000
 		}
 	},
 	"拷贝漫画": {
