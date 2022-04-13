@@ -2200,6 +2200,19 @@
 			"replaceE": ".pagelist"
 		}
 	},
+	"anime1": {
+		"host": "anime1.me",
+		"url": "/^\\/$/",
+		"hiddenPN": true,
+		"history": false,
+		"blank": 3,
+		"pager": {
+			"nextL": "js; let next = fun.getCSS('a.paginate_button.next');if (next && next.className.indexOf('disabled') === -1) {let oldList = fun.getCSS('#table-list>tbody').innerHTML;if (oldList) {next.click(); fun.getCSS('#table-list>tbody').insertAdjacentHTML('afterbegin', oldList);}}",
+			"pageE": "#table-list>tbody",
+			"interval": 500,
+			"scrollD": 800
+		}
+	},
 	"初音社": {
 		"host": "www.mikuclub.cc",
 		"url": "/^\\/[a-z]/",
@@ -2707,6 +2720,24 @@
 			"replaceE": ".nav-links"
 		}
 	},
+	"漫本": {
+		"host": "www.manben.com",
+		"url": "if (fun.indexOF(/^\\/m\\d+/)) {if (fun.getCookie('showtype') != '2') {document.cookie='showtype=2; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';location.reload();}else{return true;}}",
+		"style": ".main{height: auto !important;overflow-y: hidden !important;} #comicContain img {min-height: 300px;} .comic-contain li{margin: 0 !important;} img.imgFloat_1, img.imgFloat_2, span.comic-ft {display: none !important;}",
+		"history": true,
+		"pager": {
+			"nextL": "#mainControlNext",
+			"pageE": "//body/script[starts-with(text(),'eval(')]",
+			"insertP": ["body",3],
+			"replaceE": ".main_control",
+			"scriptT": 2,
+			"interval": 5000,
+			"scrollD": 2000
+		},
+		"function": {
+			"aF": "let _img=''; for (let i=0;i<newImgs.length;i++){_img += `<li><img src=\"${newImgs[i]}\"></li>`;}; document.getElementById('comicContain').insertAdjacentHTML('beforeend', _img);"
+		}
+	},
 	"漫画皮": {
 		"host": "www.manhuapi.com",
 		"url": "/\\/chapter\\//",
@@ -2894,23 +2925,14 @@
 	},
 	"鬼罗丽漫画": {
 		"host": ["www.gllmh8.com","m.gllmh8.com"],
-		"url": "/\\/\\d+(_\\d+)?\\.html$/",
-		"style": ".article-content img {visibility: visible; opacity: 1;} .swiper-container {display: none !important;}",
+		"url": "/^\\/./",
+		"style": ".article-content img {visibility: visible; opacity: 1;display: block;} #newsArticle img {margin-bottom: -1px;} .swiper-container {display: none !important;}",
 		"history": true,
 		"pager": {
+			"type": 3,
 			"nextL": "li.thisclass+li>a",
-			"pageE": ".article-content p, #newsArticle p",
-			"replaceE": ".pagination, .pages",
-			"scrollD": 5500
-		}
-	},
-	"鬼罗丽漫画 - 分类页": {
-		"host": "www.gllmh8.com",
-		"pager": {
-			"nextL": "li.thisclass+li>a",
-			"pageE": ".listl>ul>li",
-			"replaceE": ".page",
-			"scrollD": 2000
+			"pageE": ".article-content img, #newsArticle img, .listl>ul, ul.news_list_1",
+			"replaceE": ".pagination, .pages, .page"
 		}
 	},
 	"起点中文": {

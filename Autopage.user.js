@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.7.5
+// @version      5.7.6
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -819,33 +819,6 @@ function: {
                     scrollD: 1000
                 }
             }, // B 站(Bilibili) - 搜索页 - 专栏
-            anime1: {
-                host: 'anime1.me',
-                url: ()=> {if (indexOF('s=', 's')) {curSite = DBSite.wp_article;} else if (lp == '/') {curSite = DBSite.anime1;}},
-                history: false,
-                pager: {
-                    type: 4,
-                    nextL: ()=> { // 获取下一页内容（叠加）
-                        let next = getCSS('a.paginate_button.next');
-                        if (next && next.className.indexOf('disabled') === -1) {
-                            let oldList = getCSS('#table-list > tbody').innerHTML;
-                            if (oldList) {next.click(); pageNum.now = pageNum._now + 1; getCSS('#table-list > tbody').insertAdjacentHTML('afterbegin', oldList);}
-                        }
-                    },
-                    interval: 500,
-                    scrollD: 800
-                }
-            }, //                  Anime1
-            manben: {
-                host: 'www.manben.com',
-                url: ()=> {if (indexOF(/\/m\d+/)) {
-                    if (getCookie('showtype') != '2') {
-                        document.cookie='showtype=2; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; // 写入 Cookie 开启 [垂直阅读] 模式
-                        location.reload(); // 刷新网页
-                    }
-                    curSite = DBSite.mhxqiu;
-                }}
-            }, //            漫本
             cartoonmad: {
                 host: ['www.cartoonmad.com','www.cartoonmad.cc'],
                 url: ()=> {if (indexOF('/comic/')) {
