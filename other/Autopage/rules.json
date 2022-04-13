@@ -4805,6 +4805,21 @@
 			"scrollD": 2500
 		}
 	},
+	"EPORNER": {
+		"host": "www.eporner.com",
+		"url": "return (!fun.indexOF('/video-'))",
+		"style": "#mainBlogPosts, .footer-text, footer {display: none !important;}",
+		"blank": 3,
+		"pager": {
+			"nextL": ".nmnext",
+			"pageE": "#vidresults>[id], script[src*='/ajax']",
+			"replaceE": ".numlist2",
+			"scriptT": 2
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"t66y - 帖子列表": {
 		"host": "www.t66y.com",
 		"url": "/^\\/thread/",
