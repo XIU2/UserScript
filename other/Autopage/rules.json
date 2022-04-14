@@ -5101,6 +5101,19 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
 		}
 	},
+	"Netflav": {
+		"host": "netflav.com",
+		"url": "return (fun.lp() != '/' && !fun.indexOF(/^\\/(video|actress|browse|genre)$/))",
+		"blank": 3,
+		"pager": {
+			"type": 6,
+			"nextL": "js;return fun.getNextEP('a.active.item+a.item:not(.icon)', 'page=', /page=\\d+/)",
+			"pageE": ".grid_cell",
+			"replaceE": ".pagination",
+			"loadTime": 1200,
+			"scrollD": 3000
+		}
+	},
 	"HuangboAV": {
 		"host": "huangboav.com",
 		"url": "return (fun.indexOF(/^\\/(category|tag)\\//) || location.search != '')",
@@ -5211,9 +5224,34 @@
 			"scrollD": 2000
 		}
 	},
+	"7mmtv": {
+		"host": ["7mmtv.tv","7mm.tv","/^[a-z]{2}\\d{4}\\.com$/"],
+		"url": "return (document.title.indexOf('7mmtv') != -1 && fun.lp() != '/' && !fun.indexOF('_content/'))",
+		"pager": {
+			"nextL": "li.page-item.current+li.page-item>a",
+			"pageE": ".latest-korean-slider>.row:first-of-type>div",
+			"replaceE": ".pagination-row"
+		}
+	},
+	"7mmtv - 漫画": {
+		"host": ["/^.+\\.7mmtv\\.tv$/","/^.+\\.7mm\\.tv$/","/^.+\\.[a-z]{2}\\d{4}\\.com$/"],
+		"url": "if (document.title.indexOf('7mmtv') != -1 && fun.indexOF('/hcomic_content/')) {let _img=''; for (let i=1;i<=Large_cgurl.length;i++){_img += `<li><img src=\"${Large_cgurl[i]}\" class=\"img-responsive\"></li>`;}; document.getElementById('show_cg_html').innerHTML = _img; return true;}",
+		"style": ".video-introduction-images-row>center>*:not(#content) {display: none !important;}",
+		"hiddenPN": true
+	},
+	"Hentai.tv": {
+		"host": "hentai.tv",
+		"url": "/^\\/(trending|genre)\\//",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.page-links.current+a.page-links",
+			"pageE": "a.card.row",
+			"replaceE": ".pagination"
+		}
+	},
 	"hanime1": {
 		"host": "hanime1.me",
-		"url": "return (fun.lp() == '/search')",
+		"url": "/^\\/search/",
 		"blank": 3,
 		"pager": {
 			"nextL": "a[rel='next']",
@@ -5370,7 +5408,7 @@
 		}
 	},
 	"Gelbooru": {
-		"host": ["gelbooru.com","tbib.org","safebooru.org","illusioncards.booru.org"],
+		"host": ["gelbooru.com","tbib.org","safebooru.org","illusioncards.booru.org","rule34.xxx","hypnohub.net","xbooru.com"],
 		"url": "/s=list/",
 		"blank": 3,
 		"pager": {
@@ -5379,14 +5417,54 @@
 			"replaceE": "#paginator"
 		}
 	},
+	"Rule34": {
+		"host": ["rule34hentai.net","rule34.paheal.net"],
+		"url": "return (fun.lp() == '/' || fun.indexOF('/post/list'))",
+		"blank": 3,
+		"pager": {
+			"nextL": "#paginator b+a",
+			"pageE": ".thumb",
+			"replaceE": "#paginator"
+		}
+	},
 	"Danbooru": {
-		"host": "danbooru.donmai.us",
+		"host": ["danbooru.donmai.us","e621.net"],
 		"url": "return (fun.lp() == '/' || fun.lp() == '/posts')",
 		"blank": 3,
 		"pager": {
-			"nextL": "a.paginator-next",
-			"pageE": ".posts-container",
+			"nextL": "a[rel='next']",
+			"pageE": "article",
 			"replaceE": ".paginator"
+		}
+	},
+	"Hentai Foundry": {
+		"host": "www.hentai-foundry.com",
+		"url": "return (fun.lp() != '/' && fun.getCSS('.thumb_square') != null)",
+		"blank": 3,
+		"pager": {
+			"nextL": ".next>a",
+			"pageE": ".thumb_square",
+			"replaceE": ".pager"
+		}
+	},
+	"The Hentai World": {
+		"host": "thehentaiworld.com",
+		"url": "return (fun.lp() == '/' || fun.indexOF(/^\\/(tag|page|hentai-images)\\//))",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.next, .current+.minithumb>a",
+			"pageE": ".thumb, #doujin>a",
+			"replaceE": ".navigation, #miniThumbContainer"
+		}
+	},
+	"LoLHentai": {
+		"host": "www.lolhentai.net",
+		"url": "/\\/(category|tags)\\//",
+		"blank": 3,
+		"pager": {
+			"nextL": "a[rel='next']",
+			"pageE": ".gthumb",
+			"replaceE": ".pagination"
 		}
 	},
 	"Hentai Cosplays - 图片页": {
@@ -5772,21 +5850,6 @@
 			"replaceE": ".pageart>ul",
 			"scrollD": 3000
 		}
-	},
-	"7mmtv": {
-		"host": ["7mmtv.tv","cc4871.com"],
-		"url": "return (fun.lp() != '/' && !fun.indexOF('_content/'))",
-		"pager": {
-			"nextL": "li.page-item.current+li.page-item>a",
-			"pageE": ".latest-korean-slider>.row:first-of-type>div",
-			"replaceE": ".pagination-row"
-		}
-	},
-	"7mmtv - 漫画": {
-		"host": "gw24sy.cc4871.com",
-		"url": "if (fun.indexOF('/hcomic_content/')) {let _img=''; for (let i=1;i<=Large_cgurl.length;i++){_img += `<li><img src=\"${Large_cgurl[i]}\" class=\"img-responsive\"></li>`;}; document.getElementById('show_cg_html').innerHTML = _img; return true;}",
-		"style": ".video-introduction-images-row>center>*:not(#content) {display: none !important;}",
-		"hiddenPN": true
 	},
 	"新闻吧 - xinwenba.net": {
 		"host": ["www.xinwenba.net","m.xinwenba.net"],
