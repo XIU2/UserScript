@@ -357,7 +357,7 @@
 		"url": "return ((fun.indexOF(/^\\/people\\/.+\\/status/) && (!fun.indexOF('tab=','s') || fun.indexOF('tab=comment','s')))  || (fun.indexOF(/^\\/note\\/\\d+\\//) && !fun.indexOF('type=','s')) || fun.indexOF(/^\\/review\\/\\d+\\//))",
 		"pager": {
 			"type": 6,
-			"nextL": "js; let a=fun.getCSS('a.next');if(a && a.href){return a.href.replace(/#.+$/,'')}",
+			"nextL": "a.next",
 			"pageE": ".comment-list-wrapper",
 			"replaceE": ".paginator",
 			"loadTime": 1000
@@ -2875,6 +2875,18 @@
             "aF": "let _img = ''; for (let i=0;i<arr_pages.length;i++){_img += `<img src=\"${img_prefix}${arr_pages[i]}\">`;}; fun.getCSS('#center_box').insertAdjacentHTML('beforeend', _img);"
         }
     },
+	"动漫之家 - 日漫 - 分类页": {
+		"host": "manhua.dmzj.com",
+		"url": "/^\\/tags/",
+		"pager": {
+			"type": 6,
+			"forceHTTPS": true,
+			"nextL": "a.pselected+a",
+			"pageE": "#search_list_div>ul",
+			"replaceE": ".pages",
+			"loadTime": 800
+		}
+	},
     "动漫之家 - 日漫 - 最近更新": {
         "host": "manhua.dmzj.com",
         "url": "/^\\/update/",
