@@ -1983,6 +1983,18 @@
 			"replaceE": ".pageNav"
 		}
 	},
+	"bilibili - 新版搜索页": {
+		"host": "search.bilibili.com",
+		"url": "fun.isUrlC(); return ((fun.lp() == '/all' || fun.lp() == '/video' || fun.lp() == '/article') && fun.getCSS('ul.video-list') == null && fun.getCSS('#article-list') == null)",
+		"history": true,
+		"pager": {
+			"type": 6,
+			"nextL": "js;return fun.getNextEP('.vui_pagenation--btn-num.vui_button--active+button.vui_pagenation--btn-num', 'page=', /page=\\d+(&o=\\d+)?/)",
+			"pageE": ".video-list-item, .media-list>div",
+			"replaceE": ".vui_pagenation--btns",
+			"loadTime": 1200
+		}
+	},
 	"NO视频": {
 		"host": "www.novipnoad.com",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('.html'))",
