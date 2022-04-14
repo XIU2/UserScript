@@ -1877,6 +1877,17 @@
 			"replaceE": ".ajax-pager"
 		}
 	},
+	"flysheep": {
+		"host": "www.flysheep6.com",
+		"url": "return (!fun.indexOF(/^\\/archives\\/\\d/))",
+		"style": "#content>.post {position: static !important; float: left !important; height: 500px !important;}",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.next",
+			"pageE": "#content>.post",
+			"replaceE": ".pagination"
+		}
+	},
 	"cs.rin.ru - 帖子列表": {
 		"host": "cs.rin.ru",
 		"url": "return (fun.lp() == '/forum/viewforum.php')",
@@ -2818,6 +2829,63 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"动漫之家": {
+		"host": "www.dmzj.com",
+		"url": "if (fun.indexOF('/view/')) {if (fun.getCookie('display_mode') != '1') {document.cookie='display_mode=1; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';location.reload();}else{return true;}}",
+		"style": "p.mh_curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} .comic_wraCon > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;min-height: 200px;}",
+		"pager": {
+			"nextL": "span.next>a",
+			"pageE": "head>script[type]:not([src])",
+			"insertP": ["body",3],
+			"replaceE": ".wrap_last_mid",
+			"scriptT": 2,
+			"interval": 5000,
+			"scrollD": 3000
+		},
+		"function": {
+			"aF": "let _img = '', _img_arr; if (pages.indexOf('|') === -1){pages = pages.replace(/\\r\\n/g, '|')}; _img_arr = JSON.parse(pages).page_url.split('|'); for (let i=0;i<_img_arr.length;i++) {_img += `<img src=\"${img_prefix}${_img_arr[i]}\">`;}; fun.getCSS('.comic_wraCon').insertAdjacentHTML('beforeend', _img);"
+		}
+	},
+	"动漫之家 - 分类页": {
+		"host": "www.dmzj.com",
+		"url": "/^\\/(category|update|rank)/",
+		"style": ".wrap_mhlist_l.con_left, .wrap_list {height: auto!important;}",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.pg_next",
+			"pageE": "ul.list_con_li>li, .ph_r_con_li>div:not(.ad_column)",
+			"replaceE": ".page",
+			"scrollD": 1000
+		}
+	},
+	"动漫之家 - 日漫": {
+        "host": "manhua.dmzj.com",
+        "url": "if (fun.indexOF(/\\/\\d+\\.shtml/)) {let chapterScroll = fun.getCSS('#qiehuan_txt'); if (chapterScroll && chapterScroll.textContent === '切换到上下滚动阅读') {chapterScroll.click();} else {return true;}}",
+        "style": "p.curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} #center_box > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;min-height: 200px;}",
+        "pager": {
+            "nextL": "#next_chapter",
+            "pageE": "head>script[type]:not([src])",
+            "insertP": ["body",3],
+            "replaceE": ".display_graybg",
+            "scriptT": 2,
+            "interval": 2000,
+            "scrollD": 3000
+        },
+        "function": {
+            "aF": "let _img = ''; for (let i=0;i<arr_pages.length;i++){_img += `<img src=\"${img_prefix}${arr_pages[i]}\">`;}; fun.getCSS('#center_box').insertAdjacentHTML('beforeend', _img);"
+        }
+    },
+    "动漫之家 - 日漫 - 最近更新": {
+        "host": "manhua.dmzj.com",
+        "url": "/^\\/update/",
+        "blank": 3,
+        "pager": {
+            "nextL": "//div[@class='pages']/a[contains(text(), '下一页')]",
+            "pageE": ".newpic_content > *:not(.pages)",
+            "replaceE": ".pages",
+            "scrollD": 1000
+        }
+    },
 	"快岸漫画": {
 		"host": "www.kanbook.net",
 		"url": "if (fun.indexOF(/^\\/\\d+\\/\\d+\\/\\d+/)) {if (fun.getCSS('img.img-fluid')){fun.getCSS('img.img-fluid').style.display = 'none';}; setTimeout(function(){let _img = '';for (let i = 0; i < imagesUrlArr.length; i++) {_img += `<img class=\"img-fluid d-md-block mx-auto\" src=\"${host + imagesUrlArr[i]}\">`;};document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', _img);},100); return true;}",
@@ -2900,32 +2968,6 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
 		}
 	},
-	"COCOMANGA 漫画": {
-		"host": "www.cocomanga.com",
-		"url": "if (fun.indexOF('.html')){if (!(fun.getCookie('mh_readmode') === '' || fun.getCookie('mh_readmode') === '3')) {document.cookie='mh_readmode=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; location.reload();}; return true;} else if (fun.indexOF(/\\/\\d+\\/$/)) {setTimeout(function(){if (document.querySelector('a.website-display-all')) document.querySelector('a.website-display-all').click();}, 300);}",
-		"style": ".mh_readend, .mh_footpager, .mh_readmode {display: none !important;}",
-		"iframe": true,
-		"pager": {
-			"type": 5,
-			"nextL": "//a[contains(@class, 'read_page_link') and contains(string(), '下一章')][not(contains(@href, 'javascript'))]",
-			"interval": 5000,
-			"scrollD": 2000
-		}
-	},
-	"COCOMANGA 漫画 - 分类页": {
-		"host": "www.cocomanga.com",
-		"url": "return (fun.lp() == '/show' || fun.lp() == '/search')",
-		"blank": 1,
-		"pager": {
-			"nextL": "js;return fun.getNextEP('.fed-page-info a.fed-btns-green+a[onclick]', 'page=', /page=\\d+/)",
-			"pageE": "ul.fed-list-info > li, dl.fed-deta-info",
-			"replaceE": ".fed-page-info",
-			"scrollD": 1000
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [1,'a[data-original]','data-original'])"
-		}
-	},
 	"木马漫画 - 阅读页": {
 		"host": "www.omyschool.com",
 		"url": "/\\/article_detail\\//",
@@ -2946,6 +2988,50 @@
 			"nextL": "a.next.page-numbers",
 			"pageE": "#book_list>.item",
 			"replaceE": ".uk-pagination"
+		}
+	},
+	"漫画星球": {
+		"host": ["/\\.mhxqiu/","/^www\\.sixmh\\d\\./"],
+		"url": "if (fun.indexOF(/\\/\\d+\\.html/)) {return true;} else if (fun.indexOF(/\\/\\d+\\/$/)) {setTimeout(function(){if (document.getElementById('zhankai')) document.getElementById('zhankai').click();}, 500);}",
+		"style": ".imgFloat_1, .imgFloat_2, .main_control, span.comic-ft {display: none !important;} html, body, #mainView {height: auto !important;} body.view .main ul.comic-contain li{margin:0 auto !important;} .comic-contain .loaded{box-shadow: none !important;}",
+		"pager": {
+			"nextL": "#mainControlNext",
+			"pageE": "//script[contains(text(),'eval')]",
+			"insertP": ["body",3],
+			"replaceE": ".main_control, h1.chaptername_title, span.title-comicHeading",
+			"scriptT": 2,
+			"interval": 4000,
+			"scrollD": 3000
+		},
+		"function": {
+			"aF": "let _img = ''; for (let i=0;i<newImgs.length;i++) {_img += `<li><div style=\"display: inline-block;zoom: 1;\"><img src=\"${newImgs[i]}\" class=\"loaded lazy\" style=\"opacity: 1;box-shadow:none;\"></div></li>`;}; document.getElementById('comicContain').insertAdjacentHTML('beforeend', _img);"
+		}
+	},
+	"漫画星球 - 分类页": {
+		"host": ["/\\.mhxqiu/","/^www\\.sixmh\\d\\./"],
+		"url": "/^\\/(sort|rank)\\//",
+		"blank": 3,
+		"pager": {
+			"nextL": "#thisclass+li>a",
+			"pageE": ".cy_list_mh > ul",
+			"replaceE": ".NewPages",
+			"scrollD": 1000
+		}
+	},
+	"风之动漫": {
+		"host": "manhua.fffdm.com",
+		"url": "if (location.pathname.split('/').length === 4){document.write = function(){}; return true;}",
+		"style": "#footer, #header {display: none !important;} #mhimg0 img {display: block !important;margin: 0 auto !important;}",
+		"pager": {
+			"nextL": "a.pure-button.button-success+a",
+			"pageE": "id('main')/script[contains(text(), 'var Title')]",
+			"insertP": ["body",3],
+			"replaceE": ".navigation",
+			"scriptT": 2,
+			"scrollD": 2000
+		},
+		"function": {
+			"aF": "document.getElementById('mhimg0').appendChild(document.createElement('img')).src = mhpicurl;"
 		}
 	},
 	"包子漫画": {
@@ -2970,6 +3056,32 @@
 			"nextL": "li.thisclass+li>a",
 			"pageE": ".article-content img, #newsArticle img, .listl>ul, ul.news_list_1",
 			"replaceE": ".pagination, .pages, .page"
+		}
+	},
+	"COCOMANGA 漫画": {
+		"host": "www.cocomanga.com",
+		"url": "if (fun.indexOF('.html')){if (!(fun.getCookie('mh_readmode') === '' || fun.getCookie('mh_readmode') === '3')) {document.cookie='mh_readmode=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; location.reload();}; return true;} else if (fun.indexOF(/\\/\\d+\\/$/)) {setTimeout(function(){if (document.querySelector('a.website-display-all')) document.querySelector('a.website-display-all').click();}, 300);}",
+		"style": ".mh_readend, .mh_footpager, .mh_readmode {display: none !important;}",
+		"iframe": true,
+		"pager": {
+			"type": 5,
+			"nextL": "//a[contains(@class, 'read_page_link') and contains(string(), '下一章')][not(contains(@href, 'javascript'))]",
+			"interval": 5000,
+			"scrollD": 2000
+		}
+	},
+	"COCOMANGA 漫画 - 分类页": {
+		"host": "www.cocomanga.com",
+		"url": "return (fun.lp() == '/show' || fun.lp() == '/search')",
+		"blank": 1,
+		"pager": {
+			"nextL": "js;return fun.getNextEP('.fed-page-info a.fed-btns-green+a[onclick]', 'page=', /page=\\d+/)",
+			"pageE": "ul.fed-list-info > li, dl.fed-deta-info",
+			"replaceE": ".fed-page-info",
+			"scrollD": 1000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [1,'a[data-original]','data-original'])"
 		}
 	},
 	"起点中文": {

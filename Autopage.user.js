@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.7.7
+// @version      5.7.8
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、微博、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -954,88 +954,6 @@ function: {
                     scrollD: 3000
                 }
             }, //           HiComic (嗨漫画)
-            dmzj: {
-                host: 'www.dmzj.com',
-                url: ()=> {if (indexOF('/view/')) {
-                    if (getCookie('display_mode') != '1') { // 强制开启 [上下滚动阅读] 模式
-                        document.cookie='display_mode=1; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; // 写入 Cookie 开启 [上下滚动阅读] 模式
-                        location.reload(); // 刷新网页
-                    }
-                    setTimeout(function() {dmzj_init('.comic_wraCon > a > img')}, 100);
-                    curSite = DBSite.dmzj;
-                } else if (indexOF('/category') || indexOF('/update')) {
-                    curSite = DBSite.dmzj_list;
-                } else if (indexOF('/rank')) {
-                    curSite = DBSite.dmzj_rank;
-                }},
-                style: 'p.mh_curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} .comic_wraCon > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}', // 隐藏中间的页数信息
-                pager: {
-                    type: 4,
-                    nextL: 'span.next > a',
-                    insertP: ['.comic_wraCon', 3],
-                    insertE: dmzj_insertE,
-                    replaceE: '.wrap_last_mid, .wrap_last_head',
-                    interval: 2000,
-                    scrollD: 3000
-                }
-            }, //              动漫之家 - 原创
-            dmzj_list: {
-                style: '.wrap_mhlist_l.con_left, .wrap_list {height: auto!important;}',
-                blank: 1,
-                pager: {
-                    nextL: 'a.pg_next',
-                    pageE: 'ul.list_con_li > li',
-                    replaceE: '.page',
-                    scrollD: 1000
-                }
-            }, //         动漫之家 - 原创 - 分类页
-            dmzj_rank: {
-                style: '.wrap_mhlist_l.con_left {height: auto!important;}',
-                pager: {
-                    nextL: 'a.pg_next',
-                    pageE: '.ph_r_con_li > div:not(.ad_column)',
-                    replaceE: '.page',
-                    scrollD: 1000
-                }
-            }, //         动漫之家 - 原创 - 排行榜
-            dmzj_manhua: {
-                host: 'manhua.dmzj.com',
-                url: ()=> {if (indexOF(/\/\d+\.shtml/)) {
-                    let chapterScroll = getCSS('#qiehuan_txt') // 强制为 [上下滚动阅读] 模式
-                    if (chapterScroll && chapterScroll.textContent === '切换到上下滚动阅读') {chapterScroll.click();}
-                    setTimeout(function() {dmzj_init('#center_box > .inner_img img[src]')}, 100);
-                    curSite = DBSite.dmzj_manhua;
-                    /*} else if (indexOF('/tags/')) {
-                    curSite = DBSite.dmzj_manhua_list;*/
-                } else if (indexOF('/update')) {
-                    curSite = DBSite.dmzj_manhua_update;
-                }},
-                style: 'p.curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} #center_box > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}', // 隐藏中间的页数信息
-                pager: {
-                    type: 4,
-                    nextL: '#next_chapter',
-                    insertP: ['#center_box', 3],
-                    insertE: dmzj_manhua_insertE,
-                    replaceE: '.display_graybg',
-                    interval: 2000,
-                    scrollD: 3000
-                }
-            }, //       动漫之家 - 日漫
-            /*dmzj_manhua_list: {
-                pager: {
-                    nextL: ()=> getNextUPN(/(?<=-)\d+(?=\.shtml)/, /-\d+\.shtml/, '-', '.shtml', '2', getCSS('#topage > option:last-child').value),
-                    pageE: '#search_list_div ul'
-                }
-            },*/ //  动漫之家 - 日漫 - 分类页
-            dmzj_manhua_update: {
-                blank: 1,
-                pager: {
-                    nextL: '//div[@class="pages"]/a[contains(text(), "下一页")]',
-                    pageE: '.newpic_content > *:not(.pages)',
-                    replaceE: '.pages',
-                    scrollD: 1000
-                }
-            }, //动漫之家 - 日漫 - 最新更新
             ykmh: {
                 host: 'www.ykmh.com',
                 url: ()=> {if (indexOF(/\/\d+\.html/)) {
@@ -1070,48 +988,6 @@ function: {
                     scrollD: 1000
                 }
             }, //         优酷漫画 - 分类页
-            mhxqiu: {
-                host: [/\.mhxqiu/,/www\.sixmh\d\./],
-                url: ()=> {if (indexOF(/\/\d+\.html/)) { // 阅读页
-                    curSite = DBSite.mhxqiu;
-                } else if (indexOF(/\/\d+\/$/)) { // 目录页
-                    setTimeout(function(){if (getCSS('#zhankai')) getCSS('#zhankai').click();}, 500)
-                } else if (indexOF(/\/(sort|rank)\//)) { // 分类页
-                    curSite = DBSite.mhxqiu_list;
-                }},
-                style: '.imgFloat_1, .imgFloat_2, .main_control, span.comic-ft {display: none !important;} html, body, #mainView {height: auto !important;} body.view .main ul.comic-contain li{margin:0 auto !important;} .comic-contain .loaded{box-shadow: none !important;}',
-                pager: {
-                    type: 4,
-                    nextL: '#mainControlNext',
-                    insertP: ['#comicContain', 3],
-                    insertE: mhxqiu_insertE,
-                    replaceE: '.main_control, h1.chaptername_title, span.title-comicHeading',
-                    interval: 4000,
-                    scrollD: 3000
-                }
-            }, //            漫画星球
-            mhxqiu_list: {
-                blank: 1,
-                pager: {
-                    nextL: '//div[@class="NewPages"]//a[contains(text(), "下一页")]',
-                    pageE: '.cy_list_mh > ul',
-                    replaceE: '.NewPages',
-                    scrollD: 1000
-                }
-            }, //       漫画星球 - 分类页
-            fffdm: {
-                host: 'manhua.fffdm.com',
-                url: ()=> {if (location.pathname.split('/').length === 4) {curSite = DBSite.fffdm;}},
-                style: '#footer, #header {display: none !important;} #mhimg0 img {display: block !important;margin: 0 auto !important;}',
-                pager: {
-                    type: 4,
-                    nextL: '//a[contains(text(), "下一页") or contains(text(), "下一頁") or contains(text(), "下一话") or contains(text(), "下一話")]',
-                    insertP: ['#mhimg0', 3],
-                    insertE: fffdm_insertE,
-                    replaceE: '.navigation, #weizhi, h1',
-                    scrollD: 2000
-                }
-            }, //             风之动漫
             leyuman: {
                 host: 'www.leyuman.com',
                 url: ()=> {if (indexOF(/\/comic\/\d+\/\d+\.html/)) {
@@ -1969,53 +1845,6 @@ function: {
     }
 
 
-    // [动漫之家] 初始化（调整本话其余图片）
-    function dmzj_init(css) {
-        let _img = '';
-        getAllCSS(css).forEach(function (one) {_img += `<img src="${one.dataset.original}">`;})
-        getOne(curSite.pager.insertP[0]).innerHTML = _img;
-    }
-    // [动漫之家] 插入数据
-    function dmzj_insertE(pageE, type) {
-        if (!pageE) return
-        // 插入并运行 <script>
-        insScript('head > script[type]:not([src])', pageE);
-
-        // 插入图片
-        let _img = '', _img_arr;
-        if (pages.indexOf('|') === -1) {
-            _img_arr = JSON.parse(pages.replace(/\r\n/g,'|')).page_url.split('|');
-        } else {
-            _img_arr = JSON.parse(pages).page_url.split('|');
-        }
-        for (let now of _img_arr) {
-            _img += `<img src="${img_prefix}${now}">`;
-        }
-        if (_img) {
-            getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-            addHistory(pageE);
-            if (replaceElems(pageE)) pageNum.now = pageNum._now + 1
-        }
-    }
-    // [动漫之家-漫画] 插入数据
-    function dmzj_manhua_insertE(pageE, type) {
-        if (!pageE) return
-        // 插入并运行 <script>
-        insScript('head > script[type]:not([src])', pageE);
-
-        // 插入图片
-        let _img = '';
-        for (let now of arr_pages) {
-            _img += `<img src="${img_prefix}${now}">`;
-        }
-        if (_img) {
-            getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-            addHistory(pageE);
-            if (replaceElems(pageE)) pageNum.now = pageNum._now + 1
-        }
-    }
-
-
     // [优酷漫画] 初始化（调整本话其余图片）
     function ykmh_init(css) {
         let host = SinMH.getChapterImage(1).split('/')[0] + '//' + SinMH.getChapterImage(1).split('/')[2];
@@ -2047,44 +1876,6 @@ function: {
             getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
             addHistory(document, pageTitle + ' - 优酷漫画');
             if (replaceElems(pageE)) pageNum.now = pageNum._now + 1
-        }
-    }
-
-
-    // [漫画星球] 插入数据
-    function mhxqiu_insertE(pageE, type) {
-        if (!pageE) return
-        // 插入并运行 <script>
-        insScript('//script[contains(text(), "eval") and contains(text(), "newImgs")]', pageE);
-
-        // 插入图片
-        let _img = '';
-        for (let now of newImgs) {_img += `<li><div style="display: inline-block;zoom: 1;"><img src="${now}" class="loaded lazy" style="opacity: 1;box-shadow:none;"></div></li>`;}
-        if (_img) {
-            // 将 img 标签插入到网页中
-            getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
-            addHistory(pageE);
-            pageNum.now = pageNum._now + 1
-            replaceElems(pageE)
-        }
-    }
-
-
-    // [风之动漫] 插入数据
-    function fffdm_insertE(pageE, type) {
-        if (!pageE) return
-        // 插入并运行 <script>
-        let scriptElems = getXpath('id("main")/script[contains(text(), "mhpicurl")][1]', pageE, pageE);
-        if (scriptElems) {
-            document.body.appendChild(document.createElement('script')).textContent = scriptElems.textContent.replace(/document\.write.+/, '');
-
-            // 插入图片
-            setTimeout(function() {
-                getOne(curSite.pager.insertP[0]).appendChild(document.createElement('img')).src = mhpicurl;
-                addHistory(pageE);
-                pageNum.now = pageNum._now + 1
-                replaceElems(pageE)
-            }, 100)
         }
     }
 
@@ -3185,7 +2976,7 @@ function: {
         "host": ["bbb1.com", "bbb2.com"],
         "url": "/^\\/s$/",
         "style": ".aaaa {display: none !important;}",
-        "blank": 1,
+        "blank": 3,
         "hiddenPN": true,
         "history": false,
         "thread": true,
