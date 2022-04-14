@@ -1877,17 +1877,6 @@
 			"replaceE": ".ajax-pager"
 		}
 	},
-	"flysheep": {
-		"host": "www.flysheep6.com",
-		"url": "return (!fun.indexOF(/^\\/archives\\/\\d/))",
-		"style": "#content>.post {position: static !important; float: left !important; height: 500px !important;}",
-		"blank": 3,
-		"pager": {
-			"nextL": "a.next",
-			"pageE": "#content>.post",
-			"replaceE": ".pagination"
-		}
-	},
 	"cs.rin.ru - 帖子列表": {
 		"host": "cs.rin.ru",
 		"url": "return (fun.lp() == '/forum/viewforum.php')",

@@ -430,7 +430,7 @@ function: {
                     if (!indexOF('/post/') && !getCSS('#comments, .comments-area, #disqus_thread')) {
                         curSite = DBSite.wp_article; curSite.pager.nextL = nextL;
                         // 自适应瀑布流样式
-                        setTimeout(function(){if (getCSS(curSite.pager.pageE).style.cssText.indexOf('position: absolute') != -1){insStyle(curSite.pager.pageE + '{position: static !important; float: left !important; height: '+ parseInt(getCSS(curSite.pager.pageE).offsetHeight * 1.1) + 'px !important;}');}}, 1000);
+                        setTimeout(function(){if (getCSS(curSite.pager.pageE).style.cssText.indexOf('position: absolute') != -1){insStyle(curSite.pager.pageE + '{position: static !important; float: left !important; height: '+ parseInt(getCSS(curSite.pager.pageE).offsetHeight * 1.1) + 'px !important;}');}}, 1500);
                     }
                 },
                 blank: 3,
