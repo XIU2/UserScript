@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.7.9
+// @version      5.8.0
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -104,7 +104,7 @@
         'https://hk1.monika.love/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.fsofso.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json'
-    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, DBSite2, SiteType, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname;
+    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, DBSite2, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname;
     window.autoPage = {lp: ()=>location.pathname, indexOF: indexOF, isMobile: isMobile, isUrlC: isUrlC, blank: forceTarget, getAll: getAll, getOne: getOne, getAllXpath: getAllXpath, getXpath: getXpath, getAllCSS: getAllCSS, getCSS: getCSS, getNextE: getNextE, getNextEP: getNextEP, getNextSP: getNextSP, getNextEPN: getNextEPN, getNextUPN: getNextUPN, getNextUP: getNextUP, getNextF: getNextF, getSearch: getSearch, getCookie: getCookie, insStyle: insStyle, insScript: insScript, src_bF: src_bF, xs_bF: xs_bF}
 
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
@@ -253,7 +253,7 @@
         } else if (getCSS('head meta[name="generator" i][content="nexusphp" i]') || getXpath('id("footer")[contains(string(), "NexusPHP")]')) {
             console.info(`[自动无缝翻页] - <NexusPHP> 论坛`); return 7;
 
-        } else if (getAllCSS('.load-more, .loadmore, #load-more, #loadmore, .show_more').length === 1) {
+        } else if (getAllCSS('.more, .load-more, .load_more, .loadmore, #more, #load-more, #load_more, #loadmore, .show-more, .show_more').length === 1) {
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 1`); return 8;
 
         } else if (getAllXpath('//*[text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]').length === 1 && location.hostname.indexOf('www.smzdm.com') == -1) {
@@ -312,7 +312,7 @@
                 case 7: //   < 所有 NexusPHP 论坛 >
                     DBSite.nexusphp.url(); break;
                 case 8: // < 部分自带 自动无缝翻页 的网站 1 >
-                    DBSite.loadmore.url('.load-more, .loadmore, #load-more, #loadmore, .show_more'); break;
+                    DBSite.loadmore.url('.more, .load-more, .load_more, .loadmore, #more, #load-more, #load_more, #loadmore, .show-more, .show_more'); break;
                 case 9: // < 部分自带 自动无缝翻页 的网站 2 >
                     DBSite.loadmore.url('//*[text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]'); break;
                 case 100: // < 部分使用 WordPress 的网站 (a.next) >
@@ -729,53 +729,6 @@ function: {
                     replaceE: '//p[@align][./font[@class="gray"]]'
                 }
             }, //           NexusPHP 论坛
-            baidu_tieba: {
-                host: ['tieba.baidu.com', 'jump2.bdimg.com'],
-                url: ()=> {if (location.hostname == 'jump2.bdimg.com') location.hostname = 'tieba.baidu.com';
-                           if (lp == '/f') {
-                               baidu_tieba_1(); // 右侧悬浮发帖按钮点击事件（解决自动翻页导致无法发帖的问题）
-                               curSite = DBSite.baidu_tieba;
-                           } else if (indexOF('/p/')) {
-                               curSite = DBSite.baidu_tieba_post;
-                           } else if (lp == '/f/search/res') {
-                               curSite = DBSite.baidu_tieba_search;
-                           }},
-                style: 'img.j_retract {margin-top: 0 !important;margin-bottom: 0 !important;}', // 修复帖子列表中预览图片，在切换下一个/上一个图片时，多出来的图片上下边距
-                history: false,
-                iframe: true,
-                pager: {
-                    type: 4,
-                    nextL: ()=> {if (getNextE('a.next.pagination-item')) getPageE_(curSite.pageUrl + '&pagelets=frs-list%2Fpagelet%2Fthread&pagelets_stamp=' + new Date().getTime());},
-                    pageE: '#thread_list > li',
-                    insertP: ['#thread_list', 3],
-                    insertE: baidu_tieba_insertE,
-                    replaceE: '#frs_list_pager',
-                    interval: 2000,
-                    scrollD: 2500
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-original]', 'data-original']
-                }
-            }, //        百度贴吧 - 帖子列表
-            baidu_tieba_post: {
-                blank: true,
-                thread: true,
-                style: '.d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld, .topic_list_box.topic-fixed {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}', // 签名、印记、头像边框、VIP 元素
-                pager: {
-                    type: 5,
-                    nextL: '//li[contains(@class,"pb_list_pager")]/a[text()="下一页"]',
-                    style: 'ul.tbui_aside_float_bar, .core_title_wrap_bright.tbui_follow_fixed.core_title_absolute_bright {display: none !important;}'
-                }
-            }, //   百度贴吧 - 帖子内
-            baidu_tieba_search: {
-                pager: {
-                    nextL: 'a.next',
-                    pageE: '.s_post_list > div',
-                    replaceE: '.pager',
-                    scrollD: 1000
-                }
-            }, // 百度贴吧 - 搜索页
             nexusmods: {
                 host: 'www.nexusmods.com',
                 url: ()=> {urlC = true; if (!(lp == '/' || indexOF(/\/mods\/\d+/))) {curSite = DBSite.nexusmods;}},
@@ -910,7 +863,7 @@ function: {
                     bF: src_bF,
                     bFp: [0, 'img[data-src]', 'data-src']
                 }
-            }, //    漫画台 - 分类/搜索页
+            }, //    漫画柜 - 分类/搜索页
             _36manga: {
                 host: ['36manga.com', 'www.36manga.com', '36manhua.com', 'www.36manhua.com'],
                 url: ()=> {if (indexOF(/\/manhua\/.+\/\d+\.html/)) {
@@ -994,79 +947,6 @@ function: {
                     scrollD: 1000
                 }
             }, //         优酷漫画 - 分类页
-            leyuman: {
-                host: 'www.leyuman.com',
-                url: ()=> {if (indexOF(/\/comic\/\d+\/\d+\.html/)) {
-                    curSite = DBSite.leyuman;
-                    setTimeout(leyuman_init, 100);
-                } else if (indexOF(/\/comic\/\d+\.html/)) {
-                    setTimeout(function(){if (getCSS('#read-more')) getCSS('#read-more').click();}, 500)
-                } else {
-                    curSite = DBSite.leyuman_list;
-                }},
-                style: '.mh_select, .mh_comicpic > p, mh_headpager {display: none !important;} .mh_comicpic > img{width: 100% !important; height: auto !important;}',
-                pager: {
-                    type: 4,
-                    nextL: '#xurl',
-                    insertP: ['.mh_comicpic', 3],
-                    insertE: leyuman_insertE,
-                    replaceE: '.mh_headpager, .mh_readtitle',
-                    interval: 3000,
-                    scrollD: 3000
-                }
-            }, //           乐语漫画
-            leyuman_list: {
-                blank: 1,
-                pager: {
-                    nextL: '//a[@class="page-link"][contains(text(), "下一页")]',
-                    pageE: '.works_recommend.classification_works > ul',
-                    replaceE: '.paging',
-                    scrollD: 1000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-src]', 'data-src']
-                }
-            }, //      乐语漫画 - 分类页
-            _77mh: {
-                host: 'www.77mh.cc',
-                url: ()=> {if (indexOF(/\/\d+\.html/)) {
-                    curSite = DBSite._77mh;
-                    setTimeout(_77mh_init, 100);
-                } else if (indexOF('/colist_')) {
-                    setTimeout(function(){if (getCSS('#listmore1, .listmore')) getCSS('#listmore1, .listmore').click();}, 500)
-                } else {
-                    curSite = DBSite._77mh_list;
-                }},
-                style: '.page_num, #bdtopbot {display: none !important;} #comicImg > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}',
-                pager: {
-                    type: 4,
-                    nextL: _77mh_nextL,
-                    insertP: ['#comicImg', 3],
-                    insertE: _77mh_insertE,
-                    interval: 3000,
-                    scrollD: 2000
-                }
-            }, //             新新漫画
-            _77mh_list: {
-                blank: 1,
-                pager: {
-                    nextL: '//div[@class="pages_s"]/a[text()="下一页"]',
-                    pageE: '.ar_list_co > ul > li',
-                    replaceE: '.pages_s',
-                    scrollD: 1000
-                }
-            }, //        新新漫画 - 分类页
-            _77mh_search: {
-                host: 'so.77mh.cc',
-                blank: 1,
-                pager: {
-                    nextL: 'a.next',
-                    pageE: '.ar_list_co > ul > dl',
-                    replaceE: '.pages_s',
-                    scrollD: 1000
-                }
-            }, //      新新漫画 - 搜索页
             gufengmh: {
                 host: /^www\.gufengmh\d/,
                 url: ()=> {if (indexOF(/\/\d+.+\.html/)) {
@@ -1096,39 +976,6 @@ function: {
                     scrollD: 1000
                 }
             }, //     古风漫画网 - 分类页
-            szcdmj: {
-                host: 'www.szcdmj.com',
-                url: ()=> {
-                    if (indexOF('/szcchapter/')) {
-                        curSite = DBSite.szcdmj;
-                    } else if (indexOF('/szcbook/')) {
-                        if (getCSS('#detail-list-more')) getCSS('#detail-list-more').click();
-                    } else if (lp == '/szcbolist' || lp == '/update') {
-                        curSite = DBSite.szcdmj_list;
-                    }},
-                style: '.header {opacity: 0.3 !important;}',
-                pager: {
-                    nextL: '//div[@class="fanye"][1]/a[@href][text()="下一页" or text()="下一话"]',
-                    pageE: '.comicpage > div',
-                    insertP: ['.comicpage', 3],
-                    replaceE: '.fanye,h1.title',
-                    interval: 0,
-                    scrollD: 2000
-                },
-                function: {
-                    bF: src_bF,
-                    bFp: [0, 'img[data-original]', 'data-original']
-                }
-            }, //            砂之船动漫家
-            szcdmj_list: {
-                blank: 1,
-                pager: {
-                    nextL: '#nextPage',
-                    pageE: 'ul.mh-list > li',
-                    replaceE: '.pagination',
-                    scrollD: 1000
-                }
-            }, //       砂之船动漫家 - 分类/搜索页
             mangabz: {
                 host: ['mangabz.com', 'www.mangabz.com'],
                 url: ()=> {if (indexOF(/\/m\d+/)) {
@@ -1251,10 +1098,6 @@ function: {
         // 生成 SiteTypeID
         setSiteTypeID();
         //console.log(DBSite)
-        // 用于脚本判断（针对部分特殊的网站）
-        SiteType = {
-            BAIDU_TIEBA: DBSite.baidu_tieba.SiteTypeID
-        };
     }
     // 外置翻页规则
     function getRulesUrl(update = false) {
@@ -1521,38 +1364,6 @@ function: {
     function waterfallStyle() {
         let width = getCSS('#waterfall > li:first-child').style.width;
         if (width) insStyle(`#waterfall {height: auto !important; width: 100% !important;} #waterfall > li {width: ${width} !important; float: left !important; position: inherit !important; left: auto !important; top: auto !important;}`);
-    }
-
-
-    // [百度贴吧]（发帖按钮点击事件）
-    function baidu_tieba_1() {
-        let button = getCSS('.tbui_aside_fbar_button.tbui_fbar_post > a');
-        if (button) {
-            button.remove();
-            getCSS('li.tbui_aside_fbar_button.tbui_fbar_down').insertAdjacentHTML(getAddTo(4), '<li class="tbui_aside_fbar_button tbui_fbar_post"><a href="javascript:void(0);" title="因为 [自动无缝翻页] 的原因，请点击该按钮发帖！"></a></li>')
-            button = getCSS('.tbui_aside_fbar_button.tbui_fbar_post > a');
-            if (button) {
-                button.onclick = function(){
-                    let button2 = getCSS('div.edui-btn.edui-btn-fullscreen.edui-btn-name-portrait');
-                    if (button2) {button2.click();} else {alert('提示：登录后才能发帖！');}
-                    return false;
-                }
-            }
-        }
-    }
-    // [百度贴吧] 插入数据
-    function baidu_tieba_insertE(pageE, type) {
-        if (!pageE) return
-        // 获取 <script> 内容
-        const scriptElems = getXpath(`//script[contains(text(), 'Bigpipe.register("frs-list/pagelet/thread_list", ')]`, pageE, pageE);
-        if (scriptElems) {
-            // 从 <script> 中提取帖子列表字符串
-            let scriptText = scriptElems.textContent.replace('Bigpipe.register("frs-list/pagelet/thread_list", ','');
-            scriptText = scriptText.slice(0, scriptText.indexOf(').'));
-            // 字符串转 Element 元素
-            let temp_baidu_tieba = document.createElement('div'); temp_baidu_tieba.innerHTML = JSON.parse(scriptText).content;
-            processElems(temp_baidu_tieba);
-        }
     }
 
 
@@ -1886,75 +1697,6 @@ function: {
     }
 
 
-    // [乐语漫画] 初始化（调整本话其余图片）
-    function leyuman_init() {
-        let _img = '';
-        for (let one of JSON.parse(z_img)) {
-            if (one.slice(0,4) === 'http') {
-                _img += `<img src="${one}">`;
-            } else {
-                _img += `<img src="https://img.shishi-life.com/${one}">`;
-            }
-        }
-        getOne(curSite.pager.insertP[0]).innerHTML = _img;
-
-    }
-    // [乐语漫画] 插入数据
-    function leyuman_insertE(pageE, type) {
-        if (!pageE) return
-        // 插入并运行 <script>
-        insScript('//body//script[not(@src)][contains(text(), "z_img=")]', pageE);
-
-        // 插入图片
-        let _img = '';
-        for (let one of JSON.parse(z_img)) {
-            if (one.slice(0,4) === 'http') {
-                _img += `<img src="${one}">`;
-            } else {
-                _img += `<img src="https://img.shishi-life.com/${one}">`;
-            }
-        }
-        if (_img) {
-            // 将 img 标签插入到网页中
-            getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
-            addHistory(pageE);
-            pageNum.now = pageNum._now + 1
-            replaceElems(pageE)
-        }
-    }
-
-
-    // [新新漫画] 初始化（调整本话其余图片）
-    function _77mh_init() {
-        let _img = '';
-        for (let one of arr) {_img += `<img src="${img_qianz}${one}">`;}
-        getOne(curSite.pager.insertP[0]).innerHTML = _img;
-    }
-    // [新新漫画] 获取下一页地址
-    function _77mh_nextL() {
-        let next = nextLink_b
-        if (next && next != curSite.pageUrl) {
-            curSite.pageUrl = next;
-            getPageE_(curSite.pageUrl);
-        }
-    }
-    // [新新漫画] 插入数据
-    function _77mh_insertE(pageE, type) {
-        if (!pageE) return
-        // 插入并运行 <script>
-        insScript('//script[not(@src)][contains(text(), "eval(")]', pageE);
-
-        // 插入图片
-        let _img = '';
-        for (let one of msg.split('|')) {_img += `<img src="${img_qianz}${one}.webp">`;}
-        if (_img) {
-            // 将 img 标签插入到网页中
-            getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
-            addHistory(pageE);
-            pageNum.now = pageNum._now + 1
-        }
-    }
-
     // [古风漫画网] 插入数据
     function gufengmh_insertE(pageE, type) {
         if (!pageE) return
@@ -2196,10 +1938,7 @@ function: {
 
                     // <<<<< 翻页类型 4（部分简单的动态加载类网站）>>>>>
                 } else if (curSite.pager.type === 4) {
-                    // 为百度贴吧的发帖考虑，预留底部一小部分...
-                    if (!(curSite.SiteTypeID === SiteType.BAIDU_TIEBA && document.documentElement.scrollHeight <= scrollHeight + scrollTop + 200)) {
-                        intervalPause(); if (typeof curSite.pager.nextL == 'function') {curSite.pager.nextL();} else if (getNextE(curSite.pager.nextL)) {getPageE_(curSite.pageUrl);}
-                    }
+                    intervalPause(); if (typeof curSite.pager.nextL == 'function') {curSite.pager.nextL();} else if (getNextE(curSite.pager.nextL)) {getPageE_(curSite.pageUrl);}
 
                     // <<<<< 翻页类型 5（插入 iframe 方式来加载下一页）>>>>>
                 } else if (curSite.pager.type === 5) {
@@ -2308,7 +2047,11 @@ function: {
 
         // 创建 iframe
         let iframe = document.createElement('iframe');
-        iframe.style = 'position: absolute !important; width: 100% !important; height: 100% !important; border: none !important;';
+        if (location.hostname == 'www.cocomanga.com') {
+            iframe.style = 'position: absolute; width: 100%; height: 100%; border: none;';
+        } else {
+            iframe.style = 'position: absolute !important; width: 100% !important; height: 100% !important; border: none !important;';
+        }
         iframe.id = 'Autopage_iframe';
         iframe.src = src.replace(/#.+$/,'');
 
@@ -2367,7 +2110,11 @@ function: {
         }
 
         // 插入 iframe
-        document.documentElement.appendChild(iframe);
+        if (location.hostname == 'www.cocomanga.com') {
+            document.body.appendChild(iframe);
+        } else {
+            document.documentElement.appendChild(iframe);
+        }
     }
     // 翻页类型 6（通过 iframe 获取下一页动态加载内容，只有一个娃）
     function insIframe_(src) {
@@ -2375,12 +2122,12 @@ function: {
         if (!pausePage) return
         pausePage = false
 
-        console.log('222',src)
+        //console.log('000',src)
         // 如果不存在，则创建一个 iframe
         let iframe = document.getElementById('Autopage_iframe');
         if (!iframe) {
             iframe = document.createElement('iframe');
-            iframe.style = 'position: absolute !important; top: -9999px !important; left: -9999px !important; width: 100% !important; height: 100% !important; border: none !important; z-index: -999 !important; /*visibility: hidden;*/';
+            iframe.style = 'position: absolute !important; top: -9999px !important; left: -9999px !important; width: 100% !important; height: 100% !important; border: none !important; z-index: -999 !important;';
             //iframe.sandbox = 'allow-same-origin allow-scripts allow-popups allow-forms';
             iframe.id = 'Autopage_iframe';
             iframe.src = src.replace(/#.+$/,'');
@@ -2399,7 +2146,7 @@ function: {
                     pausePage = true; //      恢复翻页
                 }
             }, curSite.pager.loadTime/10)
-        }
+            }
 
         // 插入 iframe（如果已存在则直接改 src）
         if (document.getElementById('Autopage_iframe')) {
