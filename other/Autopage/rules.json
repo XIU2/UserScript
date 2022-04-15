@@ -1264,7 +1264,7 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"千图网 - 分类/搜索页": {
@@ -1334,7 +1334,7 @@
 			"scrollD": 2000
 		},
 		"function": {
-			"bF": "pageE.forEach(function (one) {if (one.className === 'list' && one.dataset.w != undefined) {one.style.width = `${one.dataset.w}px`;}}); return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+			"bF": "pageE.forEach(function (one) {if (one.className === 'list' && one.dataset.w != undefined) {one.style.width = `${one.dataset.w}px`;}}); return fun.src_bF(pageE)"
 		}
 	},
 	"众图网": {
@@ -1992,7 +1992,8 @@
 			"nextL": "js;return fun.getNextEP('.vui_pagenation--btn-num.vui_button--active+button.vui_pagenation--btn-num', 'page=', /page=\\d+(&o=\\d+)?/)",
 			"pageE": ".video-list-item, .media-list>div",
 			"replaceE": ".vui_pagenation--btns",
-			"loadTime": 800
+			"loadTime": 600,
+			"scrollD": 2500
 		}
 	},
 	"NO视频": {
@@ -2052,11 +2053,11 @@
 			"replaceE": "#pagenavi"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"91 美剧网": {
-		"host": "/mjw\\d+\\.com/",
+		"host": "/mjw\\d+\\.com$/",
 		"url": "return (document.title.indexOf('91美剧') > -1 && !fun.indexOF('/w/') && !fun.indexOF('/dp/'))",
 		"blank": 3,
 		"pager": {
@@ -2225,7 +2226,7 @@
 		}
 	},
 	"音范丝": {
-		"host": "/www\\.yinfans\\./",
+		"host": "/^www\\.yinfans\\./",
 		"style": "#post_container>li {position: static !important; float: left !important; height: 620px !important;}",
 		"pager": {
 			"nextL": "a.next",
@@ -2242,7 +2243,7 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])",
+			"bF": "return fun.src_bF(pageE)",
 			"aF": "document.body.appendChild(document.createElement('script')).textContent = 'this.imagePreview()'"
 		}
 	},
@@ -2255,7 +2256,7 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"磁力狗": {
@@ -2308,7 +2309,7 @@
 		}
 	},
 	"爱恋动漫/漫猫动漫/末日动漫": {
-		"host": ["www.kisssub.org","www.comicat.org","www.anix.moe","/(share|www)\\.acgnx\\./"],
+		"host": ["www.kisssub.org","www.comicat.org","www.anix.moe","/^(share|www)\\.acgnx\\./"],
 		"pager": {
 			"nextL": "a.nextprev:last-of-type",
 			"pageE": "#data_list>tr",
@@ -2607,7 +2608,7 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"中文字幕网 zimuzimu": {
@@ -2656,7 +2657,7 @@
 			"scrollD": 1000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"动漫啦": {
@@ -2710,7 +2711,7 @@
 			"scrollD": 3000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"言耽社 - 分类页": {
@@ -2966,7 +2967,7 @@
 			"scrollD": 3000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"拷贝漫画 - 推荐页": {
@@ -2978,7 +2979,7 @@
 			"replaceE": "ul.page-all"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"木马漫画 - 阅读页": {
@@ -3546,7 +3547,7 @@
 			"scrollD": 2000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"小众软件": {
@@ -3832,7 +3833,7 @@
 			"replaceE": ".navigation"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"winhelponline": {
@@ -3911,7 +3912,7 @@
 			"scrollD": 2000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"PubMed": {
@@ -4406,7 +4407,7 @@
 		}
 	},
 	"IT之家": {
-		"host": "/\\.ithome\\.com/",
+		"host": "/\\.ithome\\.com$/",
 		"pager": {
 			"type": 2,
 			"nextL": "a.more",
@@ -4491,7 +4492,7 @@
 		}
 	},
 	"阿里盘搜": {
-		"host": "/www\\.upyunso[0-9]?\\.com/",
+		"host": "/^www\\.upyunso[0-9]?\\.com$/",
 		"url": "return (fun.lp() == '/search.html')",
 		"style": ".pager-wrap {display: none !important;}",
 		"history": true,
@@ -4883,7 +4884,7 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
 		}
 	},
-	"xvideos": {
+	"Xvideos": {
 		"host": ["www.xnxx.com","www.xvideos.com"],
 		"url": "if (location.hostname == 'www.xnxx.com') {if (fun.indexOF('/search/')) return true;} else {if (fun.lp() == '/' || fun.indexOF(/\\/(c|tags|lang)\\//)) return true;}",
 		"blank": 3,
@@ -4893,12 +4894,12 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])",
+			"bF": "return fun.src_bF(pageE)",
 			"aF": "document.body.appendChild(document.createElement('script')).textContent = 'xv.thumb_block_initiator.init_listing();';"
 		}
 	},
-	"pornhub": {
-		"host": "/\\.pornhub\\.com/",
+	"PornHub": {
+		"host": "/\\.pornhub\\.com$/",
 		"url": "/^\\/video/",
 		"style": ".footerContentWrapper, .pre-footer {display: none !important;}",
 		"blank": 3,
@@ -4908,10 +4909,62 @@
 			"replaceE": ".pagination3"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
-	"91porn": {
+	"YouPorn": {
+		"host": "www.youporn.com",
+		"url": "return (!fun.indexOF('/watch/'))",
+		"blank": 1,
+		"pager": {
+			"nextL": "a[aria-label='Next page']",
+			"pageE": ".video-box",
+			"replaceE": "#pagination",
+			"scrollD": 1500
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
+	"RedTube": {
+		"host": "www.redtube.com",
+		"url": "return (fun.lp() != '/pornstar' && !fun.indexOF(/^\\/\\d+$/) && fun.getCSS('#w_pagination') != null)",
+		"blank": 3,
+		"pager": {
+			"nextL": "#wp_navNext",
+			"pageE": ".videoblock_list:not([id*='_vid_']):not([id*='_premium_']), .content_limit>ul>li.channel-box",
+			"replaceE": "#w_pagination",
+			"scrollD": 2000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
+	"Tube8": {
+		"host": "www.tube8.com",
+		"url": "return (!fun.indexOF(/\\/\\d{5,}\\/$/))",
+		"style": "#home_page_wrapper>.sectionWrapper:nth-last-child(-n+3) {display: none;}",
+		"blank": 3,
+		"pager": {
+			"nextL": "#pagination_next",
+			"pageE": "#category_video_list .video_box, #result_container>.video_box, .sectionWrapper .video_box",
+			"replaceE": "#pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-thumb]','data-thumb'])"
+		}
+	},
+	"Thumbzilla": {
+		"host": "www.thumbzilla.com",
+		"url": "return (!fun.indexOF('/video/'))",
+		"blank": 3,
+		"pager": {
+			"nextL": ".page_next>a",
+			"pageE": ".responsiveListing>li:not([id])",
+			"replaceE": ".pagination"
+		}
+	},
+	"91Porn": {
 		"host": ["91porn.com","0118.workarea7.live"],
 		"url": "/\\/v\\.php/",
 		"blank": 3,
@@ -4922,7 +4975,7 @@
 		}
 	},
 	"xHamster": {
-		"host": "/xhamster(\\d+)?\\.com/",
+		"host": "/xhamster(\\d+)?\\.com$/",
 		"url": "return (document.title.indexOf('xHamster') > -1 && !fun.indexOF('/videos/') && !fun.indexOF('/photos/'))",
 		"blank": 3,
 		"pager": {
@@ -4942,6 +4995,54 @@
 			"pageE": "#vidresults>[id], script[src*='/ajax']",
 			"replaceE": ".numlist2",
 			"scriptT": 2
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
+	"YouJizz": {
+		"host": "www.youjizz.com",
+		"url": "return (fun.lp() == '/' || (!fun.indexOF('/videos/') && fun.indexOF('.html')))",
+		"blank": 3,
+		"pager": {
+			"nextL": ".pagination-next",
+			"pageE": ".video-thumb",
+			"replaceE": ".pagination, .mobilePager"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
+	"DaftSex": {
+		"host": "daftsex.com",
+		"url": "fun.isUrlC(); return (!fun.indexOF('/watch/') && fun.getCSS('.more') != null)",
+		"pager": {
+			"type": 2,
+			"nextL": ".more",
+			"interval": 1000
+		}
+	},
+	"DaftSex - other": {
+		"host": "daftsex.com",
+		"url": "return (!fun.indexOF('/watch/') && fun.getCSS('.pagination') != null)",
+		"blank": 3,
+		"pager": {
+			"nextL": "li.active+li>a",
+			"pageE": ".video-item",
+			"replaceE": ".pagination"
+		}
+	},
+	"SEX.COM": {
+		"host": "www.sex.com",
+		"url": "return (!fun.indexOF('/pin/'))",
+		"blank": 3,
+		"pager": {
+			"type": 6,
+			"nextL": "button.active+a",
+			"pageE": "#masonry_container",
+			"replaceE": ".pagination",
+			"loadTime": 600,
+			"scrollD": 3000
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE)"
@@ -5042,16 +5143,16 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
-	"JavBus": {
-		"host": "/^www\\.(jav.+|.+jav)\\./",
-		"url": "return (fun.getCSS('img[alt=\"JavBus\" i]') && !fun.indexOF('/forum/'))",
+	"JavBus / AVMOO": {
+		"host": ["/^www\\.(jav.+|.+jav)\\./","/^avmoo\\./"],
+		"url": "return ((fun.getCSS('img[alt=\"JavBus\" i]')||document.title.indexOf('JavBus') > -1||document.title.indexOf('AVMOO') > -1) && !fun.indexOF('/forum/'))",
 		"style": "#waterfall>.item {position: static !important; float: left !important; height: 400px !important;}",
 		"blank": 3,
 		"pager": {
-			"nextL": "#next",
+			"nextL": "#next, .pagination>.active+li>a",
 			"pageE": "#waterfall>.item",
 			"replaceE": ".pagination"
 		}
@@ -5087,7 +5188,7 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"JavDove 番号鸽": {
@@ -5100,7 +5201,7 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"Netflav": {
@@ -5116,6 +5217,46 @@
 			"scrollD": 3000
 		}
 	},
+	"Porn87": {
+		"host": "porn87.com",
+		"url": "return (fun.lp() == '/' || fun.lp() == '/main/tag' || fun.lp() == '/main/search')",
+		"blank": 3,
+		"pager": {
+			"nextL": ".pagination-next:not(.mobile_pagination)>a",
+			"pageE": ".column:not(.native_ads)",
+			"replaceE": ".pagination"
+		}
+	},
+	"GGJAV": {
+		"host": "ggjav.com",
+		"url": "return (fun.lp() != '/' && fun.lp() != '/home/' && fun.lp() != '/main/video')",
+		"blank": 3,
+		"pager": {
+			"nextL": ".pager>a:last-child[href]",
+			"pageE": ".item.columns:not(.native_ads), .columns.model_chunk",
+			"replaceE": ".pager"
+		}
+	},
+	"BuzzAV": {
+		"host": "www.buzzav.com",
+		"url": "/\\/(videos|albums)/",
+		"blank": 3,
+		"pager": {
+			"nextL": ".page-item.active+li>a",
+			"pageE": ".content-left>.row.content-row",
+			"replaceE": ".pagination"
+		}
+	},
+	"AV6K": {
+		"host": "av6k.com",
+		"url": "return (fun.lp() != '/' && !fun.indexOF('/search') && !fun.indexOF(/\\/\\d+\\.html$/))",
+		"blank": 3,
+		"pager": {
+			"nextL": ".thisclass+li>a",
+			"pageE": ".listA",
+			"replaceE": ".pages_c"
+		}
+	},
 	"HuangboAV": {
 		"host": "huangboav.com",
 		"url": "return (fun.indexOF(/^\\/(category|tag)\\//) || location.search != '')",
@@ -5127,7 +5268,7 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"SupJav": {
@@ -5140,7 +5281,7 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"141 JAV": {
@@ -5251,6 +5392,16 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"CartoonPornVideos": {
+		"host": "www.cartoonpornvideos.com",
+		"url": "return (fun.getCSS('.content>.pagination') != null)",
+		"blank": 3,
+		"pager": {
+			"nextL": ".next",
+			"pageE": ".thumb-list>div",
+			"replaceE": ".content>.pagination"
+		}
+	},
 	"hanime1": {
 		"host": "hanime1.me",
 		"url": "/^\\/search/",
@@ -5262,7 +5413,7 @@
 			"scrollD": 2500
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"hanime1 - 漫画 - 分类页": {
@@ -5304,7 +5455,7 @@
 			"scrollD": 2000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])",
+			"bF": "return fun.src_bF(pageE)",
 			"aF": "setTimeout(function(){document.body.appendChild(document.createElement('script')).textContent = `var old_onImageLoaded = onImageLoaded; onImageLoaded = function(e){aid = parseInt(/photos\\\\/\\\\d+/.exec(e.src)[0].replace('photos/','')); old_onImageLoaded(e);}`}, 500)"
 		}
 	},
@@ -5319,7 +5470,7 @@
 			"replaceE": "#wrapper>.container>div:not(.row)>.pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"177 漫画/xxiav": {
@@ -5386,7 +5537,7 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"nhentai - 图片页": {
@@ -5491,7 +5642,7 @@
 			"replaceE": ".wp-pagenavi, #page>#page_nation"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"绅士仓库": {
@@ -5536,7 +5687,7 @@
 			"replaceE": ".article-paging, .pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"秀人集": {
@@ -5608,7 +5759,7 @@
 			"scrollE": ".pagination[role='navigation'], .article-fulltext~.pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"宅男女神": {
@@ -5689,7 +5840,7 @@
 			"scrollD": 3000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-original]','data-original'])"
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"24tupian": {
@@ -5785,7 +5936,7 @@
 		}
 	},
 	"24FA": {
-		"host": ["www.24fa.com","www.24faa.com","/www\\.\\d{3}w\\.cc/"],
+		"host": ["www.24fa.com","www.24faa.com","/^www\\.\\d{3}w\\.cc$/"],
 		"url": "/^\\/m?n\\d+/",
 		"style": ".moreR {display: none;} #content img {width: auto; max-width: 99%; height: auto; display: block; margin: 0 auto;}",
 		"pager": {
