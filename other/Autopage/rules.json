@@ -884,7 +884,7 @@
 		}
 	},
 	"北+": {
-		"host": ["/^((www|bbs)\\.)?(soul|north|south|white|level|summer|spring|snow)-plus\\.(net|org)$/","bbs.imoutolove.me"],
+		"host": ["/^((www|bbs)\\.)?(soul|snow|south|spring|summer|north|white|level|east)-plus\\.(net|org)$/","bbs.imoutolove.me"],
 		"url": "return (fun.lp() == '/thread.php' || fun.lp() == '/search.php')",
 		"pager": {
 			"nextL": "//div[@class='pages']/ul/li[./b]/following-sibling::li[1][not(@class)]/a[not(text()='»')]",
@@ -893,7 +893,7 @@
 		}
 	},
 	"北+ - 图墙": {
-		"host": ["/^((www|bbs)\\.)?(soul|north|south|white|level|summer|spring|snow)-plus\\.(net|org)$/","bbs.imoutolove.me"],
+		"host": ["/^((www|bbs)\\.)?(soul|snow|south|spring|summer|north|white|level|east)-plus\\.(net|org)$/","bbs.imoutolove.me"],
 		"url": "return (fun.lp() == '/thread_new.php')",
 		"style": "img.lazy {display: inline !important;}",
 		"pager": {
@@ -1992,7 +1992,7 @@
 			"nextL": "js;return fun.getNextEP('.vui_pagenation--btn-num.vui_button--active+button.vui_pagenation--btn-num', 'page=', /page=\\d+(&o=\\d+)?/)",
 			"pageE": ".video-list-item, .media-list>div",
 			"replaceE": ".vui_pagenation--btns",
-			"loadTime": 1200
+			"loadTime": 800
 		}
 	},
 	"NO视频": {
@@ -4141,15 +4141,17 @@
 	"菜鸟教程": {
 		"host": "www.runoob.com",
 		"url": "if (location.pathname.split('/').length>2 && fun.getCSS('#leftcolumn')) return true",
-		"style": "#comments, #postcomments, #respond, #footer {display: none !important;} .article-intro h1:not(:nth-of-type(1)) {margin: 30px 0 10px 0;}",
+		"style": "#comments, #postcomments, #respond, #footer {display: none !important;} .article-intro h1:not(:nth-of-type(1)) {margin: 30px 0 10px 0;} .left-column.site-fix {position: initial !important;}",
 		"history": true,
 		"pager": {
+			"type": 3,
 			"nextL": "js;let next = fun.getCSS('#leftcolumn>a[style]~a[href]'); if (next && next.href.split('/').length === location.href.split('/').length && next.href.split('/')[3] === location.href.split('/')[3]) {return next.href;}; next.href = location.href; return ''",
 			"pageE": "#content>*, script[src*='assets/js/main.min.js']",
 			"replaceE": ".previous-next-links, #leftcolumn",
+			"scrollE": ".article>.sidebar-box",
 			"scriptT": 2,
 			"forceHTTPS": true,
-			"scrollD": 1000
+			"scrollD": 500
 		}
 	},
 	"博客园 - 文章列表": {
