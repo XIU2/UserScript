@@ -6264,5 +6264,14 @@
 			"pageE": ".gallery-detail-content",
 			"replaceE": ".pagination"
 		}
+	},
+	"2avtt.com": {
+		"host": ["www.2avtt.com","m.2avtt.com"],
+		"url": "/\\/\\d+(_\\d+)?\\.html$/",
+		"pager": {
+			"nextL": ".thisclass+li>a, .wallpaper-container>a:last-of-type",
+			"pageE": "#photoMain, .wallpaper-container>a",
+			"replaceE": ".page"
+		}
 	}
 }
