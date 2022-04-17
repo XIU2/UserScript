@@ -971,7 +971,7 @@ function: {
     // 外置翻页规则
     function getRulesUrl(update = false) {
         // 如果是原来的时间格式 或 刚安装脚本，则需要立即更新
-        if (typeof(GM_getValue('menu_ruleUpdateTime', '')) == 'string') update = true
+        if (typeof(GM_getValue('menu_ruleUpdateTime', '')) == 'string') {update = true; alert('请点击【确定】开始首次获取【外置翻页规则】（大概几秒\n\n在此期间请不要 操作/跳转/关闭 当前网页~\n\n如果不小心没获取成功也没事，可以去脚本菜单中手动【更新外置翻页规则】即可（浏览器右上角 Tampermonkey 扩展图标内的脚本菜单');}
 
         if (update) { // 手动更新（或安装后首次更新）
             GM_notification({text: '🔄 更新外置翻页规则中，请勿操作网页...', timeout: 5000});
