@@ -3736,19 +3736,6 @@
 			"replaceE": "#pages"
 		}
 	},
-	"盒子部落": {
-		"host": "www.hezibuluo.com",
-		"url": "return (!fun.indexOF(/\\/\\d+\\.html/))",
-		"pager": {
-			"nextL": "a.next",
-			"pageE": ".main li.item",
-			"replaceE": ".pagination",
-			"scrollD": 2000
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE)"
-		}
-	},
 	"小众软件": {
 		"host": "www.appinn.com",
 		"url": "return (fun.lp() == '/' || fun.indexOF('/category/'))",
