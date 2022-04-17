@@ -3316,10 +3316,10 @@
 	},
 	"起点中文": {
 		"host": "www.qidian.com",
-		"url": "/^\\/(all|finish|free)/",
+		"url": "/^\\/(all|rank|finish|free)/",
 		"pager": {
 			"nextL": "a[class*='pagination-next']",
-			"pageE": "ul.all-img-list>li",
+			"pageE": "#book-img-text>ul",
 			"replaceE": "#page-container"
 		}
 	},
