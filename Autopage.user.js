@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.8.2
+// @version      5.8.3
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -253,10 +253,10 @@
         } else if (getCSS('head meta[name="generator" i][content="nexusphp" i]') || getXpath('id("footer")[contains(string(), "NexusPHP")]')) {
             console.info(`[自动无缝翻页] - <NexusPHP> 论坛`); return 7;
 
-        } else if (getAllCSS('.more, .load-more, .load_more, .loadmore, #more, #load-more, #load_more, #loadmore, .show-more, .show_more').length === 1) {
+        } else if (location.hostname.indexOf('.douban.com') == -1 && getAllCSS('.more, .load-more, .load_more, .loadmore, #more, #load-more, #load_more, #loadmore, .show-more, .show_more').length === 1) {
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 1`); return 8;
 
-        } else if (getAllXpath('//*[text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]').length === 1 && location.hostname.indexOf('www.smzdm.com') == -1) {
+        } else if (location.hostname.indexOf('.douban.com') == -1 && location.hostname.indexOf('.smzdm.com') == -1 && getAllXpath('//*[text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]').length === 1) {
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 2`); return 9;
 
         } else if (getCSS('link[href*="/wp-content/" i], script[src*="/wp-content/" i]')) {
