@@ -1463,6 +1463,15 @@
 			"bF": "return fun.src_bF(pageE, [0, 'img[data-lazy-src]', 'data-lazy-src'])"
 		}
 	},
+	"图行天下": {
+		"host": "www.photophoto.cn",
+		"url": "return (fun.lp() != '/' && !fun.indexOF('/sucai/'))",
+		"pager": {
+			"nextL": "a.last",
+			"pageE": "#Masonry",
+			"replaceE": "#page"
+		}
+	},
 	"搜图神器": {
 		"host": "www.logosc.cn",
 		"url": "/\\/so\\//",
