@@ -426,6 +426,7 @@
 	"豆瓣 - 小组/讨论区": {
 		"host": ["www.douban.com", "movie.douban.com"],
 		"url": "/^\\/(group|subject)\\/\\d+\\/discussion/",
+		"blank": 3,
 		"pager": {
 			"nextL": "link[rel='next']",
 			"pageE": "table.olt>tbody>tr:not(:first-of-type)",
@@ -546,6 +547,7 @@
 	"V2EX - 最近主题页": {
 		"host": ["v2ex.com","www.v2ex.com"],
 		"url": "return (fun.lp() == '/recent')",
+		"blank": 3,
 		"pager": {
 			"nextL": "a.page_current+a.page_normal",
 			"pageE": ".cell.item",
@@ -574,6 +576,7 @@
 	"V2EX - 分类主题页": {
 		"host": ["v2ex.com","www.v2ex.com"],
 		"url": "/\\/go\\//",
+		"blank": 3,
 		"pager": {
 			"nextL": "a.page_current+a.page_normal",
 			"pageE": "#TopicsNode>div",
@@ -702,7 +705,8 @@
 	},
 	"宽带山论坛": {
 		"host": "club.kdslife.com",
-		"url": "return (fun.indexOF('/f_'))",
+		"url": "/^\\/f_/",
+		"blank": 3,
 		"pager": {
 			"nextL": "//div[@class='fr i3_r']/a[text()='后一页']",
 			"pageE": "ul.main_List>li.i2:not(.h_bg)",
@@ -712,7 +716,7 @@
 	},
 	"宽带山论坛 - 帖子内": {
 		"host": "club.kdslife.com",
-		"url": "return (fun.indexOF('/t_'))",
+		"url": "/^\\/t_/",
 		"thread": true,
 		"pager": {
 			"nextL": "//div[@class='pages']/a[text()='>>']",
@@ -734,7 +738,7 @@
 	},
 	"篱笆网论坛 - 帖子列表": {
 		"host": "www.libaclub.com",
-		"url": "/\\/f_/",
+		"url": "/^\\/f_/",
 		"pager": {
 			"nextL": "a.ui-paging-next",
 			"pageE": "ul.ui-list>li:not(.ui-list-item-head):not(.ui-list-merchant-ad)",
@@ -766,7 +770,7 @@
 	},
 	"篱笆网论坛 - 搜索页": {
 		"host": "www.libaclub.com",
-		"url": "return (fun.lp() == '/facade.php')",
+		"url": "/\\/facade.php/",
 		"pager": {
 			"nextL": "//div[@class='ui-page']/a[contains(text(), '下一页')]",
 			"pageE": ".ui-box-main>ul.ui-list>li",
@@ -816,7 +820,7 @@
 	},
 	"芥子空间论坛": {
 		"host": "bbs.lieyou888.com",
-		"url": "/\\/forum/",
+		"url": "/^\\/forum/",
 		"pager": {
 			"nextL": "//div[contains(@class, '_pageNav')]/a[text()='下一页']",
 			"pageE": "ul.gb-bbs-list>li",
@@ -1751,6 +1755,7 @@
 	"游侠网 - 攻略页": {
 		"host": "gl.ali213.net",
 		"style": ".n_show_b, a.morezjjump {display: none !important;}",
+		"blank": 3,
 		"pager": {
 			"type": 3,
 			"nextL": "a.next",
@@ -1788,6 +1793,7 @@
 	"游民星空 - 攻略页": {
 		"host": "www.gamersky.com",
 		"url": "/^\\/handbook\\//",
+		"blank": 3,
 		"pager": {
 			"type": 3,
 			"nextL": "//div[@class='page_css']/a[text()='下一页']",
@@ -2415,7 +2421,7 @@
 	},
 	"萌番组 lite": {
 		"host": "bangumi.moe",
-		"url": "return (fun.indexOF('/lite'))",
+		"url": "/^\\/lite/",
 		"pager": {
 			"nextL": "//section/a[./span[contains(@class, 'next')]]",
 			"pageE": "li.torrent-li",
@@ -2551,7 +2557,7 @@
 	},
 	"WebHD - 搜索页": {
 		"host": "webhd.cc",
-		"url": "return (fun.indexOF('/search'))",
+		"url": "/\\/search/",
 		"blank": 3,
 		"pager": {
 			"nextL": "//a[@class='page-link'][contains(text(), '下一页')]",
@@ -2606,7 +2612,7 @@
 	},
 	"SubHD - 论坛": {
 		"host": "subhd.tv",
-		"url": "return (fun.indexOF('/forum/forum') || fun.indexOF('/forum/ask'))",
+		"url": "/^\\/forum\\/(forum|ask)/",
 		"pager": {
 			"nextL": "//a[@class='page-link'][contains(text(), '下一页')]",
 			"pageE": ".bg-white.shadow-sm.rounded-3>div",
@@ -2639,7 +2645,7 @@
 	},
 	"伪射手网 - 分类页": {
 		"host": "assrt.net",
-		"url": "return (fun.indexOF('/list/'))",
+		"url": "/\\/list\\//",
 		"pager": {
 			"nextL": "//a[@id='pl-nav' and text()='>']",
 			"pageE": "#resultsdiv>.subitem:not([id])",
@@ -2825,6 +2831,7 @@
 	"漫画皮 - 分类页": {
 		"host": "www.manhuapi.com",
 		"url": "return (!fun.indexOF(/\\/manhua\\/\\d+\\.html/))",
+		"blank": 3,
 		"pager": {
 			"nextL": "//div[@class='pages']/a[text()='下一页']",
 			"pageE": ".cy_list_mh>ul",
@@ -3081,6 +3088,7 @@
 	"木马漫画 - 分类页": {
 		"host": "www.omyschool.com",
 		"url": "return (!fun.indexOF('/article_list/'))",
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next.page-numbers",
 			"pageE": "#book_list>.item",
@@ -3299,12 +3307,11 @@
 	},
 	"起点中文": {
 		"host": "www.qidian.com",
-		"url": "return (fun.indexOF('/all/'))",
+		"url": "/^\\/(all|finish|free)/",
 		"pager": {
 			"nextL": "a[class*='pagination-next']",
 			"pageE": "ul.all-img-list>li",
-			"replaceE": "#page-container",
-			"scrollD": 900
+			"replaceE": "#page-container"
 		}
 	},
 	"起点中文 - 阅读页": {
@@ -3314,8 +3321,7 @@
 		"pager": {
 			"nextL": "a[id$='chapterNext']",
 			"pageE": ".main-text-wrap>div:not(.admire-wrap)",
-			"replaceE": ".chapter-control",
-			"scrollD": 900
+			"replaceE": ".chapter-control"
 		}
 	},
 	"七猫中文 - 阅读页": {
@@ -3325,13 +3331,13 @@
 		"pager": {
 			"nextL": "//div[@class='reader-footer']/a[text()='下一章']",
 			"pageE": ".article>p",
-			"replaceE": ".reader-footer",
-			"scrollD": 900
+			"replaceE": ".reader-footer"
 		}
 	},
 	"知轩藏书": {
 		"host": "zxcs.me",
-		"url": "return (fun.indexOF('/sort/'))",
+		"url": "/\\/sort\\//",
+		"blank": 3,
 		"pager": {
 			"nextL": "#pagenavi>span+a",
 			"pageE": "dl[id='plist']",
@@ -3340,23 +3346,12 @@
 		}
 	},
 	"宝书网": {
-		"host": "www.baoshuu.com",
-		"url": "return (fun.indexOF('/TXT/list'))",
+		"host": ["www.baoshuu.com","m.baoshuu.com"],
+		"url": "/\\/TXT\\/list/",
 		"pager": {
-			"nextL": "//div[@class='listl2']//a[text()='下一页']",
-			"pageE": ".listl2>ul>li",
-			"replaceE": ".listl2>dl",
-			"scrollD": 900
-		}
-	},
-	"宝书网- 手机版": {
-		"host": "m.baoshuu.com",
-		"url": "return (fun.indexOF('/TXT/list'))",
-		"pager": {
-			"nextL": "//div[@class='man_first']//a[text()='下一页']",
-			"pageE": ".man_first>ul>li",
-			"replaceE": ".man_first>dl",
-			"scrollD": 900
+			"nextL": "//div[@class='listl2' or @class='man_first']//a[text()='下一页']",
+			"pageE": ".listl2>ul, .man_first>ul",
+			"replaceE": ".listl2>dl, .man_first>dl"
 		}
 	},
 	"下书网": {
@@ -3381,7 +3376,7 @@
 	},
 	"御书网": {
 		"host": "www.yushubo.com",
-		"url": "return (fun.indexOF('/read_'))",
+		"url": "/\\/read_/",
 		"style": ".readbg.mt10 {display: none !important;}",
 		"history": true,
 		"pager": {
@@ -3394,22 +3389,12 @@
 	},
 	"御书网 - 分类页": {
 		"host": "www.yushubo.com",
-		"url": "return (fun.indexOF('/lists/'))",
+		"url": "/^\\/(lists|all)\\//",
+		"blank": 3,
 		"pager": {
 			"nextL": "id('pager')//a[contains(text(), '下一页')]",
-			"pageE": ".books-list>ul>li",
-			"replaceE": "#pager",
-			"scrollD": 1000
-		}
-	},
-	"御书网 - 书库页": {
-		"host": "www.yushubo.com",
-		"url": "return (fun.indexOF('/all'))",
-		"pager": {
-			"nextL": "id('pager')//a[contains(text(), '下一页')]",
-			"pageE": "ul.search-list>li",
-			"replaceE": "#pager",
-			"scrollD": 1000
+			"pageE": "ul.search-list, .books-list",
+			"replaceE": "#pager"
 		}
 	},
 	"搜小说": {
@@ -3516,6 +3501,7 @@
 	"铅笔小说 - 分类页": {
 		"host": "www.23qb.com",
 		"url": "return (fun.lp() != '/' && !fun.indexOF(/\\/book\\/\\d+\\//))",
+		"blank": 3,
 		"pager": {
 			"nextL": ".pages a.next, .pages>strong+a",
 			"pageE": "#sitebox>dl",
@@ -3582,7 +3568,7 @@
 	},
 	"哔哩轻小说 - 文库": {
 		"host": "www.linovelib.com",
-		"url": "return (fun.indexOF('/wenku/'))",
+		"url": "/\\/wenku\\//",
 		"pager": {
 			"nextL": "#pagelink>a.next",
 			"pageE": ".store_collist>div.bookbox",
@@ -3608,7 +3594,7 @@
 	},
 	"哔哩轻小说 - 手机版": {
 		"host": "w.linovelib.com",
-		"url": "return (fun.indexOF(/\\/novel\\/\\d+\\/.+\\.html/))",
+		"url": "/\\/novel\\/\\d+\\/.+\\.html/",
 		"history": true,
 		"pager": {
 			"nextL": "js; if (ReadParams.url_next.slice(ReadParams.url_next.length-5) === '.html') return (location.origin + ReadParams.url_next)",
@@ -3619,7 +3605,7 @@
 	},
 	"哔哩轻小说 - 手机版 - 文库": {
 		"host": "w.linovelib.com",
-		"url": "return (fun.indexOF('/wenku/') || fun.indexOF('/sa/'))",
+		"url": "/\\/(wenku|sa)\\//",
 		"pager": {
 			"nextL": "#pagelink>strong+a ,#pagelink a.next",
 			"pageE": "ol.book-ol>li",
@@ -3739,6 +3725,7 @@
 	"小众软件": {
 		"host": "www.appinn.com",
 		"url": "return (fun.lp() == '/' || fun.indexOF('/category/'))",
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next.page-numbers",
 			"pageE": "section#latest-posts>article",
@@ -5301,6 +5288,7 @@
 	"H 次元": {
 		"host": "h-ciyuan.com",
 		"url": "return (fun.lp() == '/' ||fun.indexOF('/category/') || fun.indexOF('/tag/'))",
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
 			"pageE": ".gridview-posts",
@@ -5311,6 +5299,7 @@
 	"灵梦御所": {
 		"host": "blog.reimu.net",
 		"url": "return (fun.lp() == '/' || fun.indexOF('/category') || fun.indexOF('/tag'))",
+		"blank": 3,
 		"pager": {
 			"nextL": "span.current+a.sfwppa-current-page",
 			"pageE": "article[id^='post-']",
@@ -5524,6 +5513,7 @@
 		"host": "www.sexnori19.me",
 		"url": "return (fun.lp() == '/bbs/board.php' && !fun.indexOF(/bo_table=(free|yasul|adv|notice)/,'s'))",
 		"style": ".gallery-item {position: static !important;float: left !important;}",
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
 			"pageE": ".gallery-item",
@@ -5707,6 +5697,7 @@
 	},
 	"E-Hentai": {
 		"host": ["e-hentai.org","exhentai.org"],
+		"blank": 3,
 		"pager": {
 			"nextL": "//table[@class='ptt']//a[text()='>']",
 			"pageE": ".itg>div, .itg>tbody>tr:not(:first-of-type)",
@@ -5716,6 +5707,7 @@
 	"nhentai": {
 		"host": "nhentai.net",
 		"url": "return (fun.lp() == '/' || fun.lp() == '/search/' || fun.indexOF(/\\/(tag|artist|character)\\//))",
+		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
 			"pageE": ".gallery",
@@ -5864,8 +5856,9 @@
 		}
 	},
 	"绅士漫画": {
-		"host": "/^www\\.wnacg\\./",
+		"host": "/^(www\\.)?wnacg\\./",
 		"url": "/^\\/(albums|search|photos-index)/",
+		"blank": 3,
 		"pager": {
 			"nextL": "span.thispage+a",
 			"pageE": "li.gallary_item",
