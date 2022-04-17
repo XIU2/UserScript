@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.8.1
+// @version      5.8.2
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -552,7 +552,7 @@ function: {
             discuz_guide: {
                 pager: {
                     nextL: 'a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
-                    pageE: 'id("threadlist")//table[./tbody[contains(@id, "normalthread_")]]/tbody[not(@id="separatorline")]',
+                    pageE: 'tbody[id^="normalthread_"]',
                     replaceE: '.pg, .pages',
                     forceHTTPS: true
                 }
@@ -567,10 +567,10 @@ function: {
             }, //   Discuz! 论坛 - 图片模式的帖子列表（不带无缝加载下一页按钮的）
             discuz_thread: {
                 thread: true,
-                style: '.pgbtn {display: none;}',
+                style: '.pgbtn, .viewthread:not(:first-of-type)>h1, .viewthread:not(:first-of-type)>ins, .viewthread:not(:first-of-type)>.headactions {display: none;}',
                 pager: {
                     nextL: 'a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
-                    pageE: '#postlist > div[id^="post_"]',
+                    pageE: '#postlist > div[id^="post_"], form>.viewthread',
                     replaceE: '//div[contains(@class,"pg") or contains(@class,"pages")][./a[contains(@class,"nxt") or contains(@class,"next") or contains(@class,"prev")][not(contains(@href,"javascript") or contains(@href,"commentmore"))]]',
                     forceHTTPS: true
                 },
@@ -1219,9 +1219,9 @@ function: {
                 curSite = DBSite.discuz_youspace;
             } else if (indexOF('mod=collection', 's')) { // < 淘贴列表 >
                 curSite = DBSite.discuz_collection;
-            } else if (getCSS('#threadlist')) { //          < 部分论坛的各板块 URL 是自定义的 >
+            } else if (getCSS('#threadlist, tbody[id^="normalthread_"]')) { //          < 部分论坛的各板块 URL 是自定义的 >
                 discuzForum();
-            } else if (getCSS('#postlist')) { //            < 部分论坛的帖子内 URL 是自定义的 >
+            } else if (getCSS('#postlist, form>.viewthread')) { //            < 部分论坛的帖子内 URL 是自定义的 >
                 curSite = DBSite.discuz_thread;
             } else if (isMobile()) { //                     手机版判断
                 discuzForum('m');

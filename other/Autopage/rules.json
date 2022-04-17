@@ -5247,7 +5247,7 @@
 		}
 	},
 	"t66y - 帖子列表": {
-		"host": "www.t66y.com",
+		"host": ["t66y.com","www.t66y.com"],
 		"url": "/^\\/thread/",
 		"pager": {
 			"nextL": "//div[@class='pages']/a[text()='下一頁']",
@@ -5257,7 +5257,7 @@
 		}
 	},
 	"t66y - 帖子内": {
-		"host": "www.t66y.com",
+		"host": ["t66y.com","www.t66y.com"],
 		"url": "/^\\/(read\\.php|htm_data|htm_mob)/",
 		"style": ".tips {display: none !important;}",
 		"thread": true,
