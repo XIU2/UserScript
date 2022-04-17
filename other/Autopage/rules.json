@@ -1633,6 +1633,14 @@
 			"scriptT": 2
 		}
 	},
+	"魔顿": {
+		"host": "www.modown.cn",
+		"url": "/\\/category\\//",
+		"pager": {
+			"type": 2,
+			"nextL": ".pagination-trigger>a"
+		}
+	},
 	"3DM - 分类页": {
 		"host": "www.3dmgame.com",
 		"url": "if (fun.getCSS('.Llist_b>div.lis')) return true",
