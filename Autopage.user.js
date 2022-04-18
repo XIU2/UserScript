@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.8.4
+// @version      5.8.5
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -253,10 +253,10 @@
         } else if (getCSS('head meta[name="generator" i][content="nexusphp" i]') || getXpath('id("footer")[contains(string(), "NexusPHP")]')) {
             console.info(`[自动无缝翻页] - <NexusPHP> 论坛`); return 7;
 
-        } else if (location.hostname.indexOf('.douban.com') == -1 && getAllCSS('.more, .load-more, .load_more, .loadmore, #more, #load-more, #load_more, #loadmore, .show-more, .show_more').length === 1) {
+        } else if (getAllCSS('.load-more, .load_more, .loadmore, #load-more, #load_more, #loadmore, .show-more, .show_more').length === 1) {
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 1`); return 8;
 
-        } else if (location.hostname.indexOf('.douban.com') == -1 && location.hostname.indexOf('.smzdm.com') == -1 && getAllXpath('//*[text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]').length === 1) {
+        } else if (location.hostname.indexOf('.smzdm.com') == -1 && getAllXpath('//*[text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]').length === 1) {
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 2`); return 9;
 
         } else if (getCSS('link[href*="/wp-content/" i], script[src*="/wp-content/" i]')) {
@@ -971,7 +971,7 @@ function: {
     // 外置翻页规则
     function getRulesUrl(update = false) {
         // 如果是原来的时间格式 或 刚安装脚本，则需要立即更新
-        if (typeof(GM_getValue('menu_ruleUpdateTime', '')) == 'string') {update = true; alert('请点击【确定】开始首次获取【外置翻页规则】（大概几秒\n\n在此期间请不要 操作/跳转/关闭 当前网页~\n\n如果不小心没获取成功也没事，可以去脚本菜单中手动【更新外置翻页规则】即可（浏览器右上角 Tampermonkey 扩展图标内的脚本菜单\n\n\n另外，想要【临时暂停翻页】请点击左下角悬浮的【页码】按钮');}
+        if (typeof(GM_getValue('menu_ruleUpdateTime', '')) == 'string') {update = true; alert('请点击【确定】开始首次获取【外置翻页规则】（大概几秒\n\n在此期间请不要 操作/跳转/关闭 当前网页~\n\n如果不小心没获取成功也没事，可以去脚本菜单中手动【更新外置翻页规则】即可（浏览器右上角 Tampermonkey 扩展图标内的脚本菜单\n\n\n另外，想要【临时暂停翻页】请点击左下角悬浮的【页码】按钮\n\n\n如果每次打开网页都会看到该提示，说明你的 油猴脚本管理器 存在兼容性问题，请尝试更换其他的试试！');}
 
         if (update) { // 手动更新（或安装后首次更新）
             GM_notification({text: '🔄 更新外置翻页规则中，请勿操作网页...', timeout: 5000});
