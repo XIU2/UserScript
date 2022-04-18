@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.0.4
+// @version      2.0.5
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @description:zh-TW  移除登錄彈窗、屏蔽首頁視頻、默認收起回答、快捷收起回答/評論、快捷回到頂部、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化搜索熱門、淨化標題消息、置頂顯示時間、完整問題時間、區分問題文章、默認高清原圖、默認站外直鏈...
@@ -454,7 +454,7 @@ function blockUsers(type) {
 
         blockKeywords_now();
         window.addEventListener('urlchange', function(){
-            setTimeout(blockKeywords_now, 500); // 网页 URL 变化后再次执行
+            setTimeout(blockKeywords_now, 1000); // 网页 URL 变化后再次执行
         })
 
         // 这个是监听网页插入事件，用来判断后续网页动态插入的元素
@@ -560,9 +560,9 @@ function blockUsers(type) {
             })
         }
 
-        setTimeout(blockUsers_now, 500);
+        setTimeout(blockUsers_now, 1000);
         window.addEventListener('urlchange', function(){
-            setTimeout(blockUsers_now, 500); // 网页 URL 变化后再次执行
+            setTimeout(blockUsers_now, 1000); // 网页 URL 变化后再次执行
         })
 
         const callback = (mutationsList, observer) => {
@@ -772,7 +772,7 @@ function blockKeywords(type) {
 
         blockKeywords_now();
         window.addEventListener('urlchange', function(){
-            setTimeout(blockKeywords_now, 500); // 网页 URL 变化后再次执行
+            setTimeout(blockKeywords_now, 1000); // 网页 URL 变化后再次执行
         })
 
         // 这个是监听网页插入事件，用来判断后续网页动态插入的元素
@@ -795,9 +795,9 @@ function blockKeywords(type) {
             document.querySelectorAll('.HotLanding-contentItem, .Card.SearchResult-Card[data-za-detail-view-path-module="AnswerItem"], .Card.SearchResult-Card[data-za-detail-view-path-module="PostItem"]').forEach(function(item1){blockKeywords_1(item1, 'a[data-za-detail-view-id]');})
         }
 
-        setTimeout(blockKeywords_now, 500);
+        setTimeout(blockKeywords_now, 1000);
         window.addEventListener('urlchange', function(){
-            setTimeout(blockKeywords_now, 500); // 网页 URL 变化后再次执行
+            setTimeout(blockKeywords_now, 1000); // 网页 URL 变化后再次执行
         })
 
         const callback = (mutationsList, observer) => {
@@ -853,6 +853,7 @@ function blockKeywords(type) {
 
     function blockKeywords_1(item1, css) {
         let item = item1.querySelector(css); // 标题所在元素
+        console.log(item)
         if (item) {
             for (const keyword of menu_value('menu_customBlockKeywords')) { // 遍历关键词黑名单
                 let text = item.content || item.textContent;
