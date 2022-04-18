@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.8.6
+// @version      5.8.7
 // @author       X.I.U
 // @description  ⭐无缝衔接下一页内容到网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫銜接下一頁內容到網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -106,9 +106,9 @@
         'https://hk1.monika.love/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.fsofso.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json'
-    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, DBSite2, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname, _GM_info;
+    ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, DBSite2, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname, scriptHandler;
     window.autoPage = {lp: ()=>location.pathname, indexOF: indexOF, isMobile: isMobile, isUrlC: isUrlC, blank: forceTarget, getAll: getAll, getOne: getOne, getAllXpath: getAllXpath, getXpath: getXpath, getAllCSS: getAllCSS, getCSS: getCSS, getNextE: getNextE, getNextEP: getNextEP, getNextSP: getNextSP, getNextEPN: getNextEPN, getNextUPN: getNextUPN, getNextUP: getNextUP, getNextF: getNextF, getSearch: getSearch, getCookie: getCookie, insStyle: insStyle, insScript: insScript, src_bF: src_bF, xs_bF: xs_bF}
-    if (typeof GM_info != 'undefined') {_GM_info = GM_info;} else if (typeof GM != 'undefined' && typeof GM.info != 'undefined') {_GM_info = GM.info;} else {_GM_info = {scriptHandler: ''};}
+    if (typeof GM_info != 'undefined') {scriptHandler = GM_info.scriptHandler;} else if (typeof GM != 'undefined' && typeof GM.info != 'undefined') {scriptHandler = GM.info.scriptHandler;} else {scriptHandler = '';}
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
     }
@@ -973,12 +973,12 @@ function: {
     // 外置翻页规则
     function getRulesUrl(update = false) {
         // 如果是原来的时间格式 或 刚安装脚本，则需要立即更新
-        if (typeof(GM_getValue('menu_ruleUpdateTime', '')) == 'string') {update = true; if (_GM_info.scriptHandler != 'AdGuard') {alert('请点击【确定】开始首次获取【外置翻页规则】（大概几秒\n\n在此期间请不要 操作/跳转/关闭 当前网页~\n\n如果不小心没获取成功也没事，可以去脚本菜单中手动【更新外置翻页规则】即可（浏览器右上角 Tampermonkey 扩展图标内的脚本菜单\n\n\n另外，想要【临时暂停翻页】请点击左下角悬浮的【页码】按钮\n\n如果每次打开网页都会看到该提示，说明你的 油猴脚本管理器 存在兼容性问题，请尝试更换其他的试试！');} else {urlArr2 = urlArr}}
+        if (typeof(GM_getValue('menu_ruleUpdateTime', '')) == 'string') {update = true; if (scriptHandler != 'AdGuard') {alert('请点击【确定】开始首次获取【外置翻页规则】（大概几秒\n\n在此期间请不要 操作/跳转/关闭 当前网页~\n\n如果不小心没获取成功也没事，可以去脚本菜单中手动【更新外置翻页规则】即可（浏览器右上角 Tampermonkey 扩展图标内的脚本菜单\n\n\n另外，想要【临时暂停翻页】请点击左下角悬浮的【页码】按钮\n\n如果每次打开网页都会看到该提示，说明你的 油猴脚本管理器 存在兼容性问题，请更换其他试试！');} else {urlArr2 = urlArr}}
 
         if (update) { // 手动更新（或安装后首次更新）
             GM_notification({text: '🔄 更新外置翻页规则中，请勿操作网页...', timeout: 5000});
             getRulesUrl_(true);
-        } else if (parseInt(+new Date()/1000) - GM_getValue('menu_ruleUpdateTime', 0) > 172800) { // 自动更新，距离上次检查更新超过 2 天，则立即更新规则
+        } else if (parseInt(+new Date()/1000) - GM_getValue('menu_ruleUpdateTime', 0) > 604800) {
             getRulesUrl_();
         }
 
