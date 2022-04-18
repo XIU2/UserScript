@@ -60,7 +60,7 @@
 		}
 	},
 	"必应搜索 + 手机版": {
-		"host": ["www.bing.com","cn.bing.com"],
+		"host": ["www.bing.com","cn.bing.com","www4.bing.com"],
 		"url": "if (fun.lp() == '/search') {if (fun.isMobile() && document.documentElement.lang != 'zh') {return false;} else {return true;}}",
 		"style": "#b_footer, .b_imagePair.square_mp>.inner, .b_msg, #b_results>[class='b_ans'] {display: none !important;}",
 		"history": true,
@@ -4214,7 +4214,7 @@
 		}
 	},
 	"谷歌学术": {
-		"host": ["scholar.google.com", "xs2.dailyheadlines.cc"],
+		"host": ["/^scholar\\.google\\./", "xs2.dailyheadlines.cc"],
 		"history": true,
 		"pager": {
 			"nextL": "//a[./span[contains(@class, 'next')]]",
@@ -4239,7 +4239,7 @@
 		}
 	},
 	"必应学术": {
-		"host": ["www.bing.com","cn.bing.com"],
+		"host": ["www.bing.com","cn.bing.com","www4.bing.com"],
 		"url": "return (fun.lp() == '/academic/search')",
 		"style": "li.aca_algo_count {display: none !important;}",
 		"history": true,
