@@ -3722,6 +3722,16 @@
 			"replaceE": ".pages"
 		}
 	},
+	"福利吧 - 文章内": {
+		"host": "fuliba2021.net",
+		"url": "/^\\/\\d+\\.html/",
+		"pager": {
+			"type": 3,
+			"nextL": ".post-page-numbers.current+a",
+			"pageE": ".article-content",
+			"replaceE": ".article-paging"
+		}
+	},
 	"黑域基地": {
 		"host": "www.hybase.com",
 		"url": "return (fun.getCSS('#pages') != null)",
@@ -5215,7 +5225,7 @@
 	},
 	"SEX.COM": {
 		"host": "www.sex.com",
-		"url": "return (!fun.indexOF('/pin/'))",
+		"url": "/^\\/(pins|pics|gifs|videos)/",
 		"blank": 3,
 		"pager": {
 			"type": 6,
