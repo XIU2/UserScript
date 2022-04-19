@@ -5843,7 +5843,7 @@
 	},
 	"绅士仓库": {
 		"host": "/^cangku\\./",
-		"url": "if (document.title.indexOf('绅士') == -1){return}; fun.isUrlC(); setTimeout(`let a='.mr-auto,.navbar-brand.active,.simple-navbar';if(location.pathname.indexOf('/search/')!=-1){a='.mr-auto,.navbar-brand.active'};document.querySelectorAll(a).forEach(function (o) {o.innerHTML = o.innerHTML;})`, 1500); return (fun.lp() == '/' || fun.indexOF('/category/') || fun.indexOF('/user/'))",
+		"url": "if (document.title.indexOf('绅士') == -1){return}; fun.isUrlC(); if (fun.lp() != '/rank'){setTimeout(`let a='.mr-auto,.navbar-brand.active,.simple-navbar';if(location.pathname.indexOf('/search/')!=-1){a='.mr-auto,.navbar-brand.active'};document.querySelectorAll(a).forEach(function (o) {o.innerHTML = o.innerHTML;})`, 1500);} return (fun.lp() == '/' || fun.indexOF('/category/') || fun.indexOF('/user/'))",
 		"history": true,
 		"pager": {
 			"type": 6,
@@ -6279,6 +6279,16 @@
 			"nextL": ".thisclass+li>a, .wallpaper-container>a:last-of-type",
 			"pageE": "#photoMain, .wallpaper-container>a",
 			"replaceE": ".page"
+		}
+	},
+	"Cool18.com": {
+		"host": "www.cool18.com",
+		"url": "/\\/index\\.php/",
+		"blank": 3,
+		"pager": {
+			"nextL": "id('d_list_page')/a[text()='下一页'] | //table//a[text()='下一页']",
+			"pageE": "#d_list>ul, table.dc_bar2",
+			"replaceE": "#d_list_page, #d_list_foot, table.dc_bar"
 		}
 	}
 }
