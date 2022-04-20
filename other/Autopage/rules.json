@@ -5098,7 +5098,7 @@
 	},
 	"Xvideos": {
 		"host": ["www.xnxx.com","www.xvideos.com"],
-		"url": "if (location.hostname == 'www.xnxx.com') {if (fun.indexOF('/search/')) return true;} else {if (fun.lp() == '/' || fun.indexOF(/\\/(c|tags|lang)\\//)) return true;}",
+		"url": "if (location.hostname == 'www.xnxx.com') {return (fun.indexOF('/search/'));} else {return (fun.lp() == '/' || fun.indexOF(/^\\/(c|tags|lang)\\//));}",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next-page, a.next",
