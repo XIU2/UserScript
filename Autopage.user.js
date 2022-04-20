@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.8.7
+// @version      5.8.8
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -262,22 +262,43 @@
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 2`); return 9;
 
         } else if (getCSS('link[href*="/wp-content/" i], script[src*="/wp-content/" i]')) {
-            if (getAllCSS('article[class], div[id^="post-"], ul[class*="post"] > li.item').length > 2 && getCSS('#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi')) {
-                if (getCSS('a.next, a.next-page')) {
-                    console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (a.next)`); return 100;
-                } else if (getCSS('a[rel="next" i], a[aria-label="Next Page" i], a[aria-label="下一页"]')) {
-                    console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (a[rel="next"])`); return 101;
-                } else if (getCSS('li.next-page > a, li.next > a')) {
-                    console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (li.next-page > a)`); return 102;
-                } else if (getCSS('.nav-previous a, a.nav-previous')) {
-                    console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (旧文章)`); return 103;
-                } else if (getXpath('//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]', getCSS('#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi'))) {
-                    console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 (下一页)`); return 104;
+
+            //if (getAllCSS('article[class], div[id^="post-"], ul[class*="post"]>li.item, .post').length < 4 || getCSS('#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi')) return 0;
+
+            if (getCSS('a.next, a.next-page')) {
+                DBSite.wp_article.pager.nextL = 'a.next, a.next-page'
+            } else if (getCSS('a[rel="next" i], a[aria-label="Next Page" i], a[aria-label="下一页"]')) {
+                DBSite.wp_article.pager.nextL = 'a[rel="next" i], a[aria-label="Next Page" i], a[aria-label="下一页"]'
+            } else if (getCSS('li.next-page > a, li.next > a')) {
+                DBSite.wp_article.pager.nextL = 'li.next-page > a, li.next > a'
+            } else if (getCSS('.nav-previous a, a.nav-previous')) {
+                DBSite.wp_article.pager.nextL = '.nav-previous a, a.nav-previous'
+            } else if (getXpath('//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]', getCSS('#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi'))) {
+                DBSite.wp_article.pager.nextL = '//*[self::ul or self::nav or self::div][@id="nav-below" or contains(@class, "navigation") or contains(@class, "pagination") or contains(@class, "pagenavi")]//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]'
+            }
+
+            if (DBSite.wp_article.pager.nextL != undefined) {
+                if (getAllCSS('article[class]').length > 3) {
+                    DBSite.wp_article.pager.pageE = 'article[class]'
+                } else if (getAllCSS('div[id^="post-"]').length > 3) {
+                    DBSite.wp_article.pager.pageE = 'div[id^="post-"]'
+                } else if (getAllCSS('ul[class*="post"]>li.item').length > 3) {
+                    DBSite.wp_article.pager.pageE = 'ul[class*="post"]>li.item'
+                } else if (getAllCSS('.post').length > 3) {
+                    DBSite.wp_article.pager.pageE = '.post'
                 }
+                if (DBSite.wp_article.pager.pageE != undefined) console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站`); return 10;
+            /*} else if (getCSS('.post-page-numbers.current+a')) {
+                if (getAllCSS('.entry-content').length == 1) {
+                    DBSite.wp_article_post.pager.pageE = '.entry-content'
+                } else if (getAllCSS('article').length == 1) {
+                    DBSite.wp_article_post.pager.pageE = 'article'
+                }
+                if (DBSite.wp_article_post.pager.pageE != undefined) console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 2`); return 11;*/
             }
         } else if (getCSS('meta[name="generator" i][content*="Typecho" i]')) {
             if (getCSS('li.next > a') && getCSS('.blog-post, .post-list') && getCSS('.page-navigator')) {
-                console.info(`[自动无缝翻页] - 部分使用 Typecho 的网站 (handsome)`); return 150;
+                console.info(`[自动无缝翻页] - 部分使用 Typecho 的网站 (handsome)`); return 12;
             }
 
         } else if (getCSS('.stui-page, .stui-page__item') && getCSS('li.active.hidden-xs+li.hidden-xs>a') && getCSS('.stui-vodlist')) {
@@ -317,17 +338,11 @@
                     DBSite.loadmore.url('.more, .load-more, .load_more, .loadmore, #more, #load-more, #load_more, #loadmore, .show-more, .show_more'); break;
                 case 9: // < 部分自带 自动无缝翻页 的网站 2 >
                     DBSite.loadmore.url('//*[text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]'); break;
-                case 100: // < 部分使用 WordPress 的网站 (a.next) >
-                    DBSite.wp_article.url('a.next, a.next-page'); break;
-                case 101: // < 部分使用 WordPress 的网站 (a[rel="next"]) >
-                    DBSite.wp_article.url('a[rel="next" i], a[aria-label="Next Page" i], a[aria-label="下一页"]'); break;
-                case 102: // < 部分使用 WordPress 的网站 (li.next-page > a) >
-                    DBSite.wp_article.url('li.next-page > a, li.next > a'); break;
-                case 103: // < 部分使用 WordPress 的网站 (旧文章) >
-                    DBSite.wp_article.url('.nav-previous a, a.nav-previous'); break;
-                case 104: // < 部分使用 WordPress 的网站 (下一页) >
-                    DBSite.wp_article.url('//*[self::ul or self::nav or self::div][@id="nav-below" or contains(@class, "navigation") or contains(@class, "pagination") or contains(@class, "pagenavi")]//a[contains(text(), "下一页") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]'); break;
-                case 150: // < 部分使用 Typecho 的网站 (handsome) >
+                case 10: // < 部分使用 WordPress 的网站 >
+                    DBSite.wp_article.url(); break;
+                //case 11: // < 部分使用 WordPress 的网站 >
+                //    curSite = DBSite.wp_article_post; break;
+                case 12: // < 部分使用 Typecho 的网站 (handsome) >
                     curSite = DBSite.typecho_handsome; break;
                 case 200: // < 所有使用 笔趣阁 1 模板的小说网站 >
                     DBSite.biquge1.url(); break;
@@ -428,23 +443,31 @@ function: {
                 }
             }, //           部分自带 自动无缝翻页 的网站
             wp_article: {
-                url: function(nextL) {
+                url: ()=> {
                     if (!indexOF('/post/') && !getCSS('#comments, .comments-area, #disqus_thread')) {
-                        curSite = DBSite.wp_article; curSite.pager.nextL = nextL;
+                        curSite = DBSite.wp_article;
                         // 自适应瀑布流样式
-                        setTimeout(function(){if (getCSS(curSite.pager.pageE).style.cssText.indexOf('position: absolute') != -1){insStyle(curSite.pager.pageE + '{position: static !important; float: left !important; height: '+ parseInt(getCSS(curSite.pager.pageE).offsetHeight * 1.1) + 'px !important;}');}}, 1500);
+                        setTimeout(()=>{if (getCSS(curSite.pager.pageE).style.cssText.indexOf('position: absolute') != -1){insStyle(curSite.pager.pageE + '{position: static !important; float: left !important; height: '+ parseInt(getCSS(curSite.pager.pageE).offsetHeight * 1.1) + 'px !important;}');}}, 1500);
                     }
                 },
                 blank: 3,
                 pager: {
-                    pageE: 'article[class], div[id^="post-"], ul[class*="post"] > li.item',
                     replaceE: '#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi',
+                    forceHTTPS: true,
                     scrollD: 2000
                 },
                 function: {
                     bF: "return fun.src_bF(pageE)"
                 }
             }, //         部分使用 WordPress 的网站
+            /*wp_article_post: {
+                pager: {
+                    type: 3,
+                    nextL: '.post-page-numbers.current+a',
+                    replaceE: '.',
+                    scrollD: 1000
+                }
+            },*/ //         部分使用 WordPress 的网站 - 文章内
             typecho_handsome: {
                 blank: 3,
                 pager: {

@@ -4818,6 +4818,17 @@
 			"replaceE": ".h-pages"
 		}
 	},
+	"駿河屋 - 搜索页": {
+		"host": "www.suruga-ya.jp",
+		"url": "/^\\/search/",
+		"blank": 3,
+		"pager": {
+			"nextL": "li.next>a",
+			"pageE": "#search_result>.item_box",
+			"replaceE": "#pager",
+			"scrollD": 2500
+		}
+	},
 	"书签地球": {
 		"host": "www.bookmarkearth.com",
 		"url": "return (fun.lp() == '/' || fun.lp() == '/page')",
