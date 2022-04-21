@@ -5645,12 +5645,11 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
-			"pageE": ".gallery, body>script",
-			"replaceE": ".pagination",
-			"scriptT": 2
+			"pageE": ".gallery",
+			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE)"
+			"bF": "if (_n_app.options.blacklisted_tags != null && _n_app.options.blacklisted_tags.length != 0) {pageE.forEach(function (one) {let tags = one.dataset.tags.split(' ');for (let i=0; i < tags.length; i++){for (let ii=0; ii < _n_app.options.blacklisted_tags.length; ii++){if (tags[i] == _n_app.options.blacklisted_tags[ii]) {one.classList.add('blacklisted');};};};});}; return fun.src_bF(pageE)"
 		}
 	},
 	"nhentai - 图片页": {
