@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.8.8
+// @version      5.8.9
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -287,7 +287,7 @@
                 } else if (getAllCSS('.post').length > 3) {
                     DBSite.wp_article.pager.pageE = '.post'
                 }
-                if (DBSite.wp_article.pager.pageE != undefined) console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站`); return 10;
+                if (DBSite.wp_article.pager.pageE != undefined) {console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站`); return 10;}
             /*} else if (getCSS('.post-page-numbers.current+a')) {
                 if (getAllCSS('.entry-content').length == 1) {
                     DBSite.wp_article_post.pager.pageE = '.entry-content'
@@ -1024,11 +1024,14 @@ function: {
 
                             curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
                             registerMenuCommand(); // 重新判断规则
-                            if (curSite.style) {insStyle(curSite.style)} // 插入 Style CSS 样式
-                            pageLoading(); // 自动无缝翻页
 
+                            webTypeIf(); // 判断网站类型
+                            if (!GM_getValue('menu_thread')) {if (curSite.thread) {curSite = {SiteTypeID: 0}; pageNum.now = 1;}} // 帖子内自动翻页判断
                             if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
+                            if (curSite.blank != undefined) forceTarget(); // 强制新标签页打开链接
+                            if (curSite.style) {insStyle(curSite.style)} // 插入 Style CSS 样式
                             pausePageEvent(); // 左键双击网页空白处暂停翻页
+                            pageLoading(); // 自动无缝翻页
 
                             if (n) GM_notification({text: '✅ 已更新外置翻页规则！\n如果依然无法翻页，说明还不支持当前网页，欢迎点击此处提交申请~', timeout: 5000, onclick: function(){window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});}});
                         } else {
@@ -1064,9 +1067,7 @@ function: {
     webTypeIf();
 
     // 帖子内自动翻页判断
-    if (!GM_getValue('menu_thread')) {
-        if (curSite.thread) {curSite = {SiteTypeID: 0}; pageNum.now = 1;}
-    }
+    if (!GM_getValue('menu_thread')) {if (curSite.thread) {curSite = {SiteTypeID: 0}; pageNum.now = 1;}}
 
     //console.log(curSite)
     // 显示页码
@@ -1094,18 +1095,16 @@ function: {
                 } // 对于翻页模式 5，如果是 iframe 框架内 URL 变动，则升级为顶级页面，如果是顶级页面的 URL 变动，则清理 iframe 框架
                 nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
                 registerMenuCommand(); // 重新判断规则
+
                 //console.log(curSite);
                 if (curSite.blank != undefined) forceTarget(); // 强制新标签页打开链接
                 //if (curSite.initE != undefined) initEvent(); // 初始化事件
                 if (curSite.style) {insStyle(curSite.style)} // 插入 Style CSS 样式
-                // 帖子内自动翻页判断
-                if (!GM_getValue('menu_thread')) {
-                    if (curSite.thread) {curSite = {SiteTypeID: 0}; pageNum.now = 1;}
-                }
-                pageLoading(); // 自动无缝翻页
-
+                if (!GM_getValue('menu_thread')) {if (curSite.thread) {curSite = {SiteTypeID: 0}; pageNum.now = 1;}} // 帖子内自动翻页判断
                 if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
                 pausePageEvent(); // 左键双击网页空白处暂停翻页
+
+                pageLoading();
             })
         } else if (webType === 2) {
             window.addEventListener('urlchange', function(){
@@ -1116,16 +1115,12 @@ function: {
                     nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
                     discuz_(); // 重新判断规则
 
-                    // 帖子内自动翻页判断
-                    if (!GM_getValue('menu_thread')) {
-                        if (curSite.thread) {curSite = {SiteTypeID: 0}; pageNum.now = 1;}
-                    }
-
+                    if (!GM_getValue('menu_thread')) {if (curSite.thread) {curSite = {SiteTypeID: 0}; pageNum.now = 1;}} // 帖子内自动翻页判断
                     if (curSite.style) {insStyle(curSite.style)} // 插入 Style CSS 样式
-                    pageLoading(); // 自动无缝翻页
-
                     if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
                     pausePageEvent(); // 左键双击网页空白处暂停翻页
+
+                    pageLoading();
                 }, 500)
             })
         } else if (webType === 3) {
@@ -1134,11 +1129,12 @@ function: {
                 if (nowLocation == location.href) return
                 nowLocation = location.href; curSite = {SiteTypeID: 0}; pageNum.now = 1; // 重置规则+页码
                 DBSite.flarum.url(); // 重新判断规则
-                if (curSite.style) {insStyle(curSite.style)} // 插入 Style CSS 样式
-                pageLoading(); // 自动无缝翻页
 
+                if (curSite.style) {insStyle(curSite.style)} // 插入 Style CSS 样式
                 if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
                 pausePageEvent(); // 左键双击网页空白处暂停翻页
+
+                pageLoading();
             })
         }
     }
