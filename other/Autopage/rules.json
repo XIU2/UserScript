@@ -5645,8 +5645,9 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
-			"pageE": ".gallery",
-			"replaceE": ".pagination"
+			"pageE": ".gallery, body>script",
+			"replaceE": ".pagination",
+			"scriptT": 2
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE)"
