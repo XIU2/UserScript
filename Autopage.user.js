@@ -2535,7 +2535,7 @@ function: {
     }
 }
 </pre></details>
-<details><summary style="cursor: pointer;overflow: hidden !important;text-overflow: ellipsis !important;white-space: nowrap !important;"><kbd><strong>「 点击展开 查看所有规则 」（可按 Ctrl+F 搜索 pageUrl 查看当前网页规则，内置规则无法列出）</strong></kbd></summary>
+<details><summary style="cursor: pointer;overflow: hidden !important;text-overflow: ellipsis !important;white-space: nowrap !important;"><kbd><strong>「 点击展开 查看所有规则 」（可按 Ctrl+F 搜索规则，脚本内置的通用规则因格式限制无法列出）</strong></kbd></summary>
 <pre id="Autopage_customRules_all" style="overflow-y: scroll !important; overflow-x: hidden !important; height: 500px !important; word-break: break-word !important; white-space: pre-wrap !important;"> </pre></details>
 
 <textarea id="Autopage_customRules_textarea" style="min-width:95% !important; min-height:70% !important; display: block !important; margin: 10px 0 10px 0; white-space:nowrap !important; overflow:scroll !important; resize: auto !important; text-transform: initial !important;" placeholder="留空等于默认的 {}，请把规则插入 {} 之间">${customRules}</textarea>
