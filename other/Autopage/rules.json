@@ -5746,7 +5746,7 @@
 	},
 	"nhentai": {
 		"host": "nhentai.net",
-		"url": "return (fun.lp() == '/' || fun.lp() == '/search/' || fun.indexOF(/\\/(tag|artist|character)\\//))",
+		"url": "return (fun.lp() == '/' || fun.lp() == '/search/' || fun.indexOF(/\\/(tag|artist|character|language)\\//))",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
