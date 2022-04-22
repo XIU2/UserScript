@@ -4332,6 +4332,16 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"Bootcss 中文网": {
+		"host": "v4.bootcss.com",
+		"url": "/^\\/docs\\//",
+		"style": "#TableOfContents {display: none !important;}",
+		"pager": {
+			"nextL": ".bd-sidenav-active+li>a, .bd-toc-item.active+.bd-toc-item>a",
+			"pageE": "main>*",
+			"replaceE": ".bd-links"
+		}
+	},
 	"51CTO": {
 		"host": "www.51cto.com",
 		"url": "return (fun.lp() == '/' || fun.lp() == '/dev')",
