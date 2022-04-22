@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.8.9
+// @version      5.9.0
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -870,6 +870,40 @@ function: {
                     scrollD: 3000
                 }
             }, //           HiComic (嗨漫画)
+            alimanhua: {
+                host: 'www.alimanhua.com',
+                url: ()=> {
+                    if (indexOF(/\/\d+\.html$/)) {
+                        curSite = DBSite.alimanhua;
+                    } else if (indexOF(/^\/manhua\/\d+\/$/)) {
+                        setTimeout(()=>{getCSS('#openBook').click()}, 500)
+                    } else if (lp != '/'){
+                        curSite = DBSite.alimanhua_list;
+                    }
+                },
+                style: 'iframe {display: none !important;}',
+                pager: {
+                    type: 4,
+                    nextL: alimanhua_nextL,
+                    pageE: 'head>script:not([src])',
+                    insertP: ['#viewimages', 3],
+                    insertE: alimanhua_insertE,
+                    interval: 3000,
+                    scrollD: 3000
+                }
+            }, //         阿狸漫画
+            alimanhua_list: {
+                blank: 3,
+                pager: {
+                    nextL: '#pager>b+a',
+                    pageE: '#dmList>ul',
+                    replaceE: '#pager',
+                    scrollD: 800
+                },
+                function: {
+                    bF: "return fun.src_bF(pageE, [0, 'img[_src]', '_src'])"
+                }
+            }, //      阿狸漫画 - 分类/搜索页
             mangabz: {
                 host: ['mangabz.com', 'www.mangabz.com'],
                 url: ()=> {if (indexOF(/\/m\d+/)) {
@@ -1476,6 +1510,38 @@ function: {
             _img += `<img src="${src}">`
         }
         getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+        pageNum.now = pageNum._now + 1
+    }
+
+
+    // [阿狸漫画] 获取下一页地址
+    function alimanhua_nextL(pageE, type) {
+        if (type === 'url') {
+            if(pageE.status == 1){
+                if (pageE.url === curSite.pageUrl) return
+                curSite.pageUrl = pageE.url;
+                getPageE_(curSite.pageUrl); // 真正的下一页链接
+            } else {
+                curSite = {SiteTypeID: 0}
+                alert("已经是最后一章！");
+            }
+        } else {
+            getPageE_(`${location.origin}/e/extend/ret_page/mindex.php?bid=${window.location.href.split("/")[4]}&id=${window.location.href.split("/")[5]}&u=1`, 'json', 'GET', '', 'url');
+        }
+    }
+    // [阿狸漫画] 插入数据
+    function alimanhua_insertE(pageE, type) {
+        if (!pageE) return
+        if (type === 'url') { // 获取下一页链接
+            alimanhua_nextL(pageE, type); return
+        }
+        insScript('head>script:not([src])', pageE);
+
+        // 插入图片
+        let _img = '';
+        for (let i=1;i<photosr.length;i++){_img += `<img src="http://res.img.tueqi.com/${photosr[i]}">`;}
+        getCSS(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img);
+        addHistory(pageE);
         pageNum.now = pageNum._now + 1
     }
 

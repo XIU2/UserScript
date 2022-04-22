@@ -2814,7 +2814,7 @@
 			"insertP": ["body",3],
 			"replaceE": ".view-bottom-bar, .winnextchapter, .view-fix-bottom-bar",
 			"scriptT": 2,
-			"interval": 5000,
+			"interval": 4000,
 			"scrollD": 2000
 		},
 		"function": {
@@ -2862,7 +2862,7 @@
 			"insertP": ["body",3],
 			"replaceE": ".vg-r-data, ol.links-of-books",
 			"scriptT": 2,
-			"interval": 5000,
+			"interval": 4000,
 			"scrollD": 2000
 		},
 		"function": {
@@ -2893,7 +2893,7 @@
 			"insertP": ["body",3],
 			"replaceE": ".wrap_last_mid",
 			"scriptT": 2,
-			"interval": 5000,
+			"interval": 4000,
 			"scrollD": 3000
 		},
 		"function": {
@@ -2961,7 +2961,7 @@
 			"pageE": "//body/script[not(@src)]",
 			"insertP": ["body",3],
 			"scriptT": 2,
-			"interval": 5000,
+			"interval": 4000,
 			"scrollD": 2000
 		},
 		"function": {
@@ -2977,7 +2977,7 @@
 			"nextL": "#next_chapter",
 			"pageE": ".pic[_src]",
 			"replaceE": "[class^='display_']",
-			"interval": 5000,
+			"interval": 4000,
 			"scrollD": 2000
 		},
 		"function": {
@@ -3154,7 +3154,7 @@
 			"pageE": "//script[not(@src)][contains(text(), 'eval(')]|//script[contains(@src,'ct.js')]",
 			"insertP": ["body",3],
 			"scriptT": 2,
-			"interval": 5000,
+			"interval": 4000,
 			"scrollD": 5000
 		},
 		"function": {
@@ -3193,7 +3193,7 @@
 			"pageE": "//script[contains(text(),'chapterImages')]",
 			"insertP": ["body",3],
 			"scriptT": 2,
-			"interval": 5000,
+			"interval": 4000,
 			"scrollD": 4000
 		},
 		"function": {
