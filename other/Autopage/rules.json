@@ -1983,11 +1983,11 @@
 	},
 	"byrut.org": {
 		"host": "byrut.org",
-		"url": "return (!fun.indexOF(/^\\/\\d+-/))",
+		"url": "return (document.title.indexOf('Поиск по сайту')==-1)",
 		"blank": 3,
 		"pager": {
 			"nextL": "//span[@class='pnext']/parent::a",
-			"pageE": ".short_item",
+			"pageE": ".short_item, .comments-tree-item",
 			"replaceE": ".bottom-page"
 		}
 	},
