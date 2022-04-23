@@ -3332,7 +3332,7 @@
 	},
 	"御书网": {
 		"host": "www.yushubo.com",
-		"url": "/\\/read_/",
+		"url": "/^\\/read_/",
 		"style": ".readbg.mt10 {display: none !important;}",
 		"history": true,
 		"pager": {
@@ -3350,6 +3350,18 @@
 			"nextL": "id('pager')//a[contains(text(), '下一页')]",
 			"pageE": "ul.search-list, .books-list",
 			"replaceE": "#pager"
+		}
+	},
+	"御书网 - 手机版": {
+		"host": "m.yushubo.com",
+		"url": "/^\\/read_/",
+		"style": ".member, iframe, [data-url], article[id^='article'], [style*='position:'] {display: none !important;}",
+		"history": true,
+		"pager": {
+			"nextL": "//a[@class='btn-next'][text()='下一页' or text()='下一章']",
+			"pageE": ".read-section",
+			"insertP": [".read-section",6],
+			"replaceE": ".chapter-porn"
 		}
 	},
 	"搜小说": {
@@ -4417,12 +4429,12 @@
 			"scrollD": 2500
 		}
 	},
-	"Github - Issues/Pull/Discussions/Releases": {
+	"Github - Issues/Pull/Discussions/Releases/Actions": {
 		"host": ["github.com","hub.fastgit.xyz"],
-		"url": "return (fun.indexOF(/\\/(issues|pulls|discussions|releases)$/) || fun.indexOF('/discussions/categories'))",
+		"url": "return (fun.indexOF(/\\/(issues|pulls|discussions|releases)$/) || fun.indexOF('/discussions/categories') || fun.indexOF(/\\/actions($|\\/workflows)/))",
 		"pager": {
 			"nextL": "a.next_page",
-			"pageE": "div[id^='issue_'], ul[aria-labelledby='discussions-list']>li, #repo-content-pjax-container>div>div[data-pjax]>div:not(.paginate-container)",
+			"pageE": "div[id^='issue_'], ul[aria-labelledby='discussions-list']>li, #repo-content-pjax-container>div>div[data-pjax]>div:not(.paginate-container), div[id^='check_suite_']",
 			"replaceE": ".pagination",
 			"scrollD": 2500
 		}
