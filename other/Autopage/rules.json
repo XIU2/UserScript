@@ -4727,14 +4727,24 @@
 			"replaceE": ".pagination"
 		}
 	},
-	"亚马逊 - JP": {
-		"host": "www.amazon.co.jp",
+	"Amazon": {
+		"host": ["www.amazon.com","www.amazon.cn","www.amazon.co.jp"],
 		"url": "/\\/s\\?/",
 		"pager": {
 			"type": 3,
 			"nextL": "a.s-pagination-next",
 			"pageE": ".s-result-item[data-component-type='s-search-result']",
 			"replaceE": ".s-pagination-container"
+		}
+	},
+	"eBay": {
+		"host": ["www.ebay.com","cn.ebay.com","www.ebay.com.hk","www.ebay.co.jp"],
+		"url": "/^\\/sch\\//",
+		"pager": {
+			"type": 3,
+			"nextL": "a.pagination__next",
+			"pageE": "ul.srp-results>li.s-item",
+			"replaceE": ".pagination"
 		}
 	},
 	"什么值得买 - 分类/搜索页": {
