@@ -1452,6 +1452,10 @@
 			"bF": "return fun.src_bF(pageE, [0, 'img[data-lazy-src]', 'data-lazy-src'])"
 		}
 	},
+	"Unsplash": {
+		"host": "unsplash.com",
+		"url": "fun.isUrlC(); if(fun.indexOF('/s/photos/')){setTimeout((f=fun)=>{f.getXpath(\"//button[text()='Load more photos']\").click();}, 2000)}"
+	},
 	"图行天下": {
 		"host": "www.photophoto.cn",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/sucai/'))",
