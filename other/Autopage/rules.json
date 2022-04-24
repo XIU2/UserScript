@@ -4727,6 +4727,16 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"亚马逊 - JP": {
+		"host": "www.amazon.co.jp",
+		"url": "/\\/s\\?/",
+		"pager": {
+			"type": 3,
+			"nextL": "a.s-pagination-next",
+			"pageE": ".s-result-item[data-component-type='s-search-result']",
+			"replaceE": ".s-pagination-container"
+		}
+	},
 	"什么值得买 - 分类/搜索页": {
 		"host": ["www.smzdm.com","search.smzdm.com"],
 		"url": "return (location.hostname === 'search.smzdm.com' || fun.indexOF('/fenlei/') || fun.indexOF(/\\/mall\\/.+\\/.+/))",
