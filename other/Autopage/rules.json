@@ -48,7 +48,7 @@
 		"history": true,
 		"pager": {
 			"nextL": "#pnnext",
-			"pageE": "id('search') | //style[not(contains(text(), 'table,div,span,p{display:none}'))]",
+			"pageE": "id('search')/div | //style[not(contains(text(), 'table,div,span,p{display:none}'))]",
 			"replaceE": "id('navcnt') | id('rcnt')//div[@role='navigation']",
 			"scriptT": 0,
 			"scrollD": 2500
@@ -4038,7 +4038,7 @@
 		"history": true,
 		"pager": {
 			"nextL": "//div[@class='paginator']//span/strong/parent::span/parent::td/following-sibling::td[1]//a",
-			"pageE": "id('searchResultBox') | //script[contains(string(), 'pagerOptions')]",
+			"pageE": "//*[@id='searchResultBox'] | //script[contains(string(), 'pagerOptions')]",
 			"replaceE": ".paginator",
 			"scriptT": 2,
 			"scrollD": 2000
