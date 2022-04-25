@@ -3608,12 +3608,17 @@
 			"scrollD": 2000
 		}
 	},
-	"423down": {
-		"host": "www.423down.com",
+	"蓝鲨": {
+		"host": "www.lan-sha.com",
+		"url": "return (!fun.indexOF('.html'))",
+		"style": "#app {overflow: initial !important;}",
 		"pager": {
-			"nextL": "//span[@class='current']/following-sibling::a[1] | //span[@class='page-numbers current']/preceding-sibling::a[1]",
-			"pageE": ".content>.excerpt, .commentlist>li",
-			"replaceE": ".paging, .pagenav"
+			"nextL": "a.current+a",
+			"pageE": "li.post-item",
+			"replaceE": ".pages"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"不死鸟": {
@@ -3805,6 +3810,14 @@
 			"nextL": "a.nextpage",
 			"pageE": ".ApdList>ul.ApdLi",
 			"replaceE": ".pagination"
+		}
+	},
+	"423down": {
+		"host": "www.423down.com",
+		"pager": {
+			"nextL": "//span[@class='current']/following-sibling::a[1] | //span[@class='page-numbers current']/preceding-sibling::a[1]",
+			"pageE": ".content>.excerpt, .commentlist>li",
+			"replaceE": ".paging, .pagenav"
 		}
 	},
 	"华军软件园": {
