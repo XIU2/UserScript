@@ -651,6 +651,28 @@
 			"interval": 500
 		}
 	},
+	"水木社区": {
+		"host": "www.mysmth.net",
+		"url": "return (location.href.indexOf('board/') != -1)",
+		"style": "[id*='banner'], [class*='banner'] {display: none !important;}",
+		"pager": {
+			"nextL": ".page-select+li.page-normal>a",
+			"pageE": ".board-list>tbody>tr:not(.top)",
+			"replaceE": ".pagination",
+			"scrollD": 800
+		}
+	},
+	"水木社区 - 帖子内": {
+		"host": "www.mysmth.net",
+		"url": "return (location.href.indexOf('article/') != -1)",
+		"style": "[id*='banner'], [class*='banner'] {display: none !important;}",
+		"thread": true,
+		"pager": {
+			"nextL": ".page-select+li.page-normal>a",
+			"pageE": ".b-content>*",
+			"replaceE": ".pagination"
+		}
+	},
 	"看雪论坛": {
 		"host": "bbs.pediy.com",
 		"url": "/\\/forum-/",
