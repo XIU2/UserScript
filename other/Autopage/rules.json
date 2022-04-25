@@ -1523,6 +1523,15 @@
 			"scrollD": 2000
 		}
 	},
+	"第一PPT": {
+		"host": "www.1ppt.com",
+		"url": "return (fun.lp() != '/' && !fun.indexOF('/article/'))",
+		"pager": {
+			"nextL": "li.thisclass+li:not(.nohref)>a",
+			"pageE": "ul.tplist",
+			"replaceE": ".pages"
+		}
+	},
 	"普象网 - 帖子内": {
 		"host": "www.puxiang.com",
 		"url": "/^\\/forum\\/thread/",
