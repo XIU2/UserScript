@@ -331,7 +331,6 @@
 	"百度贴吧 - 帖子内": {
 		"host": ["tieba.baidu.com","jump2.bdimg.com"],
 		"url": "if (location.hostname == 'jump2.bdimg.com') location.hostname = 'tieba.baidu.com'; return (fun.indexOF('/p/')) ",
-		"blank": 1,
 		"iframe": true,
 		"thread": true,
 		"style": ".d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld, .topic_list_box.topic-fixed {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}",
@@ -2506,12 +2505,15 @@
 	},
 	"RARBG": {
 		"host": "/rarbg/",
-		"url": "return (document.title.indexOf('RARBG') > -1 && fun.lp() == '/torrents.php')",
+		"url": "if(document.title.indexOf('RARBG') > -1 && fun.lp() == '/torrents.php'){fun.getAllCSS('table.lista2t tr.lista2 td>a[onmouseover]').forEach((now)=>{now.parentElement.setAttribute('onmouseover', now.getAttribute('onmouseover')); now.removeAttribute('onmouseover');now.parentElement.setAttribute('onmouseout', now.getAttribute('onmouseout')); now.removeAttribute('onmouseout');}); return true}",
 		"blank": 3,
 		"pager": {
 			"nextL": "#pager_links>a[title='next page']",
 			"pageE": "table.lista2t tr.lista2",
 			"replaceE": "#pager_links"
+		},
+		"function": {
+			"bF": "pageE.forEach((one)=>{let now=fun.getCSS('td>a[onmouseover]',one);now.parentElement.setAttribute('onmouseover', now.getAttribute('onmouseover')); now.removeAttribute('onmouseover');now.parentElement.setAttribute('onmouseout', now.getAttribute('onmouseout')); now.removeAttribute('onmouseout');});return pageE"
 		}
 	},
 	"Zooqle": {
