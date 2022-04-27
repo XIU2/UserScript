@@ -3234,8 +3234,8 @@
 			"replaceE": ".pagination, .pages, .page"
 		}
 	},
-	"古风漫画网 / 优酷漫画 / 36 漫画": {
-		"host": ["/^www\\.gufengmh\\d/","www.ykmh.com","36manga.com","www.36manga.com","36manhua.com","www.36manhua.com"],
+	"古风漫画网 / 优酷漫画 / 36 漫画 / 360 漫画": {
+		"host": ["/^www\\.gufengmh\\d/","www.ykmh.com","36manga.com","www.36manga.com","36manhua.com","www.36manhua.com","www.100fanwo.com"],
 		"url": "if (fun.indexOF(/\\/\\d+\\.html$/)) {if (location.hostname == 'www.ykmh.com' || location.hostname.indexOf('36man') != -1) {if (localStorage.getItem('chapterScroll') != '\"pagination\"') {localStorage.setItem('chapterScroll', '\"pagination\"'); location.reload();} else {setTimeout(()=>{let _img = '',host = SinMH.getResHostDomain(); if (location.hostname == 'www.ykmh.com') {chapterPath=''}; for (let i=0;i<chapterImages.length;i++){_img += `<img src=\"${host}${chapterPath}${chapterImages[i]}\">`;}; document.getElementById('images').innerHTML = _img;}, 500); return true;}} else {let chapterScroll = fun.getCSS('#chapter-scroll:not(.active)'); if (chapterScroll) {chapterScroll.click();}; return true;}}",
 		"style": ".img_land_prev, .img_land_next,p.img_info, #sider-left, #sider-right, p.img_info, .tc, .chapter-view + .w996 {display: none !important;} #images>img {display: inline-block;min-height: 300px;margin: 0 auto !important;border: none !important;padding: 0 !important;max-width: 99% !important;height: auto !important;}",
 		"history": true,
@@ -3248,17 +3248,31 @@
 			"scrollD": 4000
 		},
 		"function": {
-			"aF": "let _img = '',host = SinMH.getResHostDomain(); if (location.hostname == 'www.ykmh.com') {chapterPath=''}else if (location.hostname.indexOf('36man') == -1){host+='/'}; for (let i=0;i<chapterImages.length;i++){_img += `<img src=\"${host}${chapterPath}${chapterImages[i]}\">`;}; document.getElementById('images').insertAdjacentHTML('beforeend', _img);"
+			"aF": "let _img = '',host = SinMH.getResHostDomain(); if (location.hostname == 'www.ykmh.com'||location.hostname == 'www.100fanwo.com') {chapterPath=''}else if (location.hostname.indexOf('36man') == -1){host+='/'}; for (let i=0;i<chapterImages.length;i++){_img += `<img src=\"${host}${chapterPath}${chapterImages[i]}\">`;}; document.getElementById('images').insertAdjacentHTML('beforeend', _img);"
 		}
 	},
-	"古风漫画网 / 优酷漫画 / 36 漫画 - 分类页": {
-		"host": ["/^www\\.gufengmh\\d/","www.ykmh.com","36manga.com","www.36manga.com","36manhua.com","www.36manhua.com"],
+	"古风漫画网 / 优酷漫画 / 36 漫画 / 360 漫画 - 分类页": {
+		"host": ["/^www\\.gufengmh\\d/","www.ykmh.com","36manga.com","www.36manga.com","36manhua.com","www.36manhua.com","www.100fanwo.com"],
 		"url": "/^\\/(update|list|search)/",
 		"blank": 3,
 		"pager": {
 			"nextL": "li.next>a",
 			"pageE": "li.item-lg, li.list-comic",
 			"replaceE": "ul.pagination"
+		}
+	},
+	"360 漫画 - 手机版": {
+		"host": "m.100fanwo.com",
+		"url": "/\\/\\d+(-\\d+)?\\.html$/",
+		"style": ".erPag img {padding: 0!important;border: none!important;display: block;min-width: 100%;max-width: 100%;height: 100%;margin: auto;margin-bottom: -1px;} body>*:not(.UnderPage), .UnderPage>*:not(.erPag):not(.Introduct_Sub):not(.title3):not(.control_bottom) {display: none !important;}",
+		"pager": {
+			"nextL": "id('action')//a[text()='下一页' or text()='下一章']",
+			"pageE": ".erPag",
+			"replaceE": "#action",
+			"scrollD": 1500
+		},
+		"function": {
+			"bF": "pageE[0].innerHTML = pageE[0].innerHTML.replaceAll('mip-img','img');return pageE"
 		}
 	},
 	"砂之船动漫家": {
