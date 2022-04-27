@@ -3222,6 +3222,30 @@
 			"replaceE": ".pages_s"
 		}
 	},
+	"笔屋漫画 - 分类页": {
+		"host": "www.biwumh.com",
+		"url": "/^\\/l\\//",
+		"pager": {
+			"nextL": "#pagelink>strong+a",
+			"pageE": "#sitebox",
+			"replaceE": "#pagelink"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[_src]','_src'])"
+		}
+	},
+	"笔屋漫画": {
+		"host": "www.biwumh.com",
+		"url": "/^\\/\\d+\\/\\d+(_\\d+)?\\.html$/",
+		"pager": {
+			"nextL": "//p[@class='mlfy_page']/a[text()='下一页' or text()='下一章']",
+			"pageE": "#TextContent>img",
+			"replaceE": ".mlfy_page"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"鬼罗丽漫画": {
 		"host": ["www.gllmh8.com","m.gllmh8.com"],
 		"url": "/^\\/./",
