@@ -475,7 +475,8 @@ function: {
                 pager: {
                     type: 3,
                     nextL: '.post-page-numbers.current+a',
-                    replaceE: '//a[contains(@class,"post-page-numbers")]/parent::*'
+                    replaceE: '//a[contains(@class,"post-page-numbers")]/parent::*',
+                    scrollD: 2000
                 },
                 function: {
                     bF: src_bF
