@@ -3764,16 +3764,6 @@
 			"replaceE": ".pages"
 		}
 	},
-	"福利吧 - 文章内": {
-		"host": "fuliba2021.net",
-		"url": "/^\\/\\d+\\.html/",
-		"pager": {
-			"type": 3,
-			"nextL": ".post-page-numbers.current+a",
-			"pageE": ".article-content",
-			"replaceE": ".article-paging"
-		}
-	},
 	"黑域基地": {
 		"host": "www.hybase.com",
 		"url": "return (fun.getCSS('#pages') != null)",
@@ -5091,16 +5081,6 @@
 			"replaceE": ".pagination, .home-more-container"
 		}
 	},
-	"医学考研网": {
-		"host": ["info.medkaoyan.net","www.1y.is"],
-		"url": "return (fun.getCSS('.post-page-numbers.current') != null)",
-		"pager": {
-			"nextL": ".post-page-numbers.current+a.post-page-numbers",
-			"pageE": ".entry-content>*:not(.wbp-cbm):not(.page-links)",
-			"replaceE": ".page-links",
-			"scrollD": 2500
-		}
-	},
 	"CocoaControls": {
 		"host": "www.cocoacontrols.com",
 		"url": "fun.isUrlC(); return (fun.lp()=='/' || fun.indexOF('/controls'))",
@@ -5374,16 +5354,6 @@
 			"pageE": ".gridview-posts",
 			"replaceE": ".category",
 			"scrollD": 2000
-		}
-	},
-	"灵梦御所": {
-		"host": "blog.reimu.net",
-		"url": "return (fun.lp() == '/' || fun.indexOF('/category') || fun.indexOF('/tag'))",
-		"blank": 3,
-		"pager": {
-			"nextL": "span.current+a.sfwppa-current-page",
-			"pageE": "article[id^='post-']",
-			"replaceE": ".wp-pagenavi"
 		}
 	},
 	"JavDB": {
@@ -5944,18 +5914,6 @@
 			"replaceE": ".paginator"
 		}
 	},
-	"美女推": {
-		"host": "mvtui.com",
-		"url": "/^\\/./",
-		"pager": {
-			"nextL": ".article-paging span.current+a, li.next-page a",
-			"pageE": ".article-content>p, #posts",
-			"replaceE": ".article-paging, .pagination"
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE)"
-		}
-	},
 	"秀人集": {
 		"host": "/\\.xiuren[a-z]+\\./",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/search/'))",
@@ -6172,16 +6130,6 @@
 			"pageE": "article img",
 			"replaceE": ".pagination2",
 			"scrollD": 2000
-		}
-	},
-	"ROSI 小莉写真": {
-		"host": "www.xiaoli8.cc",
-		"url": "/\\/\\d+$/",
-		"pager": {
-			"nextL": "span.post-page-numbers.current+a.post-page-numbers",
-			"pageE": "li.blocks-gallery-item",
-			"replaceE": ".page-links",
-			"scrollD": 3000
 		}
 	},
 	"imn5_net": {
