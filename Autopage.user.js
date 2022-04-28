@@ -346,7 +346,7 @@
                 case 7: //   < 所有 NexusPHP 论坛 >
                     DBSite.nexusphp.url(); break;
                 case 8: // < 部分自带 自动无缝翻页 的网站 1 >
-                    DBSite.loadmore.url('.more, .load-more, .load_more, .loadmore, #more, #load-more, #load_more, #loadmore, .show-more, .show_more'); break;
+                    DBSite.loadmore.url('.load-more, .load_more, .loadmore, #load-more, #load_more, #loadmore, .show-more, .show_more'); break;
                 case 9: // < 部分自带 自动无缝翻页 的网站 2 >
                     DBSite.loadmore.url('//*[text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]'); break;
                 case 10: // < 部分使用 WordPress 的网站 >
