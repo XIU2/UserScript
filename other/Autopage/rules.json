@@ -1487,6 +1487,22 @@
 			"bF": "return fun.src_bF(pageE, [0, 'img[data-lazy-src]', 'data-lazy-src'])"
 		}
 	},
+	"Pngtree": {
+		"host": ["pngtree.com","zh.pngtree.com"],
+		"url": "return (!fun.indexOF('/freepng/') && !fun.indexOF('/freebackground/'))",
+		"style": "div[class*='-banner'], .COLLECT, .v2-footer, #v2-foot, .transform-login {display: none !important;} img[data-original] {opacity: 1 !important;}",
+		"pager": {
+			"type": 6,
+			"nextL": ".nextPage",
+			"pageE": "//*[self::div or self::li][@data-id]/parent::*",
+			"replaceE": ".pageCont",
+			"loadTime": 200,
+			"scrollD": 5000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"Unsplash": {
 		"host": "unsplash.com",
 		"url": "fun.isUrlC(); if(fun.indexOF('/s/photos/')){setTimeout((f=fun)=>{f.getXpath(\"//button[text()='Load more photos']\").click();}, 2000)}"
