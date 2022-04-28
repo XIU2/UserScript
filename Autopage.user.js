@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.9.4
+// @version      5.9.5
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -22,6 +22,7 @@
 // @connect      cdn.jsdelivr.net
 // @connect      gcore.jsdelivr.net
 // @connect      fastly.jsdelivr.net
+// @connect      raw.githubusercontents.com
 // @connect      www.xuexiniu.com
 // @connect      bbs.xuexiniu.com
 // @connect      weili.ooopic.com
@@ -97,9 +98,9 @@
         'https://raw.xn--p8jhe.tw/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw-gh.gcdn.mirr.one/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://cdn.staticaly.com/gh/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://cdn.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://gcore.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
-        'https://fastly.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json'
+        'https://fastly.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
+        'https://raw.githubusercontents.com/XIU2/UserScript/master/other/Autopage/rules.json'
     ], urlArr2 = [
         'https://userscript.gh2233.ml/other/Autopage/rules.json',
         'https://userscript.xiu2.xyz/other/Autopage/rules.json',
