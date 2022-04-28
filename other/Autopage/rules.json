@@ -1527,9 +1527,9 @@
 	},
 	"iconfont": {
 		"host": "www.iconfont.cn",
-		"url": "fun.isUrlC(); return (fun.indexOF('/search/'))",
+		"url": "fun.isUrlC(); return (fun.indexOF(/^\\/(search|collections|illustrations|illustrations_3d|lotties)\\/index/))",
 		"blank": 2,
-		"style": ".footer, header .bind-tips, .block-pagination-wrap, #magix_vf_main .block-sub-banner, #J_block_sidebar {display: none !important;}",
+		"style": ".footer, header .bind-tips, .block-pagination-wrap, #magix_vf_main .block-sub-banner:not([p-id='96']), #J_block_sidebar {display: none !important;}",
 		"iframe": true,
 		"pager": {
 			"type": 5,
