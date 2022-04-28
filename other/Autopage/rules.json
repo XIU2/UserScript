@@ -5358,16 +5358,12 @@
 	},
 	"JavDB": {
 		"host": "/^javdb/",
-		"url": "return (document.title.indexOf('JavDB') > -1)",
-		"style": ".grid-item.column{position: static !important; float: left !important; height: 313px !important;}",
+		"url": "return (document.title.indexOf('JavDB') > -1 && !fun.indexOF('/v/') && fun.getCSS('.pagination') != null)",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.pagination-next",
-			"pageE": ".grid-item.column, .section-container>div",
+			"pageE": "#videos, #makers, #series, #actors>div",
 			"replaceE": ".pagination"
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"JavBus / AVMOO": {
