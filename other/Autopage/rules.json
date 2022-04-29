@@ -5378,7 +5378,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "a.pagination-next",
-			"pageE": "#videos, #makers, #series, #actors>div",
+			"pageE": ".movie-list, #videos, #makers, #series, #actors>div",
 			"replaceE": ".pagination"
 		}
 	},
