@@ -3,7 +3,7 @@
 // @name:zh-CN   护眼模式
 // @name:zh-TW   護眼模式
 // @name:en      Dark Mode
-// @version      1.4.5
+// @version      1.4.6
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
 // @description:zh-CN  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
@@ -23,14 +23,6 @@
 // @namespace    https://github.com/XIU2/UserScript
 // @supportURL   https://github.com/XIU2/UserScript
 // @homepageURL  https://github.com/XIU2/UserScript
-// @exclude      https://*.iqiyi.com/*
-// @exclude      https://*.youku.com/*
-// @exclude      https://m.v.qq.com/*
-// @exclude      https://v.qq.com/*
-// @exclude      https://*.acfun.cn/*
-// @exclude      https://*.youtube.com/*
-// @exclude      https://*.youtube-nocookie.com/*
-// @exclude      https://weread.qq.com/*
 // ==/UserScript==
 
 (function() {
