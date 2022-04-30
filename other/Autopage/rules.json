@@ -360,15 +360,14 @@
 		"style": "img.j_retract {margin-top: 0 !important;margin-bottom: 0 !important;}",
 		"history": false,
 		"pager": {
-			"type": 6,
-			"nextL": "a.next.pagination-item",
-			"pageE": "#thread_list>li",
-			"replaceE": "#frs_list_pager",
-			"loadTime": 100,
-			"scrollD": 5000
+			"nextL": "js; if (fun.getCSS('a.next.pagination-item')) return (fun.getCSS('a.next.pagination-item').href + '&pagelets=frs-list%2Fpagelet%2Fthread&pagelets_stamp=' + new Date().getTime())",
+			"pageE": "//script[contains(text(), 'Bigpipe.register(\"frs-list/pagelet/thread_list\", ')]",
+			"insertP": ["#thread_list",3],
+			"interval": 2000,
+			"scrollD": 3000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE)"
+			"bF": "let scriptText = pageE[0].textContent.replace('Bigpipe.register(\"frs-list/pagelet/thread_list\", ',''); scriptText = scriptText.slice(0, scriptText.indexOf(').')); let temp = document.createElement('div'); temp.innerHTML = JSON.parse(scriptText).content; fun.getCSS('#frs_list_pager').innerHTML = fun.getCSS('#frs_list_pager',temp).innerHTML; return fun.src_bF(fun.getAllCSS('#thread_list>li',temp))"
 		}
 	},
 	"百度贴吧 - 搜索页": {
