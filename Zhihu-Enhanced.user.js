@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.0.6
+// @version      2.0.7
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @description:zh-TW  移除登錄彈窗、屏蔽首頁視頻、默認收起回答、快捷收起回答/評論、快捷回到頂部、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化搜索熱門、淨化標題消息、置頂顯示時間、完整問題時間、區分問題文章、默認高清原圖、默認站外直鏈...
@@ -547,9 +547,9 @@ function blockUsers(type) {
         function blockUsers_now() {
             if (location.search.indexOf('type=content') === -1) return // 目前只支持搜索页的 [综合]
             document.querySelectorAll('.Card.SearchResult-Card[data-za-detail-view-path-module="AnswerItem"], .Card.SearchResult-Card[data-za-detail-view-path-module="PostItem"]').forEach(function(item1){
-                let item = item1.querySelector('.RichText.ztext.CopyrightRichText-richText b'); // 标题所在元素
+                let item = item1.querySelector('.RichText.ztext.CopyrightRichText-richText b'); // 用户名所在元素
                 if (item) {
-                    for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历关键词黑名单
+                    for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
                         if (keyword != '' && item.textContent === keyword) { // 找到就删除该信息流
                             console.log(item.textContent);
                             item1.hidden = true;
@@ -560,7 +560,7 @@ function blockUsers(type) {
             })
         }
 
-        setTimeout(blockUsers_now, 1000);
+        setTimeout(blockUsers_now, 2000);
         window.addEventListener('urlchange', function(){
             setTimeout(blockUsers_now, 1000); // 网页 URL 变化后再次执行
         })
@@ -570,15 +570,13 @@ function blockUsers(type) {
             for (const mutation of mutationsList) {
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType != 1) return
-                    if (target.className === 'Card SearchResult-Card' && (target.dataset.zaDetailViewPathModule === 'AnswerItem' || target.dataset.zaDetailViewPathModule === 'PostItem')) {
-                        let item = target.querySelector('.RichText.ztext.CopyrightRichText-richText b'); // 用户名所在元素
-                        if (item) {
-                            for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
-                                if (keyword != '' && item.textContent === keyword) { // 找到就删除该信息流
-                                    console.log(item.textContent);
-                                    target.hidden = true;
-                                    break;
-                                }
+                    let item = target.querySelector('.Card.SearchResult-Card[data-za-detail-view-path-module="AnswerItem"] .RichText.ztext.CopyrightRichText-richText b, .Card.SearchResult-Card[data-za-detail-view-path-module="PostItem"] .RichText.ztext.CopyrightRichText-richText b');
+                    if (item) {
+                        for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
+                            if (keyword != '' && item.textContent === keyword) { // 找到就删除该信息流
+                                console.log(item.textContent);
+                                target.hidden = true;
+                                break;
                             }
                         }
                     }
@@ -795,7 +793,7 @@ function blockKeywords(type) {
             document.querySelectorAll('.HotLanding-contentItem, .Card.SearchResult-Card[data-za-detail-view-path-module="AnswerItem"], .Card.SearchResult-Card[data-za-detail-view-path-module="PostItem"]').forEach(function(item1){blockKeywords_1(item1, 'a[data-za-detail-view-id]');})
         }
 
-        setTimeout(blockKeywords_now, 1000);
+        setTimeout(blockKeywords_now, 2000);
         window.addEventListener('urlchange', function(){
             setTimeout(blockKeywords_now, 1000); // 网页 URL 变化后再次执行
         })
@@ -875,7 +873,7 @@ function blockType(type) {
     // 一开始加载的信息流 + 添加标签样式
     if (type === 'search') { // 搜索页
         if (!menu_value('menu_blockTypeVideo') && !menu_value('menu_blockTypeArticle') && !menu_value('menu_blockTypeTopic') && !menu_value('menu_blockTypeSearch')) return
-        if (menu_value('menu_blockTypeSearch') && location.pathname === '/search') setTimeout(function(){document.querySelector('.RelevantQuery').parentElement.parentElement.hidden = true;;}, 1000)
+        if (menu_value('menu_blockTypeSearch') && location.pathname === '/search') setTimeout(function(){document.querySelector('.RelevantQuery').parentElement.parentElement.hidden = true;}, 2000)
         name = 'h2.ContentItem-title a:not(.zhihu_e_toQuestion), a.KfeCollection-PcCollegeCard-link, h2.SearchTopicHeader-Title a'
         addSetInterval_(name);
     } else if (type === 'question') { // 问题页
