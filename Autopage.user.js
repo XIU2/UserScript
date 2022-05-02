@@ -295,6 +295,17 @@
             }
 
             if (DBSite.wp_article.pager.nextL != undefined) {
+                if (getAllCSS('main').length == 1) {
+                    if (getAllCSS('main article[class]').length > 3) {
+                        DBSite.wp_article.pager.pageE = 'main article[class]'
+                    } else if (getAllCSS('main div[id^="post-"]').length > 3) {
+                        DBSite.wp_article.pager.pageE = 'main div[id^="post-"]'
+                    } else if (getAllCSS('main .post').length > 3) {
+                        DBSite.wp_article.pager.pageE = 'main .post'
+                    }
+                    if (DBSite.wp_article.pager.pageE != undefined) {console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站`); return 10;}
+                }
+
                 if (getAllCSS('article[class]').length > 3) {
                     DBSite.wp_article.pager.pageE = 'article[class]'
                 } else if (getAllCSS('div[id^="post-"]').length > 3) {
