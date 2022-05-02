@@ -3375,16 +3375,6 @@
 			"replaceE": "#page-container"
 		}
 	},
-	"起点中文 - 阅读页": {
-		"host": "read.qidian.com",
-		"style": ".admire-wrap {display: none !important;}",
-		"history": true,
-		"pager": {
-			"nextL": "a[id$='chapterNext']",
-			"pageE": ".main-text-wrap>div:not(.admire-wrap)",
-			"replaceE": ".chapter-control"
-		}
-	},
 	"七猫中文 - 阅读页": {
 		"host": "www.qimao.com",
 		"url": "return (fun.indexOF(/\\/shuku\\/\\d+-\\d+\\//) || fun.indexOF('/reader/index/'))",
