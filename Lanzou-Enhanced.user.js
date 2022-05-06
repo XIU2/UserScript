@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.4.2
+// @version      1.4.3
 // @author       X.I.U
-// @description  刷新不回根目录、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、一键复制所有分享链接、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
+// @description  刷新不回根目录、快捷返回上一级（右键网页空白处）、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、一键复制所有分享链接、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @include      /^https:\/\/.+\.lanzou[a-z]\.com\/.*$/
 // @match        *://pan.lanzou.com/*
 // @match        *://lanzou.com/u
@@ -128,6 +128,7 @@
             fobiddenBack(); //                           禁止浏览器返回（并绑定新的返回事件）
             EventXMLHttpRequest(); //                    监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
             setTimeout(clickOpenDirectory, 500); //      点击空白进入目录
+            setTimeout(backToTop, 2000); //              快捷返回上级（右键点击 网页右侧/下方 空白处）
 
             dragEnter(); //                              拖入文件自动显示上传框
             setTimeout(viewTop,1000); //                 监听并修改右键菜单 [外链分享地址] 为 [复制并打开分享链接] / [复制分享链接] / [打开分享链接] 之一
@@ -518,6 +519,17 @@
                 document.getElementById('sub').click();
             }
         };
+    }
+
+
+    // 快捷返回上级（右键点击 网页右侧/下方 空白处）
+    function backToTop() {
+        mainframe.document.getElementById('container').oncontextmenu = mainframe.document.body.oncontextmenu = function(e){
+            if (e.target == this) {
+                e.preventDefault();
+                backEvent();
+            }
+        }
     }
 
 
