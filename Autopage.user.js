@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      5.9.6
+// @version      5.9.7
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -2572,7 +2572,7 @@ function: {
 <li>具体的翻页规则说明、示例，为了方便更新及补充，我都写到 <strong><a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github</a></strong> 里面了。</li>
 <li>脚本会自动格式化规则，因此<strong>无需手动缩进、换行</strong>，只需把规则<strong>插入默认的 { } 中间</strong>即可。</li>
 </ul>
-<pre>
+<pre style="white-space: pre-wrap !important;user-select: auto !important;">
 // 下面示例是把所有规则都塞进去了，但实际上大都用不上，大多数网站只需要像第一个 "aaa" 这样的规则
 // "aaa" 是规则名，唯一！不能重复！否则会被 外置/内置规则 覆盖，支持中文等各种字符
 // "url" 是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站
@@ -2629,7 +2629,7 @@ function: {
 }
 </pre></details>
 <details><summary style="cursor: pointer;overflow: hidden !important;text-overflow: ellipsis !important;white-space: nowrap !important;"><kbd><strong>「 点击展开 查看所有规则 」（可按 Ctrl+F 搜索规则，脚本内置的通用规则因格式限制无法列出）</strong></kbd></summary>
-<pre id="Autopage_customRules_all" style="overflow-y: scroll !important; overflow-x: hidden !important; height: 500px !important; word-break: break-word !important; white-space: pre-wrap !important;"> </pre></details>
+<pre id="Autopage_customRules_all" style="overflow-y: scroll !important; overflow-x: hidden !important; height: 500px !important; word-break: break-word !important; white-space: pre-wrap !important;user-select: auto !important;"> </pre></details>
 
 <textarea id="Autopage_customRules_textarea" style="min-width:95% !important; min-height:70% !important; display: block !important; margin: 10px 0 10px 0; white-space:nowrap !important; overflow:scroll !important; resize: auto !important; text-transform: initial !important;" placeholder="留空等于默认的 {}，请把规则插入 {} 之间">${customRules}</textarea>
 <button id="Autopage_customRules_save" style="margin-right: 20px !important;">保存并刷新</button><button id="Autopage_customRules_cancel">取消修改</button>
