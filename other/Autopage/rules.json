@@ -1236,6 +1236,19 @@
 			"scrollD": 2000
 		}
 	},
+	"Buhitter": {
+		"host": "buhitter.com",
+		"url": "/^\\/(category|search)/",
+		"pager": {
+			"nextL": ".page-item.disabled+li>a",
+			"pageE": "#tweets-area>div",
+			"replaceE": ".pagination",
+			"scrollD": 2500
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"Iwara": {
 		"host": ["www.iwara.tv","ecchi.iwara.tv"],
 		"url": "/\\/(images|videos|search)/",
