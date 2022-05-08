@@ -6315,5 +6315,14 @@
 			"pageE": "#d_list>ul, table.dc_bar2",
 			"replaceE": "#d_list_page, #d_list_foot, table.dc_bar"
 		}
+	},
+	"taotuxp.com": {
+		"host": "www.taotuxp.com",
+		"url": "/^\\/\\d+\\.html/",
+		"pager": {
+			"nextL": ".pagelist>span+a",
+			"pageE": "#post_content>p",
+			"replaceE": ".pagelist"
+		}
 	}
 }
