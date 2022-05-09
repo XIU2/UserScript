@@ -4741,6 +4741,16 @@
 			"pageE": "#res_list>div"
 		}
 	},
+	"奈斯搜索": {
+		"host": "www.niceso.fun",
+		"url": "return (fun.lp()!='/'&&!fun.indexOF('/file/'))",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.btn:not([href])+a.btn.btn-line",
+			"pageE": ".search-item, .forum-topic-item",
+			"replaceE": ".page-num-box"
+		}
+	},
 	"wikihow": {
 		"host": ["www.wikihow.com","zh.wikihow.com"],
 		"url": "return (fun.indexOF('/Category:'))",
