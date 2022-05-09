@@ -388,12 +388,12 @@
 			"replaceE": "#paginator"
 		}
 	},
-	"豆瓣 - top250/分集短评/剧评影评/在看/想看/看过的电影/作品": {
+	"豆瓣 - top250/分集短评/剧评影评/在看/想看/看过的电影/作品/图片": {
 		"host": "movie.douban.com",
-		"url": "return (fun.lp() == '/top250' || fun.indexOF(/^\\/subject\\/\\d+\\/(episode|tv_discuss)/) || fun.indexOF(/^\\/subject\\/\\d+\\/reviews/) || fun.indexOF(/^\\/people\\/\\d+\\/(do|wish|collect)/) || fun.indexOF(/^\\/celebrity\\/\\d+\\/movies/))",
+		"url": "return (fun.lp() == '/top250' || fun.indexOF(/^\\/subject\\/\\d+\\/(episode|tv_discuss|reviews|photos)/) || fun.indexOF(/^\\/people\\/\\d+\\/(do|wish|collect)/) || fun.indexOF(/^\\/celebrity\\/\\d+\\/(movies|photos)/))",
 		"pager": {
 			"nextL": "link[rel='next']",
-			"pageE": ".grid_view, #comments, .review-list, .grid-view, .grid_view>ul>li",
+			"pageE": ".grid_view, #comments, .review-list, .grid-view, .grid_view>ul>li, .poster-col3>li",
 			"replaceE": ".paginator"
 		}
 	},
@@ -2504,9 +2504,9 @@
 			"replaceE": ".pagination"
 		}
 	},
-	"SkrBT": {
-		"host": "/skrbt/",
-		"url": "return (fun.getCSS(\"link[href*='/skrbt/'], img[src*='/skrbt/']\") != null && fun.lp() == '/search')",
+	"SkrBT / BT1207": {
+		"host": ["/skrbt/","/bt1207/"],
+		"url": "return (fun.getCSS(\"link[href*='/skrbt/'], img[src*='/skrbt/'], img[src*='/bt1207/']\") != null && fun.lp() == '/search')",
 		"history": true,
 		"pager": {
 			"nextL": "js;let page = fun.getCSS('a[onclick][aria-label=\"Next\"]'); if (page) {page = /(?<=\\()\\d+(?=\\))/.exec(page.onclick)[0];} else {return '';}; if (page) {return fun.getNextF('#search-form').replace(/p=\\d+/,'p=' + page)} else {return '';}",
