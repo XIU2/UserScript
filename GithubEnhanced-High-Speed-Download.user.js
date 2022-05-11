@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      1.9.7
+// @version      1.9.8
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -30,18 +30,18 @@
     'use strict';
     var backColor = '#ffffff', fontColor = '#888888', menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'), menu_menu_raw_fast_ID, menu_feedBack_ID;
     const download_url = [
-        ['https://pd.zwc365.com/seturl/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        //['https://pd.zwc365.com/seturl/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        ['https://gh2.yanqishui.work/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@HongjieCN] 提供'],
         ['https://gh.gh2233.ml/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [本脚本作者 X.I.U/XIU2] 提供'],
         //['https://gh.api.99988866.xyz/https://github.com', '美国', '[美国 Cloudflare CDN]'],
-        //['https://github.rc1844.workers.dev', '美国', '[美国 Cloudflare CDN]'],
         //['https://gh-rep.mirr.one', '美国', '[美国 Cloudflare CDN]'],
         //['https://cdn.githubjs.cf', '美国', '[美国 Cloudflare CDN]'],
-        //['https://gh.yqs.workers.dev', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@HongjieCN] 提供'],
-        //['https://ghgo.feizhuqwq.workers.dev/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        //['https://gh-proxy-misakano7545.koyeb.app/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        //['https://ghgo.feizhuqwq.workers.dev/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [feizhuqwq.com] 提供'],
         ['https://gh.ddlc.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@mtr-static-official] 提供'],
         ['https://git.yumenaka.net/https://github.com', '美国', '[美国 圣何塞]'],
         ['https://download.xn--p8jhe.tw', '美国', '[美国 圣何塞] - 该公益加速源由 [おうか] 提供', 'https://archive.xn--p8jhe.tw'],
-        ['https://github.do/https://github.com', '国内', '[中国 国内] - 该公益加速源由 [小麦云服] 提供'],
+        //['https://github.do/https://github.com', '国内', '[中国 国内] - 该公益加速源由 [小麦云服] 提供'],
         ['https://ghproxy.fsofso.com/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://github.ddlc.love/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [@mtr-static-official] 提供', ''],
         ['https://download.fastgit.org', '日本', '[日本 东京] - 该公益加速源由 [FastGit] 提供', 'https://archive.fastgit.org'],
@@ -66,7 +66,7 @@
         ['git@git.zhlh6.cn', '美国', '[美国 洛杉矶]']
     ], raw_url = [
         ['https://raw.githubusercontent.com', 'Github 原生', '[日本 东京]'],
-        ['https://github.do/https://raw.githubusercontent.com', '国内', '[中国 国内] - 该公益加速源由 [小麦云服] 提供&#10;&#10; - 缓存：有'],
+        //['https://github.do/https://raw.githubusercontent.com', '国内', '[中国 国内] - 该公益加速源由 [小麦云服] 提供&#10;&#10; - 缓存：有'],
         ['https://ghproxy.fsofso.com/https://github.com', '香港 1', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://pd.zwc365.com/seturl/https://raw.githubusercontent.com', '香港 2', '[中国 香港]'],
         ['https://raw.iqiq.io', '香港 2', '[中国 香港] - 该公益加速源由 [iQDNS/iQZone] 提供&#10;&#10; - 缓存：无（或时间很短）'],
@@ -75,7 +75,8 @@
         ['https://fastly.jsdelivr.net/gh', '日本 1', '[日本 东京] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
         ['https://cdn.staticaly.com/gh', '日本 2', '[日本 东京] - 该公益加速源由 [Statically CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 30 MB 的文件'],
         ['https://raw.fastgit.org', '日本 3', '[日本 东京] - 该公益加速源由 [FastGit] 提供&#10;&#10; - 缓存：无（或时间很短）'],
-        //['https://cdn.jsdelivr.net/gh', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
+        //['https://git.yumenaka.net/https://raw.githubusercontent.com', '美国', '[美国 圣何塞]'],
+        //['https://raw.xn--p8jhe.tw', '美国', '[美国 圣何塞] - 该公益加速源由 [おうか] 提供'],
         ['https://gcore.jsdelivr.net/gh', '其他 1', '[移动走香港、电信走日本] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
         //['https://raw-gh.gcdn.mirr.one', '俄罗斯', '[俄罗斯 G-Core Labs CDN]&#10;&#10; - 缓存：有'],
         ['https://raw.githubusercontents.com', '其他 2', '[香港、新加坡、美国]（不固定）&#10;&#10; - 缓存：有&#10; - 该加速源不支持大小超过 1 MB 的文件']
@@ -103,11 +104,8 @@
 
     // 切换加速源
     function menu_toggle_raw_fast() {
-        if (menu_raw_fast >= raw_url.length - 1) { // 如果当前加速源位置大于等于加速源总数，则改为第一个加速源，反之递增下一个加速源
-            menu_raw_fast = 0;
-        } else {
-            menu_raw_fast += 1;
-        }
+        // 如果当前加速源位置大于等于加速源总数，则改为第一个加速源，反之递增下一个加速源
+        if (menu_raw_fast >= raw_url.length - 1) {menu_raw_fast = 0;} else {menu_raw_fast += 1;}
         GM_setValue('xiu2_menu_raw_fast', menu_raw_fast);
         delRawDownLink(); // 删除旧加速源
         addRawDownLink(); // 添加新加速源
