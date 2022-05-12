@@ -1334,6 +1334,15 @@
 			"replaceE": ".tcdPageCode"
 		}
 	},
+	"NEWCGER": {
+		"host": "www.newcger.com",
+		"url": "return (fun.getCSS('.pageNav')!=null)",
+		"pager": {
+			"nextL": "a.current+a",
+			"pageE": ".imageTextItem>li",
+			"replaceE": ".pageNav"
+		}
+	},
 	"图怪兽": {
 		"host": "818ps.com",
 		"url": "/^\\/search\\//",
