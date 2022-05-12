@@ -342,6 +342,15 @@
 			"loadTime": 1000
 		}
 	},
+	"百度贴吧 - 搜索页": {
+		"host": "tieba.baidu.com",
+		"url": "/^\\/f\\/search\\/res/",
+		"pager": {
+			"nextL": "a.next",
+			"pageE": ".s_post_list > div",
+			"replaceE": ".pager"
+		}
+	},
 	"百度贴吧 - 帖子内": {
 		"host": ["tieba.baidu.com","jump2.bdimg.com"],
 		"url": "if (location.hostname == 'jump2.bdimg.com') location.hostname = 'tieba.baidu.com'; return (fun.indexOF('/p/')) ",
@@ -368,15 +377,6 @@
 		},
 		"function": {
 			"bF": "let scriptText = pageE[0].textContent.replace('Bigpipe.register(\"frs-list/pagelet/thread_list\", ',''); scriptText = scriptText.slice(0, scriptText.indexOf(').')); let temp = document.createElement('div'); temp.innerHTML = JSON.parse(scriptText).content; fun.getCSS('#frs_list_pager').innerHTML = fun.getCSS('#frs_list_pager',temp).innerHTML; return fun.src_bF(fun.getAllCSS('#thread_list>li',temp))"
-		}
-	},
-	"百度贴吧 - 搜索页": {
-		"host": "tieba.baidu.com",
-		"url": "/^\\/f\\/search\\/res/",
-		"pager": {
-			"nextL": "a.next",
-			"pageE": ".s_post_list > div",
-			"replaceE": ".pager"
 		}
 	},
 	"豆瓣 - 短评": {
