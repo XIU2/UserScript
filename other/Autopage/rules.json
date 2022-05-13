@@ -4510,6 +4510,15 @@
 			"replaceE": "main navigation-tree, main .scrollbar"
 		}
 	},
+	"pypi.org": {
+		"host": "pypi.org",
+		"url": "/^\\/search\\//",
+		"pager": {
+			"nextL": "span.button--primary+a.button.button-group__button",
+			"pageE": "ul[aria-label='Search results']>li",
+			"replaceE": ".button-group--pagination"
+		}
+	},
 	"Gitee - Explore/Issues/Pulls/Releases/Tags": {
 		"host": "gitee.com",
 		"url": "return (fun.indexOF('/explore/') || fun.indexOF(/\\/(issues|pulls|releases|tags)$/))",
@@ -4857,7 +4866,7 @@
 		}
 	},
 	"Amazon": {
-		"host": ["www.amazon.com","www.amazon.cn","www.amazon.co.jp"],
+		"host": ["www.amazon.com","www.amazon.cn","www.amazon.co.jp","www.amazon.es"],
 		"url": "/\\/s\\?/",
 		"pager": {
 			"type": 3,
