@@ -5481,6 +5481,19 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"JieAV": {
+		"host": ["www.jieav.com","www.qinav.com","www.qinimg.com","www.yinmh.com","www.txtxi.com","www.dnaav.com","www.jiedm.com","www.ruav.xyz","www.feiav.com"],
+		"url": "return (fun.getCSS('.pages')!=null)",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.active+a",
+			"pageE": ".list_box>ul",
+			"replaceE": ".pages"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[img]','img'])"
+		}
+	},
 	"Netflav": {
 		"host": "netflav.com",
 		"url": "return (fun.lp() != '/' && !fun.indexOF(/^\\/(video|actress|browse|genre)$/))",
