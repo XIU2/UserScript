@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.0.7
+// @version      2.0.8
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @description:zh-TW  移除登錄彈窗、屏蔽首頁視頻、默認收起回答、快捷收起回答/評論、快捷回到頂部、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化搜索熱門、淨化標題消息、置頂顯示時間、完整問題時間、區分問題文章、默認高清原圖、默認站外直鏈...
@@ -762,6 +762,7 @@ function blockKeywords(type) {
         // 前几条因为是直接加载的，而不是动态插入网页的，所以需要单独判断
         function blockKeywords_now() {
             if (location.pathname === '/hot') {
+                console.log('222222222222')
                 document.querySelectorAll('.HotItem').forEach(function(item1){blockKeywords_1(item1, 'h2.HotItem-title');})
             } else {
                 document.querySelectorAll(className1).forEach(function(item1){blockKeywords_1(item1, 'h2.ContentItem-title meta[itemprop="name"], meta[itemprop="headline"]');})
@@ -1369,6 +1370,7 @@ function questionInvitation(){
     setInterval(originalPic,100); //                                       默认高清原图
     setInterval(directLink, 100); //    默认站外直链
     window.addEventListener('urlchange', function(){ // 针对的是从单个回答页跳转到完整回答页时
+        console.log(location.pathname)
         if (location.pathname.indexOf('question') > -1 && location.pathname.indexOf('waiting') === -1 && location.pathname.indexOf('/answer/') === -1) { //       回答页 //
             setTimeout(function(){
                 collapsedNowAnswer('.QuestionPage'); //                        收起当前回答 + 快捷返回顶部
@@ -1378,9 +1380,13 @@ function questionInvitation(){
                 blockYanXuan(); //                                             屏蔽盐选内容
             }, 300);
         } else if (location.pathname == '/') {
-            blockUsers('index'); //                                        屏蔽指定用户
-            blockKeywords('index'); //                                     屏蔽指定关键词
-            blockType(); //                                                屏蔽指定类别（视频/文章等）
+            setTimeout(()=>{
+                blockUsers('index'); //                                        屏蔽指定用户
+                blockKeywords('index'); //                                     屏蔽指定关键词
+                blockType(); //                                                屏蔽指定类别（视频/文章等）
+            }, 500);
+        } else if (location.pathname == '/hot') {
+            setTimeout(()=>{blockKeywords('index');}, 500);//                  屏蔽指定关键词
         }
     })
 
@@ -1484,6 +1490,8 @@ function questionInvitation(){
                 blockUsers('index'); //                                        屏蔽指定用户
                 blockKeywords('index'); //                                     屏蔽指定关键词
                 blockType(); //                                                屏蔽指定类别（视频/文章等）
+            } else if (location.pathname == '/hot') {
+                blockKeywords('index'); //                                     屏蔽指定关键词
             } else {
                 blockUsers();
             }
