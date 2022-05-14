@@ -2786,14 +2786,14 @@
 		"style": ".rd-guess, .rd-aside, .page-index__btn {display: none !important;} .rd-article__pic {display: initial !important;} .rd-article__pic>img {margin: 0 auto;display: block;height: auto;min-height: 200px;}",
 		"history": true,
 		"pager": {
-			"nextL": "js; if (fun.getCSS('a.rd-aside__item.j-rd-next')) return location.origin + fun.getCSS('a.rd-aside__item.j-rd-next').getAttribute('_href')",
+			"nextL": "js;return (location.origin + fun.getCSS('a.rd-aside__item.j-rd-next').getAttribute('_href'))",
 			"pageE": ".rd-article-wr>div",
 			"replaceE": "a.last-crumb, .rd-aside",
 			"interval": 2000,
 			"scrollD": 2000
 		},
 		"function": {
-			"bF": "if (location.hostname == 'www.g-lens.com') {return fun.src_bF(pageE, [0,'img[pc-ec]','pc-ec'])} else {return fun.src_bF(pageE, [0,'img[echo-pc]','echo-pc'])}"
+			"bF": "if (location.hostname == 'www.g-lens.com') {return fun.src_bF(pageE, [0,'img[pc-ec]','pc-ec'])} else {return fun.src_bF(pageE, [0,'img[data-original]','data-original'])}"
 		}
 	},
 	"好漫 6 - 分类/搜索页": {
@@ -2822,10 +2822,9 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-echo]','data-echo'])"
 		}
 	},
-	"好漫 8 - 分类页": {
+	"好漫 8 - 分类/搜索页": {
 		"host": "www.haoman8.com",
-		"url": "/^\\/category\\//",
-		"style": "#readerContainer {position: initial !important;overflow: hidden !important;} #js_pageInfoText, #js_pageProgress, #js_ftAutoBtn {display: none !important;}",
+		"url": "/\\/(category|search)/",
 		"pager": {
 			"nextL": ".acgn-pages>.on+a",
 			"pageE": "li.acgn-item",
