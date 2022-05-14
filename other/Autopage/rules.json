@@ -2808,6 +2808,30 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"好漫 8": {
+		"host": "www.haoman8.com",
+		"url": "if (fun.indexOF(/^\\/comic\\/\\d+\\/\\d+$/)){if (fun.getCookie('pmode') != '2') {document.cookie='pmode=2; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';location.reload();}else{fun.src_bF(fun.getAllCSS('img[data-echo]'), [0,'img[data-echo]','data-echo']); return true;}}",
+		"style": "#readerContainer {position: initial !important;overflow: hidden !important;} #js_pageInfoText, #js_pageProgress, #js_ftAutoBtn {display: none !important;}",
+		"pager": {
+			"nextL": "js;return (location.origin + fun.getCSS('#js_pageNextBtn').getAttribute('_href'))",
+			"pageE": ".acgn-reader-chapter__item[id]",
+			"replaceE": "#js_footMenu",
+			"interval": 4000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-echo]','data-echo'])"
+		}
+	},
+	"好漫 8 - 分类页": {
+		"host": "www.haoman8.com",
+		"url": "/^\\/category\\//",
+		"style": "#readerContainer {position: initial !important;overflow: hidden !important;} #js_pageInfoText, #js_pageProgress, #js_ftAutoBtn {display: none !important;}",
+		"pager": {
+			"nextL": ".acgn-pages>.on+a",
+			"pageE": "li.acgn-item",
+			"replaceE": ".acgn-pages"
+		}
+	},
 	"动漫狂": {
 		"host": "www.cartoonmad.cc",
 		"style": "body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:not(:first-child) {display: none !important;} body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img {max-width: 100%;height: auto;display: block !important;margin: 0 auto !important;}",
