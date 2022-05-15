@@ -6097,12 +6097,16 @@
 		}
 	},
 	"宅男女神": {
-		"host": "www.fnvshen.com",
+		"host": ["www.fnvshen.com","www.haonvshen.com"],
 		"url": "/^\\/(g|gallery|tag)\\//",
 		"pager": {
+			"type": 3,
 			"nextL": "#pages>span +a:not(.a1), a.cur+a",
 			"pageE": "#hgallery>img, #listdiv>ul>li",
 			"replaceE": "#pages, .pagesYY"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"爱女神 - 图片页": {
