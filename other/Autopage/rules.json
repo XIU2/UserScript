@@ -175,6 +175,27 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-isrc]','data-isrc'])"
 		}
 	},
+	"F 搜 - 手机版": {
+		"host": "fsoufsou.com",
+		"url": "return (fun.lp()=='/search' && !fun.indexOF('tbn=images','s') && fun.isMobile())",
+		"pager": {
+			"type": 2,
+			"nextL": ".next-page-container"
+		}
+	},
+	"F 搜": {
+		"host": "fsoufsou.com",
+		"url": "return (fun.lp()=='/search' && !fun.indexOF('tbn=images','s'))",
+		"history": true,
+		"pager": {
+			"type": 6,
+			"nextL": "js;return fun.getNextEP('.turn-page-num-wrap.selected', 'pageIndex=', /pageIndex=\\d+/)",
+			"pageE": ".organic-results>div",
+			"replaceE": ".bottom-pagination",
+			"loadTime": 1000,
+			"scrollD": 3000
+		}
+	},
 	"轻搜": {
 		"host": "www.qingsearch.com",
 		"url": "return (fun.lp() == '/' && fun.indexOF('qings=', 's'))",
