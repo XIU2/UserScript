@@ -2548,6 +2548,7 @@
 	},
 	"Nyaa": {
 		"host": ["nyaa.si","sukebei.nyaa.si"],
+		"url": "return (fun.lp()=='/')",
 		"blank": 3,
 		"pager": {
 			"nextL": "a[rel='next'], li.next>a",
