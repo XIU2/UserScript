@@ -16,10 +16,10 @@
 // @connect      raw.fastgit.org
 // @connect      cdn.staticaly.com
 // @connect      ghproxy.futils.com
-// @connect      git.yumenaka.net
+// @connect      raw.cithub.icu
 // @connect      raw.xn--p8jhe.tw
+// @connect      git.yumenaka.net
 // @connect      raw-gh.gcdn.mirr.one
-// @connect      cdn.jsdelivr.net
 // @connect      gcore.jsdelivr.net
 // @connect      fastly.jsdelivr.net
 // @connect      raw.githubusercontents.com
@@ -95,8 +95,9 @@
         'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.futils.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
         'https://ghproxy.fsofso.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
-        'https://git.yumenaka.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.cithub.icu/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.xn--p8jhe.tw/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://git.yumenaka.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw-gh.gcdn.mirr.one/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://cdn.staticaly.com/gh/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://gcore.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
@@ -110,8 +111,9 @@
         'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.futils.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
         'https://ghproxy.fsofso.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
-        'https://git.yumenaka.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://raw.xn--p8jhe.tw/XIU2/UserScript/master/other/Autopage/rules.json'
+        'https://raw.cithub.icu/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.xn--p8jhe.tw/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://git.yumenaka.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json'
     ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, DBSite2, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname, scriptHandler;
     window.autoPage = {lp: ()=>location.pathname, indexOF: indexOF, isMobile: isMobile, isUrlC: isUrlC, blank: forceTarget, getAll: getAll, getOne: getOne, getAllXpath: getAllXpath, getXpath: getXpath, getAllCSS: getAllCSS, getCSS: getCSS, getNextE: getNextE, getNextEP: getNextEP, getNextSP: getNextSP, getNextEPN: getNextEPN, getNextUPN: getNextUPN, getNextUP: getNextUP, getNextF: getNextF, getSearch: getSearch, getCookie: getCookie, insStyle: insStyle, insScript: insScript, src_bF: src_bF, xs_bF: xs_bF}
     if (typeof GM_info != 'undefined') {scriptHandler = GM_info.scriptHandler;} else if (typeof GM != 'undefined' && typeof GM.info != 'undefined') {scriptHandler = GM.info.scriptHandler;} else {scriptHandler = '';}
@@ -264,7 +266,7 @@
         } else if (getAllCSS('.load-more, .load_more, .loadmore, #load-more, #load_more, #loadmore, .show-more, .show_more').length === 1) {
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 1`); return 8;
 
-        } else if (location.hostname.indexOf('.smzdm.com') == -1 && getAllXpath('//*[self::a or self::span or self::button or self::div][text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]').length === 1) {
+        } else if (location.hostname.indexOf('.smzdm.com') == -1 && location.hostname.indexOf('.steampowered.com') == -1 && getAllXpath('//*[self::a or self::span or self::button or self::div][text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]').length === 1) {
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 2`); return 9;
 
         } else if (getCSS('link[href*="/wp-content/" i], script[src*="/wp-content/" i]')) {
