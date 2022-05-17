@@ -2164,18 +2164,6 @@
 			"replaceE": ".pagination_wrap"
 		}
 	},
-	"奈菲影视": {
-		"host": "www.nfmovies.com",
-		"url": "return (fun.lp() == '/search.php' || fun.indexOF('/list/'))",
-		"pager": {
-			"nextL": "//ul[contains(@class, 'myui-page')]/li/a[text()='下一页']",
-			"pageE": "ul.myui-vodlist>li",
-			"replaceE": "ul.myui-page"
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [1, 'a[data-original]', 'data-original'])"
-		}
-	},
 	"嗯哩嗯哩/森之屋动漫": {
 		"host": ["enlienli.com","www.senfun.net"],
 		"url": "return (fun.indexOF('/show/') || fun.indexOF('/search') || (fun.indexOF('/type/') && fun.getCSS('#page') != null))",
@@ -6168,10 +6156,10 @@
 		"url": "/^\\/album|category\\//",
 		"style": ".td-gallery-content>img {min-height: 300px;}",
 		"pager": {
+			"type": 3,
 			"nextL": "a.a1:last-of-type",
 			"pageE": ".td-gallery-content>img, .td-category-span",
-			"replaceE": "#pages",
-			"scrollD": 3000
+			"replaceE": "#pages"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE)"
@@ -6217,16 +6205,6 @@
 			"replaceE": "#dm-fy"
 		}
 	},
-	"高清尤物网": {
-		"host": ["www.gqywt.com","www.jjtaotu.com"],
-		"url": "/\\/\\d{8}\\/\\d{3,}/",
-		"pager": {
-			"nextL": "//div[@class='pagelist']//a[text()='下一页']",
-			"pageE": "#picg img",
-			"replaceE": ".page .pagelist",
-			"scrollD": 4500
-		}
-	},
 	"仙女图": {
 		"host": ["www.xiannvtu.com","m.xiannvtu.com"],
 		"url": "/^\\/v\\//",
@@ -6237,24 +6215,14 @@
 			"replaceE": ".page, .fenye"
 		}
 	},
-	"ROSIMM 写真": {
-		"host": ["www.rosi3.cc","www.rosimm3.com"],
-		"url": "/\\.html$/",
-		"pager": {
-			"nextL": "//div[@class='pagination2']/li/a[text()='下一页']",
-			"pageE": "article img",
-			"replaceE": ".pagination2",
-			"scrollD": 2000
-		}
-	},
 	"imn5_net": {
 		"host": "www.imn5.net",
 		"url": "/\\/\\d+(_\\d+)?\\.html$/",
 		"pager": {
+			"type": 3,
 			"nextL": "a.current+a",
 			"pageE": ".imgwebp",
-			"replaceE": ".page",
-			"scrollD": 2000
+			"replaceE": ".page"
 		}
 	},
 	"24FA": {
@@ -6273,10 +6241,10 @@
 		"url": "/^\\/\\d+\\.html/",
 		"style": "#post_content>.code-block, .single-ad, .single-adphone {display: none !important;}",
 		"pager": {
+			"type": 3,
 			"nextL": ".pagelist>span+a",
 			"pageE": "#post_content",
-			"replaceE": ".pagelist",
-			"scrollD": 2000
+			"replaceE": ".pagelist"
 		}
 	},
 	"推图网": {
@@ -6310,20 +6278,20 @@
 		"url": "/\\/gallerys/",
 		"style": ".contain.refill:not(.relatedvideos) {display: none !important;}",
 		"pager": {
+			"type": 3,
 			"nextL": "//a[@class='page-numbers' and text()='Next >']",
 			"pageE": ".contentme",
-			"replaceE": ".pagination-site",
-			"scrollD": 4000
+			"replaceE": ".pagination-site"
 		}
 	},
 	"美图网 tuli": {
 		"host": ["www.tuli.cc","m.tuli.cc"],
 		"url": "/\\/\\d+(_\\d+)?\\.html$/",
 		"pager": {
+			"type": 3,
 			"nextL": "li.thisclass+li>a",
 			"pageE": ".bodyintroduce, .picbox>img",
-			"replaceE": ".pageart>ul",
-			"scrollD": 3000
+			"replaceE": ".pageart>ul"
 		}
 	},
 	"新闻吧 - xinwenba.net": {
@@ -6346,34 +6314,14 @@
 			"replaceE": ".pagination"
 		}
 	},
-	"邪恶道 - xacazj": {
-		"host": "m.xacazj.com",
+	"美女写真网 - hh1234/jutu123": {
+		"host": ["www.hh1234.cc","www.jutu123.net"],
 		"url": "/\\/\\d+(_\\d+)?\\.html$/",
 		"pager": {
-			"nextL": "//div[@class='fanye1']//a[text()='下一页' or text()='下☆页']",
-			"pageE": "#nr234img img",
-			"replaceE": ".fanye1",
-			"scrollD": 2000
-		}
-	},
-	"美女写真网 - hh1234": {
-		"host": "www.hh1234.cc",
-		"url": "/\\/\\d+(_\\d+)?\\.html$/",
-		"pager": {
+			"type": 3,
 			"nextL": ".current+a",
 			"pageE": ".content>img",
-			"replaceE": ".page-list",
-			"scrollD": 2000
-		}
-	},
-	"全图网 - quantuwang1.com": {
-		"host": ["qq.quantuwang1.com","q.quantuwang1.com"],
-		"url": "/^\\/m\\//",
-		"pager": {
-			"nextL": ".index_c_page>span+a",
-			"pageE": "body>.box>.index_c>.index_c_img",
-			"replaceE": ".index_c_page",
-			"scrollD": 2000
+			"replaceE": ".page-list, .pages"
 		}
 	},
 	"爱看图吧": {
