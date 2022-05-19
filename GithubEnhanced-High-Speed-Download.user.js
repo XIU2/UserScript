@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.0.0
+// @version      2.0.1
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -31,7 +31,7 @@
     var backColor = '#ffffff', fontColor = '#888888', menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'), menu_menu_raw_fast_ID, menu_feedBack_ID;
     const download_url = [
         //['https://pd.zwc365.com/seturl/https://github.com', '美国', '[美国 Cloudflare CDN]'],
-        ['https://gh2.yanqishui.work/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@HongjieCN] 提供'],
+        //['https://gh2.yanqishui.work/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@HongjieCN] 提供'],
         ['https://gh.ddlc.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@mtr-static-official] 提供'],
         ['https://gh.gh2233.ml/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@X.I.U/XIU2] 提供'],
         //['https://gh.api.99988866.xyz/https://github.com', '美国', '[美国 Cloudflare CDN]'],
@@ -48,7 +48,7 @@
         ['https://download.fastgit.org', '日本', '[日本 东京] - 该公益加速源由 [FastGit] 提供', 'https://archive.fastgit.org'],
         ['https://mirror.ghproxy.com/https://github.com', '日本', '[日本 东京] - 该公益加速源由 [ghproxy] 提供'],
         ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供'],
-        ['https://hub.xn--gzu630h.xn--kpry57d', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供']
+        ['https://hub.xn--gzu630h.xn--kpry57d', '韩国', '[韩国 首尔]']
     ], clone_url = [
         //['https://github.do/https://github.com', '国内', '[中国 国内] - 该公益加速源由 [小麦云服] 提供'],
         ['https://gitclone.com', '国内', '[中国 国内] - 该公益加速源由 [GitClone] 提供&#10;&#10; - 缓存：有&#10; - 首次比较慢，缓存后较快'],
@@ -57,7 +57,7 @@
         ['https://hub.fastgit.xyz', '日本', '[日本 东京] - 该公益加速源由 [FastGit] 提供'],
         ['https://mirror.ghproxy.com/https://github.com', '日本', '[日本 东京] - 该公益加速源由 [ghproxy] 提供'],
         ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供'],
-        ['https://hub.xn--gzu630h.xn--kpry57d', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供'],
+        ['https://hub.xn--gzu630h.xn--kpry57d', '韩国', '[韩国 首尔]'],
         //['https://gh.gcdn.mirr.one', '俄罗斯', '[俄罗斯 G-Core Labs CDN]'],
         //['https://cithub.icu', '美国', '[美国 洛杉矶]'],
         //['https://hub.xn--p8jhe.tw', '美国', '[美国 圣何塞]']
@@ -76,6 +76,7 @@
         ['https://fastly.jsdelivr.net/gh', '日本 1', '[日本 东京] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
         ['https://cdn.staticaly.com/gh', '日本 2', '[日本 东京] - 该公益加速源由 [Statically CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 30 MB 的文件'],
         ['https://raw.fastgit.org', '日本 3', '[日本 东京] - 该公益加速源由 [FastGit] 提供&#10;&#10; - 缓存：无（或时间很短）'],
+        ['https://raw.xn--gzu630h.xn--kpry57d', '韩国', '[韩国 首尔]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://raw.cithub.icu', '美国', '[美国 洛杉矶]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://raw.xn--p8jhe.tw', '美国', '[美国 圣何塞]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://git.yumenaka.net/https://raw.githubusercontent.com', '美国', '[美国 圣何塞]&#10;&#10; - 缓存：无（或时间很短）'],
@@ -150,11 +151,11 @@
     // Release
     function addRelease() {
         let html = document.querySelectorAll('.Box-footer'); if (html.length == 0) return
-        let divDisplay = '';
-        if (document.documentElement.clientWidth > 1000) {divDisplay = 'float: right;margin-top: -3px;margin-left: 8px;';}; // 调整小屏幕时的样式
+        let divDisplay = 'margin-left: -90px;';
+        if (document.documentElement.clientWidth > 755) {divDisplay = 'margin-top: -3px;margin-left: 8px;display: inherit;';}; // 调整小屏幕时的样式
         for (const current of html) {
             if (current.querySelector('.XIU2-RS')) continue
-            current.querySelectorAll('li.Box-row > a').forEach(function (_this) {
+            current.querySelectorAll('li.Box-row a').forEach(function (_this) {
                 let href = _this.href.split(location.host),
                     url = '', _html = `<div class="XIU2-RS" style="${divDisplay}">`;
 
@@ -167,7 +168,7 @@
                     if (location.host === 'hub.fastgit.xyz') url = url.replace('hub.fastgit.xyz','github.com')
                     _html += `<a style="${style[0]}" class="btn" href="${url}" title="${download_url[i][2]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
                 }
-                _this.insertAdjacentHTML('afterend', _html + '</div>');
+                _this.parentElement.nextElementSibling.insertAdjacentHTML('beforeend', _html + '</div>');
             });
         }
     }
