@@ -442,7 +442,7 @@ pager: {
          注意：如 pageE 中选择了多类元素，则不能省略 insertP（比如包含 `,` 与 `|` 符号），除非另外的选择器是 <script> <style> <link> 标签
 
     replaceE: 要替换为下一页内容的元素（比如页码）
-    scrollD： 翻页动作触发点（[滚动条] 与 [网页底部] 之间的距离），数值越大，越早开始翻页，一般是访问网页速度越慢，该值就需要越大，省略后默认 1500
+    scrollD： 翻页动作触发点（[滚动条] 与 [网页底部] 之间的距离），数值越大，越早开始翻页，一般是访问网页速度越慢，该值就需要越大，省略后默认 2000
 
     scriptT:  单独插入 <script> 标签
        0 = 下一页的所有 <script> 标签
@@ -1758,7 +1758,7 @@ function: {
     function pageLoading() {
         if (curSite.SiteTypeID === 0 || !curSite.pager) return
         if (curSite.pager.type === undefined) curSite.pager.type = 1; // 默认翻页模式 1
-        if (curSite.pager.scrollD === undefined) curSite.pager.scrollD = 1500; // 默认翻页触发线 1500
+        if (curSite.pager.scrollD === undefined) curSite.pager.scrollD = 2000; // 默认翻页触发线 2000
         if (curSite.pager.interval === undefined) curSite.pager.interval = 500; // 默认间隔时间 500ms
         //console.log(curSite)
         curSite.pageUrl = ''; // 下一页URL
@@ -2584,7 +2584,7 @@ function: {
 // 下面示例是把所有规则都塞进去了，但实际上大都用不上，大多数网站只需要像第一个 "aaa" 这样的规则
 // "aaa" 是规则名，唯一！不能重复！否则会被 外置/内置规则 覆盖，支持中文等各种字符
 // "url" 是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站
-// "scrollD" 是用来控制翻页敏感度的（越大就越早触发翻页，访问速度慢的网站需要调大，可省略(注意逗号)，默认 1500）
+// "scrollD" 是用来控制翻页敏感度的（越大就越早触发翻页，访问速度慢的网站需要调大，可省略(注意逗号)，默认 2000）
 {
     "aaa": {
         "host": "aaaa",
@@ -2593,7 +2593,7 @@ function: {
             "nextL": "xxxx",
             "pageE": "xxxx",
             "replaceE": "xxxx",
-            "scrollD": 1500
+            "scrollD": 2000
         }
     },
     "bbb": {
@@ -2614,7 +2614,7 @@ function: {
             "scriptT": 1,
             "forceHTTPS": true,
             "interval": 500,
-            "scrollD": 1500
+            "scrollD": 2000
         },
         "function": {
             "bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])",
@@ -2631,7 +2631,7 @@ function: {
             "nextTextOf": "下一页",
             "isHidden": true,
             "interval": 1000,
-            "scrollD": 1500
+            "scrollD": 2000
         }
     }
 }
