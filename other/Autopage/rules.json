@@ -517,7 +517,7 @@
 	},
 	"虎扑社区 - 帖子内": {
 		"host": "bbs.hupu.com",
-		"url": "return (fun.indexOF('.html'))",
+		"url": "return fun.indexOF('.html')",
 		"thread": true,
 		"pager": {
 			"nextL": "li.hupu-rc-pagination-next>a",
@@ -527,7 +527,7 @@
 	},
 	"虎扑社区": {
 		"host": "bbs.hupu.com",
-		"url": "return (fun.lp() != '/' && !fun.indexOF('/all-'))",
+		"url": "return fun.getCSS('ul.hupu-rc-pagination')",
 		"pager": {
 			"nextL": "js; let next = fun.getCSS('li.hupu-rc-pagination-item-active+li.hupu-rc-pagination-item>a'); if (next) return (location.origin + location.pathname.replace(/-\\d+/,'') + '-' + next.textContent)",
 			"pageE": "li.bbs-sl-web-post-body",
@@ -2613,7 +2613,7 @@
 	},
 	"MINI4K": {
 		"host": "www.mini4k.com",
-		"url": "return (fun.lp() != '/' && !fun.indexOF(/\\/\\d{3,}/))",
+		"url": "return fun.getCSS('.pagination')",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.pager__item--next",
@@ -2633,7 +2633,7 @@
 	},
 	"A4k 字幕网": {
 		"host": "www.a4k.net",
-		"url": "return (!fun.indexOF('/subtitle/'))",
+		"url": "return !fun.indexOF('/subtitle/')",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.pager__item--next",
@@ -2652,7 +2652,7 @@
 	},
 	"SubHD": {
 		"host": ["subhd.tv","subhdtw.com","subhd.la","subhd.cc","subhd.me"],
-		"url": "return (fun.lp() != '/' && fun.lp() != '/zu' && !fun.indexOF('/a/') && !fun.indexOF('/d/') && !fun.indexOF('/forum/'))",
+		"url": "return fun.getCSS('nav.clearfix')",
 		"pager": {
 			"nextL": "//a[@class='page-link'][contains(text(), '下一页')]",
 			"pageE": ".bg-white.shadow-sm.rounded-3",
