@@ -1679,6 +1679,18 @@
 			"replaceE": "ul.pagination"
 		}
 	},
+	"酷家乐": {
+		"host": "www.kujiale.cn",
+		"url": "/^\\/decoproduct\\/model/",
+		"pager": {
+			"nextL": ".page-next",
+			"pageE": ".J_modelList>li",
+			"replaceE": "#pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
+		}
+	},
 	"字客网": {
 		"host": "www.fontke.com",
 		"url": "return ((fun.indexOF('/list/') && fun.getCSS('.index-family')) || fun.indexOF('/search/'))",
@@ -5781,6 +5793,32 @@
 			"nextL": "a.next",
 			"pageE": "#image-container img",
 			"replaceE": ".reader-pagination"
+		}
+	},
+	"MANGA1000": {
+		"host": "manga1000.top",
+		"url": "/^\\/\\d+\\/\\d+\\//",
+		"pager": {
+			"nextL": "js; return (location.origin+fun.getCSS('ul.chapter_select option[selected]').previousElementSibling.value)",
+			"pageE": ".chapter-content>img, .chapter-content>br",
+			"replaceE": ".chapter_select",
+			"interval": 2000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
+	"MANGA1000 - 分类/搜索页": {
+		"host": "manga1000.top",
+		"url": "/^\\/manga-list/",
+		"blank": 3,
+		"pager": {
+			"nextL": "//a[text()='»']",
+			"pageE": ".thumb-item-flow",
+			"replaceE": ".pagination, .col-md-8>.btn-group:first-child"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [1,'[data-bg]','data-bg'])"
 		}
 	},
 	"yande": {
