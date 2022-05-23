@@ -2647,7 +2647,7 @@
 		"host": ["subhd.tv","subhdtw.com","subhd.la","subhd.cc","subhd.me"],
 		"url": "/^\\/forum\\/(forum|ask)/",
 		"pager": {
-			"nextL": "//a[@class='page-link'][contains(text(), '下一页')]",
+			"nextL": "//a[@class='page-link'][text()='下一页']",
 			"pageE": ".bg-white.shadow-sm.rounded-3>div",
 			"replaceE": "nav.clearfix"
 		}
@@ -2656,7 +2656,7 @@
 		"host": ["subhd.tv","subhdtw.com","subhd.la","subhd.cc","subhd.me"],
 		"url": "return fun.getCSS('nav.clearfix')",
 		"pager": {
-			"nextL": "//a[@class='page-link'][contains(text(), '下一页')]",
+			"nextL": "//a[@class='page-link'][text()='下一页']",
 			"pageE": ".bg-white.shadow-sm.rounded-3",
 			"insertP": ["nav.clearfix",1],
 			"replaceE": "nav.clearfix"
