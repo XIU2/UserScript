@@ -711,6 +711,7 @@
 	"番组计划": {
 		"host": ["bgm.tv","bangumi.tv"],
 		"url": "/\\/(browser|subject_search|tag)/",
+		"blank": 3,
 		"pager": {
 			"nextL": "//div[@class='page_inner']/a[text()='››']",
 			"pageE": "ul#browserItemList>li",
@@ -2404,11 +2405,12 @@
 		}
 	},
 	"动漫花园": {
-		"host": ["dmhy.org","share.dmhy.org","dmhy.anoneko.com"],
+		"host": ["dmhy.org","www.dmhy.org","share.dmhy.org","dmhy.anoneko.com"],
+		"url": "return fun.getCSS('.table.clear .nav_title')",
 		"pager": {
 			"nextL": "//div[@class='nav_title']/a[contains(text(), '下一')]",
 			"pageE": "#topic_list>tbody>tr",
-			"replaceE": ".nav_title"
+			"replaceE": ".table.clear .nav_title"
 		},
 		"function": {
 			"aF": "document.body.appendChild(document.createElement('script')).textContent = `$('#topic_list>tbody>tr:even:not(.even):not(.odd)').addClass('even'); $('#topic_list>tbody>tr:odd:not(.even):not(.odd)').addClass('odd');`"
