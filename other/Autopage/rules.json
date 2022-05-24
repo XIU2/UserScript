@@ -5462,6 +5462,16 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[img]','img'])"
 		}
 	},
+	"porn78.info": {
+		"host": ["porn78.info","nyaa.porn78.info"],
+		"url": "return fun.getCSS('.next')",
+		"blank": 3,
+		"pager": {
+			"nextL": ".next>a",
+			"pageE": "#portfolio>li",
+			"replaceE": ".general-pagination"
+		}
+	},
 	"Netflav": {
 		"host": "netflav.com",
 		"url": "return (fun.lp() != '/' && !fun.indexOF(/^\\/(video|actress|browse|genre)$/))",
