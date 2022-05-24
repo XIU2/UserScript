@@ -4067,6 +4067,16 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"apkmirror": {
+		"host": "www.apkmirror.com",
+		"url": "return fun.getCSS('.pagination')",
+		"pager": {
+			"type": 3,
+			"nextL": "a.nextpostslink",
+			"pageE": "[role='main'] .listWidget>div:not([class]), #primary .listWidget>div:not([class])",
+			"replaceE": ".pagination"
+		}
+	},
 	"winhelponline": {
 		"host": "www.winhelponline.com",
 		"pager": {
