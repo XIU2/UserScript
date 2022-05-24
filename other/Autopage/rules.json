@@ -4070,6 +4070,7 @@
 	"apkmirror": {
 		"host": "www.apkmirror.com",
 		"url": "return fun.getCSS('.pagination')",
+		"blank": 3,
 		"pager": {
 			"type": 3,
 			"nextL": "a.nextpostslink",
