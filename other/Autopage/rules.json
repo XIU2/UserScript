@@ -47,8 +47,7 @@
 		"pager": {
 			"nextL": "#pnnext",
 			"pageE": "id('search')/div | //style[not(contains(text(), 'table,div,span,p{display:none}'))]",
-			"replaceE": "id('navcnt') | id('rcnt')//div[@role='navigation']",
-			"scriptT": 0,
+			"replaceE": "#navcnt, #rcnt div[role='navigation']",
 			"scrollD": 2500
 		},
 		"function": {
