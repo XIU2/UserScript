@@ -856,9 +856,21 @@
 			"bF": "return fun.src_bF(pageE, [0, 'img[original]', 'original'])"
 		}
 	},
+	"汽车之家论坛": {
+		"host": "club.autohome.com.cn",
+		"url": "fun.isUrlC(); return fun.indexOF('/bbs/forum')",
+		"blank": 3,
+		"pager": {
+			"type": 6,
+			"nextL": "js; return fun.getNextUPN(/(?<=-)\\d+(?=\\.html)/,/-\\d+\\.html$/,'-','.html','2',fun.getCSS('.athm-page__num>a:last-of-type').textContent)",
+			"pageE": ".post-list>li",
+			"loadTime": 1000,
+			"scrollD": 3000
+		}
+	},
 	"爱卡汽车网论坛": {
 		"host": "www.xcar.com.cn",
-		"url": "return (fun.lp() == '/bbs/forumdisplay.php')",
+		"url": "return (fun.lp() == '/bbs/forumdisplay.php' && !fun.getCSS('.article_more_item'))",
 		"pager": {
 			"nextL": "a.page_down",
 			"pageE": ".table-section>dl:not(.table_head)",
