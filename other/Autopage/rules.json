@@ -749,10 +749,10 @@
 	},
 	"2DFan - 表格": {
 		"host": ["2dfan.com","www.2dfan.com","galge.fun"],
-		"url": "return (fun.getCSS('.topic-list')&&fun.getCSS('.pagination'))",
+		"url": "return (fun.getCSS('.topic-list, .download-list')&&fun.getCSS('.pagination'))",
 		"pager": {
 			"nextL": "a[rel='next']",
-			"pageE": ".topic-list>tbody>tr",
+			"pageE": ".topic-list>tbody>tr, .download-list>.media",
 			"replaceE": ".pagination>ul"
 		}
 	},
