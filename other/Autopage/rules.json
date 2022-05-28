@@ -263,6 +263,15 @@
 			"replaceE": ".Pagenation"
 		}
 	},
+	"Brave 搜索": {
+		"host": "search.brave.com",
+		"url": "/^\\/search/",
+		"pager": {
+			"nextL": "id('pagination')/a[./div[contains(@class,'icon-right')]]",
+			"pageE": "#results>div:not([id])",
+			"replaceE": "#pagination"
+		}
+	},
 	"Qwant 搜索": {
 		"host": "www.qwant.com",
 		"url": "fun.isUrlC(); return (fun.indexOF('q=', 's') && fun.indexOF('t=web', 's'))",
