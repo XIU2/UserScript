@@ -5459,7 +5459,7 @@
 		}
 	},
 	"Jable.TV": {
-		"host": "jable.tv",
+		"host": ["jable.tv","fs1.app"],
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/videos/'))",
 		"blank": 3,
 		"history": false,
