@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.0.5
+// @version      6.0.6
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -978,11 +978,11 @@ function: {
                 } else if (getCSS('.detail-more')) {
                     getCSS('.detail-more').click();
                 }},
-                style: '.view-paging > .container, .view-comment {display: none !important;} .rightToolBar {opacity: 0.3 !important;} #cp_img > img{display: block !important;margin: 0 auto !important; max-width: 99% !important; width: auto !important; height: auto !important;} body {overflow: auto !important;}',
+                style: '.view-paging > .container, .view-comment {display: none !important;} .rightToolBar {opacity: 0.3 !important;} #cp_img > img, #barChapter > img{display: block !important;margin: 0 auto !important; max-width: 99% !important; width: auto !important; height: auto !important;} body {overflow: auto !important;}',
                 pager: {
                     type: 4,
                     nextL: dm5_nextL,
-                    insertP: ['#cp_img', 3],
+                    insertP: ['#barChapter,#cp_img', 3],
                     insertE: dm5_insertE,
                     replaceE: '.view-paging > .container, .rightToolBar',
                     interval: 500,
@@ -1583,15 +1583,13 @@ function: {
 
     // [Mangabz 漫画] 初始化（调整本话图片）
     function mangabz_init() {
-        let showimage = getCSS('#showimage'),
-            cp_img = getCSS('#cp_img'),
-            cp_image = getCSS('#cp_image');
-        if (showimage) {showimage.removeAttribute('oncontextmenu');}
-        if (cp_img) {cp_img.removeAttribute('oncontextmenu');}
-        if (cp_image) {
-            cp_image.removeAttribute('oncontextmenu');
-            cp_image.removeAttribute('id');
-            cp_image.removeAttribute('style');
+        if (getCSS('#showimage')) getCSS('#showimage').removeAttribute('oncontextmenu');
+        if (getCSS('#cp_img')) getCSS('#cp_img').removeAttribute('oncontextmenu');
+        if (getCSS('#barChapter')) getCSS('#barChapter').removeAttribute('oncontextmenu');
+        if (getCSS('#cp_image')) {
+            getCSS('#cp_image').removeAttribute('oncontextmenu');
+            getCSS('#cp_image').removeAttribute('id');
+            getCSS('#cp_image').removeAttribute('style');
         }
     }
     // [Mangabz 漫画] 获取下一页地址
@@ -1661,7 +1659,7 @@ function: {
                 }
             } else { // 下一话
                 // 插入 <script> 标签
-                insScript('html:not([dir]) > head > script:not([src])', pageE);
+                insScript('html:not([dir])>head>script:not([src])', pageE);
                 addHistory(pageE);
                 pageNum.now = pageNum._now + 1
                 replaceElems(pageE)
@@ -1834,7 +1832,8 @@ function: {
             overrideMimeType: 'text/html; charset=' + (document.characterSet||document.charset||document.inputEncoding),
             headers: {
                 'Referer': (curSite.noReferer === true) ? '':location.href,
-                'User-Agent': navigator.userAgent
+                'User-Agent': navigator.userAgent,
+                'Accept': 'text/html,application/xhtml+xml,application/xml'
             },
             timeout: 10000,
             onload: function (response) {
@@ -1858,14 +1857,14 @@ function: {
     }
     // 翻页类型 4
     function getPageE_(url, type = '', method = 'GET', data = '', type2) {
-        let mimeType;
+        let mimeType,accept;
         switch (type) {
             case 'json':
-                mimeType = 'application/json; charset=' + (document.characterSet||document.charset||document.inputEncoding); break;
+                accept = 'application/json'; mimeType = 'application/json; charset=' + (document.characterSet||document.charset||document.inputEncoding); break;
             case 'text':
-                mimeType = 'text/plain; charset=' + (document.characterSet||document.charset||document.inputEncoding); break;
+                accept = 'text/plain'; mimeType = 'text/plain; charset=' + (document.characterSet||document.charset||document.inputEncoding); break;
             default:
-                mimeType = 'text/html; charset=' + (document.characterSet||document.charset||document.inputEncoding);
+                accept = 'text/html,application/xhtml+xml,application/xml'; mimeType = 'text/html; charset=' + (document.characterSet||document.charset||document.inputEncoding);
         }
 
         GM_xmlhttpRequest({
@@ -1877,7 +1876,8 @@ function: {
             headers: {
                 'Referer': (curSite.noReferer === true) ? '':location.href,
                 'Content-Type': (method === 'POST') ? 'application/x-www-form-urlencoded':'',
-                'User-Agent': navigator.userAgent
+                'User-Agent': navigator.userAgent,
+                'Accept': accept
             },
             timeout: 10000,
             onload: function (response) {
