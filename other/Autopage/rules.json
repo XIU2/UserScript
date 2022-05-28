@@ -735,6 +735,40 @@
 			"replaceE": ".page_inner"
 		}
 	},
+	"2DFan - 图文": {
+		"host": ["2dfan.com","www.2dfan.com","galge.fun"],
+		"url": "return (fun.getCSS('#subjects')&&fun.getCSS('.pagination'))",
+		"pager": {
+			"nextL": "a[rel='next']",
+			"pageE": "body",
+			"insertP": ["#subjects>.media",5]
+		},
+		"function": {
+			"bF": "o=document.createElement('div'); o.innerHTML=JSON.parse(pageE[0].textContent).subjects; fun.getCSS('.pagination').outerHTML = o.querySelector('.pagination').outerHTML; return fun.src_bF([].slice.call(o.querySelectorAll('.media')), [0,'img[data-normal]','data-normal'])"
+		}
+	},
+	"2DFan - 表格": {
+		"host": ["2dfan.com","www.2dfan.com","galge.fun"],
+		"url": "return (fun.getCSS('.topic-list')&&fun.getCSS('.pagination'))",
+		"pager": {
+			"nextL": "a[rel='next']",
+			"pageE": ".topic-list>tbody>tr",
+			"replaceE": ".pagination>ul"
+		}
+	},
+	"2DFan - 评论": {
+		"host": ["2dfan.com","www.2dfan.com","galge.fun"],
+		"url": "if (fun.getCSS('#comments')&&fun.getCSS('.pagination')){[].slice.call(fun.getAllCSS('#comments>div')).reverse().forEach((e)=>{document.querySelector('#comments>.pagination').insertAdjacentElement('beforebegin', e);});return true}",
+		"history": false,
+		"pager": {
+			"nextL": "a[rel='prev']",
+			"pageE": "body",
+			"insertP": ["#comments>.media",5]
+		},
+		"function": {
+			"bF": "o=document.createElement('div'); o.innerHTML=JSON.parse(pageE[0].textContent).comments; fun.getCSS('.pagination').outerHTML = o.querySelector('.pagination').outerHTML; return [].slice.call(o.querySelectorAll('.media:not(.no-btm-border)')).reverse()"
+		}
+	},
 	"懂车帝论坛": {
 		"host": "www.dongchedi.com",
 		"url": "fun.isUrlC(); return (fun.indexOF('/community/'))",
