@@ -2566,7 +2566,7 @@
 	},
 	"1337x": {
 		"host": "/1337x\\./",
-		"url": "return (document.title.indexOf('1337x') > -1 && fun.indexOF('search/'))",
+		"url": "return (document.title.indexOf('1337x') > -1 && fun.getCSS('.pagination>ul'))",
 		"blank": 3,
 		"pager": {
 			"nextL": "//div[@class='pagination']//a[text()='>>']",
