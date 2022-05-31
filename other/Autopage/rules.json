@@ -5353,6 +5353,7 @@
 	"t66y - 帖子内": {
 		"host": ["t66y.com","www.t66y.com"],
 		"url": "/^\\/(read\\.php|htm_data|htm_mob)/",
+		"style": ".tips {    position: absolute!important; top: -100%!important;}",
 		"thread": true,
 		"pager": {
 			"nextL": "//div[@class='pages']/a[text()='下一頁']",
