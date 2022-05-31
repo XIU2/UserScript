@@ -4307,26 +4307,13 @@
 		}
 	},
 	"谷歌学术": {
-		"host": ["/^scholar\\.google\\./", "xs2.dailyheadlines.cc","xueshu.dailyheadlines.cc"],
+		"host": ["/^scholar\\.google\\./", "xs2.dailyheadlines.cc","xueshu.dailyheadlines.cc","sc.panda321.com"],
 		"history": true,
 		"pager": {
 			"nextL": "//a[./span[contains(@class, 'next')]]",
 			"pageE": "#gs_res_ccl_mid>*",
 			"replaceE": "#gs_n",
 			"scriptT": 1
-		}
-	},
-	"谷歌学术 - 镜像站": {
-		"host": "sc.panda321.com",
-		"history": true,
-		"pager": {
-			"nextL": "//a[./span[contains(@class, 'next')]]",
-			"pageE": "#gs_res_ccl_mid>*",
-			"replaceE": "#gs_n",
-			"scriptT": 1
-		},
-		"function": {
-			"bF": "fun.getCSS('#gs_n').remove(); return pageE"
 		}
 	},
 	"必应学术": {
