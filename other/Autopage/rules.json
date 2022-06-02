@@ -4063,9 +4063,9 @@
 		"host": "www.yrxitong.com",
 		"url": "return (!fun.indexOF('/h-nd-'))",
 		"pager": {
-			"nextL": "span.pageNext>a",
+			"nextL": "div.pageNext>a",
 			"pageE": "#containerFormsCenter .m_news_list>div",
-			"replaceE": ".pagenation"
+			"replaceE": ".jz_pagenation_wrap"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [1, 'a[data-original]', 'data-original'])"
