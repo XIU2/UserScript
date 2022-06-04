@@ -5039,6 +5039,15 @@
 			"replaceE": ".poi-pager"
 		}
 	},
+	"BOSS直聘": {
+		"host": "www.zhipin.com",
+		"url": "return (fun.getCSS('.next') && fun.getCSS('.job-list>ul>li'))",
+		"pager": {
+			"nextL": ".next",
+			"pageE": ".job-list>ul>li",
+			"replaceE": ".page"
+		}
+	},
 	"立创开源硬件平台": {
 		"host": "www.oshwhub.com",
 		"url": "/^\\/explore/",
