@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HTML5 视频音频默认音量
-// @version      1.0.1
+// @version      1.0.2
 // @author       X.I.U
 // @description  避免被一些默认 100% 音量的视频/音频吓一跳（或社死）！且支持各网站分别记住音量...
 // @match        *://*/*
@@ -25,7 +25,9 @@
         // 如果菜单ID数组多于菜单数组，说明不是首次添加菜单，需要卸载所有脚本菜单
         if (menu_ID.length > 0){for (let i=0;i<menu_ID.length;i++){GM_unregisterMenuCommand(menu_ID[i]);}}
         menu_ID[0] = GM_registerMenuCommand('#️⃣ 修改全局默认音量 [ ' + GM_getValue('menu_defaultVolume', 30) + '% ]', function(){customDefaultVolume()});
-        menu_ID[1] = GM_registerMenuCommand('🔁 忘记当前网站音量 (即跟随全局)', function(){resetCurrentVolume()});
+        let nowVolume = ' (跟随全局)'
+        if (localStorage.getItem('html5_xiu_currentVolume')) nowVolume = ' [ ' + parseInt(localStorage.getItem('html5_xiu_currentVolume')) + '% ]'
+        menu_ID[1] = GM_registerMenuCommand('🔁 忘记当前网站音量' + nowVolume, function(){resetCurrentVolume()});
         menu_ID[2] = GM_registerMenuCommand('💬 反馈 & 建议', function () {GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true}); GM_openInTab('https://greasyfork.org/zh-CN/scripts/438400/feedback', {active: true,insert: true,setParent: true});});
     }
 
@@ -66,8 +68,10 @@
     function volumeChangeEvent(event) {
         if (event.target.muted) { // 判断是否静音
             localStorage.setItem('html5_xiu_currentVolume', 0)
+            registerMenuCommand(); // 修改脚本菜单
         } else if (localStorage.getItem('html5_xiu_currentVolume') || ((event.target.volume * 100) !== GM_getValue('menu_defaultVolume', 30))) {
             localStorage.setItem('html5_xiu_currentVolume', event.target.volume * 100)
+            registerMenuCommand(); // 修改脚本菜单
         }
     }
 
@@ -78,7 +82,9 @@
         let nowVolume = parseFloat(localStorage.getItem('html5_xiu_currentVolume')); // 先看看 localStorage 有没有（即用户是否手动调整过音量）
         if (!nowVolume && nowVolume !== 0) nowVolume = GM_getValue('menu_defaultVolume', 30); // 如果 localStorage 没有，那就从脚本配置中获取
         if (!((typeof nowVolume === 'number') && nowVolume <= 100)) nowVolume = 30; // 如果获取到的音量数值不是数字，或大于 100，则重置为 30
+        //console.log(_this, _this.volume)
         _this.volume = nowVolume / 100; // 设置音量为 0~1 范围
+        //console.log(_this.volume)
     }
 
 
