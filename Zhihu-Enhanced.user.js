@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.0.8
+// @version      2.0.9
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @description:zh-TW  移除登錄彈窗、屏蔽首頁視頻、默認收起回答、快捷收起回答/評論、快捷回到頂部、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化搜索熱門、淨化標題消息、置頂顯示時間、完整問題時間、區分問題文章、默認高清原圖、默認站外直鏈...
@@ -1118,6 +1118,8 @@ function removeLogin() {
                 if (target.querySelector('.signFlowModal')) {
                     let button = target.querySelector('.Button.Modal-closeButton.Button--plain');
                     if (button) button.click();
+                } else if (getXpath('//button[text()="立即登录/注册"]',target)) {
+                    target.remove();
                 }
             }
         }
@@ -1125,18 +1127,19 @@ function removeLogin() {
 
     // 未登录时才会监听并移除登录弹窗
     if(location.hostname === 'zhuanlan.zhihu.com') { // 如果是文章页
-        if (!document.querySelector('button.ColumnPageHeader-MenuToggler')) { // 未登录
+        if (!document.querySelector('.ColumnPageHeader-profile>.AppHeader-menu')) { // 未登录
             const observer = new MutationObserver(removeLoginModal);
             observer.observe(document, { childList: true, subtree: true });
+            getXpath('//button[text()="登录/注册"]').outerHTML = '<a class="Button AppHeader-login Button--blue" href="https://www.zhihu.com/signin" target="_blank">登录/注册</a>'; // [登录] 按钮跳转至登录页面
         } else {
             cleanTitles(); // 净化标题消息
         }
     } else { // 不是文章页
-        if (document.querySelector('button.AppHeader-login')) { // 未登录
+        if (!document.querySelector('.AppHeader-profile>.AppHeader-menu')) { // 未登录
             const observer = new MutationObserver(removeLoginModal);
             observer.observe(document, { childList: true, subtree: true });
             document.lastElementChild.appendChild(document.createElement('style')).textContent = '.Question-mainColumnLogin, button.AppHeader-login {display: none !important;}'; // 屏蔽问题页中间的登录提示
-            document.querySelector('button.AppHeader-login').insertAdjacentHTML('afterend', '<a class="Button AppHeader-login Button--blue" href="https://www.zhihu.com/signin" target="_blank">登录</a>'); // [登录] 按钮跳转至登录页面
+            getXpath('//button[text()="登录/注册"]').outerHTML = '<a class="Button AppHeader-login Button--blue" href="https://www.zhihu.com/signin" target="_blank">登录/注册</a>'; // [登录] 按钮跳转至登录页面
         } else {
             cleanTitles(); // 净化标题消息
         }
@@ -1244,6 +1247,18 @@ function addUrlChangeEvent() {
     window.addEventListener('popstate',()=>{
         window.dispatchEvent(new Event('urlchange'))
     });
+}
+
+
+function getXpath(xpath, contextNode, doc = document) {
+    contextNode = contextNode || doc;
+    try {
+        const result = doc.evaluate(xpath, contextNode, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+        // 应该总是返回一个元素节点
+        return result.singleNodeValue && result.singleNodeValue.nodeType === 1 && result.singleNodeValue;
+    } catch (err) {
+        throw new Error(`无效 Xpath: ${xpath}`);
+    }
 }
 
 
