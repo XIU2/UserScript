@@ -4038,6 +4038,15 @@
 			"replaceE": ".page-nav.td-pb-padding-side"
 		}
 	},
+	"奔跑中的奶酪": {
+		"host": "www.runningcheese.com",
+		"url": "return fun.getCSS('.pagination')",
+		"pager": {
+			"nextL": "a.next.page-numbers",
+			"pageE": ".ajaxpost",
+			"replaceE": ".pagination"
+		}
+	},
 	"Nite07 的小窝": {
 		"host": "www.nite07.com",
 		"url": "return (fun.lp() == '/' || fun.indexOF('/page/'))",
