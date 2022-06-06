@@ -3177,7 +3177,7 @@
 			"replaceE": ".uk-pagination"
 		}
 	},
-	"漫画星球": {
+	"漫画星球 / 6 漫画": {
 		"host": ["/\\.mhxqiu/","/^www\\.sixmh\\d\\./"],
 		"url": "if (fun.indexOF(/\\/\\d+\\.html/)) {return true;} else if (fun.indexOF(/\\/\\d+\\/$/)) {setTimeout(()=>{if (document.getElementById('zhankai')) document.getElementById('zhankai').click();}, 500);}",
 		"style": ".imgFloat_1, .imgFloat_2, .main_control, span.comic-ft {display: none !important;} html, body, #mainView {height: auto !important;} body.view .main ul.comic-contain li{margin:0 auto !important;} .comic-contain .loaded{box-shadow: none !important;}",
@@ -3203,6 +3203,23 @@
 			"nextL": "#thisclass+li>a",
 			"pageE": ".cy_list_mh > ul",
 			"replaceE": ".NewPages"
+		}
+	},
+	"漫画星球 / 6 漫画 - 手机版": {
+		"host": ["/^(m\\.)?mhxqiu\\d\\./","/^(m\\.)?sixmh\\d\\./"],
+		"url": "/\\/\\d+\\.html$/",
+		"style": ".comic-recommend {display: none !important;}",
+		"history": true,
+		"pager": {
+			"nextL": "li.next>a",
+			"pageE": "//body/script[contains(text(),'eval')]",
+			"insertP": ["body",3],
+			"replaceE": ".end-btns",
+			"scriptT": 2,
+			"interval": 4000
+		},
+		"function": {
+			"aF": "let _img = ''; for (let i=0;i<newImgs.length;i++) {_img += `<div class=\"chapter-img-box\"><img src=\"${newImgs[i]}\"></div>`;}; document.getElementById('mainView_img').insertAdjacentHTML('beforeend', _img);"
 		}
 	},
 	"风之动漫": {
