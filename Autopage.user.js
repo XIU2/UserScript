@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.0.7
+// @version      6.0.8
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -91,7 +91,7 @@
         ['menu_customRules', '自定义翻页规则', '自定义翻页规则', {}]
     ], urlArr = [ // 外置翻页规则更新地址分流，以保证更新成功率
         'https://userscript.gh2233.ml/other/Autopage/rules.json',
-        'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
+        //'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://hk1.monika.love/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.futils.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
@@ -107,7 +107,7 @@
     ], urlArr2 = [
         'https://userscript.gh2233.ml/other/Autopage/rules.json',
         'https://userscript.xiu2.xyz/other/Autopage/rules.json',
-        'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
+        //'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://hk1.monika.love/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.futils.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
@@ -399,7 +399,7 @@
     thread:      对于社区类网站，要在 帖子内 的规则中加入这个，用于脚本的 [帖子内自动翻页] 功能（即用户可以选择开启/关闭所有社区类网站帖子内的自动翻页）
     style:       要插入网页的 CSS Style 样式
     retry:       允许获取失败后重试
-    blank:       强制新标签页打开链接（1 = <base>，2 = 对 body 点击事件委托，3 = 仅对 pageE 的父元素点击事件委托）
+    blank:       强制新标签页打开链接（1 = <base>，2 = 对 body 点击事件委托，3 = 仅对 pageE 的父元素点击事件委托，4 = 仅对 pageE 的父元素添加 target="_blank"）
 
 pager: {
     type:     翻页模式
@@ -1096,7 +1096,7 @@ function: {
                             webTypeIf(); // 判断网站类型
                             if (!GM_getValue('menu_thread')) {if (curSite.thread) {curSite = {SiteTypeID: 0}; pageNum.now = 1;}} // 帖子内自动翻页判断
                             if (GM_getValue('menu_page_number')) {pageNumber('add');} else {pageNumber('set');} // 显示页码
-                            if (curSite.blank != undefined) forceTarget(); // 强制新标签页打开链接
+                            if (curSite.blank != undefined) setTimeout(forceTarget, 1000); // 强制新标签页打开链接
                             if (curSite.style) {insStyle(curSite.style)} // 插入 Style CSS 样式
                             pausePageEvent(); // 左键双击网页空白处暂停翻页
                             pageLoading(); // 自动无缝翻页
@@ -1143,7 +1143,7 @@ function: {
     // 左键双击网页空白处暂停翻页
     pausePageEvent();
     // 强制新标签页打开链接
-    if (curSite.blank != undefined) forceTarget();
+    if (curSite.blank != undefined) setTimeout(forceTarget, 1000);
     // 初始化事件
     //if (curSite.initE != undefined) initEvent();
 
@@ -1165,7 +1165,7 @@ function: {
                 registerMenuCommand(); // 重新判断规则
 
                 //console.log(curSite);
-                if (curSite.blank != undefined) forceTarget(); // 强制新标签页打开链接
+                if (curSite.blank != undefined) setTimeout(forceTarget, 1000); // 强制新标签页打开链接
                 //if (curSite.initE != undefined) initEvent(); // 初始化事件
                 if (curSite.style) {insStyle(curSite.style)} // 插入 Style CSS 样式
                 if (!GM_getValue('menu_thread')) {if (curSite.thread) {curSite = {SiteTypeID: 0}; pageNum.now = 1;}} // 帖子内自动翻页判断
@@ -2055,6 +2055,9 @@ function: {
                 }
             }
 
+            // 强制新标签页打开链接
+            if (curSite.blank === 4) {pageE = forceTarget(pageE);}
+
             // 插入位置
             let addTo = getAddTo(curSite.pager.insertP[1]);
 
@@ -2445,9 +2448,19 @@ function: {
 
 
     // 强制新标签页打开链接
-    function forceTarget() {
+    function forceTarget(pageE) {
         if (curSite.blank === 1) {
             document.head.appendChild(document.createElement('base')).target = '_blank';
+
+        } else if (curSite.blank === 4) {
+            if (pageE) {
+                pageE.forEach(function (dd) {getAllCSS('a[href]:not([target="_blank"]):not([onclick]):not([href^="#"]):not([href^="javascript:"])',dd).forEach(function (a) {a.target = '_blank';});});
+                return pageE
+            }
+
+            let dd = toE5pop(getAll(curSite.pager.pageE));
+            if (dd && dd.parentElement != null) dd = dd.parentElement
+            getAllCSS('a[href]:not([target="_blank"]):not([onclick]):not([href^="#"]):not([href^="javascript:"])',dd).forEach(function (a) {a.target = '_blank';})
 
         } else {
             let d;
