@@ -3434,6 +3434,19 @@
 			"bF": "return fun.src_bF(pageE, [1,'a[data-original]','data-original'])"
 		}
 	},
+	"flamescans 漫画": {
+        "host": "flamescans.org",
+        "url": "return fun.getCSS('#readerarea')",
+        "pager": {
+            "type": 3,
+            "nextL": ".ch-next-btn:not(.disabled)",
+            "pageE": "id('readerarea')/p|//script[starts-with(text(),'ts_reader.run(')]",
+            "scriptT": 2,
+            "replaceE": ".nextprev",
+            "scrollE": ".chnav.cbot",
+            "scrollD": 3000
+        }
+    },
 	"起点中文": {
 		"host": "www.qidian.com",
 		"url": "/^\\/(all|rank|finish|free)/",
@@ -3803,6 +3816,15 @@
 			"nextL": "a.page-next",
 			"pageE": ".app-item-content, .article-item-content",
 			"replaceE": ".pagination-content"
+		}
+	},
+	"扩展派": {
+		"host": "www.crxfun.com",
+		"url": "/^\\/(all|hot|recommend)/",
+		"pager": {
+			"nextL": "a.page-link[aria-label='Next']",
+			"pageE": ".body-c-body>div",
+			"replaceE": ".pagination"
 		}
 	},
 	"MacWK": {
