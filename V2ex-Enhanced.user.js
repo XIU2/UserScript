@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.1.6
+// @version      1.1.7
 // @author       X.I.U
-// @description  自动签到、链接转图片、自动无缝翻页、回到顶部（右键点击两侧空白处）、快速回复（左键双击两侧空白处）、新标签页打开链接、标签页伪装为 Github（摸鱼）
+// @description  自动签到、链接转图片、自动无缝翻页、使用 SOV2EX 搜索、回到顶部（右键点击两侧空白处）、快速回复（左键双击两侧空白处）、新标签页打开链接、标签页伪装为 Github（摸鱼）
 // @match        *://v2ex.com/*
 // @match        *://*.v2ex.com/*
+// @match        *://www.sov2ex.com/*
 // @icon         https://www.v2ex.com/static/favicon.ico
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
@@ -30,11 +31,13 @@
         ['menu_backToTop', '回到顶部（右键点击两侧空白处）', '回到顶部', true],
         ['menu_quickReply', '快速回复（左键双击两侧空白处）', '快速回复', true],
         ['menu_linksBlank', '新标签页打开链接', '新标签页打开链接', true],
+        ['menu_sov2ex', '使用 SOV2EX 搜索', '使用 SOV2EX 搜索', false],
         ['menu_fish', '标签页伪装为 Github（摸鱼）', '标签页伪装为 Github', false]
-    ], menu_ID = [];
+    ], menu_ID = [], pausePage = true;
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
     }
+
     registerMenuCommand();
 
     // 注册脚本菜单
@@ -154,10 +157,20 @@
                 replaceE: 'css;#Main > .box > .cell[style] > table',
                 scrollDelta: 1000
             }
+        },
+        sov2ex: { // sov2ex
+            SiteTypeID: 8,
+            pager: {
+                nextLink: '.paging>a',
+                scrollDelta: 1000
+            }
         }
     };
 
-
+    if (location.hostname === 'www.sov2ex.com') {
+        curSite = DBSite.sov2ex;
+        pageLoading();
+    } else {
     switch (location.pathname) {
         case '/': //              首页
             addChangesLink();
@@ -189,7 +202,8 @@
     if(menu_value('menu_pageLoading')) pageLoading(); //             自动翻页（无缝）
     if(menu_value('menu_backToTop')) backToTop(); //                 回到顶部（右键点击左右两侧空白处）
     if(menu_value('menu_linksToImgs')) linksToImgs(); //             链接转图片
-
+    if(menu_value('menu_sov2ex')) setTimeout(soV2ex, 1000); //       替换为 sov2ex 搜索
+    }
 
     // 自动签到（后台）
     function qianDao() {
@@ -260,6 +274,34 @@
                 }
             }
         });
+    }
+
+
+    // 替换为 sov2ex 搜索，代码来自 v2ex-plus 扩展：https://github.com/sciooga/v2ex-plus （懒得重复造轮子了~）
+    function soV2ex() {
+        document.body.appendChild(document.createElement('script')).textContent = `
+                var $search = $('#search')
+        var searchEvents = $._data($search[0], "events" )
+        var oKeydownEvent = searchEvents['keydown'][0]['handler']
+        var oInputEvent = searchEvents['input'][0]['handler']
+        $search.attr("placeholder","sov2ex")
+        $search.unbind('keydown', oKeydownEvent)
+        $search.unbind('input', oInputEvent)
+        $search.on('input', function(e) {
+            oInputEvent(e)
+            $('.search-item:last').attr('href', 'https://www.sov2ex.com/?q=' + $search.val()).text('sov2ex ' +$search.val());
+        })
+        $search.keydown(function(e) {
+            if (e.code == 'Enter' || e.code == 'NumpadEnter' || e.keyCode === 13) {
+                if ($('.search-item:last').is('.active')) {
+                    $(this).val($(this).val().replace(/[#%&]/g,""));//用户输入不能包含特殊字符#%&
+                    window.open("https://www.sov2ex.com/?q=" + $(this).val());
+                    return 0
+                }
+            }
+            oKeydownEvent(e)
+        })
+        `;
     }
 
 
@@ -359,18 +401,20 @@
     function pageLoading() {
         if (curSite.SiteTypeID > 0){
             windowScroll(function (direction, e) {
-                if (direction === 'down') { // 下滑才准备翻页
-                    let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-                    //console.log(document.documentElement.scrollHeight)
-                    let scrollDelta = curSite.pager.scrollDelta;
-                    if (document.documentElement.scrollHeight <= document.documentElement.clientHeight + scrollTop + scrollDelta) {
-                        if (curSite.pager.type === 1) {
-                            ShowPager.loadMorePage();
-                        }else{
-                            let autopbn = document.querySelector(curSite.pager.nextLink);
-                            if (autopbn){
-                                autopbn.click();
-                            }
+                // 下滑 且 未暂停翻页 且 SiteTypeID > 0 时，才准备翻页
+                if (direction != 'down' || !pausePage) return
+                let scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
+                    scrollHeight = window.innerHeight || document.documentElement.clientHeight,
+                    scrollDelta = curSite.pager.scrollDelta;
+                if (document.documentElement.scrollHeight <= scrollHeight + scrollTop + scrollDelta) {
+                    if (curSite.pager.type === 1) {
+                        ShowPager.loadMorePage();
+                    }else{
+                        let autopbn = document.querySelector(curSite.pager.nextLink);
+                        if (autopbn){
+                            autopbn.click();
+                            pausePage = false
+                            setTimeout(function(){pausePage = true;}, 500)
                         }
                     }
                 }
@@ -381,11 +425,11 @@
 
     // 滚动条事件
     function windowScroll(fn1) {
-        var beforeScrollTop = document.documentElement.scrollTop,
+        var beforeScrollTop = document.documentElement.scrollTop || document.body.scrollTop,
             fn = fn1 || function () {};
         setTimeout(function () { // 延时执行，避免刚载入到页面就触发翻页事件
             window.addEventListener('scroll', function (e) {
-                var afterScrollTop = document.documentElement.scrollTop,
+                var afterScrollTop = document.documentElement.scrollTop || document.body.scrollTop,
                     delta = afterScrollTop - beforeScrollTop;
                 if (delta == 0) return false;
                 fn(delta > 0 ? 'down' : 'up', e);
