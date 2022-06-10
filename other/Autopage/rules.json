@@ -3345,7 +3345,7 @@
 	"古风漫画网 / 优酷漫画 / 36 漫画 / 360 漫画 / 漫漫台 / 古漫画": {
 		"host": ["/^www\\.gufengmh\\d/","www.ykmh.com","36manga.com","www.36manga.com","36manhua.com","www.36manhua.com","www.100fanwo.com","www.manmantai.com","www.izhegu.com"],
 		"url": "if (fun.indexOF(/\\/\\d+\\.html$/)) {if (location.hostname == 'www.ykmh.com' || location.hostname == 'www.manmantai.com'||location.hostname == 'www.izhegu.com'|| location.hostname.indexOf('36man') != -1) {if (localStorage.getItem('chapterScroll') != '\"pagination\"') {localStorage.setItem('chapterScroll', '\"pagination\"'); location.reload();} else {setTimeout(()=>{let _img = '',host = SinMH.getResHostDomain(); if (location.hostname == 'www.ykmh.com'||location.hostname == 'www.izhegu.com') {chapterPath=''}; if (location.hostname == 'www.manmantai.com' && chapterImages[0].slice(0,4) == 'http'){host=''}; for (let i=0;i<chapterImages.length;i++){_img += `<img src=\"${host}${chapterPath}${chapterImages[i]}\">`;}; document.getElementById('images').innerHTML = _img;}, 500); return true;}} else if (localStorage.getItem('chapterScroll') != '\"scroll\"') {localStorage.setItem('chapterScroll', '\"scroll\"'); location.reload();}else{return true}}",
-		"style": ".img_land_prev, .img_land_next,p.img_info, #sider-left, #sider-right, p.img_info, .tc, .chapter-view + .w996, .chapter-view>div[style]:not([id]):not([class]) {display: none !important;} #images{min-height: 6000px !important;} #images>img {display: inline-block !important;min-height: 400px;margin: 0 auto !important;border: none !important;padding: 0 !important;max-width: 99% !important;height: auto !important;}",
+		"style": ".img_land_prev, .img_land_next, #sider-left, #sider-right, p.img_info, .tc, .chapter-view + .w996, .chapter-view>div[style]:not([id]):not([class]) {display: none !important;} #images{min-height: 6000px !important;} #images>img {display: inline-block !important;min-height: 400px;margin: 0 auto !important;border: none !important;padding: 0 !important;max-width: 99% !important;height: auto !important;}",
 		"history": true,
 		"pager": {
 			"nextL": "js; let url = comicUrl + nextChapterData.id + '.html'; if (nextChapterData.id != null && url && url != '.html' && url != location.href) return url",
@@ -3367,6 +3367,23 @@
 			"nextL": "li.next>a",
 			"pageE": "li.item-lg, li.list-comic",
 			"replaceE": "ul.pagination"
+		}
+	},
+	"爱漫之家": {
+		"host": "www.52fuman.xyz",
+		"url": "if (fun.indexOF(/\\/\\d+\\.html$/)) {let _img='',imgArr=qTcms_S_m_murl.split('$qingtiandy$'); for (let i=0;i<imgArr.length;i++){_img += `<img src=\"${imgArr[i]}\">`;}; fun.getCSS('#qTcms_Pic_middle td').insertAdjacentHTML('beforeend', _img); return true}",
+		"style": "#sider-left, #sider-right, .tc.w996 {display: none !important;} #images{min-height: 6000px !important;} #qTcms_Pic_middle img {display: inline-block !important;min-height: 400px;margin: 0 auto !important;border: none !important;padding: 0 !important;max-width: 99% !important;height: auto !important;}",
+		"history": true,
+		"pager": {
+			"nextL": "js; if (qTcms_Pic_nextArr.slice(0,10) != 'javascript') return location.origin + qTcms_Pic_nextArr",
+			"pageE": "//script[contains(text(),'qTcms_S_m_murl')]",
+			"insertP": ["body",3],
+			"scriptT": 2,
+			"interval": 4000,
+			"scrollD": 4000
+		},
+		"function": {
+			"aF": "let _img='',imgArr=base64_decode(qTcms_S_m_murl_e).split('$qingtiandy$'); for (let i=0;i<imgArr.length;i++){_img += `<img src=\"${imgArr[i]}\">`;}; fun.getCSS('#qTcms_Pic_middle td').insertAdjacentHTML('beforeend', _img);"
 		}
 	},
 	"360 漫画 - 手机版": {
