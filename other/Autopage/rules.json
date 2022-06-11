@@ -4976,6 +4976,19 @@
 			"replaceE": ".h-pages"
 		}
 	},
+	"APSGO 软购": {
+		"host": "apsgo.com",
+		"url": "/^\\/search/",
+		"blank": 3,
+		"pager": {
+			"type": 6,
+			"nextL": "js; return fun.getNextEP('li.ant-pagination-item-active+li.ant-pagination-item>a', 'page=', /page=\\d+/)",
+			"pageE": ".pull-right .p-list>.item",
+			"replaceE": ".ant-pagination",
+			"loadTime": 500,
+			"scrollD": 5000
+		}
+	},
 	"駿河屋 - 搜索页": {
 		"host": "www.suruga-ya.jp",
 		"url": "/^\\/search/",
