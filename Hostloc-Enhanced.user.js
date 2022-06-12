@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.4.5
+// @version      1.4.6
 // @author       X.I.U
 // @description  自动签到（访问空间 +22 积分）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键网页两侧空白处）、收起预览帖子（左键网页两侧空白处）、屏蔽投票贴、屏蔽阅读权限 255 帖子、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复
 // @match        *://hostloc.com/*
@@ -484,12 +484,14 @@
     // 显示在线状态
     function onlineStatus() {
         document.querySelectorAll('[id^="favatar"]').forEach(function(item){ // 遍历所有帖子
-            let icon = (item.querySelector('[id^="userinfo"] > .i.y em').textContent === '当前在线') ? '🌝' : '🌚';
-            let divStatus = document.createElement('div');
-            divStatus.style = 'position: absolute;margin: -8px 0 0 8px;padding: 0 1px 1.2px;background-color: #ffffff;border-radius: 50%;';
-            divStatus.textContent = icon;
-            let mochu = item.querySelector('.avatar');
-            mochu.parentNode.insertBefore(divStatus,mochu);
+            if (item.querySelector('[id^="userinfo"] > .i.y em')) {
+                let icon = (item.querySelector('[id^="userinfo"] > .i.y em').textContent === '当前在线') ? '🌝' : '🌚';
+                let divStatus = document.createElement('div');
+                divStatus.style = 'position: absolute;margin: -8px 0 0 8px;padding: 0 1px 1.2px;background-color: #ffffff;border-radius: 50%;';
+                divStatus.textContent = icon;
+                let mochu = item.querySelector('.avatar');
+                mochu.parentNode.insertBefore(divStatus,mochu);
+            }
         })
     }
 
