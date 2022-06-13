@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.0.2
+// @version      2.0.3
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -43,7 +43,7 @@
         ['https://download.xn--p8jhe.tw', '美国', '[美国 圣何塞]', 'https://archive.xn--p8jhe.tw'],
         ['https://git.yumenaka.net/https://github.com', '美国', '[美国 圣何塞]'],
         //['https://github.do/https://github.com', '国内', '[中国 国内] - 该公益加速源由 [小麦云服] 提供'],
-        //['https://ghproxy.futils.com/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
+        ['https://ghproxy.futils.com/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [F 搜] 提供（存在限速）'],
         //['https://github.ddlc.love/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [@mtr-static-official] 提供', ''],
         ['https://download.fastgit.org', '日本', '[日本 东京] - 该公益加速源由 [FastGit] 提供', 'https://archive.fastgit.org'],
         ['https://mirror.ghproxy.com/https://github.com', '日本', '[日本 东京] - 该公益加速源由 [ghproxy] 提供'],
@@ -70,7 +70,8 @@
         ['https://raw.githubusercontent.com', 'Github 原生', '[日本 东京]'],
         //['https://github.do/https://raw.githubusercontent.com', '国内', '[中国 国内] - 该公益加速源由 [小麦云服] 提供&#10;&#10; - 缓存：有'],
         ['https://ghproxy.futils.com/https://github.com', '香港 1', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
-        ['https://raw.iqiq.io', '香港 2', '[中国 香港] - 该公益加速源由 [iQDNS/iQZone] 提供&#10;&#10; - 缓存：无（或时间很短）'],
+        ['https://ghproxy.fsofso.com/https://github.com', '香港 2', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
+        //['https://raw.iqiq.io', '香港 2', '[中国 香港] - 该公益加速源由 [iQDNS/iQZone] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://hk1.monika.love', '香港 3', '[中国 香港] - 该公益加速源由 [@mtr-static-official] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://ghproxy.com/https://raw.githubusercontent.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://fastly.jsdelivr.net/gh', '日本 1', '[日本 东京] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
@@ -242,7 +243,7 @@
         for (let i=1;i<raw_url.length;i++) {
             if (raw_url[i][0].indexOf('jsdelivr.net') != -1) {
                 url = raw_url[i][0] + href.replace('/blob/','@');
-            } else if (raw_url[i][0].indexOf('futils.com') != -1) {
+            } else if (raw_url[i][0].indexOf('futils.com') != -1 || raw_url[i][0].indexOf('fsofso.com') != -1) {
                 url = raw_url[i][0] + href;
             } else {
                 url = raw_url[i][0] + href2;
@@ -288,7 +289,7 @@
 
             if (raw_url[menu_raw_fast][0].indexOf('jsdelivr.net') != -1) {
                 url = raw_url[menu_raw_fast][0] + href.replace('/blob/','@');
-            } else if (raw_url[menu_raw_fast][0].indexOf('futils.com') != -1) {
+            } else if (raw_url[menu_raw_fast][0].indexOf('futils.com') != -1 || raw_url[menu_raw_fast][0].indexOf('fsofso.com') != -1) {
                 url = raw_url[menu_raw_fast][0] + href;
             } else {
                 url = raw_url[menu_raw_fast][0] + href2;
