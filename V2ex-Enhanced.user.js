@@ -223,7 +223,7 @@
             let timeOld = GM_getValue('menu_clockInTime')
             if (!timeOld || timeOld != timeNow) {
                 qianDaoStatus_(timeNow) //                               后台获取签到状态（并判断是否需要签到）
-            }/* else { //                                                  新旧签到时间一致
+            }/* else { //                                                新旧签到时间一致
                 console.info('[V2EX 增强] 已经签过到了。')
             }*/
         }
@@ -249,8 +249,8 @@
                         qiandao.href = 'javascript:void(0);';
                     }
                 } else {
-                    GM_notification({text: '自动签到失败！请联系作者解决！', timeout: 4000, onclick() {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/424246/feedback', {active: true,insert: true,setParent: true});}});
-                    console.warn('[V2EX 增强] 自动签到失败！请联系作者解决！')
+                    GM_notification({text: '自动签到失败！请访问 V2EX 首页试试。\n如果持续几天都签到失败，请联系作者解决！', timeout: 4000, onclick() {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/424246/feedback', {active: true,insert: true,setParent: true});}});
+                    console.warn('[V2EX 增强] 自动签到失败！请访问 V2EX 首页试试。如果持续几天都签到失败，请联系作者解决！')
                     if (qiandao) qiandao.textContent = '自动签到失败！请尝试手动签到！';
                 }
             }
