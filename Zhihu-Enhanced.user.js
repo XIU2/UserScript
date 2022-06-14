@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.1.0
+// @version      2.1.1
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @description:zh-TW  移除登錄彈窗、屏蔽首頁視頻、默認收起回答、快捷收起回答/評論、快捷回到頂部、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化搜索熱門、淨化標題消息、置頂顯示時間、完整問題時間、區分問題文章、默認高清原圖、默認站外直鏈...
@@ -272,6 +272,10 @@ function collapsedNowAnswer(selectors) {
                 if (rightButton) rightButton.click();
                 // 固定在回答底部的 [收起回答]（此时正在浏览回答内容 [尾部区域]）
             } else {
+
+                // 悬浮的 [收起评论]（此时正在浏览评论内容 [中间区域]）
+                if (document.querySelector('.CommentCollapseButton')) {document.querySelector('.CommentCollapseButton').click();console.log('asfaf')}
+
                 let answerCollapseButton_ = false;
                 for (let el of document.querySelectorAll('.ContentItem-rightButton[data-zop-retract-question]')) { // 遍历所有回答底部的 [收起] 按钮
                     if (isElementInViewport(el)) { // 判断该 [收起] 按钮是否在可视区域内
@@ -294,7 +298,10 @@ function collapsedNowAnswer(selectors) {
                             let commentCollapseButton = el.parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                             // 如果展开了评论，就收起评论
                             //console.log('555')
-                            if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) commentCollapseButton.click();
+                            if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) {
+                                commentCollapseButton.click();
+                                if (!isElementInViewport(commentCollapseButton)) scrollTo(0,el.offsetTop+el.offsetHeight-30)
+                            }
                             let answerCollapseButton__ = el.querySelector('.ContentItem-rightButton[data-zop-retract-question]');
                             //console.log('666')
                             if (answerCollapseButton__) answerCollapseButton__.click() // 再去收起回答
@@ -330,10 +337,12 @@ function collapsedNowAnswer(selectors) {
                     if (commentCollapseButton_1.length > 0) {
                         for (let el of commentCollapseButton_1) {
                             if (isElementInViewport(el)) {
-                                let commentCollapseButton = findParentElement(el, 'ContentItem AnswerItem').querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
+                                let parentElement = findParentElement(el, 'List-item') || findParentElement(el, 'Card '),
+                                    commentCollapseButton = parentElement.querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                                 if (commentCollapseButton.textContent.indexOf('收起评论') > -1) {
                                     //console.log('999')
                                     commentCollapseButton.click()
+                                    if (!isElementInViewport(commentCollapseButton)) {console.log(parentElement,parentElement.offsetTop,parentElement.offsetHeight);scrollTo(0,parentElement.offsetTop+parentElement.offsetHeight-50)}
                                     commentCollapseButton__ = true // 如果找到并点击了，就没必要执行下面的代码了（可视区域中没有 评论元素 时）
                                     break
                                 }
@@ -345,11 +354,13 @@ function collapsedNowAnswer(selectors) {
                         if (commentCollapseButton_2.length > 0) {
                             for (let el of commentCollapseButton_2) {
                                 if (isElementInViewport(el)) {
-                                    let commentCollapseButton = findParentElement(el, 'ContentItem AnswerItem').querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
+                                    let parentElement = findParentElement(el, 'List-item') || findParentElement(el, 'Card '),
+                                    commentCollapseButton = parentElement.querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                                     //console.log(commentCollapseButton)
                                     if (commentCollapseButton.textContent.indexOf('收起评论') > -1) {
                                         //console.log('101010')
                                         commentCollapseButton.click()
+                                        if (!isElementInViewport(commentCollapseButton)) {console.log(parentElement,parentElement.offsetTop,parentElement.offsetHeight);scrollTo(0,parentElement.offsetTop+parentElement.offsetHeight-50)}
                                         break
                                     }
                                 }
