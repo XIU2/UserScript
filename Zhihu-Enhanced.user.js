@@ -941,7 +941,7 @@ function blockType(type) {
                     if (menu_value('menu_blockTypeVideo')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;
                 }
             } else if (titleA.href.indexOf('/education/video-course/') > -1) { // 如果是視頻課程 
-                findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;
+                if (menu_value('menu_blockTypeVideo')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;
             } else if (titleA.href.indexOf('zhuanlan.zhihu.com') > -1) { // 如果是文章
                 if (menu_value('menu_blockTypeArticle')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;
             }
