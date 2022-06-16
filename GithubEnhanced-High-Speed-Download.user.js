@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.0.3
+// @version      2.0.4
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -70,8 +70,8 @@
         ['https://raw.githubusercontent.com', 'Github 原生', '[日本 东京]'],
         //['https://github.do/https://raw.githubusercontent.com', '国内', '[中国 国内] - 该公益加速源由 [小麦云服] 提供&#10;&#10; - 缓存：有'],
         ['https://ghproxy.futils.com/https://github.com', '香港 1', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
-        ['https://ghproxy.fsofso.com/https://github.com', '香港 2', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
-        //['https://raw.iqiq.io', '香港 2', '[中国 香港] - 该公益加速源由 [iQDNS/iQZone] 提供&#10;&#10; - 缓存：无（或时间很短）'],
+        //['https://ghproxy.fsofso.com/https://github.com', '香港 2', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
+        ['https://raw.iqiq.io', '香港 2', '[中国 香港] - 该公益加速源由 [iQDNS/iQZone] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://hk1.monika.love', '香港 3', '[中国 香港] - 该公益加速源由 [@mtr-static-official] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://ghproxy.com/https://raw.githubusercontent.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://fastly.jsdelivr.net/gh', '日本 1', '[日本 东京] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
