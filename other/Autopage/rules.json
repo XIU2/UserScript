@@ -5917,7 +5917,7 @@
 	},
 	"nhentai": {
 		"host": "nhentai.net",
-		"url": "return (fun.lp() == '/' || fun.lp() == '/search/' || fun.indexOF(/\\/(tag|artist|character|language)\\//))",
+		"url": "return fun.getCSS('a.next')&&fun.getCSS('.gallery')",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
