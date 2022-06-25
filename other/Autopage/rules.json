@@ -1810,6 +1810,18 @@
 			"scriptT": 2
 		}
 	},
+	"3DM - 搜索": {
+		"host": "so.3dmgame.com",
+		"url": "/keyword=/",
+		"pager": {
+			"nextL": "span.curr+a",
+			"pageE": ".search_lis, .search_wrap>script[src='/p/js/pager.min.js'], .search_wrap>script:not([src])",
+			"scriptT": 2
+		},
+		"function": {
+			"aF": "setTimeout(function(f=fun){document.body.appendChild(document.createElement('script')).textContent = f.getXpath('//body/script[contains(text(),\"kkpager\")][last()]').textContent},500)"
+		}
+	},
 	"游侠网": {
 		"host": "www.ali213.net",
 		"url": "if (fun.getCSS('#after_this_page')) return true",
