@@ -3812,7 +3812,7 @@
 		}
 	},
 	"不死鸟": {
-		"host": "iao.su",
+		"host": ["iui.su","iao.su","hao.su","niao.su"],
 		"pager": {
 			"nextL": "li.next>a",
 			"pageE": "#index>article, #archive>article",
