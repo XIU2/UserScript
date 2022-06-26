@@ -4089,8 +4089,8 @@
 			"replaceE": ".ajax-pager"
 		}
 	},
-	"腾龙工作室 - 动态加载": {
-		"host": "www.tenlonstudio.com",
+	"腾龙工作室 / 阿酷杂货铺 - 动态加载": {
+		"host": ["www.tenlonstudio.com","www.coolexe.com"],
 		"url": "return (fun.lp() !== '/' && !fun.indexOF('.html'))",
 		"history": true,
 		"pager": {
