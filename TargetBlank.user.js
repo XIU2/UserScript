@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         新标签页打开链接
-// @version      1.0.8
+// @version      1.0.9
 // @author       X.I.U
 // @description  将网页中所有链接改为新标签页打开~
 // @match        *://*/*
@@ -11,6 +11,8 @@
 // @namespace    https://github.com/XIU2/UserScript
 // @supportURL   https://github.com/XIU2/UserScript
 // @homepageURL  https://github.com/XIU2/UserScript
+// @exclude      https://accounts.google.com/*
+// @exclude      https://accounts.google.com.hk/*
 // ==/UserScript==
 
 (function() {
