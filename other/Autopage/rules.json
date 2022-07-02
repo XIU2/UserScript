@@ -3469,15 +3469,6 @@
 			"replaceE": "#pagenavi"
 		}
 	},
-	"宝书网": {
-		"host": ["www.baoshuu.com","m.baoshuu.com"],
-		"url": "/\\/TXT\\/list/",
-		"pager": {
-			"nextL": "//div[@class='listl2' or @class='man_first']//a[text()='下一页']",
-			"pageE": ".listl2>ul, .man_first>ul",
-			"replaceE": ".listl2>dl, .man_first>dl"
-		}
-	},
 	"下书网": {
 		"host": "mip.xiashucom.com",
 		"url": "/\\/yue_/",
