@@ -326,9 +326,9 @@
                 }
                 if (DBSite.wp_article.pager.pageE != undefined) {console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站`); return 10;}
             }
-        } else if (getCSS('meta[name="template" i][content="handsome" i]')) {
+        } else if (getCSS('meta[name="template" i][content="handsome" i]') && getCSS('li.next>a')) {
                 console.info(`[自动无缝翻页] - 部分使用 Typecho 的网站 (handsome)`); return 12;
-        } else if (getCSS('meta[name="template" i][content="Mirages" i]')) {
+        } else if (getCSS('meta[name="template" i][content="Mirages" i]') && getCSS('li.next>a')) {
                 console.info(`[自动无缝翻页] - 部分使用 Typecho 的网站 (Mirages)`); return 13;
 
         } else if (getCSS('.stui-page, .stui-page__item') && getCSS('li.active.hidden-xs+li.hidden-xs>a') && getCSS('.stui-vodlist')) {
@@ -512,7 +512,7 @@ function: {
             typecho_handsome: {
                 blank: 3,
                 pager: {
-                    nextL: 'li.next > a',
+                    nextL: 'li.next>a',
                     pageE: '.blog-post, .post-list',
                     replaceE: '.page-navigator'
                 }
@@ -520,7 +520,7 @@ function: {
             typecho_mirages: {
                 blank: 3,
                 pager: {
-                    nextL: 'li.next > a',
+                    nextL: 'li.next>a',
                     pageE: '#index>article, #archive>article',
                     scriptT: 3,
                     replaceE: '.page-navigator'
