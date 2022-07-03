@@ -3766,15 +3766,6 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
-	"不死鸟": {
-		"host": ["iui.su","iao.su","hao.su","niao.su"],
-		"pager": {
-			"nextL": "li.next>a",
-			"pageE": "#index>article, #archive>article",
-			"replaceE": "ol.page-navigator",
-			"scriptT": 3
-		}
-	},
 	"分享者 - 搜索页": {
 		"host": "www.sharerw.com",
 		"url": "return (fun.lp() == '/search.php')",

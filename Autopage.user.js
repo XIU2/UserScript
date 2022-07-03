@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.0.14
+// @version      6.0.15
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -326,10 +326,10 @@
                 }
                 if (DBSite.wp_article.pager.pageE != undefined) {console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站`); return 10;}
             }
-        } else if (getCSS('meta[name="generator" i][content*="Typecho" i]')) {
-            if (getCSS('li.next > a') && getCSS('.blog-post, .post-list') && getCSS('.page-navigator')) {
+        } else if (getCSS('meta[name="template" i][content="handsome" i]')) {
                 console.info(`[自动无缝翻页] - 部分使用 Typecho 的网站 (handsome)`); return 12;
-            }
+        } else if (getCSS('meta[name="template" i][content="Mirages" i]')) {
+                console.info(`[自动无缝翻页] - 部分使用 Typecho 的网站 (Mirages)`); return 13;
 
         } else if (getCSS('.stui-page, .stui-page__item') && getCSS('li.active.hidden-xs+li.hidden-xs>a') && getCSS('.stui-vodlist')) {
             console.info(`[自动无缝翻页] - 部分影视网站`); return 300;
@@ -376,6 +376,8 @@
                     curSite = DBSite.wp_article_post; break;
                 case 12: // < 部分使用 Typecho 的网站 (handsome) >
                     curSite = DBSite.typecho_handsome; break;
+                case 13: // < 部分使用 Typecho 的网站 (Mirages) >
+                    curSite = DBSite.typecho_mirages; break;
                 case 200: // < 所有使用 笔趣阁 1 模板的小说网站 >
                     DBSite.biquge1.url(); break;
                 case 201: // < 所有使用 笔趣阁 2 - 手机版 模板的小说网站 >
@@ -474,8 +476,7 @@ function: {
                 pager: {
                     type: 2,
                     isHidden: true,
-                    interval: 1000,
-                    scrollD: 2000
+                    interval: 1000
                 }
             }, //           部分自带 自动无缝翻页 的网站
             wp_article: {
@@ -513,10 +514,18 @@ function: {
                 pager: {
                     nextL: 'li.next > a',
                     pageE: '.blog-post, .post-list',
-                    replaceE: '.page-navigator',
-                    scrollD: 3000
+                    replaceE: '.page-navigator'
                 }
             }, //   部分使用 Typecho 的网站 (handsome)
+            typecho_mirages: {
+                blank: 3,
+                pager: {
+                    nextL: 'li.next > a',
+                    pageE: '#index>article, #archive>article',
+                    scriptT: 3,
+                    replaceE: '.page-navigator'
+                }
+            }, //   部分使用 Typecho 的网站 (Mirages)
             biquge1: {
                 url: ()=> {curSite = DBSite.biquge1;xs_bF(getAllCSS('.content > #content'),[/<br>.{0,10}秒记住.+$/, '']);},
                 style: 'img, .posterror, a[href*="posterror()"], [style*="background"][style*="url("]:not(html):not(body), #content > *:not(br):not(p) {display: none !important;}',
@@ -563,8 +572,7 @@ function: {
                     nextL: '#pb_next, .url_next',
                     pageE: '#txt, .txt',
                     insertP: ['#txt, .txt', 6],
-                    replaceE: '.chapter-control, .chapter-page-btn',
-                    scrollD: 2000
+                    replaceE: '.chapter-control, .chapter-page-btn'
                 }
             }, //          笔趣阁 3 - 手机版 模板的小说网站
             biquge3: {
@@ -704,8 +712,7 @@ function: {
                 pager: {
                     nextL: '.pagination li.next a[rel="next"], .topic-actions .pagination strong~a',
                     pageE: '.forumbg:not(.announcement) ul.topiclist.topics > li',
-                    replaceE: '.action-bar .pagination, .topic-actions .pagination',
-                    scrollD: 2000
+                    replaceE: '.action-bar .pagination, .topic-actions .pagination'
                 }
             }, //              phpBB 论坛 - 帖子列表
             phpbb_post: {
@@ -713,16 +720,14 @@ function: {
                 pager: {
                     nextL: '.pagination li.next a[rel="next"], .topic-actions .pagination strong~a',
                     pageE: 'div.post[id], div.post[id]+hr',
-                    replaceE: '.action-bar .pagination, .topic-actions .pagination',
-                    scrollD: 2000
+                    replaceE: '.action-bar .pagination, .topic-actions .pagination'
                 }
             }, //         phpBB 论坛 - 帖子内
             phpbb_search: {
                 pager: {
                     nextL: '.pagination li.next a[rel="next"], .topic-actions .pagination strong~a',
                     pageE: 'div.search.post',
-                    replaceE: '.action-bar .pagination, .pagination',
-                    scrollD: 2000
+                    replaceE: '.action-bar .pagination, .pagination'
                 }
             }, //       phpBB 论坛 - 搜索页
             xenforo: {
@@ -963,8 +968,7 @@ function: {
                     insertP: ['#cp_img', 3],
                     insertE: mangabz_insertE,
                     replaceE: 'p.top-title, body > .container > div:not([id])',
-                    interval: 500,
-                    scrollD: 2000
+                    interval: 500
                 }
             }, //           Mangabz 漫画
             mangabz_list: {
@@ -993,8 +997,7 @@ function: {
                     insertP: ['#barChapter,#cp_img', 3],
                     insertE: dm5_insertE,
                     replaceE: '.view-paging > .container, .rightToolBar',
-                    interval: 500,
-                    scrollD: 2000
+                    interval: 500
                 }
             }, //               动漫屋
             xmanhua: {
