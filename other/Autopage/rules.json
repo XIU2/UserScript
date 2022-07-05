@@ -6347,6 +6347,19 @@
 			"replaceE": ".paging"
 		}
 	},
+	"微图坊": {
+        "host": "www.v2ph.com",
+        "url": "/^\\/album\\//",
+        "style": ".album-photo, .photos-list img {opacity: 1 !important; position: unset !important; padding: 0 !important;}",
+        "pager": {
+            "nextL": ".active.page-item+li>a",
+            "pageE": ".album-photo",
+            "replaceE": ".pagination"
+        },
+        "function": {
+            "bF": "return fun.src_bF(pageE)"
+        }
+    },
 	"美女目录网": {
 		"host": "www.mnmulu.com",
 		"url": "/^\\/(index|photos)\\//",
