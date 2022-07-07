@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.1.2
+// @version      2.1.3
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @description:zh-TW  移除登錄彈窗、屏蔽首頁視頻、默認收起回答、快捷收起回答/評論、快捷回到頂部、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化搜索熱門、淨化標題消息、置頂顯示時間、完整問題時間、區分問題文章、默認高清原圖、默認站外直鏈...
@@ -274,7 +274,7 @@ function collapsedNowAnswer(selectors) {
             } else {
 
                 // 悬浮的 [收起评论]（此时正在浏览评论内容 [中间区域]）
-                if (document.querySelector('.CommentCollapseButton')) {document.querySelector('.CommentCollapseButton').click();console.log('asfaf')}
+                //if (getXpath('//button[text()="收起评论"]',document.querySelector('.Comments-container'))) {getXpath('//button[text()="收起评论"]',document.querySelector('.Comments-container')).click();console.log('asfaf')}
 
                 let answerCollapseButton_ = false;
                 for (let el of document.querySelectorAll('.ContentItem-rightButton[data-zop-retract-question]')) { // 遍历所有回答底部的 [收起] 按钮
@@ -283,7 +283,11 @@ function collapsedNowAnswer(selectors) {
                         let commentCollapseButton = el.parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                         // 如果展开了评论，就收起评论
                         //console.log('333')
-                        if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) commentCollapseButton.click();
+                        //if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) commentCollapseButton.click();
+                        if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) {
+                            commentCollapseButton.click();
+                            if (!isElementInViewport(commentCollapseButton)) scrollTo(0,el.offsetTop+el.offsetHeight-30)
+                        }
                         //console.log('444')
                         el.click() // 再去收起回答
                         answerCollapseButton_ = true; // 如果找到并点击收起了，就没必要执行下面的代码了（可视区域中没有 [收起回答] 时）
@@ -314,7 +318,7 @@ function collapsedNowAnswer(selectors) {
             // 下面这段只针对 [收起评论]（如果展开了的话）
             let commentCollapseButton_ = false, commentCollapseButton__ = false;
             // 悬浮的 [收起评论]（此时正在浏览评论内容 [中间区域]）
-            let commentCollapseButton = document.querySelector('.CommentCollapseButton')
+            let commentCollapseButton = getXpath('//button[text()="收起评论"]',document.querySelector('.Comments-container'))
             if (commentCollapseButton) {
                 //console.log('777')
                 commentCollapseButton.click();
@@ -603,26 +607,18 @@ function blockUsers(type) {
             for (const mutation of mutationsList) {
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType != 1) return
-                    let item = target.querySelector('img.Avatar.UserLink-avatar')
+                    let item = target.querySelector('img.Avatar[width="24"]')
                     if (item) {
+                        //console.log(item)
                         menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
+                            console.log(item.alt,item1)
                             if (item.alt === item1) { // 找到就删除该搜索结果
-                                if (findParentElement(item, 'NestComment--rootComment', true)) {
-                                    findParentElement(item, 'NestComment--rootComment', true).hidden = true;;
-                                } else if (findParentElement(item, 'NestComment--child', true)){
-                                    findParentElement(item, 'NestComment--child', true).hidden = true;;
-                                } else if (findParentElement(item, 'NestComment', true)){
-                                    findParentElement(item, 'NestComment', true).hidden = true;;
-                                } else if (findParentElement(item, 'CommentItemV2', true)){
-                                    findParentElement(item, 'CommentItemV2', true).hidden = true;;
-                                } else if (findParentElement(item, 'CommentItemV2 CommentItemV2--highlighted', true)){
-                                    findParentElement(item, 'CommentItemV2 CommentItemV2--highlighted', true).hidden = true;;
-                                }
+                                item.parentElement.parentElement.style.display = "none";
                             }
                         })
 
                         // 添加屏蔽用户按钮（点赞、回复等按钮后面）
-                        if (item) {
+                        /*if (item) {
                             let footer = findParentElement(item, 'CommentItemV2-meta', true).parentElement.querySelector('.CommentItemV2-metaSibling > .CommentItemV2-footer'),
                                 userid = item.parentElement;
                             if (userid && footer && !footer.lastElementChild.dataset.name) {
@@ -630,7 +626,7 @@ function blockUsers(type) {
                                 footer.insertAdjacentHTML('beforeend',`<button type="button" data-name="${item.alt}" data-userid="${userid}" class="Button CommentItemV2-hoverBtn Button--plain"><span style="display: inline-flex; align-items: center;">&#8203;<svg class="Zi Zi--Like" fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="transform: rotate(180deg); margin-right: 5px;"><path d="M18.376 5.624c-3.498-3.499-9.254-3.499-12.752 0-3.499 3.498-3.499 9.254 0 12.752 3.498 3.499 9.254 3.499 12.752 0 3.499-3.498 3.499-9.14 0-12.752zm-1.693 1.693c2.37 2.37 2.596 6.094.678 8.69l-9.367-9.48c2.708-1.919 6.32-1.58 8.69.79zm-9.48 9.48c-2.37-2.37-2.595-6.095-.676-8.69l9.48 9.48c-2.822 1.918-6.433 1.58-8.803-.79z" fill-rule="evenodd"></path></svg></span>屏蔽用户</button>`);
                                 footer.lastElementChild.onclick = function(){blockUsers_button_add(this.dataset.name, this.dataset.userid, false)}
                             }
-                        }
+                        }*/
                     }
                 }
             }
@@ -638,6 +634,7 @@ function blockUsers(type) {
         const observer = new MutationObserver(callback);
         observer.observe(document, { childList: true, subtree: true });
     }
+
 
     // 添加屏蔽用户按钮（用户信息悬浮框中）
     function blockUsers_button() {
@@ -940,7 +937,7 @@ function blockType(type) {
                 if (findParentElement(titleA, 'ContentItem AnswerItem').querySelector('.VideoAnswerPlayer')) {
                     if (menu_value('menu_blockTypeVideo')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;
                 }
-            } else if (titleA.href.indexOf('/education/video-course/') > -1) { // 如果是視頻課程 
+            } else if (titleA.href.indexOf('/education/video-course/') > -1) { // 如果是視頻課程
                 if (menu_value('menu_blockTypeVideo')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;
             } else if (titleA.href.indexOf('zhuanlan.zhihu.com') > -1) { // 如果是文章
                 if (menu_value('menu_blockTypeArticle')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;
@@ -1214,14 +1211,8 @@ function closeFloatingComments() {
         for (const mutation of mutationsList) {
             for (const target of mutation.addedNodes) {
                 if (target.nodeType != 1) return
-                if (target.querySelector('.Modal-backdrop')) {
-                    document.querySelector('.Modal-backdrop').onclick = function(event){
-                        if (event.target == this) {
-                            let button = document.querySelector('.Button.Modal-closeButton.Button--plain');
-                            if (button) button.click();
-                        }
-                    }
-                }
+                let button = document.querySelector('button[aria-label="关闭"]');
+                if (button) {button.parentElement.parentElement.onclick = function(event){if (event.target.parentElement == this) {button.click();}}}
             }
         }
     };
