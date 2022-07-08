@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.0.6
+// @version      2.0.7
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -29,17 +29,18 @@
 (function() {
     'use strict';
     var backColor = '#ffffff', fontColor = '#888888', menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'), menu_menu_raw_fast_ID, menu_feedBack_ID;
-    const download_url = [
+    const download_url_us = [
         //['https://pd.zwc365.com/seturl/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        ['https://ghdl.z-o.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [feizhuqwq.com] 提供'],
         ['https://gh2.yanqishui.work/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@HongjieCN] 提供'],
         ['https://gh.ddlc.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@mtr-static-official] 提供'],
         ['https://gh.gh2233.ml/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@X.I.U/XIU2] 提供'],
-        //['https://gh.api.99988866.xyz/https://github.com', '美国', '[美国 Cloudflare CDN]'],
-        //['https://gh-proxy-misakano7545.koyeb.app/https://github.com', '美国', '[美国 Cloudflare CDN]'],
-        //['https://cdn.githubjs.cf', '美国', '[美国 Cloudflare CDN]'],
+        ['https://gh.api.99988866.xyz/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        ['https://gh-proxy-misakano7545.koyeb.app/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        ['https://cdn.githubjs.cf', '美国', '[美国 Cloudflare CDN]'],
         //['https://download.cithub.icu', '美国', '[美国 洛杉矶]', 'https://archive.cithub.icu'],
         ['https://download.xn--p8jhe.tw', '美国', '[美国 圣何塞]', 'https://archive.xn--p8jhe.tw'],
-        //['https://git.yumenaka.net/https://github.com', '美国', '[美国 圣何塞]'],
+    ], download_url = [
         ['https://ghproxy.futils.com/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [F 搜] 提供（存在限速）'],
         ['https://download.fastgit.org', '日本', '[日本 东京] - 该公益加速源由 [FastGit] 提供', 'https://archive.fastgit.org'],
         ['https://mirror.ghproxy.com/https://github.com', '日本', '[日本 东京] - 该公益加速源由 [ghproxy] 提供'],
@@ -141,26 +142,34 @@
         if (location.pathname.indexOf('/releases')) {addRelease();}
     });
 
+    // download_url 加速源随机
+    function get_New_download_url() {
+        let a = Math.floor(Math.random()*download_url_us.length), b, new_download_url=[]
+        do {b = Math.floor(Math.random()*download_url_us.length)}
+        while (b == a);
+        return [download_url_us[a],download_url_us[b]].concat(download_url)
+    }
 
     // Release
     function addRelease() {
-        let html = document.querySelectorAll('.Box-footer'); if (html.length == 0) return
+        let html = document.querySelectorAll('.Box-footer'); if (html.length == 0 || location.pathname.indexOf('/releases') == -1) return
         let divDisplay = 'margin-left: -90px;';
         if (document.documentElement.clientWidth > 755) {divDisplay = 'margin-top: -3px;margin-left: 8px;display: inherit;';}; // 调整小屏幕时的样式
+        let new_download_url = get_New_download_url();
         for (const current of html) {
             if (current.querySelector('.XIU2-RS')) continue
             current.querySelectorAll('li.Box-row a').forEach(function (_this) {
                 let href = _this.href.split(location.host),
                     url = '', _html = `<div class="XIU2-RS" style="${divDisplay}">`;
 
-                for (let i=0;i<download_url.length;i++) {
-                    if (download_url[i][3] !== undefined && url.indexOf('/archive/') !== -1) {
-                        url = download_url[i][3] + href[1]
+                for (let i=0;i<new_download_url.length;i++) {
+                    if (new_download_url[i][3] !== undefined && url.indexOf('/archive/') !== -1) {
+                        url = new_download_url[i][3] + href[1]
                     } else {
-                        url = download_url[i][0] + href[1]
+                        url = new_download_url[i][0] + href[1]
                     }
                     if (location.host !== 'github.com') url = url.replace(location.host,'github.com')
-                    _html += `<a style="${style[0]}" class="btn" href="${url}" title="${download_url[i][2]}" rel="noreferrer noopener nofollow">${download_url[i][1]}</a>`
+                    _html += `<a style="${style[0]}" class="btn" href="${url}" title="${new_download_url[i][2]}" rel="noreferrer noopener nofollow">${new_download_url[i][1]}</a>`
                 }
                 _this.parentElement.nextElementSibling.insertAdjacentHTML('beforeend', _html + '</div>');
             });
@@ -173,18 +182,17 @@
         if (document.querySelector('.XIU2-DZ')) return
         let html = document.querySelector('.dropdown-menu.dropdown-menu-sw.p-0 ul li:last-child');if (!html) return
         let href = html.getElementsByTagName('a')[0].href,
-            url = '', _html = '';
+            url = '', _html = '', new_download_url = get_New_download_url();
+        for (let i=0;i<new_download_url.length;i++) {
+            if (new_download_url[i][3] === '') continue
 
-        for (let i=0;i<download_url.length;i++) {
-            if (download_url[i][3] === '') continue
-
-            if (download_url[i][3] !== undefined) {
-                url = download_url[i][3] + href.split(location.host)[1]
+            if (new_download_url[i][3] !== undefined) {
+                url = new_download_url[i][3] + href.split(location.host)[1]
             } else {
-                url = download_url[i][0] + href.split(location.host)[1]
+                url = new_download_url[i][0] + href.split(location.host)[1]
             }
             if (location.host !== 'github.com') url = url.replace(location.host,'github.com')
-            _html += `<li class="Box-row Box-row--hover-gray p-3 mt-0 XIU2-DZ"><a class="d-flex flex-items-center color-fg-default text-bold no-underline" rel="noreferrer noopener nofollow" href="${url}" title="${download_url[i][2]}">${svg[0]}Download ZIP ${download_url[i][1]}</a></li>`
+            _html += `<li class="Box-row Box-row--hover-gray p-3 mt-0 XIU2-DZ"><a class="d-flex flex-items-center color-fg-default text-bold no-underline" rel="noreferrer noopener nofollow" href="${url}" title="${new_download_url[i][2]}">${svg[0]}Download ZIP ${new_download_url[i][1]}</a></li>`
         }
         html.insertAdjacentHTML('afterend', _html);
     }
