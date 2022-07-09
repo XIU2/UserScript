@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.1.0
+// @version      6.1.1
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -332,7 +332,7 @@
         } else if (getCSS('meta[name="template" i][content="Mirages" i]') && getCSS('.page-navigator')) {
                 console.info(`[自动无缝翻页] - 部分使用 Typecho 的网站 (Mirages)`); return 13;
 
-        } else if (getCSS('.stui-page, .stui-page__item') && getCSS('li.active.hidden-xs+li.hidden-xs>a') && getCSS('.stui-vodlist')) {
+        } else if (getCSS('.stui-page, .stui-page__item, #long-page, .myui-page, .myui-page__item')) {
             console.info(`[自动无缝翻页] - 部分影视网站`); return 300;
 
         } else if (getCSS('.ArticleImageBox, .PictureList') && getCSS('.article_page') && getXpath('//div[contains(@class,"article_page")]//a[text()="下一页"]')) {
@@ -592,13 +592,12 @@ function: {
                 }
             }, //            笔趣阁 4 模板的小说网站
             yingshi: {
-                style: 'div.stui-page__all {display: none !important;}',
+                style: 'div.stui-page__all, div.myui-page__all {display: none !important;}',
                 blank: 3,
                 pager: {
-                    nextL: 'li.active.hidden-xs+li.hidden-xs>a',
-                    pageE: '.stui-vodlist',
-                    replaceE: '.stui-page, .stui-page__item',
-                    scrollD: 1000
+                    nextL: '.stui-page li.active+li>a, .stui-page__item li.active+li>a, #long-page .active+li>a, .myui-page .visible-xs+li>a',
+                    pageE: '.stui-vodlist, .myui-vodlist>li, #content, #searchList',
+                    replaceE: '.stui-page, .stui-page__item, #long-page, .myui-page, .myui-page__item'
                 },
                 function: {
                     bF: src_bF,

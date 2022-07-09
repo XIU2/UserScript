@@ -2179,18 +2179,6 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
-	"gimy 剧迷": {
-		"host": ["gimy.app","gimytv.app"],
-		"url": "/^\\/(cat|genre|search)\\//",
-		"pager": {
-			"nextL": "#long-page .active+li>a, .myui-page .visible-xs+li>a",
-			"pageE": "#content, .myui-vodlist>li, #searchList",
-			"replaceE": "#long-page, .myui-page"
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE, [1,'a[data-original]','data-original'])"
-		}
-	},
 	"ZzzFun 动漫": {
 		"host": "www.zzzfun.com",
 		"url": "/^\\/vod_(type|show|search)/",
