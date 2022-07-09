@@ -123,7 +123,7 @@
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
     }
-console.log('1111111111111111111111111111111111111111111111')
+
     getRulesUrl();
     registerMenuCommand();
     if (menuId.length < 4) {return}
