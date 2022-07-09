@@ -2328,7 +2328,7 @@
 		}
 	},
 	"初音社": {
-		"host": "www.mikuclub.cc",
+		"host": "www.mikuclub.online",
 		"url": "/^\\/[a-z]/",
 		"pager": {
 			"type": 2,
