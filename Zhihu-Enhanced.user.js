@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.1.4
+// @version      2.1.5
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @description:zh-TW  移除登錄彈窗、屏蔽首頁視頻、默認收起回答、快捷收起回答/評論、快捷回到頂部、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化搜索熱門、淨化標題消息、置頂顯示時間、完整問題時間、區分問題文章、默認高清原圖、默認站外直鏈...
@@ -295,7 +295,7 @@ function collapsedNowAnswer(selectors) {
                 }
                 // 针对完全看不到 [收起回答] 按钮时（如 [头部区域]，以及部分明明很长却不显示悬浮横条的回答）
                 if (!answerCollapseButton_) {
-                    for (let el of document.querySelectorAll('.List-item, .Card.AnswerCard')) { // 遍历所有回答主体元素
+                    for (let el of document.querySelectorAll('.List-item, .Card.AnswerCard, .Card.TopstoryItem')) { // 遍历所有回答主体元素
                         if (isElementInViewport_(el)) { // 判断该回答是否在可视区域内
                             // 固定的 [收起评论]（先看看是否展开评论，即存在 [收起评论] 按钮）
                             let commentCollapseButton = el.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
@@ -319,7 +319,7 @@ function collapsedNowAnswer(selectors) {
             // 悬浮的 [收起评论]（此时正在浏览评论内容 [中间区域]）
             let commentCollapseButton = getXpath('//button[text()="收起评论"]',document.querySelector('.Comments-container'))
             if (commentCollapseButton) {
-                //console.log('777')
+                //console.log('777', commentCollapseButton)
                 commentCollapseButton.click();
             } else { // 固定的 [收起评论]（此时正在浏览评论内容 [头部区域]）
                 let commentCollapseButton_1 = document.querySelectorAll('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type, .ContentItem-action > button.Button.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
