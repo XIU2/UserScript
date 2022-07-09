@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.0.18
+// @version      6.1.0
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -123,7 +123,7 @@
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
     }
-
+console.log('1111111111111111111111111111111111111111111111')
     getRulesUrl();
     registerMenuCommand();
     if (menuId.length < 4) {return}
@@ -182,16 +182,17 @@
         end:
         for (let now in DBSite) { // 遍历 对象
             if (!DBSite[now].host) continue; // 如果不存在则继续下一个循环
-            //console.log(DBSite[now].host)
             // 如果是 数组
+
             if (Array.isArray(DBSite[now].host)) {
 
                 for (let i of DBSite[now].host) { // 遍历 数组
+
                     // 针对自定义翻页规则中的正则
                     if (typeof i === 'string' && i.slice(0,1) === '/') i = new RegExp(i.slice(1,i.length-1))
                     if ((i instanceof RegExp && i.test(location.hostname)) || (typeof i === 'string' && i === location.hostname)) {
 
-                        if (self != top) {if (!DBSite[now].iframe) break end;} // 如果当前位于 iframe 框架下，就需要判断是否需要继续执行
+                        if (self != top) {if (!DBSite[now].iframe) continue end;} // 如果当前位于 iframe 框架下，就需要判断是否需要继续执行
                         if (DBSite[now].url) {
                             if (typeof DBSite[now].url == 'function') {
                                 DBSite[now].url();
@@ -219,7 +220,7 @@
                 if (typeof DBSite[now].host === 'string' && DBSite[now].host.slice(0,1) === '/') DBSite[now].host = new RegExp(DBSite[now].host.slice(1,DBSite[now].host.length-1))
                 if ((DBSite[now].host instanceof RegExp && DBSite[now].host.test(location.hostname)) || (typeof DBSite[now].host === 'string' && DBSite[now].host === location.hostname)) {
 
-                    if (self != top) {if (!DBSite[now].iframe) break;} // 如果当前位于 iframe 框架下，就需要判断是否需要继续执行
+                    if (self != top) {if (!DBSite[now].iframe) continue;} // 如果当前位于 iframe 框架下，就需要判断是否需要继续执行
                     if (DBSite[now].url) {
                         if (typeof DBSite[now].url == 'function') {
                             DBSite[now].url();
@@ -1927,13 +1928,10 @@ function: {
 
         // 创建 iframe
         let iframe = document.createElement('iframe');
-        if (location.hostname == 'www.cocomanga.com') {
-            iframe.style = 'position: absolute; width: 100%; height: 100%; border: none;';
-        } else {
-            iframe.style = 'position: absolute !important; width: 100% !important; height: 100% !important; border: none !important;';
-        }
         iframe.id = 'Autopage_iframe';
         iframe.src = src.replace(/#.+$/,'');
+
+        document.documentElement.appendChild(document.createElement('style')).textContent = 'iframe#Autopage_iframe {position: absolute !important; width: 100% !important; height: 100% !important; border: none !important;}';
 
         var beforeScrollTop = document.documentElement.scrollTop || document.body.scrollTop
         // 当滚动条到底部时（即完全显示 iframe 框架），隐藏当前页面的滚动条
@@ -1954,27 +1952,31 @@ function: {
                 document.documentElement.appendChild(newStyle);
 
                 // 恢复 iframe 的滚动条
-                if (iframe.contentWindow.document.querySelector('#Autopage_iframe-scroll-hidden')) iframe.contentWindow.document.querySelector('#Autopage_iframe-scroll-hidden').remove();
+                if (iframe.contentWindow.document.querySelectorAll('#Autopage_iframe-scroll-hidden')) iframe.contentWindow.document.querySelectorAll('#Autopage_iframe-scroll-hidden').forEach((o)=>{o.remove();});
 
                 // 给予 iframe 焦点
                 iframe.focus();
                 if (iframe.contentWindow.document.body) {iframe.contentWindow.document.body.focus(); iframe.contentWindow.document.body.click();}
             } else if (delta < 0 && scrollTop + clientHeight + 10 <= scrollHeight && getCSS('#Autopage_iframe-scroll')) {
                 getCSS('#Autopage_iframe-scroll').remove();
-
                 // 再次禁用 iframe 的滚动条
-                let newStyle = document.createElement('style'); newStyle.id = 'Autopage_iframe-scroll-hidden';
-                newStyle.textContent = 'html, body {overflow: hidden !important;}';
-                iframe.contentWindow.document.documentElement.appendChild(newStyle);
+                if (!iframe.contentWindow.document.getElementById('Autopage_iframe-scroll-hidden')) {
+                    let newStyle = document.createElement('style'); newStyle.id = 'Autopage_iframe-scroll-hidden';
+                    newStyle.textContent = 'html, body {overflow: hidden !important;}';
+                    iframe.contentWindow.document.documentElement.appendChild(newStyle);
+                }
             }
         }, false);
 
         // 加载完成后才继续
         iframe.onload = function() {
             // 暂时禁用 iframe 的滚动条
-            let newStyle = document.createElement('style'); newStyle.id = 'Autopage_iframe-scroll-hidden';
-            newStyle.textContent = 'html, body {overflow: hidden !important;}';
-            iframe.contentWindow.document.documentElement.appendChild(newStyle);
+            if (!getCSS('#Autopage_iframe-scroll') && !iframe.contentWindow.document.getElementById('Autopage_iframe-scroll-hidden')) {
+
+                let newStyle = document.createElement('style'); newStyle.id = 'Autopage_iframe-scroll-hidden';
+                newStyle.textContent = 'html, body {overflow: hidden !important;}';
+                iframe.contentWindow.document.documentElement.appendChild(newStyle);
+            }
 
             // 添加历史记录
             if (curSite.history === undefined) {
@@ -2007,10 +2009,11 @@ function: {
         let iframe = document.getElementById('Autopage_iframe');
         if (!iframe) {
             iframe = document.createElement('iframe');
-            iframe.style = 'position: absolute !important; top: -9999px !important; left: -9999px !important; width: 100% !important; height: 100% !important; border: none !important; z-index: -999 !important;';
             //iframe.sandbox = 'allow-same-origin allow-scripts allow-popups allow-forms';
             iframe.id = 'Autopage_iframe';
             iframe.src = src.replace(/#.+$/,'');
+
+            document.documentElement.appendChild(document.createElement('style')).textContent = 'iframe#Autopage_iframe {position: absolute !important; top: -9999px !important; left: -9999px !important; width: 100% !important; height: 100% !important; border: none !important; z-index: -999 !important;}';
         }
 
         // 加载完成后才继续
