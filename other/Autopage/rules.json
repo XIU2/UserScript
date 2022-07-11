@@ -2141,19 +2141,6 @@
 			"replaceE": ".pagination_wrap"
 		}
 	},
-	"嗯哩嗯哩/森之屋动漫": {
-		"host": ["enlienli.com","www.senfun.net"],
-		"url": "return (fun.indexOF('/show/') || fun.indexOF('/search') || (fun.indexOF('/type/') && fun.getCSS('#page')))",
-		"blank": 3,
-		"pager": {
-			"nextL": "a.page-number.page-next",
-			"pageE": ".module-items>*",
-			"replaceE": "#page"
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE)"
-		}
-	},
 	"核桃影院": {
 		"host": ["123456.li","video.tf"],
 		"url": "/^\\/category-/",

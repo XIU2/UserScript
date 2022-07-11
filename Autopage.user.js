@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.1.1
+// @version      6.1.2
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -334,9 +334,11 @@
 
         } else if (getCSS('.stui-page, .stui-page__item, #long-page, .myui-page, .myui-page__item')) {
             console.info(`[自动无缝翻页] - 部分影视网站`); return 300;
+        } else if (getCSS('#page') && getCSS('.module-items')) {
+            console.info(`[自动无缝翻页] - 部分影视网站 2`); return 301;
 
         } else if (getCSS('.ArticleImageBox, .PictureList') && getCSS('.article_page') && getXpath('//div[contains(@class,"article_page")]//a[text()="下一页"]')) {
-            console.info(`[自动无缝翻页] - 部分美女图站 - 手机版`); return 301;
+            console.info(`[自动无缝翻页] - 部分美女图站 - 手机版`); return 302;
 
         } else if (getCSS('.content > #content') && getXpath('//div[contains(@class,"page_chapter")]//a[text()="下一章"]')) {
             console.info(`[自动无缝翻页] - <笔趣阁 1> 模板的小说网站`); return 200;
@@ -347,7 +349,7 @@
         } else if ((getCSS('meta[name="description" i][content*="小说"], meta[name="description" i][content*="章节"], meta[name="description" i][content*="阅读"]') || location.hostname.indexOf('biqu') > -1 || document.title.indexOf('笔趣阁') > -1 || document.title.indexOf('小说') > -1) && (getCSS('[id="content" i], [class~="content" i], [id="chaptercontent" i], [class~="chaptercontent" i], [id="booktext" i], [id="txtcontent" i]') && getXpath('//a[contains(text(), "下一章") or contains(text(), "下一页")]'))) {
             console.info(`[自动无缝翻页] - <笔趣阁 4> 模板的小说网站`); return 203;
         } else if (getCSS('meta[content^=SearXNG i], link[href*=SearXNG i], script[src*=SearXNG i]')) {
-            console.info(`[自动无缝翻页] - <SearXNG> 元搜索引擎`); return 302;
+            console.info(`[自动无缝翻页] - <SearXNG> 元搜索引擎`); return 303;
         }
         return 0;
     }
@@ -389,9 +391,11 @@
                     curSite = DBSite.biquge3; break;
                 case 300: // < 部分影视网站 >
                     curSite = DBSite.yingshi; break;
-                case 301: // < 部分美女图站 - 手机版 >
+                case 301: // < 部分影视网站 2 >
+                    curSite = DBSite.yingshi2; break;
+                case 302: // < 部分美女图站 - 手机版 >
                     curSite = DBSite.meinvtu_m; break;
-                case 302: // < SearXNG 元搜索引擎 >
+                case 303: // < SearXNG 元搜索引擎 >
                     document.cookie='infinite_scroll=1; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';
                     document.cookie='results_on_new_tab=1; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';
                     break;
@@ -526,7 +530,7 @@ function: {
                     scriptT: 3,
                     replaceE: '.page-navigator'
                 }
-            }, //   部分使用 Typecho 的网站 (Mirages)
+            }, //    部分使用 Typecho 的网站 (Mirages)
             biquge1: {
                 url: ()=> {curSite = DBSite.biquge1;xs_bF(getAllCSS('.content > #content'),[/<br>.{0,10}秒记住.+$/, '']);},
                 style: 'img, .posterror, a[href*="posterror()"], [style*="background"][style*="url("]:not(html):not(body), #content > *:not(br):not(p) {display: none !important;}',
@@ -604,6 +608,17 @@ function: {
                     bFp: [1, '[data-original]', 'data-original']
                 }
             }, //            部分影视网站
+            yingshi2: {
+                blank: 3,
+                pager: {
+                    nextL: '#page a[title="下一页"], a.page-number.page-next',
+                    pageE: '.module-items>*',
+                    replaceE: '#page'
+                },
+                function: {
+                    bF: src_bF
+                }
+            }, //           部分影视网站 2
             meinvtu_m: {
                 history: true,
                 blank: 3,
