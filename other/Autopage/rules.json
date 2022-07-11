@@ -3337,15 +3337,14 @@
 			"aF": "let _img='',imgArr=base64_decode(qTcms_S_m_murl_e).split('$qingtiandy$'); for (let i=0;i<imgArr.length;i++){_img += `<img src=\"${imgArr[i]}\">`;}; fun.getCSS('#qTcms_Pic_middle td').insertAdjacentHTML('beforeend', _img);"
 		}
 	},
-	"360 漫画 - 手机版": {
-		"host": "m.100fanwo.com",
+	"360 漫画 / 好看的漫画网 - 手机版": {
+		"host": ["m.100fanwo.com","m.cnanjie.com"],
 		"url": "/\\/\\d+(-\\d+)?\\.html$/",
 		"style": ".erPag img {padding: 0!important;border: none!important;display: block;min-width: 100%;max-width: 100%;height: 100%;margin: auto;margin-bottom: -1px;} body>*:not(.UnderPage), .UnderPage>*:not(.erPag):not(.Introduct_Sub):not(.title3):not(.control_bottom) {display: none !important;}",
 		"pager": {
 			"nextL": "id('action')//a[text()='下一页' or text()='下一章']",
 			"pageE": ".erPag",
-			"replaceE": "#action",
-			"scrollD": 1500
+			"replaceE": "#action"
 		},
 		"function": {
 			"bF": "pageE[0].innerHTML = pageE[0].innerHTML.replaceAll('mip-img','img');return pageE"
