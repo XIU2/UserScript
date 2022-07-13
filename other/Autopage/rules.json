@@ -6103,7 +6103,7 @@
 		}
 	},
 	"宅男女神": {
-		"host": ["www.fnvshen.com","www.haonvshen.com"],
+		"host": ["www.gnvshen.com","www.fnvshen.com","www.haonvshen.com"],
 		"url": "/^\\/(g|gallery|tag)\\//",
 		"pager": {
 			"type": 3,
