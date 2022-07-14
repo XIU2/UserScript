@@ -3320,9 +3320,9 @@
 			"replaceE": "ul.pagination"
 		}
 	},
-	"爱漫之家": {
-		"host": "www.52fuman.xyz",
-		"url": "if (fun.indexOF(/\\/\\d+\\.html$/)) {let _img='',imgArr=qTcms_S_m_murl.split('$qingtiandy$'); for (let i=0;i<imgArr.length;i++){_img += `<img src=\"${imgArr[i]}\">`;}; fun.getCSS('#qTcms_Pic_middle td').insertAdjacentHTML('beforeend', _img); return true}",
+	"爱漫之家 / 733 动漫": {
+		"host": ["www.52fuman.xyz","www.733.so"],
+		"url": "if (fun.indexOF(/\\/\\d+\\.html$/)) {let _img='',imgArr=qTcms_S_m_murl.split('$qingtiandy$'); for (let i=0;i<imgArr.length;i++){if(location.hostname == 'www.733.so'){imgArr[i]=f_qTcms_Pic_curUrl_realpic(imgArr[i])};_img += `<img src=\"${imgArr[i]}\">`;}; fun.getCSS('#qTcms_Pic_middle td').innerHTML=_img; return true}",
 		"style": "#sider-left, #sider-right, .tc.w996 {display: none !important;} #images{min-height: 6000px !important;} #qTcms_Pic_middle img {display: inline-block !important;min-height: 400px;margin: 0 auto !important;border: none !important;padding: 0 !important;max-width: 99% !important;height: auto !important;}",
 		"history": true,
 		"pager": {
@@ -3334,7 +3334,7 @@
 			"scrollD": 4000
 		},
 		"function": {
-			"aF": "let _img='',imgArr=base64_decode(qTcms_S_m_murl_e).split('$qingtiandy$'); for (let i=0;i<imgArr.length;i++){_img += `<img src=\"${imgArr[i]}\">`;}; fun.getCSS('#qTcms_Pic_middle td').insertAdjacentHTML('beforeend', _img);"
+			"aF": "let _img='',imgArr=base64_decode(qTcms_S_m_murl_e).split('$qingtiandy$'); for (let i=0;i<imgArr.length;i++){if(location.hostname == 'www.733.so'){imgArr[i]=f_qTcms_Pic_curUrl_realpic(imgArr[i])};_img += `<img src=\"${imgArr[i]}\">`;}; fun.getCSS('#qTcms_Pic_middle td').insertAdjacentHTML('beforeend', _img);"
 		}
 	},
 	"360 漫画 / 好看的漫画网 - 手机版": {
