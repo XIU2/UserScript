@@ -2251,7 +2251,7 @@
 		}
 	},
 	"AGE 动漫": {
-		"host": ["www.agemys.com","www.age.tv"],
+		"host": ["/^www\\.agemys\\..+$/","www.age.tv"],
 		"url": "return (fun.indexOF('/catalog/') || fun.lp() == '/search' || fun.lp() == '/recommend' || fun.lp() == '/update')",
 		"blank": 3,
 		"pager": {
@@ -2261,7 +2261,7 @@
 		}
 	},
 	"AGE 动漫 - 排行榜": {
-		"host": ["www.agemys.com","www.age.tv"],
+		"host": ["/^www\\.agemys\\..+$/","www.age.tv"],
 		"url": "return (fun.lp() == '/rank')",
 		"blank": 3,
 		"pager": {
