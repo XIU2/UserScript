@@ -4766,7 +4766,7 @@
 	},
 	"奈斯搜索": {
 		"host": "www.niceso.fun",
-		"url": "return (fun.lp()!='/'&&!fun.indexOF('/file/'))",
+		"url": "return fun.getCSS('.page-num-box')",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.btn:not([href])+a.btn.btn-line",
