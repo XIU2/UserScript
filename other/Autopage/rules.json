@@ -426,7 +426,7 @@
 	},
 	"豆瓣 - 小组/讨论区 - 帖子内": {
 		"host": ["www.douban.com", "movie.douban.com"],
-		"url": "return (fun.indexOF('/group/topic/') || fun.indexOF(/^\\/subject\\/\\d+\\/discussion\\/\\d+/))",
+		"url": "return (fun.indexOF('/group/topic/') || fun.indexOF(/^\\/subject\\/.+\\/discussion\\/\\d+/))",
 		"thread": true,
 		"pager": {
 			"nextL": "link[rel='next']",
@@ -437,7 +437,7 @@
 	},
 	"豆瓣 - 小组/讨论区": {
 		"host": ["www.douban.com", "movie.douban.com"],
-		"url": "/^\\/(group|subject)\\/\\d+\\/discussion/",
+		"url": "/^\\/(group|subject)\\/.+\\/discussion/",
 		"blank": 3,
 		"pager": {
 			"nextL": "link[rel='next']",
