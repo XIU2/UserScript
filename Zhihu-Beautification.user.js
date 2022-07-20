@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.4.9
+// @version      1.5.0
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
+// @exclude      https://www.zhihu.com/signin*
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
