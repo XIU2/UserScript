@@ -2196,26 +2196,6 @@
 			"replaceE": ".pages"
 		}
 	},
-	"樱花动漫": {
-		"host": ["www.imomoe.la","www.imomoe.live"],
-		"url": "return (fun.indexOF('/list/'))",
-		"blank": 3,
-		"pager": {
-			"nextL": "//div[@class='pages']/a[text()='下一页']",
-			"pageE": "#contrainer>.img> ul>li",
-			"replaceE": ".pages"
-		}
-	},
-	"樱花动漫 - 搜索页等": {
-		"host": ["www.imomoe.la","www.imomoe.live"],
-		"url": "return (fun.lp() == '/so.asp' || fun.lp() == '/search.asp')",
-		"blank": 3,
-		"pager": {
-			"nextL": "//div[@class='pages']/a[text()='下一页']",
-			"pageE": "#contrainer .fire .pics>ul>li",
-			"replaceE": ".pages"
-		}
-	},
 	"怡萱动漫": {
 		"host": "www.yxdm.li",
 		"url": "return (fun.indexOF('/search') || fun.indexOF('/category') || fun.indexOF('/resource'))",
@@ -5867,6 +5847,15 @@
 			"nextL": "a.next",
 			"pageE": "#image-container img",
 			"replaceE": ".reader-pagination"
+		}
+	},
+	"hitomi": {
+		"host": "hitomi.la",
+		"url": "if(fun.indexOF('/reader/')){setTimeout(()=>{let _img='<div id=\"comicImages\" tabindex=\"1\" class=\"fitVertical\">';for (let i=0;i<2;i++){_img += `<img src=\"${url_from_url_from_hash(galleryinfo['id'], our_galleryinfo[i], 'webp', undefined, 'a')}\">`;};document.getElementById('comicImages').outerHTML = _img+'</div>';window.imgIndex = 1;},500);return true;}",
+		"style": "body {height: auto !important; overflow: auto !important;} #comicImages.fitVertical img {margin: 0 auto;display: block;max-height: calc(1000px - 41px);} .navbar-static-top {display: none;}",
+		"pager": {
+			"nextL": "js;if(window.imgIndex +1 >= our_galleryinfo.length){return}; document.getElementById('comicImages').insertAdjacentHTML('beforeend', `<img src=\"${url_from_url_from_hash(galleryinfo['id'], our_galleryinfo[window.imgIndex], 'webp', undefined, 'a')}\">`); window.imgIndex+=1;",
+			"scrollD": 1000
 		}
 	},
 	"MANGA1000": {
