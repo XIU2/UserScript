@@ -6392,5 +6392,17 @@
 			"pageE": "#post_content>p",
 			"replaceE": ".pagelist"
 		}
+	},
+	"cgpeers": {
+		"host": "cgpeers.to",
+		"url": "return (fun.lp() == '/torrents.php')",
+		"history": false,
+		"blank": 3,
+		"pager": {
+			"nextL": ".linkbox > a.pager_next",
+			"pageE": "#torrent_table > tbody > tr:not(.colhead)",
+			"replaceE": ".linkbox",
+			"scrollD": 2000
+		}
 	}
 }
