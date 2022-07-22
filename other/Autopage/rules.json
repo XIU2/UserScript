@@ -2559,6 +2559,17 @@
 			"replaceE": ".search_stat"
 		}
 	},
+	"CGpeers": {
+		"host": "cgpeers.to",
+		"url": "return (fun.lp() == '/torrents.php')",
+		"history": false,
+		"blank": 3,
+		"pager": {
+			"nextL": ".linkbox > a.pager_next",
+			"pageE": "#torrent_table > tbody > tr:not(.colhead)",
+			"replaceE": ".linkbox"
+		}
+	},
 	"WebHD": {
 		"host": "webhd.cc",
 		"url": "return (fun.lp() == '/' || fun.indexOF('/list/new'))",
@@ -6232,14 +6243,14 @@
 		}
 	},
 	"24FA": {
-		"host": ["www.24fa.com","www.24faa.com","/^www\\.\\d{3}w\\.cc$/"],
-		"url": "/^\\/m?n\\d+/",
+		"host": ["www.24fa.com","www.24faa.com","/^(www\\.)?\\d{3}w\\.cc$/"],
+		"url": "if(document.title.indexOf('24FA') > -1 && fun.indexOF(/^\\/m?n\\d+/)) return true",
 		"style": ".moreR {display: none;} #content img {width: auto; max-width: 99%; height: auto; display: block; margin: 0 auto;}",
 		"pager": {
 			"nextL": "li.p_current+li>a",
 			"pageE": "#content img",
 			"replaceE": ".pager",
-			"scrollD": 3000
+			"scrollD": 3500
 		}
 	},
 	"遛无写真": {
@@ -6380,18 +6391,6 @@
 			"nextL": ".pagelist>span+a",
 			"pageE": "#post_content>p",
 			"replaceE": ".pagelist"
-		}
-	},
-	"cgpeers": {
-		"host": "cgpeers.to",
-		"url": "return (fun.lp() == '/torrents.php')",
-		"history": false,
-		"blank": 3,
-		"pager": {
-			"nextL": ".linkbox > a.pager_next",
-			"pageE": "#torrent_table > tbody > tr:not(.colhead)",
-			"replaceE": ".linkbox",
-			"scrollD": 2000
 		}
 	}
 }
