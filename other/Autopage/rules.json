@@ -1895,6 +1895,17 @@
 			"bF": "pageE.forEach(function (one) {if (one.tagName === 'P' && one.textContent.indexOf('更多相关') > -1) {one.style.display = 'none';}}); return fun.src_bF(pageE)"
 		}
 	},
+	"游研社": {
+		"host": "www.yystv.cn",
+		"url": "return fun.getCSS('ul.list-container')",
+		"pager": {
+			"type": 6,
+			"nextL": "js; return fun.getNextEP('.cur-page+li', 'page=', /page=\\d+/)",
+			"pageE": "ul.list-container>li",
+			"replaceE": ".page-num-list",
+			"loadTime": 300
+		}
+	},
 	"机核 GCORES": {
 		"host": "www.gcores.com",
 		"url": "fun.isUrlC(); fun.getAllCSS('.navLayout_side, .gtabs, .loadingPlaceholder>.row').forEach(function (o) {o.innerHTML = o.innerHTML;}); return (fun.lp() != '/' && (fun.indexOF('/collections/') || !fun.indexOF(/\\/\\d+$/)))",
