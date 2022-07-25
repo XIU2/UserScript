@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.1.3
+// @version      6.1.4
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -89,12 +89,12 @@
         ['menu_history', '添加历史记录+修改地址/标题', '添加历史记录+修改地址/标题', true],
         ['menu_rules', '更新外置翻页规则 (每天自动)', '更新外置翻页规则 (每天自动)', {}],
         ['menu_customRules', '自定义翻页规则', '自定义翻页规则', {}]
-    ], urlArr = [ // 外置翻页规则更新地址分流，以保证更新成功率，记得 connect
+    ], urlArr = [ // 外置翻页规则更新地址分流，以确保更新成功率（记得 connect）
         'https://userscript.gh2233.ml/other/Autopage/rules.json',
         'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://ghproxy.futils.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
-        'https://ghproxy.fsofso.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
+        //'https://ghproxy.futils.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
+        //'https://ghproxy.fsofso.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
         'https://raw.xn--gzu630h.xn--kpry57d/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.xn--p8jhe.tw/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://git.yumenaka.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
@@ -109,8 +109,8 @@
         'https://userscript.xiu2.xyz/other/Autopage/rules.json',
         'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://ghproxy.futils.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
-        'https://ghproxy.fsofso.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
+        //'https://ghproxy.futils.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
+        //'https://ghproxy.fsofso.com/https://github.com/XIU2/UserScript/blob/master/other/Autopage/rules.json',
         'https://raw.xn--gzu630h.xn--kpry57d/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.xn--p8jhe.tw/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://git.yumenaka.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json'
@@ -204,7 +204,7 @@
                                         if (new Function('fun', DBSite[now].url)(window.autoPage)) {curSite = DBSite[now];} else {if (urlC === true) {support = true;}; break;}
                                     }
                                 } catch (e) {
-                                    console.error('[自动无缝翻页] - 当前网页规则 "url" 有误，请检查！', e);
+                                    console.error('[自动无缝翻页] - 当前网页规则 "url" 有误，请检查！', e, DBSite[now].url);
                                 }
                             }
                         } else {
@@ -234,7 +234,7 @@
 
                                 }
                             } catch (e) {
-                                console.error('[自动无缝翻页] - 当前网页规则 "url" 有误，请检查！', e);
+                                console.error('[自动无缝翻页] - 当前网页规则 "url" 有误，请检查！', e, DBSite[now].url);
                             }
                         }
                     } else {
@@ -1867,7 +1867,7 @@ function: {
                     //console.log('URL：' + url, '最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
                     processElems(createDocumentByString(response.responseText));
                 } catch (e) {
-                    console.error('[自动无缝翻页] - 处理获取到的下一页内容时出现问题，请检查！', e);
+                    console.error('[自动无缝翻页] - 处理获取到的下一页内容时出现问题，请检查！', e, response.responseText);
                 }
             },
             onerror: function (response) {
@@ -2343,7 +2343,7 @@ function: {
                 curSite.pageUrl = tempUrl;
                 func(curSite.pageUrl);
             } catch (e) {
-                console.error('[自动无缝翻页] - 当前网页规则 "nextL" 内 JS 代码有误，请检查！', e);
+                console.error('[自动无缝翻页] - 当前网页规则 "nextL" 内 JS 代码有误，请检查！', e, curSite.pager.nextL);
             }
         } else if (getNextE()) {
             func(curSite.pageUrl);
@@ -2471,7 +2471,7 @@ function: {
                 for (var a, o = { TITLE: !0, META: !0, LINK: !0, STYLE: !0, BASE: !0}, i = t.body, s = i.childNodes, c = s.length - 1; c >= 0; c--) o[(a = s[c]).nodeName] && i.removeChild(a);
                 return t;
             }
-        } else console.error('没有找到要转成 DOM 的字符串');
+        } else console.error('没有找到要转成 DOM 的字符串', e);
     }
 
 
