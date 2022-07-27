@@ -1,6 +1,6 @@
 ---
 name: 功能建议 (Feature request)
-about: 想要某个油猴脚本添加一些新功能，或者有什么优化/建议~
+about: 某个功能有什么建议，或希望添加一些新功能~
 title: "[脚本名称] 希望添加 XX 功能（记得修改该示例标题）"
 labels: 功能建议
 assignees: ''
