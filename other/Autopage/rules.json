@@ -486,6 +486,17 @@
 			"nextL": "js; let next = fun.getCSS('.Pagination .PaginationButton--current+button:not(.PaginationButton-next)');if (next) return (location.origin + location.pathname + '?page=' + next.textContent)"
 		}
 	},
+	"简书": {
+		"host": "www.jianshu.com",
+		"url": "/^\\/$/",
+		"pager": {
+			"type": 2,
+			"nextL": "a.load-more",
+			"isHidden": true,
+			"interval": 500,
+			"scrollD": 1000
+		}
+	},
 	"微博评论": {
 		"host": "weibo.com",
 		"pager": {
@@ -1043,8 +1054,8 @@
 		}
 	},
 	"A 岛 - 手机版 - 帖子列表": {
-		"host": ["adnmb3.com","www.tnmb.org","nimingban.xyz","nimingban.org"],
-		"url": "/\\/m\\/f\\//",
+		"host": ["adnmb3.com","www.tnmb.org","nimingban.xyz","nimingban.org","www.nmbxd.com","www.nmbxd1.com"],
+		"url": "/\\/(m|Mobile)\\/(f|timeline)\\//",
 		"pager": {
 			"nextL": "//li[contains(@class, 'pagination-next')]//a[text()='下一页']",
 			"pageE": ".h-middle>div[id^='threads_'], .h-middle>hr.h-middle>div[id^='threads_'], .h-middle>hr:nth-of-type(n+2), script[src$='/h.mobile.js']",
@@ -1055,7 +1066,7 @@
 		}
 	},
 	"A 岛 - 手机版 - 帖子内": {
-		"host": ["adnmb3.com","www.tnmb.org","nimingban.xyz","nimingban.org"],
+		"host": ["adnmb3.com","www.tnmb.org","nimingban.xyz","nimingban.org","www.nmbxd.com","www.nmbxd1.com"],
 		"url": "/\\/m\\/t\\//",
 		"thread": true,
 		"pager": {
@@ -1067,7 +1078,7 @@
 		}
 	},
 	"A 岛": {
-		"host": ["adnmb3.com","www.tnmb.org","nimingban.xyz","nimingban.org"],
+		"host": ["adnmb3.com","www.tnmb.org","nimingban.xyz","nimingban.org","www.nmbxd.com","www.nmbxd1.com"],
 		"url": "/\\/(f|Forum)\\//",
 		"pager": {
 			"nextL": "//ul[contains(@class, 'pagination')]//a[text()='下一页']",
@@ -1078,12 +1089,12 @@
 		}
 	},
 	"A 岛 - 帖子内": {
-		"host": ["adnmb3.com","www.tnmb.org","nimingban.xyz","nimingban.org"],
+		"host": ["adnmb3.com","www.tnmb.org","nimingban.xyz","nimingban.org","www.nmbxd.com","www.nmbxd1.com"],
 		"url": "/\\/t\\//",
 		"thread": true,
 		"pager": {
 			"nextL": "//ul[contains(@class, 'pagination')]//a[text()='下一页']",
-			"pageE": ".h-threads-list>.h-threads-item>.h-threads-item-replys, script[src$='/h.desktop.js']",
+			"pageE": ".h-threads-list>.h-threads-item>.h-threads-item-replys, .h-threads-list>.h-threads-item>.h-threads-item-replies, script[src$='/h.desktop.js']",
 			"replaceE": "//ul[contains(@class, 'pagination')]",
 			"scriptT": 2,
 			"scrollD": 2500
