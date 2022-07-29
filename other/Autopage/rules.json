@@ -1519,6 +1519,18 @@
 			"bF": "return fun.src_bF(pageE, [0, 'img[data-url]', 'data-url'])"
 		}
 	},
+	"vcg.com": {
+		"host": "www.vcg.com",
+		"url": "fun.isUrlC(); return fun.indexOF(/^\\/creative-(image|illustration)\\//)",
+		"pager": {
+			"nextL": "a.paginationClickBox+a",
+			"pageE": ".galleryItem",
+			"replaceE": ".center_page"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"Pixabay": {
 		"host": "pixabay.com",
 		"pager": {
@@ -1736,6 +1748,18 @@
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
+		}
+	},
+	"建E室内设计网": {
+		"host": "www.justeasy.cn",
+		"url": "/\\/search-/",
+		"pager": {
+			"type": 6,
+			"nextL": ".pagination li.active+li>a",
+			"pageE": "#ajax_ul_list>div, #caselist>li",
+			"replaceE": ".pagination",
+			"loadTime": 1500,
+			"scrollD": 4000
 		}
 	},
 	"字客网": {
