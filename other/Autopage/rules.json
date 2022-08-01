@@ -2562,7 +2562,7 @@
 			"replaceE": "#pager_links"
 		},
 		"function": {
-			"bF": "pageE.forEach((one)=>{let now=fun.getCSS('td>a[onmouseover]',one);now.parentElement.setAttribute('onmouseover', now.getAttribute('onmouseover')); now.removeAttribute('onmouseover');now.parentElement.setAttribute('onmouseout', now.getAttribute('onmouseout')); now.removeAttribute('onmouseout');});return pageE"
+			"bF": "pageE.forEach((one)=>{let now=fun.getCSS('td>a[onmouseover]',one);if(now){now.parentElement.setAttribute('onmouseover', now.getAttribute('onmouseover')); now.removeAttribute('onmouseover');now.parentElement.setAttribute('onmouseout', now.getAttribute('onmouseout')); now.removeAttribute('onmouseout');};});return pageE"
 		}
 	},
 	"Zooqle": {
