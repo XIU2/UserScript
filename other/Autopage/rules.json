@@ -2546,7 +2546,7 @@
 		"url": "return (document.title.indexOf('1337x') > -1 && fun.getCSS('.pagination>ul'))",
 		"blank": 3,
 		"pager": {
-			"nextL": "//div[@class='pagination']//a[text()='>>']",
+			"nextL": ".pagination li.active+li>a",
 			"pageE": "table.table-list>tbody>tr",
 			"replaceE": ".pagination"
 		}
