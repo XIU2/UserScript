@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.1.4
+// @version      6.1.5
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -343,11 +343,11 @@
         } else if (getCSS('.content > #content') && getXpath('//div[contains(@class,"page_chapter")]//a[text()="下一章"]')) {
             console.info(`[自动无缝翻页] - <笔趣阁 1> 模板的小说网站`); return 200;
         } else if (getCSS('#nr1, #chaptercontent, .Readarea, .ReadAjax_content') && getCSS('#pb_next')) {
-            console.info(`[自动无缝翻页] - <笔趣阁 2 - 手机版> 模板的小说网站`); return 201;
+            console.info(`[自动无缝翻页] - <笔趣阁 1 - 手机版> 模板的小说网站`); return 201;
         } else if (getCSS('#txt, .txt') && getCSS('#pb_next, .url_next') && getCSS('.chapter-control, .chapter-page-btn')) {
-            console.info(`[自动无缝翻页] - <笔趣阁 3> 模板的小说网站`); return 202;
-        } else if ((getCSS('meta[name="description" i][content*="小说"], meta[name="description" i][content*="章节"], meta[name="description" i][content*="阅读"]') || location.hostname.indexOf('biqu')!=-1 || document.title.match(/笔趣阁|小说|章/)!=null) && (getCSS('[id="content" i], [class~="content" i], [id="chaptercontent" i], [class~="chaptercontent" i], [id="booktext" i], [id="txtcontent" i]') && getXpath('//a[contains(text(), "下一章") or contains(text(), "下一页")]'))) {
-            console.info(`[自动无缝翻页] - <笔趣阁 4> 模板的小说网站`); return 203;
+            console.info(`[自动无缝翻页] - <笔趣阁 2> 模板的小说网站`); return 202;
+        } else if ((getCSS('meta[name="description" i][content*="小说"], meta[name="description" i][content*="章节"], meta[name="description" i][content*="阅读"]') || location.hostname.indexOf('biqu')!=-1 || document.title.match(/笔趣阁|小说|章/)!=null) && (getCSS('[id="content" i], [class~="content" i], [id="chaptercontent" i], [class~="chaptercontent" i], [id="booktext" i], [id="txtcontent" i]') && getXpath('//a[contains(text(), "下一章") or contains(text(), "下一页") or contains(text(), "下一节")]'))) {
+            console.info(`[自动无缝翻页] - <笔趣阁 3> 模板的小说网站`); return 203;
         } else if (getCSS('meta[content^=SearXNG i], link[href*=SearXNG i], script[src*=SearXNG i]')) {
             console.info(`[自动无缝翻页] - <SearXNG> 元搜索引擎`); return 303;
         }
@@ -383,11 +383,11 @@
                     curSite = DBSite.typecho_mirages; break;
                 case 200: // < 所有使用 笔趣阁 1 模板的小说网站 >
                     DBSite.biquge1.url(); break;
-                case 201: // < 所有使用 笔趣阁 2 - 手机版 模板的小说网站 >
+                case 201: // < 所有使用 笔趣阁 1 - 手机版 模板的小说网站 >
                     curSite = DBSite.biquge1_m; break;
-                case 202: // < 所有使用 笔趣阁 3 模板的小说网站 >
+                case 202: // < 所有使用 笔趣阁 2 模板的小说网站 >
                     DBSite.biquge2.url(); break;
-                case 203: // < 所有使用 笔趣阁 4 模板的小说网站 >
+                case 203: // < 所有使用 笔趣阁 3 模板的小说网站 >
                     curSite = DBSite.biquge3; break;
                 case 300: // < 部分影视网站 >
                     curSite = DBSite.yingshi; break;
@@ -584,11 +584,11 @@ function: {
                 style: 'img, .posterror, a[href*="posterror()"], [style*="background"][style*="url("]:not(html):not(body), script+div[style="padding:15px;"] {display: none !important;}',
                 history: true,
                 pager: {
-                    nextL: '//a[contains(text(), "下一章") or contains(text(), "下一页")]',
+                    nextL: '//a[contains(text(), "下一章") or contains(text(), "下一页") or contains(text(), "下一节")]',
                     pageE: '[id="content" i], [class~="content" i], [id="chaptercontent" i], [class~="chaptercontent" i], [id="booktext" i], [id="txtcontent" i]',
                     insertP: ['[id="content" i], [class~="content" i], [id="chaptercontent" i], [class~="chaptercontent" i], [id="booktext" i], [id="txtcontent" i]', 6],
                     insertP6Br: true,
-                    replaceE: '//a[contains(text(), "下一章") or contains(text(), "下一页")]/parent::*'
+                    replaceE: '//a[contains(text(), "下一章") or contains(text(), "下一页") or contains(text(), "下一节")]/parent::*'
                 },
                 function: {
                     bF: xs_bF,
