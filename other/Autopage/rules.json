@@ -3472,7 +3472,7 @@
 	},
 	"知轩藏书": {
 		"host": "zxcs.me",
-		"url": "/\\/sort\\//",
+		"url": "/\\/(sort|tag)\\//",
 		"blank": 3,
 		"pager": {
 			"nextL": "#pagenavi>span+a",
