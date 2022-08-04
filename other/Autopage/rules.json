@@ -3233,7 +3233,7 @@
 		"history": true,
 		"pager": {
 			"nextL": ".next_chapter>a",
-			"pageE": ".comic-contain>amp-img",
+			"pageE": ".comic-contain>div",
 			"replaceE": ".next_chapter, .bottom-bar, .header .title"
 		}
 	},
