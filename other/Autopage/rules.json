@@ -2029,7 +2029,7 @@
 		}
 	},
 	"Switch520": {
-		"host": ["switch520.com","switch520.net"],
+		"host": ["fourpetal.com","fourpetal.com"],
 		"url": "return (!fun.indexOF('.html'))",
 		"blank": 3,
 		"pager": {
