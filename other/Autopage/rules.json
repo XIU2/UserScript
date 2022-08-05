@@ -6071,7 +6071,7 @@
 		}
 	},
 	"绅士漫画": {
-		"host": "/^(www\\.)?wnacg\\./",
+		"host": ["/^(www\\.)?(wnacg|htcomic)\\./","/^(www\\.)?qy\\d\\.ru/"],
 		"url": "/^\\/(albums|search|photos-index)/",
 		"blank": 3,
 		"pager": {
