@@ -56,7 +56,7 @@
 > _请确保使用 **Tampermonkey 正式版** 扩展，其他的用户脚本管理器可能导致**无法正常使用**脚本。_  
 > _如果要重装脚本，请记得在 Tampermonkey 扩展的**回收站中彻底删除**脚本后再去重新安装脚本。_  
 
-> _**不会离线安装 .crx 扩展？[Chrome、Edge 重新开启隐藏的 [拖入安装 .crx 扩展] 功能！](https://zhuanlan.zhihu.com/p/276027099)**_  
+> _**不会离线安装 .crx 扩展？[Chrome、Edge 重新开启隐藏的 [拖入安装 .crx 扩展] 功能！](https://zhuanlan.zhihu.com/p/276027099)**_
 
 ****
 
