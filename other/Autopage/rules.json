@@ -6172,7 +6172,7 @@
 		}
 	},
 	"秀人美女": {
-		"host": "www.xrmn5.cc",
+		"host": "www.xrmn5.com",
 		"url": "/(^\\/.)|(\\d+\\.html$)/",
 		"pager": {
 			"type": 3,
