@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.0.9
+// @version      2.1.0
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -39,21 +39,19 @@
         ['https://gh-proxy-misakano7545.koyeb.app/https://github.com', '美国', '[美国 Cloudflare CDN]'],
         ['https://cdn.githubjs.cf', '美国', '[美国 Cloudflare CDN]'],
         //['https://download.cithub.icu', '美国', '[美国 洛杉矶]', 'https://archive.cithub.icu'],
-        ['https://download.xn--p8jhe.tw', '美国', '[美国 圣何塞]', 'https://archive.xn--p8jhe.tw'],
+        ['https://download.xn--p8jhe.tw', '美国', '[美国 圣何塞]', 'https://archive.xn--p8jhe.tw']
     ], download_url = [
         //['https://ghproxy.futils.com/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [F 搜] 提供（存在限速）'],
         ['https://download.fastgit.org', '日本', '[日本 东京] - 该公益加速源由 [FastGit] 提供', 'https://archive.fastgit.org'],
         ['https://mirror.ghproxy.com/https://github.com', '日本', '[日本 东京] - 该公益加速源由 [ghproxy] 提供'],
-        ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供'],
-        ['https://hub.xn--gzu630h.xn--kpry57d', '韩国', '[韩国 首尔]']
+        ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供']
     ], clone_url = [
         ['https://gitclone.com', '国内', '[中国 国内] - 该公益加速源由 [GitClone] 提供&#10;&#10; - 缓存：有&#10; - 首次比较慢，缓存后较快'],
         //['https://ghproxy.futils.com/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://hub.fastgit.xyz', '日本', '[日本 东京] - 该公益加速源由 [FastGit] 提供'],
         ['https://mirror.ghproxy.com/https://github.com', '日本', '[日本 东京] - 该公益加速源由 [ghproxy] 提供'],
         ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供'],
-        ['https://hub.xn--gzu630h.xn--kpry57d', '韩国', '[韩国 首尔]'],
-        //['https://gh.gcdn.mirr.one', '俄罗斯', '[俄罗斯 G-Core Labs CDN]'],
+        ['https://gh.gcdn.mirr.one', '俄罗斯', '[俄罗斯 G-Core Labs CDN]']
         //['https://cithub.icu', '美国', '[美国 洛杉矶]'],
         //['https://hub.xn--p8jhe.tw', '美国', '[美国 圣何塞]']
         //['https://hub.0z.gs', '美国', '[美国 Cloudflare CDN]'],
@@ -70,7 +68,6 @@
         ['https://fastly.jsdelivr.net/gh', '日本 1', '[日本 东京] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
         ['https://cdn.staticaly.com/gh', '日本 2', '[日本 东京] - 该公益加速源由 [Statically CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 30 MB 的文件'],
         ['https://raw.fastgit.org', '日本 3', '[日本 东京] - 该公益加速源由 [FastGit] 提供&#10;&#10; - 缓存：无（或时间很短）'],
-        ['https://raw.xn--gzu630h.xn--kpry57d', '韩国', '[韩国 首尔]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://raw.cithub.icu', '美国', '[美国 洛杉矶]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://raw.xn--p8jhe.tw', '美国', '[美国 圣何塞]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://git.yumenaka.net/https://raw.githubusercontent.com', '美国', '[美国 圣何塞]&#10;&#10; - 缓存：无（或时间很短）'],
@@ -143,10 +140,12 @@
 
     // download_url 加速源随机
     function get_New_download_url() {
-        let a = Math.floor(Math.random()*download_url_us.length), b, new_download_url=[]
-        do {b = Math.floor(Math.random()*download_url_us.length)}
+        let a = Math.floor(Math.random()*download_url_us.length), b, c, new_download_url=[]
+        do {b = Math.floor(Math.random()*download_url_us.length)} // 随机第二个
         while (b == a);
-        return [download_url_us[a],download_url_us[b]].concat(download_url)
+        do {c = Math.floor(Math.random()*download_url_us.length)} // 随机第三个
+        while (c == a || c == b);
+        return [download_url_us[a],download_url_us[b],download_url_us[c]].concat(download_url)
     }
 
     // Release
