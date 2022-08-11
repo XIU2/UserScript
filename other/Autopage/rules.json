@@ -1061,8 +1061,7 @@
 			"pageE": ".h-middle>div[id^='threads_'], .h-middle>hr.h-middle>div[id^='threads_'], .h-middle>hr:nth-of-type(n+2), script[src$='/h.mobile.js']",
 			"insertP": ["#h-threads-pagination",1],
 			"replaceE": "#h-threads-pagination",
-			"scriptT": 2,
-			"scrollD": 2500
+			"scriptT": 2
 		}
 	},
 	"A 岛 - 手机版 - 帖子内": {
@@ -1073,8 +1072,7 @@
 			"nextL": "//li[contains(@class, 'pagination-next')]//a[text()='下一页']",
 			"pageE": ".h-threads-replylist>div, script[src$='/h.mobile.js']",
 			"replaceE": "#h-threads-pagination",
-			"scriptT": 2,
-			"scrollD": 2500
+			"scriptT": 2
 		}
 	},
 	"A 岛": {
@@ -1084,8 +1082,7 @@
 			"nextL": "//ul[contains(@class, 'pagination')]//a[text()='下一页']",
 			"pageE": ".h-threads-list>*, script[src$='/h.desktop.js']",
 			"replaceE": "//ul[contains(@class, 'pagination')]",
-			"scriptT": 2,
-			"scrollD": 2500
+			"scriptT": 2
 		}
 	},
 	"A 岛 - 帖子内": {
@@ -1096,8 +1093,18 @@
 			"nextL": "//ul[contains(@class, 'pagination')]//a[text()='下一页']",
 			"pageE": ".h-threads-list>.h-threads-item>.h-threads-item-replys, .h-threads-list>.h-threads-item>.h-threads-item-replies, script[src$='/h.desktop.js']",
 			"replaceE": "//ul[contains(@class, 'pagination')]",
-			"scriptT": 2,
-			"scrollD": 2500
+			"scriptT": 2
+		}
+	},
+	"BOG 匿名版": {
+		"host": "bog.ac",
+		"url": "/^\\/(f|t)\\//",
+		"style": "body{position: initial !important;}",
+		"blank": 4,
+		"pager": {
+			"nextL": "//a[(@class='page-next' and starts-with(@href,'/f/')) or (@class='page-last' and text()='上一页' and starts-with(@href,'/t/'))]",
+			"pageE": ".item",
+			"replaceE": ".page-main"
 		}
 	},
 	"4 Chan": {
@@ -1200,8 +1207,7 @@
 		"pager": {
 			"nextL": "js; return fun.getNextEP('.pageNumberLayout.selectedPageNumber+span.pageNumberLayout>a', 'page=', /page=\\d+/)",
 			"pageE": ".thread-message",
-			"replaceE": ".pagingControl",
-			"scrollD": 2200
+			"replaceE": ".pagingControl"
 		}
 	},
 	"Pixiv - 分类页": {
