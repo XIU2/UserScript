@@ -6438,5 +6438,16 @@
 			"pageE": "#post_content>p",
 			"replaceE": ".pagelist"
 		}
+	},
+	"俊美图": {
+		"host": "www.meijuntu.com",
+		"url": "return fun.getCSS('.pages')",
+		"style": "a.pre_picture,a.next_picture{display: none !important;}",
+		"pager": {
+			"type": 3,
+			"nextL": ".pages>span +a:not(.a1)",
+			"pageE": ".pictures>img,.pic-list>ul",
+			"replaceE": ".pages"
+		}
 	}
 }
