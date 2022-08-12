@@ -32,17 +32,17 @@
     const download_url_us = [
         ['https://gh.gh2233.ml/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@X.I.U/XIU2] 提供'],
         //['https://gh.api.99988866.xyz/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [hunshcn/gh-proxy] 提供'], // 官方演示站用的人太多了
+        ['https://gh.ddlc.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@mtr-static-official] 提供'], // 2023-01-14
+        ['https://gh2.yanqishui.work/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@HongjieCN] 提供'],
         //['https://ghdl.z-o.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [feizhuqwq.com] 提供'],
         ['https://gh-proxy-misakano7545.koyeb.app/https://github.com', '美国', '[美国 Cloudflare CDN]'],
-        ['https://gh2.yanqishui.work/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@HongjieCN] 提供'],
-        ['https://gh.ddlc.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@mtr-static-official] 提供'], // 2023-01-14
-        ['https://gh.flyinbug.top/gh/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        ['https://gh.flyinbug.top/gh/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [Mintimate] 提供'],
         ['https://github.91chi.fun/https://github.com', '美国', '[美国 Cloudflare CDN]'],
-        ['https://proxy.zyun.vip/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        ['https://proxy.zyun.vip/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [知了小站] 提供'],
         ['https://git.xfj0.cn/https://github.com', '美国', '[美国 Cloudflare CDN]'],
         ['https://gh.con.sh/https://github.com', '美国', '[美国 Cloudflare CDN]'],
         ['https://ghps.cc/https://github.com', '美国', '[美国 Cloudflare CDN]'],
-        ['https://cors.isteed.cc/github.com', '美国', '[美国 Cloudflare CDN]'],
+        ['https://cors.isteed.cc/github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [Lufs\'s] 提供'],
         ['https://cdn.githubjs.cf', '美国', '[美国 Cloudflare CDN]']
         //['https://download.cithub.icu', '美国', '[美国 洛杉矶]', 'https://archive.cithub.icu'],
         //['https://download.xn--p8jhe.tw', '美国', '[美国 圣何塞]', 'https://archive.xn--p8jhe.tw']
@@ -52,7 +52,6 @@
         ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供，有不同地区的服务器，不过国内一般分配为韩国']
     ], clone_url = [
         ['https://gitclone.com', '国内', '[中国 国内] - 该公益加速源由 [GitClone] 提供&#10;&#10; - 缓存：有&#10; - 首次比较慢，缓存后较快'],
-        //['https://moeyy.cn/gh-proxy/https://github.com', '国内', '[中国 国内]'],
         //['https://ghproxy.futils.com/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://hub.fastgit.xyz', '日本', '[日本 东京] - 该公益加速源由 [FastGit] 提供'],
         ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供，有不同地区的服务器，不过国内一般分配为韩国'],
