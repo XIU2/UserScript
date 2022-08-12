@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.1.0
+// @version      2.1.1
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -30,27 +30,32 @@
     'use strict';
     var backColor = '#ffffff', fontColor = '#888888', menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'), menu_menu_raw_fast_ID, menu_feedBack_ID;
     const download_url_us = [
-        ['https://ghdl.z-o.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [feizhuqwq.com] 提供'],
+        ['https://gh.gh2233.ml/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@X.I.U/XIU2] 提供'],
+        //['https://gh.api.99988866.xyz/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [hunshcn/gh-proxy] 提供'], // 官方演示站用的人太多了
+        //['https://ghdl.z-o.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [feizhuqwq.com] 提供'],
+        ['https://gh-proxy-misakano7545.koyeb.app/https://github.com', '美国', '[美国 Cloudflare CDN]'],
         ['https://gh2.yanqishui.work/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@HongjieCN] 提供'],
         ['https://gh.ddlc.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@mtr-static-official] 提供'], // 2023-01-14
-        ['https://gh.gh2233.ml/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@X.I.U/XIU2] 提供'],
+        ['https://gh.flyinbug.top/gh/https://github.com', '美国', '[美国 Cloudflare CDN]'],
         ['https://github.91chi.fun/https://github.com', '美国', '[美国 Cloudflare CDN]'],
-        ['https://gh.api.99988866.xyz/https://github.com', '美国', '[美国 Cloudflare CDN]'],
-        ['https://gh-proxy-misakano7545.koyeb.app/https://github.com', '美国', '[美国 Cloudflare CDN]'],
-        ['https://cdn.githubjs.cf', '美国', '[美国 Cloudflare CDN]'],
+        ['https://proxy.zyun.vip/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        ['https://git.xfj0.cn/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        ['https://gh.con.sh/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        ['https://ghps.cc/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        ['https://cors.isteed.cc/github.com', '美国', '[美国 Cloudflare CDN]'],
+        ['https://cdn.githubjs.cf', '美国', '[美国 Cloudflare CDN]']
         //['https://download.cithub.icu', '美国', '[美国 洛杉矶]', 'https://archive.cithub.icu'],
-        ['https://download.xn--p8jhe.tw', '美国', '[美国 圣何塞]', 'https://archive.xn--p8jhe.tw']
+        //['https://download.xn--p8jhe.tw', '美国', '[美国 圣何塞]', 'https://archive.xn--p8jhe.tw']
     ], download_url = [
         //['https://ghproxy.futils.com/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [F 搜] 提供（存在限速）'],
         ['https://download.fastgit.org', '日本', '[日本 东京] - 该公益加速源由 [FastGit] 提供', 'https://archive.fastgit.org'],
-        ['https://mirror.ghproxy.com/https://github.com', '日本', '[日本 东京] - 该公益加速源由 [ghproxy] 提供'],
-        ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供']
+        ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供，有不同地区的服务器，不过国内一般分配为韩国']
     ], clone_url = [
         ['https://gitclone.com', '国内', '[中国 国内] - 该公益加速源由 [GitClone] 提供&#10;&#10; - 缓存：有&#10; - 首次比较慢，缓存后较快'],
+        //['https://moeyy.cn/gh-proxy/https://github.com', '国内', '[中国 国内]'],
         //['https://ghproxy.futils.com/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://hub.fastgit.xyz', '日本', '[日本 东京] - 该公益加速源由 [FastGit] 提供'],
-        ['https://mirror.ghproxy.com/https://github.com', '日本', '[日本 东京] - 该公益加速源由 [ghproxy] 提供'],
-        ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供'],
+        ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供，有不同地区的服务器，不过国内一般分配为韩国'],
         ['https://gh.gcdn.mirr.one', '俄罗斯', '[俄罗斯 G-Core Labs CDN]']
         //['https://cithub.icu', '美国', '[美国 洛杉矶]'],
         //['https://hub.xn--p8jhe.tw', '美国', '[美国 圣何塞]']
@@ -68,6 +73,7 @@
         ['https://fastly.jsdelivr.net/gh', '日本 1', '[日本 东京] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
         ['https://cdn.staticaly.com/gh', '日本 2', '[日本 东京] - 该公益加速源由 [Statically CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 30 MB 的文件'],
         ['https://raw.fastgit.org', '日本 3', '[日本 东京] - 该公益加速源由 [FastGit] 提供&#10;&#10; - 缓存：无（或时间很短）'],
+        ['https://ghproxy.net/https://raw.githubusercontent.com', '日本 4', '[日本 大阪]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://raw.cithub.icu', '美国', '[美国 洛杉矶]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://raw.xn--p8jhe.tw', '美国', '[美国 圣何塞]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://git.yumenaka.net/https://raw.githubusercontent.com', '美国', '[美国 圣何塞]&#10;&#10; - 缓存：无（或时间很短）'],
@@ -112,40 +118,38 @@
         return ['0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'][num]
     }
 
-    colorMode();
-    addRelease(); //                     Release 加速
+    colorMode(); // 适配白天/夜间主题模式
+    if (location.pathname.indexOf('/releases')) addRelease(); // Release 加速
     setTimeout(addDownloadZIP, 2000); // Download ZIP 加速
     setTimeout(addGitClone, 2000); //    Git Clone 加速
     setTimeout(addGitCloneSSH, 2000); // Git Clone SSH 加速
     addRawFile(); //                     Raw 加速
-    setTimeout(addRawDownLink, 2000); // 添加 Raw 下载链接（☁），延迟 2 秒执行，避免被 pjax 刷掉
+    setTimeout(addRawDownLink, 2000); // Raw 单文件快捷下载（☁），延迟 2 秒执行，避免被 pjax 刷掉
 
-    document.addEventListener('pjax:success',function(){ // pjax 事件发生后
-        colorMode();
-        addRelease(); //                     Release 加速
+    // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
+    if (window.onurlchange === undefined) addUrlChangeEvent();
+    window.addEventListener('urlchange', function() {
+        colorMode(); // 适配白天/夜间主题模式
+        if (location.pathname.indexOf('/releases')) addRelease(); // Release 加速
         setTimeout(addDownloadZIP, 2000); // Download ZIP 加速
         setTimeout(addGitClone, 2000); //    Git Clone 加速
         setTimeout(addGitCloneSSH, 2000); // Git Clone SSH 加速
         addRawFile(); //                     Raw 加速
-        setTimeout(addRawDownLink, 2000); // 添加 Raw 下载链接（☁），延迟 2 秒执行，避免被 pjax 刷掉
-    });
-
-    // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）事件
-    // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
-    if (window.onurlchange === undefined) {addUrlChangeEvent();}
-    window.addEventListener('urlchange', function() {
-        addRawDownLink_();
-        if (location.pathname.indexOf('/releases')) {addRelease();}
+        setTimeout(addRawDownLink, 2000); // Raw 单文件快捷下载（☁），延迟 2 秒执行，避免被 pjax 刷掉
+        addRawDownLink_(); // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）鼠标事件
     });
 
     // download_url 加速源随机
     function get_New_download_url() {
-        let a = Math.floor(Math.random()*download_url_us.length), b, c, new_download_url=[]
+        let a = Math.floor(Math.random()*download_url_us.length), b, c, d, new_download_url=[]
         do {b = Math.floor(Math.random()*download_url_us.length)} // 随机第二个
         while (b == a);
         do {c = Math.floor(Math.random()*download_url_us.length)} // 随机第三个
         while (c == a || c == b);
-        return [download_url_us[a],download_url_us[b],download_url_us[c]].concat(download_url)
+        do {d = Math.floor(Math.random()*download_url_us.length)} // 随机第四个
+        while (d == a || d == b || d == c);
+        return [download_url_us[a],download_url_us[b],download_url_us[c],download_url_us[d]].concat(download_url)
+        //return download_url_us.concat(download_url) // 调试用
     }
 
     // Release
@@ -253,7 +257,7 @@
     }
 
 
-    // 添加 Raw 下载链接（☁）
+    // Raw 单文件快捷下载（☁）
     function addRawDownLink() {
         // 如果不是项目文件页面，就返回，如果网页有 Raw 下载链接（☁）就返回
         let files = document.querySelectorAll('div.Box-row svg.octicon.octicon-file');if(files.length === 0) return;if (location.pathname.indexOf('/tags') > -1) return
@@ -303,16 +307,14 @@
     }
 
 
-    // 删除 Raw 快捷下载（☁）
+    // 移除 Raw 单文件快捷下载（☁）
     function delRawDownLink() {
         let aElm = document.querySelectorAll('.fileDownLink');if(aElm.length === 0) return;
-        aElm.forEach(function(fileElm) {
-            fileElm.remove()
-        })
+        aElm.forEach(function(fileElm) {fileElm.remove();})
     }
 
 
-    // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）鼠标事件
+    // 在浏览器返回/前进时重新添加 Raw 单文件快捷下载（☁）鼠标事件
     function addRawDownLink_() {
         // 如果不是项目文件页面，就返回，如果网页没有 Raw 下载链接（☁）就返回
         let files = document.querySelectorAll('div.Box-row svg.octicon.octicon-file');if(files.length === 0) return;
@@ -372,7 +374,7 @@
     }
 
 
-    // 自定义 urlchange 事件（用来监听 URL 变化）
+    // 自定义 urlchange 事件（用来监听 URL 变化），针对非 Tampermonkey 油猴管理器
     function addUrlChangeEvent() {
         history.pushState = ( f => function pushState(){
             var ret = f.apply(this, arguments);
