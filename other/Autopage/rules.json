@@ -4863,6 +4863,16 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"OpenUserJS": {
+		"host": "openuserjs.org",
+		"url": "return fun.getCSS('li.active+li>a')",
+		"blank": 3,
+		"pager": {
+			"nextL": "li.active+li>a",
+			"pageE": ".panel>table>tbody>tr.tr-link, .panel>.table-responsive>table>tbody>tr.tr-link, [id^='comment-']",
+			"replaceE": ".pagination"
+		}
+	},
 	"UserScript": {
 		"host": "www.userscript.zone",
 		"url": "return (fun.lp() == '/search')",
