@@ -3461,7 +3461,7 @@
 		"host": "www.qidian.com",
 		"url": "/^\\/(all|rank|finish|free)/",
 		"pager": {
-			"nextL": "a[class*='pagination-next']",
+			"nextL": "//a[contains(@class,'-pagination-current')]/parent::li/following-sibling::li[1]/a",
 			"pageE": "#book-img-text>ul",
 			"replaceE": "#page-container"
 		}
