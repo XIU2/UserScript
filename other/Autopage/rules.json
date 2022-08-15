@@ -1213,7 +1213,6 @@
 	"Pixiv - 分类页": {
 		"host": "www.pixiv.net",
 		"url": "fun.isUrlC(); if (fun.isMobile()) {return false}; if (fun.lp() == '/') {fun.blank();} else if (fun.indexOF('/tags/')) {return true;} else if (fun.indexOF('/artworks/')) {setTimeout(()=>{fun.getXpath('//button[contains(string(), \"查看全部\") or contains(string(), \"See all\") or contains(string(), \"すべて見る\") or contains(string(), \"모두 보기\")]').click();},3000)}",
-		"blank": 2,
 		"style": "ul[class*='-1 ']>li {display: inline !important;} #root{margin-bottom: -175px;} ul>li>button[class^='sc-'], a[href^='/premium/lead/lp'] {display: none !important;}",
 		"iframe": true,
 		"pager": {
@@ -1224,7 +1223,6 @@
 	"Pixiv - 用户作品页": {
 		"host": "www.pixiv.net",
 		"url": "if (fun.isMobile()) {return false}; return (fun.indexOF('/users/') && fun.indexOF(/\\/(artworks|illustrations|manga)/))",
-		"blank": 2,
 		"iframe": true,
 		"style": "ul[class*='-1 ']>li {display: inline !important;} #root{margin-bottom: -125px;} ul>li>button[class^='sc-'][style='background-color: rgb(0, 0, 0);'], a[href^='/premium/lead/lp'] {display: none !important;}",
 		"pager": {
