@@ -1391,29 +1391,15 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
-	"千图网 - 分类/搜索页": {
+	"千图网": {
 		"host": "www.58pic.com",
-		"url": "if (fun.indexOF(/\\/(tupian|piccate|pmulti|scene)\\//)) {if (fun.indexOF('/piccate/') && fun.getCSS('.card-grid-box .qt-card-box[style*=\"width:\"]')) {fun.insStyle('.card-grid-box .qt-card-box {display: block;height: 300px;min-height: 250px;}')}; return true}",
-		"style": ".qtw-card.place-box, .card-lazy, .is-line .is-back, .qt-model-t.login-model {display: none !important;}",
+		"url": "/\\/(c|tupian|piccate|pmulti|scene)\\//",
+		"style": ".qtw-card.place-box, .card-lazy, .is-line .is-back, .qt-model-t.login-model, .qtd-next-card {display: none !important;} .search-page-container {position: initial !important;}",
 		"pager": {
+			"type": 3,
 			"nextL": "//div[contains(@class,'page-box')]//a[text()='下一页']",
-			"pageE": ".card-grid-box.is-new:not(.favorites-box)>div",
-			"replaceE": ".page-box",
-			"scrollD": 2500
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE)"
-		}
-	},
-	"千图网 - 专题/收藏夹": {
-		"host": "www.58pic.com",
-		"url": "/\\/c\\//",
-		"style": ".qt-model-t.login-model, .card-lazy {display: none !important;}",
-		"pager": {
-			"nextL": "//div[contains(@class,'page-box')]//a[text()='下一页']",
-			"pageE": ".list-box>div",
-			"replaceE": ".page-box",
-			"scrollD": 4000
+			"pageE": ".card-grid-box.is-new:not(.favorites-box)>div, .list-box>div, .qtd-card-container>.qtd-card[data-id], .pic-container>.qtd-card[data-id]",
+			"replaceE": ".page-box"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE)"
