@@ -4351,6 +4351,16 @@
 			"replaceE": "#b_results .b_pag"
 		}
 	},
+	"全国图书参考咨询联盟": {
+		"host": "/^.+\\.ucdrs.superlib.net$/",
+		"url": "/^\\/search/",
+		"pager": {
+			"nextL": "#pageinfo>b+a",
+			"pageE": ".book1",
+			"replaceE": "#pageinfo",
+			"scrollD": 1000
+		}
+	},
 	"StackOverflow": {
 		"host": "stackoverflow.com",
 		"url": "return (fun.lp() == '/search' || (fun.indexOF(/^\\/questions/) && !fun.indexOF(/^\\/questions\\/\\d+/)) || fun.lp() == '/tags' || fun.lp() == '/users')",
@@ -5905,6 +5915,11 @@
 			"pageE": "#image-container img",
 			"replaceE": ".reader-pagination"
 		}
+	},
+	"Orzqwq": {
+		"host": "orzqwq.com",
+		"url": "if(fun.indexOF(/\\/p\\/\\d\\/$/)){let t = setInterval(()=>{if(typeof chapter_preloaded_images !== 'undefined'){let _img=''; for (let i=0;i<=chapter_preloaded_images.length;i++){_img += `<img src=\"${chapter_preloaded_images[i]}\">`;}; document.querySelector('.reading-content').innerHTML = _img;clearInterval(t);}},500); return true;}",
+		"hiddenPN": true
 	},
 	"hitomi": {
 		"host": "hitomi.la",
