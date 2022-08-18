@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         3DM论坛美化
-// @version      1.0.1
+// @version      1.0.2
 // @author       X.I.U
 // @description  精简多余内容、样式优化
 // @icon         https://www.3dmgame.com/favicon.ico
@@ -29,7 +29,7 @@
 		margin: 0 0 2px;
 	}
 }
-#toptb, .dnch_eo_pt,.dnch_eo_pr, .dnch_eo_f, .bml, dl.pil.cl, td.plc.plm .sign, .dnch_eo_pb,.dnch_eo_pt, .pls .side-star, .pls .side-group, div#h_nv, .res-footer-note, img[border="0"].zoom, .md_ctrl, .pls.favatar .xg1, .wp.a_h, .hd_table, .a_cn, .wp.a_f, .bm.lk, .a_pt {
+#toptb, .dnch_eo_pt,.dnch_eo_pr, .dnch_eo_f, .bml, dl.pil.cl, td.plc.plm .sign, .dnch_eo_pb,.dnch_eo_pt, .pls .side-star, .pls .side-group, div#h_nv, .res-footer-note, a>img[border="0"].zoom, .md_ctrl, .pls.favatar .xg1, .wp.a_h, .hd_table, .a_cn, .wp.a_f, .bm.lk, .a_pt {
 	display: none !important;
 }
 .pls .avatar img {
