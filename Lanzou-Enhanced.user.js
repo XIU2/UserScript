@@ -135,7 +135,7 @@
             setTimeout(viewTop,1000); //                 监听并修改右键菜单 [外链分享地址] 为 [复制并打开分享链接] / [复制分享链接] / [打开分享链接] 之一
             setTimeout(copyAllfileSha, 500); //          一键复制所有分享链接
 
-            setTimeout(filesSort, 200); //               文件排序
+            setTimeout(filesSort, 300); //               文件排序
         }
     }
 
@@ -597,6 +597,7 @@
                     if (strA[i] === strB[i]) {
                         continue;
                     }
+                    if (strB[i] === undefined) return 1;
                     if (notChinese(strA[i]) && notChinese(strB[i])) {
                         return strA[i] < strB[i] ? -1 : 1;
                     } else if (notChinese(strA[i])) {
@@ -610,9 +611,9 @@
                 if (strA.length === strB.length) {
                     return 0;
                 } else if (strA.length < strB.length) {
-                    return 1;
+                    return -1;
                 }
-                return -1;
+                return 1;
             }
             function notChinese(char) {
                 const charCode = char.charCodeAt(0)
@@ -623,7 +624,6 @@
 
         // 创建排序按鈕
         function createAllButtons() {
-            if (!menu_value('menu_fileSort')) return;
             const tabTitle = frameDoc.querySelector('#container > div.n1 > div.f_th');
             const name = tabTitle.querySelector('div.f_name');
             const size = tabTitle.querySelector('div.f_size');
@@ -684,6 +684,22 @@
             }
             return filesInfo;
         }
+
+        function getFolders() {
+            const list = frameDoc.querySelector('#sub_folder_list');
+            const folders = list.childNodes;
+            const foldersInfo = [];
+            for (const folder of folders) {
+                const name = folder.querySelector('.f_tb > .f_name2 > span.follink > span').textContent;
+                foldersInfo.push({
+                    info: {
+                        name: name,
+                    },
+                    node: folder
+                })
+            }
+            return foldersInfo;
+        }
         // 转换文件大小
         function parseByteSize(text) {
             const unit = ['B', 'K', 'M', 'G', 'T'];
@@ -715,16 +731,16 @@
         }
 
         // 排序
-        function sortFiles(files, by, order) {
+        function sortItems(files, by, order) {
             let compareFunc;
             if (by === 'name') {
                 compareFunc = (a, b) => {
-                    return (order == 'asc' ? 1 : -1) * sortByName(a.info.name, b.info.name);
+                    return (order === 'asc' ? 1 : -1) * sortByName(a.info.name, b.info.name);
                 }
             } else {
                 compareFunc = (a, b) => {
                     const result = a.info[by] > b.info[by] ? 1 : -1;
-                    return (order == 'asc' ? 1 : -1) * result;
+                    return (order === 'asc' ? 1 : -1) * result;
                 }
             }
             files.sort(compareFunc);
@@ -733,11 +749,28 @@
         function sortFileList() {
             const files = getFiles();
             if (files.length > 0) {
-                sortFiles(files, currentStatus.by, currentStatus.order);
+                sortItems(files, currentStatus.by, currentStatus.order);
                 // console.log(files)
                 const fileList = frameDoc.querySelector('#filelist');
                 for (let i = 0; i < files.length; i++) {
                     fileList.appendChild(files[i].node);
+                }
+            }
+        }
+
+        function sortFolderList() {
+            const folders = getFolders();
+            // console.log(folders);
+            if (folders.length > 0) {
+                // 文件夹只能按名称排序
+                if (currentStatus.by === 'name') {
+                    sortItems(folders, 'name', currentStatus.order);
+                } else {
+                    sortItems(folders, 'name', 'asc'); // 其他情况，皆按名称升序
+                }
+                const folderList = frameDoc.querySelector('#sub_folder_list');
+                for (let i = 0; i < folders.length; i++) {
+                    folderList.appendChild(folders[i].node);
                 }
             }
         }
@@ -748,9 +781,16 @@
                 // 自己修改的时候不排序
                 if (event.removedNodes.length > 0) return;
             }
-
             sortFileList();
+        }
 
+        function folderListCallback(records) {
+            if (!menu_value('menu_fileSort')) return;
+            for (const event of records) {
+                // 自己修改的时候不排序
+                if (event.removedNodes.length > 0) return;
+            }
+            sortFolderList();
         }
 
         function clickSortButton(by, button) {
@@ -773,21 +813,28 @@
             button.textContent = currentStatus.order === 'asc' ? '⬆' : '⬇';
             currentStatus.by = by;
             sortFileList();
+            sortFolderList();
 
         }
 
         // create buttons
         setTimeout(() => {
-            if (allButtons === undefined) {
+            if (allButtons === undefined && menu_value('menu_fileSort')) {
                 allButtons = createAllButtons();
+                // console.log(allButtons);
                 allButtons[currentStatus.by].el.textContent = '⬆';
             }
         }, 500);
 
         // sort files
         const fileList = frameDoc.querySelector('#filelist');
-        const observer = new MutationObserver(fileListCallback);
-        observer.observe(fileList, { childList: true, attributes: false });
+        const fileObserver = new MutationObserver(fileListCallback);
+        fileObserver.observe(fileList, { childList: true, attributes: false });
+
+        // sort files
+        const folderList = frameDoc.querySelector('#sub_folder_list');;
+        const folderObserver = new MutationObserver(folderListCallback);
+        folderObserver.observe(folderList, { childList: true, attributes: false });
 
 
     }
