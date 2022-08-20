@@ -6304,7 +6304,7 @@
 		}
 	},
 	"24FA": {
-		"host": ["www.24fa.com","www.24faa.com","/^(www\\.)?\\d{3}w\\.cc$/"],
+		"host": ["/^(www\\.)?24fa.?\\.com$/","/^(www\\.)?\\d{3}w\\.cc$/"],
 		"url": "if(document.title.indexOf('24FA') > -1 && fun.indexOF(/^\\/m?n\\d+/)) return true",
 		"style": ".moreR {display: none;} #content img {width: auto; max-width: 99%; height: auto; display: block; margin: 0 auto;}",
 		"pager": {
