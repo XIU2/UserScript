@@ -39,7 +39,8 @@
         ['menu_refreshCorrection', '刷新不返回根目录', '刷新不返回根目录', true],
         ['menu_rightClickMenu', '右键文件显示菜单', '右键文件显示菜单', true],
         ['menu_directDownload', '点击直接下载文件 (分享链接列表页)', '点击直接下载文件', true],
-        ['menu_folderDescdesMenu', '调整描述（话说）编辑框大小', '调整描述（话说）编辑框大小', true]
+        ['menu_folderDescdesMenu', '调整描述（话说）编辑框大小', '调整描述（话说）编辑框大小', true],
+        ['menu_fileSort', '文件排序', '文件排序', true]
     ], menu_ID = [], lastFolderID;
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
@@ -133,6 +134,8 @@
             dragEnter(); //                              拖入文件自动显示上传框
             setTimeout(viewTop,1000); //                 监听并修改右键菜单 [外链分享地址] 为 [复制并打开分享链接] / [复制分享链接] / [打开分享链接] 之一
             setTimeout(copyAllfileSha, 500); //          一键复制所有分享链接
+
+            setTimeout(filesSort, 200); //               文件排序
         }
     }
 
@@ -571,5 +574,221 @@
         };
         const observer = new MutationObserver(callback);
         observer.observe(mainframe.document, { childList: true, subtree: true });
+    }
+
+    // 文件排序
+    function filesSort() {
+        const frame = mainframe;
+        const frameDoc = frame.document;
+
+        const currentStatus = {
+            by: 'name',
+            order: 'asc',
+        }
+
+        let allButtons = undefined;
+
+        // 文件名排序
+        function sortByName(name1, name2) {
+            function sort(a, b) {
+                const strA = a.toLocaleLowerCase().split('');
+                const strB = b.toLocaleLowerCase().split('');
+                for (let i = 0; i < strA.length; i++) {
+                    if (strA[i] === strB[i]) {
+                        continue;
+                    }
+                    if (notChinese(strA[i]) && notChinese(strB[i])) {
+                        return strA[i] < strB[i] ? -1 : 1;
+                    } else if (notChinese(strA[i])) {
+                        return -1;
+                    } else if (notChinese(strB[i])) {
+                        return 1;
+                    } else {
+                        return strA[i].localeCompare(strB[i]);
+                    }
+                }
+                if (strA.length === strB.length) {
+                    return 0;
+                } else if (strA.length < strB.length) {
+                    return 1;
+                }
+                return -1;
+            }
+            function notChinese(char) {
+                const charCode = char.charCodeAt(0)
+                return charCode >= 0 && charCode <= 128
+            }
+            return sort(name1, name2);
+        }
+
+        // 创建排序按鈕
+        function createAllButtons() {
+            if (!menu_value('menu_fileSort')) return;
+            const tabTitle = frameDoc.querySelector('#container > div.n1 > div.f_th');
+            const name = tabTitle.querySelector('div.f_name');
+            const size = tabTitle.querySelector('div.f_size');
+            const time = tabTitle.querySelector('div.f_time');
+            const down = tabTitle.querySelector('div.f_down'); // 下载量
+            return {
+                name: {
+                    el: createButton(name, 'name'),
+                    order: 'asc',
+                },
+                size: {
+                    el: createButton(size, 'size'),
+                    order: 'asc',
+                },
+                time: {
+                    el: createButton(time, 'time'),
+                    order: 'asc',
+                },
+                down: {
+                    el: createButton(down, 'down'),
+                    order: 'asc',
+                }
+            };
+        }
+        function createButton(element, by) {
+            // element.insertAdjacentHTML('beforeend', '<a class="col_sort_btn" href="javascript: void;" style="font-size: 16px; float: right;">⇧</a>');
+            let button = frameDoc.createElement('a');
+            button.className = 'col_sort_btn';
+            button.href = 'javascript: void(0);';
+            button.style.fontSize = '16px';
+            button.style.float = 'right';
+            button.textContent = '⇧';
+            button.onclick = () => clickSortButton(by, button);
+            element.appendChild(button);
+            return button;
+        }
+
+
+        function getFiles() {
+            const list = frameDoc.querySelector('#filelist');
+            const files = list.childNodes;
+            const filesInfo = [];
+            const now = new Date();
+            for (const file of files) {
+                const name = file.querySelector('.f_name > span.aspanlink > .f_name_title').textContent;
+                const size = parseByteSize(file.querySelector('.f_size').textContent);
+                const time = file.querySelector('.f_time').textContent;
+                const down = parseInt(file.querySelector('.f_down').textContent);
+                filesInfo.push({
+                    info: {
+                        name: name,
+                        size: size,
+                        time: parseTime(now, time),
+                        down: down
+                    },
+                    node: file
+                })
+            }
+            return filesInfo;
+        }
+        // 转换文件大小
+        function parseByteSize(text) {
+            const unit = ['B', 'K', 'M', 'G', 'T'];
+            let size = 0;
+            for (let i = 0; i < unit.length; i++) {
+                if (text.indexOf(unit[i]) > -1) {
+                    size = parseFloat(text.replace(unit[i], '')) * Math.pow(1024, i);
+                    break;
+                }
+            }
+            return size;
+        }
+        // 转换时间格式
+        function parseTime(now, text) {
+            if (text.indexOf('秒前') > -1) {
+                return now - parseInt(text.replace('秒前', '')) * 1000;
+            } else if (text.indexOf('分钟前') > -1) {
+                return now - parseInt(text.replace('分钟前', '')) * 60 * 1000;
+            } else if (text.indexOf('小时前') > -1) {
+                return now - parseInt(text.replace('小时前', '')) * 60 * 60 * 1000;
+            } else if (text.indexOf('天前') > -1) {
+                return now - parseInt(text.replace('天前', '')) * 24 * 60 * 60 * 1000; // 我不知道有没有以下几种情况，暂时先写上
+            } else if (text.indexOf('月前') > -1) {
+                return now - parseInt(text.replace('月前', '')) * 30 * 24 * 60 * 60 * 1000;
+            } else if (text.indexOf('年前') > -1) {
+                return now - parseInt(text.replace('年前', '')) * 365 * 24 * 60 * 60 * 1000;
+            }
+            return Date.parse(text);
+        }
+
+        // 排序
+        function sortFiles(files, by, order) {
+            let compareFunc;
+            if (by === 'name') {
+                compareFunc = (a, b) => {
+                    return (order == 'asc' ? 1 : -1) * sortByName(a.info.name, b.info.name);
+                }
+            } else {
+                compareFunc = (a, b) => {
+                    const result = a.info[by] > b.info[by] ? 1 : -1;
+                    return (order == 'asc' ? 1 : -1) * result;
+                }
+            }
+            files.sort(compareFunc);
+        }
+
+        function sortFileList() {
+            const files = getFiles();
+            if (files.length > 0) {
+                sortFiles(files, currentStatus.by, currentStatus.order);
+                // console.log(files)
+                const fileList = frameDoc.querySelector('#filelist');
+                for (let i = 0; i < files.length; i++) {
+                    fileList.appendChild(files[i].node);
+                }
+            }
+        }
+
+        function fileListCallback(records) {
+            if (!menu_value('menu_fileSort')) return;
+            for (const event of records) {
+                // 自己修改的时候不排序
+                if (event.removedNodes.length > 0) return;
+            }
+
+            sortFileList();
+
+        }
+
+        function clickSortButton(by, button) {
+            if (currentStatus.by === by) {
+                currentStatus.order = button.textContent === '⬆' ? 'desc' : 'asc';
+            } else {
+                currentStatus.order = button.textContent === '⇧' ? 'asc' : 'desc';
+                for (const key in allButtons) {
+                    if (key === by) continue;
+                    if (Object.hasOwnProperty.call(allButtons, key)) {
+                        const btnItem = allButtons[key];
+                        if (btnItem.el.textContent === '⬆') {
+                            btnItem.el.textContent = '⇧';
+                        } else if (btnItem.el.textContent === '⬇') {
+                            btnItem.el.textContent = '⇩';
+                        }
+                    }
+                }
+            }
+            button.textContent = currentStatus.order === 'asc' ? '⬆' : '⬇';
+            currentStatus.by = by;
+            sortFileList();
+
+        }
+
+        // create buttons
+        setTimeout(() => {
+            if (allButtons === undefined) {
+                allButtons = createAllButtons();
+                allButtons[currentStatus.by].el.textContent = '⬆';
+            }
+        }, 500);
+
+        // sort files
+        const fileList = frameDoc.querySelector('#filelist');
+        const observer = new MutationObserver(fileListCallback);
+        observer.observe(fileList, { childList: true, attributes: false });
+
+
     }
 })();
