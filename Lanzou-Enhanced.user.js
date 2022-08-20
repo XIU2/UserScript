@@ -795,9 +795,12 @@
 
         function clickSortButton(by, button) {
             if (currentStatus.by === by) {
+                // 当前选项，点击时，反转排序
                 currentStatus.order = button.textContent === '⬆' ? 'desc' : 'asc';
             } else {
+                // 非当前选项，点击时，以图标所示的顺序排序
                 currentStatus.order = button.textContent === '⇧' ? 'asc' : 'desc';
+                // 修改非当前选项按钮的图标
                 for (const key in allButtons) {
                     if (key === by) continue;
                     if (Object.hasOwnProperty.call(allButtons, key)) {
@@ -831,7 +834,7 @@
         const fileObserver = new MutationObserver(fileListCallback);
         fileObserver.observe(fileList, { childList: true, attributes: false });
 
-        // sort files
+        // sort folders
         const folderList = frameDoc.querySelector('#sub_folder_list');;
         const folderObserver = new MutationObserver(folderListCallback);
         folderObserver.observe(folderList, { childList: true, attributes: false });
