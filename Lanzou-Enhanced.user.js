@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.4.3
+// @version      1.4.4
 // @author       X.I.U
-// @description  刷新不回根目录、快捷返回上一级（右键网页空白处）、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、一键复制所有分享链接、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
+// @description  文件排序、刷新不回根目录、快捷返回上一级（右键网页空白处）、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、一键复制所有分享链接、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @include      /^https:\/\/.+\.lanzou[a-z]\.com\/.*$/
 // @match        *://pan.lanzou.com/*
 // @match        *://lanzou.com/u
@@ -631,30 +631,32 @@
             const down = tabTitle.querySelector('div.f_down'); // 下载量
             return {
                 name: {
-                    el: createButton(name, 'name'),
+                    el: createButton(name, 'name', '按 文件名称 排序'),
                     order: 'asc',
                 },
                 size: {
-                    el: createButton(size, 'size'),
+                    el: createButton(size, 'size', '按 文件大小 排序'),
                     order: 'asc',
                 },
                 time: {
-                    el: createButton(time, 'time'),
+                    el: createButton(time, 'time', '按 上传时间 排序'),
                     order: 'asc',
                 },
                 down: {
-                    el: createButton(down, 'down'),
+                    el: createButton(down, 'down', '按 下载次数 排序'),
                     order: 'asc',
                 }
             };
         }
-        function createButton(element, by) {
+        function createButton(element, by, title) {
             // element.insertAdjacentHTML('beforeend', '<a class="col_sort_btn" href="javascript: void;" style="font-size: 16px; float: right;">⇧</a>');
             let button = frameDoc.createElement('a');
             button.className = 'col_sort_btn';
             button.href = 'javascript: void(0);';
             button.style.fontSize = '16px';
             button.style.float = 'right';
+            if (by == 'name') {button.style.float = 'left';}
+            button.title = title;
             button.textContent = '⇧';
             button.onclick = () => clickSortButton(by, button);
             element.appendChild(button);
