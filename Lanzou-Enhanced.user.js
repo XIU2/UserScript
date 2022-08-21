@@ -827,7 +827,7 @@
             if (allButtons === undefined && menu_value('menu_fileSort')) {
                 allButtons = createAllButtons();
                 // console.log(allButtons);
-                allButtons[currentStatus.by].el.textContent = '⬆';
+                allButtons[currentStatus.by].el.textContent = currentStatus.order === 'asc' ? '⬆' : '⬇';
             }
         }, 500);
 
