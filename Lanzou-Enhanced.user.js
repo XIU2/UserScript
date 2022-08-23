@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.4.4
+// @version      1.4.5
 // @author       X.I.U
 // @description  文件排序、刷新不回根目录、快捷返回上一级（右键网页空白处）、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、一键复制所有分享链接、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @include      /^https:\/\/.+\.lanzou[a-z]\.com\/.*$/
@@ -716,18 +716,52 @@
         }
         // 转换时间格式
         function parseTime(now, text) {
+            function parseDay(time) {
+                const days = [
+                    {
+                        name: '前天',
+                        offset: -2,
+                    },
+                    {
+                        name: '昨天',
+                        offset: -1,
+                    }
+                ];
+                const date = new Date(now.getTime());
+                let index = -1;
+                for (let i = 0; i < days.length; i++) {
+                    if (time.indexOf(days[i].name) > -1) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index === -1) return new Date(now.getTime());
+                const hourAndMinute = text.replace(days[index].name, '').split(':');
+                const hour = parseInt(hourAndMinute[0]);
+                const minute = parseInt(hourAndMinute[1]);
+                date.setDate(date.getDate() + days[index].offset);
+                date.setHours(hour);
+                date.setMinutes(minute);
+                // 蓝奏云显示比较奇怪，超过24小时，未满48小时，都是昨天，并不以每天0点作为分界
+                if (hour * 60 + minute > now.getHours() * 60 + now.getMinutes()) {
+                    date.setDate(date.getDate() - 1);
+                }
+                return date;
+            }
             if (text.indexOf('秒前') > -1) {
-                return now - parseInt(text.replace('秒前', '')) * 1000;
+                return now.getTime() - parseInt(text.replace('秒前', '')) * 1000;
             } else if (text.indexOf('分钟前') > -1) {
-                return now - parseInt(text.replace('分钟前', '')) * 60 * 1000;
+                return now.getTime() - parseInt(text.replace('分钟前', '')) * 60 * 1000;
             } else if (text.indexOf('小时前') > -1) {
-                return now - parseInt(text.replace('小时前', '')) * 60 * 60 * 1000;
+                return now.getTime() - parseInt(text.replace('小时前', '')) * 60 * 60 * 1000;
+            } else if (text.indexOf('昨天') > -1 || text.indexOf('前天') > -1) {
+                return parseDay(text).getTime();
             } else if (text.indexOf('天前') > -1) {
-                return now - parseInt(text.replace('天前', '')) * 24 * 60 * 60 * 1000; // 我不知道有没有以下几种情况，暂时先写上
-            } else if (text.indexOf('月前') > -1) {
-                return now - parseInt(text.replace('月前', '')) * 30 * 24 * 60 * 60 * 1000;
+                return now.getTime() - parseInt(text.replace('天前', '')) * 24 * 60 * 60 * 1000;
+            } else if (text.indexOf('月前') > -1) { // 我不知道有没有以下几种情况，暂时先写上
+                return now.getTime() - parseInt(text.replace('月前', '')) * 30 * 24 * 60 * 60 * 1000;
             } else if (text.indexOf('年前') > -1) {
-                return now - parseInt(text.replace('年前', '')) * 365 * 24 * 60 * 60 * 1000;
+                return now.getTime() - parseInt(text.replace('年前', '')) * 365 * 24 * 60 * 60 * 1000;
             }
             return Date.parse(text);
         }
