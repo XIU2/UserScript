@@ -1992,7 +1992,7 @@
 		"url": "return (fun.indexOF('/workshop/browse') || fun.indexOF('/myworkshopfiles/'))",
 		"pager": {
 			"nextL": "//a[@class='pagebtn' and text()='>']",
-			"pageE": ".workshopBrowseItems>*",
+			"pageE": ".workshopBrowseItems>*,.workshopItemSubscription,.workshopItemSubscription+script",
 			"replaceE": ".workshopBrowsePaging",
 			"scriptT": 2
 		}
