@@ -48,6 +48,7 @@
 // @namespace    https://github.com/XIU2/UserScript
 // @supportURL   https://github.com/XIU2/UserScript
 // @homepageURL  https://github.com/XIU2/UserScript
+// @exclude      *://*localhost*/*
 // @exclude      https://*.taobao.com/*
 // @exclude      https://*.tmall.com/*
 // @exclude      https://*.1688.com/*
