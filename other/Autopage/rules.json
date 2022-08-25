@@ -385,6 +385,14 @@
 			"bF": "let scriptText = pageE[0].textContent.replace('Bigpipe.register(\"frs-list/pagelet/thread_list\", ',''); scriptText = scriptText.slice(0, scriptText.indexOf(').')); let temp = document.createElement('div'); temp.innerHTML = JSON.parse(scriptText).content; fun.getCSS('#frs_list_pager').innerHTML = fun.getCSS('#frs_list_pager',temp).innerHTML; return fun.src_bF(fun.getAllCSS('#thread_list>li',temp))"
 		}
 	},
+	"豆瓣": {
+		"host": "movie.douban.com",
+		"url": "/^\\/(explore|tv\\/)/",
+		"pager": {
+			"type": 2,
+			"nextL": ".explore-more>button:not(.processing)"
+		}
+	},
 	"豆瓣 - 短评": {
 		"host": "movie.douban.com",
 		"url": "/^\\/subject\\/\\d+\\/comments/",
