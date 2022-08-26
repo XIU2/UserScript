@@ -5828,24 +5828,23 @@
 		}
 	},
 	"禁漫天堂": {
-		"host": ["jmcomic.mobi","jmcomic1.mobi","18comic.vip","18comic.org"],
-		"url": "if (fun.indexOF(/^\\/photo\\//)){fun.src_bF(fun.getAllCSS('.scramble-page'), [0,'img[data-original]:not(.lazy-loaded)','data-original']); return true}",
-		"style": "[data-group], div[data-page], .thumb-overlay-albums>*:not(.scramble-page) {display: none !important;} #Comic_Top_Nav[style*='display: block'] {opacity: 0.3;}",
+		"host": ["18comic.vip","18comic.org","/^jmcomic[0-9]?\\.[a-z]+$/"],
+		"url": "if (fun.indexOF(/^\\/photo\\//)){fun.src_bF(fun.getAllCSS('.scramble-page'), [0,'img[data-original]:not(.lazy-loaded)','data-original']); setTimeout(()=>{document.body.appendChild(document.createElement('script')).textContent = `var old_onImageLoaded = onImageLoaded; onImageLoaded = function(e){aid = parseInt(/photos\\\\/\\\\d+/.exec(e.src)[0].replace('photos/','')); if(aid>scramble_id){old_onImageLoaded(e);}}`}, 3000); return true}",
+		"style": "[data-group], div[data-page], .thumb-overlay-albums>*:not(.scramble-page):not(.scramble-page1) {display: none !important;} #Comic_Top_Nav[style*='display: block'] {opacity: 0.3;}",
 		"history": true,
 		"pager": {
 			"nextL": "#next_series>a[href]",
-			"pageE": ".scramble-page",
+			"pageE": ".scramble-page,.scramble-page1",
 			"replaceE": ".menu-bolock-ul, #next_series",
-			"scriptT": 0,
-			"interval": 5000
+			"interval": 5000,
+			"scrollD": 3000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE)",
-			"aF": "setTimeout(()=>{document.body.appendChild(document.createElement('script')).textContent = `var old_onImageLoaded = onImageLoaded; onImageLoaded = function(e){aid = parseInt(/photos\\\\/\\\\d+/.exec(e.src)[0].replace('photos/','')); old_onImageLoaded(e);}`}, 500)"
+			"bF": "pageE.forEach(function (o) {o.className+=1;let b=o.querySelector('img');if(b){b.onload=e=>{onImageLoaded(e.target)}}}); return fun.src_bF(pageE)"
 		}
 	},
 	"禁漫天堂 - 分类页": {
-		"host": ["jmcomic.mobi","jmcomic1.mobi","18comic.vip","18comic.org"],
+		"host": ["18comic.vip","18comic.org","/^jmcomic[0-9]?\\.[a-z]+$/"],
 		"url": "/^\\/(albums|search|blogs|videos|movies)/",
 		"style": ".row>[style='z-index: 0;'], .col-lg-3.col-md-3.col-sm-3.col-xs-6 {display: none !important;}",
 		"blank": 3,
