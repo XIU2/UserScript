@@ -4602,7 +4602,7 @@
 		}
 	},
 	"Github": {
-		"host": ["github.com","hub.fastgit.xyz"],
+		"host": "github.com",
 		"url": "fun.isUrlC(); return (fun.lp() == '/')",
 		"pager": {
 			"type": 2,
@@ -4610,17 +4610,17 @@
 		}
 	},
 	"Github - Star/Repositories/Commits": {
-		"host": ["github.com","hub.fastgit.xyz"],
+		"host": "github.com",
 		"url": "/(tab=(stars|repositories)|\\/commits)/",
 		"pager": {
 			"nextL": "//div[@class='paginate-container']/div/*[last()]",
-			"pageE": "#js-pjax-container .position-relative div[class^='col-lg-']>div:not(.position-relative):not(.paginate-container), #user-repositories-list>ul>li, .js-navigation-container>div",
+			"pageE": "#js-pjax-container .position-relative div[class^='col-lg-']:first-of-type>div:not(.position-relative):not(.paginate-container), #user-repositories-list>ul>li, .js-navigation-container>div",
 			"replaceE": ".paginate-container",
 			"scrollD": 2500
 		}
 	},
 	"Github - Issues/Pull/Discussions/Releases/Actions": {
-		"host": ["github.com","hub.fastgit.xyz"],
+		"host": "github.com",
 		"url": "return (fun.indexOF(/\\/(issues|pulls|discussions|releases)$/) || fun.indexOF('/discussions/categories') || fun.indexOF(/\\/actions($|\\/workflows)/))",
 		"pager": {
 			"nextL": "a.next_page",
@@ -4630,7 +4630,7 @@
 		}
 	},
 	"Github - Tags": {
-		"host": ["github.com","hub.fastgit.xyz"],
+		"host": "github.com",
 		"url": "return (fun.indexOF(/\\/tags$/))",
 		"pager": {
 			"nextL": "//div[@class='pagination']/*[last()]",
@@ -4640,7 +4640,7 @@
 		}
 	},
 	"Github - Notifications": {
-		"host": ["github.com","hub.fastgit.xyz"],
+		"host": "github.com",
 		"url": "/\\/notifications/",
 		"pager": {
 			"nextL": "nav.paginate-container>a[aria-label='Next']",
@@ -4650,7 +4650,7 @@
 		}
 	},
 	"Github - Search": {
-		"host": ["github.com","hub.fastgit.xyz"],
+		"host": "github.com",
 		"url": "/\\/search\\?/",
 		"pager": {
 			"nextL": "a.next_page",
