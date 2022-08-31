@@ -4350,7 +4350,7 @@
 		}
 	},
 	"谷歌学术": {
-		"host": ["/^scholar\\.google\\./", "xs2.dailyheadlines.cc","xueshu.dailyheadlines.cc","sc.panda321.com"],
+		"host": ["/^scholar\\.google\\./", "xs2.dailyheadlines.cc","xueshu.dailyheadlines.cc","sc.panda321.com","scholar.lanfanshu.cn","scholar.mirrors.pw"],
 		"history": true,
 		"pager": {
 			"nextL": "//a[./span[contains(@class, 'next')]]",
