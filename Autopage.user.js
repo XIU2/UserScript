@@ -17,6 +17,8 @@
 // @connect      raw.iqiq.io
 // @connect      ghproxy.net
 // @connect      gh-proxy-download.moeyy.cn
+// @connect      raw.njuu.cf
+// @connect      raw.kgithub.com
 // @connect      cdn.staticaly.com
 // @connect      ghproxy.futils.com
 // @connect      ghproxy.fsofso.com
@@ -98,6 +100,7 @@
         'https://gitea.com/XIU2/UserScript/raw/branch/master/other/Autopage/rules.json',
         'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.kgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://gh-proxy-download.moeyy.cn/gh-proxy/https:/raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.njuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
@@ -118,6 +121,7 @@
         'https://gitea.com/XIU2/UserScript/raw/branch/master/other/Autopage/rules.json',
         'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.kgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://gh-proxy-download.moeyy.cn/gh-proxy/https:/raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.njuu.cf/XIU2/UserScript/master/other/Autopage/rules.json'
