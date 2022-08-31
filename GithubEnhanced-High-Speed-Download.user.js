@@ -53,7 +53,7 @@
     ], clone_url = [
         ['https://gitclone.com', '国内', '[中国 国内] - 该公益加速源由 [GitClone] 提供&#10;&#10; - 缓存：有&#10; - 首次比较慢，缓存后较快'],
         //['https://ghproxy.futils.com/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
-        ['https://hub.fastgit.xyz', '日本', '[日本 东京] - 该公益加速源由 [FastGit] 提供'],
+        // ['https://hub.fastgit.xyz', '日本', '[日本 东京] - 该公益加速源由 [FastGit] 提供'],
         ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供，有不同地区的服务器，不过国内一般分配为韩国'],
         ['https://gh.gcdn.mirr.one', '俄罗斯', '[俄罗斯 G-Core Labs CDN]']
         //['https://cithub.icu', '美国', '[美国 洛杉矶]'],
