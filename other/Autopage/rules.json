@@ -1556,6 +1556,15 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"Hippopx": {
+		"host": "www.hippopx.com",
+		"url": "/\\/(query|search)/",
+		"pager": {
+			"nextL": ".nextpage",
+			"pageE": "#mainlist",
+			"replaceE": ".prevnext"
+		}
+	},
 	"Unsplash": {
 		"host": "unsplash.com",
 		"url": "fun.isUrlC(); if(fun.indexOF('/s/photos/')){setTimeout((f=fun)=>{f.getXpath(\"//button[text()='Load more photos']\").click();}, 2000)}"
