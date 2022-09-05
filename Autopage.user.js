@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.2.4
+// @version      6.2.5
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -831,14 +831,14 @@ function: {
             }, //           NexusPHP 论坛
             nexusmods: {
                 host: 'www.nexusmods.com',
-                url: ()=> {urlC = true; if (!(lp == '/' || indexOF(/\/mods\/\d+/))) {curSite = DBSite.nexusmods;}},
+                url: ()=> {urlC = true; if (!(lp == '/' || indexOF(/\/mods\/\d+/) || !getCSS('.pagination li.next'))) {curSite = DBSite.nexusmods;}},
                 blank: 1,
                 history: false,
                 pager: {
                     nextL: nexusmods_nextL,
                     pageE: 'ul.tiles > li',
                     replaceE: '.pagination',
-                    scrollD: 4000
+                    scrollD: 3500
                 },
                 function: {
                     bF: nexusmods_bF
@@ -1369,13 +1369,15 @@ function: {
 
     // [NexusMods] 获取下一页地址
     function nexusmods_nextL() {
-        if (getCSS('.nexus-ui-blocker')) return
+        if (getCSS('.nexus-ui-blocker') || !getCSS('.pagination li.next')) return
         let modList;
-        if (indexOF('/news')) {modList = RH_NewsTabContent;} else {modList = RH_ModList;}
+        if (indexOF('/news')) {modList = RH_NewsTabContent;} else if (indexOF('/users/') && indexOF('tab=user+files','s')) {modList = RH_UserModsTab;} else {modList = RH_ModList;}
         if (!modList) return
         let out_items = JSON.stringify(modList.out_items).replace(/{|}|"/g,''),
             nextNum = getXpath('//div[contains(@class, "pagenav")][1]//a[contains(@class, "page-selected")]/parent::li/following-sibling::li/a'),
-            categories = modList.out_items.categories, categoriesUrl = '';
+            categories = modList.out_items.categories, categoriesUrl = '',
+            tags_yes = modList.out_items.tags_yes, tags_yesUrl = '',
+            search = modList.out_items.search, searchUrl = '';
         var url = '';
         if (nextNum && nextNum.innerText) {
             nextNum = nextNum.innerText;
@@ -1385,14 +1387,18 @@ function: {
                 out_items += `,page:${nextNum}`;
             }
             if (categories && categories != []) {
-                for (let i = 0; i < categories.length; i++) {
-                    categoriesUrl += `,categories[]:${categories[i]}`
-                }
-                categoriesUrl = categoriesUrl.replace(/,/,'');
-                if (out_items.indexOf('categories:') > -1) {
-                    out_items = out_items.replace(/categories:\[.*\]/, categoriesUrl)
-                }
+                for (let i = 0; i < categories.length; i++) {categoriesUrl += `,categories[]:${categories[i]}`;}
+                if (out_items.indexOf('categories:') > -1) out_items = out_items.replace(/categories:\[.*\]/, categoriesUrl.replace(/,/,''))
             }
+            if (tags_yes && tags_yes != []) {
+                for (let i = 0; i < tags_yes.length; i++) {tags_yesUrl += `,tags_yes[]:${tags_yes[i]}`;}
+                if (out_items.indexOf('tags_yes:') > -1) out_items = out_items.replace(/tags_yes:\[.*\]/, tags_yesUrl.replace(/,/,''))
+            }
+            if (search && search.length != 0) {
+                for (let key in modList.out_items.search) {searchUrl += `search[${key}]:${modList.out_items.search[key]},`;}
+                if (out_items.indexOf('search:') > -1) out_items = out_items.replace('search:',searchUrl)
+            }
+            //console.log(`https://www.nexusmods.com${modList.uri}?RH_${modList.id}=${out_items}`)
             return `https://www.nexusmods.com${modList.uri}?RH_${modList.id}=${out_items}`
         }
         return ''
