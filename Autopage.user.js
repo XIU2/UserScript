@@ -836,7 +836,7 @@ function: {
                 history: false,
                 pager: {
                     nextL: nexusmods_nextL,
-                    pageE: 'ul.tiles>li,li.comment:not(.comment-sticky)',
+                    pageE: 'ul.tiles>li,#comment-container>ol>li.comment:not(.comment-sticky)',
                     replaceE: '.pagination',
                     scrollD: 3500
                 },
