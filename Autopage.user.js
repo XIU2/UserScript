@@ -831,12 +831,12 @@ function: {
             }, //           NexusPHP 论坛
             nexusmods: {
                 host: 'www.nexusmods.com',
-                url: ()=> {urlC = true; if (indexOF(/\/(mods|users)\/\d+/)) {if (indexOF('tab=posts','s') || indexOF('tab=user+files','s')){curSite = DBSite.nexusmods;}} else if (lp !== '/' && getCSS('.pagination a.page-selected')) {curSite = DBSite.nexusmods;}},
+                url: ()=> {urlC = true; if (indexOF(/\/(mods|users)\/\d+/)) {if (indexOF('tab=posts','s')){curSite = DBSite.nexusmods_posts;} else if (indexOF('tab=user+files','s')){curSite = DBSite.nexusmods;}} else if (lp !== '/' && getCSS('.pagination a.page-selected')) {curSite = DBSite.nexusmods;}},
                 blank: 1,
                 history: false,
                 pager: {
                     nextL: nexusmods_nextL,
-                    pageE: 'ul.tiles>li,#comment-container>ol>li.comment:not(.comment-sticky)',
+                    pageE: 'ul.tiles>li',
                     replaceE: '.pagination',
                     scrollD: 3500
                 },
@@ -844,6 +844,15 @@ function: {
                     bF: nexusmods_bF
                 }
             }, //               NexusMods
+            nexusmods_posts: {
+                history: false,
+                pager: {
+                    nextL: nexusmods_nextL,
+                    pageE: '#comment-container>ol>li.comment:not(.comment-sticky)',
+                    replaceE: '.pagination',
+                    scrollD: 3500
+                }
+            }, //               NexusMods posts
             bilibili_search: {
                 host: 'search.bilibili.com',
                 url: ()=> {
@@ -1374,25 +1383,25 @@ function: {
         if (indexOF('/news')) {modList = RH_NewsTabContent;} else if (indexOF('/users/') && indexOF('tab=user+files','s')) {modList = RH_UserModsTab;} else if (indexOF('/mods/') && indexOF('tab=posts','s')) {modList = RH_CommentContainer;} else {modList = RH_ModList;}
         if (!modList) return
         let out_items = JSON.stringify(modList.out_items).replace(/{|}|"/g,''),
-            nextNum = getXpath('//div[contains(@class, "pagination")][1]//a[contains(@class, "page-selected")]/parent::li/following-sibling::li[1]/a'),
-            categories = modList.out_items.categories, categoriesUrl = '',
-            tags_yes = modList.out_items.tags_yes, tags_yesUrl = '',
-            search = modList.out_items.search, searchUrl = '';
+            nextNum = getXpath('//div[contains(@class, "pagination")][1]//a[contains(@class, "page-selected")]/parent::li/following-sibling::li[1]/a');
         var url = '';
         if (nextNum && nextNum.innerText) {
             nextNum = nextNum.innerText;
             if (out_items.indexOf('page:') > -1) {out_items = out_items.replace(/page:\d+/, `page:${nextNum}`);} else {out_items += `,page:${nextNum}`;}
-            if (categories && categories != []) {
-                for (let i = 0; i < categories.length; i++) {categoriesUrl += `,categories[]:${categories[i]}`;}
-                if (out_items.indexOf('categories:') > -1) out_items = out_items.replace(/categories:\[.*\]/, categoriesUrl.replace(/,/,''))
-            }
-            if (tags_yes && tags_yes != []) {
-                for (let i = 0; i < tags_yes.length; i++) {tags_yesUrl += `,tags_yes[]:${tags_yes[i]}`;}
-                if (out_items.indexOf('tags_yes:') > -1) out_items = out_items.replace(/tags_yes:\[.*\]/, tags_yesUrl.replace(/,/,''))
-            }
-            if (search && search.length != 0) {
-                for (let key in modList.out_items.search) {searchUrl += `search[${key}]:${modList.out_items.search[key]},`;}
-                if (out_items.indexOf('search:') > -1) out_items = out_items.replace('search:',searchUrl)
+            if (!indexOF(/\/(mods|users)\/\d+/)) { // MOD 页/用户页 不需要这些
+                let categories = modList.out_items.categories, categoriesUrl = '', tags_yes = modList.out_items.tags_yes, tags_yesUrl = '', search = modList.out_items.search, searchUrl = '';
+                if (categories && categories != []) { // 分类页
+                    for (let i = 0; i < categories.length; i++) {categoriesUrl += `,categories[]:${categories[i]}`;}
+                    if (out_items.indexOf('categories:') > -1) out_items = out_items.replace(/categories:\[.*\]/, categoriesUrl.replace(/,/,''))
+                }
+                if (tags_yes && tags_yes != []) { // 标签页
+                    for (let i = 0; i < tags_yes.length; i++) {tags_yesUrl += `,tags_yes[]:${tags_yes[i]}`;}
+                    if (out_items.indexOf('tags_yes:') > -1) out_items = out_items.replace(/tags_yes:\[.*\]/, tags_yesUrl.replace(/,/,''))
+                }
+                if (search && search.length != 0) { // 搜索页
+                    for (let key in modList.out_items.search) {searchUrl += `search[${key}]:${modList.out_items.search[key]},`;}
+                    if (out_items.indexOf('search:') > -1) out_items = out_items.replace('search:',searchUrl)
+                }
             }
             //console.log(`https://www.nexusmods.com${modList.uri}?RH_${modList.id}=${out_items}`)
             return `https://www.nexusmods.com${modList.uri}?RH_${modList.id}=${out_items}`
