@@ -3397,7 +3397,7 @@
 	"二次元动漫": {
 		"host": "www.2animx.com",
 		"url": "if(fun.indexOF('/index-look-')){setTimeout(()=>{window.page=function(){return false}},2000);return true}",
-		"style": "#img_ad_img>img {max-width: 100% !important;}",
+		"style": "#img_ad_img>img[alt] {max-width: 99% !important;display: block !important;margin: 0 auto !important;}",
 		"pager": {
 			"nextL": "//a[text()='下一頁' or text()='下一章'][not(starts-with(@href,'javascript'))]",
 			"pageE": "#ComicPic",
