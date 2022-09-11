@@ -769,6 +769,19 @@
 			"bF": "o=document.createElement('div'); o.innerHTML=JSON.parse(pageE[0].textContent).comments; fun.getCSS('.pagination').outerHTML = o.querySelector('.pagination').outerHTML; return [].slice.call(o.querySelectorAll('.media:not(.no-btm-border)')).reverse()"
 		}
 	},
+	"巴哈姆特": {
+		"host": "forum.gamer.com.tw",
+		"url": "/^\\/B\\.php/",
+		"blank": 4,
+		"pager": {
+			"nextL": "a.next",
+			"pageE": ".b-list>tbody>tr:not(.b-list__head)",
+			"replaceE": ".b-pager"
+		},
+		"function": {
+			"aF": "Forum.B.lazyThumbnail();Forum.Common.drawNoImageCanvas();"
+		}
+	},
 	"懂车帝论坛": {
 		"host": "www.dongchedi.com",
 		"url": "fun.isUrlC(); return (fun.indexOF('/community/'))",
