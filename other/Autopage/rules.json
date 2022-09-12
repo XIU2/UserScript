@@ -301,17 +301,16 @@
 		}
 	},
 	"Presearch": {
-		"host": "engine.presearch.org",
+		"host": "presearch.com",
 		"url": "/^\\/search/",
-		"style": ".items-center.justify-center.text-black, .text-gray-300>div[x-data] {display: none !important;}",
+		"style": "[x-if^='state.results.pages']+div, .text-gray-300>[x-data] {display: none !important;}",
 		"pager": {
 			"type": 6,
-			"nextL": ".font-light.border-b-2.border-transparent:last-of-type>a",
-			"pageE": ".text-gray-300>div, head>script:not([src])",
-			"replaceE": ".font-light.border-b-2.border-transparent>a",
-			"scriptT": 2,
-			"loadTime": 500,
-			"scrollD": 2500
+			"nextL": "a[\\:class*='${state.results.pages[state.results.pages.length-1]']",
+			"pageE": "[x-for^='(result']~div",
+			"replaceE": "[x-if^='state.results.pages']+div",
+			"loadTime": 1000,
+			"scrollD": 3000
 		}
 	},
 	"WebCrawler 搜索": {
