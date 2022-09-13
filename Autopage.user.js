@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.2.8
+// @version      6.2.9
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -1389,19 +1389,27 @@ function: {
             nextNum = nextNum.innerText;
             if (out_items.indexOf('page:') > -1) {out_items = out_items.replace(/page:\d+/, `page:${nextNum}`);} else {out_items += `,page:${nextNum}`;}
             if (!indexOF(/\/(mods|users)\/\d+/)) { // MOD 页/用户页 不需要这些
-                let categories = modList.out_items.categories, categoriesUrl = '', tags_yes = modList.out_items.tags_yes, tags_yesUrl = '', search = modList.out_items.search, searchUrl = '';
+                let categories = modList.out_items.categories, tags_yes = modList.out_items.tags_yes, search = modList.out_items.search, out_items_sub = '';
                 if (categories && categories != []) { // 分类页
-                    for (let i = 0; i < categories.length; i++) {categoriesUrl += `,categories[]:${categories[i]}`;}
-                    if (out_items.indexOf('categories:') > -1) out_items = out_items.replace(/categories:\[.*\]/, categoriesUrl.replace(/,/,''))
-                }
+                    if (modList.out_items.categories instanceof Array) {// 单独使用时为数组
+                        for (let i = 0; i < categories.length; i++) {out_items_sub += `categories[]:${categories[i]},`;}
+                    } else {
+                        for (let key in modList.out_items.categories) {out_items_sub += `categories[${key}]:${modList.out_items.categories[key]},`;}
+                    }
+                    if (out_items.indexOf('categories:') > -1) out_items = out_items.replace('categories:', out_items_sub)
+                }; out_items_sub='';
                 if (tags_yes && tags_yes != []) { // 标签页
-                    for (let i = 0; i < tags_yes.length; i++) {tags_yesUrl += `,tags_yes[]:${tags_yes[i]}`;}
-                    if (out_items.indexOf('tags_yes:') > -1) out_items = out_items.replace(/tags_yes:\[.*\]/, tags_yesUrl.replace(/,/,''))
-                }
+                    if (modList.out_items.tags_yes instanceof Array) {// 单独使用时为数组
+                        for (let i = 0; i < tags_yes.length; i++) {out_items_sub += `tags_yes[]:${tags_yes[i]},`;}
+                    } else {
+                        for (let key in modList.out_items.tags_yes) {out_items_sub += `tags_yes[${key}]:${modList.out_items.tags_yes[key]},`;}
+                    }
+                    if (out_items.indexOf('tags_yes:') > -1) out_items = out_items.replace('tags_yes:', out_items_sub)
+                }; out_items_sub='';
                 if (search && search.length != 0) { // 搜索页
-                    for (let key in modList.out_items.search) {searchUrl += `search[${key}]:${modList.out_items.search[key]},`;}
-                    if (out_items.indexOf('search:') > -1) out_items = out_items.replace('search:',searchUrl)
-                }
+                    for (let key in modList.out_items.search) {out_items_sub += `search[${key}]:${modList.out_items.search[key]},`;}
+                    if (out_items.indexOf('search:') > -1) out_items = out_items.replace('search:',out_items_sub)
+                }; out_items_sub='';
             }
             //console.log(`https://www.nexusmods.com${modList.uri}?RH_${modList.id}=${out_items}`)
             return `https://www.nexusmods.com${modList.uri}?RH_${modList.id}=${out_items}`
