@@ -1693,7 +1693,7 @@
 	},
 	"学犀牛 - 帖子列表": {
 		"host": ["www.xuexiniu.com","bbs.xuexiniu.com"],
-		"url": "if (fun.getCSS('body#nv_forum.pg_forumdisplay') && fun.getCSS('ul.waterfall')) return true",
+		"url": "return (fun.getCSS('body#nv_forum.pg_forumdisplay') && fun.getCSS('ul.waterfall'))",
 		"pager": {
 			"nextL": "a.nxt:not([href*='javascript'])",
 			"pageE": ".waterfall>li",
@@ -1702,7 +1702,7 @@
 	},
 	"学犀牛 - 帖子列表2": {
 		"host": ["www.xuexiniu.com","bbs.xuexiniu.com"],
-		"url": "if (fun.getCSS('body#nv_forum.pg_forumdisplay')) return true",
+		"url": "return fun.getCSS('body#nv_forum.pg_forumdisplay')",
 		"history": false,
 		"pager": {
 			"nextL": "a.nxt:not([href^='javascript']) ,a.next:not([href^='javascript'])",
@@ -1712,7 +1712,7 @@
 	},
 	"学犀牛 - 帖子内": {
 		"host": ["www.xuexiniu.com","bbs.xuexiniu.com"],
-		"url": "if (fun.getCSS('body#nv_forum.pg_viewthread')) return true",
+		"url": "return fun.getCSS('body#nv_forum.pg_viewthread')",
 		"thread": true,
 		"pager": {
 			"nextL": "a.nxt:not([href*='javascript'])",
@@ -1801,7 +1801,7 @@
 	},
 	"3DM - 分类页": {
 		"host": "www.3dmgame.com",
-		"url": "if (fun.getCSS('.Llist_b>div.lis')) return true",
+		"url": "return fun.getCSS('.Llist_b>div.lis')",
 		"pager": {
 			"nextL": "li.next>a",
 			"pageE": ".Llist_b>div.lis",
@@ -1813,7 +1813,7 @@
 	},
 	"3DM - 游戏专区 - 分类页": {
 		"host": "www.3dmgame.com",
-		"url": "if (fun.getCSS('.newsleft>ul')) return true",
+		"url": "return fun.getCSS('.newsleft>ul')",
 		"pager": {
 			"nextL": "li.next>a",
 			"pageE": ".newsleft>ul>li",
@@ -1825,7 +1825,7 @@
 	},
 	"3DM - 游戏专区 - 资源页": {
 		"host": "www.3dmgame.com",
-		"url": "return (fun.indexOF('/resource'))",
+		"url": "return fun.indexOF('/resource')",
 		"pager": {
 			"nextL": "li.next>a",
 			"pageE": ".item>ul",
@@ -1868,7 +1868,7 @@
 	},
 	"游侠网": {
 		"host": "www.ali213.net",
-		"url": "if (fun.getCSS('#after_this_page')) return true",
+		"url": "return fun.getCSS('#after_this_page')",
 		"pager": {
 			"type": 3,
 			"nextL": "#after_this_page",
@@ -1899,7 +1899,7 @@
 	},
 	"游侠网 - 下载页": {
 		"host": "down.ali213.net",
-		"url": "if (fun.getCSS('.famous-ul>.famous-li')) return true",
+		"url": "return fun.getCSS('.famous-ul>.famous-li')",
 		"pager": {
 			"nextL": "a.page-next",
 			"pageE": ".famous-ul>.famous-li",
@@ -1915,7 +1915,7 @@
 		"blank": 3,
 		"pager": {
 			"type": 3,
-			"nextL": "a.next",
+			"nextL": "a.active.n+a:not(.next)",
 			"pageE": ".c-detail>*",
 			"replaceE": ".page_fenye",
 			"scrollE": ".page_fenye",
@@ -4303,7 +4303,7 @@
 	},
 	"科研通": {
 		"host": "www.ablesci.com",
-		"url": "if (fun.getCSS('ul.fly-list')) return true",
+		"url": "return fun.getCSS('ul.fly-list')",
 		"pager": {
 			"nextL": "li.next>a",
 			"pageE": "ul.fly-list>li",
@@ -4470,7 +4470,7 @@
 	},
 	"菜鸟教程": {
 		"host": "www.runoob.com",
-		"url": "if (location.pathname.split('/').length>2 && fun.getCSS('#leftcolumn')) return true",
+		"url": "return (location.pathname.split('/').length>2 && fun.getCSS('#leftcolumn'))",
 		"style": "#comments, #postcomments, #respond, #footer {display: none !important;} .article-intro h1:not(:nth-of-type(1)) {margin: 30px 0 10px 0;} .middle-column {min-height: 1000px;}",
 		"history": true,
 		"pager": {
@@ -4792,7 +4792,7 @@
 	},
 	"致美化": {
 		"host": "zhutix.com",
-		"url": "if (fun.getCSS('#post-list')) return true;",
+		"url": "return fun.getCSS('#post-list')",
 		"pager": {
 			"nextL": "//li[@class='next-page']/a | //div[@class='btn-pager']/a[text()='❯']",
 			"pageE": "#post-list>ul>li",
@@ -6344,7 +6344,7 @@
 	},
 	"24FA": {
 		"host": ["/^(www\\.)?24fa.?\\.com$/","/^(www\\.)?\\d{3}w\\.cc$/"],
-		"url": "if(document.title.indexOf('24FA') > -1 && fun.indexOF(/^\\/m?n\\d+/)) return true",
+		"url": "return (document.title.indexOf('24FA') > -1 && fun.indexOF(/^\\/m?n\\d+/))",
 		"style": ".moreR {display: none;} #content img {width: auto; max-width: 99%; height: auto; display: block; margin: 0 auto;}",
 		"pager": {
 			"nextL": "li.p_current+li>a",
