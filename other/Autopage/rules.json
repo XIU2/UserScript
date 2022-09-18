@@ -1747,6 +1747,18 @@
 			"replaceE": "ul.pagination"
 		}
 	},
+	"模匠网": {
+		"host": "www.3dsmj.com",
+		"url": "return fun.getCSS('.content-top1')",
+		"pager": {
+			"nextL": ".active.page-item+li:not(.disabled)>a",
+			"pageE": ".content-top1>div",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
+		}
+	},
 	"下得乐": {
 		"host": ["www.xiadele.com","search.xiadele.com"],
 		"url": "/^\\/.+/",
@@ -2048,7 +2060,7 @@
 		}
 	},
 	"Switch520": {
-		"host": "fourpetal.com",
+		"host": "xxxxx520.com",
 		"url": "return (!fun.indexOF('.html'))",
 		"blank": 3,
 		"pager": {
