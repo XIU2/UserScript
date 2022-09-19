@@ -3524,7 +3524,7 @@
 	"知轩藏书": {
 		"host": "zxcs.me",
 		"url": "/\\/(sort|tag)\\//",
-		"blank": 3,
+		"blank": 4,
 		"pager": {
 			"nextL": "#pagenavi>span+a",
 			"pageE": "dl[id='plist']",
