@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.1.3
+// @version      2.1.4
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -48,13 +48,13 @@
         ['https://download.nuaa.cf', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [LibraryCloud] 提供']
         //['https://download.cithub.icu', '美国', '[美国 洛杉矶]', 'https://archive.cithub.icu']
     ], download_url = [
-        //['https://kgithub.com', '新加坡', '[新加坡] - 该公益加速源由 [kGithub] 提供'],
+        //['https://kgithub.com', '新加坡', '[新加坡] - 该公益加速源由 [KGitHub] 提供'],
         //['https://ghproxy.futils.com/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [F 搜] 提供（存在限速）'],
         ['https://download.fastgit.org', '日本', '[日本 东京] - 该公益加速源由 [FastGit] 提供', 'https://archive.fastgit.org'],
         ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供，有不同地区的服务器，不过国内一般分配为韩国']
     ], clone_url = [
         ['https://gitclone.com', '国内', '[中国 国内] - 该公益加速源由 [GitClone] 提供&#10;&#10; - 缓存：有&#10; - 首次比较慢，缓存后较快'],
-        ['https://kgithub.com', '新加坡', '[新加坡] - 该公益加速源由 [kGithub] 提供&#10;&#10; - 缓存：无（或时间很短）'],
+        ['https://kgithub.com', '新加坡', '[新加坡] - 该公益加速源由 [KGitHub] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://ghproxy.futils.com/https://github.com', '香港', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         // ['https://hub.fastgit.xyz', '日本', '[日本 东京] - 该公益加速源由 [FastGit] 提供'],
         ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供，有不同地区的服务器，不过国内一般分配为韩国'],
@@ -73,7 +73,7 @@
         //['https://ghproxy.futils.com/https://github.com', '香港 1', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://ghproxy.fsofso.com/https://github.com', '香港 2', '[中国 香港] - 该公益加速源由 [F 搜] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://raw.iqiq.io', '香港 1', '[中国 香港] - 该公益加速源由 [iQDNS/iQZone] 提供&#10;&#10; - 缓存：无（或时间很短）'],
-        ['https://raw.kgithub.com', '新加坡 1', '[新加坡] - 该公益加速源由 [kGithub] 提供&#10;&#10; - 缓存：无（或时间很短）'],
+        ['https://raw.kgithub.com', '新加坡 1', '[新加坡] - 该公益加速源由 [KGitHub] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://ghproxy.com/https://raw.githubusercontent.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://fastly.jsdelivr.net/gh', '日本 1', '[日本 东京] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
         ['https://cdn.staticaly.com/gh', '日本 2', '[日本 东京] - 该公益加速源由 [Statically CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 30 MB 的文件'],
@@ -144,6 +144,21 @@
         addRawDownLink_(); // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）鼠标事件
     });
 
+
+    // Github Release 改版为动态加载文件列表，因此需要监控网页元素变化
+    const callback = (mutationsList, observer) => {
+        if (location.pathname.indexOf('/releases') === -1) return
+        for (const mutation of mutationsList) {
+            for (const target of mutation.addedNodes) {
+                if (target.nodeType !== 1) return
+                if (target.tagName === 'DIV' && target.dataset.viewComponent === 'true' && target.classList[0] === 'Box') addRelease();
+            }
+        }
+    };
+    const observer = new MutationObserver(callback);
+    observer.observe(document, { childList: true, subtree: true });
+
+
     // download_url 加速源随机
     function get_New_download_url() {
         let a = Math.floor(Math.random()*download_url_us.length), b, c, d, new_download_url=[]
@@ -153,16 +168,15 @@
         while (c == a || c == b);
         do {d = Math.floor(Math.random()*download_url_us.length)} // 随机第四个
         while (d == a || d == b || d == c);
-        return [download_url_us[a],download_url_us[b],download_url_us[c],download_url_us[d]].concat(download_url)
         //return download_url_us.concat(download_url) // 调试用
+        return [download_url_us[a],download_url_us[b],download_url_us[c],download_url_us[d]].concat(download_url)
     }
 
     // Release
     function addRelease() {
         let html = document.querySelectorAll('.Box-footer'); if (html.length == 0 || location.pathname.indexOf('/releases') == -1) return
-        let divDisplay = 'margin-left: -90px;';
+        let divDisplay = 'margin-left: -90px;', new_download_url = get_New_download_url();
         if (document.documentElement.clientWidth > 755) {divDisplay = 'margin-top: -3px;margin-left: 8px;display: inherit;';}; // 调整小屏幕时的样式
-        let new_download_url = get_New_download_url();
         for (const current of html) {
             if (current.querySelector('.XIU2-RS')) continue
             current.querySelectorAll('li.Box-row a').forEach(function (_this) {
