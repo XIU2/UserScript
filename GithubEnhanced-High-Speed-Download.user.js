@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.1.5
+// @version      2.1.6
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -68,6 +68,7 @@
         ['git@git.zhlh6.cn', '美国', '[美国 洛杉矶]']
     ], raw_url = [
         ['https://raw.githubusercontent.com', 'Github 原生', '[日本 东京]'],
+        ['https://jsd.eagleyao.com/gh', '国内', '[中国 国内] - 该公益加速源由 [ayao] 提供&#10;&#10; - 缓存：有'],
         ['https://raw.iqiq.io', '香港 1', '[中国 香港] - 该公益加速源由 [iQDNS/iQZone] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://raw.kgithub.com', '新加坡 1', '[新加坡] - 该公益加速源由 [KGitHub] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://ghproxy.com/https://raw.githubusercontent.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供&#10;&#10; - 缓存：无（或时间很短）'],
@@ -260,10 +261,8 @@
             url = '', _html = '';
 
         for (let i=1;i<raw_url.length;i++) {
-            if (raw_url[i][0].indexOf('jsdelivr.net') != -1) {
+            if (raw_url[i][0].indexOf('jsdelivr.net') != -1 || raw_url[i][0].indexOf('eagleyao.com') != -1) {
                 url = raw_url[i][0] + href.replace('/blob/','@');
-            } else if (raw_url[i][0].indexOf('futils.com') != -1 || raw_url[i][0].indexOf('fsofso.com') != -1) {
-                url = raw_url[i][0] + href;
             } else {
                 url = raw_url[i][0] + href2;
             }
@@ -306,10 +305,8 @@
                 href = cntElm_a.getAttribute('href'),
                 href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
 
-            if (raw_url[menu_raw_fast][0].indexOf('jsdelivr.net') != -1) {
+            if (raw_url[menu_raw_fast][0].indexOf('jsdelivr.net') != -1 || raw_url[i][0].indexOf('eagleyao.com') != -1) {
                 url = raw_url[menu_raw_fast][0] + href.replace('/blob/','@');
-            } else if (raw_url[menu_raw_fast][0].indexOf('futils.com') != -1 || raw_url[menu_raw_fast][0].indexOf('fsofso.com') != -1) {
-                url = raw_url[menu_raw_fast][0] + href;
             } else {
                 url = raw_url[menu_raw_fast][0] + href2;
             }
