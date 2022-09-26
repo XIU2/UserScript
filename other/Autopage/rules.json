@@ -5927,7 +5927,7 @@
 	},
 	"E-Hentai": {
 		"host": ["e-hentai.org","exhentai.org"],
-		"url": "return fun.getCSS('.itg,#gdt,#img')",
+		"url": "if(fun.getCSS('.itg,#gdt,#img')){setTimeout(()=>{window.nl=()=>{return false}},2000);return true}",
 		"style": "#img {max-width: 100% !important;height: auto !important;min-height: 400px;}",
 		"blank": 3,
 		"pager": {
