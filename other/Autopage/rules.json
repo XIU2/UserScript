@@ -5925,55 +5925,28 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
 		}
 	},
-	"E-Hentai-g": {
-		"host": ["e-hentai.org","exhentai.org"],
-		"url": "/^\\/g\\//",
-		"pager": {
-			"type": 3,
-			"nextL": "//table[@class='ptt']//a[text()='>']",
-			"pageE": "#gdt>div:not(.c)",
-			"replaceE": ".ptt, .ptb"
-		}
-	},
-	"E-Hentai-s": {
-		"host": ["e-hentai.org","exhentai.org"],
-		"url": "/^\\/s\\//",
-		"style": "#img {max-width: 100% !important;height: auto !important;min-height: 400px;}",
-		"pager": {
-			"nextL": "a#next",
-			"pageE": "#img",
-			"replaceE": ".sn"
-		}
-	},
 	"E-Hentai": {
 		"host": ["e-hentai.org","exhentai.org"],
+		"url": "return fun.getCSS('.itg,#gdt,#img')",
+		"style": "#img {max-width: 100% !important;height: auto !important;min-height: 400px;}",
 		"blank": 3,
 		"pager": {
-			"nextL": "//table[@class='ptt']//a[text()='>']",
-			"pageE": ".itg>div, .itg>tbody>tr:not(:first-of-type)",
-			"replaceE": ".ptt, .ptb"
+			"nextL": "//table[@class='ptt']//a[string()='>'] | id('next')",
+			"pageE": ".itg>div, .itg>tbody>tr:not(:first-of-type), #gdt>div:not(.c), #img",
+			"replaceE": ".ptt, .ptb, .sn"
 		}
 	},
 	"nhentai": {
 		"host": "nhentai.net",
-		"url": "return fun.getCSS('a.next')&&fun.getCSS('.gallery')",
+		"url": "return fun.getCSS('a.next') && (fun.getCSS('.gallery, #image-container'))",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
-			"pageE": ".gallery",
-			"replaceE": ".pagination"
+			"pageE": ".gallery, #image-container img",
+			"replaceE": ".pagination, .reader-pagination"
 		},
 		"function": {
 			"bF": "if (_n_app.options.blacklisted_tags != null && _n_app.options.blacklisted_tags.length != 0) {pageE.forEach(function (one) {let tags = one.dataset.tags.split(' ');for (let i=0; i < tags.length; i++){for (let ii=0; ii < _n_app.options.blacklisted_tags.length; ii++){if (tags[i] == _n_app.options.blacklisted_tags[ii]) {one.classList.add('blacklisted');};};};});}; return fun.src_bF(pageE)"
-		}
-	},
-	"nhentai - 图片页": {
-		"host": "nhentai.net",
-		"url": "/\\/g\\/\\d+\\/\\d+\\//",
-		"pager": {
-			"nextL": "a.next",
-			"pageE": "#image-container img",
-			"replaceE": ".reader-pagination"
 		}
 	},
 	"Orzqwq": {
