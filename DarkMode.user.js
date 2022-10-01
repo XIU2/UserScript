@@ -3,7 +3,7 @@
 // @name:zh-CN   护眼模式
 // @name:zh-TW   護眼模式
 // @name:en      Dark Mode
-// @version      1.4.7
+// @version      1.4.8
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
 // @description:zh-CN  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
@@ -398,7 +398,11 @@
                 if (location.hostname.indexOf('search.bilibili.com') > -1) {
                     style += `ul.video-list img, ul.video-list .video-item .img .mask-video, ul.video-list .video-item .img .van-danmu, ul.video-list .video-item .img .van-framepreview {filter: none !important;}`
                 } else if (location.hostname.indexOf('.bilibili.com') > -1) {
-                    style += `#bilibiliPlayer video, .video-item .img .mask-video, .video-item .img .van-danmu, .video-item .img .van-framepreview {filter: none !important;} #bilibiliPlayer:not(.mode-fullscreen), #bilibiliPlayer:not(.mode-fullscreen) .bilibili-player-video-sendbar {filter: invert(1) !important;} .bilibili-player.bilibili-player-area-v1, .bilibili-player.bilibili-player-area-v3, #bilibiliPlayer {box-shadow: none !important;} * {font-weight: bold !important;}`
+                    style += `
+.bpx-player-container[data-screen="full"] .bpx-player-video-wrap {filter: invert(1) !important;}
+.bpx-player-container[data-screen="web"] {filter: invert(1) !important;}
+.bpx-player-container[data-screen="web"] video {filter: none !important;}
+* {font-weight: bold !important;}`
                 } else if (location.hostname.indexOf('.huya.com') > -1) {
                     style += `#player-wrap[style="height: 100%;"], .player-loading, .sidebar-show, #player-ctrl-wrap {filter: invert(1) !important;}`
                 }
