@@ -4979,7 +4979,7 @@
 		}
 	},
 	"Amazon": {
-		"host": ["www.amazon.com","www.amazon.cn","www.amazon.co.jp","www.amazon.es"],
+		"host": "/^www\\.amazon\\.([a-z]+|com?\\.[a-z]+)$/",
 		"url": "/\\/s\\?/",
 		"pager": {
 			"type": 3,
@@ -4989,7 +4989,7 @@
 		}
 	},
 	"eBay": {
-		"host": ["www.ebay.com","cn.ebay.com","www.ebay.com.hk","www.ebay.co.jp"],
+		"host": "/^(www|[a-z]{2})\\.ebay\\.([a-z]+|com?\\.[a-z]+)$/",
 		"url": "/^\\/sch\\//",
 		"pager": {
 			"type": 3,
