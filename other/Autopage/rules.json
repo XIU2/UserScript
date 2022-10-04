@@ -687,6 +687,7 @@
 		"host": "www.mysmth.net",
 		"url": "return (location.href.indexOf('board/') != -1)",
 		"style": "[id*='banner'], [class*='banner'] {display: none !important;}",
+		"blank": 4,
 		"pager": {
 			"nextL": ".page-select+li.page-normal>a",
 			"pageE": ".board-list>tbody>tr:not(.top)",
