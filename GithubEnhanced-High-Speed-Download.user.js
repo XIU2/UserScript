@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.1.6
+// @version      2.1.7
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -305,7 +305,7 @@
                 href = cntElm_a.getAttribute('href'),
                 href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
 
-            if (raw_url[menu_raw_fast][0].indexOf('jsdelivr.net') != -1 || raw_url[i][0].indexOf('eagleyao.com') != -1) {
+            if (raw_url[menu_raw_fast][0].indexOf('jsdelivr.net') != -1 || raw_url[menu_raw_fast][0].indexOf('eagleyao.com') != -1) {
                 url = raw_url[menu_raw_fast][0] + href.replace('/blob/','@');
             } else {
                 url = raw_url[menu_raw_fast][0] + href2;
