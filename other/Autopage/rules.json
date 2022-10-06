@@ -5797,16 +5797,20 @@
 		}
 	},
 	"7mmtv": {
-		"host": ["7mmtv.tv","7mm.tv","/^[a-z]{2}\\d{4}\\.com$/"],
+		"host": "7mmtv.sx",
 		"url": "return (document.title.indexOf('7mmtv') != -1 && fun.lp() != '/' && !fun.indexOF('_content/'))",
+		"blank": 4,
 		"pager": {
 			"nextL": "li.page-item.current+li.page-item>a",
-			"pageE": ".latest-korean-slider>.row:first-of-type>div",
+			"pageE": "main .row.content",
 			"replaceE": ".pagination-row"
+		},
+		"function": {
+			"aF": "document.body.appendChild(document.createElement('script')).textContent = 'window.document.dispatchEvent(new Event(\"DOMContentLoaded\", {bubbles: true,cancelable: true}));'"
 		}
 	},
 	"7mmtv - 漫画": {
-		"host": ["/^.+\\.7mmtv\\.tv$/","/^.+\\.7mm\\.tv$/","/^.+\\.[a-z]{2}\\d{4}\\.com$/"],
+		"host": "/^.+\\.7mmtv\\.sx$/",
 		"url": "if (document.title.indexOf('7mmtv') != -1 && fun.indexOF('/hcomic_content/')) {let _img=''; for (let i=1;i<=Large_cgurl.length;i++){_img += `<li><img src=\"${Large_cgurl[i]}\" class=\"img-responsive\"></li>`;}; document.getElementById('show_cg_html').innerHTML = _img; return true;}",
 		"style": ".video-introduction-images-row>center>*:not(#content) {display: none !important;}",
 		"hiddenPN": true
