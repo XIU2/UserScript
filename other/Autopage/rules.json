@@ -5947,11 +5947,11 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
-			"pageE": ".gallery, #image-container img",
+			"pageE": ".container>.gallery, .gallery-favorite, #image-container img",
 			"replaceE": ".pagination, .reader-pagination"
 		},
 		"function": {
-			"bF": "if (_n_app.options.blacklisted_tags != null && _n_app.options.blacklisted_tags.length != 0) {pageE.forEach(function (one) {let tags = one.dataset.tags.split(' ');for (let i=0; i < tags.length; i++){for (let ii=0; ii < _n_app.options.blacklisted_tags.length; ii++){if (tags[i] == _n_app.options.blacklisted_tags[ii]) {one.classList.add('blacklisted');};};};});}; return fun.src_bF(pageE)"
+			"bF": "if (!fun.indexOF('/favorites/') && _n_app.options.blacklisted_tags != null && _n_app.options.blacklisted_tags.length != 0) {pageE.forEach(function (one) {let tags = one.dataset.tags.split(' ');for (let i=0; i < tags.length; i++){for (let ii=0; ii < _n_app.options.blacklisted_tags.length; ii++){if (tags[i] == _n_app.options.blacklisted_tags[ii]) {one.classList.add('blacklisted');};};};});}; return fun.src_bF(pageE)"
 		}
 	},
 	"Orzqwq": {
