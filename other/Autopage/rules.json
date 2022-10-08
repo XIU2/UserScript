@@ -6225,7 +6225,7 @@
 		}
 	},
 	"秀人美女": {
-		"host": "www.xrmn5.com",
+		"host": "www.xrmnw.cc",
 		"url": "/(^\\/.)|(\\d+\\.html$)/",
 		"pager": {
 			"type": 3,
@@ -6235,14 +6235,14 @@
 		}
 	},
 	"精品美女吧": {
-		"host": "www.jpmn8.com",
+		"host": ["www.jpmn5.com","www.jpmn8.com"],
 		"url": "/(^\\/.)|(\\d+\\.html$)/",
 		"style": "img[onload] {min-height: 500px;}",
 		"pager": {
-			"type": 3,
 			"nextL": ".current+a",
 			"pageE": "img[onload], article.excerpt",
-			"replaceE": ".pagination1"
+			"replaceE": ".pagination1",
+			"scrollD": 3000
 		}
 	},
 	"ku66": {
