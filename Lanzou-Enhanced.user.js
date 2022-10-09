@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.4.5
+// @version      1.4.6
 // @author       X.I.U
 // @description  文件排序、刷新不回根目录、快捷返回上一级（右键网页空白处）、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、一键复制所有分享链接、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @include      /^https:\/\/.+\.lanzou[a-z]\.com\/.*$/
@@ -105,11 +105,11 @@
         shareLinkWithPassword(); //                                 带密码的分享链接自动输密码
     } else {
         setTimeout(function() { //                                  延迟 300 毫秒（避免网页还没加载完）
+            if (document.querySelector('#pwdload,#passwddiv')) { // > 分享链接输入密码页
+                enterPassword(); //                                 自动输入密码（仅支持访问 带密码的分享链接 时）
+                enterToPass(); //                                   输入密码后回车确认（针对手动输入密码）
+            }
             if (document.getElementById('infos')) { //              > 分享链接文件列表页
-                if (document.getElementById('pwdload')) { //        > 分享链接输入密码页
-                    enterPassword(); //                             自动输入密码（仅支持访问 带密码的分享链接 时）
-                    enterToPass(); //                               输入密码后回车确认
-                }
                 fileMoreS(); //                                     自动显示更多文件
                 directDownload(); //                                点击直接下载文件（分享链接列表页）
             }
@@ -161,7 +161,11 @@
             let password = location.search.split('=')
             if (password.length > 0) {
                 document.getElementById('pwd').value = password[password.length - 1]
-                document.getElementById('sub').click();
+                if (document.getElementById('sub')) {
+                    document.getElementById('sub').click();
+                } else {
+                    document.querySelector('.passwddiv-btn[onclick]').click();
+                }
             }
         }
     }
