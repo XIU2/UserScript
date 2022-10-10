@@ -4667,7 +4667,7 @@
 		"url": "return (fun.indexOF(/\\/(issues|pulls|discussions|releases)$/) || fun.indexOF('/discussions/categories') || fun.indexOF(/\\/actions($|\\/workflows)/))",
 		"pager": {
 			"nextL": "a.next_page",
-			"pageE": "div[id^='issue_'], ul[aria-labelledby='discussions-list']>li, #repo-content-pjax-container>div>div[data-pjax]>div:not(.paginate-container), div[id^='check_suite_']",
+			"pageE": "div[id^='issue_'], ul[aria-labelledby='discussions-list']>li, #repo-content-pjax-container>div>div[data-pjax]>section, div[id^='check_suite_']",
 			"replaceE": ".pagination",
 			"scrollD": 2500
 		}
