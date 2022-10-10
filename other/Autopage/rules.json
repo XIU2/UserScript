@@ -5815,6 +5815,22 @@
 		"style": ".video-introduction-images-row>center>*:not(#content) {display: none !important;}",
 		"hiddenPN": true
 	},
+	"imhentai.xxx": {
+		"host": "imhentai.xxx",
+		"url": "return fun.getCSS('.thumb') && fun.getCSS('.page-item.active')",
+		"blank": 4,
+		"pager": {
+			"nextL": ".page-item.active+li:not(.disabled)>a",
+			"pageE": ".thumb",
+			"replaceE": ".pagination"
+		}
+	},
+	"imhentai.xxx - 图片页": {
+		"host": "imhentai.xxx",
+		"url": "if(fun.indexOF('/view/')){setTimeout(()=>{let _img='',iext_nx='',Pages=parseInt(document.getElementById('pages').value),image_dir=document.getElementById('image_dir').value,gallery_id=document.getElementById('gallery_id').value;for(let i=1;i<=Pages;i++){if(g_th[i].split(',')[0]=='j'){iext_nx='jpg'}else if(g_th[i].split(',')[0]=='p'){iext_nx='png'}else if(g_th[i].split(',')[0]=='b'){iext_nx='bmp'}else if(g_th[i].split(',')[0]=='g'){iext_nx='gif'};_img+=`<img src=\"//${random_server}/${image_dir}/${gallery_id}/${i}.${iext_nx}\">`;};console.log(_img);document.querySelector('.pre_img').outerHTML=_img;},1000);return true}",
+		"style": ".nav_pagination {display: none !important;}",
+		"hiddenPN": true
+	},
 	"Hentai.tv": {
 		"host": "hentai.tv",
 		"url": "/^\\/(trending|genre)\\//",
