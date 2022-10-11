@@ -2115,12 +2115,12 @@
 	},
 	"RuTracker - 帖子列表": {
 		"host": ["rutracker.org", "rutracker.net"],
-		"url": "/viewforum\\.php/",
-		"blank": 3,
+		"url": "/(viewforum|tracker)\\.php/",
+		"blank": 4,
 		"pager": {
-			"nextL": "#pagination b~a.pg",
-			"pageE": "tr[id^='tr-']",
-			"replaceE": "#pagination"
+			"nextL": "#pagination b~a.pg, .nav b~a.pg",
+			"pageE": "tr[id^='tr-'], tr[id^='trs-']",
+			"replaceE": "#pagination, .bottom_info>.nav"
 		}
 	},
 	"RuTracker - 帖子内": {
