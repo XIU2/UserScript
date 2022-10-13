@@ -2240,6 +2240,31 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"厂长资源": {
+		"host": "www.czspp.com",
+		"url": "return (fun.getCSS('a.current+a') && fun.getCSS('.bt_img'))",
+		"style": ".bt_img>ul>li>a {height: 337.778px;}",
+		"pager": {
+			"nextL": "a.current+a",
+			"pageE": ".bt_img>ul",
+			"replaceE": ".pagenavi_txt"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
+	"电影狗": {
+		"host": "www.dianyinggou.com",
+		"url": "return (fun.getCSS('.mainPage') && fun.getCSS('.movies'))",
+		"pager": {
+			"nextL": ".mainPage>li.selected+li>a",
+			"pageE": ".movies",
+			"replaceE": ".mainPage"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
+		}
+	},
 	"91 美剧网": {
 		"host": "/mjw\\d+\\.com$/",
 		"url": "return (document.title.indexOf('91美剧') > -1 && !fun.indexOF('/w/') && !fun.indexOF('/dp/'))",
