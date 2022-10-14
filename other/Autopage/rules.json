@@ -234,7 +234,7 @@
 		}
 	},
 	"Yahoo 搜索": {
-		"host": "search.yahoo.com",
+		"host": ["search.yahoo.com","hk.search.yahoo.com"],
 		"url": "/\\/search/",
 		"history": true,
 		"pager": {
