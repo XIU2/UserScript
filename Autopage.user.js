@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.3.7
+// @version      6.3.8
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -309,7 +309,11 @@
             if (DBSite.wp_article.pager.nextL != undefined) {
                 if (DBSite.wp_article.pager.nextL.indexOf('//') !== 0) DBSite.wp_article.pager.replaceE += ',' + DBSite.wp_article.pager.nextL
                 if (getAllCSS('main').length == 1) {
-                    if (getAllCSS('main article[class]').length > 3) {
+                    if (getAllCSS('main .posts-wrapper.row>div>article').length > 3) {
+                        DBSite.wp_article.pager.pageE = 'main .posts-wrapper.row>div'
+                    } else if (getAllCSS('main article[id^="post-"]').length > 3) {
+                        DBSite.wp_article.pager.pageE = 'main article[id^="post-"]'
+                    } else if (getAllCSS('main article[class]').length > 3) {
                         DBSite.wp_article.pager.pageE = 'main article[class]'
                     } else if (getAllCSS('main div[id^="post-"]').length > 3) {
                         DBSite.wp_article.pager.pageE = 'main div[id^="post-"]'
@@ -319,7 +323,11 @@
                     if (DBSite.wp_article.pager.pageE != undefined) {console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站`); return 10;}
                 }
 
-                if (getAllCSS('article[class]').length > 3) {
+                if (getAllCSS('.posts-wrapper.row>div>article').length > 3) {
+                    DBSite.wp_article.pager.pageE = '.posts-wrapper.row>div'
+                } else if (getAllCSS('article[id^="post-"]').length > 3) {
+                    DBSite.wp_article.pager.pageE = 'article[id^="post-"]'
+                } else if (getAllCSS('article[class]').length > 3) {
                     DBSite.wp_article.pager.pageE = 'article[class]'
                 } else if (getAllCSS('div[id^="post-"]').length > 3) {
                     DBSite.wp_article.pager.pageE = 'div[id^="post-"]'
