@@ -2251,7 +2251,7 @@
 		}
 	},
 	"厂长资源": {
-		"host": "www.czspp.com",
+		"host": ["czspp.com","www.czspp.com"],
 		"url": "return (fun.getCSS('a.current+a') && fun.getCSS('.bt_img'))",
 		"style": ".bt_img>ul>li>a {height: 337.778px;}",
 		"pager": {
