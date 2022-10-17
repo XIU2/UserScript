@@ -2113,6 +2113,16 @@
 			"replaceE": "#wrapcentre>div"
 		}
 	},
+	"Nexus-Games": {
+		"host": "nexus-games.net",
+		"url": "return (fun.getCSS('.game-list')&&fun.getCSS('.next>a'))",
+		"blank": 3,
+		"pager": {
+			"nextL": ".next>a",
+			"pageE": ".game-list>.game",
+			"replaceE": ".post-pagination"
+		}
+	},
 	"RuTracker - 帖子列表": {
 		"host": ["rutracker.org", "rutracker.net"],
 		"url": "/(viewforum|tracker)\\.php/",
@@ -4308,6 +4318,16 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"account.zlib.pro": {
+		"host": "account.zlib.pro",
+		"url": "return !fun.indexOF('/line_')",
+		"pager": {
+			"nextL": "li.active+li>a",
+			"pageE": ".container:not(.top)",
+			"replaceE": ".pagination",
+			"scrollD": 500
+		}
+	},
 	"PubMed": {
 		"host": "pubmed.ncbi.nlm.nih.gov",
 		"pager": {
@@ -6383,7 +6403,7 @@
 		}
 	},
 	"24FA": {
-		"host": ["/^(www\\.)?24fa.?\\.com$/","/^(www\\.)?\\d{3}w\\.cc$/"],
+		"host": ["^(www\\.)?24fa\\.[a-z]+$","/^(www\\.)?24fa.?\\.com$/","/^(www\\.)?\\d{3}w\\.cc$/"],
 		"url": "return (document.title.indexOf('24FA') > -1 && fun.indexOF(/^\\/m?n\\d+/))",
 		"style": ".moreR {display: none;} #content img {width: auto; max-width: 99%; height: auto; display: block; margin: 0 auto;}",
 		"pager": {
