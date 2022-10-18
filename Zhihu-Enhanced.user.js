@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.1.9
+// @version      2.2.0
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @description:zh-TW  移除登錄彈窗、屏蔽首頁視頻、默認收起回答、快捷收起回答/評論、快捷回到頂部、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化搜索熱門、淨化標題消息、置頂顯示時間、完整問題時間、區分問題文章、默認高清原圖、默認站外直鏈...
@@ -1382,7 +1382,7 @@ function questionInvitation(){
 (function() {
     if (window.onurlchange === undefined) {addUrlChangeEvent();} // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
     window.addEventListener('urlchange', function(){ // 针对的是从单个回答页跳转到完整回答页时
-        console.log(location.pathname)
+        //console.log(location.pathname)
         if (location.pathname.indexOf('question') > -1 && location.pathname.indexOf('waiting') === -1 && location.pathname.indexOf('/answer/') === -1) { //       回答页 //
             setTimeout(function(){
                 collapsedNowAnswer('.QuestionPage'); //                        收起当前回答 + 快捷返回顶部
@@ -1402,6 +1402,7 @@ function questionInvitation(){
         }
     })
 
+    removeLogin(); //                                                      移除登录弹窗
     // Violentmonkey 比 Tampermonkey 加载更早，会导致一些元素还没加载，因此需要延迟一会儿
     // Tampermonkey 4.18.0 版本可能需要延迟一会执行
     if (GM_info.scriptHandler === 'Violentmonkey' || (GM_info.scriptHandler === 'Tampermonkey' && parseFloat(GM_info.version.slice(0,4)) >= 4.18)) {
@@ -1411,7 +1412,6 @@ function questionInvitation(){
     }
 
     function start(){
-        removeLogin(); //                                                      移除登录弹窗
         cleanTitles(); //                                                      净化标题消息
         removeHighlightLink(); //                                              移除高亮链接
         setInterval(originalPic,100); //                                       默认高清原图
