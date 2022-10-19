@@ -3640,11 +3640,13 @@
 	"和图书": {
 		"host": ["hetushu.com","www.hetushu.com","hetubook.com","www.hetubook.com"],
 		"url": "/^\\/book\\/\\d+\\/\\d+\\.html$/",
-		"style": "body,#center,#cbox,#content {overflow: initial !important;position: initial !important;} #right,.sidebarbox{position: fixed !important;right: 0;}",
+		"style": "body,#center,#cbox,#content {overflow: initial !important;position: initial !important;} #right,.sidebarbox{position: fixed !important;right: 0;} #Autopage_iframe{display: none;}",
 		"pager": {
+			"type": 6,
 			"nextL": "#next",
 			"pageE": "#content>.h2~div",
-			"replaceE": ".next,.pre"
+			"replaceE": ".next,.pre",
+			"loadTime": 500
 		}
 	},
 	"owlook": {
