@@ -3638,7 +3638,7 @@
 		}
 	},
 	"和图书": {
-		"host": ["www.hetushu.com","www.hetubook.com"],
+		"host": ["hetushu.com","www.hetushu.com","hetubook.com","www.hetubook.com"],
 		"url": "/^\\/book\\/\\d+\\/\\d+\\.html$/",
 		"style": "body,#center,#cbox,#content {overflow: initial !important;position: initial !important;} #right,.sidebarbox{position: fixed !important;right: 0;}",
 		"pager": {
