@@ -3637,6 +3637,16 @@
 			"bF": "return fun.xs_bF(pageE, [/(<br>)?(&nbsp;)+您可以在百度.+?最新章节！/, ''])"
 		}
 	},
+	"和图书": {
+		"host": ["www.hetushu.com","www.hetubook.com"],
+		"url": "/^\\/book\\/\\d+\\/\\d+\\.html$/",
+		"style": "body,#center,#cbox,#content {overflow: initial !important;position: initial !important;} #right,.sidebarbox{position: fixed !important;right: 0;}",
+		"pager": {
+			"nextL": "#next",
+			"pageE": "#content>.h2~div",
+			"replaceE": ".next,.pre"
+		}
+	},
 	"owlook": {
 		"host": ["www.owlook.com.cn","www1.owlook.com.cn"],
 		"url": "return (fun.lp() == '/owllook_content')",
@@ -6012,7 +6022,7 @@
 			"replaceE": ".pagination, .reader-pagination"
 		},
 		"function": {
-			"bF": "if (!fun.indexOF('/favorites/') && _n_app.options.blacklisted_tags != null && _n_app.options.blacklisted_tags.length != 0) {pageE.forEach(function (one) {let tags = one.dataset.tags.split(' ');for (let i=0; i < tags.length; i++){for (let ii=0; ii < _n_app.options.blacklisted_tags.length; ii++){if (tags[i] == _n_app.options.blacklisted_tags[ii]) {one.classList.add('blacklisted');};};};});}; return fun.src_bF(pageE)"
+			"bF": "if (fun.getCSS('.container>.gallery') && _n_app.options.blacklisted_tags != null && _n_app.options.blacklisted_tags.length != 0) {pageE.forEach(function (one) {let tags = one.dataset.tags.split(' ');for (let i=0; i < tags.length; i++){for (let ii=0; ii < _n_app.options.blacklisted_tags.length; ii++){if (tags[i] == _n_app.options.blacklisted_tags[ii]) {one.classList.add('blacklisted');};};};});}; return fun.src_bF(pageE)"
 		}
 	},
 	"Orzqwq": {
@@ -6296,7 +6306,7 @@
 		}
 	},
 	"精品美女吧": {
-		"host": "www.jpmn8.com",
+		"host": ["www.jpmnb.com","www.jpmnb.net","www.jpmn8.com"],
 		"url": "/(^\\/.)|(\\d+\\.html$)/",
 		"style": "img[onload] {min-height: 500px;}",
 		"pager": {
