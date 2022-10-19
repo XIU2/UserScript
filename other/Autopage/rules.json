@@ -5811,6 +5811,31 @@
 			"scrollD": 2500
 		}
 	},
+	"YavTube": {
+		"host": "yavtube.com",
+		"url": "return (fun.getCSS('li.active')&&fun.getCSS('ul.item-list'))",
+		"pager": {
+			"nextL": "li.active+li.wave-effect>a",
+			"pageE": "ul.item-list",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
+	"YavTube - 作品页": {
+		"host": "yavtube.com",
+		"url": "/^\\/model\\//",
+		"pager": {
+			"nextL": "section.active li.active+li.wave-effect>a",
+			"pageE": "section.model-items-container:first-of-type>ul",
+			"insertP": ["section.active>ul",5],
+			"replaceE": "section.active .pagination, section.model-items-container:not([style='display: none;']):first-of-type .pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"UraakaList": {
 		"host": "uraakalist.com",
 		"url": "/^\\/.+/",
