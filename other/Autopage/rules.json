@@ -5812,7 +5812,7 @@
 		}
 	},
 	"YavTube": {
-		"host": "yavtube.com",
+		"host": ["yavtube.com","r18hub.com"],
 		"url": "return (fun.getCSS('li.active')&&fun.getCSS('ul.item-list'))",
 		"pager": {
 			"nextL": "li.active+li.wave-effect>a",
@@ -5824,7 +5824,7 @@
 		}
 	},
 	"YavTube - 作品页": {
-		"host": "yavtube.com",
+		"host": ["yavtube.com","r18hub.com"],
 		"url": "/^\\/model\\//",
 		"pager": {
 			"nextL": "section.active li.active+li.wave-effect>a",
