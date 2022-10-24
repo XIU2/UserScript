@@ -65,7 +65,7 @@
 			"replaceE": "#b_results>.b_pag"
 		},
 		"function": {
-			"bF": "if (!fun.getCSS('.b_title>a.sh_favicon')) {fun.insStyle('.b_title>a.sh_favicon {display: none !important;}');return pageE;}; pageE.forEach(function (one) {fun.getAllCSS('div.rms_iac[data-src]').forEach(function (one1) {one1.outerHTML = `<img src=\"${one1.dataset.src}\" height=\"16\" width=\"16\" alt=\"全球 Web 图标\" role=\"presentation\" class=\"rms_img\">`;})});return pageE"
+			"bF": "if (!fun.getCSS('.b_title>a.sh_favicon')) {fun.insStyle('.b_title>a.sh_favicon {display: none !important;}');return pageE;}; pageE.forEach(function (one) {fun.getAllCSS('div.rms_iac[data-src]',one).forEach(function (one1) {one1.outerHTML = `<img src=\"${one1.dataset.src}\" height=\"16\" width=\"16\" alt=\"全球 Web 图标\" role=\"presentation\" class=\"rms_img\">`;})});return pageE"
 		}
 	},
 	"搜狗搜索": {
