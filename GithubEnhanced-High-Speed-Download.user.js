@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.1.9
+// @version      2.1.10
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -68,14 +68,15 @@
         ['git@git.zhlh6.cn', '美国', '[美国 洛杉矶]']
     ], raw_url = [
         ['https://raw.githubusercontent.com', 'Github 原生', '[日本 东京]'],
-        ['https://jsd.eagleyao.com/gh', '国内', '[中国 国内] - 该公益加速源由 [ayao] 提供&#10;&#10; - 缓存：有'],
+        ['https://jsd.cdn.zzko.cn/gh', '国内 1', '[中国 国内] - 该公益加速源由 [ayao] 提供&#10;&#10; - 缓存：有'],
+        ['https://js.cdn.haah.net/gh', '国内 2', '[中国 国内] - 该公益加速源由 [haah] 提供&#10;&#10; - 缓存：有'],
         ['https://raw.iqiq.io', '香港 1', '[中国 香港] - 该公益加速源由 [iQDNS/iQZone] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://raw.kgithub.com', '新加坡 1', '[新加坡] - 该公益加速源由 [KGitHub] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://ghproxy.com/https://raw.githubusercontent.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://fastly.jsdelivr.net/gh', '日本 1', '[日本 东京] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
         ['https://cdn.staticaly.com/gh', '日本 2', '[日本 东京] - 该公益加速源由 [Statically CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 30 MB 的文件'],
         ['https://raw.fastgit.org', '日本 3', '[日本 东京] - 该公益加速源由 [FastGit] 提供&#10;&#10; - 缓存：无（或时间很短）'],
-        ['https://ghproxy.net/https://raw.githubusercontent.com', '日本 4', '[日本 大阪]&#10;&#10; - 缓存：无（或时间很短）'],
+        //['https://ghproxy.net/https://raw.githubusercontent.com', '日本 4', '[日本 大阪]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://raw.njuu.cf', '美国', '[美国 拉斯维加斯] - 该公益加速源由 [LibraryCloud] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://raw.cithub.icu', '美国', '[美国 洛杉矶]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://git.yumenaka.net/https://raw.githubusercontent.com', '美国', '[美国 圣何塞]&#10;&#10; - 缓存：无（或时间很短）'],
@@ -261,7 +262,7 @@
             url = '', _html = '';
 
         for (let i=1;i<raw_url.length;i++) {
-            if (raw_url[i][0].indexOf('jsdelivr.net') != -1 || raw_url[i][0].indexOf('eagleyao.com') != -1) {
+            if (raw_url[i][0].indexOf('/gh') != -1 && raw_url[i][0].indexOf('cdn.staticaly.com') === -1) {
                 url = raw_url[i][0] + href.replace('/blob/','@');
             } else {
                 url = raw_url[i][0] + href2;
@@ -304,8 +305,7 @@
                 Name = cntElm_a.innerText,
                 href = cntElm_a.getAttribute('href'),
                 href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
-
-            if (raw_url[menu_raw_fast][0].indexOf('jsdelivr.net') != -1 || raw_url[menu_raw_fast][0].indexOf('eagleyao.com') != -1) {
+            if (raw_url[menu_raw_fast][0].indexOf('/gh') != -1 && raw_url[menu_raw_fast][0].indexOf('cdn.staticaly.com') === -1) {
                 url = raw_url[menu_raw_fast][0] + href.replace('/blob/','@');
             } else {
                 url = raw_url[menu_raw_fast][0] + href2;
