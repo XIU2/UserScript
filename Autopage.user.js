@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.3.11
+// @version      6.3.12
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -98,12 +98,12 @@
         'https://js.cdn.haah.net/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.kgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        //'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://cdn.staticaly.com/gh/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://gcore.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
-        'https://fastly.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
-        'https://raw.githubusercontents.com/XIU2/UserScript/master/other/Autopage/rules.json'
+        'https://fastly.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json'
+        //'https://raw.githubusercontents.com/XIU2/UserScript/master/other/Autopage/rules.json'
     ], urlArr2 = [
         'https://userscript.gh2233.ml/other/Autopage/rules.json',
         'https://userscript.xiu2.xyz/other/Autopage/rules.json',
@@ -112,7 +112,7 @@
         'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.kgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        //'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json'
     ],
         loadMoreExclude1 = ['stackoverflow.com'],
@@ -267,7 +267,7 @@
         } else if (getCSS('head meta[name="generator" i][content="nexusphp" i]') || getXpath('id("footer")[contains(string(), "NexusPHP")]')) {
             console.info(`[自动无缝翻页] - <NexusPHP> 论坛`); return 7;
 
-        } else if (loadMoreExclude(loadMoreExclude1) && getAllCSS('.load-more, .load_more, .loadmore, #load-more, #load_more, #loadmore, .show-more, .show_more').length === 1) {
+        } else if (loadMoreExclude(loadMoreExclude1) && getAllCSS('.load-more, .load_more, .loadmore, #load-more, #load_more, #loadmore, [id^="loadmore"], .show-more, .show_more').length === 1) {
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 1`); return 8;
 
         } else if (loadMoreExclude(loadMoreExclude2) && getAllXpath('//*[self::a or self::span or self::button or self::div][text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]').length === 1) {
@@ -313,6 +313,8 @@
                 if (getAllCSS('main').length == 1) {
                     if (getAllCSS('main .posts-wrapper.row>div>article').length > 3) {
                         DBSite.wp_article.pager.pageE = 'main .posts-wrapper.row>div'
+                    } else if (getAllXpath('//main//div[contains(@class,"row")]/div/article').length > 3) {
+                        DBSite.wp_article.pager.pageE = '//main//div[contains(@class,"row")]/div/article/parent::div'
                     } else if (getAllCSS('main article[id^="post-"]').length > 3) {
                         DBSite.wp_article.pager.pageE = 'main article[id^="post-"]'
                     } else if (getAllCSS('main article[class]').length > 3) {
@@ -327,6 +329,8 @@
 
                 if (getAllCSS('.posts-wrapper.row>div>article').length > 3) {
                     DBSite.wp_article.pager.pageE = '.posts-wrapper.row>div'
+                } else if (getAllXpath('//div[contains(@class,"row")]/div/article').length > 3) {
+                    DBSite.wp_article.pager.pageE = '//div[contains(@class,"row")]/div/article/parent::div'
                 } else if (getAllCSS('article[id^="post-"]').length > 3) {
                     DBSite.wp_article.pager.pageE = 'article[id^="post-"]'
                 } else if (getAllCSS('article[class]').length > 3) {
@@ -387,7 +391,7 @@
                 case 7: //   < 所有 NexusPHP 论坛 >
                     DBSite.nexusphp.url(); break;
                 case 8: // < 部分自带 自动无缝翻页 的网站 1 >
-                    DBSite.loadmore.url('.load-more, .load_more, .loadmore, #load-more, #load_more, #loadmore, .show-more, .show_more'); break;
+                    DBSite.loadmore.url('.load-more, .load_more, .loadmore, #load-more, #load_more, #loadmore, [id^="loadmore"], .show-more, .show_more'); break;
                 case 9: // < 部分自带 自动无缝翻页 的网站 2 >
                     DBSite.loadmore.url('//*[self::a or self::span or self::button or self::div][text()="加载更多" or text()="查看更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]'); break;
                 case 10: // < 部分使用 WordPress 的网站 >
@@ -506,7 +510,7 @@ function: {
                     if (!indexOF('/post/') && !getCSS('#comments, .comments-area, #disqus_thread')) {
                         curSite = DBSite.wp_article;
                         // 自适应瀑布流样式
-                        setTimeout(()=>{if (getCSS(curSite.pager.pageE).style.cssText.indexOf('position: absolute') != -1){insStyle(curSite.pager.pageE + '{position: static !important; float: left !important; height: '+ parseInt(getCSS(curSite.pager.pageE).offsetHeight * 1.1) + 'px !important;}');}}, 1500);
+                        setTimeout(()=>{if (getOne(curSite.pager.pageE).style.cssText.indexOf('position: absolute') != -1){insStyle(curSite.pager.pageE + '{position: static !important; float: left !important; height: '+ parseInt(getCSS(curSite.pager.pageE).offsetHeight * 1.1) + 'px !important;}');}}, 1500);
                     }
                 },
                 style: 'img[data-src], img[data-original] {opacity: 1 !important;}',
