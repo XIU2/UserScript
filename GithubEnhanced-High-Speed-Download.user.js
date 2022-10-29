@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.1.10
+// @version      2.1.11
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -68,20 +68,19 @@
         ['git@git.zhlh6.cn', '美国', '[美国 洛杉矶]']
     ], raw_url = [
         ['https://raw.githubusercontent.com', 'Github 原生', '[日本 东京]'],
-        ['https://jsd.cdn.zzko.cn/gh', '国内 1', '[中国 国内] - 该公益加速源由 [ayao] 提供&#10;&#10; - 缓存：有'],
-        ['https://js.cdn.haah.net/gh', '国内 2', '[中国 国内] - 该公益加速源由 [haah] 提供&#10;&#10; - 缓存：有'],
+        ['https://jsd.cdn.zzko.cn/gh', '国内', '[中国 国内] - 该公益加速源由 [ayao] 提供&#10;&#10; - 缓存：有'],
         ['https://raw.iqiq.io', '香港 1', '[中国 香港] - 该公益加速源由 [iQDNS/iQZone] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://raw.kgithub.com', '新加坡 1', '[新加坡] - 该公益加速源由 [KGitHub] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://ghproxy.com/https://raw.githubusercontent.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://fastly.jsdelivr.net/gh', '日本 1', '[日本 东京] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
         ['https://cdn.staticaly.com/gh', '日本 2', '[日本 东京] - 该公益加速源由 [Statically CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 30 MB 的文件'],
         ['https://raw.fastgit.org', '日本 3', '[日本 东京] - 该公益加速源由 [FastGit] 提供&#10;&#10; - 缓存：无（或时间很短）'],
-        //['https://ghproxy.net/https://raw.githubusercontent.com', '日本 4', '[日本 大阪]&#10;&#10; - 缓存：无（或时间很短）'],
+        ['https://ghproxy.net/https://raw.githubusercontent.com', '日本 4', '[日本 大阪]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://raw.njuu.cf', '美国', '[美国 拉斯维加斯] - 该公益加速源由 [LibraryCloud] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://raw.cithub.icu', '美国', '[美国 洛杉矶]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://git.yumenaka.net/https://raw.githubusercontent.com', '美国', '[美国 圣何塞]&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://gcore.jsdelivr.net/gh', '其他 1', '[移动走香港、电信走日本] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
-        ['https://raw.githubusercontents.com', '其他 2', '[香港、新加坡、美国等]（CDN 不固定）&#10;&#10; - 缓存：有&#10; - 该加速源不支持大小超过 1 MB 的文件'],
+        //['https://raw.githubusercontents.com', '其他 2', '[香港、新加坡、美国等]（CDN 不固定）&#10;&#10; - 缓存：有&#10; - 该加速源不支持大小超过 1 MB 的文件'],
         ['https://github.moeyy.xyz/https://raw.githubusercontent.com', '其他 3', '[新加坡、香港、日本等]（CDN 不固定）&#10;&#10; - 缓存：无（或时间很短）']
         //['https://raw-gh.gcdn.mirr.one', '俄罗斯', '[俄罗斯 G-Core Labs CDN]&#10;&#10; - 缓存：有']
     ], svg = [
