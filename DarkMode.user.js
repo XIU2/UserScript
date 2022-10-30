@@ -3,7 +3,7 @@
 // @name:zh-CN   护眼模式
 // @name:zh-TW   護眼模式
 // @name:en      Dark Mode
-// @version      1.4.8
+// @version      1.4.9
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
 // @description:zh-CN  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
@@ -205,7 +205,7 @@
 
     // 自定义昼夜时间
     function menu_customTime() {
-        let newMods = prompt('自定义脚本内和白天/晚上相关的时间，修改后刷新网页生效~\n格式：6:00|18:30 (即 6:00 ~ 18:30 之间是白天时间)', GM_getValue('menu_customTime'));
+        let newMods = prompt('自定义脚本内和白天/晚上相关的时间，修改后刷新网页生效~\n格式：6:00|18:30 (即 6:00 ~ 18:30 之间是白天时间)\n也支持反向设置：14:00|12:00 (即 12:00 ~ 14:00 之间是夜晚时间)', GM_getValue('menu_customTime'));
         if (newMods === '') {
             GM_setValue('menu_customTime', '6:00|18:00');
             registerMenuCommand(); // 重新注册脚本菜单
@@ -493,8 +493,12 @@
         let nowTime = new Date('2022-03-07 ' + new Date().getHours() + ':' + new Date().getMinutes() + ':00').getTime()/1000, time = GM_getValue('menu_customTime').split('|');
         time[0] = new Date('2022-03-07 ' + time[0] + ':00').getTime()/1000;
         time[1] = new Date('2022-03-07 ' + time[1] + ':00').getTime()/1000;
-
-        if (nowTime > time[0] && nowTime < time[1]) return true
-        return false
+        if (time[0] < time[1]){
+            if (nowTime > time[0] && nowTime < time[1]) return true
+            return false
+        } else {
+            if (nowTime > time[0] || nowTime < time[1]) return true
+            return false
+        }
     }
 })();
