@@ -1910,6 +1910,16 @@
 			"replaceE": ".p_bar"
 		}
 	},
+	"游侠网 - 专题列表": {
+		"host": "www.ali213.net",
+		"url": "/^\\/zt\\//",
+		"pager": {
+			"nextL": ".down_gametool_con1>a.active+a",
+			"pageE": ".list",
+			"replaceE": ".down_gametool_con1",
+			"scrollD": 700
+		}
+	},
 	"游侠网 - 下载页": {
 		"host": "down.ali213.net",
 		"url": "return fun.getCSS('.famous-ul>.famous-li')",
