@@ -3355,7 +3355,7 @@
 		}
 	},
 	"新新漫画": {
-		"host": "www.77mh.xyz",
+		"host": ["www.77mh.nl","www.77mh.xyz","www.77mh.me"],
 		"url": "if (fun.indexOF(/\\/\\d+\\.html/)) {setTimeout(()=>{let _img = ''; for (let i = 0; i < arr.length; i++){_img += `<img src=\"${img_qianz}${arr[i]}\">`;}; document.getElementById('comicImg').innerHTML = _img;},500); return true;}",
 		"style": ".page_num, #bdtopbot {display: none !important;} #comicImg > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}",
 		"pager": {
@@ -3371,7 +3371,7 @@
 		}
 	},
 	"新新漫画 - 分类页": {
-		"host": ["www.77mh.xyz","so.77mh.xyz"],
+		"host": ["www.77mh.nl","so.77mh.nl","www.77mh.xyz","so.77mh.xyz","www.77mh.me","so.77mh.me"],
 		"url": "if (fun.indexOF('/colist_')) {setTimeout(()=>{if (document.getElementById('listmore1')) document.getElementById('listmore1').click();}, 500)}else{return true;}",
 		"blank": 3,
 		"pager": {
@@ -5128,6 +5128,16 @@
 			"replaceE": ".cut-page"
 		}
 	},
+	"摩点众筹": {
+		"host": "zhongchou.modian.com",
+		"url": "return (fun.getCSS('.page')&&fun.getCSS('.pro_ul>li'))",
+		"pager": {
+			"nextL": ".next",
+			"pageE": ".pro_ul>li,body>script[language='javascript']",
+			"insertP": [".pro_ul",3],
+			"scriptT": 2
+		}
+	},
 	"彼岸图网": {
 		"host": "pic.netbian.com",
 		"style": "li.nextpage {display: none !important;} .alist>ul {height: auto !important;} .alist>ul>li {position: static !important; float: left !important; height: 550px !important;}",
@@ -6529,7 +6539,7 @@
 		}
 	},
 	"微图坊": {
-        "host": "www.v2ph.com",
+        "host": ["www.v2ph.com","www.v2ph.net"],
         "url": "/^\\/album\\//",
         "style": ".album-photo, .photos-list img {opacity: 1 !important; position: unset !important; padding: 0 !important;}",
         "pager": {
