@@ -2045,7 +2045,7 @@
 		"pager": {
 			"nextL": "//a[@class='pagebtn' and text()='>']",
 			"pageE": ".workshopBrowseItems>*,.workshopItemSubscription,.workshopItemSubscription+script",
-			"replaceE": ".workshopBrowsePaging",
+			"replaceE": ".workshopBrowsePaging,.workshopBrowsePagingWithBG",
 			"scriptT": 2
 		}
 	},
