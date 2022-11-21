@@ -6054,9 +6054,9 @@
 		"style": "#img {max-width: 100% !important;height: auto !important;min-height: 400px;}",
 		"blank": 3,
 		"pager": {
-			"nextL": "//table[@class='ptt']//a[string()='>'] | id('next')",
+			"nextL": "//table[@class='ptt']//a[string()='>'] | id('next') | id('unext')",
 			"pageE": ".itg>div, .itg>tbody>tr:not(:first-of-type), #gdt>div:not(.c), #img",
-			"replaceE": ".ptt, .ptb, .sn"
+			"replaceE": ".ptt, .ptb, .sn, .searchnav"
 		}
 	},
 	"nhentai": {
