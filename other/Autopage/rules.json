@@ -1544,13 +1544,15 @@
 	},
 	"Pixabay": {
 		"host": "pixabay.com",
+		"url": "/\\/search\\//",
+		"blank": 4,
 		"pager": {
-			"nextL": "//a[text()=\"›\"]",
-			"pageE": "[class^=\"results\"] >[class^=\"container\"]>div",
-			"replaceE": "//a[text()=\"›\"]"
+			"nextL": "//a[string()='›']",
+			"pageE": ".search-results>div",
+			"replaceE": "div>.paginator"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-lazy-src]', 'data-lazy-src'])"
+			"bF": "return fun.src_bF(pageE, [0, 'img[data-lazy]', 'data-lazy'])"
 		}
 	},
 	"Pngtree": {
