@@ -146,7 +146,7 @@
 		"noReferer": true,
 		"pager": {
 			"nextL": "#snext",
-			"pageE": ".result",
+			"pageE": ".result,head>style",
 			"replaceE": "#page"
 		},
 		"function": {
@@ -4024,30 +4024,29 @@
 		"host": "www.weidown.com",
 		"url": "return (fun.indexOF('/search/'))",
 		"pager": {
-			"nextL": "a.nextpage",
+			"nextL": "#pageGroup>span+a",
 			"pageE": ".articleListWrapper>.richTextItem.search",
 			"replaceE": "#pageGroup",
-			"scrollD": 700
+			"forceHTTPS": true
 		}
 	},
 	"微当下载-专题页": {
 		"host": "www.weidown.com",
 		"url": "return (fun.indexOF('/special'))",
 		"pager": {
-			"nextL": "a.nextpage",
+			"nextL": "#pageGroup>span+a",
 			"pageE": ".special>.item, .articleWrapper>div",
-			"insertP": [".special, .articleWrapper",3],
 			"replaceE": "#pageGroup",
-			"scrollD": 700
+			"forceHTTPS": true
 		}
 	},
 	"微当下载": {
 		"host": "www.weidown.com",
 		"pager": {
-			"nextL": "a.nextpage",
-			"pageE": ".articleWrapper>.itemArticle, .articleWrapper>.richTextItem.search",
-			"insertP": [".articleWrapper",3],
-			"replaceE": "#pageGroup"
+			"nextL": "#pageGroup>span+a",
+			"pageE": "(//div[contains(@class,'articleWrapper')])[1]/div",
+			"replaceE": "#pageGroup",
+			"forceHTTPS": true
 		}
 	},
 	"大眼仔旭": {
