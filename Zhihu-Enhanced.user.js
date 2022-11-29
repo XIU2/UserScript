@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.2.1
+// @version      2.2.2
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @description:zh-TW  移除登錄彈窗、屏蔽首頁視頻、默認收起回答、快捷收起回答/評論、快捷回到頂部、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化搜索熱門、淨化標題消息、置頂顯示時間、完整問題時間、區分問題文章、默認高清原圖、默認站外直鏈...
@@ -42,8 +42,8 @@ var menu_ALL = [
     ['menu_blockTypeVideo', '视频 [首页、搜索页、问题页]', '视频（首页、搜索页、问题页）', true],
     ['menu_blockTypeArticle', '文章 [首页、搜索页]', '文章（首页、搜索页）', false],
     ['menu_blockTypeTopic', '话题 [搜索页]', '话题（搜索页）', false],
-    ['menu_blockTypeSearch', '杂志文章、相关搜索等 [搜索页]', '相关搜索、杂志等（搜索页）', false],
-    ['menu_blockYanXuan', '屏蔽盐选内容', '屏蔽盐选内容', false],
+    ['menu_blockTypeSearch', '杂志文章、盐选专栏、相关搜索等 [搜索页]', '相关搜索、杂志、盐选等（搜索页）', false],
+    ['menu_blockYanXuan', '屏蔽盐选内容 [问题页]', '屏蔽盐选内容（问题页）', false],
     ['menu_cleanSearch', '净化搜索热门 (默认搜索词及热门搜索)', '净化搜索热门', false],
     ['menu_cleanTitles', '净化标题消息 (标题中的私信/消息)', '净化标题提醒', false],
     ['menu_questionRichTextMore', '展开问题描述', '展开问题描述', false],
@@ -70,8 +70,8 @@ function registerMenuCommand() {
         } else if (menu_ALL[i][0] === 'menu_customBlockKeywords') {
             if (menu_value('menu_blockKeywords')) menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockKeywords()});
         } else if (menu_ALL[i][0] === 'menu_blockType') {
-            menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_setting('checkbox', menu_ALL[i][1], menu_ALL[i][2], true, [menu_ALL[i+1], menu_ALL[i+2], menu_ALL[i+3], menu_ALL[i+4]])});
-        } else if (menu_ALL[i][0] != 'menu_blockTypeVideo' && menu_ALL[i][0] != 'menu_blockTypeArticle' && menu_ALL[i][0] != 'menu_blockTypeTopic' && menu_ALL[i][0] != 'menu_blockTypeSearch') {
+            menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_setting('checkbox', menu_ALL[i][1], menu_ALL[i][2], true, [menu_ALL[i+1], menu_ALL[i+2], menu_ALL[i+3], menu_ALL[i+4], menu_ALL[i+5]])});
+        } else if (menu_ALL[i][0] != 'menu_blockTypeVideo' && menu_ALL[i][0] != 'menu_blockTypeArticle' && menu_ALL[i][0] != 'menu_blockTypeTopic' && menu_ALL[i][0] != 'menu_blockTypeSearch' && menu_ALL[i][0] != 'menu_blockYanXuan') {
             menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
         }
     }
@@ -926,7 +926,7 @@ function blockType(type) {
             } else if (titleA.href.indexOf('/topic/') > -1) { //            如果是话题
                 if (menu_value('menu_blockTypeTopic')) findParentElement(titleA, 'Card SearchResult-Card').hidden = true;
             } else if (titleA.href.indexOf('/market/') > -1) { //           如果是杂志文章等乱七八糟的
-                if (menu_value('menu_blockTypeArticle')) findParentElement(titleA, 'Card SearchResult-Card').hidden = true;
+                if (menu_value('menu_blockTypeSearch')) findParentElement(titleA, 'Card SearchResult-Card').hidden = true;
             }
         } else if (location.pathname.indexOf('/question/') > -1) { // 问题页
             if (menu_value('menu_blockTypeVideo')) findParentElement(titleA, 'List-item').hidden = true;
