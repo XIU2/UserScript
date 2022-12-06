@@ -4720,12 +4720,12 @@
 			"nextL": ".ajax-pagination-btn"
 		}
 	},
-	"Github - Star/Repositories/Commits": {
+	"Github - Star/Repositories/Commits/Dependents": {
 		"host": "github.com",
-		"url": "/(tab=(stars|repositories)|\\/commits)/",
+		"url": "/(tab=(stars|repositories)|\\/commits|\\/network\\/dependents)/",
 		"pager": {
 			"nextL": "//div[@class='paginate-container']/div/*[last()]",
-			"pageE": "#js-pjax-container .position-relative div[class^='col-lg-']:first-of-type>div:not(.position-relative):not(.paginate-container), #user-repositories-list>ul>li, .js-navigation-container>div",
+			"pageE": "#js-pjax-container .position-relative div[class^='col-lg-']:first-of-type>div:not(.position-relative):not(.paginate-container), #user-repositories-list>ul>li, .js-navigation-container>div, .Box>[data-test-id='dg-repo-pkg-dependent']",
 			"replaceE": ".paginate-container",
 			"scrollD": 2500
 		}
