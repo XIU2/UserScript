@@ -6061,7 +6061,7 @@
 		}
 	},
 	"nhentai": {
-		"host": "nhentai.net",
+		"host": ["nhentai.net","nhentai.to"],
 		"url": "return fun.getCSS('a.next') && (fun.getCSS('.gallery, #image-container'))",
 		"blank": 3,
 		"pager": {
@@ -6070,7 +6070,7 @@
 			"replaceE": ".pagination, .reader-pagination"
 		},
 		"function": {
-			"bF": "if (fun.getCSS('.container>.gallery') && _n_app.options.blacklisted_tags != null && _n_app.options.blacklisted_tags.length != 0) {pageE.forEach(function (one) {let tags = one.dataset.tags.split(' ');for (let i=0; i < tags.length; i++){for (let ii=0; ii < _n_app.options.blacklisted_tags.length; ii++){if (tags[i] == _n_app.options.blacklisted_tags[ii]) {one.classList.add('blacklisted');};};};});}; return fun.src_bF(pageE)"
+			"bF": "if (fun.getCSS('.container>.gallery') && typeof _n_app !== 'undefined' && _n_app.options.blacklisted_tags != null && _n_app.options.blacklisted_tags.length != 0) {pageE.forEach(function (one) {let tags = one.dataset.tags.split(' ');for (let i=0; i < tags.length; i++){for (let ii=0; ii < _n_app.options.blacklisted_tags.length; ii++){if (tags[i] == _n_app.options.blacklisted_tags[ii]) {one.classList.add('blacklisted');};};};});}; return fun.src_bF(pageE)"
 		}
 	},
 	"Orzqwq": {
