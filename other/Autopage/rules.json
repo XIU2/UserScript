@@ -578,52 +578,24 @@
 			"scriptT": 2
 		}
 	},
-	"V2EX - 最近主题页": {
+	"V2EX - 帖子内": {
 		"host": ["v2ex.com","www.v2ex.com"],
-		"url": "return (fun.lp() == '/recent')",
+		"url": "/^\\/t\\//",
+		"thread": true,
+		"pager": {
+			"nextL": ".page_current+a",
+			"pageE": ".cell[id^='r_']",
+			"replaceE": "//a[@class='page_current']/../.."
+		}
+	},
+	"V2EX": {
+		"host": ["v2ex.com","www.v2ex.com"],
+		"url": "return fun.getCSS('.page_current+a')",
 		"blank": 3,
 		"pager": {
-			"nextL": "a.page_current+a.page_normal",
-			"pageE": ".cell.item",
-			"replaceE": "#Main>.box>.cell[style]:not(.item)>table"
-		}
-	},
-	"V2EX - 提醒消息页": {
-		"host": ["v2ex.com","www.v2ex.com"],
-		"url": "return (fun.lp() == '/notifications')",
-		"pager": {
-			"nextL": "a.page_current+a.page_normal",
-			"pageE": "#notifications>div",
-			"replaceE": "#Main>.box>.cell[style]>table"
-		}
-	},
-	"V2EX - 用户回复页": {
-		"host": ["v2ex.com","www.v2ex.com"],
-		"url": "/\\/replies/",
-		"pager": {
-			"nextL": "a.page_current+a.page_normal",
-			"pageE": "//div[@id='Main']//div[@class='box']//div[@class='dock_area'] | //*[@id='Main']//div[@class='box']//div[@class='inner'] | //*[@id='Main']//div[@class='box']//div[@class='dock_area'][last()]/following-sibling::div[@class='cell'][1]",
-			"insertP": ["//div[@id='Main']//div[@class='box']//div[@class='cell'][last()]",1],
-			"replaceE": "#Main>.box>.cell[style]>table"
-		}
-	},
-	"V2EX - 分类主题页": {
-		"host": ["v2ex.com","www.v2ex.com"],
-		"url": "/\\/go\\//",
-		"blank": 3,
-		"pager": {
-			"nextL": "a.page_current+a.page_normal",
-			"pageE": "#TopicsNode>div",
-			"replaceE": "#Main>.box>.cell[style]>table"
-		}
-	},
-	"V2EX - 账户余额页": {
-		"host": ["v2ex.com","www.v2ex.com"],
-		"url": "return (fun.lp() == '/balance')",
-		"pager": {
-			"nextL": "a.page_current+a.page_normal",
-			"pageE": "#Main .box>div:not(.cell)>table>tbody>tr:not(:first-child)",
-			"replaceE": "#Main>.box>.cell[style]>table"
+			"nextL": ".page_current+a",
+			"pageE": ".cell.item, #notifications>div, #TopicsNode>div, #Main>.box>.dock_area,#Main>.box>.dock_area+.inner,#Main>.box>.dock_area+.cell:not([style]), table.data>tbody>tr:not(:first-child)",
+			"replaceE": "//a[@class='page_current']/../.."
 		}
 	},
 	"煎蛋网": {
@@ -5292,7 +5264,7 @@
 		}
 	},
 	"古诗文网": {
-		"host": ["www.gushiwen.cn","so.gushiwen.cn","m.gushiwen.cn"],
+		"host": ["www.gushiwen.cn","so.gushiwen.cn","m.gushiwen.cn","shiwens.com"],
 		"pager": {
 			"nextL": "a.amore",
 			"pageE": ".left .sons:not([id]), .sonspic",
