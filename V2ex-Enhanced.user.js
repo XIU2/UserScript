@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.1.7
+// @version      1.1.8
 // @author       X.I.U
 // @description  自动签到、链接转图片、自动无缝翻页、使用 SOV2EX 搜索、回到顶部（右键点击两侧空白处）、快速回复（左键双击两侧空白处）、新标签页打开链接、标签页伪装为 Github（摸鱼）
 // @match        *://v2ex.com/*
@@ -125,18 +125,18 @@
                 scrollDelta: 1500
             }
         },
-        reply: { // 帖子内容页
+        reply: { // 帖子内容页（从前往后）
             SiteTypeID: 5,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="page_current"]/preceding-sibling::a[1][@href]',
+                nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
                 pageElement: 'css;.cell[id^="r_"]',
                 HT_insert: ['//div[starts-with(@id, "r_")][last()]/following-sibling::div[@class="cell"][1]', 1],
                 replaceE: 'css;#Main > .box > .cell[style] > table',
                 scrollDelta: 1500
             }
         },
-        reply_positive: { // 帖子内容页（正序）
+        reply_positive: { // 帖子内容页（从后往前）
             SiteTypeID: 6,
             pager: {
                 type: 1,
@@ -188,7 +188,7 @@
             if (location.pathname.indexOf('/go/') > -1) { // 分类主题页
                 curSite = DBSite.go;
             } else if (location.pathname.indexOf('/t/') > -1) { // 帖子内容页
-                if(menu_value('menu_pageLoading_reply'))curSite = DBSite.reply_positive; // 帖子内自动无缝翻页
+                if(menu_value('menu_pageLoading_reply'))curSite = DBSite.reply; // 帖子内自动无缝翻页
                 if(menu_value('menu_quickReply'))quickReply(); // 快速回复（双击左右两侧空白处）
             } else if (location.pathname.indexOf('/replies') > -1) { // 用户回复页
                 curSite = DBSite.replies;
@@ -249,8 +249,8 @@
                         qiandao.href = 'javascript:void(0);';
                     }
                 } else {
-                    GM_notification({text: '自动签到失败！请访问 V2EX 首页试试。\n如果持续几天都签到失败，请联系作者解决！', timeout: 4000, onclick() {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/424246/feedback', {active: true,insert: true,setParent: true});}});
-                    console.warn('[V2EX 增强] 自动签到失败！请访问 V2EX 首页试试。如果持续几天都签到失败，请联系作者解决！')
+                    GM_notification({text: '自动签到失败！请访问 V2EX 首页试试。\n如果连续几天都签到失败，请联系作者解决！', timeout: 4000, onclick() {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/424246/feedback', {active: true,insert: true,setParent: true});}});
+                    console.warn('[V2EX 增强] 自动签到失败！请访问 V2EX 首页试试。如果连续几天都签到失败，请联系作者解决！')
                     if (qiandao) qiandao.textContent = '自动签到失败！请尝试手动签到！';
                 }
             }
