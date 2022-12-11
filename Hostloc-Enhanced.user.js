@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.4.6
+// @version      1.4.7
 // @author       X.I.U
 // @description  自动签到（访问空间 +22 积分）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键网页两侧空白处）、收起预览帖子（左键网页两侧空白处）、屏蔽投票贴、屏蔽阅读权限 255 帖子、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复
 // @match        *://hostloc.com/*
@@ -253,6 +253,7 @@
             case 'thread': // 帖子内
                 blockUsers_('[id^="post_"]', 'a[href^="space-uid"]');
                 blockUsers_('[id^="comment_"] > div', 'a.xi2.xw1'); // 点评
+                blockUsers_('.quote', 'a[href*="&ptid="]:not([id])>font', 1); // 回复引用
                 break;
             case 'forum': //  各版块帖子列表
                 blockUsers_('[id^="normalthread_"]', 'a[href^="space-uid"]');
@@ -269,13 +270,18 @@
                 break;
         }
 
-        function blockUsers_(list1, list2) {
+        function blockUsers_(list1, list2, type) {
             document.querySelectorAll(list1).forEach(function(item){ // 遍历所有帖子
                 menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
                     let itemName = item.querySelector(list2); // 寻找用户名
-                    if (itemName && itemName.textContent === item1) {
-                        console.log(`屏蔽用户：${item1}`);
-                        item.hidden = true; // 删除帖子
+                    if (itemName) {
+                        if (type && type === 1 && itemName.textContent.split(' ')[0] === item1) { // 回复引用
+                            console.log(`屏蔽用户：${item1}`);
+                            item.hidden = true; // 隐藏
+                        } else if (itemName.textContent === item1) {
+                            console.log(`屏蔽用户：${item1}`);
+                            item.hidden = true; // 隐藏
+                        }
                     }
                 })
             })
@@ -289,7 +295,12 @@
                             let itemName = item.querySelector('a.xi2'); // 寻找用户名
                             if (itemName && itemName.textContent === item1) {
                                 console.log(`屏蔽用户：${item1}`);
-                                item.hidden = true; // 删除回复
+                                item.hidden = true; // 隐藏
+                            }
+                            itemName = item.querySelector('.quote>blockquote>font:first-child'); // 寻找用户名（回复引用）
+                            if (itemName && itemName.textContent.split(' ')[0] === item1) {
+                                console.log(`屏蔽用户：${item1}`);
+                                item.querySelector('.quote').hidden = true; // 隐藏
                             }
                         })
                     })
