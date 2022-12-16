@@ -6433,7 +6433,7 @@
 		}
 	},
 	"24FA": {
-		"host": ["^(www\\.)?24fa\\.[a-z]+$","/^(www\\.)?24fa.?\\.com$/","/^(www\\.)?\\d{3}w\\.cc$/"],
+		"host": ["/^(www\\.)?24fa\\.[a-z]+$/","/^(www\\.)?24fa.?\\.com$/","/^(www\\.)?\\d{3}w\\.cc$/"],
 		"url": "return (document.title.indexOf('24FA') > -1 && fun.indexOF(/^\\/m?n\\d+/))",
 		"style": ".moreR {display: none;} #content img {width: auto; max-width: 99%; height: auto; display: block; margin: 0 auto;}",
 		"pager": {
