@@ -75,7 +75,7 @@
         ['https://fastly.jsdelivr.net/gh', '日本 1', '[日本 东京] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
         ['https://cdn.staticaly.com/gh', '日本 2', '[日本 东京] - 该公益加速源由 [Statically CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 30 MB 的文件'],
         ['https://raw.fastgit.org', '日本 3', '[日本 东京] - 该公益加速源由 [FastGit] 提供&#10;&#10; - 缓存：无（或时间很短）'],
-        //['https://ghproxy.net/https://raw.githubusercontent.com', '日本 4', '[日本 大阪]&#10;&#10; - 缓存：无（或时间很短）'],
+        ['https://ghproxy.net/https://raw.githubusercontent.com', '日本 4', '[日本 大阪]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://raw.njuu.cf', '美国', '[美国 拉斯维加斯] - 该公益加速源由 [LibraryCloud] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://raw.cithub.icu', '美国', '[美国 洛杉矶]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://git.yumenaka.net/https://raw.githubusercontent.com', '美国', '[美国 圣何塞]&#10;&#10; - 缓存：无（或时间很短）'],
