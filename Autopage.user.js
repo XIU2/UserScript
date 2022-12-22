@@ -96,7 +96,7 @@
         'https://jsd.cdn.zzko.cn/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.kgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        //'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://cdn.staticaly.com/gh/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://gcore.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
@@ -110,7 +110,7 @@
         'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.kgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        //'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json'
     ],
         loadMoreExclude1 = ['stackoverflow.com'],
