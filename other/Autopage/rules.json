@@ -3483,8 +3483,8 @@
 			"replaceE": ".pagination"
 		}
 	},
-	"COCOMANGA 漫画": {
-		"host": "www.cocomanga.com",
+	"COLAMANHUA 漫画": {
+		"host": "www.colamanhua.com",
 		"url": "if (fun.indexOF('.html')){if (!(fun.getCookie('mh_readmode') === '' || fun.getCookie('mh_readmode') === '3')) {document.cookie='mh_readmode=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; location.reload();}; return true;} else if (fun.indexOF(/\\/\\d+\\/$/)) {setTimeout(()=>{if (document.querySelector('a.website-display-all')) document.querySelector('a.website-display-all').click();}, 500);}",
 		"style": ".mh_readend, .mh_footpager, .mh_readmode, .fed-foot-info {display: none !important;}",
 		"iframe": true,
@@ -3496,8 +3496,8 @@
 			"scrollD": 500
 		}
 	},
-	"COCOMANGA 漫画 - 分类页": {
-		"host": "www.cocomanga.com",
+	"COLAMANHUA 漫画 - 分类页": {
+		"host": "www.colamanhua.com",
 		"url": "return (fun.lp() == '/show' || fun.lp() == '/search')",
 		"blank": 1,
 		"pager": {
