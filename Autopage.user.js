@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.4.5
+// @version      6.4.6
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -1101,16 +1101,21 @@ function: {
                 }
             } //                   国家自然科学基金
         };
-        // 合并 自定义规则、外置规则、内置规则
-        if (Object.keys(GM_getValue('menu_customRules', {})).length === 0) {
-            DBSite = Object.assign(GM_getValue('menu_customRules', {}), GM_getValue('menu_rules', {}), DBSite);
-            DBSite2 = GM_getValue('menu_rules', {})
-        } else { // 自定义规则 覆盖 同名的外置规则
+        // 合并 自定义规则、外置规则、内置规则（注：Object.assign 合并对象时，同名会后者覆盖前者）
+        if (Object.keys(GM_getValue('menu_customRules', {})).length === 0) { // 如果自定义规则为空，则直接合并 外置规则、内置规则
+            DBSite = Object.assign({}, GM_getValue('menu_rules', {}), DBSite);
+            DBSite2 = GM_getValue('menu_rules', {});
+        } else { // 如果有自定义规则，为避免外置规则覆盖同名的自定义规则，要先判断并移除同名的外置规则
             let a = GM_getValue('menu_customRules', {}), a1 = Object.keys(a),
                 b = GM_getValue('menu_rules', {}), b1 = Object.keys(b)
-            for (let i = 0; i < a1.length; i++) {if(b1.indexOf(a1[i]) != -1) {delete b[a1[i]]};}
-            DBSite = Object.assign(a, b, DBSite);
-            DBSite2 = Object.assign(a, b);
+            for (let i = 0; i < a1.length; i++) { // 循环 [自定义规则-对象名] 数组
+                if (b1.indexOf(a1[i]) != -1) { // 在 [外置规则-对象名] 数组中，寻找是否有同名的 [自定义规则-对象名]
+                    if (a[a1[i]].inherits === true){ a[a1[i]] = Object.assign({}, b[a1[i]], a[a1[i]]);} // 如果该同名的自定义规则对象含有 inherits 继承标识，则将同名的两者合并（自定义覆盖外置）
+                    delete b[a1[i]] // 删除外置规则中的同名，这样后续合并时，外置规则才不会覆盖自定义规则的同名规则
+                };
+            }
+            DBSite = Object.assign({}, a, b, DBSite);
+            DBSite2 = Object.assign({}, JSON.parse(JSON.stringify(a)), JSON.parse(JSON.stringify(b))); // 为了避免对象的后续变化影响 DBSite2 内容（如 SiteTypeID），需要对 a b 变量进行完全克隆，使其完全独立
         }
 
         // 生成 SiteTypeID
@@ -2668,10 +2673,13 @@ function: {
 <li>脚本会自动格式化规则，因此<strong>无需手动缩进、换行</strong>，只需把规则<strong>插入默认的 { } 中间</strong>即可。</li>
 </ul>
 <pre style="white-space: pre-wrap !important;user-select: auto !important;">
-// 下面示例是把所有规则都塞进去了，但实际上大都用不上，大多数网站只需要像第一个 "aaa" 这样的规则
-// "aaa" 是规则名，唯一！不能重复！否则会被 外置/内置规则 覆盖，支持中文等各种字符
+// 下面示例是把所有规则都塞进去了，但实际上大部分都用不上，大多数网站只需要像第一个 "aaa" 这样的规则
+// "aaa" 是规则名，唯一！如果和 外置规则名 重复，则会将完全覆盖同名的外置规则，支持中文等各种字符
 // "url" 是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站
 // "scrollD" 是用来控制翻页敏感度的（越大就越早触发翻页，访问速度慢的网站需要调大，可省略(注意逗号)，默认 2000）
+
+// "inherits" 是继承标识，当你只需要对某个外置规则中 增删改 部分规则内容时（比如只是修改域名），那么就可以像下面第二个 "aaa" 规则一样写一个同名规则，规则内只有要修改的 host，以及 inherits 标识，这样脚本就会将外置规则中的 host 替换为自定义规则中的 host，其他规则则不变。即更灵活了，无需每次为了修改部分规则而去复制全部规则了，也不用担心我后续更新这个外置规则后，你还需要再次复制一遍来修改。。。
+
 {
     "aaa": {
         "host": "aaaa",
@@ -2682,6 +2690,10 @@ function: {
             "replaceE": "xxxx",
             "scrollD": 2000
         }
+    },
+    "aaa": {
+        "host": "cccc",
+        "inherits": true
     },
     "bbb": {
         "host": ["bbb1.com", "bbb2.com"],
