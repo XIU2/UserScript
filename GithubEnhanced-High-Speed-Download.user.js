@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.2.1
+// @version      2.2.2
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -34,7 +34,7 @@
         ['https://gh.ddlc.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@mtr-static-official] 提供'], // 2023-01-14
         ['https://gh2.yanqishui.work/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@HongjieCN] 提供'],
         ['https://ghdl.feizhuqwq.cf/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [feizhuqwq.com] 提供'],
-        ['https://gh-proxy-misakano7545.koyeb.app/https://github.com', '美国', '[美国 Cloudflare CDN]'],
+        //['https://gh-proxy-misakano7545.koyeb.app/https://github.com', '美国', '[美国 Cloudflare CDN]'],
         ['https://gh.flyinbug.top/gh/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [Mintimate] 提供'],
         ['https://github.91chi.fun/https://github.com', '美国', '[美国 Cloudflare CDN]'],
         ['https://proxy.zyun.vip/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [知了小站] 提供'],
@@ -42,7 +42,7 @@
         ['https://gh.con.sh/https://github.com', '美国', '[美国 Cloudflare CDN]'],
         ['https://ghps.cc/https://github.com', '美国', '[美国 Cloudflare CDN]'],
         ['https://cors.isteed.cc/github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [Lufs\'s] 提供'],
-        ['https://cdn.githubjs.cf', '美国', '[美国 Cloudflare CDN]'],
+        //['https://cdn.githubjs.cf', '美国', '[美国 Cloudflare CDN]'],
         //['https://download.njuu.cf', '美国', '[美国 拉斯维加斯] - 该公益加速源由 [LibraryCloud] 提供'],
         ['https://download.yzuu.cf', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [LibraryCloud] 提供'],
         ['https://download.nuaa.cf', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [LibraryCloud] 提供']
@@ -261,7 +261,7 @@
             url = '', _html = '';
 
         for (let i=1;i<raw_url.length;i++) {
-            if (raw_url[i][0].indexOf('/gh') != -1 && raw_url[i][0].indexOf('cdn.staticaly.com') === -1) {
+            if ((raw_url[i][0].indexOf('/gh') + 3 === raw_url[i][0].length) && raw_url[i][0].indexOf('cdn.staticaly.com') === -1) {
                 url = raw_url[i][0] + href.replace('/blob/','@');
             } else {
                 url = raw_url[i][0] + href2;
@@ -304,7 +304,7 @@
                 Name = cntElm_a.innerText,
                 href = cntElm_a.getAttribute('href'),
                 href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
-            if (raw_url[menu_raw_fast][0].indexOf('/gh') != -1 && raw_url[menu_raw_fast][0].indexOf('cdn.staticaly.com') === -1) {
+            if ((raw_url[menu_raw_fast][0].indexOf('/gh') + 3 === raw_url[menu_raw_fast][0].length) && raw_url[menu_raw_fast][0].indexOf('cdn.staticaly.com') === -1) {
                 url = raw_url[menu_raw_fast][0] + href.replace('/blob/','@');
             } else {
                 url = raw_url[menu_raw_fast][0] + href2;
