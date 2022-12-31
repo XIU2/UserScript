@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.4.6
+// @version      6.4.7
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、拷贝漫画、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -281,12 +281,14 @@
                 DBSite.wp_article_post.pager.nextL = '//div[contains(@class,"fenye")]//a[string()="下一页"]'; DBSite.wp_article_post.pager.replaceE = '.fenye';
             }
             if (DBSite.wp_article_post.pager.nextL != undefined) {
-                if (getAllCSS('.entry-content').length == 1) {
-                    DBSite.wp_article_post.pager.pageE = '.entry-content>*:not(.wbp-cbm):not(.page-links):not(.article-paging):not(.entry-pagination):not(.pagination):not(.fenye):not(.open-message):not(.article-social)'
+                if (getAllCSS('#entry-content>#content-innerText, .entry-content>#content-innerText').length == 1) {
+                    DBSite.wp_article_post.pager.pageE = '#entry-content>#content-innerText, .entry-content>#content-innerText'
+                } else if (getAllCSS('.entry-content').length == 1) {
+                    DBSite.wp_article_post.pager.pageE = '.entry-content>*:not(.wbp-cbm):not(.page-links):not(.post-links):not(.article-paging):not(.entry-pagination):not(.pagination):not(.fenye):not(.open-message):not(.article-social):not(footer)'
                 } else if (getAllCSS('.article-content').length == 1) {
-                    DBSite.wp_article_post.pager.pageE = '.article-content>*:not(.page-links):not(.article-paging):not(.entry-pagination):not(.pagination):not(.fenye):not(.open-message):not(.article-social)'
+                    DBSite.wp_article_post.pager.pageE = '.article-content>*:not(.page-links):not(.post-links):not(.article-paging):not(.entry-pagination):not(.pagination):not(.fenye):not(.open-message):not(.article-social):not(footer)'
                 } else if (getAllCSS('article').length == 1) {
-                    DBSite.wp_article_post.pager.pageE = 'article>*:not(.page-links):not(.article-paging):not(.entry-pagination):not(.pagination):not(.fenye):not(.open-message):not(.article-social)'
+                    DBSite.wp_article_post.pager.pageE = 'article>*:not(.page-links):not(.post-links):not(.article-paging):not(.entry-pagination):not(.pagination):not(.fenye):not(.open-message):not(.article-social):not(footer)'
                 }
                 if (DBSite.wp_article_post.pager.pageE != undefined) console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站 - 文章内`); return 11;
             }
@@ -424,6 +426,8 @@
     // 内置翻页规则
     function setDBSite() {
         /*
+    inherits:    继承标识，仅用于自定义规则，用于增删改某个外置规则的部分规则时，可使用该标识来省略不需要修改的规则，只写有变化的规则
+
     url:         匹配到该域名后要执行的函数/正则（一般用于根据 URL 分配相应翻页规则）
     urlC:        对于使用 pjax 技术的网站，需要监听 URL 变化来重新判断翻页规则（需要放在 url: 中，自定义规则的话需要使用 fun.isUrlC()）
 
