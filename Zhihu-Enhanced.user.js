@@ -458,7 +458,7 @@ function blockUsers(type) {
                 if (item) {
                     for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
                         if (keyword != '' && item.dataset.zop.indexOf('authorName":"' + keyword + '",') > -1) { // 找到就删除该信息流
-                            console.log(item.dataset.zop);
+                            console.log('已屏蔽：' + item.dataset.zop);
                             item1.hidden = true;
                             break;
                         }
@@ -482,7 +482,7 @@ function blockUsers(type) {
                         if (item) {
                             for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
                                 if (keyword != '' && item.dataset.zop.indexOf('authorName":"' + keyword + '",') > -1) { // 找到就删除该信息流
-                                    console.log(item.dataset.zop);
+                                    console.log('已屏蔽：' + item.dataset.zop);
                                     target.hidden = true;
                                     break;
                                 }
@@ -507,7 +507,7 @@ function blockUsers(type) {
                         if (item1) {
                             menu_value('menu_customBlockUsers').forEach(function(item2){ // 遍历用户黑名单
                                 if (item1.dataset.zop.indexOf('authorName":"' + item2 + '",') > -1) { // 找到就删除该回答
-                                    console.log(item1.dataset.zop)
+                                    console.log('已屏蔽：' + item1.dataset.zop)
                                     target.hidden = true;
                                 }
                             })
@@ -526,7 +526,7 @@ function blockUsers(type) {
                         if (item1) {
                             menu_value('menu_customBlockUsers').forEach(function(item2){ // 遍历用户黑名单
                                 if (item1.dataset.zop.indexOf('authorName":"' + item2 + '",') > -1) { // 找到就删除该回答
-                                    console.log(item1.dataset.zop)
+                                    console.log('已屏蔽：' + item1.dataset.zop)
                                     item.hidden = true;
                                 }
                             })
@@ -550,7 +550,7 @@ function blockUsers(type) {
             if (item1) {
                 menu_value('menu_customBlockUsers').forEach(function(item2){ // 遍历用户黑名单
                     if (item1.dataset.zop.indexOf('authorName":"' + item2 + '",') > -1) { // 找到就删除该回答
-                        console.log(item1.dataset.zop)
+                        console.log('已屏蔽：' + item1.dataset.zop)
                         item.hidden = true;
                     }
                 })
@@ -566,7 +566,7 @@ function blockUsers(type) {
                 if (item) {
                     for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
                         if (keyword != '' && item.textContent === keyword) { // 找到就删除该信息流
-                            console.log(item.textContent);
+                            console.log('已屏蔽：' + item.textContent);
                             item1.hidden = true;
                             break;
                         }
@@ -589,7 +589,7 @@ function blockUsers(type) {
                     if (item) {
                         for (const keyword of menu_value('menu_customBlockUsers')) { // 遍历用户名黑名单
                             if (keyword != '' && item.textContent === keyword) { // 找到就删除该信息流
-                                console.log(item.textContent);
+                                console.log('已屏蔽：' + item.textContent);
                                 target.hidden = true;
                                 break;
                             }
@@ -770,7 +770,6 @@ function blockKeywords(type) {
         // 前几条因为是直接加载的，而不是动态插入网页的，所以需要单独判断
         function blockKeywords_now() {
             if (location.pathname === '/hot') {
-                console.log('222222222222')
                 document.querySelectorAll('.HotItem').forEach(function(item1){blockKeywords_1(item1, 'h2.HotItem-title');})
             } else {
                 document.querySelectorAll(className1).forEach(function(item1){blockKeywords_1(item1, 'h2.ContentItem-title meta[itemprop="name"], meta[itemprop="headline"]');})
@@ -860,12 +859,12 @@ function blockKeywords(type) {
 
     function blockKeywords_1(item1, css) {
         let item = item1.querySelector(css); // 标题所在元素
-        console.log(item)
+        //console.log(item)
         if (item) {
             for (const keyword of menu_value('menu_customBlockKeywords')) { // 遍历关键词黑名单
                 let text = item.content || item.textContent;
                 if (keyword != '' && text.toLowerCase().indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该信息流
-                    console.log(text);
+                    console.log('已屏蔽：' + text);
                     item1.hidden = true;
                     item1.style.display = 'none';
                     break;
@@ -1159,7 +1158,6 @@ function cleanTitles() {
 
     // 方案一
     const elTitle = document.head.querySelector('title');
-    console.log(elTitle)
     const original = elTitle.textContent;
     const observer = new MutationObserver(function() {
         if (elTitle.textContent != original) { // 避免重复执行
@@ -1383,7 +1381,6 @@ function questionInvitation(){
 (function() {
     if (window.onurlchange === undefined) {addUrlChangeEvent();} // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
     window.addEventListener('urlchange', function(){ // 针对的是从单个回答页跳转到完整回答页时
-        //console.log(location.pathname)
         if (location.pathname.indexOf('question') > -1 && location.pathname.indexOf('waiting') === -1 && location.pathname.indexOf('/answer/') === -1) { //       回答页 //
             setTimeout(function(){
                 collapsedNowAnswer('.QuestionPage'); //                        收起当前回答 + 快捷返回顶部
