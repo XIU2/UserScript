@@ -3,7 +3,7 @@
 // @name:zh-CN   DuckDuckGo 增强
 // @name:zh-TW   DuckDuckGo 增強
 // @name:en      DuckDuckGo Enhancements
-// @version      1.0.1
+// @version      1.0.2
 // @author       X.I.U
 // @description  屏蔽指定域名、修复图标加载、链接不携来源、快捷回到顶部（右键两侧空白处）
 // @description:zh-CN  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
@@ -18,7 +18,7 @@
 // @grant        GM_setValue
 // @grant        GM_notification
 // @license      GPL-3.0 License
-// @run-at       document-end
+// @run-at       document-idle
 // @namespace    https://github.com/XIU2/UserScript
 // @supportURL   https://github.com/XIU2/UserScript
 // @homepageURL  https://github.com/XIU2/UserScript
@@ -56,7 +56,7 @@
     };
 
 
-    document.documentElement.appendChild(document.createElement('style')).textContent = '.blockDomainBtn {padding: 0 8px !important; font-size: 12px !important; line-height: normal !important; margin-left: 10px !important; border-radius: 3px !important; vertical-align: top !important; opacity: 0.4 !important; top: 3px; cursor: cell;} .result.result--sep--hr {display: none;}';
+    document.documentElement.appendChild(document.createElement('style')).textContent = '.blockDomainBtn {padding: 0 8px !important; font-size: 12px !important; line-height: normal !important; margin-left: 10px !important; border-radius: 3px !important; vertical-align: top !important; opacity: 0.4 !important; top: 3px; cursor: cell;} .result.result--sep--hr {display: none;} a[data-testid="result-title-a"]{display: inline-block}';
     mutationObserver(); // 屏蔽指定域名 + 修复图标加载 + 链接不携来源
     backToTop(); //        快捷回到顶部
 
@@ -84,17 +84,21 @@
                     if (target.nodeType != 1) break
 
                     // 屏蔽指定域名
-                    if (target.dataset.domain && checkDomain(target.dataset.domain)) {target.remove(); break;}
+                    if (target.dataset.nrn === 'result') {
+                        const a=target.querySelector('h2>a,a[data-testid="result-title-a]"')
+                        if (a && checkDomain(a.href.split('/')[2])) {
+                            target.remove(); break;
+                        } else {
+                            // 链接不携来源
+                            addRel(target);
 
+                            // 添加屏蔽按钮
+                            addBlockDomainBtn(target, a, a.href.split('/')[2]);
+                        }
+                    }
                     // 修复图标加载
-                    let img = target.querySelector('img.result__icon__img[data-src]'); // 寻找图标元素
-                    if (img && !img.src) img.src = img.dataset.src
-
-                    // 链接不携来源
-                    addRel(target);
-
-                    // 添加屏蔽按钮
-                    addBlockDomainBtn(target, target.dataset.domain);
+                    //let img = target.querySelector('img.result__icon__img[data-src]'); // 寻找图标元素
+                    //if (img && !img.src) img.src = img.dataset.src
                 }
             }
         };
@@ -120,9 +124,9 @@
 
 
     // 添加屏蔽按钮
-    function addBlockDomainBtn(doc, domain) {
+    function addBlockDomainBtn(doc, toElement, domain) {
         if (!GM_getValue('menu_blockDomainBtn')) return
-        let toElement = doc.querySelector('a.result__url');
+        //let toElement = doc.querySelector('a.result__url');
         if (toElement) {
             toElement.insertAdjacentHTML('afterend', `<button class="btn blockDomainBtn" data-domain="${domain}" title="点击在搜索结果中屏蔽 [ ${domain} ] 域名">屏蔽</button>`);
             doc.querySelector('button.blockDomainBtn').addEventListener('click', function(e) {
@@ -132,7 +136,7 @@
                 blockDomain.push(e.target.dataset.domain)
                 GM_setValue('menu_blockDomain', blockDomain);
                 // 隐藏该域名的所有搜索结果
-                document.querySelectorAll(`#links > div[data-domain="${e.target.dataset.domain}"]`).forEach(function(one){one.style.display = 'none'})
+                document.querySelectorAll(`button[data-domain="${e.target.dataset.domain}"].blockDomainBtn`).forEach(function(one){one.parentElement.parentElement.parentElement.parentElement.remove();})
             });
         }
     }
