@@ -3,9 +3,9 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.2.2
+// @version      2.2.3
 // @author       X.I.U
-// @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
+// @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)、添加 git clone 命令
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
 // @description:zh-TW  高速下載 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、項目列表單文件快捷下載 (☁)
 // @description:en  High-speed download of Git Clone/SSH, Release, Raw, Code(ZIP) and other files, project list file quick download (☁)
@@ -27,11 +27,11 @@
 
 (function() {
     'use strict';
-    var backColor = '#ffffff', fontColor = '#888888', menu_raw_fast = GM_getValue('xiu2_menu_raw_fast'), menu_menu_raw_fast_ID, menu_feedBack_ID;
+    var backColor = '#ffffff', fontColor = '#888888', menu_rawFast = GM_getValue('xiu2_menu_raw_fast'), menu_rawFast_ID, menu_gitClone_ID, menu_feedBack_ID;
     const download_url_us = [
         ['https://gh.gh2233.ml/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@X.I.U/XIU2] 提供'],
         //['https://gh.api.99988866.xyz/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [hunshcn/gh-proxy] 提供'], // 官方演示站用的人太多了
-        ['https://gh.ddlc.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@mtr-static-official] 提供'], // 2023-01-14
+        ['https://gh.ddlc.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@mtr-static-official] 提供'],
         ['https://gh2.yanqishui.work/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@HongjieCN] 提供'],
         ['https://ghdl.feizhuqwq.cf/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [feizhuqwq.com] 提供'],
         //['https://gh-proxy-misakano7545.koyeb.app/https://github.com', '美国', '[美国 Cloudflare CDN]'],
@@ -89,37 +89,30 @@
         '<svg class="octicon octicon-cloud-download" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M9 12h2l-3 3-3-3h2V7h2v5zm3-8c0-.44-.91-3-4.5-3C5.08 1 3 2.92 3 5 1.02 5 0 6.52 0 8c0 1.53 1 3 3 3h3V9.7H3C1.38 9.7 1.3 8.28 1.3 8c0-.17.05-1.7 1.7-1.7h1.3V5c0-1.39 1.56-2.7 3.2-2.7 2.55 0 3.13 1.55 3.2 1.8v1.2H12c.81 0 2.7.22 2.7 2.2 0 2.09-2.25 2.2-2.7 2.2h-2V11h2c2.08 0 4-1.16 4-3.5C16 5.06 14.08 4 12 4z"></path></svg>'
     ], style = ['padding:0 6px; margin-right: -1px; border-radius: 2px; background-color: var(--XIU2-back-Color); border-color: rgba(27, 31, 35, 0.1); font-size: 11px; color: var(--XIU2-font-Color);'];
 
-    if (menu_raw_fast == null){menu_raw_fast = 1; GM_setValue('xiu2_menu_raw_fast', 1)};
+    if (menu_rawFast == null){menu_rawFast = 1; GM_setValue('xiu2_menu_raw_fast', 1)};
+    if (GM_getValue('menu_gitClone') == null){GM_setValue('menu_gitClone', true)};
     registerMenuCommand();
     // 注册脚本菜单
     function registerMenuCommand() {
-        if (menu_feedBack_ID) { // 如果反馈菜单ID不是 null，则删除所有脚本菜单
-            GM_unregisterMenuCommand(menu_menu_raw_fast_ID);
-            GM_unregisterMenuCommand(menu_feedBack_ID);
-            menu_raw_fast = GM_getValue('xiu2_menu_raw_fast');
-        }
-        if (menu_raw_fast > raw_url.length - 1) { // 避免在减少 raw 数组后，用户储存的数据大于数组而报错
-            menu_raw_fast = 0
-        }
-        menu_menu_raw_fast_ID = GM_registerMenuCommand(`${menu_num(menu_raw_fast)} [ ${raw_url[menu_raw_fast][1]} ] 加速源 (☁) - 点击切换`, menu_toggle_raw_fast);
+        // 如果反馈菜单ID不是 null，则删除所有脚本菜单
+        if (menu_feedBack_ID) {GM_unregisterMenuCommand(menu_rawFast_ID); GM_unregisterMenuCommand(menu_gitClone_ID); GM_unregisterMenuCommand(menu_feedBack_ID); menu_rawFast = GM_getValue('xiu2_menu_raw_fast');}
+        // 避免在减少 raw 数组后，用户储存的数据大于数组而报错
+        if (menu_rawFast > raw_url.length - 1) menu_rawFast = 0
+        menu_rawFast_ID = GM_registerMenuCommand(`${['0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'][menu_rawFast]} [ ${raw_url[menu_rawFast][1]} ] 加速源 (☁) - 点击切换`, menu_toggle_raw_fast);
+        menu_gitClone_ID = GM_registerMenuCommand(`${GM_getValue('menu_gitClone')?'✅':'❌'} 添加 git clone 命令`, function(){if (GM_getValue('menu_gitClone') == true) {GM_setValue('menu_gitClone', false); GM_notification({text: `已关闭 [添加 git clone 命令] 功能\n（点击刷新网页后生效）`, timeout: 3500, onclick: function(){location.reload();}});} else {GM_setValue('menu_gitClone', true); GM_notification({text: `已开启 [添加 git clone 命令] 功能\n（点击刷新网页后生效）`, timeout: 3500, onclick: function(){location.reload();}});}registerMenuCommand();});
         menu_feedBack_ID = GM_registerMenuCommand('💬 反馈 & 建议 [Github]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/412245/feedback', {active: true,insert: true,setParent: true});});
     }
 
     // 切换加速源
     function menu_toggle_raw_fast() {
         // 如果当前加速源位置大于等于加速源总数，则改为第一个加速源，反之递增下一个加速源
-        if (menu_raw_fast >= raw_url.length - 1) {menu_raw_fast = 0;} else {menu_raw_fast += 1;}
-        GM_setValue('xiu2_menu_raw_fast', menu_raw_fast);
+        if (menu_rawFast >= raw_url.length - 1) {menu_rawFast = 0;} else {menu_rawFast += 1;}
+        GM_setValue('xiu2_menu_raw_fast', menu_rawFast);
         delRawDownLink(); // 删除旧加速源
         addRawDownLink(); // 添加新加速源
-        GM_notification({text: "已切换加速源为：" + raw_url[menu_raw_fast][1], timeout: 3000}); // 提示消息
+        GM_notification({text: "已切换加速源为：" + raw_url[menu_rawFast][1], timeout: 3000}); // 提示消息
         registerMenuCommand(); // 重新注册脚本菜单
     };
-
-    // 菜单数字图标
-    function menu_num(num) {
-        return ['0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'][num]
-    }
 
     colorMode(); // 适配白天/夜间主题模式
     if (location.pathname.indexOf('/releases')) addRelease(); // Release 加速
@@ -200,7 +193,7 @@
     function addDownloadZIP() {
         if (document.querySelector('.XIU2-DZ')) return
         let html = document.querySelector('#local-panel ul li:last-child');if (!html) return
-        let href = html.getElementsByTagName('a')[0].href,
+        let href = html.firstElementChild.href,
             url = '', _html = '', new_download_url = get_New_download_url();
         for (let i=0;i<new_download_url.length;i++) {
             if (new_download_url[i][3] === '') continue
@@ -221,16 +214,17 @@
     function addGitClone() {
         if (document.querySelector('.XIU2-GC')) return
         let html = document.querySelector('[role="tabpanel"]:nth-child(2) div.input-group');if (!html) return
-        let href_split = html.getElementsByTagName('input')[0].getAttribute('value').split(location.host),
-            url = '', _html = '';
+        let href_split = html.firstElementChild.value.split(location.host),
+            url = '', _html = '', _gitClone = '';
 
+        if (GM_getValue('menu_gitClone')) {_gitClone='git clone '; html.firstElementChild.value = _gitClone + html.firstElementChild.value;}
         for (let i=0;i<clone_url.length;i++) {
             if (clone_url[i][0] === 'https://gitclone.com') {
                 url = clone_url[i][0] + '/github.com' + href_split[1]
             } else {
                 url = clone_url[i][0] + href_split[1]
             }
-            _html += `<div class="input-group XIU2-GC" style="margin-top: 4px;" title="加速源：${clone_url[i][1]} （点击可直接复制）"><input value="${url}" aria-label="${url}" title="${clone_url[i][2]}" type="text" class="form-control input-monospace input-sm color-bg-subtle" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${url}" aria-label="Copy to clipboard" class="btn btn-sm js-clipboard-copy tooltipped-no-delay ClipboardButton" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
+            _html += `<div class="input-group XIU2-GC" style="margin-top: 4px;" title="加速源：${clone_url[i][1]} （点击可直接复制）"><input value="${_gitClone}${url}" aria-label="${url}" title="${clone_url[i][2]}" type="text" class="form-control input-monospace input-sm color-bg-subtle" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${_gitClone}${url}" aria-label="Copy to clipboard" class="btn btn-sm js-clipboard-copy tooltipped-no-delay ClipboardButton" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
         }
         html.insertAdjacentHTML('afterend', _html);
     }
@@ -240,13 +234,14 @@
     function addGitCloneSSH() {
         if (document.querySelector('.XIU2-GCS')) return
         let html = document.querySelector('[role="tabpanel"]:nth-child(3) div.input-group');if (!html) return
-        let href_split = html.getElementsByTagName('input')[0].getAttribute('value').split(':'),
-            _html = '';
+        let href_split = html.firstElementChild.value.split(':'),
+            _html = '', _gitClone = '';
 
         if (href_split[0] != 'git@github.com') return
 
+        if (GM_getValue('menu_gitClone')) {_gitClone='git clone '; html.firstElementChild.value = _gitClone + html.firstElementChild.value;}
         for (let i=0;i<clone_ssh_url.length;i++) {
-            _html += `<div class="input-group XIU2-GCS" style="margin-top: 4px;" title="加速源：${clone_ssh_url[i][1]} （点击可直接复制）"><input value="${clone_ssh_url[i][0] + ':' + href_split[1]}" aria-label="${clone_ssh_url[i][0] + ':' + href_split[1]}" title="${clone_ssh_url[i][2]}" type="text" class="form-control input-monospace input-sm color-bg-subtle" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${clone_ssh_url[i][0] + ':' + href_split[1]}" aria-label="Copy to clipboard" class="btn btn-sm js-clipboard-copy tooltipped-no-delay ClipboardButton" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
+            _html += `<div class="input-group XIU2-GCS" style="margin-top: 4px;" title="加速源：${clone_ssh_url[i][1]} （点击可直接复制）"><input value="${_gitClone}${clone_ssh_url[i][0] + ':' + href_split[1]}" aria-label="${clone_ssh_url[i][0] + ':' + href_split[1]}" title="${clone_ssh_url[i][2]}" type="text" class="form-control input-monospace input-sm color-bg-subtle" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${_gitClone}${clone_ssh_url[i][0] + ':' + href_split[1]}" aria-label="Copy to clipboard" class="btn btn-sm js-clipboard-copy tooltipped-no-delay ClipboardButton" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
         }
         html.insertAdjacentHTML('afterend', _html);
     }
@@ -304,14 +299,14 @@
                 Name = cntElm_a.innerText,
                 href = cntElm_a.getAttribute('href'),
                 href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
-            if ((raw_url[menu_raw_fast][0].indexOf('/gh') + 3 === raw_url[menu_raw_fast][0].length) && raw_url[menu_raw_fast][0].indexOf('cdn.staticaly.com') === -1) {
-                url = raw_url[menu_raw_fast][0] + href.replace('/blob/','@');
+            if ((raw_url[menu_rawFast][0].indexOf('/gh') + 3 === raw_url[menu_rawFast][0].length) && raw_url[menu_rawFast][0].indexOf('cdn.staticaly.com') === -1) {
+                url = raw_url[menu_rawFast][0] + href.replace('/blob/','@');
             } else {
-                url = raw_url[menu_raw_fast][0] + href2;
+                url = raw_url[menu_rawFast][0] + href2;
             }
 
-            url_name = raw_url[menu_raw_fast][1]; url_tip = raw_url[menu_raw_fast][2];
-            cntElm_svg.insertAdjacentHTML('afterend', `<a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url[menu_raw_fast][1]} ] 加速源 (☁) 即可切换。">${svg[2]}</a>`);
+            url_name = raw_url[menu_rawFast][1]; url_tip = raw_url[menu_rawFast][2];
+            cntElm_svg.insertAdjacentHTML('afterend', `<a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url[menu_rawFast][1]} ] 加速源 (☁) 即可切换。">${svg[2]}</a>`);
             // 绑定鼠标事件
             trElm.onmouseover = mouseOverHandler;
             trElm.onmouseout = mouseOutHandler;
@@ -366,17 +361,17 @@
         if (document.getElementById('XIU2-Github')) {style_Add = document.getElementById('XIU2-Github')} else {style_Add = document.createElement('style'); style_Add.id = 'XIU2-Github'; style_Add.type = 'text/css';}
         backColor = '#ffffff'; fontColor = '#888888';
 
-        if (document.getElementsByTagName('html')[0].getAttribute('data-color-mode') === 'dark') { // 如果是夜间模式
-            if (document.getElementsByTagName('html')[0].getAttribute('data-dark-theme') === 'dark_dimmed') {
+        if (document.lastElementChild.dataset.colorMode === 'dark') { // 如果是夜间模式
+            if (document.lastElementChild.dataset.darkTheme === 'dark_dimmed') {
                 backColor = '#272e37'; fontColor = '#768390';
             } else {
                 backColor = '#161a21'; fontColor = '#97a0aa';
             }
-        } else if (document.getElementsByTagName('html')[0].getAttribute('data-color-mode') === 'auto') { // 如果是自动模式
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches || document.getElementsByTagName('html')[0].getAttribute('data-light-theme').indexOf('dark') > -1) { // 如果浏览器是夜间模式 或 白天模式是 dark 的情况
-                if (document.getElementsByTagName('html')[0].getAttribute('data-dark-theme') === 'dark_dimmed') {
+        } else if (document.lastElementChild.dataset.colorMode === 'auto') { // 如果是自动模式
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches || document.lastElementChild.dataset.lightTheme.indexOf('dark') > -1) { // 如果浏览器是夜间模式 或 白天模式是 dark 的情况
+                if (document.lastElementChild.dataset.darkTheme === 'dark_dimmed') {
                     backColor = '#272e37'; fontColor = '#768390';
-                } else if (document.getElementsByTagName('html')[0].getAttribute('data-dark-theme').indexOf('light') == -1) { // 排除夜间模式是 light 的情况
+                } else if (document.lastElementChild.dataset.darkTheme.indexOf('light') == -1) { // 排除夜间模式是 light 的情况
                     backColor = '#161a21'; fontColor = '#97a0aa';
                 }
             }
