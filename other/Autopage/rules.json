@@ -4991,11 +4991,11 @@
 	},
 	"Quicker": {
 		"host": "getquicker.net",
-		"url": "/\\/Share\\//",
+		"url": "/^\\/(Share\\/|QA($|\\?))/",
 		"blank": 3,
 		"pager": {
 			"nextL": "//a[@class='page-link' and text()='下一页']",
-			"pageE": "table.table >tbody>tr:not(:first-child), script[src^='/js/site.js']",
+			"pageE": "table.table >tbody>tr:not(:first-child), .question-item, script[src^='/js/site.js']",
 			"replaceE": "ul.pagination",
 			"scriptT": 2
 		}
