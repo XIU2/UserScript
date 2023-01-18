@@ -1969,9 +1969,10 @@
 	"Modrinth": {
 		"host": "modrinth.com",
 		"url": "fun.isUrlC(); return (fun.lp() == '/mods')",
+		"blank": 4,
 		"pager": {
-			"nextL": "js; let n = fun.getCSS('.page-number-container:not(.page-number)+.page-number-container>button'), m = fun.getSearch('m')||'20'; if (n && n.innerText){return fun.getNextSP((parseInt(n.innerText)-1)*parseInt(m), 'o=', /o=\\d+/);}",
-			"pageE": ".project-card.card",
+			"nextL": "js; let n = fun.getCSS('.page-number-container:not(.page-number)+.page-number-container>a'), m = fun.getSearch('m')||'20'; if (n && n.innerText){return fun.getNextSP((parseInt(n.innerText)-1)*parseInt(m), 'o=', /o=\\d+/);}",
+			"pageE": "article.project-card",
 			"replaceE": ".paginates"
 		}
 	},
@@ -3271,19 +3272,16 @@
 		}
 	},
 	"风之动漫": {
-		"host": "manhua.fffdm.com",
-		"url": "if (location.pathname.split('/').length === 4){document.write = function(){}; return true;}",
-		"style": "#footer, #header {display: none !important;} #mhimg0 img {display: block !important;margin: 0 auto !important;}",
+		"host": ["www.fffdm.com","manhua.fffdm.com"],
+		"url": "fun.isUrlC();return (location.pathname.split('/').length >= 4)",
+		"style": "#header, footer {display: none !important;} #mhpic {display: block !important;margin: 0 auto !important;}",
 		"history": true,
 		"pager": {
-			"nextL": "a.pure-button.button-success+a",
-			"pageE": "id('main')/script[contains(text(), 'var Title')]",
-			"insertP": ["body",3],
+			"type": 6,
+			"nextL": "//div[@class='navigation']/a[text()='下一页'][@href]",
+			"pageE": "#mhpic",
 			"replaceE": ".navigation",
-			"scriptT": 2
-		},
-		"function": {
-			"aF": "document.getElementById('mhimg0').appendChild(document.createElement('img')).src = mhpicurl;"
+			"loadTime": 500
 		}
 	},
 	"包子漫画": {
