@@ -44,6 +44,7 @@ var menu_ALL = [
     ['menu_blockTypeTopic', '话题 [搜索页]', '话题（搜索页）', false],
     ['menu_blockTypeSearch', '杂志文章、盐选专栏、相关搜索等 [搜索页]', '相关搜索、杂志、盐选等（搜索页）', false],
     ['menu_blockYanXuan', '屏蔽盐选内容 [问题页]', '屏蔽盐选内容（问题页）', false],
+    ['menu_blockLive', '屏蔽直播内容 [热榜]', '屏蔽直播内容 [热榜]', true],
     ['menu_cleanSearch', '净化搜索热门 (默认搜索词及热门搜索)', '净化搜索热门', false],
     ['menu_cleanTitles', '净化标题消息 (标题中的私信/消息)', '净化标题提醒', false],
     ['menu_questionRichTextMore', '展开问题描述', '展开问题描述', false],
@@ -1377,6 +1378,70 @@ function questionInvitation(){
     });
 }
 
+// 屏蔽热榜直播
+function blockLive() {
+    if (!menu_value('menu_blockLive')) {
+        return;
+    }
+
+    const isLiveItem = (hotItem) => {
+        const linkItem = hotItem.querySelector('.HotItem-content a');
+
+        if (linkItem === null) {
+            return false;
+        }
+
+        const link = linkItem.href;
+
+        return /\/theater\/\d+/.test(link);
+    }
+
+    const block = () => {
+        removeLiveItems();
+        fixItemRank();
+    };
+
+    // 移除直播项
+    const removeLiveItems = () => {
+        const hotItems = document.querySelectorAll('.HotList-list .HotItem');
+
+        for (const item of hotItems) {
+            if (isLiveItem(item)) {
+                item.remove();
+            }
+        }
+    }
+
+    // 修复排行榜
+    const fixItemRank = () => {
+        const hotItems = document.querySelectorAll('.HotList-list .HotItem');
+
+        hotItems.forEach((item, index) => {
+            const rank = item.querySelector('.HotItem-index .HotItem-rank');
+
+            if (rank !== null) {
+                rank.innerText = index + 1;
+            }
+        });
+    }
+
+    const blockLive_content = (mutationsList, observer) => {
+        for (const mutation of mutationsList) {
+            for (const target of mutation.addedNodes) {
+                if (target.classList.contains('.HotItem')) {
+                    block();
+                }
+            }
+        }
+    }
+
+    const observer = new MutationObserver(blockLive_content);
+    observer.observe(document, { childList: true, subtree: true });
+
+    // 初始移除
+    block();
+}
+
 
 (function() {
     if (window.onurlchange === undefined) {addUrlChangeEvent();} // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
@@ -1396,7 +1461,12 @@ function questionInvitation(){
                 blockType(); //                                                屏蔽指定类别（视频/文章等）
             }, 500);
         } else if (location.pathname == '/hot') {
-            setTimeout(()=>{blockKeywords('index');}, 500);//                  屏蔽指定关键词
+            setTimeout(()=>{
+                //屏蔽指定关键词
+                blockKeywords('index');
+                // 移除直播项
+                blockLive();
+            }, 500);
         }
     })
 
@@ -1507,6 +1577,7 @@ function questionInvitation(){
                 blockType(); //                                                屏蔽指定类别（视频/文章等）
             } else if (location.pathname == '/hot') {
                 blockKeywords('index'); //                                     屏蔽指定关键词
+                blockLive(); //                                                屏蔽热榜直播
             } else {
                 blockUsers();
             }
