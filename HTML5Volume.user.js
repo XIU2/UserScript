@@ -88,7 +88,7 @@
 
     // 判断该视频/音频元素是否已监听事件
     function isFirstEvent(target) {
-        //if (!target.controls) return; // 如果视频/音频已经有了自己的控件（即没有使用 HTML5 默认的控件），则退出
+        if (!target.controls) return; // 如果视频/音频已经有了自己的控件（即没有使用 HTML5 默认的控件），则退出
         modifyVolume(target);
         // 如果没有该属性，则代表是还未监听事件
         if (target.dataset.html5VolumeXiu != 'true') {
