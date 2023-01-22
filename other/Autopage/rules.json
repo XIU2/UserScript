@@ -2637,7 +2637,7 @@
 		}
 	},
 	"Kickass Torrents": {
-		"host": "kickasss.to",
+		"host": ["kickasss.to","katcr.to"],
 		"url": "return (fun.lp() != '/' && !fun.indexOF('.html') && !fun.indexOF('/popular'))",
 		"blank": 3,
 		"pager": {
