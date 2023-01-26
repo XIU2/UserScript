@@ -3835,6 +3835,17 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"晋江文学城": {
+		"host": "www.jjwxc.net",
+		"url": "/chapterid=/",
+		"style": ".noveltext>div{display: none !important;}",
+		"pager": {
+			"type": 3,
+			"nextL": "//span[@class='bigtext' and text()='下一章→']/..",
+			"pageE": ".noveltext",
+			"replaceE": ".noveltitle[height]"
+		}
+	},
 	"AO3 - 列表页/搜索页": {
 		"host": "archiveofourown.org",
 		"url": "return (fun.indexOF(/\\/works$/) || fun.lp() == '/works/search')",
