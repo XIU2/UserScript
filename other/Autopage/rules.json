@@ -1985,6 +1985,16 @@
 			"replaceE": ".PageNav"
 		}
 	},
+	"MCMOD.cn": {
+		"host": ["www.mcmod.cn","search.mcmod.cn"],
+		"url": "/^\\/((modlist|worldgen|verify|history)\\.html|s)/",
+		"style": "[data-name='worldgen-list']+.common-comment-block {display: none !important;}",
+		"pager": {
+			"nextL": ".page-item.active+.page-item>a",
+			"pageE": ".modlist-list-frame>.modlist-block, .worldgen-list, .verify-list-list-table>tbody>tr, .history-list-frame, .search-result-list",
+			"replaceE": ".pagination:not([data-name='comment-list'])"
+		}
+	},
 	"CurseForge": {
 		"host": "www.curseforge.com",
 		"pager": {
