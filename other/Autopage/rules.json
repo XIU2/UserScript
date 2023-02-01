@@ -4721,12 +4721,12 @@
 			"nextL": ".ajax-pagination-btn"
 		}
 	},
-	"Github - Star/Repositories/Commits/Dependents": {
+	"Github - Star/Repositories/Commits/Dependents/NotificationsSubscriptions": {
 		"host": "github.com",
-		"url": "/(tab=(stars|repositories)|\\/commits|\\/network\\/dependents)/",
+		"url": "/(tab=(stars|repositories)|\\/commits|\\/network\\/dependents|^\\/notifications\\/subscriptions(\\?|$))/",
 		"pager": {
-			"nextL": "//div[@class='paginate-container']/div/*[last()]",
-			"pageE": "#js-pjax-container .position-relative div[class^='col-lg-']:first-of-type>div:not(.position-relative):not(.paginate-container), #user-repositories-list>ul>li, .js-navigation-container>div, .Box>[data-test-id='dg-repo-pkg-dependent']",
+			"nextL": "//*[self::div or self::nav][@class='paginate-container']/div/*[last()]",
+			"pageE": "#user-starred-repos div[class^='col-']:first-of-type>div:not(.position-relative):not(.paginate-container), #user-repositories-list>ul>li, .js-navigation-container>div, .Box>[data-test-id='dg-repo-pkg-dependent'], #threads-unsubscribe-form>ul>li",
 			"replaceE": ".paginate-container",
 			"scrollD": 2500
 		}
@@ -4753,7 +4753,7 @@
 	},
 	"Github - Notifications": {
 		"host": "github.com",
-		"url": "/\\/notifications/",
+		"url": "/^\\/notifications(\\?|$)/",
 		"pager": {
 			"nextL": "nav.paginate-container>a[aria-label='Next']",
 			"pageE": "li.notifications-list-item",
