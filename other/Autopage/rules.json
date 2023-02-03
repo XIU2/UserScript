@@ -218,9 +218,9 @@
 		"url": "return (fun.lp() == '/search/')",
 		"history": true,
 		"pager": {
-			"nextL": "a.pager__item_kind_next",
+			"nextL": "a.Pager-Item_type_next, a.pager__item_kind_next",
 			"pageE": "#search-result, style",
-			"replaceE": ".pager"
+			"replaceE": ".Pager, .pager"
 		}
 	},
 	"Yandex 搜索 - 视频": {
