@@ -4356,7 +4356,8 @@
 		"host": "pubmed.ncbi.nlm.nih.gov",
 		"pager": {
 			"type": 2,
-			"nextL": "button.load-button.next-page"
+			"nextL": "button.load-button.next-page",
+			"scrollD": 1000
 		}
 	},
 	"X-MOL": {
