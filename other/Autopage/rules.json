@@ -4328,12 +4328,12 @@
 		}
 	},
 	"Z-Library": {
-		"host": "/(\\dlib|b-ok\\d?|booksc|z-lib)\\./",
+		"host": "/(^lib-.+\\.\\d+lib\\.[a-z]+$|(\\dlib|b-ok\\d?|booksc|z-lib)\\.)/",
 		"url": "return (document.title.indexOf('Z-Library') > -1 && fun.indexOF('/s/'))",
 		"blank": 3,
 		"history": true,
 		"pager": {
-			"nextL": "//div[@class='paginator']//span/strong/parent::span/parent::td/following-sibling::td[1]//a",
+			"nextL": "//div[@class='paginator ' or @class='paginator']//span/strong/../../following-sibling::td[1]//a",
 			"pageE": "//*[@id='searchResultBox'] | //script[contains(string(), 'pagerOptions')]",
 			"replaceE": ".paginator",
 			"scriptT": 2
