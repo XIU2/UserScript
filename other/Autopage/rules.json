@@ -6265,7 +6265,7 @@
 		}
 	},
 	"秀人集": {
-		"host": "/\\.xiuren[a-z]+\\./",
+		"host": "/\\.xiuren([a-z]|\\d)+\\./",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/search/'))",
 		"pager": {
 			"nextL": ".current+a",
