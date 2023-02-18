@@ -2463,7 +2463,7 @@
 		}
 	},
 	"BT 之家": {
-		"host": "/btbtt/",
+		"host": ["/btbtt/","/bt\\d{3,4}\\.com$/"],
 		"url": "return (fun.getCSS(\".logo>a[title='BT之家']\") && (fun.lp() == '/' || fun.indexOF(/^\\/(index|forum|search)-/)))",
 		"pager": {
 			"nextL": "//div[@class='page']/a[text()='▶' or text()='下一页']",
