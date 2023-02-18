@@ -350,8 +350,8 @@
                     DBSite.wp_article.pager.pageE = '.posts-row>posts[class*="post"]'
                 } else if (getAllCSS('#posts, .posts').length == 1) {
                     DBSite.wp_article.pager.pageE = '#posts, .posts'
-                } else if (getAllCSS('#content .row').length == 1 && getAllCSS('#content .row+.nav-pagination').length == 1) {
-                    DBSite.wp_article.pager.pageE = '#content .row'
+                } else if (getAllCSS('#content .container>.row').length == 1 && getAllCSS('#content .container>.row+.nav-pagination').length == 1) {
+                    DBSite.wp_article.pager.pageE = '#content .container>.row'
                 }
                 if (DBSite.wp_article.pager.pageE != undefined) {console.info(`[自动无缝翻页] - 部分使用 WordPress 的网站`); return 10;}
             }
