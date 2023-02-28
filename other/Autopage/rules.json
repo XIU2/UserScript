@@ -2908,24 +2908,15 @@
 		}
 	},
 	"动漫狂": {
-		"host": "www.cartoonmad.cc",
+		"host": ["www.cartoonmad.com","www.cartoonmad.cc"],
+		"url": "/^\\/comic\\/\\d+\\.html$/",
 		"style": "body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:not(:first-child) {display: none !important;} body > table > tbody > tr:nth-child(4) > td > table > tbody > tr:first-child > td:first-child img {max-width: 100%;height: auto;display: block !important;margin: 0 auto !important;}",
 		"history": true,
 		"pager": {
-			"nextL": "js; let next=fun.getXpath(\"//a[@class='pages'][contains(text(),'下一頁')][not(@href='thend.asp')]\");if (next) {return next.href;} else {next=fun.getXpath(\"//a[@class='pages'][contains(string(),'下一話')]\");if (next) return next.href;}",
+			"nextL": "js; let next=fun.getXpath(\"//a[@class='pages'][contains(text(),'下一頁')][not(starts-with(@href,'thend.asp'))]\");if (next) {return next.href;} else {next=fun.getXpath(\"//a[@class='pages'][contains(string(),'下一話')]\");if (next) return next.href;}",
 			"pageE": "img[onload]",
 			"replaceE": "body > table > tbody > tr:nth-child(2), body > table > tbody > tr:nth-child(5)",
 			"interval": 0
-		}
-	},
-	"动漫狂 - 分类/搜索页": {
-		"host": "www.cartoonmad.com",
-		"url": "/^\\/./",
-		"blank": 3,
-		"pager": {
-			"nextL": "//a[@class='pages'][contains(text(), '下一頁')]",
-			"pageE": "td[background='/image/content_box4.gif']+td > table > tbody > tr",
-			"replaceE": "//a[@class='pages']/parent::td/parent::tr | //font[contains(text(), '目前在第')]"
 		}
 	},
 	"动漫啦": {
