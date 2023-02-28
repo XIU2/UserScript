@@ -6431,13 +6431,13 @@
 		}
 	},
 	"娱乐吧": {
-		"host": ["www.yuleba.org","m.yuleba.org"],
+		"host": ["www.yuleba.org","m.yuleba.org","m.entba.net"],
 		"url": "/^\\/a|b\\//",
 		"style": ".b_img>.paging {float: left;}",
 		"pager": {
 			"type": 3,
 			"nextL": "//div[@class='paging']/a[text()='下一页']",
-			"pageE": ".b_img:not(:nth-child(7))>ul, .picture>p, .a_img>p",
+			"pageE": ".b_img:not(:nth-child(7))>ul, .a_img>.main>p",
 			"replaceE": ".paging"
 		}
 	},
