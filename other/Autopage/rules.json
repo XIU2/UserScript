@@ -3637,7 +3637,7 @@
 		"pager": {
 			"type": 6,
 			"nextL": "#next",
-			"pageE": "#content>.h2~div",
+			"pageE": "#content>h2:not(.h2)~*",
 			"replaceE": ".next,.pre",
 			"loadTime": 500
 		}
