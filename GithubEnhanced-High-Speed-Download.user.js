@@ -62,7 +62,7 @@
         // ['https://hub.fastgit.xyz', '日本', '[日本 东京] - 该公益加速源由 [FastGit] 提供'],
         ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供，有不同地区的服务器，不过国内一般分配为韩国'],
         //['https://gh.gcdn.mirr.one', '俄罗斯', '[俄罗斯 G-Core Labs CDN]'],
-        ['https://cithub.icu', '美国', '[美国 洛杉矶]'],
+        //['https://cithub.icu', '美国', '[美国 洛杉矶]'],
         ['https://github.nite07.com', '美国', '[美国 洛杉矶] - 该公益加速源由 [Nite07] 提供'],
         ['https://hub.njuu.cf', '美国', '[美国 拉斯维加斯] - 该公益加速源由 [LibraryCloud] 提供'],
         ['https://hub.yzuu.cf', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [LibraryCloud] 提供']
