@@ -1,5 +1,5 @@
 name: 功能建议 (Feature request)
-description: xxx 脚本的 xxx 功能有什么建议，或希望添加一些新功能~
+description: xxx 脚本的 xxx 功能有什么建议，或希望添加一些新功能...
 title: "[脚本名称] 希望添加 xxx 功能（记得修改该标题示例，并移除该括号提示）"
 labels: 功能建议
 body:
@@ -8,11 +8,10 @@ body:
       value: |
         ***注意：本项目已不再接受任何【新脚本请求】！***
         ****
-        发之前，请先搜下有没有类似的 [Issues](https://github.com/XIU2/CloudflareSpeedTest/issues) （包括[关闭](https://github.com/XIU2/CloudflareSpeedTest/issues?q=is%3Aissue+is%3Aclosed)的），请勿重复发起！  
+        发之前，请先搜下有没有类似的 [Issues](https://github.com/XIU2/UserScript/issues) （包括[关闭](https://github.com/XIU2/UserScript/issues?q=is%3Aissue+is%3Aclosed)的），请勿重复发起！  
         另外，无论添加修改什么功能，都需要消耗大量时间与精力，因此请确保该功能建议是大家都需要的，而不是只为了满足个人小众需求！  
         ****
-        如果是希望 `[自动无缝翻页]` 脚本添加某个网站的支持，那么就在下面 `功能需求` 处写上具体到要添加支持的网页 URL 地址（而不是只写个首页地址），并在 `预期目标` 中简单介绍该网站。  
-        因为精力有限，目前主要维护现有规则，因此是否添加支持则看 网站类型 与 个人兴趣，不再全盘接受了~
+        如果是希望 `[自动无缝翻页]` 脚本添加某个网站的支持，那么就在下面 `功能需求` 处写上具体到要添加支持的网页 URL 地址（而不是只写个首页地址），并在 `预期目标` 中简单介绍该网站。因为精力有限，目前主要维护现有规则，因此是否添加支持则看 网站类型 与 个人兴趣，不再全盘接受了~
         ****
   - type: textarea
     id: description
