@@ -4765,14 +4765,22 @@
 			"scrollD": 2500
 		}
 	},
+	"Github - Search New": {
+		"host": "github.com",
+		"url": "return (fun.indexOF('/search?','h') && fun.getCSS('[app-name=blackbird-search]'))",
+		"pager": {
+			"nextL": "js; return fun.getNextEP('em[aria-current=page]+a', 'p=', /p=\\d+/)",
+			"pageE": "[data-testid=results-list]>div",
+			"replaceE": "nav[class^='Pagination__PaginationContainer']"
+		}
+	},
 	"Github - Search": {
 		"host": "github.com",
 		"url": "/\\/search\\?/",
 		"pager": {
 			"nextL": "a.next_page",
 			"pageE": ".repo-list>li, .code-list-item, #commit_search_results>div, .issue-list-item, .discussion-list-item, #package_search_results>div, #marketplace_search_results>div:first-child>div, .topic-list-item, #wiki_search_results>div:first-child>div, #user_search_results>div:first-child>div",
-			"replaceE": ".pagination",
-			"scrollD": 3000
+			"replaceE": ".pagination"
 		}
 	},
 	"Github - Gist - Search": {
