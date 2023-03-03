@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.2.7
+// @version      2.2.8
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)、添加 git clone 命令
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -35,7 +35,7 @@
         ['https://gh.gh2233.ml/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@X.I.U/XIU2] 提供'],
         //['https://gh.api.99988866.xyz/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [hunshcn/gh-proxy] 提供'], // 官方演示站用的人太多了
         ['https://gh.ddlc.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@mtr-static-official] 提供'],
-        ['https://gh2.yanqishui.work/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@HongjieCN] 提供'],
+        //['https://gh2.yanqishui.work/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@HongjieCN] 提供'],
         ['https://ghdl.feizhuqwq.cf/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [feizhuqwq.com] 提供'],
         //['https://gh-proxy-misakano7545.koyeb.app/https://github.com', '美国', '[美国 Cloudflare CDN]'],
         ['https://gh.flyinbug.top/gh/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [Mintimate] 提供'],
@@ -139,7 +139,7 @@
         setTimeout(addGitCloneSSH, 2000); // Git Clone SSH 加速
         addRawFile(); //                     Raw 加速
         setTimeout(addRawDownLink, 2000); // Raw 单文件快捷下载（☁），延迟 2 秒执行，避免被 pjax 刷掉
-        addRawDownLink_(); // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）鼠标事件
+        setTimeout(addRawDownLink_, 1000); // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）鼠标事件
     });
 
 
@@ -256,8 +256,8 @@
 
     // Raw
     function addRawFile() {
-        if (document.querySelector('.XIU2-RF')) return
-        let html = document.getElementById('raw-url');if (!html) return
+        if (document.querySelector('.XIU2-RF')) document.querySelectorAll('.XIU2-RF').forEach((e)=>{e.remove()})
+        let html = document.querySelector('#raw-url, a[data-testid="raw-button"]');if (!html) return
         let href = location.href.replace(`https://${location.host}`,''),
             href2 = href.replace('/blob/','/'),
             url = '', _html = '';
@@ -268,7 +268,7 @@
             } else {
                 url = raw_url[i][0] + href2;
             }
-            _html += `<a href="${url}" title="${raw_url[i][2]}" target="_blank" role="button" rel="noreferrer noopener nofollow" class="btn-sm btn BtnGroup-item XIU2-RF">${raw_url[i][1].replace(/ \d/,'')}</a>`
+            _html += `<a href="${url}" title="${raw_url[i][2]}" target="_blank" role="button" rel="noreferrer noopener nofollow" data-size="small" class="${html.className} XIU2-RF">${raw_url[i][1].replace(/ \d/,'')}</a>`
         }
         html.insertAdjacentHTML('afterend', _html);
     }
@@ -277,14 +277,14 @@
     // Raw 单文件快捷下载（☁）
     function addRawDownLink() {
         // 如果不是项目文件页面，就返回，如果网页有 Raw 下载链接（☁）就返回
-        let files = document.querySelectorAll('div.Box-row svg.octicon.octicon-file');if(files.length === 0) return;if (location.pathname.indexOf('/tags') > -1) return
+        let files = document.querySelectorAll('div.Box-row svg.octicon.octicon-file, .react-directory-filename-column>svg.color-fg-muted');if(files.length === 0) return;if (location.pathname.indexOf('/tags') > -1) return
         let files1 = document.querySelectorAll('a.fileDownLink');if(files1.length > 0) return;
 
         // 鼠标指向则显示
         var mouseOverHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
-                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file');
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file, svg.color-fg-muted');
             aElm_new.forEach(el=>{el.style.cssText = 'display: inline'});
             aElm_now.forEach(el=>{el.style.cssText = 'display: none'});
         };
@@ -293,16 +293,15 @@
         var mouseOutHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
-                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file');
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file, svg.color-fg-muted');
             aElm_new.forEach(el=>{el.style.cssText = 'display: none'});
             aElm_now.forEach(el=>{el.style.cssText = 'display: inline'});
         };
 
         // 循环添加
-        files.forEach(function(fileElm, i) {
+        files.forEach(function(fileElm) {
             let trElm = fileElm.parentNode.parentNode,
-                cntElm_a = trElm.querySelector('[role="rowheader"] > .css-truncate.css-truncate-target.d-block.width-fit > a'),
-                cntElm_svg = trElm.querySelector('.mr-3.flex-shrink-0 svg.octicon.octicon-file'),
+                cntElm_a = trElm.querySelector('[role="rowheader"] > .css-truncate.css-truncate-target.d-block.width-fit > a, .react-directory-truncate>a'),
                 Name = cntElm_a.innerText,
                 href = cntElm_a.getAttribute('href'),
                 href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
@@ -313,7 +312,7 @@
             }
 
             url_name = raw_url[menu_rawFast][1]; url_tip = raw_url[menu_rawFast][2];
-            cntElm_svg.insertAdjacentHTML('afterend', `<a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url[menu_rawFast][1]} ] 加速源 (☁) 即可切换。">${svg[2]}</a>`);
+            fileElm.insertAdjacentHTML('afterend', `<a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url[menu_rawFast][1]} ] 加速源 (☁) 即可切换。">${svg[2]}</a>`);
             // 绑定鼠标事件
             trElm.onmouseover = mouseOverHandler;
             trElm.onmouseout = mouseOutHandler;
@@ -331,14 +330,14 @@
     // 在浏览器返回/前进时重新添加 Raw 单文件快捷下载（☁）鼠标事件
     function addRawDownLink_() {
         // 如果不是项目文件页面，就返回，如果网页没有 Raw 下载链接（☁）就返回
-        let files = document.querySelectorAll('div.Box-row svg.octicon.octicon-file');if(files.length === 0) return;
+        let files = document.querySelectorAll('div.Box-row svg.octicon.octicon-file, .react-directory-filename-column>svg.color-fg-muted');if(files.length === 0) return;
         let files1 = document.querySelectorAll('a.fileDownLink');if(files1.length === 0) return;
 
         // 鼠标指向则显示
         var mouseOverHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
-                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file');
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file, svg.color-fg-muted');
             aElm_new.forEach(el=>{el.style.cssText = 'display: inline'});
             aElm_now.forEach(el=>{el.style.cssText = 'display: none'});
         };
@@ -347,13 +346,12 @@
         var mouseOutHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
-                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file');
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file, svg.color-fg-muted');
             aElm_new.forEach(el=>{el.style.cssText = 'display: none'});
             aElm_now.forEach(el=>{el.style.cssText = 'display: inline'});
         };
-
         // 循环添加
-        files.forEach(function(fileElm, i) {
+        files.forEach(function(fileElm) {
             let trElm = fileElm.parentNode.parentNode;
             // 绑定鼠标事件
             trElm.onmouseover = mouseOverHandler;
