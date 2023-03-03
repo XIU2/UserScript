@@ -4423,6 +4423,18 @@
 			"replaceE": ".xmc_Pages"
 		}
 	},
+	"315学术网": {
+		"host": "www.315xs.com",
+		"url": "/\\/search\\.php/",
+		"retry": 3100,
+		"pager": {
+			"nextL": "//ul[@class='pagelist']//a[text()='下一页']",
+			"pageE": ".resultlist>dl",
+			"replaceE": ".pagelist",
+			"interval": 3100,
+			"scrollD": 700
+		}
+	},
 	"百度学术": {
 		"host": "xueshu.baidu.com",
 		"url": "return (fun.lp() == '/s')",
