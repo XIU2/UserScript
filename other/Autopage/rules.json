@@ -5042,11 +5042,11 @@
 	},
 	"Quicker": {
 		"host": "getquicker.net",
-		"url": "/^\\/(Share\\/|QA($|\\?))/",
+		"url": "/^\\/(Share\\/|Search\\?|QA($|\\?))/",
 		"blank": 3,
 		"pager": {
 			"nextL": "//a[@class='page-link' and text()='下一页']",
-			"pageE": "table.table >tbody>tr:not(:first-child), .question-item, script[src^='/js/site.js']",
+			"pageE": "table.table >tbody>tr:not(:first-child), .result-item, .question-item, script[src^='/js/site.js']",
 			"replaceE": "ul.pagination",
 			"scriptT": 2
 		}
