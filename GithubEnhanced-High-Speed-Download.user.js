@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.2.9
+// @version      2.3.0
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)、添加 git clone 命令
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -125,7 +125,7 @@
     };
 
     colorMode(); // 适配白天/夜间主题模式
-    if (location.pathname.indexOf('/releases')) addRelease(); // Release 加速
+    //if (location.pathname.indexOf('/releases')) addRelease(); // Release 加速
     setTimeout(addDownloadZIP, 2000); // Download ZIP 加速
     setTimeout(addGitClone, 2000); //    Git Clone 加速
     setTimeout(addGitCloneSSH, 2000); // Git Clone SSH 加速
@@ -160,17 +160,12 @@
     observer.observe(document, { childList: true, subtree: true });
 
 
-    // download_url 加速源随机
+    // download_url 随机 4 个美国加速源
     function get_New_download_url() {
-        let a = Math.floor(Math.random()*download_url_us.length), b, c, d, new_download_url=[]
-        do {b = Math.floor(Math.random()*download_url_us.length)} // 随机第二个
-        while (b == a);
-        do {c = Math.floor(Math.random()*download_url_us.length)} // 随机第三个
-        while (c == a || c == b);
-        do {d = Math.floor(Math.random()*download_url_us.length)} // 随机第四个
-        while (d == a || d == b || d == c);
-        //return download_url_us.concat(download_url) // 调试用
-        return [download_url_us[a],download_url_us[b],download_url_us[c],download_url_us[d]].concat(download_url)
+        //return download_url_us.concat(download_url) // 全输出调试用
+        let shuffled = download_url_us.slice(0), i = download_url_us.length, min = i - 4, temp, index;
+        while (i-- > min) {index = Math.floor((i + 1) * Math.random()); temp = shuffled[index]; shuffled[index] = shuffled[i]; shuffled[i] = temp;}
+        return shuffled.slice(min).concat(download_url); // 随机洗牌 download_url_us 数组并取前 4 个，然后将其合并至 download_url 数组
     }
 
     // Release
