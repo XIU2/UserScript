@@ -2200,7 +2200,7 @@
 	},
 	"bilibili - 新版搜索页": {
 		"host": "search.bilibili.com",
-		"url": "fun.isUrlC(); return ((fun.lp() == '/all' || fun.lp() == '/video' || fun.lp() == '/article') && !fun.getCSS('ul.video-list') && !fun.getCSS('#article-list'))",
+		"url": "fun.isUrlC(); return ((fun.lp() == '/all' || fun.lp() == '/video' || fun.lp() == '/pgc' || fun.lp() == '/article') && !fun.getCSS('ul.video-list') && !fun.getCSS('#article-list'))",
 		"history": true,
 		"pager": {
 			"type": 6,
