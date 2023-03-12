@@ -3164,46 +3164,6 @@
 			"replaceE": "#pagination"
 		}
 	},
-	"拷贝漫画": {
-		"host": "/copymanga\\./",
-		"url": "/\\/chapter\\//",
-		"style": ".upMember, .comicContainerAds, .footer {display: none !important;} body, html {height: auto !important;}",
-		"iframe": true,
-		"history": true,
-		"pager": {
-			"type": 5,
-			"nextL": ".comicContent-next>a",
-			"style": "h4.header, h4.header +div[style*='fixed'] {display: none !important;}",
-			"scrollD": 3000
-		}
-	},
-	"拷贝漫画 - 分类页": {
-		"host": "/copymanga\\./",
-		"url": "/\\/comics/",
-		"pager": {
-			"type": 6,
-			"nextL": "li.next>a",
-			"pageE": ".exemptComicItem",
-			"replaceE": "ul.page-all",
-			"loadTime": 1000,
-			"scrollD": 3000
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE)"
-		}
-	},
-	"拷贝漫画 - 推荐页": {
-		"host": "/copymanga\\./",
-		"url": "/\\/recommend/",
-		"pager": {
-			"nextL": "li.next>a",
-			"pageE": ".exemptComicItem",
-			"replaceE": "ul.page-all"
-		},
-		"function": {
-			"bF": "return fun.src_bF(pageE)"
-		}
-	},
 	"木马漫画 - 阅读页": {
 		"host": "www.omyschool.com",
 		"url": "/\\/article_detail\\//",
