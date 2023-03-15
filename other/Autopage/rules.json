@@ -23,7 +23,7 @@
 	},
 	"百度站内搜索": {
 		"host": "zhannei.baidu.com",
-		"url": "return (fun.lp() == '/cse/site')",
+		"url": "/^\\/cse\\/site/",
 		"history": true,
 		"pager": {
 			"nextL": "a.pager-next-foot",
@@ -99,7 +99,7 @@
 	},
 	"搜狗微信 - 搜索": {
 		"host": "weixin.sogou.com",
-		"url": "return (fun.lp() == '/weixin')",
+		"url": "/^\\/weixin/",
 		"history": true,
 		"pager": {
 			"nextL": "#sogou_next",
@@ -119,7 +119,7 @@
 	},
 	"头条搜索": {
 		"host": "so.toutiao.com",
-		"url": "return (fun.lp() == '/search')",
+		"url": "/^\\/search/",
 		"history": true,
 		"pager": {
 			"nextL": "//div[contains(@class, '-pagination')]/a[string()='下一页']",
@@ -215,7 +215,7 @@
 	},
 	"Yandex 搜索": {
 		"host": ["yandex.com","yandex.ru","yandex.ua","yandex.by","yandex.kz","yandex.uz","yandex.com.tr"],
-		"url": "return (fun.lp() == '/search/')",
+		"url": "/^\\/search\\//",
 		"history": true,
 		"pager": {
 			"nextL": "a.Pager-Item_type_next, a.pager__item_kind_next",
@@ -225,7 +225,7 @@
 	},
 	"Yandex 搜索 - 视频": {
 		"host": ["yandex.com","yandex.ru","yandex.ua","yandex.by","yandex.kz","yandex.uz","yandex.com.tr"],
-		"url": "return (fun.lp() == '/video/search')",
+		"url": "/^\\/video\\/search/",
 		"hiddenPN": true,
 		"pager": {
 			"type": 2,
@@ -272,17 +272,17 @@
 	},
 	"Ecosia 搜索": {
 		"host": "www.ecosia.org",
-		"url": "return (fun.lp() == '/search')",
+		"url": "/^\\/search/",
 		"history": true,
 		"pager": {
 			"nextL": "nav.pagination a[aria-label='Next page']",
-			"pageE": "section.mainline>div:not(.related-queries)",
+			"pageE": "section.mainline>div:not(.related-queries):not(.mainline__pagination)",
 			"replaceE": "nav.pagination"
 		}
 	},
 	"Magi 搜索": {
 		"host": "magi.com",
-		"url": "return (fun.lp() == '/search')",
+		"url": "/^\\/search/",
 		"pager": {
 			"type": 2,
 			"nextL": ".card[data-type='next']",
@@ -291,7 +291,7 @@
 	},
 	"ASK 搜索": {
 		"host": ["ask.com","www.ask.com"],
-		"url": "return (fun.lp() == '/web')",
+		"url": "/^\\/web/",
 		"style": ".PartialSearchResults-heading {display: none !important;}",
 		"history": true,
 		"pager": {
