@@ -1930,7 +1930,7 @@
 	},
 	"游民星空": {
 		"host": "www.gamersky.com",
-		"url": "/^\\/(zl|ent|handbook|hardware)\\/.+\\.shtml/",
+		"url": "/^\\/(zl|ent|news|handbook|hardware)\\/.+\\.shtml/",
 		"blank": 3,
 		"pager": {
 			"type": 3,
