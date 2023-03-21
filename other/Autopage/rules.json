@@ -3055,7 +3055,7 @@
 		}
 	},
 	"动漫之家": {
-		"host": "www.dmzj.com",
+		"host": ["www.dmzj.com","www.idmzj.com"],
 		"url": "if (fun.indexOF('/view/')) {if (fun.getCookie('display_mode') != '1') {document.cookie='display_mode=1; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';location.reload();}else{return true;}}",
 		"style": "p.mh_curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} .comic_wraCon > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;min-height: 200px;}",
 		"history": true,
@@ -3073,7 +3073,7 @@
 		}
 	},
 	"动漫之家 - 分类页": {
-		"host": "www.dmzj.com",
+		"host": ["www.dmzj.com","www.idmzj.com"],
 		"url": "/^\\/(category|update|rank)/",
 		"style": ".wrap_mhlist_l.con_left, .wrap_list {height: auto!important;}",
 		"blank": 3,
@@ -3084,7 +3084,7 @@
 		}
 	},
 	"动漫之家 - 日漫": {
-		"host": "manhua.dmzj.com",
+		"host": ["manhua.dmzj.com","manhua.idmzj.com"],
 		"url": "if (fun.indexOF(/\\/\\d+\\.shtml/)) {let chapterScroll = fun.getCSS('#qiehuan_txt'); if (chapterScroll && chapterScroll.textContent === '切换到上下滚动阅读') {chapterScroll.click();} else {return true;}}",
 		"style": "p.curr_page, .btmBtnBox, .float_code, #floatCode {display: none !important;} #center_box > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;min-height: 200px;}",
 		"history": true,
@@ -3102,19 +3102,19 @@
 		}
 	},
 	"动漫之家 - 日漫 - 分类页": {
-		"host": "manhua.dmzj.com",
+		"host": ["manhua.dmzj.com","manhua.idmzj.com"],
 		"url": "/^\\/tags/",
 		"pager": {
 			"type": 6,
-			"nextL": "a.pselected+a",
-			"pageE": "#search_list_div>ul",
+			"nextL": "//div[@class='pages']/a[contains(text(), '下一页')]",
+			"pageE": ".tcaricature_block>ul",
 			"replaceE": ".pages",
 			"forceHTTPS": true,
 			"loadTime": 800
 		}
 	},
 	"动漫之家 - 日漫 - 最近更新": {
-		"host": "manhua.dmzj.com",
+		"host": ["manhua.dmzj.com","manhua.idmzj.com"],
 		"url": "/^\\/update/",
 		"blank": 3,
 		"pager": {
