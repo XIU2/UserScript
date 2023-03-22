@@ -3,9 +3,9 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.2.6
+// @version      2.2.7
 // @author       X.I.U
-// @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容/热榜直播、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
+// @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容/热榜杂项、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @description:zh-TW  移除登錄彈窗、屏蔽首頁視頻、默認收起回答、快捷收起回答/評論、快捷回到頂部、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化搜索熱門、淨化標題消息、置頂顯示時間、完整問題時間、區分問題文章、默認高清原圖、默認站外直鏈...
 // @description:en  A more personalized Zhihu experience~
 // @match        *://www.zhihu.com/*
@@ -45,7 +45,7 @@ var menu_ALL = [
     ['menu_blockTypeTopic', '话题 [搜索页]', '话题（搜索页）', false],
     ['menu_blockTypeSearch', '杂志文章、盐选专栏、相关搜索等 [搜索页]', '相关搜索、杂志、盐选等（搜索页）', false],
     ['menu_blockYanXuan', '盐选内容 [问题页]', '盐选内容（问题页）', false],
-    ['menu_blockTypeLiveHot', '直播内容 [热榜]', '直播内容 [热榜]', true],
+    ['menu_blockTypeLiveHot', '热榜文章、直播、广告等 [热榜]', '热榜文章、直播、广告等 [热榜]', true],
     ['menu_cleanSearch', '净化搜索热门 (默认搜索词及热门搜索)', '净化搜索热门', false],
     ['menu_cleanTitles', '净化标题消息 (标题中的私信/消息)', '净化标题提醒', false],
     ['menu_questionRichTextMore', '展开问题描述', '展开问题描述', false],
@@ -1379,14 +1379,14 @@ function questionInvitation(){
     });
 }
 
-// 屏蔽热榜直播
-function blockLive() {
+// 屏蔽热榜杂项
+function blockHotOther() {
     if (!menu_value('menu_blockTypeLiveHot')) return;
 
-    const isLiveItem = (hotItem) => {
+    const isQuestionItem = (hotItem) => {
         const linkItem = hotItem.querySelector('.HotItem-content a');
         if (linkItem === null) return false;
-        return /\/theater\/\d+/.test(linkItem.href);
+        return /\/question\/\d+/.test(linkItem.href);
     }
 
     const block = () => {
@@ -1394,11 +1394,11 @@ function blockLive() {
         fixItemRank();
     };
 
-    // 移除直播项
+    // 移除非问题的内容
     const removeLiveItems = () => {
         const hotItems = document.querySelectorAll('.HotList-list .HotItem');
         for (const item of hotItems) {
-            if (isLiveItem(item)) item.remove();
+            if (!isQuestionItem(item)) item.remove();
         }
     }
 
@@ -1450,8 +1450,8 @@ function blockLive() {
             setTimeout(()=>{
                 //屏蔽指定关键词
                 blockKeywords('index');
-                // 移除直播项
-                blockLive();
+                // 移除热播杂项
+                blockHotOther();
             }, 500);
         }
     })
@@ -1563,7 +1563,7 @@ function blockLive() {
                 blockType(); //                                                屏蔽指定类别（视频/文章等）
             } else if (location.pathname == '/hot') {
                 blockKeywords('index'); //                                     屏蔽指定关键词
-                blockLive(); //                                                屏蔽热榜直播
+                blockHotOther(); //                                            屏蔽热榜杂项
             } else {
                 blockUsers();
             }
