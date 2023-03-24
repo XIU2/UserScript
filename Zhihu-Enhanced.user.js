@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.2.7
+// @version      2.2.8
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容/热榜杂项、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @description:zh-TW  移除登錄彈窗、屏蔽首頁視頻、默認收起回答、快捷收起回答/評論、快捷回到頂部、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化搜索熱門、淨化標題消息、置頂顯示時間、完整問題時間、區分問題文章、默認高清原圖、默認站外直鏈...
@@ -32,7 +32,7 @@
 'use strict';
 var menu_ALL = [
     ['menu_defaultCollapsedAnswer', '默认收起回答', '默认收起回答', true],
-    ['menu_collapsedAnswer', '一键收起回答', '一键收起回答', true],
+    ['menu_collapsedAnswer', '一键收起回答/评论', '一键收起回答/评论', true],
     ['menu_collapsedNowAnswer', '快捷收起回答/评论 (点击两侧空白处)', '快捷收起回答/评论', true],
     ['menu_backToTop', '快捷回到顶部 (右键两侧空白处)', '快捷回到顶部', true],
     ['menu_blockUsers', '屏蔽指定用户', '屏蔽指定用户', true],
@@ -209,39 +209,42 @@ function defaultCollapsedAnswer() {
 }
 
 
-// 一键收起回答（全部）
+// 一键收起回答+评论（全部）
 function collapsedAnswer() {
     if (!menu_value('menu_collapsedAnswer')) return
     //console.log('1111', document.querySelector('.CornerAnimayedFlex'))
     if (document.querySelector('.CornerAnimayedFlex') && !document.getElementById('collapsed-button')) {
-        //console.log('2222')
+        // 向网页中插入收起全部回答按钮+样式+绑定点击事件
         document.head.appendChild(document.createElement('style')).textContent = '.CornerButton{margin-bottom:8px !important;}.CornerButtons{bottom:45px !important;}';
-        document.querySelector('.CornerAnimayedFlex').insertAdjacentHTML('afterBegin', '<button id="collapsed-button" data-tooltip="收起全部回答" data-tooltip-position="left" data-tooltip-will-hide-on-click="false" aria-label="收起全部回答" type="button" class="' + document.querySelector('.CornerAnimayedFlex>button').className + '"><svg class="ContentItem-arrowIcon is-active" aria-label="收起全部回答" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M16.036 19.59a1 1 0 0 1-.997.995H9.032a.996.996 0 0 1-.997-.996v-7.005H5.03c-1.1 0-1.36-.633-.578-1.416L11.33 4.29a1.003 1.003 0 0 1 1.412 0l6.878 6.88c.782.78.523 1.415-.58 1.415h-3.004v7.005z"></path></svg></button>');
+        document.querySelector('.CornerAnimayedFlex').insertAdjacentHTML('afterBegin', '<button id="collapsed-button" data-tooltip="收起全部回答/评论" data-tooltip-position="left" data-tooltip-will-hide-on-click="false" aria-label="收起全部回答/评论" type="button" class="' + document.querySelector('.CornerAnimayedFlex>button').className + '"><svg class="ContentItem-arrowIcon is-active" aria-label="收起全部回答/评论" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M16.036 19.59a1 1 0 0 1-.997.995H9.032a.996.996 0 0 1-.997-.996v-7.005H5.03c-1.1 0-1.36-.633-.578-1.416L11.33 4.29a1.003 1.003 0 0 1 1.412 0l6.878 6.88c.782.78.523 1.415-.58 1.415h-3.004v7.005z"></path></svg></button>');
         document.getElementById('collapsed-button').onclick = function () {
-            if (location.pathname === '/' || location.pathname === '/hot' || location.pathname === '/follow') {
-                document.querySelectorAll('.ContentItem-rightButton').forEach(function (el) {
-                    if (el.hasAttribute('data-zop-retract-question')) {
-                        el.click()
-                    }
-                });
+
+            // 收起所有评论（悬浮的 [收起评论]）
+            document.querySelectorAll('.Comments-container').forEach(function (el) {
+                let commentCollapseButton = getXpath('//button[text()="收起评论"]', el)
+                if (commentCollapseButton) commentCollapseButton.click();
+            });
+            // 收起所有评论（固定的 [收起评论]）
+            document.querySelectorAll('.RichContent >.ContentItem-actions>button:first-of-type').forEach(function (el) {
+                if (el.textContent.indexOf('收起评论') > -1) el.click()
+            });
+
+            if (location.pathname === '/' || location.pathname === '/hot' || location.pathname === '/follow') {// 对于首页的关注、推荐、热榜
+                document.querySelectorAll('.ContentItem-rightButton').forEach(function (el) {if (el.hasAttribute('data-zop-retract-question')) {el.click();};});
             } else {
-                document.querySelectorAll('[script-collapsed]').forEach(function(scriptCollapsed) {
-                    scriptCollapsed.querySelectorAll('.ContentItem-actions [data-zop-retract-question], .ContentItem-actions.Sticky [data-zop-retract-question]').forEach(function(button) {
-                        button.click();
-                    })
-                })
+                // 被 getCollapsedAnswerObserver 函数收起过的，固定 [收起] 按钮
+                document.querySelectorAll('[script-collapsed]').forEach(function(scriptCollapsed) {scriptCollapsed.querySelectorAll('.ContentItem-actions [data-zop-retract-question], .ContentItem-actions.Sticky [data-zop-retract-question]').forEach(function(button) {button.click();});})
+                // 被 getCollapsedAnswerObserver 函数收起过的，悬浮 [收起] 按钮（悬浮底部的横栏）
                 document.querySelectorAll('.RichContent:not([script-collapsed]) .ContentItem-actions.Sticky [data-zop-retract-question]').forEach(function(button) {
                     let el = button.parentElement;
-                    while (!el.classList.contains('RichContent')) {
-                        el = el.parentElement;
-                    }
-                    if (el) {
-                        el.setAttribute('script-collapsed', '');
-                    }
+                    while (!el.classList.contains('RichContent')) {el = el.parentElement;}
+                    if (el) el.setAttribute('script-collapsed', '');
                     button.click();
                 })
+
                 const observer = getCollapsedAnswerObserver();
                 observer.start();
+
                 if (!menu_value('menu_defaultCollapsedAnswer') && !observer._disconnectListener) {
                     window.addEventListener('urlchange', function() {
                         observer.end();
