@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.3.3
+// @version      2.3.4
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)、添加 git clone 命令
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -53,7 +53,7 @@
         ['https://download.nuaa.cf', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [LibraryCloud] 提供']
         //['https://download.cithub.icu', '美国', '[美国 洛杉矶]', 'https://archive.cithub.icu']
     ], download_url = [
-        ['https://download.fastgit.org', '德国', '[德国] - 该公益加速源由 [FastGit] 提供&#10;&#10;提示：如果速度可以接受，希望大家尽量多使用前面的美国节点（每次随机 4 个来负载均衡），&#10;避免流量都集中到亚洲公益节点，减少成本压力运营才能更持久~', 'https://archive.fastgit.org'],
+        //['https://download.fastgit.org', '德国', '[德国] - 该公益加速源由 [FastGit] 提供&#10;&#10;提示：如果速度可以接受，希望大家尽量多使用前面的美国节点（每次随机 4 个来负载均衡），&#10;避免流量都集中到亚洲公益节点，减少成本压力运营才能更持久~', 'https://archive.fastgit.org'],
         ['https://ghproxy.com/https://github.com', '韩国', '[韩国 首尔] - 该公益加速源由 [ghproxy] 提供，有日本、韩国、德国、巴西等地区的服务器，不过国内一般分配为韩国&#10;&#10;提示：如果速度可以接受，希望大家尽量多使用前面的美国节点（每次随机 4 个来负载均衡），&#10;避免流量都集中到亚洲公益节点，减少成本压力运营才能更持久~'],
         ['https://kgithub.com', '新加坡', '[新加坡] - 该公益加速源由 [KGitHub] 提供&#10;&#10;提示：如果速度可以接受，希望大家尽量多使用前面的美国节点（每次随机 4 个来负载均衡），&#10;避免流量都集中到亚洲公益节点，减少成本压力运营才能更持久~']
     ], clone_url = [
@@ -72,7 +72,7 @@
         //['https://hub.0z.gs', '美国', '[美国 Cloudflare CDN]'],
         //['https://hub.shutcm.cf', '美国', '[美国 Cloudflare CDN]']
     ], clone_ssh_url = [
-        ['git@ssh.fastgit.org', '香港', '[中国 香港] - 该公益加速源由 [FastGit] 提供']
+        //['git@ssh.fastgit.org', '香港', '[中国 香港] - 该公益加速源由 [FastGit] 提供']
         //['git@git.zhlh6.cn', '美国', '[美国 洛杉矶]']
     ], raw_url = [
         ['https://raw.githubusercontent.com', 'Github 原生', '[日本 东京]'],
@@ -82,7 +82,7 @@
         ['https://fastly.jsdelivr.net/gh', '日本 1', '[日本 东京] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
         ['https://cdn.staticaly.com/gh', '日本 2', '[日本 东京] - 该公益加速源由 [Statically CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 30 MB 的文件'],
         ['https://ghproxy.net/https://raw.githubusercontent.com', '日本 3', '[日本 大阪]&#10;&#10; - 缓存：无（或时间很短）'],
-        ['https://raw.fastgit.org', '德国', '[德国] - 该公益加速源由 [FastGit] 提供&#10;&#10; - 缓存：无（或时间很短）'],
+        //['https://raw.fastgit.org', '德国', '[德国] - 该公益加速源由 [FastGit] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://raw.njuu.cf', '美国', '[美国 拉斯维加斯] - 该公益加速源由 [LibraryCloud] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://raw.cithub.icu', '美国', '[美国 洛杉矶]&#10;&#10; - 缓存：无（或时间很短）'],
         //['https://git.yumenaka.net/https://raw.githubusercontent.com', '美国', '[美国 圣何塞]&#10;&#10; - 缓存：无（或时间很短）'],
@@ -126,7 +126,7 @@
     //if (location.pathname.indexOf('/releases')) addRelease(); // Release 加速
     setTimeout(addDownloadZIP, 2000); // Download ZIP 加速
     setTimeout(addGitClone, 2000); //    Git Clone 加速
-    setTimeout(addGitCloneSSH, 2000); // Git Clone SSH 加速
+    //setTimeout(addGitCloneSSH, 2000); // Git Clone SSH 加速
     addRawFile(); //                     Raw 加速
     setTimeout(addRawDownLink, 2000); // Raw 单文件快捷下载（☁），延迟 2 秒执行，避免被 pjax 刷掉
 
@@ -137,7 +137,7 @@
         if (location.pathname.indexOf('/releases')) addRelease(); // Release 加速
         setTimeout(addDownloadZIP, 2000); // Download ZIP 加速
         setTimeout(addGitClone, 2000); //    Git Clone 加速
-        setTimeout(addGitCloneSSH, 2000); // Git Clone SSH 加速
+        //setTimeout(addGitCloneSSH, 2000); // Git Clone SSH 加速
         addRawFile(); //                     Raw 加速
         setTimeout(addRawDownLink, 2000); // Raw 单文件快捷下载（☁），延迟 2 秒执行，避免被 pjax 刷掉
         setTimeout(addRawDownLink_, 1000); // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）鼠标事件
