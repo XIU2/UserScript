@@ -835,21 +835,37 @@
 			"replaceE": "div.ui-page"
 		}
 	},
-	"淘股吧论坛 - 生活圈": {
+	"淘股吧": {
+		"host": "www.taoguba.com.cn",
+		"url": "/^\\/$/",
+		"pager": {
+			"type": 2,
+			"nextL": "#dropDown_text[data-page]",
+			"interval": 1000,
+			"scrollD": 1000
+		}
+	},
+	"淘股吧 - 论坛": {
+		"host": "www.taoguba.com.cn",
+		"url": "/\\/(bbs|zongban|dianzan|jinghua)\\//",
+		"pager": {
+			"nextL": "js; let next = fun.getCSS('.next-page.pageDisabled'), next_ = '/'; if (next) {next = next.getAttribute('onclick').replace('gotoPage(','').replace(')','').split(','); if (fun.indexOF(/\\/dianzan|jinghua\\//)) next_ = '-'; if (parseInt(next[0]) <= parseInt(next[2])) {return (`${location.origin}/${location.pathname.split('/')[1]}/${next[0]}${next_}${next[1]}`)};}; return '';",
+			"pageE": ".items-comment-list",
+			"replaceE": ".t_page"
+		}
+	},
+	"淘股吧 - 生活圈": {
 		"host": "www.taoguba.com.cn",
 		"url": "/\\/shenghuoba\\//",
-		"style": "#joinTGB {display: none !important;}",
-		"history": false,
 		"pager": {
 			"nextL": "js; let next = fun.getCSS('#N_go_pageBtn'), next_ = location.pathname.split('/')[2].split('-')[0]; if (next && (parseInt(next.dataset.now) + 1 <= parseInt(next.dataset.total))) {if (!next_) next_ = 'H'; return (`${location.origin}/shenghuoba/${next_}-${parseInt(next.dataset.now) + 1}`)}; return '';",
 			"pageE": ".lifeContent-topicList-item",
 			"replaceE": ".N_sortPage "
 		}
 	},
-	"淘股吧论坛 - 帖子内": {
+	"淘股吧 - 帖子内": {
 		"host": "www.taoguba.com.cn",
 		"url": "/\\/Article\\//",
-		"style": "#joinTGB {display: none !important;}",
 		"history": false,
 		"thread": true,
 		"pager": {
@@ -859,17 +875,6 @@
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE)"
-		}
-	},
-	"淘股吧论坛": {
-		"host": "www.taoguba.com.cn",
-		"url": "/\\/(bbs|zongban|dianzan|jinghua)\\//",
-		"style": "#joinTGB {display: none !important;}",
-		"history": false,
-		"pager": {
-			"nextL": "js; let next = fun.getXpath('//div[contains(@class, \"t_page01\")]/a[contains(text(), \"下一页\")]'), next_ = '/'; if (next) {next = next.getAttribute('onclick').replace('gotoPage(','').replace(')','').split(','); if (fun.indexOF(/\\/dianzan|jinghua\\//)) next_ = '-'; if (parseInt(next[0]) <= parseInt(next[2])) {return (`${location.origin}/${location.pathname.split('/')[1]}/${next[0]}${next_}${next[1]}`)};}; return '';",
-			"pageE": ".p_list>.p_list01[class*='user_']",
-			"replaceE": ".t_page"
 		}
 	},
 	"芥子空间论坛": {
