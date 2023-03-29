@@ -4734,7 +4734,7 @@
 		"host": "github.com",
 		"url": "return (fun.indexOF('/search?','h') && fun.getCSS('[app-name=blackbird-search]'))",
 		"pager": {
-			"nextL": "js; return fun.getNextEP('em[aria-current=page]+a', 'p=', /p=\\d+/)",
+			"nextL": "js; return fun.getNextEP('a[aria-current=page]+a', 'p=', /p=\\d+/)",
 			"pageE": "[data-testid=results-list]>div",
 			"replaceE": "nav[class^='Pagination__PaginationContainer']"
 		}
