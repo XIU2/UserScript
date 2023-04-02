@@ -4729,22 +4729,13 @@
 			"scrollD": 2500
 		}
 	},
-	"Github - Search New": {
-		"host": "github.com",
-		"url": "return (fun.indexOF('/search?','h') && fun.getCSS('[app-name=blackbird-search]'))",
-		"pager": {
-			"nextL": "js; return fun.getNextEP('a[aria-current=page]+a', 'p=', /p=\\d+/)",
-			"pageE": "[data-testid=results-list]>div",
-			"replaceE": "nav[class^='Pagination__PaginationContainer']"
-		}
-	},
 	"Github - Search": {
 		"host": "github.com",
 		"url": "/\\/search\\?/",
 		"pager": {
-			"nextL": "a.next_page",
-			"pageE": ".repo-list>li, .code-list-item, #commit_search_results>div, .issue-list-item, .discussion-list-item, #package_search_results>div, #marketplace_search_results>div:first-child>div, .topic-list-item, #wiki_search_results>div:first-child>div, #user_search_results>div:first-child>div",
-			"replaceE": ".pagination"
+			"nextL": "js; if (fun.getCSS('a[aria-current=page]')) {return fun.getNextEP('a[aria-current=page]+a', 'p=', /p=\\d+/)} else {return fun.getCSS('a.next_page').href}",
+			"pageE": "[data-testid=results-list]>div, .repo-list>li, .code-list-item, #commit_search_results>div, .issue-list-item, .discussion-list-item, #package_search_results>div, #marketplace_search_results>div:first-child>div, .topic-list-item, #wiki_search_results>div:first-child>div, #user_search_results>div:first-child>div",
+			"replaceE": "nav[class^='Pagination__PaginationContainer'], .pagination"
 		}
 	},
 	"Github - Gist - Search": {
