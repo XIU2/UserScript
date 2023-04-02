@@ -866,11 +866,10 @@
 	"淘股吧 - 帖子内": {
 		"host": "www.taoguba.com.cn",
 		"url": "/\\/Article\\//",
-		"history": false,
 		"thread": true,
 		"pager": {
 			"nextL": "js; let next = fun.getXpath('//div[contains(@class, \"t_page01\")]/a[contains(text(), \"下一页\")]');if (next) {next = next.getAttribute('onclick').replace('gotoPageTopic(','').replace(')','').split(','); if (parseInt(next[0]) <= parseInt(next[1])) {return (`${location.origin}/Article/${fun.getCSS(\"#looktopicID\").value}/${next[0]}`)}}; return '';",
-			"pageE": "div[id^='reply_']",
+			"pageE": ".list-reply:not([style*=display])>div[id]",
 			"replaceE": ".t_page"
 		},
 		"function": {
