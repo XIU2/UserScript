@@ -278,7 +278,7 @@
         } else if (loadMoreExclude(loadMoreExclude2) && getAllXpath('//*[self::a or self::span or self::button or self::div][text()="加载更多"][not(@href) or @href="#" or starts-with(@href, "javascript")]').length === 1) {
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 2`); return 9;
 
-        } else if (getCSS('link[href*="/wp-content/" i], script[src*="/wp-content/" i]')) {
+        } else if (getCSS('link[href*="/wp-content/" i], script[src*="/wp-content/" i], head>meta[name=generator][content*="WordPress" i]')) {
 
             //if (getAllCSS('article[class], div[id^="post-"], ul[class*="post"]>li.item, .post').length < 4 || getCSS('#nav-below, nav.navigation, nav.paging-navigation, .pagination, .wp-pagenavi, .pagenavi')) return 0;
 
