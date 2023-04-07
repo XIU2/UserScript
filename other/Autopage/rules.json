@@ -640,7 +640,7 @@
 		"history": false,
 		"pager": {
 			"nextL": "js; let next = fun.getCSS('li.ant-pagination-next'), page; if (next && next.getAttribute('aria-disabled') === 'false') { page = fun.getCSS('li.ant-pagination-item-active[title]'); if (page && page.title) {return (location.origin + location.pathname + '?page=' + ++page.title);}}; return '';",
-			"pageE": "//div[@class='main-title']/parent::div/parent::div | //head/style[@data-emotion-css]",
+			"pageE": "//div[@class='main-title']/../.. | //head/style[@data-emotion-css]",
 			"replaceE": "ul.ant-pagination"
 		}
 	},
@@ -651,7 +651,7 @@
 		"history": false,
 		"pager": {
 			"nextL": "js; let next = fun.getCSS('li.ant-pagination-next'), page; if (next && next.getAttribute('aria-disabled') === 'false') { page = fun.getCSS('li.ant-pagination-item-active[title]'); if (page && page.title) {return (location.origin + location.pathname + '?page=' + ++page.title);}}; return '';",
-			"pageE": "//div[@class='main-content']/parent::div | //head/style[@data-emotion-css]",
+			"pageE": "//div[@class='main-content']/.. | //head/style[@data-emotion-css]",
 			"replaceE": "ul.ant-pagination"
 		}
 	},
@@ -1538,7 +1538,7 @@
 		"pager": {
 			"type": 6,
 			"nextL": ".nextPage",
-			"pageE": "//*[self::div or self::li][@data-id]/parent::*",
+			"pageE": "//*[self::div or self::li][@data-id]/..",
 			"replaceE": ".pageCont",
 			"loadTime": 200,
 			"scrollD": 5000
@@ -2025,7 +2025,7 @@
 		"pager": {
 			"nextL": "a.active+a:not(.disabled)",
 			"pageE": ".mod-list",
-			"replaceE": "//a[contains(@class,'active')]/parent::div"
+			"replaceE": "//a[contains(@class,'active')]/.."
 		}
 	},
 	"Steam 创意工坊 - 项目列表": {
@@ -2157,7 +2157,7 @@
 		"url": "return (document.title.indexOf('Поиск по сайту')==-1)",
 		"blank": 3,
 		"pager": {
-			"nextL": "//span[@class='pnext']/parent::a",
+			"nextL": "//span[@class='pnext']/..",
 			"pageE": ".short_item, .comments-tree-item",
 			"replaceE": ".bottom-page"
 		}
@@ -3034,7 +3034,7 @@
 		"style": ".row.m-0.pt-3.ad_2_wrap, .row.m-0.ad_1_wrap, .pagination.justify-content-center, #left, #right {display: none !important;} .pjax-container>img {min-height: 300px;}",
 		"history": true,
 		"pager": {
-			"nextL": "//ol[@class='links-of-books num_div']//a[@class='active ']/parent::li/following-sibling::li[1]/a",
+			"nextL": "//ol[@class='links-of-books num_div']//a[@class='active ']/../following-sibling::li[1]/a",
 			"pageE": "//body/script[starts-with(text(),'var img_data')]",
 			"insertP": ["body",3],
 			"replaceE": ".vg-r-data, ol.links-of-books",
@@ -3499,7 +3499,7 @@
 		"host": "www.qidian.com",
 		"url": "/^\\/(all|rank|finish|free)/",
 		"pager": {
-			"nextL": "//a[contains(@class,'-pagination-current')]/parent::li/following-sibling::li[1]/a",
+			"nextL": "//a[contains(@class,'-pagination-current')]/../following-sibling::li[1]/a",
 			"pageE": "#book-img-text>ul",
 			"replaceE": "#page-container"
 		}
@@ -4265,7 +4265,7 @@
 		"blank": 3,
 		"history": true,
 		"pager": {
-			"nextL": "//div[@class='paginator']//span/strong/parent::span/parent::td/following-sibling::td[1]//a",
+			"nextL": "//div[@class='paginator']//span/strong/../../following-sibling::td[1]//a",
 			"pageE": "#tablelibgen>tbody>tr, .paginator+script:not([src])",
 			"replaceE": ".paginator",
 			"scriptT": 2
@@ -4648,7 +4648,7 @@
 		"style": ".visibility-hidden {visibility: unset !important;} h1.type--h2 {margin-top: 80px;}",
 		"history": true,
 		"pager": {
-			"nextL": "//main//a[@class='navigation-tree__link' and @data-state='active']/following-sibling::a[@class='navigation-tree__link'][not(@target='_blank')] | //main//a[@class='navigation-tree__link' and @data-state='active']/following-sibling::div[@class='navigation-tree__nested']/a[@class='navigation-tree__link'][not(@target='_blank')] | //main//a[@class='navigation-tree__link' and @data-state='active']/parent::div/following-sibling::div[@class='navigation-tree__nested']/a[@class='navigation-tree__link'][not(@target='_blank')]",
+			"nextL": "//main//a[@class='navigation-tree__link' and @data-state='active']/following-sibling::a[@class='navigation-tree__link'][not(@target='_blank')] | //main//a[@class='navigation-tree__link' and @data-state='active']/following-sibling::div[@class='navigation-tree__nested']/a[@class='navigation-tree__link'][not(@target='_blank')] | //main//a[@class='navigation-tree__link' and @data-state='active']/../following-sibling::div[@class='navigation-tree__nested']/a[@class='navigation-tree__link'][not(@target='_blank')]",
 			"pageE": "main article>*",
 			"replaceE": "main navigation-tree, main .scrollbar"
 		}
@@ -5301,7 +5301,7 @@
 		"host": "www.dati56.com",
 		"url": "/^\\/post\\//",
 		"pager": {
-			"nextL": "//a[@class='cur']/parent::li/following-sibling::li/a",
+			"nextL": "//a[@class='cur']/../following-sibling::li/a",
 			"pageE": ".content>p",
 			"replaceE": ".ipage",
 			"scrollD": 3000
@@ -5748,7 +5748,7 @@
 		"style": "img[data-src] {opacity: 1 !important;}",
 		"blank": 3,
 		"pager": {
-			"nextL": "//a[@class='current']/parent::li/following-sibling::li[1]/a",
+			"nextL": "//a[@class='current']/../following-sibling::li[1]/a",
 			"pageE": ".page-header~div:not(.pagination):not(.clear)",
 			"replaceE": ".pagination"
 		},
@@ -5806,7 +5806,7 @@
 		"pager": {
 			"nextL": "a.gonext",
 			"pageE": ".movie-list, .articles-list, .actress-list",
-			"replaceE": "//a[contains(@class, 'gonext')]/parent::div",
+			"replaceE": "//a[contains(@class, 'gonext')]/..",
 			"scrollD": 2500
 		}
 	},
@@ -6289,7 +6289,7 @@
 		"host": "buondua.com",
 		"pager": {
 			"type": 3,
-			"nextL": "//a[@class='pagination-next']|//a[@class='pagination-link is-current']/parent::span/following-sibling::span[1]/a",
+			"nextL": "//a[@class='pagination-next']|//a[@class='pagination-link is-current']/../following-sibling::span[1]/a",
 			"pageE": ".article-fulltext, .main-body>.blog.columns",
 			"replaceE": ".pagination",
 			"scrollE": ".pagination[role='navigation'], .article-fulltext~.pagination"
