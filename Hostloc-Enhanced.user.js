@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.4.7
+// @version      1.4.8
 // @author       X.I.U
-// @description  自动签到（访问空间 +22 积分）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键网页两侧空白处）、收起预览帖子（左键网页两侧空白处）、屏蔽投票贴、屏蔽阅读权限 255 帖子、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复
+// @description  自动签到（访问空间 +22 积分）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键网页两侧空白处）、收起预览帖子（左键网页两侧空白处）、屏蔽投票贴、快速添加链接、屏蔽阅读权限 255 帖子、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复
 // @match        *://hostloc.com/*
 // @match        *://91ai.net/*
 // @icon         https://hostloc.com/favicon.ico
@@ -411,12 +411,16 @@
         function replyCustom_1() {
             let floatlayout_reply = e => {
                 if (e.target.nodeType == 1 && e.target.innerHTML && e.target.innerHTML.indexOf('id="floatlayout_reply"') > -1) {
+                    // 快速回复（悬浮）中添加 URL 按钮
+                    document.querySelector('#floatlayout_reply .fbld').insertAdjacentHTML('afterend', `<a href="javascript:;" title="点击给选中文字添加 url 标签（可正常显示为 URL）" class="flnk" style="filter: hue-rotate(83deg);" onclick="seditor_insertunit('post', '[url][i]', '[/i][/url]');doane(event);">URL</a>`);
                     document.getElementById('postsubmit').onclick = function(){
                         if (GM_getValue('menu_customLittleTail')) document.getElementById('postmessage').value += GM_getValue('menu_customLittleTail').replaceAll('\\n', '\n');
                     }
                 }
             }
             document.addEventListener('DOMNodeInserted', floatlayout_reply); // 监听插入事件
+            // 快速发帖（各版块帖子列表底部）中添加 URL 按钮
+            document.querySelector('#fastposteditor .fbld').insertAdjacentHTML('afterend', `<a href="javascript:;" title="点击给选中文字添加 url 标签（可正常显示为 URL）" class="flnk" style="filter: hue-rotate(83deg);" onclick="seditor_insertunit('post', '[url][i]', '[/i][/url]');doane(event);">URL</a>`);
         }
 
         function replyCustom_2() { // 帖子底部的回复框
