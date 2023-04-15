@@ -5090,6 +5090,16 @@
 			"scrollD": 2500
 		}
 	},
+	"孔夫子旧书网 - 搜索": {
+		"host": "search.kongfz.com",
+		"url": "/^\\/item_result\\//",
+		"pager": {
+			"nextL": "js;return fun.getNextEP('.item-page.active+a.item-page', 'pagenum=', /pagenum=\\d+/)",
+			"pageE": "#listBox>div, script[src*=Isbn_item-result_item-result_page]",
+			"replaceE": ".pager",
+			"scriptT": 2
+		}
+	},
 	"书签地球": {
 		"host": "www.bookmarkearth.com",
 		"url": "return (fun.lp() == '/' || fun.lp() == '/page')",
