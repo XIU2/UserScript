@@ -6347,7 +6347,7 @@
 		}
 	},
 	"秀人美女": {
-		"host": ["www.xrmnw.cc","www.xrmn01.cc"],
+		"host": "/^www\\.xrmn.+/",
 		"url": "/(^\\/.)|(\\d+\\.html$)/",
 		"pager": {
 			"type": 3,
