@@ -417,7 +417,7 @@
 		"pager": {
 			"type": 6,
 			"nextL": "a.next",
-			"pageE": ".comment-list-wrapper",
+			"pageE": ".comments-list-wrapper",
 			"replaceE": ".paginator",
 			"loadTime": 1000
 		}
