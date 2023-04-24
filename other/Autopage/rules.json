@@ -6533,12 +6533,12 @@
 		}
 	},
 	"新闻吧 - xinwenba.net": {
-		"host": ["www.xinwenba.net","m.xinwenba.net"],
+		"host": ["www.xinwenba.net","m.xinwenba.net","m.xwbar.com"],
 		"url": "/\\/view-/",
 		"pager": {
 			"type": 3,
 			"nextL": "//div[@class='paging']/li/a[text()='下一页']",
-			"pageE": ".picture>p, .view_img>p",
+			"pageE": ".view_img>.main",
 			"replaceE": ".paging"
 		}
 	},
