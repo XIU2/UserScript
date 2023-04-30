@@ -1782,6 +1782,16 @@
 			"scriptT": 2
 		}
 	},
+	"FontMeme": {
+		"host": "fontmeme.com",
+		"url": "/^\\/ziti\\//",
+		"blank": 3,
+		"pager": {
+			"nextL": ".pagingLinkSelected+.pagingLink>a",
+			"pageE": ".fontPreviewWrapper",
+			"replaceE": ".pagingWrapper"
+		}
+	},
 	"魔顿": {
 		"host": "www.modown.cn",
 		"url": "/\\/category\\//",
