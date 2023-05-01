@@ -5476,14 +5476,15 @@
 		}
 	},
 	"xHamster": {
-		"host": "/xhamster(\\d+)?\\.com$/",
-		"url": "return (document.title.indexOf('xHamster') > -1 && !fun.indexOF('/videos/') && !fun.indexOF('/photos/'))",
+		"host": ["/^[a-z]{2}\\.xhamster\\.com$/","/^[a-z]{2}\\..*(xh).*\\.[a-z]{2,}$/"],
+		"url": "return ((document.title.indexOf('xHamster') > -1 || fun.getCSS('meta[name=application-name][content=xHamster]')) && !fun.indexOF('/videos/') && !fun.indexOF('/photos/gallery'))",
 		"blank": 3,
 		"pager": {
-			"nextL": "li.next>a",
-			"pageE": ".thumb-list",
+			"type": 3,
+			"nextL": "li.next>a,a[rel=next]",
+			"pageE": ".thumb-list,.channels-thumbs",
 			"replaceE": ".pager-section",
-			"scrollD": 2500
+			"scrollD": 500
 		}
 	},
 	"EPORNER": {
