@@ -1391,11 +1391,11 @@
 	"千图网": {
 		"host": "www.58pic.com",
 		"url": "/\\/(c|tupian|piccate|pmulti|scene)\\//",
-		"style": ".qtw-card.place-box, .card-lazy, .is-line .is-back, .qt-model-t.login-model, .qtd-next-card {display: none !important;} .search-page-container {position: initial !important;}",
+		"style": ".qtw-card.place-box, .card-lazy, .is-line .is-back, .qtd-next-card, .login-model, .login-tip-page, .login-tip-header {display: none !important;} .pic-container.qtd-card-line-container>.qtd-card, .pic-container.qtd-card-mansory-container>.qtd-card {width: 316px;height: 428px;} .search-page-container {position: initial !important;}",
 		"pager": {
 			"type": 3,
 			"nextL": "//div[contains(@class,'page-box')]//a[text()='下一页']",
-			"pageE": ".card-grid-box.is-new:not(.favorites-box)>div, .list-box>div, .qtd-card-container>.qtd-card[data-id], .pic-container>.qtd-card[data-id]",
+			"pageE": ".qtd-card-container>.qtd-card[data-id], .pic-container>.active, .pic-container>.qtd-card[data-id], .card-grid-box.is-new:not(.favorites-box)>div, .list-box>div",
 			"replaceE": ".page-box"
 		},
 		"function": {
