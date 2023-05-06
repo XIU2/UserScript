@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.4.22
+// @version      6.4.23
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -452,7 +452,7 @@
     thread:      对于社区类网站，要在 帖子内 的规则中加入这个，用于脚本的 [帖子内自动翻页] 功能（即用户可以选择开启/关闭所有社区类网站帖子内的自动翻页）
     style:       要插入网页的 CSS Style 样式
     retry:       允许获取失败后重试
-    blank:       强制新标签页打开链接（1 = <base>，2 = 对 body 点击事件委托，3 = 仅对 pageE 的父元素点击事件委托，4 = 仅对 pageE 的父元素添加 target="_blank"）
+    blank:       强制新标签页打开链接（1 = <base>，2 = 对 body 点击事件委托，3 = 仅对 pageE 的父元素点击事件委托，4 = 仅对 pageE 的子元素 <a> 标签添加 target="_blank"）
 
 pager: {
     type:     翻页模式
@@ -861,6 +861,7 @@ function: {
                 url: ()=> {urlC = true; if (indexOF(/\/(mods|users)\/\d+/)) {if (indexOF('tab=posts','s')){curSite = DBSite.nexusmods_posts;} else if (indexOF('tab=user+files','s')){curSite = DBSite.nexusmods;}} else if (lp !== '/' && getCSS('.pagination a.page-selected')) {curSite = DBSite.nexusmods;}},
                 blank: 1,
                 history: false,
+                xRequestedWith: true,
                 pager: {
                     nextL: nexusmods_nextL,
                     pageE: 'ul.tiles>li',
@@ -873,6 +874,7 @@ function: {
             }, //               NexusMods
             nexusmods_posts: {
                 history: false,
+                xRequestedWith: true,
                 pager: {
                     nextL: nexusmods_nextL,
                     pageE: '#comment-container>ol>li.comment:not(.comment-sticky)',
@@ -1420,7 +1422,7 @@ function: {
         if (indexOF('/news')) {modList = RH_NewsTabContent;} else if (indexOF('/users/') && indexOF('tab=user+files','s')) {modList = RH_UserModsTab;} else if (indexOF('/mods/') && indexOF('tab=posts','s')) {modList = RH_CommentContainer;} else {modList = RH_ModList;}
         if (!modList) return
         let out_items = JSON.stringify(modList.out_items).replace(/{|}|"/g,''),
-            nextNum = getXpath('//div[contains(@class, "pagination")][1]//a[contains(@class, "page-selected")]/parent::li/following-sibling::li[1]/a');
+            nextNum = getXpath('//div[contains(@class, "pagination")][1]//a[contains(@class, "page-selected")]/../following-sibling::li[1]/a');
         var url = '';
         if (nextNum && nextNum.innerText) {
             nextNum = nextNum.innerText;
@@ -1917,7 +1919,8 @@ function: {
             method: 'GET',
             overrideMimeType: 'text/html; charset=' + (document.characterSet||document.charset||document.inputEncoding),
             headers: {
-                'Referer': (curSite.noReferer === true) ? '':location.href,
+                'x-requested-with': (curSite.xRequestedWith === true) ? 'XMLHttpRequest':null,
+                'Referer': (curSite.noReferer === true) ? null:location.href,
                 'User-Agent': navigator.userAgent,
                 'Accept': 'text/html,application/xhtml+xml,application/xml'
             },
@@ -1960,7 +1963,7 @@ function: {
             responseType: type,
             overrideMimeType: mimeType,
             headers: {
-                'Referer': (curSite.noReferer === true) ? '':location.href,
+                'Referer': (curSite.noReferer === true) ? null:location.href,
                 'Content-Type': (method === 'POST') ? 'application/x-www-form-urlencoded':'',
                 'User-Agent': navigator.userAgent,
                 'Accept': accept
