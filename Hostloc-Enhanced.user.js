@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.4.8
+// @version      1.4.9
 // @author       X.I.U
 // @description  自动签到（访问空间 +22 积分）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键网页两侧空白处）、收起预览帖子（左键网页两侧空白处）、屏蔽投票贴、快速添加链接、屏蔽阅读权限 255 帖子、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复
 // @match        *://hostloc.com/*
@@ -332,7 +332,7 @@
         document.querySelectorAll('[id^="normalthread_"]').forEach(function(item){ // 遍历所有帖子标题
             menu_value('menu_customBlockKeywords').forEach(function(item1){ // 遍历关键词
                 let itemName = item.querySelector('a.s.xst'); // 寻找帖子标题
-                if (itemName && itemName.textContent.indexOf(item1) > -1) {
+                if (itemName && itemName.textContent.toLowerCase().indexOf(item1.toLowerCase()) > -1) {
                     console.log(`屏蔽关键词：[${item1}]`, `，帖子标题：[${itemName.textContent}]`);
                     item.hidden = true; // 删除帖子
                 }
