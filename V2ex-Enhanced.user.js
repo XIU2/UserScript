@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.1.8
+// @version      1.2.0
 // @author       X.I.U
 // @description  自动签到、链接转图片、自动无缝翻页、使用 SOV2EX 搜索、回到顶部（右键点击两侧空白处）、快速回复（左键双击两侧空白处）、新标签页打开链接、标签页伪装为 Github（摸鱼）
 // @match        *://v2ex.com/*
@@ -277,7 +277,7 @@
     }
 
 
-    // 替换为 sov2ex 搜索，代码来自 v2ex-plus 扩展：https://github.com/sciooga/v2ex-plus （懒得重复造轮子了~）
+    // 替换为 sov2ex 搜索，代码来自 v2ex-plus 扩展：https://github.com/sciooga/v2ex-plus （懒得重复造轮子了~
     function soV2ex() {
         document.body.appendChild(document.createElement('script')).textContent = `
                 var $search = $('#search')
@@ -327,12 +327,14 @@
     }
 
 
-    // 链接转图片，修改自：https://greasyfork.org/scripts/14182
+    // 链接转图片
     function linksToImgs() {
         let links = document.links;
         Array.from(links).forEach(function (_this) {
             if (/^https.*\.(?:jpg|jpeg|jpe|bmp|png|gif)/i.test(_this.href) && !(/<img\s/i.test(_this.innerHTML))) {
                 _this.innerHTML = `<img src="${_this.href}" style="max-width: 100%!important;" />`;
+            } else if (/^https:\/\/imgur\.com\/[a-z]+$/i.test(_this.href)) { // 针对没有文件后缀的 imgur 图床链接
+                _this.innerHTML = `<img src="${_this.href}.png" style="max-width: 100%!important;" />`;
             }
         });
     }
