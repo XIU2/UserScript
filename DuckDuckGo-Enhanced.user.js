@@ -3,7 +3,7 @@
 // @name:zh-CN   DuckDuckGo 增强
 // @name:zh-TW   DuckDuckGo 增強
 // @name:en      DuckDuckGo Enhancements
-// @version      1.0.2
+// @version      1.0.3
 // @author       X.I.U
 // @description  屏蔽指定域名、修复图标加载、链接不携来源、快捷回到顶部（右键两侧空白处）
 // @description:zh-CN  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
@@ -56,9 +56,12 @@
     };
 
 
-    document.documentElement.appendChild(document.createElement('style')).textContent = '.blockDomainBtn {padding: 0 8px !important; font-size: 12px !important; line-height: normal !important; margin-left: 10px !important; border-radius: 3px !important; vertical-align: top !important; opacity: 0.4 !important; top: 3px; cursor: cell;} .result.result--sep--hr {display: none;} a[data-testid="result-title-a"]{display: inline-block}';
+    document.documentElement.appendChild(document.createElement('style')).textContent = `
+.blockDomainBtn {padding: 0 6px !important; font-size: 12px !important; line-height: normal !important; margin-left: 6px !important; border-radius: 3px !important; vertical-align: top !important; opacity: 0.4 !important; top: 3px; cursor: cell;}
+.result.result--sep--hr {display: none;}
+a[data-testid="result-title-a"]{display: inline-block}`
     mutationObserver(); // 屏蔽指定域名 + 修复图标加载 + 链接不携来源
-    backToTop(); //        快捷回到顶部
+    setTimeout(backToTop, 500); //        快捷回到顶部
 
 
     // 自定义屏蔽指定域名
@@ -82,19 +85,12 @@
             for (const mutation of mutationsList) {
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType != 1) break
-
+                    //console.log(target)
                     // 屏蔽指定域名
-                    if (target.dataset.nrn === 'result') {
-                        const a=target.querySelector('h2>a,a[data-testid="result-title-a]"')
-                        if (a && checkDomain(a.href.split('/')[2])) {
-                            target.remove(); break;
-                        } else {
-                            // 链接不携来源
-                            addRel(target);
-
-                            // 添加屏蔽按钮
-                            addBlockDomainBtn(target, a, a.href.split('/')[2]);
-                        }
+                    if (target.tagName == 'LI' && target.dataset.layout == 'organic') {
+                        Process(target)
+                    } else if (target.tagName == 'OL' && target.className == 'react-results--main') {
+                        target.childNodes.forEach(li=>{Process(li)})
                     }
                     // 修复图标加载
                     //let img = target.querySelector('img.result__icon__img[data-src]'); // 寻找图标元素
@@ -104,6 +100,19 @@
         };
         const observer = new MutationObserver(callback);
         observer.observe(document, { childList: true, subtree: true });
+
+        function Process(target) {
+            const a = target.querySelector('h2>a,a[data-testid="result-title-a]"')
+            if (a && checkDomain(a.href.split('/')[2])) {
+                target.remove();
+            } else {
+                // 链接不携来源
+                addRel(target);
+
+                // 添加屏蔽按钮
+                addBlockDomainBtn(target, a, a.href.split('/')[2]);
+            }
+        }
     }
 
 
@@ -145,8 +154,9 @@
     // 快捷回到顶部（右键两侧空白处）
     function backToTop() {
         if (!GM_getValue('menu_backToTop')) return
-        document.querySelectorAll('#web_content_wrapper, #web_content_wrapper > .cw, #links_wrapper').forEach(ele => {
+        document.querySelectorAll('#react-layout>div, #react-layout>div>div, section[data-testid=sidebar]').forEach(ele => {
             ele.oncontextmenu = function(e) {
+                //console.log(e.target, this)
                 if (e.target == this) {
                     e.preventDefault();
                     window.scrollTo(0,0);
