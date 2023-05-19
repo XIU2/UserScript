@@ -3,7 +3,7 @@
 // @version      1.0.2
 // @author       X.I.U
 // @description  精简多余内容、样式优化
-// @icon         https://www.3dmgame.com/favicon.ico
+// @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAC0klEQVR4nJ1TS0hUYRT+/nuvd2Z0nMbRrpPpTJozoZliQmEFFkT0QlwIRWlUi4jIaFGLqE0ELlsEElGrGCKimhaVVmhW9CBSy5ohk/I1pvO66R3nOt7X30IxoyTog8OBc/i+83EOB1gEoRP8Yq3fQP5WvHxqW7kkKfkmXgx+D3PCmjLLuPYmNXyotevfAud9XhQEHZtLKpe3uAozS+12MyRJRTSc7O7tCp9uOPe0Y1GBGAUeXdiyc8vuIr8gmHgQgFACSgwQg0L8oWtP7w3s2Z/vvKse9v0pcLup3FpWV97v8S5xElBMz2hgGIKRgQRcRZmYljVEo4r45E5gVVmtMNH3UC3ifvOfZ693OC3OB50jUFRAkjTIsoqjB7xo7YhgaERChpU4isuXHUsNs+Km7Y5K8rl1L2/PHld8gSFUa6V+r6TXhWMzMNW4EArFQCMRGNMywLFgLOnIXZoD0/PIuHXfSnvUwHUuqTNdJJFvW5+WfSs3z7TVnJiB25WJyXQNjpwl0LJXQVM4ECLDYorDXWJDPM/qzPJmYaxbjHBQlFfFlc4jqZRyyr3aDgYABYXJXIFl6esAws7vm1IFRvIteOktDB0IDYg9zMfP4ZbhwamUp2SWDBBQvhhsxgYQwoEBAQOAAQVD0sBaN0JPc6O/XwoyRk4bE+tLGmJUluSkDk2nSKVUwLIGhC48EQFAQOYyNa99FUiMVQ1Vt8kkPhHnfCd3OYXCjKYCj+0gz0Oo2nEGhDHNEX7BAKAbFIFnzxsrdzb5AIDJsmWh8eK9cUvDjrOv28dqCEsGDarOTgLmwwCgaho+vHx5M3i1+ca8N0opBwDJxAzux9/hffMlW3WF7cqKQk+9RXCBsCx0g079+BpgRjv9Zvtqwb31eHtooQADALquYzQmom/yGnofqzb3txe1kw6PKEOYoBmsbKaKmVeT6SNJ9kvPp68xv98v//FZ/4OfGzYzfKjarqcAAAAASUVORK5CYII=
 // @match        *://bbs.3dmgame.com/*
 // @license      GPL-3.0 License
 // @run-at       document-start

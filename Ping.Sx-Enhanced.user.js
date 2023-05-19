@@ -6,7 +6,7 @@
 // @match        https://ping.sx/ping*
 // @match        https://ping.sx/dig*
 // @match        https://ping.sx/check-port*
-// @icon         https://ping.sx/favicon.ico
+// @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAD7klEQVR4nO3WWYxfcxQH8M9//LWzdJuWaVMaI6WKKtKOfacVGuHFgy3E8iARDyKWBBEJ8SC2Jy9EeKCSqpoiBJF22k6JbdBqqqilqe4z05ol0xkP5/zz/6dPY3iQuN/kl3vv755z7lm+5/wuBQoUKFCgQIECBQoU+L+iNAb5OpRzHY5xGI8D2PMPfKlDK+qxNe2NyqHa+4k4EkdgWq6paM41GZNSrilXQ16/wE3YN8YAjsKKtH0NNo5GqVxzP6Ia9QHsQmM63IAJuSZmIBPS8UZMwfcYGKPzMA/z8Sl+G61SbQDzcbkoXxmnp7GVeX8+hrEM36bOqamzMeWm4rq0tRefYD36MRsXCJqMYAPeR3faOltQshO9KXsW9uMtQdMLU7+E7/BRbTBPpeEe/Jn33ViKP/J5BOsEzeCZ3HtEcPcVDGIH+kRPLEnZJ1J2qOb6XCarPoM5iGtxI7annTszsMcO0R9M3xC0WJ0vlmYWO/N5G+7Go5nJ3ThF0GetoM0loko9mdk2XIr7RR9VMnxr7j+QtjahBcfjd+zES5m4Llym2qdn1ujfJ2g+WJcvW3EifsFDeE2VJi/jedFg/Wl8D47DXEG5DZmR/YIqD4vp9HQGPCODPg1Xir4ZTCf6cn+6oODN6fQ9+DCTOF3QsqLfVPM9cEsKLhMlnSSoMoBFKXNDyqwQI+/2fH4dh+Xe9fhaUKE3ZZrxdn5wdcr/kLovpu1n87lX9M4w7sh3zVie+h2pvznl36vLaM9J4bWCY7NxAn4WzQLn1sgM47x8XpPGFuf9ItEbE3Bx6l2Bz3F1BtVVo9sk6HEQD+KF9OmqTGab6KMvU/82fJX6H5cFBxeKxl2fL9oy8g9EMzXjDEGhdYLXCzNjnWJCvSro0iHoNSLOhv5MSivuzeQsSdnPBP/niqq8gTm4S/TMSZn5IRyT+q0Z3G6sqRMTZSfaVQ+PyWm8PbM9TZwL7VmRlgysXZSzC4+nzOJ8/6RoyHWCIt1Zne25144tgt+bxKjcjW/wJn7MRHSKiu5L/R2pvxIbS2KEjUvHh7Js48Xo6s3KlEXjDefqFw03oNpIpdSbkjK7BC1KqoddT8rX57s+1V+RQdWDsCG/Wdkr5/cGD9UviTlbOUxmZ4bGZRa3pbMV1Gd1urAgHdibH+zI/Rli/M0SFW0SvyZb8I6g1r+GsuBfC37CTNFYU9OZNtHg9aIfmvCrKOVMUeZ5YhwuF9meg2MzkJPFaF4lqNdolD9po0UJF4msNIlG6UiHN4vZXemBVeK3oXK4VUZnhQaz8K74KWsRFDo6ZRekva25/nOoE9T6u7/nBQoUKFCgQIECBQoUKDBm/AXKhRvkgr+Z+wAAAABJRU5ErkJggg==
 // @grant        GM_setClipboard
 // @grant        window.onurlchange
 // @license      GPL-3.0 License

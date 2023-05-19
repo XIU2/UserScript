@@ -5,7 +5,7 @@
 // @description  自动签到（访问空间 +22 积分）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键网页两侧空白处）、收起预览帖子（左键网页两侧空白处）、屏蔽投票贴、快速添加链接、屏蔽阅读权限 255 帖子、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复
 // @match        *://hostloc.com/*
 // @match        *://91ai.net/*
-// @icon         https://hostloc.com/favicon.ico
+// @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABYUlEQVR4nM2VMUrFQBCG/xUbUz20EGwkIAjewMYreAabtLlKcgLP4BVsPEHEB0J4TeAJPuy0i42TsJP8byfgY/fvNplM9v92Ztb1fd9jgZxzpjhr2qMlPz+EjvUDcSgOtOO6rk2J9XeMSHQCTtdAyHHbtot+kOc5AKAsSwBTEtEJDDUgzpnjqqpmExRF4a2zLPPWTdPs3UA6BJjE+dfmZfb96vLWWwsRTYIpHQKs7wfnPx97E70+PwIAbu4eAExrgyk6AToHrM61uu0OwEhCK7k5MCEwvNC1sH6aTbC6vvfWUgtaQiQ5AvQ2/P58956fnF3NJrDGMaVHICTd76E4EYtPjwCbiOLo4vwUwNgV+sx1nMwFpugEgnNAJmK3eQMwOtMSp9o5639RdAKLN9Btd8FzPegG/lt0Duhu0LejvgOkK6xnL4pOgHbBJPCPBLvtRFbnougEzHcBm5AszqroBH4BBkemS0VRyL4AAAAASUVORK5CYII=
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand

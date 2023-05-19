@@ -28,7 +28,7 @@
 // @match        *://*.lanzouw.com/*
 // @match        *://*.lanzoux.com/*
 // @match        *://*.lanzouy.com/*
-// @icon         https://www.lanzou.com/favicon.ico
+// @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABZ0lEQVR4nJ2TvW4UQRCEv+q9H8wGwFlIOEQQIRmnCIcnEidkSAQYEpwQIPEoZPgliB04IiW15JRXAMkne3e6COaMZe7HiEqmpzVV01PTLR9g1kIAGNdYQgrIAmliPfkSRghFQEk46yGB8S0GN3IF9fKAWYHJJjzbx0/30P1H/yBggwKfF9h5gfa/wObDeV6LAkYQDWTWq5shml3A9hR9+AqjFrLMnVkigECzHhqgEf51Affuotef8ahF2UNc0QZ/s9UZnr/Cu+/Q8DZ8O8TDDbT1pDof1ylXu2iqSdP38OYQ2VhCj3dh9rM+LhY/rQooII3bMUw/1veVrhIU0E5WehxWQILPEjRC7QQDbga1XKk6vgIDuoRxi/bews5LvHGnFqU/DXDZjMuRnx44T49t2860nc756rSzL/P8cpAnRzUqnV36hQOlO7ezrBRQ2pYLEFigtfUuMRHAiptGcrWAfnyvk/afEr8Bt+re7W42OSoAAAAASUVORK5CYII=
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
 // @grant        GM_unregisterMenuCommand
