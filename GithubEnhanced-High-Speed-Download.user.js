@@ -131,7 +131,7 @@
     setTimeout(addDownloadZIP, 2000); // Download ZIP 加速
     setTimeout(addGitClone, 2000); //    Git Clone 加速
     setTimeout(addGitCloneSSH, 2000); // Git Clone SSH 加速
-    addRawFile(); //                     Raw 加速
+    if (GM_info.scriptHandler === 'Tampermonkey') {addRawFile();} else {setTimeout(addRawFile, 1000);} // Raw 加速
     setTimeout(addRawDownLink, 2000); // Raw 单文件快捷下载（☁），延迟 2 秒执行，避免被 pjax 刷掉
 
     // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
@@ -142,7 +142,7 @@
         setTimeout(addDownloadZIP, 2000); // Download ZIP 加速
         setTimeout(addGitClone, 2000); //    Git Clone 加速
         setTimeout(addGitCloneSSH, 2000); // Git Clone SSH 加速
-        addRawFile(); //                     Raw 加速
+        if (GM_info.scriptHandler === 'Tampermonkey') {addRawFile();} else {setTimeout(addRawFile, 1000);} // Raw 加速
         setTimeout(addRawDownLink, 2000); // Raw 单文件快捷下载（☁），延迟 2 秒执行，避免被 pjax 刷掉
         setTimeout(addRawDownLink_, 1000); // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）鼠标事件
     });
@@ -406,7 +406,7 @@
             return ret;
         })(history.replaceState);
 
-        window.addEventListener('popstate',()=>{
+        window.addEventListener('popstate',()=>{ // 点击浏览器的前进/后退按钮时触发 urlchange 事件
             window.dispatchEvent(new Event('urlchange'))
         });
     }
