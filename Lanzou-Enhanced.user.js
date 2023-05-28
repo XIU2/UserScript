@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.5.0
+// @version      1.5.1
 // @author       X.I.U
 // @description  文件排序、刷新不回根目录、快捷返回上一级（右键网页空白处）、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、一键复制所有分享链接、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @match        *://lanzou.com/u
@@ -293,9 +293,15 @@
         if (!menu_value('menu_directDownload')) return
         if (document.getElementById('infos')) {
             document.getElementById('infos').addEventListener('click', function(e) {
-                if (e.target.tagName === 'A') {
+                if (e.target.tagName === 'A') { // 针对普通样式的分享链接列表页
                     e.preventDefault(); // 阻止默认打开链接事件
                     GM_openInTab(e.target.href + '#download', {active: false, insert: true, setParent: true}); // 后台打开
+                } else { // 针对会员专属样式的分享链接列表页
+                    const link = e.target.closest('a'); // 点击 <a> 元素的子元素时，寻找最近的 <a> 父元素
+                    if ((link && this.contains(link))) {
+                        e.preventDefault(); // 阻止默认打开链接事件
+                        GM_openInTab(link.href + '#download', {active: false, insert: true, setParent: true}); // 后台打开
+                    }
                 }
             });
         }
@@ -304,7 +310,7 @@
     function directDownload_() {
         if (!menu_value('menu_directDownload')) return
         if (location.hash != '#download') return
-        let iframe = document.querySelector('iframe.ifr2');
+        let iframe = document.querySelector('iframe.ifr2, iframe.n_downlink');
         if (iframe) { // 只有找到 iframe 框架时才会继续运行脚本
             iframe = iframe.contentWindow;
             let timer = setInterval(function(){
