@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.4.24
+// @version      6.4.25
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -495,7 +495,7 @@ pager: {
                当 pageE: '.item' 且 insertP: ['.page', 1] 时，实际等同于 ['.item', 5]
          注意：如 pageE 中选择了多类元素，则不能省略 insertP（比如包含 `,` 与 `|` 符号），除非另外的选择器是 <script> <style> <link> 标签
 
-    replaceE: 要替换为下一页内容的元素（比如页码）
+    replaceE: 要替换为下一页内容的元素（比如页码），省略后默认替换 nextL 元素（仅限模式1/3/6，且 js 代码除外），值为空 "" 时则完全不替换
     scrollD： 翻页动作触发点（[滚动条] 与 [网页底部] 之间的距离），数值越大，越早开始翻页，一般是访问网页速度越慢，该值就需要越大，省略后默认 2000
 
     scriptT:  单独插入 <script> 标签
@@ -1375,7 +1375,8 @@ function: {
                         curSite = DBSite.discuz_thread;
                     }
                 }
-            } else if (indexOF('/archiver/')) { //     < 归档页 >
+            }
+            if (indexOF('/archiver/')) { //     < 归档页 >
                 curSite = DBSite.discuz_archiver;
             }
         }
@@ -1847,6 +1848,11 @@ function: {
         if (curSite.pager.type === undefined) curSite.pager.type = 1; // 默认翻页模式 1
         if (curSite.pager.scrollD === undefined) curSite.pager.scrollD = 2000; // 默认翻页触发线 2000
         if (curSite.pager.interval === undefined) curSite.pager.interval = 500; // 默认间隔时间 500ms
+        if (curSite.pager.replaceE === undefined) { // 如果 replaceE 不存在，则默认替换 nextL
+            if ((curSite.pager.type === 1 || curSite.pager.type === 3 || curSite.pager.type === 6) && curSite.pager.nextL && typeof curSite.pager.nextL !== 'function' && curSite.pager.nextL.search(/^js;/i) !== 0) {
+                curSite.pager.replaceE = curSite.pager.nextL
+            }
+        }
         //console.log(curSite)
         curSite.pageUrl = ''; // 下一页URL
         windowScroll(function (direction, e) {
@@ -2691,7 +2697,7 @@ function: {
 <li>脚本会自动格式化规则，因此<strong>无需手动缩进、换行</strong>，只需把规则<strong>插入默认的 { } 中间</strong>即可。</li>
 </ul>
 <pre style="white-space: pre-wrap !important;user-select: auto !important;">
-// 下面示例是把所有规则都塞进去了，但实际上大部分都用不上，大多数网站只需要像第一个 "aaa" 这样的规则
+// 下面示例是把所有规则都塞进去了，但实际上大部分都用不上，大多数网站只需要像第一个 "aaa" 这样的规则（replaceE 规则可以省略，省略后即默认替换 nextL 元素）
 // "aaa" 是规则名，唯一！如果和 外置规则名 重复，则会将完全覆盖同名的外置规则，支持中文等各种字符
 // "url" 是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站
 // "scrollD" 是用来控制翻页敏感度的（越大就越早触发翻页，访问速度慢的网站需要调大，可省略(注意逗号)，默认 2000）
