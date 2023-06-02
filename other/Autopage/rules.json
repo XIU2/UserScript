@@ -2690,6 +2690,24 @@
 			"replaceE": ".search_stat"
 		}
 	},
+	"DirtyWarez": {
+		"host": "forum.dirtywarez.com",
+		"url": "/^\\/forums\\//",
+		"blank": 3,
+		"pager": {
+			"nextL": "//a[@class='text'][contains(text(),'>')]",
+			"pageE": "li.discussionListItem"
+		}
+	},
+	"Torrenting": {
+		"host": "torrenting.com",
+		"url": "/^\\/t($|\\?)/",
+		"blank": 4,
+		"pager": {
+			"nextL": ".page_nav>b+a",
+			"pageE": ".torrentsTableTr"
+		}
+	},
 	"CGpeers": {
 		"host": "cgpeers.to",
 		"url": "return (fun.lp() == '/torrents.php')",
