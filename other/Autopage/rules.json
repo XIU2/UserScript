@@ -2660,6 +2660,15 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"BitSearch": {
+		"host": "bitsearch.to",
+		"url": "/^\\/(search|library|anime|videos|music|softwares)/",
+		"blank": 5,
+		"pager": {
+			"nextL": "a.active+a",
+			"pageE": ".movie-grid>*,.search-result"
+		}
+	},
 	"Kickass Torrents": {
 		"host": ["kickasss.to","katcr.to"],
 		"url": "return (fun.lp() != '/' && !fun.indexOF('.html') && !fun.indexOF('/popular'))",
