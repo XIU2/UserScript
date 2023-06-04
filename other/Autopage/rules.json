@@ -2968,6 +2968,31 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-srcset]','data-srcset'])"
 		}
 	},
+	"动漫屋": {
+		"host": "www.dm5.com",
+		"url": "/^\\/m\\d+\\//",
+		"history": true,
+		"style": ".view-comment {display: none !important;} .rightToolBar {opacity: 0.3 !important;} #barChapter>img {display: block !important;}",
+		"pager": {
+			"nextL": "//div[@class='view-paging']//a[text()='下一章']",
+			"pageE": "#barChapter>img",
+			"replaceE": ".view-paging, .rightToolBar",
+			"interval": 4000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
+	"动漫屋 - 分类页": {
+		"host": "www.dm5.com",
+		"url": "if(fun.indexOF('/manga-list') || fun.lp() == '/search' || fun.getCSS('.box-body>ul.mh-list>li')){return true}else if(fun.getCSS('.detail-more')){fun.getCSS('.detail-more').click()}",
+		"blank": 3,
+		"pager": {
+			"nextL": "//div[contains(@class,'page-pagination')]//a[contains(text(), '>')]",
+			"pageE": "ul.mh-list>li",
+			"replaceE": ".page-pagination"
+		}
+	},
 	"动漫啦 - 分类页": {
 		"host": "www.dongman.la",
 		"url": "if (fun.indexOF('/detail/')) {setTimeout(()=>{fun.getCSS('a#zhankai').click();},500)} else if (fun.indexOF('/manhua/')) {return true}",
