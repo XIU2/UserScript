@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.4.28
+// @version      6.5.0
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -453,7 +453,13 @@
     thread:      对于社区类网站，要在 帖子内 的规则中加入这个，用于脚本的 [帖子内自动翻页] 功能（即用户可以选择开启/关闭所有社区类网站帖子内的自动翻页）
     style:       要插入网页的 CSS Style 样式
     retry:       允许获取失败后重试
-    blank:       强制新标签页打开链接（1 = <base>，2 = 对 body 点击事件委托，3 = 仅对 pageE 的父元素点击事件委托，4 = 仅对 pageE 的子元素 <a> 标签添加 target="_blank"）
+    blank:       强制新标签页打开链接
+       1 = 网页 <head> 添加 <base target="_blank"> 来让所有链接默认新标签页打开（对已单独指定 target 或已监听点击事件的元素无效）
+       2 = 对 <body> 委托点击事件
+       3 = 对 pageE 的父元素 委托点击事件
+       4 = 对 pageE 的子元素 <a> 标签 添加 target="_blank"
+       5 = 对 pageE 的子元素 <a> 标签 清理事件后 再添加 target="_blank"
+       6 = 对 pageE 的子元素 <a> 标签 清理事件后 再添加 target="_blank" 并阻止冒泡（避免父元素事件委托捕获该元素的点击事件）
 
 pager: {
     type:     翻页模式
@@ -2096,7 +2102,7 @@ function: {
             }
 
             // 强制新标签页打开链接
-            if (curSite.blank === 4) {pageE = forceTarget(pageE);}
+            if (curSite.blank === 4 || curSite.blank === 5 || curSite.blank === 6) {pageE = forceTarget(pageE);}
 
             // 插入位置
             let addTo = getAddTo(curSite.pager.insertP[1]);
@@ -2525,9 +2531,24 @@ function: {
         if (curSite.blank === 1) {
             document.head.appendChild(document.createElement('base')).target = '_blank';
 
+        } else if (curSite.blank === 5 || curSite.blank === 6) { // 清理 <a> 元素的点击事件
+            if (!pageE) pageE = getAll(curSite.pager.pageE)
+            pageE.forEach(function (dd) {
+                getAllCSS('a[href]:not([target="_blank"]):not([onclick]):not([href^="#"]):not([href^="javascript:"])',dd).forEach(function (a) {
+                    if (a.href.slice(0,4) == 'http' && a.getAttribute('href').slice(0,1) != '#') {
+                        const clonedLink = a.cloneNode(true); // 克隆原 a 元素
+                        clonedLink.target = '_blank'; // 通过添加 target="_blank" 属性来新标签页打开，可以解决大部分情况
+                        if (curSite.blank === 6) clonedLink.addEventListener('click', function(e) {e.stopPropagation();}); // 如果添加 target="_blank" 属性无效（依然在当前网页跳转打开），那么说明其父元素的事件委托中阻止了默认打开链接事件，因此对该 <a> 元素添加点击事件并阻止冒泡（避免父元素事件委托捕获该元素的点击事件）
+                        a.insertAdjacentElement('afterend', clonedLink); // 把克隆的元素插入原 a 元素后面
+                        a.remove(); // 删除原 a 元素
+                    }
+                });
+            });
+            return pageE
+
         } else if (curSite.blank === 4) {
             if (!pageE) pageE = getAll(curSite.pager.pageE)
-            pageE.forEach(function (dd) {getAllCSS('a[href]:not([target="_blank"]):not([onclick]):not([href^="#"]):not([href^="javascript:"])',dd).forEach(function (a) {a.target = '_blank';});});
+            pageE.forEach(function (dd) {getAllCSS('a[href]:not([target="_blank"]):not([onclick]):not([href^="#"]):not([href^="javascript:"])',dd).forEach(function (a) {if (a.href.slice(0,4) == 'http' && a.getAttribute('href').slice(0,1) != '#') {a.target = '_blank';}});});
             return pageE
 
         } else {
@@ -2542,6 +2563,7 @@ function: {
 
             function forceTarget_(target, e){
                 if (target.href && target.target != '_blank' && !(target.getAttribute('onclick')) && target.href.slice(0,4) == 'http' && target.getAttribute('href').slice(0,1) != '#') {
+                    e.stopPropagation(); // 阻止冒泡（避免被父元素事件委托捕获）
                     e.preventDefault(); // 阻止默认打开链接事件
                     window.GM_openInTab(target.href, {active: true,insert: true,setParent: true});
                 }
