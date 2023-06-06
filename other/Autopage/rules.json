@@ -4726,7 +4726,7 @@
 		"url": "fun.isUrlC(); return (fun.lp() == '/')",
 		"pager": {
 			"type": 2,
-			"nextL": ".ajax-pagination-btn"
+			"nextL": "[id^=panel-]:not([hidden]) .ajax-pagination-btn"
 		}
 	},
 	"Github - Star/Repositories/Commits/Dependents/NotificationsSubscriptions": {
