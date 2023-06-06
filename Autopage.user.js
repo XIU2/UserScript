@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.5.0
+// @version      6.5.1
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -456,7 +456,7 @@
     blank:       强制新标签页打开链接
        1 = 网页 <head> 添加 <base target="_blank"> 来让所有链接默认新标签页打开（对已单独指定 target 或已监听点击事件的元素无效）
        2 = 对 <body> 委托点击事件
-       3 = 对 pageE 的父元素 委托点击事件
+       3 = 对 pageE 的父元素 委托点击事件（也会阻止冒泡，但因为距离 <a> 标签较远，因此只有在委托点击事件的元素是 pageE 的父元素的父元素时，才有意义）
        4 = 对 pageE 的子元素 <a> 标签 添加 target="_blank"
        5 = 对 pageE 的子元素 <a> 标签 清理事件后 再添加 target="_blank"
        6 = 对 pageE 的子元素 <a> 标签 清理事件后 再添加 target="_blank" 并阻止冒泡（避免父元素事件委托捕获该元素的点击事件）
@@ -1054,6 +1054,26 @@ function: {
                     scrollD: 800
                 }
             }, //      Mangabz 漫画 - 分类/搜索页
+                        dm5: {
+                host: 'www.dm5.com',
+                url: ()=> {if (indexOF(/\/m\d+/)) {
+                    setTimeout(mangabz_init, 1500);
+                    curSite = DBSite.dm5;
+                } else if (indexOF('/manga-list') || lp == '/search' || getCSS('.box-body > ul.mh-list > li')) {
+                    curSite = DBSite.mangabz_list;
+                } else if (getCSS('.detail-more')) {
+                    getCSS('.detail-more').click();
+                }},
+                style: '.view-paging > .container, .view-comment {display: none !important;} .rightToolBar {opacity: 0.3 !important;} #cp_img > img, #barChapter > img{display: block !important;margin: 0 auto !important; max-width: 99% !important; width: auto !important; height: auto !important;} body {overflow: auto !important;}',
+                pager: {
+                    type: 4,
+                    nextL: dm5_nextL,
+                    insertP: ['#barChapter,#cp_img', 3],
+                    insertE: dm5_insertE,
+                    replaceE: '.view-paging > .container, .rightToolBar',
+                    interval: 500
+                }
+            }, //               动漫屋
             xmanhua: {
                 host: ['xmanhua.com', 'www.xmanhua.com'],
                 url: ()=> {if (indexOF(/\/m\d+/)) {
@@ -1702,6 +1722,45 @@ function: {
                 replaceElems(pageE)
                 MANGABZ_PAGE = 0;
                 mangabz_nextL();
+            }
+        }
+    }
+
+
+    // [动漫屋] 获取下一页地址
+    function dm5_nextL() {
+        var url = '';
+        if (DM5_PAGE === DM5_IMAGE_COUNT) { // 下一话
+            if (getNextE('//div[@class="view-paging"]//a[text()="下一章"]')) getPageE_(curSite.pageUrl); // 访问下一话 URL 获取
+        } else { // 下一页
+            if (!mkey) var mkey = '';
+            url = location.origin + location.pathname + 'chapterfun.ashx' + `?cid=${DM5_CID}&page=${DM5_PAGE + 1}&key=${(mkey)}&language=1&gtk=6&_cid=${DM5_CID}&_mid=${DM5_MID}&_dt=${DM5_VIEWSIGN_DT}&_sign=${DM5_VIEWSIGN}`
+            if (url === curSite.pageUrl) return
+            curSite.pageUrl = url
+            //console.log(curSite.pageUrl)
+            getPageE_(curSite.pageUrl, 'text', 'GET', '', 'Next'); // 访问下一页 URL 获取
+        }
+    }
+    // [动漫屋] 插入数据
+    function dm5_insertE(pageE, type) {
+        if (pageE) {
+            if (type === 'Next') { // 下一页
+                let imgArr = eval(pageE),
+                    _img = '';
+                for (let now of imgArr) {_img += `<img src="${now}">`;}
+                if (_img) {
+                    getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
+                    DM5_PAGE += imgArr.length;
+                    addHistory(pageE, document.title, location.origin + DM5_CURL.substring(0, DM5_CURL.length - 1) + '-p' + DM5_PAGE + '/');
+                }
+            } else { // 下一话
+                // 插入 <script> 标签
+                insScript('html:not([dir])>head>script:not([src])', pageE);
+                addHistory(pageE);
+                pageNum.now = pageNum._now + 1
+                replaceElems(pageE)
+                DM5_PAGE = 0;
+                dm5_nextL();
             }
         }
     }
@@ -2535,7 +2594,7 @@ function: {
             if (!pageE) pageE = getAll(curSite.pager.pageE)
             pageE.forEach(function (dd) {
                 getAllCSS('a[href]:not([target="_blank"]):not([onclick]):not([href^="#"]):not([href^="javascript:"])',dd).forEach(function (a) {
-                    if (a.href.slice(0,4) == 'http' && a.getAttribute('href').slice(0,1) != '#') {
+                    if (a.href.slice(0,4) == 'http') {
                         const clonedLink = a.cloneNode(true); // 克隆原 a 元素
                         clonedLink.target = '_blank'; // 通过添加 target="_blank" 属性来新标签页打开，可以解决大部分情况
                         if (curSite.blank === 6) clonedLink.addEventListener('click', function(e) {e.stopPropagation();}); // 如果添加 target="_blank" 属性无效（依然在当前网页跳转打开），那么说明其父元素的事件委托中阻止了默认打开链接事件，因此对该 <a> 元素添加点击事件并阻止冒泡（避免父元素事件委托捕获该元素的点击事件）
@@ -2548,7 +2607,7 @@ function: {
 
         } else if (curSite.blank === 4) {
             if (!pageE) pageE = getAll(curSite.pager.pageE)
-            pageE.forEach(function (dd) {getAllCSS('a[href]:not([target="_blank"]):not([onclick]):not([href^="#"]):not([href^="javascript:"])',dd).forEach(function (a) {if (a.href.slice(0,4) == 'http' && a.getAttribute('href').slice(0,1) != '#') {a.target = '_blank';}});});
+            pageE.forEach(function (dd) {getAllCSS('a[href]:not([target="_blank"]):not([onclick]):not([href^="#"]):not([href^="javascript:"])',dd).forEach(function (a) {if (a.href.slice(0,4) == 'http') {a.target = '_blank';}});});
             return pageE
 
         } else {
