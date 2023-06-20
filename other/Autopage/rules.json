@@ -2212,6 +2212,14 @@
 			"replaceE": ".wp-pagenavi"
 		}
 	},
+	"gog-games.to": {
+		"host": "gog-games.to",
+		"url": "/^\\/search\\//",
+		"pager": {
+			"nextL": "span.btn.blue+a:not([disabled])",
+			"pageE": "a[data-id]"
+		}
+	},
 	"bilibili - 新版搜索页": {
 		"host": "search.bilibili.com",
 		"url": "fun.isUrlC(); return ((fun.lp() == '/all' || fun.lp() == '/video' || fun.lp() == '/pgc' || fun.lp() == '/article') && !fun.getCSS('ul.video-list') && !fun.getCSS('#article-list'))",
