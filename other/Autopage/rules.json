@@ -5929,6 +5929,16 @@
 			"replaceE": ".c-pager-101"
 		}
 	},
+	"ec.sod.co.jp": {
+		"host": "ec.sod.co.jp",
+		"url": "/^\\/prime\\/videos\\/genre\\/\\?/",
+		"blank": 4,
+		"pager": {
+			"nextL": ".page_list_li_on+.page_list_li>a",
+			"pageE": "#videos_s_mainbox",
+			"replaceE": "#page_list"
+		}
+	},
 	"7mmtv": {
 		"host": "7mmtv.sx",
 		"url": "return (document.title.indexOf('7mmtv') != -1 && fun.lp() != '/' && !fun.indexOF('_content/'))",
