@@ -2687,13 +2687,13 @@
 			"replaceE": ".pages"
 		}
 	},
-	"TorrentGalaxy.": {
-		"host": "torrentgalaxy.to",
+	"TorrentGalaxy": {
+		"host": "/^torrentgalaxy\\.[a-z]{2,6}$/",
 		"url": "/^\\/torrents\\.php/",
 		"blank": 3,
 		"pager": {
 			"nextL": "li.page-item.active+li.page-item>a",
-			"pageE": ".tgxtable",
+			"pageE": ".tgxtable>div:not(.header)",
 			"replaceE": ".pagination"
 		}
 	},
