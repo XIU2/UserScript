@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.5.5
+// @version      1.5.6
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -192,13 +192,11 @@ html[data-theme="light"] header.AppHeader {background-color: #ffffff !important;
 html[data-theme="light"] header.AppHeader a[aria-label="知乎"] svg {filter: invert(57%) sepia(71%) saturate(949%) hue-rotate(190deg) brightness(86%) contrast(188%) !important;}
 html[data-theme="light"] .AppHeader-TabsLink {color: #8590a6 !important; font-weight: normal !important;}
 html[data-theme="light"] .AppHeader-userInfo Button svg, .SearchBar-searchButton svg {color: inherit !important;}
-html[data-theme="light"] .Input-wrapper.Input-wrapper--grey {background: #f6f6f6 !important;}
-html[data-theme="light"] .AppHeader-SearchBar input.Input {color: #121212 !important;}
-html[data-theme="light"] .AppHeader-SearchBar input::-webkit-input-placeholder {color: #a4a4a4 !important;}
-html[data-theme="light"] .AppHeader-SearchBar input:-moz-placeholder {color: #a4a4a4 !important;}
-html[data-theme="light"] .AppHeader-SearchBar input::-moz-placeholder {color: #a4a4a4 !important;}
-html[data-theme="light"] .Button--primary.Button--blue {color: #fff !important;background-color: #06f !important;}
 html[data-theme="light"] .AppHeader-userInfo button>div {color: #8590a6 !important;}
+html[data-theme="light"] .Input-wrapper.Input-wrapper--grey {background: #f6f6f6 !important;}
+html[data-theme="light"] .SearchBar input {color: #121212 !important;}
+html[data-theme="light"] .SearchBar input::placeholder, html[data-theme="light"] .SearchBar input::-webkit-input-placeholder, html[data-theme="light"] {color: #919baf !important;}
+html[data-theme="light"] .Button--primary.Button--blue {color: #fff !important;background-color: #06f !important;}
             `,
             style_widescreenDisplayIndex = `/* 宽屏显示 - 首页 */
 .Topstory-mainColumn, .QuestionWaiting-mainColumn {width: inherit !important;}
