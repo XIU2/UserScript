@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.5.2
+// @version      6.5.3
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -1075,9 +1075,10 @@ function: {
                 }
             }, //               动漫屋
             xmanhua: {
-                host: ['xmanhua.com', 'www.xmanhua.com'],
+                host: ['xmanhua.com', 'www.xmanhua.com','yymanhua.com','www.yymanhua.com'],
                 url: ()=> {if (indexOF(/\/m\d+/)) {
                     setTimeout(mangabz_init, 1500);
+                    if (location.hostname.indexOf('xmanhua') != -1){unsafeWindow.MH_PREFIX23 = 'XMANHUA_'}else{unsafeWindow.MH_PREFIX23 = 'YYMANHUA_'}
                     curSite = DBSite.xmanhua;
                 } else if (indexOF(/\/\d+xm\//)) {
                     if (getCSS('.detail-list-form-more')) getCSS('.detail-list-form-more').click();
@@ -1684,8 +1685,8 @@ function: {
         if (getCSS('#barChapter')) getCSS('#barChapter').removeAttribute('oncontextmenu');
         if (getCSS('#cp_image')) {
             getCSS('#cp_image').removeAttribute('oncontextmenu');
-            getCSS('#cp_image').removeAttribute('id');
             getCSS('#cp_image').removeAttribute('style');
+            getCSS('#cp_image').removeAttribute('id');
         }
     }
     // [Mangabz 漫画] 获取下一页地址
@@ -1769,11 +1770,12 @@ function: {
     // [Xmanhua 漫画] 获取下一页地址
     function xmanhua_nextL() {
         var url = '';
-        if (XMANHUA_PAGE === XMANHUA_IMAGE_COUNT) { // 下一话
+        console.log('111111111111111111111111',unsafeWindow[unsafeWindow.MH_PREFIX23+'CID'])
+        if (unsafeWindow[unsafeWindow.MH_PREFIX23+'PAGE'] === unsafeWindow[unsafeWindow.MH_PREFIX23+'IMAGE_COUNT']) { // 下一话
             if (getNextE('//a[./img[contains(@src, "reader-bottom-right-2.png")]]')) getPageE_(curSite.pageUrl); // 访问下一话 URL 获取
         } else { // 下一页
             if (!mkey) var mkey = '';
-            url = location.origin + location.pathname + 'chapterimage.ashx' + `?cid=${XMANHUA_CID}&page=${XMANHUA_PAGE + 1}&key=${(mkey)}&_cid=${XMANHUA_CID}&_mid=${XMANHUA_MID}&_dt=${XMANHUA_VIEWSIGN_DT}&_sign=${XMANHUA_VIEWSIGN}`
+            url = location.origin + location.pathname + 'chapterimage.ashx' + `?cid=${unsafeWindow[unsafeWindow.MH_PREFIX23+'CID']}&page=${unsafeWindow[unsafeWindow.MH_PREFIX23+'PAGE'] + 1}&key=${(mkey)}&_cid=${unsafeWindow[unsafeWindow.MH_PREFIX23+'_CID']}&_mid=${unsafeWindow[unsafeWindow.MH_PREFIX23+'MID']}&_dt=${unsafeWindow[unsafeWindow.MH_PREFIX23+'VIEWSIGN_DT']}&_sign=${unsafeWindow[unsafeWindow.MH_PREFIX23+'VIEWSIGN']}`
             if (url === curSite.pageUrl) return
             curSite.pageUrl = url
             //console.log(curSite.pageUrl)
@@ -1789,8 +1791,8 @@ function: {
                 for (let now of imgArr) {_img += `<img src="${now}">`;}
                 if (_img) {
                     getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), _img); // 将 img 标签插入到网页中
-                    XMANHUA_PAGE += imgArr.length;
-                    addHistory(pageE, document.title, location.origin + XMANHUA_CURL.substring(0, XMANHUA_CURL.length - 1) + '-p' + XMANHUA_PAGE + '/');
+                    unsafeWindow[unsafeWindow.MH_PREFIX23+'PAGE'] += imgArr.length;
+                    addHistory(pageE, document.title, location.origin + unsafeWindow[unsafeWindow.MH_PREFIX23+'CURL'].substring(0, unsafeWindow[unsafeWindow.MH_PREFIX23+'CURL'].length - 1) + '-p' + unsafeWindow[unsafeWindow.MH_PREFIX23+'PAGE'] + '/');
                 }
             } else { // 下一话
                 // 插入 <script> 标签
@@ -1798,7 +1800,7 @@ function: {
                 addHistory(pageE);
                 pageNum.now = pageNum._now + 1
                 replaceElems(pageE)
-                XMANHUA_PAGE = 0;
+                unsafeWindow[unsafeWindow.MH_PREFIX23+'PAGE'] = 0;
                 xmanhua_nextL();
             }
         }
