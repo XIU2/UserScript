@@ -286,18 +286,28 @@
         var mouseOverHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
-                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file, svg.color-fg-muted');
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file, svg.color-fg-muted'),
+                aElm_img = elem.querySelectorAll('img.octicon.octicon-file, img.color-fg-muted')
+                ;
             aElm_new.forEach(el=>{el.style.cssText = 'display: inline'});
             aElm_now.forEach(el=>{el.style.cssText = 'display: none'});
+            aElm_img.forEach(el=>{el.style.cssText = 'display: none'});
         };
 
         // 鼠标离开则隐藏
         var mouseOutHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
-                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file, svg.color-fg-muted');
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file, svg.color-fg-muted'),
+                aElm_img = elem.querySelectorAll('img.octicon.octicon-file, img.color-fg-muted')
+                ;
             aElm_new.forEach(el=>{el.style.cssText = 'display: none'});
-            aElm_now.forEach(el=>{el.style.cssText = 'display: inline'});
+            if(aElm_img){
+                aElm_img.forEach(el=>{el.style.cssText = 'display: inline'});
+            }else{
+                aElm_now.forEach(el=>{el.style.cssText = 'display: inline'});
+            }
+            
         };
 
         // 循环添加
@@ -341,18 +351,28 @@
         var mouseOverHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
-                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file, svg.color-fg-muted');
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file, svg.color-fg-muted'),
+                aElm_img = elem.querySelectorAll('img.octicon.octicon-file, img.color-fg-muted')
+                ;
             aElm_new.forEach(el=>{el.style.cssText = 'display: inline'});
             aElm_now.forEach(el=>{el.style.cssText = 'display: none'});
+            aElm_img.forEach(el=>{el.style.cssText = 'display: none'});
+
         };
 
         // 鼠标离开则隐藏
         var mouseOutHandler = function(evt) {
             let elem = evt.currentTarget,
                 aElm_new = elem.querySelectorAll('.fileDownLink'),
-                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file, svg.color-fg-muted');
+                aElm_now = elem.querySelectorAll('svg.octicon.octicon-file, svg.color-fg-muted'),
+                aElm_img = elem.querySelectorAll('img.octicon.octicon-file, img.color-fg-muted')
+                ;
             aElm_new.forEach(el=>{el.style.cssText = 'display: none'});
-            aElm_now.forEach(el=>{el.style.cssText = 'display: inline'});
+            if(aElm_img){
+                aElm_img.forEach(el=>{el.style.cssText = 'display: inline'});
+            }else{
+                aElm_now.forEach(el=>{el.style.cssText = 'display: inline'});
+            }
         };
         // 循环添加
         files.forEach(function(fileElm) {
