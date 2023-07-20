@@ -3,18 +3,18 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.5.3
+// @version      6.5.4
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
 // @description:en  Append the next page content to the bottom seamlessly (like a waterfall)~
 // @match        *://*/*
 // @connect      userscript.xiu2.xyz
-// @connect      userscript.gh2233.ml
+// @connect      userscript.h233.eu.org
 // @connect      bitbucket.org
 // @connect      gitea.com
 // @connect      js.cdn.haah.net
-// @connect      raw.fastgit.org
+// @connect      raw.fgit.gq
 // @connect      raw.iqiq.io
 // @connect      raw.cithub.icu
 // @connect      raw.njuu.cf
@@ -93,10 +93,10 @@
         ['menu_rules', '更新外置翻页规则 (每天自动)', '更新外置翻页规则 (每天自动)', {}],
         ['menu_customRules', '自定义翻页规则', '自定义翻页规则', {}]
     ], urlArr = [ // 外置翻页规则更新地址分流，以确保更新成功率（记得 connect）
-        'https://userscript.gh2233.ml/other/Autopage/rules.json',
+        'https://userscript.h233.eu.org/other/Autopage/rules.json',
         'https://bitbucket.org/xiu2/userscript/raw/master/other/Autopage/rules.json',
         'https://gitea.com/XIU2/UserScript/raw/branch/master/other/Autopage/rules.json',
-        'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.fgit.gq/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.kgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://raw.cithub.icu/XIU2/UserScript/master/other/Autopage/rules.json',
@@ -109,11 +109,11 @@
         'https://fastly.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json'
         //'https://js.cdn.haah.net/gh/XIU2/UserScript/other/Autopage/rules.json'
     ], urlArr2 = [
-        'https://userscript.gh2233.ml/other/Autopage/rules.json',
+        'https://userscript.h233.eu.org/other/Autopage/rules.json',
         'https://userscript.xiu2.xyz/other/Autopage/rules.json',
         'https://bitbucket.org/xiu2/userscript/raw/master/other/Autopage/rules.json',
         'https://gitea.com/XIU2/UserScript/raw/branch/master/other/Autopage/rules.json',
-        'https://raw.fastgit.org/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.fgit.gq/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.kgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://raw.cithub.icu/XIU2/UserScript/master/other/Autopage/rules.json',
