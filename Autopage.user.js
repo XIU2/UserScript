@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.5.4
+// @version      6.5.5
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -1770,7 +1770,6 @@ function: {
     // [Xmanhua 漫画] 获取下一页地址
     function xmanhua_nextL() {
         var url = '';
-        console.log('111111111111111111111111',unsafeWindow[unsafeWindow.MH_PREFIX23+'CID'])
         if (unsafeWindow[unsafeWindow.MH_PREFIX23+'PAGE'] === unsafeWindow[unsafeWindow.MH_PREFIX23+'IMAGE_COUNT']) { // 下一话
             if (getNextE('//a[./img[contains(@src, "reader-bottom-right-2.png")]]')) getPageE_(curSite.pageUrl); // 访问下一话 URL 获取
         } else { // 下一页
@@ -2740,15 +2739,15 @@ function: {
 
         let customRules = JSON.stringify(GM_getValue('menu_customRules', {}), null, '\t');
         if (customRules == '{}') customRules = '{\n\t\n}'; // 引导用户插入规则的位置
-        let _html = `<div id="Autopage_customRules" style="left: 0 !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100% !important; height: 100% !important; margin: auto !important; padding: 25px 10px 10px 10px !important; position: fixed !important; opacity: 0.95 !important; z-index: 99999 !important; background-color: #eee !important; color: #222 !important; font-size: 14px !important; overflow: scroll !important; text-align: left !important;">
-<h3 style="font-size: 22px !important;overflow: hidden !important;text-overflow: ellipsis !important;white-space: nowrap !important;"><strong># 自定义翻页规则（优先级最高，会覆盖同名的外置翻页规则）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
-<details><summary style="cursor: pointer;overflow: hidden !important;text-overflow: ellipsis !important;white-space: nowrap !important;"><kbd><strong>「 点击展开 查看规则示例 」（为了避免需要的时候还要找，我干脆把常用规则都一股脑塞进去了）</strong></kbd></summary>
-<ul style="list-style: disc !important; margin-left: 35px !important;">
+        let _html = `<div style="left: 0; right: 0; top: 0; bottom: 0; width: 100%; height: 100%; margin: auto; padding: 25px 10px 10px 10px; position: fixed; opacity: 0.95; z-index: 99999; background-color: #eee; color: #222; font-size: 14px; overflow: scroll; text-align: left;">
+<h3 style="font-size: 22px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><strong># 自定义翻页规则（优先级最高，会覆盖同名的外置翻页规则）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
+<details><summary style="cursor: pointer;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><kbd><strong>「 点击展开 查看规则示例 」（为了避免需要的时候还要找，我干脆把常用规则都一股脑塞进去了）</strong></kbd></summary>
+<ul style="list-style: disc; margin-left: 35px;">
 <li>翻页规则为 JSON 格式，因此大家需要多少<strong>了解一点 JSON 的基本格式</strong>（主要就是逗号、转义、双引号等）。</li>
 <li>具体的翻页规则说明、示例，为了方便更新及补充，我都写到 <strong><a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github</a></strong> 里面了。</li>
 <li>脚本会自动格式化规则，因此<strong>无需手动缩进、换行</strong>，只需把规则<strong>插入默认的 { } 中间</strong>即可。</li>
 </ul>
-<pre style="white-space: pre-wrap !important;user-select: auto !important;">
+<pre style="white-space: pre-wrap;user-select: auto;">
 // 下面示例是把所有规则都塞进去了，但实际上大部分都用不上，大多数网站只需要像第一个 "aaa" 这样的规则（replaceE 规则可以省略，脚本会自动判断）
 // "aaa" 是规则名，唯一！如果和 外置规则名 重复，则会将完全覆盖同名的外置规则，支持中文等各种字符
 // "url" 是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站
@@ -2812,20 +2811,22 @@ function: {
     }
 }
 </pre></details>
-<details><summary style="cursor: pointer;overflow: hidden !important;text-overflow: ellipsis !important;white-space: nowrap !important;"><kbd><strong>「 点击展开 查看所有规则 」（可按 Ctrl+F 搜索规则，脚本内置的通用规则因格式限制无法列出）</strong></kbd></summary>
-<pre id="Autopage_customRules_all" style="overflow-y: scroll !important; overflow-x: hidden !important; height: 500px !important; word-break: break-word !important; white-space: pre-wrap !important;user-select: auto !important;"> </pre></details>
+<details><summary style="cursor: pointer;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><kbd><strong>「 点击展开 查看所有规则 」（可按 Ctrl+F 搜索规则，脚本内置的通用规则因格式限制无法列出）</strong></kbd></summary>
+<pre id="Autopage_customRules_all" style="overflow-y: scroll; overflow-x: hidden; height: 500px; word-break: break-word; white-space: pre-wrap;user-select: auto;"> </pre></details>
 
-<textarea id="Autopage_customRules_textarea" style="min-width:95% !important; min-height:70% !important; display: block !important; margin: 10px 0 10px 0; white-space:nowrap !important; overflow:scroll !important; resize: auto !important; text-transform: initial !important;" placeholder="留空等于默认的 {}，请把规则插入 {} 之间">${customRules}</textarea>
-<button id="Autopage_customRules_save" style="margin-right: 20px !important;">保存并刷新</button><button id="Autopage_customRules_cancel">取消修改</button>
+<textarea id="Autopage_customRules_textarea" style="min-width:95%; min-height:70%; display: block; margin: 10px 0 10px 0; white-space:nowrap; overflow:scroll; resize: auto; text-transform: initial;" placeholder="留空等于默认的 {}，请把规则插入 {} 之间">${customRules}</textarea>
+<button id="Autopage_customRules_save" style="margin-right: 20px;">保存并刷新</button><button id="Autopage_customRules_cancel">取消修改</button>
 </div>`
-        document.documentElement.insertAdjacentHTML('beforeend', _html); // 插入元素
+        document.documentElement.insertAdjacentHTML('beforeend', `<div id="Autopage_customRules" style="display: initial !important;position: fixed !important;z-index: 9999 !important;"></div>`);
+        let Autopage_customRules = getCSS('#Autopage_customRules'), shadowRoot = Autopage_customRules.attachShadow({ mode: 'open' }); // 创建一个 Shadow DOM 避免网页样式影响自定义翻页规则元素
+        shadowRoot.innerHTML = _html; // 插入元素
         document.documentElement.style.overflow = document.body.style.overflow = 'hidden'; // 避免网页本身滚动
-        getCSS('#Autopage_customRules_all').textContent = JSON.stringify(DBSite2, null, '\t'); // 单独插入全部规则列表，避免被 insertAdjacentHTML 语义化 HTML 标签
+        getCSS('#Autopage_customRules_all', shadowRoot).textContent = JSON.stringify(DBSite2, null, '\t'); // 单独插入全部规则列表，避免被 insertAdjacentHTML 语义化 HTML 标签
         //let b=Object.entries(DBSite2)
         //for (var i = 0; i < b.length; i++) {console.log(b[i][0], b[i][1].host);}
         // 点击事件
-        getCSS('#Autopage_customRules_save').onclick = function () {
-            customRules = getCSS('#Autopage_customRules_textarea').value;
+        getCSS('#Autopage_customRules_save', shadowRoot).onclick = function () {
+            customRules = getCSS('#Autopage_customRules_textarea', shadowRoot).value;
             //console.log(customRules)
             if (!customRules) customRules = '{}'
             try {
@@ -2838,12 +2839,13 @@ function: {
                 window.alert('自定义规则存在格式错误：\n' + e + '\n\n格式错误一般为：\n· 逗号：每组 {} 中的最后一个值末尾不能加逗号\n\n· 转义：如果正则表达式中含有转义符 \\ 那就要对其再次转义为 \\\\\n\n· 双引号：规则中冒号左右的内容都需要加上双引号，如果内容中含有双引号则需要对双引号转义（即 \\" 这样），或改为单引号');
             }
         }
-        getCSS('#Autopage_customRules_cancel').onclick = function () {document.documentElement.style.overflow = document.body.style.overflow = ''; getCSS('#Autopage_customRules').remove();}
+        getCSS('#Autopage_customRules_cancel', shadowRoot).onclick = function () {document.documentElement.style.overflow = document.body.style.overflow = ''; getCSS('#Autopage_customRules').remove();}
     }
     // 显示页码
     function pageNumber(type) {
-        if (curSite.SiteTypeID === 0 || curSite.hiddenPN || (curSite.pager && curSite.pager.type == 5 && self != top)) {if (getCSS('#Autopage_number')) {getCSS('#Autopage_number').style.display = 'none';}; return}
-        let status = getCSS('#Autopage_number');
+        if (curSite.SiteTypeID === 0 || curSite.hiddenPN || (curSite.pager && curSite.pager.type == 5 && self != top)) {if (getCSS('#Autopage_number') && getCSS('#Autopage_number').shadowRoot) {getCSS('#Autopage_number_button', getCSS('#Autopage_number').shadowRoot).style.display = 'none';}; return}
+        let status
+        if (getCSS('#Autopage_number') && getCSS('#Autopage_number').shadowRoot) {status = getCSS('#Autopage_number_button', getCSS('#Autopage_number').shadowRoot);}
         switch (type) {
             case 'add':
                 add(); break;
@@ -2859,15 +2861,21 @@ function: {
                 return
             }
             // 插入网页
-            let _style = `<style>#Autopage_number {top: calc(75vh) !important;left: 0 !important;width: 32px;height: 32px;padding: 6px !important;display: flex;position: fixed !important;opacity: 0.3;transition: .2s;z-index: 9999 !important;cursor: pointer;user-select: none !important;flex-direction: column;align-items: center;justify-content: center;box-sizing: content-box;border-radius: 0 50% 50% 0;transform-origin: center !important;transform: translateX(-8px);background-color: #eee;-webkit-tap-highlight-color: transparent;box-shadow: 1px 1px 3px 0px #aaa !important;color: #000 !important;font-size: medium;} #Autopage_number:hover {opacity: 0.8;transform: translateX(0);}</style>`,
-                _html = `<div id="Autopage_number" title="1. 此为【当前页码】（仅指脚本翻了多少页，并非实际页码，该页码可在脚本菜单中关闭）&#10;&#10;2. 鼠标【左键】点击此处可【临时暂停翻页】（再次点击可恢复）&#10;&#10;3. 鼠标【右键】点击此处可【回到顶部】">${pageNum._now}</div>`
-            document.documentElement.insertAdjacentHTML('beforeend', _style + _html);
+            let _style = `<style>#Autopage_number_button {top: calc(75vh);left: 0;width: 32px;height: 32px;padding: 6px;display: flex;position: fixed;opacity: 0.3;transition: .2s;z-index: 9999;cursor: pointer;user-select: none;flex-direction: column;align-items: center;justify-content: center;box-sizing: content-box;border-radius: 0 50% 50% 0;transform-origin: center;transform: translateX(-8px);background-color: #eee;-webkit-tap-highlight-color: transparent;box-shadow: 1px 1px 3px 0px #aaa;color: #000;font-size: medium;} #Autopage_number_button:hover {opacity: 0.8;transform: translateX(0);}</style>`,
+                _html = `<div id="Autopage_number_button" title="1. 此为【当前页码】（仅指脚本翻了多少页，并非实际页码，该页码可在脚本菜单中关闭）&#10;&#10;2. 鼠标【左键】点击此处可【临时暂停翻页】（再次点击可恢复）&#10;&#10;3. 鼠标【右键】点击此处可【回到顶部】">${pageNum._now}</div>`
+
+            document.documentElement.insertAdjacentHTML('beforeend', `<div id="Autopage_number" style="display: flex !important;position: fixed !important;z-index: 9999 !important;"></div>`);
+            let Autopage_number = getCSS('#Autopage_number'), shadowRoot = Autopage_number.attachShadow({ mode: 'open' }); // 创建一个 Shadow DOM 避免网页样式影响页码元素
+            shadowRoot.innerHTML = _style + _html; // 插入元素
+
+            //document.documentElement.insertAdjacentHTML('beforeend', _style + _html);
             // 解决 远景论坛 会清理掉前面插入的 CSS 样式的问题
-            if (location.hostname === 'bbs.pcbeta.com') {setTimeout(function(){document.documentElement.insertAdjacentHTML('beforeend', _style);}, 500);}
+            //if (location.hostname === 'bbs.pcbeta.com') {setTimeout(function(){document.documentElement.insertAdjacentHTML('beforeend', _style);}, 500);}
             if (curSite.pager && curSite.pager.type == 5) window.top.document.xiu_pausePage = pausePage
+            status = getCSS('#Autopage_number_button', shadowRoot);
             // 左键点击事件（临时暂停翻页）
-            getCSS('#Autopage_number').onclick = function(e) {
-                if (pausePage) {this.style = 'color: #FF5722 !important; font-style: italic !important;';} else {this.style = '';}
+            status.onclick = function(e) {
+                if (pausePage) {this.style.color = '#FF5722'; this.style.fontStyle = 'italic';} else {this.style = '';}
                 pausePage = !pausePage;
                 if (curSite.pager && curSite.pager.type == 5) window.top.document.xiu_pausePage = pausePage
                 e.preventDefault();
@@ -2875,13 +2883,12 @@ function: {
                 return false
             };
             // 右键点击事件（回到顶部）
-            getCSS('#Autopage_number').oncontextmenu = function(e) {
+            status.oncontextmenu = function(e) {
                 window.scrollTo(0,0);
                 e.preventDefault();
                 e.stopPropagation();
                 return false
             };
-            status = getCSS('#Autopage_number');
             set();
         }
         // 监听储存当前页码的对象值的变化
@@ -2908,6 +2915,11 @@ function: {
         if (Name === 'menu_page_number') {
             if (menu_status === true){pageNumber('del');} else {pageNumber('add');}
             registerMenuCommand(); // 重新注册脚本菜单
+            if (curSite.SiteTypeID !== 0 && curSite.pager) { // 解决开关页码后 翻页失效的问题
+                if (curSite.pager.type === undefined) curSite.pager.type = 1; // 默认翻页模式 1
+                if (curSite.pager.scrollD === undefined) curSite.pager.scrollD = 2000; // 默认翻页触发线 2000
+                if (curSite.pager.interval === undefined) curSite.pager.interval = 500; // 默认间隔时间 500ms
+            }
         } else {
             location.reload();}
     };
