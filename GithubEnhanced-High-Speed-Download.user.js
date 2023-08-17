@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.4.2
+// @version      2.4.3
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)、添加 git clone 命令
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件、项目列表单文件快捷下载 (☁)
@@ -59,6 +59,7 @@
         ['https://kgithub.com', '新加坡', '[新加坡] - 该公益加速源由 [KGitHub] 提供&#10;&#10;提示：如果速度可以接受，希望大家尽量多使用前面的美国节点（每次随机 4 个来负载均衡），&#10;避免流量都集中到亚洲公益节点，减少成本压力才能运营更持久~']
     ], clone_url = [
         ['https://gitclone.com', '国内', '[中国 国内] - 该公益加速源由 [GitClone] 提供&#10;&#10; - 缓存：有&#10; - 首次比较慢，缓存后较快'],
+        ['https://hub.fgit.cf', '香港', '[中国 香港] - 该公益加速源由 [FastGit 群组成员] 提供'],
         ['https://hub.fgit.gq', '越南', '[越南] - 该公益加速源由 [FastGit 群组成员] 提供'],
         ['https://kgithub.com', '新加坡', '[新加坡] - 该公益加速源由 [KGitHub] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://github.moeyy.xyz/https://github.com', '新加坡', '[新加坡、香港、日本等]（CDN 不固定） - 该公益加速源由 [Moeyy] 提供&#10;&#10; - 缓存：无（或时间很短）'],
@@ -77,6 +78,7 @@
     ], raw_url = [
         ['https://raw.githubusercontent.com', 'Github 原生', '[日本 东京]'],
         ['https://raw.iqiq.io', '香港', '[中国 香港] - 该公益加速源由 [iQDNS/iQZone] 提供&#10;&#10; - 缓存：无（或时间很短）'],
+        //['https://raw.fgit.cf', '香港', '[中国 香港] - 该公益加速源由 [FastGit 群组成员] 提供&#10;&#10; - 缓存：无（或时间很短）'], // 暂无必要
         //['https://raw.fgit.gq', '越南', '[越南] - 该公益加速源由 [FastGit 群组成员] 提供&#10;&#10; - 缓存：无（或时间很短）'], // 暂无必要
         ['https://raw.kgithub.com', '新加坡', '[新加坡] - 该公益加速源由 [KGitHub] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://ghproxy.com/https://raw.githubusercontent.com', '韩国', '[日本、韩国、德国等]（CDN 不固定） - 该公益加速源由 [ghproxy] 提供&#10;&#10; - 缓存：无（或时间很短）'],
@@ -224,7 +226,7 @@
         let href_split = html.firstElementChild.value.split(location.host),
             url = '', _html = '', _gitClone = '';
 
-        if (GM_getValue('menu_gitClone')) {_gitClone='git clone '; html.firstElementChild.value = _gitClone + html.firstElementChild.value;}
+        if (GM_getValue('menu_gitClone')) {_gitClone='git clone '; html.firstElementChild.value = html.querySelector('clipboard-copy').value = _gitClone + html.firstElementChild.value;}
         for (let i=0;i<clone_url.length;i++) {
             if (clone_url[i][0] === 'https://gitclone.com') {
                 url = clone_url[i][0] + '/github.com' + href_split[1]
@@ -246,7 +248,7 @@
 
         if (href_split[0] != 'git@github.com') return
 
-        if (GM_getValue('menu_gitClone')) {_gitClone='git clone '; html.firstElementChild.value = _gitClone + html.firstElementChild.value;}
+        if (GM_getValue('menu_gitClone')) {_gitClone='git clone '; html.firstElementChild.value = html.querySelector('clipboard-copy').value = _gitClone + html.firstElementChild.value;}
         for (let i=0;i<clone_ssh_url.length;i++) {
             _html += `<div class="input-group XIU2-GCS" style="margin-top: 4px;" title="加速源：${clone_ssh_url[i][1]} （点击可直接复制）"><input value="${_gitClone}${clone_ssh_url[i][0] + href_split[1]}" aria-label="${clone_ssh_url[i][0] + href_split[1]}" title="${clone_ssh_url[i][2]}" type="text" class="form-control input-monospace input-sm color-bg-subtle" data-autoselect="" readonly=""><div class="input-group-button"><clipboard-copy value="${_gitClone}${clone_ssh_url[i][0] + href_split[1]}" aria-label="Copy to clipboard" class="btn btn-sm js-clipboard-copy tooltipped-no-delay ClipboardButton" tabindex="0" role="button">${svg[1]}</clipboard-copy></div></div>`
         }
