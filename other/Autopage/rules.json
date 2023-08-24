@@ -6312,6 +6312,15 @@
 			"replaceE": ".paginator"
 		}
 	},
+	"灵梦御所": {
+		"host": "blog.reimu.net",
+		"url": "return (!fun.indexOF('/post/') && !fun.getCSS('#comments,.comments-area,#disqus_thread'))",
+		"blank": 5,
+		"pager": {
+			"nextL": ".current+a",
+			"pageE": "article.post"
+		}
+	},
 	"秀人集": {
 		"host": "/\\.xiuren([a-z]|\\d)+\\./",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/search/'))",
