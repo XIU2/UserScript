@@ -4734,7 +4734,7 @@
 		"url": "fun.isUrlC(); return (fun.lp() == '/')",
 		"pager": {
 			"type": 2,
-			"nextL": "[id^=panel-]:not([hidden]) .ajax-pagination-btn"
+			"nextL": ".js-ajax-pagination[action^='/conduit/for_you_feed']>button:not([disabled])"
 		}
 	},
 	"Github - Star/Repositories/Commits/Dependents/NotificationsSubscriptions": {
