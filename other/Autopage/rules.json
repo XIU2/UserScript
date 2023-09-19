@@ -31,29 +31,6 @@
 			"replaceE": "#pageFooter"
 		}
 	},
-	"谷歌搜索 - 手机版": {
-		"host": "/^www\\.google\\./",
-		"url": "return (fun.lp() == '/search' && !fun.indexOF('tbm=isch', 's') && (fun.indexOF('sclient=mobile', 's') || fun.isMobile()))",
-		"pager": {
-			"type": 2,
-			"nextL": "a[aria-label='查看更多'], a[aria-label='See more' i]",
-			"isHidden": true
-		}
-	},
-	"谷歌搜索": {
-		"host": "/^www\\.google\\./",
-		"url": "return (fun.lp() == '/search' && !fun.indexOF('tbm=isch', 's'))",
-		"history": true,
-		"pager": {
-			"nextL": "#pnnext",
-			"pageE": "id('search')/div | //style[not(contains(text(), 'table,div,span,p{display:none}'))]",
-			"replaceE": "#navcnt, #rcnt div[role='navigation']",
-			"scrollD": 2500
-		},
-		"function": {
-			"bF": "if (!fun.indexOF('tbm=nws', 's')){pageE.forEach(function (one) {fun.getAllCSS('a[aria-label][href*=\"https://www.youtube.com/watch?v=\"]').forEach(function (one1) {let img = fun.getCSS('img', one1); if (img) img.src = `https://i.ytimg.com/vi/${one1.href.split('?v=')[1]}/mqdefault.jpg`;})});};return pageE"
-		}
-	},
 	"必应搜索 + 手机版": {
 		"host": ["www.bing.com","cn.bing.com","www4.bing.com"],
 		"url": "if (fun.lp() == '/search') {if (fun.isMobile() && document.documentElement.lang != 'zh') {return false;} else {return true;}}",
