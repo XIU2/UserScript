@@ -14,6 +14,7 @@
 // @connect      bitbucket.org
 // @connect      gitea.com
 // @connect      js.cdn.haah.net
+// @connect      jsdelivr.b-cdn.net
 // @connect      raw.fgit.cf
 // @connect      raw.iqiq.io
 // @connect      raw.cithub.icu
@@ -98,16 +99,17 @@
         'https://gitea.com/XIU2/UserScript/raw/branch/master/other/Autopage/rules.json',
         'https://raw.fgit.cf/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://raw.kgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
+        //'https://raw.kgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://raw.cithub.icu/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.njuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://cdn.staticaly.com/gh/XIU2/UserScript/master/other/Autopage/rules.json',
+        //'https://cdn.staticaly.com/gh/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://cdn.jsdelivr.ren/gh/XIU2/UserScript/other/Autopage/rules.json',
         //'https://gcore.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
-        'https://fastly.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json'
-        //'https://js.cdn.haah.net/gh/XIU2/UserScript/other/Autopage/rules.json'
+        'https://fastly.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
+        'https://jsdelivr.b-cdn.net/gh/XIU2/UserScript/other/Autopage/rules.json',
+        'https://js.cdn.haah.net/gh/XIU2/UserScript/other/Autopage/rules.json'
     ], urlArr2 = [
         'https://userscript.h233.eu.org/other/Autopage/rules.json',
         'https://userscript.xiu2.xyz/other/Autopage/rules.json',
@@ -115,7 +117,7 @@
         'https://gitea.com/XIU2/UserScript/raw/branch/master/other/Autopage/rules.json',
         'https://raw.fgit.cf/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://raw.iqiq.io/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://raw.kgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
+        //'https://raw.kgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://raw.cithub.icu/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.njuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
@@ -1164,7 +1166,7 @@ function: {
         if (update) { // 手动更新（或安装后首次更新）
             GM_notification({text: '🔄 更新外置翻页规则中，请勿操作网页...', timeout: 5000});
             getRulesUrl_(true);
-        } else if (parseInt(+new Date()/1000) - GM_getValue('menu_ruleUpdateTime', 0) > 864000) {
+        } else if (parseInt(+new Date()/1000) - GM_getValue('menu_ruleUpdateTime', 0) > 2592000) {
             getRulesUrl_();
         }
 
