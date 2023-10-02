@@ -6299,7 +6299,7 @@
 		}
 	},
 	"秀人集": {
-		"host": "/\\.xiuren([a-z]|\\d)+\\./",
+		"host": ["/^www.xr\\d{2}.xyz$/","/\\.xiuren([a-z]|\\d)+\\./"],
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/search/'))",
 		"pager": {
 			"nextL": ".current+a",
@@ -6308,7 +6308,7 @@
 		}
 	},
 	"极品性感美女": {
-		"host": ["www.xgmn.vip","/^www.xgmn\\d{2}.xyz$/","www.jpmn5.com","www.jpmn5.cc"],
+		"host": ["www.xgmn.vip","/^www.xg\\d{2}.xyz$/","/^www.xgmn\\d{2}.xyz$/","www.jpmn5.com","www.jpmn5.cc"],
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/search/'))",
 		"pager": {
 			"nextL": ".current+a",
