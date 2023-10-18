@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.2.0
+// @version      1.2.1
 // @author       X.I.U
 // @description  自动签到、链接转图片、自动无缝翻页、使用 SOV2EX 搜索、回到顶部（右键点击两侧空白处）、快速回复（左键双击两侧空白处）、新标签页打开链接、标签页伪装为 Github（摸鱼）
 // @match        *://v2ex.com/*
@@ -85,10 +85,10 @@
             SiteTypeID: 1,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
+                nextLink: 'css;.page_current+a',
                 pageElement: 'css;.cell.item',
-                HT_insert: ['//div[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
-                replaceE: 'css;#Main > .box > .cell[style]:not(.item) > table',
+                HT_insert: ['css;.cell.ps_container:last-of-type', 1],
+                replaceE: '//a[@class="page_current"]/../..',
                 scrollDelta: 1500
             }
         },
@@ -96,10 +96,10 @@
             SiteTypeID: 2,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
+                nextLink: 'css;.page_current+a',
                 pageElement: 'css;#notifications > div',
                 HT_insert: ['css;#notifications', 3],
-                replaceE: 'css;#Main > .box > .cell[style] > table',
+                replaceE: '//a[@class="page_current"]/../..',
                 scrollDelta: 1500
             }
         },
@@ -107,10 +107,10 @@
             SiteTypeID: 3,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
-                pageElement: '//div[@id="Main"]//div[@class="box"]//div[@class="dock_area"] | //*[@id="Main"]//div[@class="box"]//div[@class="inner"] | //*[@id="Main"]//div[@class="box"]//div[@class="dock_area"][last()]/following-sibling::div[@class="cell"][1]',
-                HT_insert: ['//div[@id="Main"]//div[@class="box"]//div[@class="cell"][last()]', 1],
-                replaceE: 'css;#Main > .box > .cell[style] > table',
+                nextLink: 'css;.page_current+a',
+                pageElement: 'css;#Main>.box>.dock_area,#Main>.box>.dock_area+.inner,#Main>.box>.dock_area+.cell:not([style])',
+                HT_insert: ['css;.cell.ps_container:last-of-type', 1],
+                replaceE: '//a[@class="page_current"]/../..',
                 scrollDelta: 1500
             }
         },
@@ -118,10 +118,10 @@
             SiteTypeID: 4,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
+                nextLink: 'css;.page_current+a',
                 pageElement: 'css;#TopicsNode > div',
                 HT_insert: ['css;#TopicsNode', 3],
-                replaceE: 'css;#Main > .box > .cell[style] > table',
+                replaceE: '//a[@class="page_current"]/../..',
                 scrollDelta: 1500
             }
         },
@@ -129,10 +129,10 @@
             SiteTypeID: 5,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
+                nextLink: 'css;.page_current+a',
                 pageElement: 'css;.cell[id^="r_"]',
-                HT_insert: ['//div[starts-with(@id, "r_")][last()]/following-sibling::div[@class="cell"][1]', 1],
-                replaceE: 'css;#Main > .box > .cell[style] > table',
+                HT_insert: ['css;.cell.ps_container:last-of-type', 1],
+                replaceE: '//a[@class="page_current"]/../..',
                 scrollDelta: 1500
             }
         },
@@ -140,10 +140,10 @@
             SiteTypeID: 6,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="page_current"]/preceding-sibling::a[1][@href]',
+                nextLink: 'css;.page_current+a',
                 pageElement: 'css;.cell[id^="r_"]',
-                HT_insert: ['//div[starts-with(@id, "r_")][1]', 1],
-                replaceE: 'css;#Main > .box > .cell[style] > table',
+                HT_insert: ['css;.cell[id^="r_"]', 1],
+                replaceE: '//a[@class="page_current"]/../..',
                 scrollDelta: 1500
             }
         },
@@ -151,10 +151,10 @@
             SiteTypeID: 7,
             pager: {
                 type: 1,
-                nextLink: '//a[@class="page_current"]/following-sibling::a[1][@href]',
-                pageElement: 'css;#Main .box > div:not(.cell) > table > tbody > tr:not(:first-child)',
-                HT_insert: ['css;#Main .box > div:not(.cell) > table > tbody', 3],
-                replaceE: 'css;#Main > .box > .cell[style] > table',
+                nextLink: 'css;.page_current+a',
+                pageElement: 'css;table.data>tbody>tr:not(:first-child)',
+                HT_insert: ['css;table.data>tbody', 3],
+                replaceE: '//a[@class="page_current"]/../..',
                 scrollDelta: 1000
             }
         },
@@ -470,7 +470,7 @@
         },
         loadMorePage: function () {
             if (curSite.pager) {
-                let curPageEle = getElementByXpath(curSite.pager.nextLink);
+                let curPageEle = getOneElements(curSite.pager.nextLink);
                 var url = this.getFullHref(curPageEle);
                 console.log(`${url} ${curPageEle} ${curSite.pageUrl}`);
                 if(url === '') return;
@@ -575,6 +575,15 @@
             throw new Error(`无效 Xpath: ${xpath}`);
         }
         return result;
+    }
+    function getOneElements(selector, contextNode = undefined, doc = document) {
+        if (!selector) return;
+        contextNode = contextNode || doc;
+        if (selector.search(/^css;/i) === 0) {
+            return getElementByCSS(selector.slice(4), contextNode);
+        } else {
+            return getElementByXpath(selector, contextNode, doc);
+        }
     }
     function getAllElements(selector, contextNode = undefined, doc = document, win = window, _cplink = undefined) {
         if (!selector) return [];
