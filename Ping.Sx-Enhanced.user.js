@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Ping.Sx 增强
-// @version      1.0.1
+// @version      1.0.2
 // @author       X.I.U
 // @description  一键复制所有 IP、清理 IP 链接（点击复制而不是跳转）、快捷回到顶部（右键两侧空白处）
 // @match        https://ping.sx/ping*
@@ -43,12 +43,12 @@
     // 复制按钮点击事件
     function addCopyButtonEvent1() {
         let ip = new Array();
-        document.querySelectorAll('span.select-all:first-child').forEach(function(_this) {ip.push(_this.innerText);})
+        document.querySelectorAll('span.select-all > a[href]').forEach(function(_this) {ip.push(_this.innerText);})
         if (ip.length > 0) GM_setClipboard(unique(ip).toString().replaceAll(',','\n'), 'text');
     }
     function addCopyButtonEvent2() {
         let ip = new Array();
-        document.querySelectorAll('span.select-all:first-child').forEach(function(_this) {
+        document.querySelectorAll('span.select-all > a[href]').forEach(function(_this) {
             let img = findParentElement(_this, 'TR').querySelector('img.max-w-none');
             if (img) {if (img.alt != 'CN Flag') ip.push(_this.innerText);}
         })
@@ -113,6 +113,7 @@
         if (this.value) {
             this.value = this.value.replace(/(http:\/\/|https:\/\/|\:.+|\/.*)/ig,"");
             this.setAttribute('value',this.value);
+            this.dispatchEvent(new Event('input'));
         }
     }, true);*/
 })();
