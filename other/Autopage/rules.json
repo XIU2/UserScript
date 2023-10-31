@@ -252,9 +252,9 @@
 		"url": "/^\\/search/",
 		"history": true,
 		"pager": {
-			"nextL": "nav.pagination a[aria-label='Next page']",
-			"pageE": "section.mainline>div:not(.related-queries):not(.mainline__pagination)",
-			"replaceE": "nav.pagination"
+			"nextL": "a[data-test-id=next-button]",
+			"pageE": ".mainline__result-wrapper",
+			"replaceE": ".simplified-pagination"
 		}
 	},
 	"Magi 搜索": {
