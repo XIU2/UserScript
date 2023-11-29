@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.2.14
+// @version      2.2.15
 // @author       X.I.U
 // @description  移除登录弹窗、屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容/热榜杂项、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认高清原图、默认站外直链
 // @description:zh-TW  移除登錄彈窗、屏蔽首頁視頻、默認收起回答、快捷收起回答/評論、快捷回到頂部、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化搜索熱門、淨化標題消息、置頂顯示時間、完整問題時間、區分問題文章、默認高清原圖、默認站外直鏈...
@@ -904,6 +904,7 @@ function blockType(type) {
         if (!menu_value('menu_blockTypeVideo') && !menu_value('menu_blockTypeArticle') && !menu_value('menu_blockTypePin')) return
         if (menu_value('menu_blockTypeVideo')) document.lastChild.appendChild(document.createElement('style')).textContent = `.Card .ZVideoItem-video, .VideoAnswerPlayer video, nav.TopstoryTabs > a[aria-controls="Topstory-zvideo"] {display: none !important;}`;
         name = 'h2.ContentItem-title a:not(.zhihu_e_toQuestion)'
+        if (menu_value('menu_blockTypePin')) name = 'h2.ContentItem-title a:not(.zhihu_e_toQuestion), .ContentItem.PinItem'
         document.querySelectorAll(name).forEach(function(item){blockType_(item);})
     }
 
@@ -946,7 +947,11 @@ function blockType(type) {
         } else if (location.pathname.indexOf('/question/') > -1) { // 问题页
             if (menu_value('menu_blockTypeVideo')) findParentElement(titleA, 'List-item').hidden = true;
         } else { // 首页
-            if (titleA.href.indexOf('/zvideo/') > -1 || titleA.href.indexOf('video.zhihu.com') > -1) { // 如果是视频
+            if (titleA.className == 'ContentItem PinItem') { // 如果是想法（针对无标题）
+                if (menu_value('menu_blockTypePin')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;
+            /*} else if (titleA.href.indexOf('/pin/') > -1) { // 如果是想法
+                if (menu_value('menu_blockTypePin')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;*/
+            } else if (titleA.href.indexOf('/zvideo/') > -1 || titleA.href.indexOf('video.zhihu.com') > -1) { // 如果是视频
                 if (menu_value('menu_blockTypeVideo')) {findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;}
             } else if (titleA.href.indexOf('/answer/') > -1) { //           如果是问题（视频回答）
                 if (findParentElement(titleA, 'ContentItem AnswerItem').querySelector('.VideoAnswerPlayer')) {
@@ -956,8 +961,6 @@ function blockType(type) {
                 if (menu_value('menu_blockTypeVideo')) {findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;}
             } else if (titleA.href.indexOf('zhuanlan.zhihu.com') > -1) { // 如果是文章
                 if (menu_value('menu_blockTypeArticle')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;
-            } else if (titleA.href.indexOf('/pin/') > -1) { // 如果是想法
-                if (menu_value('menu_blockTypePin')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;
             }
         }
     }
@@ -1073,7 +1076,7 @@ function addTypeTips() {
 .AnswerItem .ContentItem-title a:not(.zhihu_e_toQuestion)::before {content:'问题';color: #f68b83;background-color: #f68b8333;${style}}
 .TopstoryQuestionAskItem .ContentItem-title a:not(.zhihu_e_toQuestion)::before {content:'问题';color: #ff5a4e;background-color: #ff5a4e33;${style}}
 .ZVideoItem .ContentItem-title a::before, .ZvideoItem .ContentItem-title a::before {content:'视频';color: #00BCD4;background-color: #00BCD433;${style}}
-.PinItem .RichContent span .RichContent-inner span.RichText::before {content:'想法';color: #4CAF50;background-color: #4CAF5033;${style}}
+.PinItem .ContentItem-title a::before {content:'想法';color: #4CAF50;background-color: #4CAF5033;${style}}
 .ArticleItem .ContentItem-title a::before {content:'文章';color: #2196F3;background-color: #2196F333;${style}}`;
 }
 
