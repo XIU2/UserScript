@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.5.9
+// @version      1.5.10
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -263,6 +263,10 @@ html[data-theme=dark] .ztext blockquote {color: #768390 !important;border-left: 
 html[data-theme=dark] .MCNLinkCard, html[data-theme=dark] .LinkCard-content, html[data-theme=dark] .ZVideoLinkCard-info {background-color: #22272e !important;}
 html[data-theme=dark] .Post-content .MCNLinkCard, html[data-theme=dark] .Post-content .LinkCard-content, html[data-theme=dark] .Post-content .ZVideoLinkCard-info {background-color: #2D333B !important;}
 html[data-theme=dark] .LinkCard-backdrop {background-image: url() !important;}
+
+/* 背景颜色 - 头像 */
+html[data-theme=dark] .Avatar, html[data-theme=dark] .UserAvatar {background-color: #2d333b !important;}
+html[data-theme=dark] .UserAvatar {border: 4px solid #2d333b !important;}
 
 /* 通知信息中点评论链接时，在弹出的评论框中 "高亮" 目标评论 */
 html[data-theme=dark] .CommentItemV2[tabindex='-1'] {background-color: #343a44 !important;}
