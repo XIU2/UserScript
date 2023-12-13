@@ -4714,12 +4714,12 @@
 			"nextL": ".js-ajax-pagination[action^='/conduit/for_you_feed']>button:not([disabled])"
 		}
 	},
-	"Github - Star/Repositories/Commits/Dependents/NotificationsSubscriptions": {
+	"Github - Star/Repositories/Dependents/NotificationsSubscriptions": {
 		"host": "github.com",
-		"url": "/(tab=(stars|repositories)|\\/commits|\\/network\\/dependents|^\\/notifications\\/subscriptions(\\?|$))/",
+		"url": "/(tab=(stars|repositories)|\\/network\\/dependents|^\\/notifications\\/subscriptions(\\?|$))/",
 		"pager": {
 			"nextL": ".paginate-container>div>:last-child",
-			"pageE": "#user-starred-repos div[class^='col-']:first-of-type>div:not(.position-relative):not(.paginate-container), #user-repositories-list>ul>li, .js-navigation-container>div, .Box>[data-test-id='dg-repo-pkg-dependent'], #threads-unsubscribe-form>ul>li",
+			"pageE": "#user-starred-repos div[class^='col-']:first-of-type>div:not(.position-relative):not(.paginate-container), #user-repositories-list>ul>li, .Box>[data-test-id='dg-repo-pkg-dependent'], #threads-unsubscribe-form>ul>li",
 			"replaceE": ".paginate-container",
 			"scrollD": 2500
 		}
