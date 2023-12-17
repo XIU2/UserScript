@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         知乎增强
 // @name:zh-CN   知乎增强
-// @name:zh-TW   知乎增强
+// @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
 // @version      2.2.15
 // @author       X.I.U
