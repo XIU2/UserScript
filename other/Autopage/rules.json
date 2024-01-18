@@ -2635,6 +2635,20 @@
 			"bF": "pageE.forEach((one)=>{let now=fun.getCSS('td>a[onmouseover]',one);if(now){now.parentElement.setAttribute('onmouseover', now.getAttribute('onmouseover')); now.removeAttribute('onmouseover');now.parentElement.setAttribute('onmouseout', now.getAttribute('onmouseout')); now.removeAttribute('onmouseout');};});return pageE"
 		}
 	},
+	"TheRARBG": {
+		"host": "therarbg.to",
+		"url": "if(fun.indexOF('/get-posts/')){fun.cleanuEvent('thead.table1head',500);return true}",
+		"blank": 3,
+		"pager": {
+			"nextL": ".active+li.page-item>a",
+			"pageE": ".row.p-1 tr.list-entry",
+			"replaceE": ".pagination",
+			"scrollD": 1300
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"Zooqle": {
 		"host": "zooqle.com",
 		"url": "return (fun.lp() == '/search' || fun.indexOF('/browse/') || fun.indexOF('/mov/'))",
