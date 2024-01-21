@@ -5649,6 +5649,20 @@
 			"replaceE": ".category"
 		}
 	},
+	"MissAV": {
+		"host": ["missav.com","/^missav\\d+\\.com$/"],
+		"url": "return (fun.indexOF(/^\\/dm\\d+\\//) || fun.indexOF('/search/'))",
+		"blank": 3,
+		"pager": {
+			"nextL": "a[rel=next]",
+			"pageE": "div[x-init*=initLozad]>div",
+			"replaceE": "//span[@aria-current='page']/..",
+			"scrollD": 1000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"JavDB": {
 		"host": "/^javdb/",
 		"url": "return (document.title.indexOf('JavDB') > -1 && !fun.indexOF('/v/') && fun.getCSS('.pagination'))",
