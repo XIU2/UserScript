@@ -15,8 +15,10 @@
 // @connect      js.cdn.haah.net
 // @connect      jsdelivr.b-cdn.net
 // @connect      raw.fgit.cf
-// @connect      raw.cithub.icu
+// @connect      raw.nuaa.cf
 // @connect      raw.njuu.cf
+// @connect      raw.yzuu.cf
+// @connect      raw.cithub.icu
 // @connect      raw.kkgithub.com
 // @connect      ghproxy.net
 // @connect      mirror.ghproxy.com
@@ -98,8 +100,10 @@
         'https://bitbucket.org/xiu2/userscript/raw/master/other/Autopage/rules.json',
         'https://raw.kkgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.fgit.cf/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.nuaa.cf/XIU2/UserScript/master/other/Autopage/rules.json',
+        //'https://raw.njuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.yzuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://raw.cithub.icu/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://raw.njuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://mirror.ghproxy.com/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://gh-proxy.com/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
@@ -116,8 +120,10 @@
         'https://bitbucket.org/xiu2/userscript/raw/master/other/Autopage/rules.json',
         'https://raw.kkgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.fgit.cf/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.nuaa.cf/XIU2/UserScript/master/other/Autopage/rules.json',
+        //'https://raw.njuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.yzuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://raw.cithub.icu/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://raw.njuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://mirror.ghproxy.com/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://gh-proxy.com/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
