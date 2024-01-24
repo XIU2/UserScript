@@ -11,6 +11,9 @@
 // @description:en  High-speed download of Git Clone/SSH, Release, Raw, Code(ZIP) and other files (Based on public welfare), project list file quick download (☁)
 // @match        *://github.com/*
 // @match        *://hub.fgit.cf/*
+// @match        *://hub.nuaa.cf/*
+// @match        *://hub.njuu.cf/*
+// @match        *://hub.yzuu.cf/*
 // @match        *://kkgithub.com/*
 // @match        *://githubfast.com/*
 // @match        *://hub.fgit.mxtrans.net/*
@@ -52,8 +55,8 @@
         //['https://cdn.githubjs.cf', '美国', '[美国 Cloudflare CDN]'], // 域名无解析
         ['https://download.fgit.cf', '美国', '[美国 洛杉矶] - 该公益加速源由 [FastGit 群组成员] 提供'],
         ['https://download.nuaa.cf', '美国', '[美国 洛杉矶] - 该公益加速源由 [LibraryCloud] 提供'],
-        ['https://download.njuu.cf', '美国', '[美国 拉斯维加斯] - 该公益加速源由 [LibraryCloud] 提供'],
-        ['https://download.yzuu.cf', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [LibraryCloud] 提供']
+        //['https://download.njuu.cf', '美国', '[美国 纽约] - 该公益加速源由 [LibraryCloud] 提供'],
+        ['https://download.yzuu.cf', '美国', '[美国 纽约] - 该公益加速源由 [LibraryCloud] 提供']
     ], download_url = [
         //['https://download.fastgit.org', '德国', '[德国] - 该公益加速源由 [FastGit] 提供&#10;&#10;提示：希望大家尽量多使用前面的美国节点（每次随机 4 个来负载均衡），&#10;避免流量都集中到亚洲公益节点，减少成本压力，公益才能更持久~', 'https://archive.fastgit.org'], // 证书过期
         ['https://mirror.ghproxy.com/https://github.com', '韩国', '[日本、韩国、德国等]（CDN 不固定） - 该公益加速源由 [ghproxy] 提供&#10;&#10;提示：希望大家尽量多使用前面的美国节点（每次随机 负载均衡），&#10;避免流量都集中到亚洲公益节点，减少成本压力，公益才能更持久~'],
@@ -73,8 +76,8 @@
         //['https://hub.gitmirror.com/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [GitMirror] 提供'], // 暂无必要
         //['https://hub.fgit.cf', '美国', '[美国 洛杉矶] - 该公益加速源由 [FastGit 群组成员] 提供'],
         //['https://hub.nuaa.cf', '美国', '[美国 洛杉矶] - 该公益加速源由 [LibraryCloud] 提供'],
-        //['https://hub.njuu.cf', '美国', '[美国 拉斯维加斯] - 该公益加速源由 [LibraryCloud] 提供']
-        //['https://hub.yzuu.cf', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [LibraryCloud] 提供'], // 暂无必要
+        //['https://hub.njuu.cf', '美国', '[美国 纽约] - 该公益加速源由 [LibraryCloud] 提供']
+        //['https://hub.yzuu.cf', '美国', '[美国 纽约] - 该公益加速源由 [LibraryCloud] 提供'], // 暂无必要
         //['https://hub.0z.gs', '美国', '[美国 Cloudflare CDN]'], // 域名无解析
         //['https://hub.shutcm.cf', '美国', '[美国 Cloudflare CDN]'] // 连接超时
     ], clone_ssh_url = [
@@ -95,7 +98,8 @@
         ['https://github.moeyy.xyz/https://raw.githubusercontent.com', '其他 3', '[新加坡、香港、日本等]（CDN 不固定）&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://raw.fgit.cf', '美国', '[美国 洛杉矶] - 该公益加速源由 [FastGit 群组成员] 提供&#10;&#10; - 缓存：无（或时间很短）'],
         ['https://raw.nuaa.cf', '美国', '[美国 洛杉矶] - 该公益加速源由 [LibraryCloud] 提供'] // 暂无必要
-        //['https://raw.njuu.cf', '美国', '[美国 拉斯维加斯] - 该公益加速源由 [LibraryCloud] 提供&#10;&#10; - 缓存：无（或时间很短）'], // 暂无必要
+        //['https://raw.njuu.cf', '美国', '[美国 纽约] - 该公益加速源由 [LibraryCloud] 提供&#10;&#10; - 缓存：无（或时间很短）'], // 暂无必要
+        //['https://raw.yzuu.cf', '美国', '[美国 纽约] - 该公益加速源由 [LibraryCloud] 提供&#10;&#10; - 缓存：无（或时间很短）'], // 暂无必要
         //['https://raw.gitmirror.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [GitMirror] 提供&#10;&#10; - 缓存：有'], // 暂无必要
         //['https://cdn.54188.cf/gh', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [PencilNavigator] 提供&#10;&#10; - 缓存：有'], // 暂无必要
         //['https://raw.fastgit.org', '德国', '[德国] - 该公益加速源由 [FastGit] 提供&#10;&#10; - 缓存：无（或时间很短）'], // 挂了
