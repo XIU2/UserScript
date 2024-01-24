@@ -12,7 +12,6 @@
 // @connect      userscript.xiu2.xyz
 // @connect      userscript.h233.eu.org
 // @connect      bitbucket.org
-// @connect      gitea.com
 // @connect      js.cdn.haah.net
 // @connect      jsdelivr.b-cdn.net
 // @connect      raw.fgit.cf
@@ -97,7 +96,6 @@
     ], urlArr = [ // 外置翻页规则更新地址分流，以确保更新成功率（记得 connect）
         'https://userscript.h233.eu.org/other/Autopage/rules.json',
         'https://bitbucket.org/xiu2/userscript/raw/master/other/Autopage/rules.json',
-        'https://gitea.com/XIU2/UserScript/raw/branch/master/other/Autopage/rules.json',
         'https://raw.kkgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.fgit.cf/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://raw.cithub.icu/XIU2/UserScript/master/other/Autopage/rules.json',
@@ -116,7 +114,6 @@
         'https://userscript.h233.eu.org/other/Autopage/rules.json',
         'https://userscript.xiu2.xyz/other/Autopage/rules.json',
         'https://bitbucket.org/xiu2/userscript/raw/master/other/Autopage/rules.json',
-        'https://gitea.com/XIU2/UserScript/raw/branch/master/other/Autopage/rules.json',
         'https://raw.kkgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.fgit.cf/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://raw.cithub.icu/XIU2/UserScript/master/other/Autopage/rules.json',
