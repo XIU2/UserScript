@@ -434,6 +434,7 @@
                 clearInterval(timer); // 取消定时器（每 5 毫秒一次的）
                 setTimeout(function(){ // 为了避免太快 body 的 CSS 还没加载上，先延迟 150 毫秒（缺点就是可能会出现短暂一闪而过的暗黑滤镜）
                     console.log('[护眼模式] html:', window.getComputedStyle(document.lastElementChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
+                    setDarkScrollbarColor();
                     if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastElementChild).backgroundColor === 'rgba(0, 0, 0, 0)' && !(document.querySelector('head>meta[name="color-scheme"],head>link[href^="resource:"]') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                         // 如果 body 没有 CSS 背景颜色（或是在资源页 且 浏览器为白天模式），那就需要添加一个背景颜色，否则影响滤镜效果
                         let style_Add2 = document.createElement('style');
@@ -487,6 +488,32 @@
     function getColorValue(e) {
         let rgbValueArry = window.getComputedStyle(e).backgroundColor.replace(/rgba|rgb|\(|\)| /g, '').split (',')
         return parseInt(rgbValueArry[0] + rgbValueArry[1] + rgbValueArry[2])
+    }
+
+
+    // 获取背景颜色数组
+    function getColorArray(e) {
+        let rgbValueArry = window.getComputedStyle(e).backgroundColor.replace(/rgba|rgb|\(|\)| /g, '').split (',')
+        return rgbValueArry.map((item) => parseInt(item))
+    }
+
+
+    // 手动实现反色滤镜
+    function applyInvert(rgb, factor) {
+        return rgb.map(value => Math.round(value * (1 - factor) + (255 - value) * factor))
+    }
+
+
+    // 模式3设置暗色的滚动条，需要等待读取背景色
+    function setDarkScrollbarColor() {
+        return
+        let darkModeType = getAutoSwitch()
+        if (darkModeType == 3){
+            let style_30 = menu_value('menu_customMode3').split('|')
+            let color = getColorArray(document.body)
+            color = applyInvert(color, style_30[0] * 0.01)
+            document.getElementById('XIU2DarkMode').textContent += ` html {scrollbar-color: #909090d0 rgb(${color.join(" ")});}`
+        }
     }
 
 
