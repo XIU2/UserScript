@@ -457,6 +457,7 @@
                 // 用来解决一些 CSS 加载缓慢的网站，可能会出现没有正确排除的问题，在没有找到更好的办法之前，先这样凑活着用
                 setTimeout(function(){
                     console.log('[护眼模式] html:', window.getComputedStyle(document.lastElementChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
+                    setDarkScrollbarColor();
                     if ((document.querySelector('head>meta[name="color-scheme"],head>link[href^="resource:"]') && window.matchMedia('(prefers-color-scheme: dark)').matches) || (document.querySelector('html[class*=dark], html[data-dark-theme*=dark], html[data-theme*=dark], html[data-color-mode*=dark], body[class*=dark]')) || (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)') || (getColorValue(document.body) > 0 && getColorValue(document.body) < 898989) || (getColorValue(document.lastElementChild) > 0 && getColorValue(document.lastElementChild) < 898989) || (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastElementChild).backgroundColor === 'rgb(0, 0, 0)')) {
                         // 如果是在资源页 且 浏览器为暗黑模式，或 html/body 元素包含 dark 标识，或底色为黑色 (等于0,0,0) 或深色 (小于 89,89,89)，就停用本脚本滤镜
                         if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
