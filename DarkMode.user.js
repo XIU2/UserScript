@@ -506,7 +506,6 @@
 
     // 模式3设置暗色的滚动条，需要等待读取背景色
     function setDarkScrollbarColor() {
-        return
         let darkModeType = getAutoSwitch()
         if (darkModeType == 3){
             let style_30 = menu_value('menu_customMode3').split('|')
