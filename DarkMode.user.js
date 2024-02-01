@@ -3,7 +3,7 @@
 // @name:zh-CN   护眼模式
 // @name:zh-TW   護眼模式
 // @name:en      Dark Mode
-// @version      1.5.3
+// @version      1.5.4
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
 // @description:zh-CN  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
@@ -363,7 +363,13 @@
             img[alt="[公式]"] {filter: none !important;}`,
             style_31_firefox = `html {filter: invert(${style_30[0]}%) !important; background-image: url(); text-shadow: 0 0 0 !important;}
             ${menu_value('menu_customMode3_exclude')} {filter: invert(1) !important;}
-            img[alt="[公式]"] {filter: none !important;}`;
+            img[alt="[公式]"] {filter: none !important;}`,
+            style_31_scrollbar = `::-webkit-scrollbar {height: 12px !important;}
+::-webkit-scrollbar-thumb {border-radius: 0;border-color: transparent;border-style: dashed;background-color: #3f4752 !important;background-clip: padding-box;transition: background-color .32s ease-in-out;}
+::-webkit-scrollbar-corner {background: #202020 !important;}
+::-webkit-scrollbar-track {background-color: #22272e !important;}
+::-webkit-scrollbar-thumb:hover {background: #3f4752 !important;}`;
+
 
         // Firefox 浏览器需要特殊对待
         if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
@@ -395,7 +401,7 @@
                 style += style_22;
                 break;
             case 3:
-                style += style_31;
+                style += style_31 + style_31_scrollbar;
                 if (location.hostname.indexOf('search.bilibili.com') > -1) {
                     style += `ul.video-list img, ul.video-list .video-item .img .mask-video, ul.video-list .video-item .img .van-danmu, ul.video-list .video-item .img .van-framepreview {filter: none !important;}`
                 } else if (location.hostname.indexOf('.bilibili.com') > -1) {
