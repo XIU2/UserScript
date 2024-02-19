@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.5.2
+// @version      1.5.3
 // @author       X.I.U
 // @description  文件排序、刷新不回根目录、快捷返回上一级（右键网页空白处）、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、一键复制所有分享链接、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整描述（话说）编辑框初始大小
 // @match        *://lanzou.com/u
@@ -44,6 +44,22 @@
 // @match        *://*.lanzow.com/*
 // @match        *://*.lanzox.com/*
 // @match        *://*.lanzoy.com/*
+// @match        *://*.lanzb.com/*
+// @match        *://*.lanze.com/*
+// @match        *://*.lanzf.com/*
+// @match        *://*.lanzh.com/*
+// @match        *://*.lanzi.com/*
+// @match        *://*.lanzj.com/*
+// @match        *://*.lanzl.com/*
+// @match        *://*.lanzm.com/*
+// @match        *://*.lanzo.com/*
+// @match        *://*.lanzp.com/*
+// @match        *://*.lanzq.com/*
+// @match        *://*.lanzt.com/*
+// @match        *://*.lanzv.com/*
+// @match        *://*.lanzw.com/*
+// @match        *://*.lanzx.com/*
+// @match        *://*.lanzy.com/*
 // @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABZ0lEQVR4nJ2TvW4UQRCEv+q9H8wGwFlIOEQQIRmnCIcnEidkSAQYEpwQIPEoZPgliB04IiW15JRXAMkne3e6COaMZe7HiEqmpzVV01PTLR9g1kIAGNdYQgrIAmliPfkSRghFQEk46yGB8S0GN3IF9fKAWYHJJjzbx0/30P1H/yBggwKfF9h5gfa/wObDeV6LAkYQDWTWq5shml3A9hR9+AqjFrLMnVkigECzHhqgEf51Affuotef8ahF2UNc0QZ/s9UZnr/Cu+/Q8DZ8O8TDDbT1pDof1ylXu2iqSdP38OYQ2VhCj3dh9rM+LhY/rQooII3bMUw/1veVrhIU0E5WehxWQILPEjRC7QQDbga1XKk6vgIDuoRxi/bews5LvHGnFqU/DXDZjMuRnx44T49t2860nc756rSzL/P8cpAnRzUqnV36hQOlO7ezrBRQ2pYLEFigtfUuMRHAiptGcrWAfnyvk/afEr8Bt+re7W42OSoAAAAASUVORK5CYII=
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
