@@ -577,7 +577,7 @@
 	},
 	"煎蛋网": {
 		"host": "jandan.net",
-		"url": "return (fun.lp() == '/' || fun.indexOF('/page/'))",
+		"url": "/^(\\/$|\\/page\\/)/",
 		"style": "#nav_prev, #nav_next, .post.f:not(.list-post) {display: none !important;}",
 		"history": false,
 		"pager": {
@@ -591,7 +591,7 @@
 	},
 	"煎蛋网 - 大杂烩": {
 		"host": "jandan.net",
-		"url": "return (fun.lp() == '/dzh')",
+		"url": "/^\\/dzh$/",
 		"pager": {
 			"type": 2,
 			"nextL": ".show_more",
@@ -600,10 +600,11 @@
 	},
 	"煎蛋网 - 吐槽": {
 		"host": "jandan.net",
+		"url": "/^\\/(qa|pic|ooxx|treehole)/",
 		"style": "#nav_prev, #nav_next, #tucao-gg {display: none !important;} .jandan-vote a.tucao-btn23:link {color: #c8c7cc !important;} .jandan-tucao {background-color: #fafaf9 !important;}",
 		"pager": {
 			"nextL": "a.previous-comment-page",
-			"pageE": "ol.commentlist>li[id^='comment-'], script[src^='//cdn.jandan.net/static/min/']",
+			"pageE": "ol.commentlist>li[id^='comment-'], head>script:not([src])",
 			"replaceE": ".cp-pagenavi",
 			"scriptT": 2
 		},
