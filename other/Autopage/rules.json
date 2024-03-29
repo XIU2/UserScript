@@ -2881,6 +2881,16 @@
 			"replaceE": ".nav-links"
 		}
 	},
+	"DL-Raw": {
+		"host": "dl-raw.se",
+		"url": "/^\\/($|\\?s=|tag|page|category)/",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.next",
+			"pageE": "div[id^=gridlane-grid-post-]",
+			"replaceE": ".pagination"
+		}
+	},
 	"漫本": {
 		"host": "www.manben.com",
 		"url": "if (fun.indexOF(/^\\/m\\d+/)) {if (fun.getCookie('showtype') != '2') {document.cookie='showtype=2; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';location.reload();}else{return true;}}",
