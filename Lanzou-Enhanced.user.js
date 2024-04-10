@@ -2,7 +2,7 @@
 // @name         蓝奏云网盘增强
 // @version      1.5.4
 // @author       X.I.U
-// @description  文件排序、刷新不回根目录、快捷返回上一级（右键网页空白处）、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、一键复制所有分享链接、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、调整文件重命名+描述（话说）编辑框初始大小
+// @description  文件排序、刷新不回根目录、快捷返回上一级（右键网页空白处）、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、一键复制所有分享链接、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、优化编辑框初始大小
 // @match        *://lanzou.com/u
 // @match        *://www.lanzou.com/u
 // @match        *://www.lanzou.com/account.php*
@@ -88,7 +88,7 @@
         ['menu_refreshCorrection', '刷新不返回根目录', '刷新不返回根目录', true],
         ['menu_rightClickMenu', '右键文件显示菜单', '右键文件显示菜单', true],
         ['menu_directDownload', '点击直接下载文件 (分享链接列表页)', '点击直接下载文件', true],
-        ['menu_folderDescdesMenu', '调整描述（话说）编辑框大小', '调整描述（话说）编辑框大小', true],
+        ['menu_folderDescdesMenu', '优化编辑框初始大小', '优化编辑框初始大小', true],
         ['menu_fileSort', '文件排序', '文件排序', true]
     ], menu_ID = [], lastFolderID;
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
@@ -173,7 +173,7 @@
         if (mainframe) { //                              只有找到 iframe 框架时才会继续运行脚本
             mainframe = mainframe.contentWindow;
             if (menu_value('menu_refreshCorrection')) refreshCorrection(); // 刷新不返回根目录（F5）
-            setTimeout(folderDescdes, 500); //           调整话说编辑框初始大小
+            setTimeout(folderDescdes, 500); //           优化编辑框初始大小
             setTimeout(hideSha, 500); //                 隐藏分享链接窗口（这样自动打开/复制分享链接时，不会一闪而过）
             fobiddenBack(); //                           禁止浏览器返回（并绑定新的返回事件）
             EventXMLHttpRequest(); //                    监听 XMLHttpRequest 事件并执行 [自动显示更多文件]
@@ -379,7 +379,7 @@
     }
 
 
-    // 调整 文件重命名及话说 编辑框的初始大小
+    // 优化编辑框初始大小
     function folderDescdes() {
         if (!menu_value('menu_folderDescdesMenu')) return
         mainframe.document.lastChild.appendChild(mainframe.document.createElement('style')).textContent = `#folder_descdes, #fol_credes, #file_desc {margin: 15px 0px; width: 550px; height: 125px;} input#f_ename_new {min-width: 700px; font-size: 14px;}`
