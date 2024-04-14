@@ -3495,16 +3495,6 @@
 			"replaceE": ".reader-footer"
 		}
 	},
-	"知轩藏书": {
-		"host": "zxcs.me",
-		"url": "/\\/(sort|tag)\\//",
-		"blank": 4,
-		"pager": {
-			"nextL": "#pagenavi>span+a",
-			"pageE": "dl[id='plist']",
-			"replaceE": "#pagenavi"
-		}
-	},
 	"下书网": {
 		"host": "mip.xiashucom.com",
 		"url": "/\\/yue_/",
@@ -6058,6 +6048,7 @@
 	"nhentai": {
 		"host": ["nhentai.net","nhentai.to","nhentai.xxx"],
 		"url": "return fun.getCSS('a.next, .current+a.page') && (fun.getCSS('.gallery, #image-container'))",
+		"style": "section#image-container img {max-width: 100% !important;height: auto !important;display: block !important;margin: 0 auto !important;}",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next, .current+a.page",
