@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.5.4
+// @version      1.5.5
 // @author       X.I.U
 // @description  文件排序、刷新不回根目录、快捷返回上一级（右键网页空白处）、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、一键复制所有分享链接、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、优化编辑框初始大小
 // @match        *://lanzou.com/u
@@ -382,7 +382,7 @@
     // 优化编辑框初始大小
     function folderDescdes() {
         if (!menu_value('menu_folderDescdesMenu')) return
-        mainframe.document.lastChild.appendChild(mainframe.document.createElement('style')).textContent = `#folder_descdes, #fol_credes, #file_desc {margin: 15px 0px; width: 550px; height: 125px;} input#f_ename_new {min-width: 700px; font-size: 14px;}`
+        mainframe.document.lastChild.appendChild(mainframe.document.createElement('style')).textContent = `#folder_descdes, #fol_credes, #file_desc {margin: 15px 0px; width: 550px; height: 125px;} input#f_ename_new {min-width: 700px; font-size: 14px;} #f_ename {z-index: 999;left: 15px;}`
     }
 
 
