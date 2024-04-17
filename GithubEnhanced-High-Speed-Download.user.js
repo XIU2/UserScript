@@ -227,7 +227,7 @@
                     } else {
                         url = new_download_url[i][0] + href[1]
                     }
-                    _html += `<a style="${style[0]}" class="btn" href="${url}" title="${new_download_url[i][2]}" rel="noreferrer noopener nofollow">${new_download_url[i][1]}</a>`
+                    _html += `<a style="${style[0]}" class="btn" href="${url}" target="_blank" title="${new_download_url[i][2]}" rel="noreferrer noopener nofollow">${new_download_url[i][1]}</a>`
                 }
                 _this.parentElement.nextElementSibling.insertAdjacentHTML('beforeend', _html + '</div>');
             });
