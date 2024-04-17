@@ -180,13 +180,15 @@
                     if (target.nodeType !== 1) return
                     if (target.tagName === 'DIV' && target.parentElement.id === '__primerPortalRoot__') {
                         addDownloadZIP(target);
-                        addGitClone(target);
-                        addGitCloneSSH(target);
+                        if (addGitClone(target) === false) return;
+                        if (addGitCloneSSH(target) === false) return;
                     } else if (target.tagName === 'DIV' && target.className.indexOf('Box-sc-') != -1) {
                         if (target.querySelector('input[value^="https:"]')) {
-                            addGitCloneClear('.XIU2-GCS'); addGitClone(target);
+                            addGitCloneClear('.XIU2-GCS');
+                            if (addGitClone(target) === false) return;
                         } else if (target.querySelector('input[value^="git@"]')) {
-                            addGitCloneClear('.XIU2-GC'); addGitCloneSSH(target);
+                            addGitCloneClear('.XIU2-GC');
+                            if (addGitCloneSSH(target) === false) return;
                         } else if (target.querySelector('input[value^="gh "]')) {
                             addGitCloneClear('.XIU2-GC, .XIU2-GCS');
                         }
@@ -194,7 +196,7 @@
                 }
             }
         }
-    }
+    };
     const observer = new MutationObserver(callback);
     observer.observe(document, { childList: true, subtree: true });
 
@@ -234,8 +236,8 @@
 
     // Download ZIP
     function addDownloadZIP(target) {
-        let html = target.querySelector('ul[class^=List__ListBox-sc-] ul[class^=List__ListBox-sc-]>li:last-child');if (!html) return;
-        if (!html.nextElementSibling) return true;
+        let html = target.querySelector('ul[class^=List__ListBox-sc-] ul[class^=List__ListBox-sc-]>li:last-child');
+        if (!html) return;
         let href_script = document.querySelector('react-partial[partial-name=repos-overview]>script[data-target="react-partial.embeddedData"]'),
             href_slice = href_script.textContent.slice(href_script.textContent.indexOf('"zipballUrl":"')+14),
             href = href_slice.slice(0, href_slice.indexOf('"')),
@@ -269,8 +271,9 @@
 
     // Git Clone
     function addGitClone(target) {
-        let html = target.querySelector('input[value^="https:"]');if (!html) return;
-        if (!html.nextElementSibling) return true;
+        let html = target.querySelector('input[value^="https:"]');
+        if (!html) return;
+        if (!html.nextElementSibling) return false;
         let href_split = html.value.split(location.host)[1],
             html_parent = '<div style="margin-top: 4px;" class="XIU2-GC ' + html.parentElement.className + '">',
             url = '', _html = '', _gitClone = '';
@@ -294,7 +297,9 @@
 
     // Git Clone SSH
     function addGitCloneSSH(target) {
-        let html = target.querySelector('input[value^="git@"]');if (!html) return
+        let html = target.querySelector('input[value^="git@"]');
+        if (!html) return;
+        if (!html.nextElementSibling) return false;
         let href_split = html.value.split(':')[1],
             html_parent = '<div style="margin-top: 4px;" class="XIU2-GCS ' + html.parentElement.className + '">',
             url = '', _html = '', _gitClone = '';
@@ -314,7 +319,8 @@
 
     // Raw
     function addRawFile() {
-        let html = document.querySelector('a[data-testid="raw-button"]');if (!html) return
+        let html = document.querySelector('a[data-testid="raw-button"]');
+        if (!html) return;
         let href = location.href.replace(`https://${location.host}`,''),
             href2 = href.replace('/blob/','/'),
             url = '', _html = '';
