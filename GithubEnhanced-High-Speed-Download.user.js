@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.5.20
+// @version      2.5.21
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)、添加 git clone 命令
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)
@@ -272,18 +272,18 @@
         let href_split = html.value.split(location.host)[1],
             html_parent = '<div style="margin-top: 4px;" class="XIU2-GC ' + html.parentElement.className + '">',
             url = '', _html = '', _gitClone = '';
-        html.nextElementSibling.hidden = true; // 隐藏右侧复制按钮
+        html.nextElementSibling.hidden = true; // 隐藏右侧复制按钮（考虑到能直接点击复制，就不再重复实现复制按钮事件了）
         if (GM_getValue('menu_gitClone')) {_gitClone='git clone '; html.value = _gitClone + html.value; html.setAttribute('value', html.value);}
         // 克隆原 Git Clone 元素
         let html_clone = html.cloneNode(true);
         for (let i=0;i<clone_url.length;i++) {
             if (clone_url[i][0] === 'https://gitclone.com') {
-                url = _gitClone + clone_url[i][0] + '/github.com' + href_split
+                url = clone_url[i][0] + '/github.com' + href_split
             } else {
-                url = _gitClone + clone_url[i][0] + href_split
+                url = clone_url[i][0] + href_split
             }
-            html_clone.title = `加速源：${clone_url[i][1]} （点击可直接复制）\n${clone_url[i][2].replaceAll('&#10;','\n')}`
-            html_clone.setAttribute('value', url)
+            html_clone.title = `${url}\n\n${clone_url[i][2].replaceAll('&#10;','\n')}\n\n提示：点击文字可直接复制`
+            html_clone.setAttribute('value', _gitClone + url)
             _html += html_parent + html_clone.outerHTML + '</div>'
         }
         html.parentElement.insertAdjacentHTML('afterend', _html);
@@ -296,14 +296,14 @@
         let href_split = html.value.split(':')[1],
             html_parent = '<div style="margin-top: 4px;" class="XIU2-GCS ' + html.parentElement.className + '">',
             url = '', _html = '', _gitClone = '';
-        html.nextElementSibling.hidden = true; // 隐藏右侧复制按钮
+        html.nextElementSibling.hidden = true; // 隐藏右侧复制按钮（考虑到能直接点击复制，就不再重复实现复制按钮事件了）
         if (GM_getValue('menu_gitClone')) {_gitClone='git clone '; html.value = _gitClone + html.value; html.setAttribute('value', html.value);}
         // 克隆原 Git Clone SSH 元素
         let html_clone = html.cloneNode(true);
         for (let i=0;i<clone_ssh_url.length;i++) {
-            url = _gitClone + clone_ssh_url[i][0] + href_split
-            html_clone.title = `加速源：${clone_ssh_url[i][1]} （点击可直接复制）\n${clone_ssh_url[i][2].replaceAll('&#10;','\n')}`
-            html_clone.setAttribute('value', url)
+            url = clone_ssh_url[i][0] + href_split
+            html_clone.title = `${url}\n\n${clone_ssh_url[i][2].replaceAll('&#10;','\n')}\n\n提示：点击文字可直接复制`
+            html_clone.setAttribute('value', _gitClone + url)
             _html += html_parent + html_clone.outerHTML + '</div>'
         }
         html.parentElement.insertAdjacentHTML('afterend', _html);
@@ -361,15 +361,14 @@
                 cntElm_a = trElm.querySelector('[role="rowheader"] > .css-truncate.css-truncate-target.d-block.width-fit > a, .react-directory-truncate>a'),
                 Name = cntElm_a.innerText,
                 href = cntElm_a.getAttribute('href'),
-                href2 = href.replace('/blob/','/'), url, url_name, url_tip = '';
+                href2 = href.replace('/blob/','/'), url = '';
             if ((raw_url[menu_rawFast][0].indexOf('/gh') + 3 === raw_url[menu_rawFast][0].length) && raw_url[menu_rawFast][0].indexOf('cdn.staticaly.com') === -1) {
                 url = raw_url[menu_rawFast][0] + href.replace('/blob/','@');
             } else {
                 url = raw_url[menu_rawFast][0] + href2;
             }
 
-            url_name = raw_url[menu_rawFast][1]; url_tip = raw_url[menu_rawFast][2];
-            fileElm.insertAdjacentHTML('afterend', `<a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${url_name}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${url_tip}提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url[menu_rawFast][1]} ] 加速源 (☁) 即可切换。">${svg[0]}</a>`);
+            fileElm.insertAdjacentHTML('afterend', `<a href="${url}" download="${Name}" target="_blank" rel="noreferrer noopener nofollow" class="fileDownLink" style="display: none;" title="「${raw_url[menu_rawFast][1]}」&#10;&#10;[Alt + 左键] 或 [右键 - 另存为...] 下载文件。&#10;注意：鼠标点击 [☁] 图标，而不是左侧的文件名！&#10;&#10;${raw_url[menu_rawFast][2]}&#10;&#10;提示：点击浏览器右上角 Tampermonkey 扩展图标 - [ ${raw_url[menu_rawFast][1]} ] 加速源 (☁) 即可切换。">${svg[0]}</a>`);
             // 绑定鼠标事件
             trElm.onmouseover = mouseOverHandler;
             trElm.onmouseout = mouseOutHandler;
