@@ -133,9 +133,9 @@
         '<svg class="octicon octicon-cloud-download" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M9 12h2l-3 3-3-3h2V7h2v5zm3-8c0-.44-.91-3-4.5-3C5.08 1 3 2.92 3 5 1.02 5 0 6.52 0 8c0 1.53 1 3 3 3h3V9.7H3C1.38 9.7 1.3 8.28 1.3 8c0-.17.05-1.7 1.7-1.7h1.3V5c0-1.39 1.56-2.7 3.2-2.7 2.55 0 3.13 1.55 3.2 1.8v1.2H12c.81 0 2.7.22 2.7 2.2 0 2.09-2.25 2.2-2.7 2.2h-2V11h2c2.08 0 4-1.16 4-3.5C16 5.06 14.08 4 12 4z"></path></svg>'
     ], style = ['padding:0 6px; margin-right: -1px; border-radius: 2px; background-color: var(--XIU2-back-Color); border-color: rgba(27, 31, 35, 0.1); font-size: 11px; color: var(--XIU2-font-Color);'];
 
-    if (menu_rawFast == null){menu_rawFast = 1; GM_setValue('xiu2_menu_raw_fast', 1)}
-    if (GM_getValue('menu_rawDownLink') == null){GM_setValue('menu_rawDownLink', true)}
-    if (GM_getValue('menu_gitClone') == null){GM_setValue('menu_gitClone', true)}
+    if (menu_rawFast == null){menu_rawFast = 1; GM_setValue('xiu2_menu_raw_fast', 1)};
+    if (GM_getValue('menu_rawDownLink') == null){GM_setValue('menu_rawDownLink', true)};
+    if (GM_getValue('menu_gitClone') == null){GM_setValue('menu_gitClone', true)};
     registerMenuCommand();
     // 注册脚本菜单
     function registerMenuCommand() {
@@ -158,7 +158,7 @@
         addRawDownLink(); // 添加新加速源
         GM_notification({text: "已切换加速源为：" + raw_url[menu_rawFast][1], timeout: 3000}); // 提示消息
         registerMenuCommand(); // 重新注册脚本菜单
-    }
+    };
 
     colorMode(); // 适配白天/夜间主题模式
     setTimeout(addRawFile, 1000); // Raw 加速
@@ -285,7 +285,7 @@
         let html = target.querySelector('input[value^="https:"]');
         if (!html) return;
         if (!html.nextElementSibling) return false;
-        let href_split = html.value.replace(/https:\/\/[^/]+/, ''),
+        let href_split = html.value.split(location.host)[1],
             html_parent = '<div style="margin-top: 4px;" class="XIU2-GC ' + html.parentElement.className + '">',
             url = '', _html = '', _gitClone = '';
         html.nextElementSibling.hidden = true; // 隐藏右侧复制按钮
