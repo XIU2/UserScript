@@ -64,7 +64,7 @@
 // @exclude      https://m.v.qq.com/*
 // @exclude      https://v.qq.com/*
 // @exclude      https://*.acfun.cn/*
-// @exclude      https:///.bilibili.com/*
+// @exclude      https://*.bilibili.com/*
 // @exclude      https://*.youtube.com/*
 // @exclude      https://*.youtube-nocookie.com/*
 // @exclude      https://*.cnki.net/*
