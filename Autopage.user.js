@@ -3,9 +3,9 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.5.20
+// @version      6.5.21
 // @author       X.I.U
-// @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、B 站(bilibili)、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、动漫之家、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
+// @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
 // @description:en  Append the next page content to the bottom seamlessly (like a waterfall)~
 // @match        *://*/*
@@ -64,13 +64,7 @@
 // @exclude      https://m.v.qq.com/*
 // @exclude      https://v.qq.com/*
 // @exclude      https://*.acfun.cn/*
-// @exclude      https://t.bilibili.com/*
-// @exclude      https://www.bilibili.com/*
-// @exclude      https://live.bilibili.com/*
-// @exclude      https://space.bilibili.com/*
-// @exclude      https://manga.bilibili.com/*
-// @exclude      https://member.bilibili.com/*
-// @exclude      https://message.bilibili.com/*
+// @exclude      https:///.bilibili.com/*
 // @exclude      https://*.youtube.com/*
 // @exclude      https://*.youtube-nocookie.com/*
 // @exclude      https://*.cnki.net/*
@@ -897,39 +891,6 @@ function: {
                     scrollD: 3500
                 }
             }, //               NexusMods posts
-            bilibili_search: {
-                host: 'search.bilibili.com',
-                url: ()=> {
-                    urlC = true;
-                    if ((lp == '/all' || lp == '/video') && getCSS('ul.video-list') != null) {
-                        curSite = DBSite.bilibili_search;
-                    } else if (lp == '/article' && getCSS('#article-list') != null) {
-                        curSite = DBSite.bilibili_search_article;
-                    }
-                },
-                retry: 100,
-                pager: {
-                    nextL: bilibili_search_nextL,
-                    pageE: '//ul[contains(@class, "video-list")]/li | //script[contains(text(), "window.__INITIAL_STATE__")]',
-                    insertP: ['ul.video-list', 3],
-                    replaceE: 'ul.pages',
-                    scriptT: 2,
-                    scrollD: 1000
-                },
-                function: {
-                    aF: bilibili_search_aF
-                }
-            }, //         B 站(Bilibili) - 搜索页 - 视频
-            bilibili_search_article: {
-                retry: 100,
-                pager: {
-                    nextL: bilibili_search_nextL,
-                    pageE: 'li.article-item',
-                    replaceE: 'ul.pages',
-                    //scriptT: 2,
-                    scrollD: 1000
-                }
-            }, // B 站(Bilibili) - 搜索页 - 专栏
             manhuacat: {
                 host: ['www.manhuacat.com', 'www.maofly.com','www.manhuafei.com'],
                 url: ()=> {if (indexOF(/\/(manga|manhua)\/\d+\/.+\.html/)) {
@@ -1486,36 +1447,6 @@ function: {
             }
         });
         return pageE
-    }
-
-
-    // [bilibili_search] 获取下一页地址
-    function bilibili_search_nextL() {
-        if (!location.search) return
-        let pageActive = 1, pageLast = parseInt(getXpath('//ul[@class="pages"]/li[contains(@class, "page-item")][not(contains(@class, "next") or contains(@class, "prev"))][last()]').innerText);
-        if (!pageLast) return
-        if (indexOF(/page=\d+/, 's')) {
-            pageActive = parseInt(/page=\d+/.exec(location.search)[0].replace('page=',''))
-        }
-        if (pageActive < pageLast) {
-            if (indexOF(/page=\d+/, 's')) {
-                return (location.origin + location.pathname + location.search.replace(/page=\d+/,`page=${pageActive+1}`))
-            } else {
-                return (location.origin + location.pathname + location.search + `&page=${pageActive+1}`)
-            }
-        }
-    }
-    // [bilibili_search] 插入后函数（加载图片）
-    function bilibili_search_aF() {
-        let result = __INITIAL_STATE__.flow[__INITIAL_STATE__.flow.fields[0]].result;
-        if (result.length > 0) {
-            let imgArr = getAllCSS('.img>span:first-child');
-            if (imgArr.length > 0) {
-                for (let i = 0; i < imgArr.length; i++) {
-                    imgArr[i].insertAdjacentHTML('beforebegin', `<div class="b-img"><picture class="b-img__inner"><img src="${result[i].pic}" loading="lazy"></picture></div>`); // 将 img 标签插入到网页中
-                }
-            }
-        }
     }
 
 

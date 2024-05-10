@@ -2198,19 +2198,6 @@
 			"pageE": "a[data-id]"
 		}
 	},
-	"bilibili - 新版搜索页": {
-		"host": "search.bilibili.com",
-		"url": "fun.isUrlC(); return ((fun.lp() == '/all' || fun.lp() == '/video' || fun.lp() == '/pgc' || fun.lp() == '/article') && !fun.getCSS('ul.video-list') && !fun.getCSS('#article-list'))",
-		"history": true,
-		"pager": {
-			"type": 6,
-			"nextL": "js; return fun.getNextEP('.vui_pagenation--btn-num.vui_button--active+button.vui_pagenation--btn-num', 'page=', /page=\\d+(&o=\\d+)?/)",
-			"pageE": ".video-list-item, .media-list>div, .video-list>div",
-			"replaceE": ".vui_pagenation--btns",
-			"loadTime": 600,
-			"scrollD": 3000
-		}
-	},
 	"NO视频": {
 		"host": "www.novipnoad.com",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('.html'))",
