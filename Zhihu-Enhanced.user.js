@@ -52,7 +52,8 @@ var menu_ALL = [
     ['menu_questionRichTextMore', '展开问题描述', '展开问题描述', false],
     ['menu_publishTop', '置顶显示时间', '置顶显示时间', true],
     ['menu_typeTips', '区分问题文章', '区分问题文章', true],
-    ['menu_toQuestion', '直达问题按钮', '直达问题按钮', true]
+    ['menu_toQuestion', '直达问题按钮', '直达问题按钮', true],
+    ['menu_hideQuestionTitle', '隐藏导航栏问题标题', '隐藏导航栏问题标题', false]
 ], menu_ID = [];
 for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
     if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
@@ -1451,6 +1452,12 @@ function blockHotOther() {
     block();
 }
 
+// 隐藏导航栏问题标题
+function hideQuestionTitle() {
+    if (!menu_value('menu_hideQuestionTitle')) return;
+
+    document.querySelectorAll('.QuestionHeader-main .QuestionHeader-title').forEach(function(element) {element.style.display = 'none';});
+}
 
 (function() {
     if (window.onurlchange === undefined) {addUrlChangeEvent();} // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
@@ -1502,7 +1509,7 @@ function blockHotOther() {
         }
         closeFloatingComments(); //                                            快捷关闭悬浮评论（监听点击事件，点击网页两侧空白处）
         blockKeywords('comment'); //                                           屏蔽指定关键词（评论）
-
+        hideQuestionTitle();//                                                 隐藏导航栏问题标题
 
         if (location.pathname.indexOf('question') > -1 && location.href.indexOf('/log') == -1) { //       回答页 //
             if (location.pathname.indexOf('waiting') == -1) {
