@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.5.21
+// @version      6.6.0
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -1867,7 +1867,37 @@ function: {
 
     // 翻页类型 1/3
     function getPageE(url) {
-        GM_xmlhttpRequest({
+        // 依靠原生 XMLHttpRequest 尝试解决因缺失跨域 cookie 导致的问题（比如一些使用 Cloudflare CDN 人机验证的网站，会出现脚本后台获取到人机验证页面）
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.overrideMimeType('text/html; charset=' + (document.characterSet||document.charset||document.inputEncoding));
+
+        if (curSite.xRequestedWith === true) {xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest')}
+        (curSite.noReferer === true) ? xhr.setRequestHeader('Referer', ''):xhr.setRequestHeader('Referer', location.href)
+        xhr.setRequestHeader('User-Agent', navigator.userAgent)
+        xhr.setRequestHeader('Accept', 'text/html,application/xhtml+xml,application/xml')
+
+        xhr.timeout = 10000;
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                //console.log('URL：' + url, '最终 URL：' + xhr.responseURL, '返回内容：' + xhr.responseText)
+                processElems(createDocumentByString(xhr.responseText));
+            } else {
+                console.error('[自动无缝翻页] - 处理获取到的下一页内容时出现问题，请检查！', xhr.statusText);
+            }
+        };
+        xhr.onerror = function() {
+            console.log('URL：' + url, xhr.statusText)
+            GM_notification({text: '❌ 获取下一页失败...', timeout: 5000});
+        };
+        xhr.ontimeout = function() {
+            setTimeout(function(){curSite.pageUrl = '';}, 3000)
+            console.log('URL：' + url, xhr.statusText)
+            GM_notification({text: '❌ 获取下一页超时，可 3 秒后再次滚动网页重试（或尝试刷新网页）...', timeout: 5000});
+        };
+        xhr.send();
+
+        /*GM_xmlhttpRequest({
             url: url,
             method: 'GET',
             overrideMimeType: 'text/html; charset=' + (document.characterSet||document.charset||document.inputEncoding),
@@ -1895,7 +1925,7 @@ function: {
                 console.log('URL：' + url, response)
                 GM_notification({text: '❌ 获取下一页超时，可 3 秒后再次滚动网页重试（或尝试刷新网页）...', timeout: 5000});
             }
-        });
+        });*/
     }
     // 翻页类型 4
     function getPageE_(url, type = '', method = 'GET', data = '', type2) {
