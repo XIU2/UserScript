@@ -120,7 +120,6 @@
 		"url": "if (fun.isMobile()) {return}; fun.isUrlC(); return (fun.lp() == '/s' && !fun.indexOF('a=image','s'))",
 		"style": ".so-lazyimg{opacity: 1 !important;} .result {border: none !important;}",
 		"history": true,
-		"noReferer": true,
 		"pager": {
 			"nextL": "#snext",
 			"pageE": ".result,head>style",
@@ -6034,12 +6033,12 @@
 	},
 	"nhentai": {
 		"host": ["nhentai.net","nhentai.to","nhentai.xxx"],
-		"url": "return fun.getCSS('a.next, .current+a.page') && (fun.getCSS('.gallery, #image-container'))",
+		"url": "if (fun.indexOF(/^\\/g\\/\\d+\\/\\d+\\//)){const imageA = document.querySelector('#image-container>a'); imageA.outerHTML=imageA.innerHTML;return true;} else if (fun.getCSS('a.next') && fun.getCSS('.gallery')){return true;}",
 		"style": "section#image-container img {max-width: 100% !important;height: auto !important;display: block !important;margin: 0 auto !important;}",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next, .current+a.page",
-			"pageE": ".container>.gallery, .gallery-favorite, #image-container img",
+			"pageE": ".container>.gallery, #image-container img",
 			"replaceE": ".pagination, .reader-pagination"
 		},
 		"function": {
