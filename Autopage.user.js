@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.1
+// @version      6.6.2
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -131,6 +131,8 @@
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menuAll[i][0]) == null){GM_setValue(menuAll[i][0], menuAll[i][3])};
     }
+    // 兼容不支持 GM_openInTab 的油猴脚本管理器
+    if (typeof GM_openInTab !== 'function') {GM_openInTab = openInTab}
 
     getRulesUrl();
     registerMenuCommand();
@@ -153,7 +155,7 @@
                 } else { // 不在禁用列表中
                     webType = doesItSupport(); // 判断网站类型（即是否支持），顺便直接赋值
                     if (webType === 0) {
-                        menuId[0] = GM_registerMenuCommand('❌ 当前网页暂不支持 [点击申请]', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
+                        menuId[0] = GM_registerMenuCommand('❌ 当前网页暂不支持 [点击申请]', function () {GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
                         menuId[1] = GM_registerMenuCommand('🔄 更新外置翻页规则 (每天自动)', function(){getRulesUrl(true)});
                         menuId[2] = GM_registerMenuCommand('#️⃣ 自定义翻页规则', function(){customRules()});
                         //console.info('[自动无缝翻页] - 暂不支持当前网页 [ ' + location.href + ' ]，申请支持: https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/419215/feedback');
@@ -174,7 +176,7 @@
                 menuId[i] = GM_registerMenuCommand(`${menuAll[i][3]?'✅':'❌'} ${menuAll[i][1]}`, function(){menu_switch(menuAll[i][3], menuAll[i][0], menuAll[i][2])});
             }
         }
-        menuId[menuId.length] = GM_registerMenuCommand('💬 反馈失效 / 申请支持', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
+        menuId[menuId.length] = GM_registerMenuCommand('💬 反馈失效 / 申请支持', function () {GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
     }
 
 
@@ -1128,7 +1130,7 @@ function: {
     // 外置翻页规则
     function getRulesUrl(update = false) {
         // 如果是原来的时间格式 或 刚安装脚本，则需要立即更新
-        if (typeof(GM_getValue('menu_ruleUpdateTime', '')) == 'string') {update = true; if (scriptHandler != 'AdGuard') {alert('请点击【确定】开始首次获取【外置翻页规则】（大概几秒\n\n在此期间请不要 操作/跳转/关闭 当前网页~\n\n如果不小心没获取成功也没事，可以去脚本菜单中手动【更新外置翻页规则】即可（浏览器右上角 Tampermonkey 扩展图标内的脚本菜单\n\n\n另外，想要【临时暂停翻页】请点击左下角悬浮的【页码】按钮\n\n如果每次打开网页都会看到该提示，说明你的 油猴脚本管理器 存在兼容性问题，请更换其他试试！');} else {urlArr2 = urlArr}}
+        if (typeof(GM_getValue('menu_ruleUpdateTime', '')) == 'string') {update = true; if (scriptHandler != 'AdGuard') {alert('请点击【确定】开始首次获取【外置翻页规则】（大概几秒\n\n在此期间请不要 操作/跳转/关闭 当前网页~\n\n如果不小心没获取成功也没事，可以去脚本菜单中手动【更新外置翻页规则】即可（浏览器右上角 Tampermonkey 扩展图标内的脚本菜单\n\n\n另外，想要【临时暂停翻页】请点击左下角悬浮的【页码】按钮\n\n如果每次打开网页都会看到该提示，说明你的 油猴脚本管理器与本脚本之间 存在兼容性问题，请更换其他试试！');} else {urlArr2 = urlArr}}
 
         if (update) { // 手动更新（或安装后首次更新）
             GM_notification({text: '🔄 更新外置翻页规则中，请勿操作网页...', timeout: 5000});
@@ -1165,7 +1167,7 @@ function: {
                             pausePageEvent(); // 左键双击网页空白处暂停翻页
                             pageLoading(); // 自动无缝翻页
 
-                            if (n) GM_notification({text: '✅ 已更新外置翻页规则！\n如果依然无法翻页，说明还不支持当前网页，点击此处提交申请~', timeout: 5000, onclick: function(){window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});}});
+                            if (n) GM_notification({text: '✅ 已更新外置翻页规则！\n如果依然无法翻页，说明还不支持当前网页，点击此处提交申请~', timeout: 5000, onclick: function(){GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});}});
                         } else {
                             console.log('URL：' + url);
                             GM_notification({text: '❌ 为空！更新失败，请再试几次...\n如果依然更新失败，请联系作者解决...', timeout: 5000});
@@ -2555,6 +2557,11 @@ function: {
     }
 
 
+    // 兼容不支持 GM_openInTab 的油猴脚本管理器
+    function openInTab(url, options) {
+        window.open(url);
+    }
+
     // 强制新标签页打开链接
     function forceTarget(pageE) {
         if (curSite.blank === 1) {
@@ -2594,7 +2601,7 @@ function: {
                 if (target.href && target.target != '_blank' && !(target.getAttribute('onclick')) && target.href.slice(0,4) == 'http' && target.getAttribute('href').slice(0,1) != '#') {
                     e.stopPropagation(); // 阻止冒泡（避免被父元素事件委托捕获）
                     e.preventDefault(); // 阻止默认打开链接事件
-                    window.GM_openInTab(target.href, {active: true,insert: true,setParent: true});
+                    GM_openInTab(target.href, {active: true,insert: true,setParent: true});
                 }
             }
             d.addEventListener('click', function(e) {
