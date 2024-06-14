@@ -676,7 +676,7 @@
 	},
 	"番组计划": {
 		"host": ["bgm.tv","bangumi.tv"],
-		"url": "/\\/(browser|subject_search|tag)/",
+		"url": "return (fun.indexOF(/\\/(browser|subject_search|tag|wish)/) || fun.getCSS('ul#browserItemList>li') || fun.getXpath(\"//div[@class='page_inner']/a[text()='››']\"))",
 		"blank": 3,
 		"pager": {
 			"nextL": "//div[@class='page_inner']/a[text()='››']",
