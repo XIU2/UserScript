@@ -3439,7 +3439,7 @@
 	"COLAMANGA 漫画 - 分类页": {
 		"host": "www.colamanga.com",
 		"url": "return (fun.lp() == '/show' || fun.lp() == '/search')",
-		"blank": 1,
+		"blank": 4,
 		"pager": {
 			"nextL": "js; return fun.getNextEP('.fed-page-info a.fed-btns-green+a[onclick]', 'page=', /page=\\d+/)",
 			"pageE": "ul.fed-list-info > li, dl.fed-deta-info",
