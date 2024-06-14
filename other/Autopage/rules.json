@@ -34,7 +34,7 @@
 	"必应搜索 + 手机版": {
 		"host": ["www.bing.com","cn.bing.com","www4.bing.com"],
 		"url": "if (fun.lp() == '/search') {if (fun.isMobile() && document.documentElement.lang != 'zh') {return false;} else {return true;}}",
-		"style": "#b_footer, .b_msg {display: none !important;}",
+		"style": "#b_footer, .b_msg, #bnp_rich_div {display: none !important;}",
 		"history": true,
 		"pager": {
 			"nextL": "a.sb_pagN, a.sb_halfnext, a.sb_fullnpl",
@@ -42,7 +42,7 @@
 			"replaceE": "#b_results>.b_pag, #b_PagAboveFooter"
 		},
 		"function": {
-			"bF": "if (!fun.getCSS('.b_title>a.sh_favicon')) {fun.insStyle('.b_title>a.sh_favicon {display: none !important;}');return pageE;}; pageE.forEach(function (one) {fun.getAllCSS('div.rms_iac[data-src]',one).forEach(function (one1) {one1.outerHTML = `<img src=\"${one1.dataset.src}\" height=\"16\" width=\"16\" alt=\"全球 Web 图标\" role=\"presentation\" class=\"rms_img\">`;})});return pageE"
+			"bF": "pageE.forEach(function (one) {fun.getAllCSS('div.rms_iac[data-src]', one).forEach(function (one1) {one1.outerHTML = `<img src=\"${one1.dataset.src}\" height=\"16\" width=\"16\" role=\"presentation\" class=\"rms_img\">`; }) }); return pageE"
 		}
 	},
 	"搜狗搜索": {
