@@ -914,36 +914,6 @@ function: {
                     scrollD: 4000
                 }
             }, //         漫画猫 + 漫画飞
-            imanhuaw: {
-                host: ['www.imanhuaw.net', 'www.imanhuaw.com', 'www.ccshwy.com'],
-                url: ()=> {
-                    if (getCSS('.mh-search-result')) {
-                        curSite = DBSite.imanhuaw_list;
-                    } else if (getCSS('a#zhankai')) {
-                        getCSS('a#zhankai').click();
-                    } else if (indexOF(/\/\d{3,}\.html/)) {
-                        curSite = DBSite.imanhuaw; imanhuaw_init();
-                    }
-                },
-                style: '#sider-left, #sider-right, .main-left, .main-right, .w996.tc, .title > span {display: none !important;} #qTcms_Pic_middle img {max-width: 110%;height: auto;}',
-                pager: {
-                    type: 4,
-                    nextL: imanhuaw_nextL,
-                    insertP: ['#qTcms_Pic_middle img:last-of-type', 4],
-                    insertE: imanhuaw_insertE,
-                    replaceE: '.title h2',
-                    interval: 2000,
-                    scrollD: 3000
-                }
-            }, //          爱漫画 + 188漫画网
-            imanhuaw_list: {
-                blank: 1,
-                pager: {
-                    nextL: '//div[@class="NewPages"]//a[text()="下一页"]',
-                    pageE: 'ul.mh-search-list > li',
-                    replaceE: '.NewPages'
-                }
-            }, //     爱漫画 - 分类页
             hicomic: {
                 host: 'www.hicomic.net',
                 url: ()=> {if (indexOF('/chapters/')) {
@@ -1017,7 +987,7 @@ function: {
                 }
             }, //           Mangabz 漫画
             mangabz_list: {
-                blank: 1,
+                blank: 4,
                 pager: {
                     nextL: '//div[contains(@class,"page-pagination")]//a[contains(text(), ">")]',
                     pageE: 'ul.mh-list > li',
@@ -1069,7 +1039,7 @@ function: {
                 }
             }, //           Xmanhua 漫画
             xmanhua_list: {
-                blank: 1,
+                blank: 4,
                 pager: {
                     nextL: '//div[@class="page-pagination"]//a[contains(text(), ">")]',
                     pageE: 'ul.mh-list > li',
@@ -1492,55 +1462,6 @@ function: {
         }
     }
 
-
-    // [爱漫画] 获取全部图片
-    function imanhuaw_getIMG() {
-        let _img = '', _imgUrl;
-        for (let one of base64_decode(qTcms_S_m_murl_e).split("$qingtiandy$")) {
-            _imgUrl = one;
-            if (one.substring(0,1) == '/') {
-                _imgUrl = qTcms_m_weburl + _imgUrl;
-            } else {
-                if (qTcms_Pic_m_if != '2') {
-                    one = one.replace(/\?/gi, 'a1a1');
-                    one = one.replace(/&/gi, 'b1b1');
-                    one = one.replace(/%/gi, 'c1c1');
-                    let m_httpurl = '';
-                    if (typeof(qTcms_S_m_mhttpurl) != 'undefined') m_httpurl = base64_decode(qTcms_S_m_mhttpurl);
-                    if (location.hostname == 'www.ccshwy.com') qTcms_m_indexurl = 'http://h.ccshwy.com/';
-                    _imgUrl = qTcms_m_indexurl + 'statics/pic/?p=' + escape(one) + '&picid=' + qTcms_S_m_id + '&m_httpurl=' + escape(m_httpurl);
-                } else {
-                    _imgUrl = _imgUrl.replace('http:', '')	;
-                    _imgUrl = _imgUrl.replace('https:', '');
-                }
-            }
-            _img += `<img src="${_imgUrl}">`;
-        }
-        return _img;
-    }
-    // [爱漫画] 初始化（调整本话其余图片）
-    function imanhuaw_init() {
-        getOne(curSite.pager.insertP[0]).outerHTML = imanhuaw_getIMG();
-        document.oncontextmenu = function(){}
-    }
-    // [爱漫画] 获取下一页地址
-    function imanhuaw_nextL() {
-        let next = location.origin + qTcms_Pic_nextArr
-        if (next && next != location.origin && next != curSite.pageUrl) {
-            curSite.pageUrl = next;
-            getPageE_(curSite.pageUrl);
-        }
-    }
-    // [爱漫画] 插入数据
-    function imanhuaw_insertE(pageE, type) {
-        if (!pageE) return
-        // 插入并运行 <script>
-        insScript('//head/script[not(@src)][contains(text(), "qTcms_S_m_murl_e")]', pageE);
-        // 将 img 标签插入到网页中
-        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), imanhuaw_getIMG());
-        addHistory(pageE);
-        pageNumIncrement()
-    }
 
 
     // [HiComic(嗨漫画)] 初始化（将本话其余图片插入网页中）
