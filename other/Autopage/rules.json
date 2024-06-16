@@ -2197,6 +2197,20 @@
 			"pageE": "a[data-id]"
 		}
 	},
+	"bilibili - 搜索页": {
+		"host": "search.bilibili.com",
+		"url": "fun.isUrlC(); return ((fun.lp() == '/all' || fun.lp() == '/video' || fun.lp() == '/pgc' || fun.lp() == '/article') && !fun.getCSS('ul.video-list') && !fun.getCSS('#article-list'))",
+		"style": ".to_hide_md:not(.to_hide_xl) {display: initial !important;}",
+		"history": true,
+		"pager": {
+			"type": 6,
+			"nextL": "js; return fun.getNextEP('.vui_pagenation--btn-num.vui_button--active+button.vui_pagenation--btn-num', 'page=', /page=\\d+/)",
+			"pageE": ".video-list-item, .media-list>div, .video-list>div",
+			"replaceE": ".vui_pagenation--btns",
+			"loadTime": 600,
+			"scrollD": 3000
+		}
+	},
 	"NO视频": {
 		"host": "www.novipnoad.com",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('.html'))",
@@ -3450,18 +3464,18 @@
 		}
 	},
 	"flamescans 漫画": {
-        "host": "flamescans.org",
-        "url": "return fun.getCSS('#readerarea')",
-        "pager": {
-            "type": 3,
-            "nextL": ".ch-next-btn:not(.disabled)",
-            "pageE": "id('readerarea')/p|//script[starts-with(text(),'ts_reader.run(')]",
-            "scriptT": 2,
-            "replaceE": ".nextprev",
-            "scrollE": ".chnav.cbot",
-            "scrollD": 3000
-        }
-    },
+		"host": "flamescans.org",
+		"url": "return fun.getCSS('#readerarea')",
+		"pager": {
+			"type": 3,
+			"nextL": ".ch-next-btn:not(.disabled)",
+			"pageE": "id('readerarea')/p|//script[starts-with(text(),'ts_reader.run(')]",
+			"scriptT": 2,
+			"replaceE": ".nextprev",
+			"scrollE": ".chnav.cbot",
+			"scrollD": 3000
+		}
+	},
 	"起点中文": {
 		"host": "www.qidian.com",
 		"url": "/^\\/(all|rank|finish|free)/",
@@ -5506,7 +5520,7 @@
 	"t66y - 帖子内": {
 		"host": ["t66y.com","www.t66y.com"],
 		"url": "/^\\/(read\\.php|htm_data|htm_mob)/",
-		"style": ".tips {    position: absolute!important; top: -100%!important;}",
+		"style": ".tips {position: absolute!important; top: -100%!important;}",
 		"thread": true,
 		"pager": {
 			"nextL": "//div[@class='pages']/a[text()='下一頁']",
@@ -6533,18 +6547,18 @@
 		}
 	},
 	"微图坊": {
-        "host": ["www.v2ph.com","www.v2ph.net"],
-        "url": "/^\\/album\\//",
-        "style": ".album-photo, .photos-list img {opacity: 1 !important; position: unset !important; padding: 0 !important;}",
-        "pager": {
-            "nextL": ".active.page-item+li>a",
-            "pageE": ".album-photo",
-            "replaceE": ".pagination"
-        },
-        "function": {
-            "bF": "return fun.src_bF(pageE)"
-        }
-    },
+		"host": ["www.v2ph.com","www.v2ph.net"],
+		"url": "/^\\/album\\//",
+		"style": ".album-photo, .photos-list img {opacity: 1 !important; position: unset !important; padding: 0 !important;}",
+		"pager": {
+			"nextL": ".active.page-item+li>a",
+			"pageE": ".album-photo",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"美女目录网": {
 		"host": "www.mnmulu.com",
 		"url": "/^\\/(index|photos)\\//",
