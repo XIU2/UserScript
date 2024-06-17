@@ -31,8 +31,22 @@
 			"replaceE": "#pageFooter"
 		}
 	},
+	"谷歌搜索 - 新闻视频图书": {
+		"host": "/^www\\.google\\./",
+		"url": "return (fun.lp() == '/search' && (fun.indexOF('tbm=nws', 's') || fun.indexOF('tbm=vid', 's') || fun.indexOF('tbm=bks', 's')))",
+		"history": true,
+		"pager": {
+			"nextL": "#pnnext",
+			"pageE": "id('rso')/div | //style[not(contains(text(), 'table,div,span,p{display:none}'))] | //body/script[@nonce][not(@src)][starts-with(text(), '(function(){var s=') or starts-with(text(), '(function(){google.ldi')]",
+			"replaceE": "#botstuff div[role='navigation']",
+			"scriptT": 2
+		},
+		"function": {
+			"bF": "fun.getAllCSS('#rso img[id^=dimg],#rso img[id^=rimg]').forEach(function (img) {img.id = 'old_'+img.id;}); if(!fun.indexOF('tbm=vid', 's')){return pageE}else{pageE.forEach(function (img) {fun.getAllCSS('img[id^=dimg]:not([data-atf])', img).forEach(function (img1) {img1.setAttribute('data-atf', '1');})}); return pageE}"
+		}
+	},
 	"必应搜索 + 手机版": {
-		"host": ["www.bing.com","cn.bing.com","www4.bing.com"],
+		"host": ["www.bing.com","cn.bing.com","www4.bing.com","global.bing.com"],
 		"url": "if (fun.lp() == '/search') {if (fun.isMobile() && document.documentElement.lang != 'zh') {return false;} else {return true;}}",
 		"style": "#b_footer, .b_msg, #bnp_rich_div {display: none !important;}",
 		"history": true,
