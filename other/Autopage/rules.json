@@ -6274,8 +6274,8 @@
 		}
 	},
 	"秀人集": {
-		"host": ["/^www.xr\\d{2}.xyz$/","/\\.xiuren([a-z]|\\d)+\\./"],
-		"url": "return (fun.lp() != '/' && !fun.indexOF('/search/'))",
+		"host": ["/^www.\\d{6}.xyz$/","/^www.xr\\d{2}.xyz$/","/\\.xiuren([a-z]|\\d)+\\./"],
+		"url": "return (fun.isPager() && fun.lp() != '/' && !fun.indexOF('/search/'))",
 		"pager": {
 			"nextL": ".current+a",
 			"pageE": ".content>p, .update_area li.i_list",
@@ -6365,8 +6365,8 @@
 		}
 	},
 	"秀人美女": {
-		"host": "/^www\\.xrmn.+/",
-		"url": "/(^\\/.)|(\\d+\\.html$)/",
+		"host": ["/^www\\.xrmn.+/","/^www.xiu\\d+\\./"],
+		"url": "return (fun.isPager() && fun.indexOF(/(^\\/.)|(\\d+\\.html$)/))",
 		"pager": {
 			"type": 3,
 			"nextL": "a.current+a",
