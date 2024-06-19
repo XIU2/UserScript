@@ -2551,7 +2551,7 @@
 		}
 	},
 	"ACG.RIP": {
-		"host": "acg.rip",
+		"host": ["acg.rip","acgrip.art"],
 		"url": "return (!fun.indexOF('/t/'))",
 		"blank": 3,
 		"pager": {
