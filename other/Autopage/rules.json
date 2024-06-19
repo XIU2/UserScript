@@ -3670,7 +3670,7 @@
 		}
 	},
 	"铅笔小说": {
-		"host": ["www.23qb.com","www.23qb.net"],
+		"host": ["www.23qb.com","www.23qb.net","m.x23qb.com"],
 		"url": "if (fun.indexOF(/\\/book\\/\\d+\\/.+\\.html/)) {fun.xs_bF(fun.getAllCSS('#mlfy_main_text>*'), [/（继续下一页）.+|铅笔小说.+/, '']); return true}",
 		"history": true,
 		"pager": {
@@ -3684,7 +3684,7 @@
 		}
 	},
 	"铅笔小说 - 分类页": {
-		"host": ["www.23qb.com","www.23qb.net"],
+		"host": ["www.23qb.com","www.23qb.net","m.x23qb.com"],
 		"url": "return (fun.lp() != '/' && !fun.indexOF(/\\/book\\/\\d+\\//))",
 		"blank": 3,
 		"pager": {
