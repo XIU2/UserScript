@@ -3743,9 +3743,10 @@
 		"url": "return (fun.indexOF(/\\/novel\\/\\d+\\/.+\\.html/))",
 		"history": true,
 		"pager": {
-			"nextL": "//p[@class='mlfy_page']/a[contains(text(), '下一页') or contains(text(), '下一章')]",
-			"pageE": "#mlfy_main_text>*",
-			"replaceE": "p.mlfy_page"
+			"type": 6,
+			"nextL": "//div[@class='mlfy_page']/a[contains(text(), '下一页') or contains(text(), '下一章')]",
+			"pageE": "#mlfy_main_text>*, head>style",
+			"replaceE": ".mlfy_page"
 		}
 	},
 	"哔哩轻小说 - 文库": {
@@ -3773,17 +3774,18 @@
 		}
 	},
 	"哔哩轻小说 - 手机版": {
-		"host": "w.linovelib.com",
+		"host": "www.bilinovel.com",
 		"url": "/\\/novel\\/\\d+\\/.+\\.html/",
 		"history": true,
 		"pager": {
+			"type": 6,
 			"nextL": "js; if (ReadParams.url_next.slice(ReadParams.url_next.length-5) === '.html') return (location.origin + ReadParams.url_next)",
-			"pageE": "id('apage')/div | //body/script[contains(text(), 'var ReadParams')]",
+			"pageE": "id('apage')/div | //body/script[contains(text(), 'var ReadParams')] | //head/style",
 			"scriptT": 2
 		}
 	},
 	"哔哩轻小说 - 手机版 - 文库": {
-		"host": "w.linovelib.com",
+		"host": "www.bilinovel.com",
 		"url": "/\\/(wenku|sa)\\//",
 		"pager": {
 			"nextL": "#pagelink>strong+a ,#pagelink a.next",
