@@ -5060,6 +5060,15 @@
 			"replaceE": ".h-pages"
 		}
 	},
+	"逛丢 - 分类/搜索页": {
+		"host": "guangdiu.com",
+		"url": "/^\\/($|\\?|index\\.|cate\\.|search\\.)/",
+		"pager": {
+			"nextL": "#nextpage",
+			"pageE": ".gooditem",
+			"replaceE": ".page"
+		}
+	},
 	"APSGO 软购": {
 		"host": "apsgo.com",
 		"url": "/^\\/search/",
