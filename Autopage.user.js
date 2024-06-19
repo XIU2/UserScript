@@ -2696,7 +2696,7 @@ function: {
 <pre style="white-space: pre-wrap;user-select: auto;">
 // 下面示例是把所有规则都塞进去了，但实际上大部分都用不上，大多数网站只需要像第一个 "aaa" 这样的规则（replaceE 规则可以省略，脚本会自动判断）
 // "aaa" 是规则名，唯一！如果和 外置规则名 重复，则会将完全覆盖同名的外置规则，支持中文等各种字符
-// "url" 是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站
+// "url" 是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站（如果不知道写什么，那么就写 fun.isPager() 这样脚本会自动匹配当前网站下存在 nextL 及 pageE 元素的网页，大部分网站是没问题的）
 // "replaceE" 省略后将会自动判断是替换 nextL 元素还是 nextL 的父元素（当 nextL 元素后面或前面有 <a> 的相邻兄弟元素时替换其父元素，反之替换其自身，仅限模式1/3/6，且 js 代码除外），值为空 "" 时则完全不替换
 // "scrollD" 是用来控制翻页敏感度的（越大就越早触发翻页，访问速度慢的网站需要调大，可省略(注意逗号)，默认 2000）
 
@@ -2740,6 +2740,16 @@ function: {
         "function": {
             "bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])",
             "aF": "document.body.appendChild(document.createElement('script')).textContent = 'xxx'"
+        }
+    },
+    "如果 url 不会写，那就直接写 fun.isPager() 这样脚本会自动匹配当前网站下存在 nextL 及 pageE 元素的网页": {
+        "host": "cccc",
+        "url": "fun.isPager()",
+        "pager": {
+            "nextL": "xxxx",
+            "pageE": "xxxx",
+            "replaceE": "xxxx",
+            "scrollD": 2000
         }
     },
     "这里也可以用中文": {
