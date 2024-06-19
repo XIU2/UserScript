@@ -6068,6 +6068,16 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
 		}
 	},
+	"acgmhs.com": {
+		"host": "acgmhs.com",
+		"url": "return fun.isPager()",
+		"style": ".pre_picture,.next_picture",
+		"pager": {
+			"nextL": ".page>span+a:not(.a1)",
+			"pageE": ".manga-picture>picture, #list>li",
+			"replaceE": ".page"
+		}
+	},
 	"E-Hentai": {
 		"host": ["e-hentai.org","exhentai.org"],
 		"url": "if(fun.getCSS('.itg,#gdt,#img')){setTimeout(()=>{window.nl=()=>{return false}},2000);return true}",
