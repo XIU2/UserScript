@@ -1436,7 +1436,7 @@
 		"host": "www.ztupic.com",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/sucai/'))",
 		"pager": {
-			"nextL": "a.page-link[rel='next']",
+			"nextL": "li.page-item.active+li.page-item>a[href]",
 			"pageE": ".floor_item",
 			"replaceE": "ul.pagination"
 		},
