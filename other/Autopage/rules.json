@@ -1198,6 +1198,15 @@
 			"replaceE": ".pagingControl"
 		}
 	},
+	"nodeseek": {
+		"host": "www.nodeseek.com",
+		"url": "return fun.isPager()",
+		"pager": {
+			"nextL": "a.pager-next",
+			"pageE": "li.post-list-item, li.content-item",
+			"replaceE": ".nsk-pager"
+		}
+	},
 	"Pixiv - 分类页": {
 		"host": "www.pixiv.net",
 		"url": "fun.isUrlC(); if (fun.isMobile()) {return false}; if (fun.lp() == '/') {fun.blank();} else if (fun.indexOF('/tags/')) {return true;} else if (fun.indexOF('/artworks/')) {setTimeout(()=>{fun.getXpath('//button[contains(string(), \"查看全部\") or contains(string(), \"See all\") or contains(string(), \"すべて見る\") or contains(string(), \"모두 보기\")]').click();},3000)}",
