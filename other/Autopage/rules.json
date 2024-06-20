@@ -5866,6 +5866,18 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"avtop10": {
+		"host": "avtop10.com",
+		"url": "return fun.isPager()",
+		"pager": {
+			"nextL": "#nextUrl",
+			"pageE": ".item-new>div",
+			"replaceE": ".page-box"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"UraakaList": {
 		"host": "uraakalist.com",
 		"url": "/^\\/.+/",
@@ -5971,6 +5983,19 @@
 			"nextL": ".next",
 			"pageE": ".thumb-list>div",
 			"replaceE": ".content>.pagination"
+		}
+	},
+	"rule34video": {
+		"host": "rule34video.com",
+		"url": "return (!fun.indexOF('/search')&&fun.isPager())",
+		"blank": 3,
+		"pager": {
+			"nextL": ".next>a",
+			"pageE": ".thumbs>.thumb",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"hanime1": {
@@ -6301,6 +6326,28 @@
 		"pager": {
 			"nextL": ".current+a",
 			"pageE": "article.post"
+		}
+	},
+	"福利姬美图": {
+		"host": "fuligirl.top",
+		"url": "return fun.isPager()",
+		"pager": {
+			"type": 3,
+			"nextL": "a[rel=next]",
+			"pageE": "img.my-1, #main>.grid>div",
+			"replaceE": "nav[role=navigation]"
+		}
+	},
+	"xiutaku": {
+		"host": "xiutaku.com",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"type": 3,
+			"nextL": "//a[@class='pagination-link is-current']/../following-sibling::*[1]/a",
+			"pageE": ".article-fulltext>p, .main-body>.blog.columns",
+			"replaceE": ".pagination",
+			"scrollE": ".article-fulltext+hr, .pagination.is-small"
 		}
 	},
 	"秀人集": {
