@@ -3796,6 +3796,16 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"必读推荐": {
+		"host": "www.bidutuijian.com",
+		"url": "/^\\/books\\/.+\\/(?:(?!0000)\\d{4})\\.html/",
+		"style": ".row",
+		"pager": {
+			"nextL": ".nav>span>a:last-of-type:not([href='#'])",
+			"pageE": "#main>.main1:nth-child(3)>p",
+			"replaceE": ".nav"
+		}
+	},
 	"晋江文学城": {
 		"host": "www.jjwxc.net",
 		"url": "/chapterid=/",
