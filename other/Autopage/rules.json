@@ -3715,7 +3715,7 @@
 			"replaceE": ".mlfy_page"
 		},
 		"function": {
-			"bF": "if(pageE[0].tagName=='STYLE'){pageE[pageE.length-1].style='font-family: read !important;';pageE[0].textContent.replace('#TextContent p:last-of-type','666')}; return pageE",
+			"bF": "if(pageE[0].tagName=='STYLE'){pageE[pageE.length-1].style='font-family: read !important;';pageE[0].textContent=pageE[0].textContent.replace(' p:last-of-type','666')}; return pageE",
 			"aF": "document.body.appendChild(document.createElement('script')).textContent='yuedu()'"
 		}
 	},
@@ -3753,7 +3753,7 @@
 			"scriptT": 2
 		},
 		"function": {
-			"bF": "if(pageE[0].tagName=='STYLE'){pageE[pageE.length-2].style='font-family: read !important;';pageE[0].textContent.replace('#TextContent p:last-of-type','666')}; return pageE"
+			"bF": "if(pageE[0].tagName=='STYLE'){pageE[pageE.length-2].style='font-family: read !important;';pageE[0].textContent=pageE[0].textContent.replace(' p:last-of-type','666')}; return pageE"
 		}
 	},
 	"哔哩轻小说 - 手机版 - 文库": {
