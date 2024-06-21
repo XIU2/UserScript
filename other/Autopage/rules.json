@@ -427,7 +427,7 @@
 		"thread": true,
 		"pager": {
 			"nextL": "link[rel='next']",
-			"pageE": ".comment-item",
+			"pageE": ".comment-item, .list>ul>li",
 			"replaceE": ".paginator",
 			"scrollD": 2500
 		}
