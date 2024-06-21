@@ -6085,8 +6085,8 @@
 			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
 		}
 	},
-	"acgmhs.com": {
-		"host": "acgmhs.com",
+	"ACG漫画网": {
+		"host": ["acgmhs.com","www.acgmhs.com"],
 		"url": "return fun.isPager()",
 		"style": ".pre_picture,.next_picture",
 		"pager": {
