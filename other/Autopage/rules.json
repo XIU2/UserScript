@@ -2677,6 +2677,16 @@
 			"replaceE": ".search_stat"
 		}
 	},
+	"BTDig": {
+		"host": "btdig.com",
+		"url": "/^\\/search/",
+		"blank": 3,
+		"pager": {
+			"nextL": "//div[@style='display:table-cell;text-align:right']//a[contains(text(),'→')]",
+			"pageE": "div[style='display:table;width:100%;text-align:left']>div",
+			"replaceE": "div[style='display:table-cell;text-align:right']"
+		}
+	},
 	"DirtyWarez": {
 		"host": "forum.dirtywarez.com",
 		"url": "/^\\/forums\\//",
