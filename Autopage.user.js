@@ -466,7 +466,7 @@
     hiddenPN:    不显示脚本左下角的页码
     history:     添加历史记录 并 修改当前 URL（默认开启，对于不支持的网站要设置为 false）
     thread:      对于社区类网站，要在 帖子内 的规则中加入这个，用于脚本的 [帖子内自动翻页] 功能（即用户可以选择开启/关闭所有社区类网站帖子内的自动翻页）
-    style:       要插入网页的 CSS Style 样式
+    style:       要插入网页的 CSS Style 样式，当只需要单纯屏蔽部分网页元素时，可以只写 CSS 选择器省略掉 {display: none !important;}
     retry:       允许获取失败后重试
     blank:       强制新标签页打开链接
        1 = 网页 <head> 添加 <base target="_blank"> 来让所有链接默认新标签页打开（对已单独指定 target 或已监听点击事件的元素无效）
@@ -2720,7 +2720,7 @@ function: {
     "bbb": {
         "host": ["bbb1.com", "bbb2.com"],
         "url": "/^\\/s$/",
-        "style": ".aaaa {display: none !important;}",
+        "style": ".aaaa {xxx: xxx}（如果只是为了单纯屏蔽隐藏某些元素，那么这里只需要写 CSS 选择器即可，脚本会自动在末尾加上 {display: none !important;} 的）",
         "blank": 3,
         "hiddenPN": true,
         "history": false,
