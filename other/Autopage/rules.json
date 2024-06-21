@@ -2510,6 +2510,11 @@
 			"scriptT": 2
 		}
 	},
+	"蜜柑计划 - Mikan - 搜索页": {
+		"host": "mikanani.me",
+		"url": "if(fun.indexOF(/^\\/Home\\/Search/)){fun.insStyle('.js-search-results-row {display: table-row !important;}');return true;}",
+		"hiddenPN": true
+	},
 	"扶她动漫": {
 		"host": ["futaacg.com", "www.futaacg.com"],
 		"pager": {
