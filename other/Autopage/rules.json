@@ -6380,6 +6380,31 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"美图乐": {
+		"host": "meitulu.cc",
+		"url": "return fun.isPager()",
+		"style": ".list-img img{opacity: 1 !important;}",
+		"blank": 3,
+		"pager": {
+			"type": 3,
+			"nextL": ".page-item.active+li.page-none>a",
+			"pageE": ".content img, header+.list>ul>li",
+			"replaceE": ".page"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
+	"M5MM": {
+		"host": "www.m5mm.com",
+		"url": "return fun.isPager()",
+		"pager": {
+			"type": 3,
+			"nextL": "a.current+a",
+			"pageE": ".vipimglist img",
+			"replaceE": ".page_navi"
+		}
+	},
 	"宅男女神": {
 		"host": ["www.gnvshen.com","www.fnvshen.com","www.haonvshen.com"],
 		"url": "/^\\/(g|gallery|tag)\\//",
