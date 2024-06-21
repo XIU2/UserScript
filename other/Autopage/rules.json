@@ -6468,6 +6468,16 @@
 			"replaceE": ".page"
 		}
 	},
+	"美人图": {
+		"host": "/^meirentu\\..+/",
+		"url": "return fun.isPager()",
+		"pager": {
+			"type": 3,
+			"nextL": "a.current+a",
+			"pageE": ".content_left img, .update_area ul.update_area_lists>li",
+			"replaceE": ".page"
+		}
+	},
 	"精品美女吧": {
 		"host": ["www.jpmnb.com","www.jpmnb.net","www.jpmn8.com"],
 		"url": "/(^\\/.)|(\\d+\\.html$)/",
