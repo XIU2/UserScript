@@ -2614,20 +2614,6 @@
 			"replaceE": ".pagination"
 		}
 	},
-	"RARBG": {
-		"host": "/rarbg/",
-		"url": "if(fun.isTitle('RARBG') && fun.lp() == '/torrents.php'){fun.getAllCSS('table.lista2t tr.lista2 td>a[onmouseover]').forEach((now)=>{now.parentElement.setAttribute('onmouseover', now.getAttribute('onmouseover')); now.removeAttribute('onmouseover');now.parentElement.setAttribute('onmouseout', now.getAttribute('onmouseout')); now.removeAttribute('onmouseout');}); fun.getAllCSS('.lista2t td.header>a').forEach((a)=>{a.setAttribute('onclick','1')}); return true}",
-		"style": "body{background-repeat-y: repeat;}",
-		"blank": 3,
-		"pager": {
-			"nextL": "#pager_links>a[title='next page']",
-			"pageE": "table.lista2t tr.lista2",
-			"replaceE": "#pager_links"
-		},
-		"function": {
-			"bF": "pageE.forEach((one)=>{let now=fun.getCSS('td>a[onmouseover]',one);if(now){now.parentElement.setAttribute('onmouseover', now.getAttribute('onmouseover')); now.removeAttribute('onmouseover');now.parentElement.setAttribute('onmouseout', now.getAttribute('onmouseout')); now.removeAttribute('onmouseout');};});return pageE"
-		}
-	},
 	"TheRARBG": {
 		"host": "therarbg.to",
 		"url": "if(fun.indexOF('/get-posts/')){fun.cleanuEvent('thead.table1head',500);return true}",
