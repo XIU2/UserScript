@@ -5840,6 +5840,16 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"GGBases": {
+		"host": "www.ggbases.com",
+		"url": "return fun.isPager()",
+		"pager": {
+			"nextL": "li[class*=pfhover]+li>a",
+			"pageE": "tr.dtr, head>style",
+			"replaceE": "div[class^=pages]",
+			"scriptT": 1
+		}
+	},
 	"UraakaList": {
 		"host": "uraakalist.com",
 		"url": "/^\\/.+/",
