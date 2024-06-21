@@ -5133,6 +5133,16 @@
 			"replaceE": "ul.pagination"
 		}
 	},
+	"WallpapersCraft": {
+		"host": "wallpaperscraft.com",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".pager__item_selected+li>a",
+			"pageE": ".wallpapers__item",
+			"replaceE": ".pager"
+		}
+	},
 	"Anime Pictures": {
 		"host": "anime-pictures.net",
 		"url": "return (fun.indexOF('/pictures/') && !fun.indexOF('/view_post/'))",
