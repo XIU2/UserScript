@@ -62,7 +62,7 @@
 
 ****
 
-## Tampermonkey v5.0.0 后某脚本无法正常运行？
+## Tampermonkey `v5.0.0` 后某脚本无法正常运行？
 
 Tampermonkey 为了顺应 Chrome 的 Manifest V3 要求，在 v5.0.0 版本中修改了 CSP 相关选项的默认值。
 
@@ -71,6 +71,12 @@ Tampermonkey 为了顺应 Chrome 的 Manifest V3 要求，在 v5.0.0 版本中�
 
 > [!CAUTION]
 > 且用且珍惜吧，随着 Manifest V3 限制，未来 广告过滤、油猴 等等扩展都会被限制功能，束手束脚。。
+
+****
+
+## Tampermonkey `v5.2.0` 后脚本无法正常运行？
+
+因为其 v5.2.0 版本转为了 Manifest V3，所以需要在浏览器的**扩展管理**界面**启用 `开发者模式`** 才能正常运行脚本！
 
 ****
 
