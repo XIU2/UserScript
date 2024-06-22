@@ -2652,6 +2652,33 @@
 			"pageE": ".movie-grid>*,.search-result"
 		}
 	},
+	"MagnetDL": {
+		"host": "www.magnetdl.com",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "id('pages')/a[contains(text(),'>')]",
+			"pageE": ".download>tbody>tr:not(:nth-last-child(-n+2))"
+		}
+	},
+	"Knaben": {
+		"host": "knaben.eu",
+		"url": "/^\\/(search|browse)\\//",
+		"blank": 3,
+		"pager": {
+			"nextL": "#nextPage",
+			"pageE": "tbody>tr"
+		}
+	},
+	"idope": {
+		"host": "/^idope\\..+/",
+		"url": "/^\\/torrent-list\\//",
+		"pager": {
+			"nextL": "js; return fun.getNextEP('.page[style]+.page','p=', /p=\\d+/)",
+			"pageE": ".resultdiv",
+			"replaceE": "#div3"
+		}
+	},
 	"Kickass Torrents": {
 		"host": ["kickasss.to","katcr.to"],
 		"url": "return (fun.lp() != '/' && !fun.indexOF('.html') && !fun.indexOF('/popular'))",
