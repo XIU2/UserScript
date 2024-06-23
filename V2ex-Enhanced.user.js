@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         V2EX 增强
-// @version      1.2.1
+// @version      1.2.2
 // @author       X.I.U
 // @description  自动签到、链接转图片、自动无缝翻页、使用 SOV2EX 搜索、回到顶部（右键点击两侧空白处）、快速回复（左键双击两侧空白处）、新标签页打开链接、标签页伪装为 Github（摸鱼）
 // @match        *://v2ex.com/*
@@ -261,7 +261,7 @@
     // 后台获取签到状态（并判断是否需要签到）
     function qianDaoStatus_(timeNow) {
         GM_xmlhttpRequest({
-            url: 'https://www.v2ex.com/mission/daily',
+            url: location.origin + '/mission/daily',
             method: 'GET',
             timeout: 5000,
             onload: function (response) {
