@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.7
+// @version      6.6.8
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、煎蛋网、龙的天空、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -331,8 +331,11 @@
                 DBSite.wp_article.pager.nextL = '.nav-previous a, a.nav-previous'
             } else if (getCSS('.pagination>.page-item.active+li.page-item>a')) {
                 DBSite.wp_article.pager.nextL = '.pagination>.page-item.active+li.page-item>a'
-            } else if (getXpath('//a[contains(text(), "下一页") or contains(text(), "下一頁") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]', getCSS('#nav-below, nav.navigation, nav.paging-navigation, .pagination:not([class*="entry"]), .wp-pagenavi, .pagenavi, nav[role="navigation"]'))) {
-                DBSite.wp_article.pager.nextL = '//*[self::ul or self::nav or self::div][@id="nav-below" or contains(@class, "navigation") or contains(@class, "pagination") or contains(@class, "pagenavi") or @role="navigation"]//a[contains(text(), "下一页") or contains(text(), "下一頁") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]'
+            } else {
+                const temp_page = getCSS('#nav-below, nav.navigation, nav.paging-navigation, #pagination:not([class*="entry"]), .pagination:not([class*="entry"]), .wp-pagenavi, .pagenavi, nav[role="navigation"]')
+                if (temp_page && getXpath('//a[contains(text(), "下一页") or contains(text(), "下一頁") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]', temp_page)) {
+                    DBSite.wp_article.pager.nextL = '//*[self::ul or self::nav or self::div][@id="nav-below" or @id="pagination" or contains(@class, "navigation") or contains(@class, "pagination") or contains(@class, "pagenavi") or @role="navigation"]//a[contains(text(), "下一页") or contains(text(), "下一頁") or contains(text(), ">") or contains(text(), "next") or contains(text(), "Next") or contains(text(), "NEXT")]'
+                }
             }
 
             if (DBSite.wp_article.pager.nextL != undefined) {
@@ -555,7 +558,7 @@ function: {
                 style: 'img[data-src], img[data-original] {opacity: 1 !important;}',
                 blank: 3,
                 pager: {
-                    replaceE: '#nav-below, nav.navigation, nav.paging-navigation, .pagination:not([class*="entry"]), .wp-pagenavi, .pagenavi, nav[role="navigation"], ul[class*="-pagination"]',
+                    replaceE: '#nav-below, nav.navigation, nav.paging-navigation, #pagination:not([class*="entry"]), .pagination:not([class*="entry"]), .wp-pagenavi, .pagenavi, nav[role="navigation"], ul[class*="-pagination"]',
                     forceHTTPS: true,
                     scrollD: 3000
                 },
