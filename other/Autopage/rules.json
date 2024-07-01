@@ -3846,6 +3846,16 @@
 			"replaceE": "#main ul.navigation, #feedback>ul.actions"
 		}
 	},
+	"红袖招": {
+		"host": "hongxiuzhao.org",
+		"url": "return (fun.getCSS('.pager')&&fun.getCSS('.article-content'))",
+		"style": ".article-content>*:not(p:not([style])):not(h1),.browser_tips",
+		"pager": {
+			"nextL": "//div[@class='pager']/a[contains(text(),'下一页')]",
+			"pageE": ".article-content>p:not([style]):not(:last-of-type)",
+			"replaceE": ".pager"
+		}
+	},
 	"蓝鲨": {
 		"host": "www.lan-sha.com",
 		"url": "return (!fun.indexOF('.html'))",
