@@ -1189,6 +1189,16 @@
 			"replaceE": ".pagination:not(#breadcrumb_multipage_popup)"
 		}
 	},
+	"ptt.cc": {
+		"host": "www.ptt.cc",
+		"url": "/^\\/bbs\\/.+\\/index/",
+		"blank": 3,
+		"pager": {
+			"nextL": "//a[@class='btn wide'][contains(text(),'‹')]",
+			"pageE": ".r-ent",
+			"replaceE": ".btn-group-paging"
+		}
+	},
 	"Microsoft Community - 帖子内": {
 		"host": "answers.microsoft.com",
 		"url": "/\\/forum\\/all\\//",
