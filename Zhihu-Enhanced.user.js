@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.3.3
+// @version      2.3.4
 // @author       X.I.U
 // @description  屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容/热榜杂项、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认站外直链...
 // @description:zh-TW  屏蔽首頁視頻、默認收起回答、快捷收起回答/評論、快捷回到頂部、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化搜索熱門、淨化標題消息、默認高清原圖（無水印）、置頂顯示時間、完整問題時間、區分問題文章、默認站外直鏈...
@@ -454,7 +454,7 @@ function blockUsers(type) {
             break;
     }
     blockUsers_comment(); //       评论区
-    blockUsers_button(); //        加入黑名单按钮
+    blockUsers_button(); //        加入黑名单按钮（用户信息悬浮框中）
 
     function blockUsers_(className1, className2) {
         // 前几条因为是直接加载的，而不是动态插入网页的，所以需要单独判断
@@ -613,18 +613,20 @@ function blockUsers(type) {
             for (const mutation of mutationsList) {
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType != 1) return
-                    let item = target.querySelector('img.Avatar[width="24"]')
-                    if (item) {
-                        //console.log(item)
-                        menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
-                            //console.log(item.alt,item1)
-                            if (item.alt === item1) { // 找到就删除该搜索结果
-                                item.parentElement.parentElement.style.display = "none";
-                            }
-                        })
+                    //console.log(target)
+                    if (target.tagName == 'DIV' && target.className.indexOf('css-') == 0 && target.dataset.id == undefined) {
+                        let item = target.querySelector('a[href^="https://www.zhihu.com/people/"]>img.Avatar[alt][loading]')
+                        if (item) {
+                            //console.log(item)
+                            menu_value('menu_customBlockUsers').forEach(function(item1){ // 遍历用户黑名单
+                                if (item.alt === item1) { // 找到就删除该搜索结果
+                                    //console.log(item.alt,item1)
+                                    item.parentElement.parentElement.parentElement.parentElement.style.display = "none";
+                                }
+                            })
 
-                        // 添加屏蔽用户按钮（点赞、回复等按钮后面）
-                        /*if (item) {
+                            // 添加屏蔽用户按钮（点赞、回复等按钮后面）
+                            /*if (item) {
                             let footer = findParentElement(item, 'CommentItemV2-meta', true).parentElement.querySelector('.CommentItemV2-metaSibling > .CommentItemV2-footer'),
                                 userid = item.parentElement;
                             if (userid && footer && !footer.lastElementChild.dataset.name) {
@@ -633,6 +635,7 @@ function blockUsers(type) {
                                 footer.lastElementChild.onclick = function(){blockUsers_button_add(this.dataset.name, this.dataset.userid, false)}
                             }
                         }*/
+                        }
                     }
                 }
             }
@@ -844,23 +847,17 @@ function blockKeywords(type) {
 
     function blockKeywords_comment() {
         function filterComment(comment) {
-            let content = comment.querySelector('.RichText'); // 寻找评论文字所在元素
-            let texts = [content.textContent.toLowerCase()]; // 因为要针对评论中的表情，所以需要整个数组并全部转为小写（用来不区分大小写）
-            for (let i = 0; i < content.children.length; i++) { // 该条针对的是评论中的表情
-                let emoticonValue = content.children[i].getAttribute('data-zhihu-emoticon'); // 确定是表情就将其添加到稍后遍历的数组中
-                if (emoticonValue) {
-                    texts.push(emoticonValue)
-                }
-            }
+            let content = comment.querySelector('.CommentContent'); // 寻找评论文字所在元素
+            let text = content.textContent.toLowerCase(); // 全部转为小写（用来不区分大小写）
+            content.querySelectorAll('img.sticker[alt]').forEach((img)=>{text += img.alt}) // 将评论中的表情添加到待遍历的评论文字中
 
             let keywords = menu_value('menu_customBlockKeywords');
-            for (const text of texts) {
-                for (const keyword of keywords) { // 遍历关键词黑名单
-                    if (keyword != '' && text.indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该评论
-                        console.log('已屏蔽评论：' + text);
-                        content.textContent = '[该评论已屏蔽]';
-                        break;
-                    }
+            for (const keyword of keywords) { // 遍历关键词黑名单
+                if (keyword != '' && text.indexOf(keyword.toLowerCase()) > -1) { // 找到就删除该评论
+                    console.log('已屏蔽评论：' + text);
+                    content.dataset.text = content.innerHTML
+                    content.onclick = (e)=>{if (e.target.dataset.text) {e.target.innerHTML = e.target.dataset.text;e.target.removeAttribute('data-text');}}
+                    content.textContent = '[该评论已屏蔽，可点击显示]';
                 }
             }
         }
@@ -869,9 +866,21 @@ function blockKeywords(type) {
             for (const mutation of mutationsList) {
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType != 1) return
-                    for (const node of target.querySelectorAll('*')) {
-                        if (node.className === 'CommentItemV2-metaSibling') filterComment(node);
+                    //console.log(target);
+                    if (target.tagName == 'DIV' && target.className.indexOf('css-') == 0 && target.dataset.id == undefined) {
+                        let item = target.querySelector('a[href^="https://www.zhihu.com/people/"]>img.Avatar[alt][loading]')
+                        if (item) {
+                            //console.log(item)
+                            filterComment(item.parentElement.parentElement.parentElement.parentElement)
+                        }
                     }
+
+                    /*if (target.tagName == 'DIV' && target.dataset.id !== undefined) {
+                        console.log(target);
+                        for (const node of target.querySelectorAll('*')) {
+                            if (node.className === 'CommentItemV2-metaSibling') filterComment(node);
+                        }
+                    }*/
                 }
             }
         };
