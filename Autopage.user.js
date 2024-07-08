@@ -2724,17 +2724,21 @@ function: {
 </ul>
 <pre class="notranslate" style="white-space: pre-wrap;user-select: auto;">
 // 下面示例是把所有规则都塞进去了，但实际上大部分都用不上，大多数网站只需要像第一个 "aaa" 这样的规则（replaceE 规则可以省略，脚本会自动判断）
-// "aaa" 是规则名，唯一！如果和 外置规则名 重复，则会将完全覆盖同名的外置规则，支持中文等各种字符
-// "url" 是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站（如果不知道写什么，那么就写 return fun.isPager() 这样脚本会默认自动匹配当前网站下存在 nextL 及 pageE 元素的网页，大部分网站是没问题的，如果改为匹配 replaceE 或者其他组合，那么请去上面的 Github Issues 里查看使用方法）
-// "replaceE" 省略后将会自动判断是替换 nextL 元素还是 nextL 的父元素（当 nextL 元素后面或前面有 <a> 的相邻兄弟元素时替换其父元素，反之替换其自身，仅限模式1/3/6，且 js 代码除外），值为空 "" 时则完全不替换
-// "scrollD" 是用来控制翻页敏感度的（越大就越早触发翻页，访问速度慢的网站需要调大，可省略(注意逗号)，默认 2000）
 
-// "inherits" 是继承标识，当你只需要对某个外置规则中 增删改 部分规则内容时（比如只是修改域名），那么就可以像下面第二个 "aaa" 规则一样写一个同名规则，规则内只有要修改的 host，以及 inherits 标识，这样脚本就会将外置规则中的 host 替换为自定义规则中的 host，其他规则则不变。即更灵活了，无需每次为了修改部分规则而去复制全部规则了，也不用担心我后续更新这个外置规则后，你还需要再次复制一遍来修改。。。
+// "aaa"       是规则名，唯一，因为 自定义翻页规则 优先级最高，所以会覆盖同名的 外置翻页规则
+
+// "url"       是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站（如果不知道写什么，那么就写 return fun.isPager() 这样脚本会默认自动匹配当前网站下存在 nextL 及 pageE 元素的网页，大部分网站是没问题的，如果改为匹配 replaceE 或者其他组合，那么请去下面的 Github Issues 里的 内置函数 中查看具体使用方法）
+
+// "replaceE"  省略后将会自动判断是替换 nextL 元素还是 nextL 的父元素（当 nextL 元素后面或前面有 <a> 的相邻兄弟元素时替换其父元素，反之替换其自身，仅限模式1/3/6，且 js 代码除外），值为空 "" 时则完全不替换
+
+// "scrollD"   是用来控制翻页敏感度的（越大就越早触发翻页，访问速度慢的网站需要调大，可省略(记得移除上一行末尾逗号)，省略后默认 2000）
+
+// "inherits"  是继承标识，当你只需要对某个外置规则中 增删改 部分规则内容时（比如只是修改域名），那么就可以像下面第二个 "aaa" 规则一样写一个同名规则，规则内只有要修改的 host，以及 inherits 标识，这样脚本就会将外置规则中的 host 替换为自定义规则中的 host，其他规则则不变。即更灵活了，无需每次为了修改部分规则而去复制全部规则了，也不用担心我后续更新这个外置规则后，你还需要再次复制一遍来修改。。。
 
 {
     "aaa": {
         "host": "aaaa",
-        "url": "xxxx",
+        "url": "return fun.isPager()",
         "pager": {
             "nextL": "xxxx",
             "pageE": "xxxx",
@@ -2768,17 +2772,8 @@ function: {
         },
         "function": {
             "bF": "return fun.src_bF(pageE, [0,'img[data-src]','data-src'])",
+            "bFp": "关于上面这个解决图片懒加载的 bF，如果你要选择的图片是 img[data-original] 或 img[data-src]，那么是可以直接省略为：return fun.src_bF(pageE)",
             "aF": "document.body.appendChild(document.createElement('script')).textContent = 'xxx'"
-        }
-    },
-    "如果 url 不会写，那就直接写 return fun.isPager() 这样脚本会默认自动匹配当前网站下存在 nextL 及 pageE 元素的网页": {
-        "host": "cccc",
-        "url": "return fun.isPager()",
-        "pager": {
-            "nextL": "xxxx",
-            "pageE": "xxxx",
-            "replaceE": "xxxx",
-            "scrollD": 2000
         }
     },
     "这里也可以用中文": {
