@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.10
+// @version      6.6.11
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -2719,13 +2719,13 @@ function: {
 <details><summary style="cursor: pointer;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><kbd><strong>「 点击展开 查看规则示例 」（为了避免需要的时候还要找，我干脆把常用规则都一股脑塞进去了）</strong></kbd></summary>
 <ul style="list-style: disc; margin-left: 35px;">
 <li>翻页规则为 JSON 格式，因此大家需要多少<strong>了解一点 JSON 的基本格式</strong>（主要就是逗号、转义、双引号等）。</li>
-<li>具体的翻页规则说明、示例，为了方便更新及补充，我都写到 <strong><a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github</a></strong> 里面了。</li>
+<li>具体的翻页规则说明、示例，为了方便更新及补充，我都写到 <strong><a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github Issues</a></strong> 里面了。</li>
 <li>脚本会自动格式化规则，因此<strong>无需手动缩进、换行</strong>，只需把规则<strong>插入默认的 { } 中间</strong>即可。</li>
 </ul>
 <pre class="notranslate" style="white-space: pre-wrap;user-select: auto;">
 // 下面示例是把所有规则都塞进去了，但实际上大部分都用不上，大多数网站只需要像第一个 "aaa" 这样的规则（replaceE 规则可以省略，脚本会自动判断）
 // "aaa" 是规则名，唯一！如果和 外置规则名 重复，则会将完全覆盖同名的外置规则，支持中文等各种字符
-// "url" 是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站（如果不知道写什么，那么就写 fun.isPager() 这样脚本会自动匹配当前网站下存在 nextL 及 pageE 元素的网页，大部分网站是没问题的）
+// "url" 是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站（如果不知道写什么，那么就写 return fun.isPager() 这样脚本会默认自动匹配当前网站下存在 nextL 及 pageE 元素的网页，大部分网站是没问题的，如果改为匹配 replaceE 或者其他组合，那么请去上面的 Github Issues 里查看使用方法）
 // "replaceE" 省略后将会自动判断是替换 nextL 元素还是 nextL 的父元素（当 nextL 元素后面或前面有 <a> 的相邻兄弟元素时替换其父元素，反之替换其自身，仅限模式1/3/6，且 js 代码除外），值为空 "" 时则完全不替换
 // "scrollD" 是用来控制翻页敏感度的（越大就越早触发翻页，访问速度慢的网站需要调大，可省略(注意逗号)，默认 2000）
 
@@ -2771,9 +2771,9 @@ function: {
             "aF": "document.body.appendChild(document.createElement('script')).textContent = 'xxx'"
         }
     },
-    "如果 url 不会写，那就直接写 fun.isPager() 这样脚本会自动匹配当前网站下存在 nextL 及 pageE 元素的网页": {
+    "如果 url 不会写，那就直接写 return fun.isPager() 这样脚本会默认自动匹配当前网站下存在 nextL 及 pageE 元素的网页": {
         "host": "cccc",
-        "url": "fun.isPager()",
+        "url": "return fun.isPager()",
         "pager": {
             "nextL": "xxxx",
             "pageE": "xxxx",
