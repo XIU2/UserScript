@@ -6507,6 +6507,14 @@
 			"replaceE": ".page_navi"
 		}
 	},
+	"爱看美女": {
+        "host": ["ikmn.cc","www.ikmn.cc","/^(www\\.)?ikmn\\d{2}\\.xyz$/"],
+        "url": "return fun.isPager()",
+        "pager": {
+            "nextL": "a.current+a",
+            "pageE": ".info-imtg-box>p"
+        }
+    },
 	"宅男女神": {
 		"host": ["www.gnvshen.com","www.fnvshen.com","www.haonvshen.com"],
 		"url": "/^\\/(g|gallery|tag)\\//",
