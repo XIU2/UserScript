@@ -6745,7 +6745,7 @@
 		}
 	},
 	"微图坊": {
-		"host": ["www.v2ph.com","www.v2ph.net"],
+		"host": "/^www\\.v2ph\\.[a-z]+$/",
 		"url": "/^\\/album\\//",
 		"style": ".album-photo, .photos-list img {opacity: 1 !important; position: unset !important; padding: 0 !important;}",
 		"pager": {
