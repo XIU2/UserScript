@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.5.26
+// @version      2.5.27
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)、添加 git clone 命令
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)
@@ -24,6 +24,7 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_notification
+// @grant        GM_setClipboard
 // @grant        window.onurlchange
 // @sandbox      JavaScript
 // @license      GPL-3.0 License
@@ -280,6 +281,9 @@
             html_parent = '<div style="margin-top: 4px;" class="XIU2-GC ' + html.parentElement.className + '">',
             url = '', _html = '', _gitClone = '';
         html.nextElementSibling.hidden = true; // 隐藏右侧复制按钮（考虑到能直接点击复制，就不再重复实现复制按钮事件了）
+        if (html.parentElement.nextElementSibling.tagName === 'SPAN'){
+            html.parentElement.nextElementSibling.textContent += ' (↑点击上面文字可复制)'
+        }
         if (GM_getValue('menu_gitClone')) {_gitClone='git clone '; html.value = _gitClone + html.value; html.setAttribute('value', html.value);}
         // 克隆原 Git Clone 元素
         let html_clone = html.cloneNode(true);
@@ -294,6 +298,10 @@
             _html += html_parent + html_clone.outerHTML + '</div>'
         }
         html.parentElement.insertAdjacentHTML('afterend', _html);
+        if (html.parentElement.parentElement.className.indexOf('XIU2-GCP') === -1){
+            html.parentElement.parentElement.classList.add('XIU2-GCP')
+            html.parentElement.parentElement.addEventListener('click', (e)=>{if (e.target.tagName === 'INPUT') {GM_setClipboard(e.target.value);}})
+        }
     }
 
 
@@ -304,6 +312,9 @@
             html_parent = '<div style="margin-top: 4px;" class="XIU2-GCS ' + html.parentElement.className + '">',
             url = '', _html = '', _gitClone = '';
         html.nextElementSibling.hidden = true; // 隐藏右侧复制按钮（考虑到能直接点击复制，就不再重复实现复制按钮事件了）
+        if (html.parentElement.nextElementSibling.tagName === 'SPAN'){
+            html.parentElement.nextElementSibling.textContent += ' (↑点击文字可复制)'
+        }
         if (GM_getValue('menu_gitClone')) {_gitClone='git clone '; html.value = _gitClone + html.value; html.setAttribute('value', html.value);}
         // 克隆原 Git Clone SSH 元素
         let html_clone = html.cloneNode(true);
@@ -314,6 +325,10 @@
             _html += html_parent + html_clone.outerHTML + '</div>'
         }
         html.parentElement.insertAdjacentHTML('afterend', _html);
+        if (html.parentElement.parentElement.className.indexOf('XIU2-GCP') === -1){
+            html.parentElement.parentElement.classList.add('XIU2-GCP')
+            html.parentElement.parentElement.addEventListener('click', (e)=>{if (e.target.tagName === 'INPUT') {GM_setClipboard(e.target.value);}})
+        }
     }
 
 
