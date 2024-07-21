@@ -31,35 +31,35 @@
 			"replaceE": "#pageFooter"
 		}
 	},
-    "谷歌搜索 - 手机版": {
-        "host": "/^www\\.google\\./",
-        "url": "return (fun.lp() == '/search' && (!fun.indexOF('tbm=', 's') || (fun.indexOF('tbm=nws', 's') || fun.indexOF('tbm=vid', 's') || fun.indexOF('tbm=bks', 's'))) && (fun.indexOF('sclient=mobile', 's') || fun.isMobile()))",
-        "pager": {
-            "nextL": "footer>div:first-child a[aria-label]",
-            "pageE": "id('main')/div[position()>1][position()<last()] | //style[not(contains(text(), 'table,div,span,p{display:none}'))] | //body/script[@nonce][not(@src)][starts-with(text(), '(function(){var s=')]",
-            "replaceE": "#main>footer>div:first-child",
-            "scriptT": 2,
-            "scrollD": 2500
-        },
-        "function": {
-            "bF": "fun.getAllCSS('#main img[id^=dimg],#main img[id^=rimg]').forEach(function (img) {img.id = 'old_'+img.id;}); if(!fun.indexOF('tbm=vid', 's') && fun.indexOF('tbm=', 's')){return pageE}else{pageE.forEach(function (img) {fun.getAllCSS('img[id^=dimg]:not([data-atf])', img).forEach(function (img1) {img1.setAttribute('data-atf', '1');})}); return pageE}"
-        }
-    },
-    "谷歌搜索": {
-        "host": "/^www\\.google\\./",
-        "url": "return (fun.lp() == '/search' && (!fun.indexOF('tbm=', 's') || (fun.indexOF('tbm=nws', 's') || fun.indexOF('tbm=vid', 's') || fun.indexOF('tbm=bks', 's'))))",
-        "history": true,
-        "pager": {
-            "nextL": "#pnnext, footer>div:first-child a[aria-label]",
-            "pageE": "id('search')/div | id('rso')/div | //style[not(contains(text(), 'table,div,span,p{display:none}'))] | //body/script[@nonce][not(@src)][starts-with(text(), '(function(){var s=') or starts-with(text(), '(function(){google.ldi')]",
-            "replaceE": "#navcnt, #rcnt div[role='navigation'], #botstuff div[role='navigation'], #main>footer>div:first-child",
-            "scriptT": 2,
-            "scrollD": 2500
-        },
-        "function": {
-            "bF": "fun.getAllCSS('#search img[id^=dimg],#search img[id^=rimg],#rso img[id^=dimg],#rso img[id^=rimg]').forEach(function (img) {img.id = 'old_'+img.id;}); if(!fun.indexOF('tbm=vid', 's') && fun.indexOF('tbm=', 's')){return pageE}else{pageE.forEach(function (img) {fun.getAllCSS('img[id^=dimg]:not([data-atf])', img).forEach(function (img1) {img1.setAttribute('data-atf', '1');})}); return pageE}"
-        }
-    },
+	"谷歌搜索 - 手机版": {
+		"host": "/^www\\.google\\./",
+		"url": "return (fun.lp() == '/search' && (!fun.indexOF('tbm=', 's') || (fun.indexOF('tbm=nws', 's') || fun.indexOF('tbm=vid', 's') || fun.indexOF('tbm=bks', 's'))) && (fun.indexOF('sclient=mobile', 's') || fun.isMobile()))",
+		"pager": {
+			"nextL": "footer>div:first-child a[aria-label]",
+			"pageE": "id('main')/div[position()>1][position()<last()] | //style[not(contains(text(), 'table,div,span,p{display:none}'))] | //body/script[@nonce][not(@src)][starts-with(text(), '(function(){var s=')]",
+			"replaceE": "#main>footer>div:first-child",
+			"scriptT": 2,
+			"scrollD": 2500
+		},
+		"function": {
+			"bF": "fun.getAllCSS('#main img[id^=dimg],#main img[id^=rimg]').forEach(function (img) {img.id = 'old_'+img.id;}); if(!fun.indexOF('tbm=vid', 's') && fun.indexOF('tbm=', 's')){return pageE}else{pageE.forEach(function (img) {fun.getAllCSS('img[id^=dimg]:not([data-atf])', img).forEach(function (img1) {img1.setAttribute('data-atf', '1');})}); return pageE}"
+		}
+	},
+	"谷歌搜索": {
+		"host": "/^www\\.google\\./",
+		"url": "return (fun.lp() == '/search' && (!fun.indexOF('tbm=', 's') || (fun.indexOF('tbm=nws', 's') || fun.indexOF('tbm=vid', 's') || fun.indexOF('tbm=bks', 's'))))",
+		"history": true,
+		"pager": {
+			"nextL": "#pnnext, footer>div:first-child a[aria-label]",
+			"pageE": "id('search')/div | id('rso')/div | //style[not(contains(text(), 'table,div,span,p{display:none}'))] | //body/script[@nonce][not(@src)][starts-with(text(), '(function(){var s=') or starts-with(text(), '(function(){google.ldi')]",
+			"replaceE": "#navcnt, #rcnt div[role='navigation'], #botstuff div[role='navigation'], #main>footer>div:first-child",
+			"scriptT": 2,
+			"scrollD": 2500
+		},
+		"function": {
+			"bF": "fun.getAllCSS('#search img[id^=dimg],#search img[id^=rimg],#rso img[id^=dimg],#rso img[id^=rimg]').forEach(function (img) {img.id = 'old_'+img.id;}); if(!fun.indexOF('tbm=vid', 's') && fun.indexOF('tbm=', 's')){return pageE}else{pageE.forEach(function (img) {fun.getAllCSS('img[id^=dimg]:not([data-atf])', img).forEach(function (img1) {img1.setAttribute('data-atf', '1');})}); return pageE}"
+		}
+	},
 	"必应搜索 + 手机版": {
 		"host": ["www.bing.com","cn.bing.com","www4.bing.com","global.bing.com"],
 		"url": "if (fun.lp() == '/search') {if (fun.isMobile() && document.documentElement.lang != 'zh') {return false;} else {return true;}}",
@@ -6460,6 +6460,14 @@
 			"isHidden": true
 		}
 	},
+	"爱妹子": {
+		"host": "xx.knit.bid",
+		"pager": {
+			"type": 2,
+			"nextL": ".ias_trigger>a",
+			"scrollD": 3000
+		}
+	},
 	"MrCong": {
 		"host": "mrcong.com",
 		"pager": {
@@ -6508,13 +6516,13 @@
 		}
 	},
 	"爱看美女": {
-        "host": ["ikmn.cc","www.ikmn.cc","/^(www\\.)?ikmn\\d{2}\\.xyz$/"],
-        "url": "return fun.isPager()",
-        "pager": {
-            "nextL": "a.current+a",
-            "pageE": ".info-imtg-box>p"
-        }
-    },
+		"host": ["ikmn.cc","www.ikmn.cc","/^(www\\.)?ikmn\\d{2}\\.xyz$/"],
+		"url": "return fun.isPager()",
+		"pager": {
+			"nextL": "a.current+a",
+			"pageE": ".info-imtg-box>p"
+		}
+	},
 	"宅男女神": {
 		"host": ["www.gnvshen.com","www.fnvshen.com","www.haonvshen.com"],
 		"url": "/^\\/(g|gallery|tag)\\//",
