@@ -723,7 +723,7 @@
 		}
 	},
 	"2DFan": {
-		"host": ["2dfan.com","www.2dfan.com","ddfan.org","galge.fun"],
+		"host": ["2dfan.com","www.2dfan.com","ddfan.org","/^ddfan\\.[a-z]+$/","/^galge\\.[a-z]+$/","/^fan2d\\.[a-z]+$/"],
 		"url": "return fun.isPager('p,r')",
 		"pager": {
 			"nextL": "a[rel='next']",
@@ -735,7 +735,7 @@
 		}
 	},
 	"2DFan - 评论": {
-		"host": ["2dfan.com","www.2dfan.com","ddfan.org","galge.fun"],
+		"host": ["2dfan.com","www.2dfan.com","ddfan.org","/^ddfan\\.[a-z]+$/","/^galge\\.[a-z]+$/","/^fan2d\\.[a-z]+$/"],
 		"url": "if (fun.getCSS('#comments')&&fun.getCSS('.pagination')){[].slice.call(fun.getAllCSS('#comments>div')).reverse().forEach((e)=>{document.querySelector('#comments>.pagination').insertAdjacentElement('beforebegin', e);});return true}",
 		"history": false,
 		"pager": {
