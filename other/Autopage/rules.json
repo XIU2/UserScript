@@ -557,8 +557,9 @@
 	},
 	"NGA": {
 		"host": ["bbs.nga.cn","ngabbs.com","nga.178.com","g.nga.cn"],
-		"url": "fun.isUrlC(); return (fun.lp() == '/thread.php')",
+		"url": "fun.isUrlC(); if(!window.__APPEMBED && !window.cookieInterval){window.cookieInterval = setInterval(()=>{if (!window.__APPEMBED) {document.cookie = 'guestJs=' + fun.getCookie('guestJs').replace(/^\\d+/,parseInt(new Date().getTime()/1000)) + ';domain=' + location.host + ';expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/;samesite=none;secure=false';document.cookie = 'lastvisit=' + parseInt(new Date().getTime()/1000+123) + ';samesite=none;secure=false;domain=' + location.host;};},1000)}; return (fun.lp() == '/thread.php')",
 		"iframe": true,
+		"gmxhr": true,
 		"pager": {
 			"nextL": "#pagebbtm a[title='下一页']",
 			"pageE": "#topicrows>tbody, #topicrows>script",
@@ -571,10 +572,11 @@
 	},
 	"NGA - 帖子内": {
 		"host": ["bbs.nga.cn","ngabbs.com","nga.178.com","g.nga.cn"],
-		"url": "return (fun.lp() == '/read.php')",
+		"url": "/^\\/read\\.php",
 		"iframe": true,
 		"history": false,
 		"thread": true,
+		"gmxhr": true,
 		"retry": 1000,
 		"pager": {
 			"nextL": "#pagebbtm a[title*='下一页']",
