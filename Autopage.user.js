@@ -1873,7 +1873,6 @@ function: {
                 headers: {
                     'x-requested-with': (curSite.xRequestedWith === true) ? 'XMLHttpRequest':null,
                     'Referer': (curSite.noReferer === true) ? null:location.href,
-                    'User-Agent': navigator.userAgent,
                     'Accept': 'text/html,application/xhtml+xml,application/xml'
                 },
                 timeout: 5000,
@@ -1918,7 +1917,6 @@ function: {
             headers: {
                 'Referer': (curSite.noReferer === true) ? null:location.href,
                 'Content-Type': (method === 'POST') ? 'application/x-www-form-urlencoded':'',
-                'User-Agent': navigator.userAgent,
                 'Accept': accept
             },
             timeout: 10000,
@@ -2721,7 +2719,7 @@ function: {
 
         let customRules = JSON.stringify(GM_getValue('menu_customRules', {}), null, 4);
         if (customRules == '{}') customRules = '{\n    \n}'; // 引导用户插入规则的位置
-        let _html = `<div style="left: 0; right: 0; top: 0; bottom: 0; width: 100%; height: 100%; margin: auto; padding: 25px 10px 10px 10px; position: fixed; opacity: 0.95; z-index: 99999; background-color: #eee; color: #222; font-size: 14px; overflow: scroll; text-align: left;">
+        let _html = `<div style="left: 0; right: 0; top: 0; bottom: 0; width: 100%; height: 100%; margin: auto; padding: 25px 10px 10px 10px; position: fixed; opacity: 0.95; z-index: 9999999; background-color: #eee; color: #222; font-size: 14px; overflow: scroll; text-align: left;">
 <h3 style="font-size: 22px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><strong># 自定义翻页规则（优先级最高，会覆盖同名的外置翻页规则）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
 <details><summary style="cursor: pointer;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><kbd><strong>「 点击展开 查看规则示例 」（为了避免需要的时候还要找，我干脆把常用规则都一股脑塞进去了）</strong></kbd></summary>
 <ul style="list-style: disc; margin-left: 35px;">
@@ -2804,7 +2802,7 @@ function: {
 <textarea id="Autopage_customRules_textarea" style="min-width:95%; min-height:70%; display: block; margin: 10px 0 10px 0; white-space:pre; overflow:scroll; resize: revert; text-transform: initial;" placeholder="留空等于默认的 {}，请把规则插入 {} 之间">${customRules}</textarea>
 <button id="Autopage_customRules_save" style="margin-right: 20px;">保存并刷新</button><button id="Autopage_customRules_cancel">取消修改</button>
 </div>`
-        document.documentElement.insertAdjacentHTML('beforeend', `<div id="Autopage_customRules" style="display: initial !important;position: fixed !important;z-index: 9999 !important;"></div>`);
+        document.documentElement.insertAdjacentHTML('beforeend', `<div id="Autopage_customRules" style="display: initial !important;position: fixed !important;z-index: 9999999 !important;"></div>`);
         let Autopage_customRules = getCSS('#Autopage_customRules'), shadowRoot = Autopage_customRules.attachShadow({ mode: 'open' }); // 创建一个 Shadow DOM 避免网页样式影响自定义翻页规则元素
         shadowRoot.innerHTML = _html; // 插入元素
         document.documentElement.style.overflow = document.body.style.overflow = 'hidden'; // 避免网页本身滚动
@@ -2848,10 +2846,10 @@ function: {
                 return
             }
             // 插入网页
-            let _style = `<style>#Autopage_number_button {top: calc(75vh);left: 0;width: 32px;height: 32px;padding: 6px;display: flex;position: fixed;opacity: 0.3;transition: .2s;z-index: 9999;cursor: pointer;user-select: none;flex-direction: column;align-items: center;justify-content: center;box-sizing: content-box;border-radius: 0 50% 50% 0;transform-origin: center;transform: translateX(-8px);background-color: #eee;-webkit-tap-highlight-color: transparent;box-shadow: 1px 1px 3px 0px #aaa;color: #000;font-size: medium;} @media (any-hover: none) {#Autopage_number_button:active {opacity: 0.8;transform: translateX(0);}}@media (any-hover: hover) {#Autopage_number_button:hover {opacity: 0.8;transform: translateX(0);}}</style>`,
+            let _style = `<style>#Autopage_number_button {top: calc(75vh);left: 0;width: 32px;height: 32px;padding: 6px;display: flex;position: fixed;opacity: 0.3;transition: .2s;z-index: 9999998;cursor: pointer;user-select: none;flex-direction: column;align-items: center;justify-content: center;box-sizing: content-box;border-radius: 0 50% 50% 0;transform-origin: center;transform: translateX(-8px);background-color: #eee;-webkit-tap-highlight-color: transparent;box-shadow: 1px 1px 3px 0px #aaa;color: #000;font-size: medium;} @media (any-hover: none) {#Autopage_number_button:active {opacity: 0.8;transform: translateX(0);}}@media (any-hover: hover) {#Autopage_number_button:hover {opacity: 0.8;transform: translateX(0);}}</style>`,
                 _html = `<div id="Autopage_number_button" title="1. 此为【当前页码】（仅指脚本翻了多少页，并非实际页码，该页码可在脚本菜单中关闭）&#10;&#10;2. 鼠标【左键】点击此处可【临时暂停翻页】（再次点击可恢复）&#10;&#10;3. 鼠标【右键】点击此处可【回到顶部】">${pageNum._now}</div>`
 
-            document.documentElement.insertAdjacentHTML('beforeend', `<div id="Autopage_number" style="display: flex !important;position: fixed !important;z-index: 9999 !important;"></div>`);
+            document.documentElement.insertAdjacentHTML('beforeend', `<div id="Autopage_number" style="display: flex !important;position: fixed !important;z-index: 9999998 !important;"></div>`);
             let Autopage_number = getCSS('#Autopage_number'), shadowRoot = Autopage_number.attachShadow({ mode: 'open' }); // 创建一个 Shadow DOM 避免网页样式影响页码元素
             shadowRoot.innerHTML = _style + _html; // 插入元素
 
