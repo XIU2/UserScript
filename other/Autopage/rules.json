@@ -6579,17 +6579,17 @@
 			"scrollD": 3000
 		}
 	},
-	"ku66": {
-		"host": ["www.ku66.net","www.ku138.cc"],
-		"url": "/(^\\/.)|(\\d+\\.html$)/",
-		"style": ".content img {min-height: 500px;} .Title9, .dibu1, .dibu2 {display: none !important;}",
-		"pager": {
-			"type": 3,
-			"nextL": ".thisclass+li>a, .this-page+a:not(.no-page)",
-			"pageE": ".content, .TypeList, .m-list.ml1",
-			"replaceE": ".NewPages, .page"
-		}
-	},
+    "ku+taotu": {
+        "host": ["/^www\\.ku\\d+\\./","/^www\\.taotu\\d+\\./"],
+        "url": "return fun.isPager()",
+        "style": ".content img {min-height: 500px;} .Title9, .dibu1, .dibu2 {display: none !important;}",
+        "pager": {
+            "type": 3,
+            "nextL": ".thisclass+li>a, .this-page+a:not(.no-page)",
+            "pageE": ".content, .TypeList, .m-list.ml1, .slider-c>.row>div",
+            "replaceE": ".NewPages, .page"
+        }
+    },
 	"kingdom": {
 		"host": "www.kingdom-en.com",
 		"url": "/(^\\/.)|(\\d+\\.html$)/",
