@@ -284,7 +284,7 @@
 		"history": true,
 		"pager": {
 			"nextL": "a.pagination__num--next",
-			"pageE": ".web-google__result",
+			"pageE": ".content-answers-top-wrap, .content-answers-top-wrap~div",
 			"replaceE": ".pagination"
 		}
 	},
