@@ -231,7 +231,7 @@
 		"host": "search.brave.com",
 		"url": "/^\\/search/",
 		"pager": {
-			"nextL": "id('pagination')/a[./div[contains(@class,'icon-right')]]",
+			"nextL": "#pagination>a:last-child",
 			"pageE": "#results>div:not([id])",
 			"replaceE": "#pagination"
 		}
