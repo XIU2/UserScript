@@ -62,7 +62,7 @@
 
 ****
 
-## Tampermonkey `v5.0.0` 后某脚本无法正常运行？
+## Tampermonkey `v5.0.0` 后脚本在 `部分网站` 无法正常运行？
 
 Tampermonkey 为了顺应 Chrome 的 Manifest V3 要求，在 v5.0.0 版本中修改了 CSP 相关选项的默认值。
 
