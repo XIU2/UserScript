@@ -159,8 +159,8 @@
 		}
 	},
 	"360 搜索": {
-		"host": "www.so.com",
-		"url": "/^\\/.+/",
+		"host": ["www.so.com","news.so.com"],
+		"url": "/^\\/(n)?s/",
 		"style": "img {opacity: 1 !important;}",
 		"history": true,
 		"pager": {
