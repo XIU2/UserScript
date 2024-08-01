@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.20
+// @version      6.6.21
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动，無需手働點擊下一頁）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -20,6 +20,7 @@
 // @connect      raw.scholar.rr.nu
 // @connect      raw.kkgithub.com
 // @connect      raw.incept.pw
+// @connect      gitdl.cn
 // @connect      ghproxy.cc
 // @connect      ghproxy.net
 // @connect      mirror.ghproxy.com
@@ -94,6 +95,7 @@
         'https://userscript.h233.eu.org/other/Autopage/rules.json',
         'https://bitbucket.org/xiu2/userscript/raw/master/other/Autopage/rules.json',
         'https://raw.kkgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://gitdl.cn/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://raw.incept.pw/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.ixnic.net/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.nuaa.cf/XIU2/UserScript/master/other/Autopage/rules.json',
@@ -111,19 +113,20 @@
         'https://cdn.jsdmirror.com/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://jsd.proxy.aks.moe/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://jsdelivr.pai233.top/gh/XIU2/UserScript/other/Autopage/rules.json',
-        'https://js.cdn.haah.net/gh/XIU2/UserScript/other/Autopage/rules.json'
+        'https://js.cdn.haah.net/gh/XIU2/UserScript/other/Autopage/rules.json',
     ], urlArr2 = [
         'https://userscript.h233.eu.org/other/Autopage/rules.json',
         'https://userscript.xiu2.xyz/other/Autopage/rules.json',
         'https://bitbucket.org/xiu2/userscript/raw/master/other/Autopage/rules.json',
         'https://raw.kkgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://gitdl.cn/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.ixnic.net/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.nuaa.cf/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.yzuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://raw.scholar.rr.nu/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://mirror.ghproxy.com/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json'
+        'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
     ],
           loadMoreExclude1 = ['.smzdm.com','stackoverflow.com'],
           loadMoreExclude2 = ['.steampowered.com','.zcool.com.cn'];
@@ -166,7 +169,7 @@
                 } else { // 不在禁用列表中
                     webType = doesItSupport(); // 判断网站类型（即是否支持），顺便直接赋值
                     if (webType === 0) {
-                        menuId[0] = GM_registerMenuCommand('❌ 当前网页暂不支持 [点击申请]', function () {GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
+                        menuId[0] = GM_registerMenuCommand('❌ 当前网页暂不支持 [点击申请]', function(){GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
                         menuId[1] = GM_registerMenuCommand('🔄 更新外置翻页规则 (每天自动)', function(){getRulesUrl(true)});
                         menuId[2] = GM_registerMenuCommand('#️⃣ 自定义翻页规则', function(){customRules()});
                         //console.info('[自动无缝翻页] - 暂不支持当前网页 [ ' + location.href + ' ]，申请支持: https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/419215/feedback');
@@ -294,6 +297,9 @@
 
         } else if (getCSS('head meta[name="generator" i][content="nexusphp" i]') || getXpath('id("footer")[contains(string(), "NexusPHP")]')) {
             console.info(`[自动无缝翻页] - <NexusPHP> 论坛`); return 7;
+
+        } else if (unsafeWindow.config && ((unsafeWindow.config.assetVersionEncoded && unsafeWindow.config.assetVersionEncoded.indexOf('gitea') !== -1) || (unsafeWindow.config.customEmojis && unsafeWindow.config.customEmojis.gitea))) {
+            console.info(`[自动无缝翻页] - <Forgejo/Gitea> git 托管系统`); return 15;
 
         } else if (loadMoreExclude(loadMoreExclude1) && getAllCSS('.load-more, .load_more, .loadmore, #load-more, #load_more, #loadmore, [id^="loadmore"], .show-more, .show_more, .ajax-more').length === 1) {
             console.info(`[自动无缝翻页] - 部分自带 自动无缝翻页 的网站 1`); return 8;
@@ -433,6 +439,8 @@
                     DBSite.mybb.url(); break;
                 case 7: //   < 所有 NexusPHP 论坛 >
                     DBSite.nexusphp.url(); break;
+                case 15: //   < 所有 Forgejo/Gitea> git 托管系统 >
+                    DBSite.forgejoGitea.url(); break;
                 case 8: // < 部分自带 自动无缝翻页 的网站 1 >
                     DBSite.loadmore.url('.load-more, .load_more, .loadmore, #load-more, #load_more, #loadmore, [id^="loadmore"], .show-more, .show_more, .ajax-more'); break;
                 case 9: // < 部分自带 自动无缝翻页 的网站 2 >
@@ -890,6 +898,14 @@ function: {
                     replaceE: 'ul.pagination'
                 }
             }, //         Xiuno 论坛 - 帖子内
+            forgejoGitea: {
+                url: ()=> {if (indexOF(/^\/explore\/.+/) || indexOF(/\/(issues|pulls|releases|tags)$/) || indexOF(/\/commits\/branch\/.+/) || (getCSS('.pagination>.active+.item') && getCSS('.flex-list>.flex-item'))) {curSite = DBSite.forgejoGitea;}},
+                pager: {
+                    nextL: '.pagination>.active+.item',
+                    pageE: '.flex-list>.flex-item, #issue-list>div, #release-list>li, tbody.tag-list>tr, tbody.commit-list>tr',
+                    replaceE: '.pagination'
+                }
+            }, //              Forgejo/Gitea git 托管系统 - explore/issues/releases/tag/commit
             nexusphp: {
                 url: ()=> {
                     if (lp == '/torrents.php' || getCSS('table.torrents')) {

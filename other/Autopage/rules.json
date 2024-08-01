@@ -4726,16 +4726,6 @@
 			"replaceE": ".pagination"
 		}
 	},
-	"Codeberg": {
-		"host": "codeberg.org",
-		"url": "return (fun.indexOF(/^\\/explore\\/.+/) || fun.indexOF(/\\/(issues|pulls|releases|tags)$/) || fun.indexOF(/\\/commits\\/branch\\/.+/))",
-		"blank": 3,
-		"pager": {
-			"nextL": ".pagination>.active+.item",
-			"pageE": ".repository.list>.item, .user.list>.item, .issue.list>.item, #release-list>li, tbody.tag-list>tr, tbody.commit-list>tr",
-			"replaceE": ".pagination"
-		}
-	},
 	"OI-Wiki": {
 		"host": "oi-wiki.org",
 		"style": "blockquote.page-copyright, h2#__comments, form#gitalk-form",
