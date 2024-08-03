@@ -6615,11 +6615,11 @@
 	},
 	"24FA": {
 		"host": ["/^(www\\.)?24fa\\.[a-z]+$/","/^(www\\.)?24fa.?\\.com$/","/^(www\\.)?\\d{3}w\\.cc$/","/^(www\\.)?\\d{3}\\.(mom|one)$"],
-		"url": "return (fun.isTitle('24FA') && fun.indexOF(/^\\/m?n\\d+/))",
+		"url": "return (fun.isTitle('24FA') && fun.isPager())",
 		"style": ".moreR {display: none;} #content img {width: auto; max-width: 99%; height: auto; display: block; margin: 0 auto;}",
 		"pager": {
 			"nextL": "li.p_current+li>a",
-			"pageE": "#content img",
+			"pageE": "#content img, #dlNews>tbody>tr, .summary",
 			"replaceE": ".pager",
 			"scrollD": 3500
 		}
