@@ -3665,6 +3665,18 @@
 			"replaceE": ".u"
 		}
 	},
+	"柒六八文学小说网": {
+		"host": ["www.778668.com","m.778668.com"],
+		"url": "if(fun.indexOF(/^\\/.+\\/\\d+_\\d+\\.html$/)){fun.xs_bF(fun.getAllCSS('.pt-read-text>p,#pt-pop>a>font>p'), [/(^微信小程序.+|本章未完，请点击.+页$)/, '']); return true}",
+		"retry": 3000,
+		"pager": {
+			"nextL": "a.pt-nextchapter[href$='.html'],.pt-nextchapter>a[href$='.html']",
+			"pageE": ".pt-read-text>p,#pt-pop>a>font>p"
+		},
+		"function": {
+			"bF": "return fun.xs_bF(pageE, [/(^微信小程序.+|本章未完，请点击.+页$)/, ''])"
+		}
+	},
 	"皇帝之家": {
 		"host": "www.huangdizhijia.com",
 		"url": "/chapter-\\d+\\.html/",
