@@ -2316,26 +2316,6 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
-	"233 动漫": {
-		"host": "www.dm233.cc",
-		"url": "return (fun.indexOF('/catalog/') || fun.lp() == '/article/' || fun.lp() == '/recommend/' || fun.lp() == '/search')",
-		"blank": 3,
-		"pager": {
-			"nextL": "//div[@class='pagelist']//a[contains(text(), '下一页') or contains(text(), '下一頁')]",
-			"pageE": ".dhnew ul>li, .xgyd ul>li",
-			"replaceE": ".pagelist"
-		}
-	},
-	"233 动漫 - 排行榜": {
-		"host": "www.dm233.cc",
-		"url": "return (fun.lp() == '/rank/')",
-		"blank": 3,
-		"pager": {
-			"nextL": "//div[@class='pagelist']//a[contains(text(), '下一页') or contains(text(), '下一頁')]",
-			"pageE": ".side-update.normal-wai>.normal-nei",
-			"replaceE": ".pagelist"
-		}
-	},
 	"anime1": {
 		"host": "anime1.me",
 		"url": "/^\\/$/",
