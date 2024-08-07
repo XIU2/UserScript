@@ -2303,23 +2303,17 @@
 		}
 	},
 	"AGE 动漫": {
-		"host": ["/^www\\.agemys\\..+$/","www.age.tv"],
-		"url": "return (fun.indexOF('/catalog/') || fun.lp() == '/search' || fun.lp() == '/recommend' || fun.lp() == '/update')",
+		"host": ["www.agefans.com","www.age.tv","/^www\\.(agedm|agemys)\\./"],
+		"url": "/^\\/(catalog|search|recommend)/",
 		"blank": 3,
 		"pager": {
-			"nextL": "id('container')//div[@class='blockcontent']/div[@style][not(@class)]/li/a[contains(text(), '下一页')]",
-			"pageE": "#container .blockcontent1>div, #container .blockcontent>ul:not(.search-list)>li",
-			"replaceE": "#container .blockcontent>div[style]:not([class])"
-		}
-	},
-	"AGE 动漫 - 排行榜": {
-		"host": ["/^www\\.agemys\\..+$/","www.age.tv"],
-		"url": "return (fun.lp() == '/rank')",
-		"blank": 3,
-		"pager": {
-			"nextL": "id('container')/ul[@style][not(@class)]/li/a[contains(text(), '下一页')]",
-			"pageE": "#container>.div_right .blockcontent.div_right_r_3>ul",
-			"replaceE": "#container>ul[style]:not([class])"
+			"nextL": "li.page-item.active+li>a",
+			"pageE": "#cata_video_list .cata_video_item,#recommend_video_wrapper>div>div>div>.position-relative",
+			"replaceE": ".pagination",
+			"forceHTTPS": true
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"233 动漫": {
