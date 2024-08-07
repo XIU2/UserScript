@@ -71,7 +71,7 @@
 			"replaceE": "#b_results>.b_pag, #b_PagAboveFooter"
 		},
 		"function": {
-			"bF": "pageE.forEach(function (one) {fun.getAllCSS('div.rms_iac[data-src]', one).forEach(function (one1) {one1.outerHTML = `<img src=\"${one1.dataset.src}\" height=\"16\" width=\"16\" role=\"presentation\" class=\"rms_img\">`; }) }); return pageE"
+			"bF": "pageE.forEach(function (one) {fun.getAllCSS('div.rms_iac[data-src]', one).forEach(function (one1) {one1.outerHTML = `<img src=\"${one1.dataset.src}\" height=\"32\" width=\"32\" role=\"presentation\" class=\"rms_img\">`; }) }); return pageE"
 		}
 	},
 	"搜狗搜索": {
@@ -493,7 +493,7 @@
 	},
 	"NGA": {
 		"host": ["bbs.nga.cn","ngabbs.com","nga.178.com","g.nga.cn"],
-		"url": "fun.isUrlC(); if(!window.__APPEMBED && !window.cookieInterval){window.cookieInterval = setInterval(()=>{if (!window.__APPEMBED) {document.cookie = 'guestJs=' + fun.getCookie('guestJs').replace(/^\\d+/,parseInt(new Date().getTime()/1000)) + ';domain=' + location.host + ';expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/;samesite=none;secure=false';document.cookie = 'lastvisit=' + parseInt(new Date().getTime()/1000+123) + ';samesite=none;secure=false;domain=' + location.host;};},1000)}; return (fun.lp() == '/thread.php')",
+		"url": "fun.isUrlC(); if(!window.__APPEMBED && !window.cookieInterval){window.cookieInterval = setInterval(()=>{if (!window.__APPEMBED) {document.cookie = 'guestJs=' + fun.getCookie('guestJs').replace(/^\\d+/,parseInt(new Date().getTime()/1000-parseInt(Math.random()*(300-100)+100))) + ';domain=' + location.host + ';expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/;samesite=none;secure=false';document.cookie = 'lastvisit=' + parseInt(new Date().getTime()/1000-parseInt(Math.random()*(100-1)+1)) + ';samesite=none;secure=false;domain=' + location.host;};},10000)}; return (fun.lp() == '/thread.php')",
 		"iframe": true,
 		"gmxhr": true,
 		"pager": {
