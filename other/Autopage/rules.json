@@ -2316,6 +2316,16 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"NT 动漫": {
+		"host": "/^www\\.ntdm\\d\\.com$/",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "//a[@class='pbutton  asciifont'][text()='下一页']",
+			"pageE": "ul.ul_li_a6>li,.blockcontent1>.cell",
+			"replaceE": "#container>div[style='text-align: center; line-height: 36px;']"
+		}
+	},
 	"anime1": {
 		"host": "anime1.me",
 		"url": "/^\\/$/",
