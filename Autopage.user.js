@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.22
+// @version      6.6.23
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动，無需手働點擊下一頁）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -615,6 +615,7 @@ function: {
                 url: ()=> {curSite = DBSite.biquge1;xs_bF(getAllCSS('.content > #content'),[/<br>.{0,10}秒记住.+$/, '']);},
                 style: 'img, .posterror, a[href*="posterror()"], [style*="background"][style*="url("]:not(html):not(body), #content > *:not(br):not(p) {display: none !important;}',
                 history: true,
+                retry: 3000,
                 pager: {
                     nextL: '//div[@class="page_chapter"]//a[text()="下一章"]',
                     pageE: '.content > #content',
@@ -629,6 +630,7 @@ function: {
             biquge1_m: {
                 style: 'img, .posterror, .show-app2, a[href*="posterror()"], [onclick*="location.href"], [style*="background"][style*="url("]:not(html):not(body), #nr1>*:not(br):not(p), #chaptercontent>*:not(br):not(p), .Readarea>*:not(br):not(p), .ReadAjax_content>*:not(br):not(p) {display: none !important;}',
                 history: true,
+                retry: 3000,
                 pager: {
                     nextL: '#pb_next, #linkNext',
                     pageE: '#nr1, #chaptercontent, .Readarea, .ReadAjax_content',
@@ -640,6 +642,7 @@ function: {
                 url: ()=> {if (isMobile() || getCSS('.chapter-page-btn') != null) {curSite = DBSite.biquge2_m;} else {curSite = DBSite.biquge2;}},
                 style: 'img, .posterror, a[href*="posterror()"], [style*="background"][style*="url("]:not(html):not(body), #txt > *:not(br):not(p) {display: none !important;}',
                 history: true,
+                retry: 3000,
                 pager: {
                     type: 6,
                     nextL: '#pb_next, .url_next',
@@ -653,6 +656,7 @@ function: {
             biquge2_m: {
                 style: 'img, .posterror, a[href*="posterror()"], [style*="background"][style*="url("]:not(html):not(body), #txt > *:not(br):not(p) {display: none !important;}',
                 history: true,
+                retry: 3000,
                 pager: {
                     nextL: '#pb_next, .url_next',
                     pageE: '#txt, .txt',
@@ -663,6 +667,7 @@ function: {
             biquge3: {
                 style: 'img, .posterror, a[href*="posterror()"], [style*="background"][style*="url("]:not(html):not(body), script+div[style="padding:15px;"], p[style*="font-weight:"] {display: none !important;}',
                 history: true,
+                retry: 3000,
                 pager: {
                     nextL: '//a[contains(text(), "下一章") or contains(text(), "下一页") or contains(text(), "下一节")]',
                     insertP6Br: true,
@@ -1862,10 +1867,10 @@ function: {
 
             xhr.timeout = 5000;
             xhr.onload = function() {
-                if (xhr.status >= 200 && xhr.status < 300) {
+                try {
                     //console.log('URL：' + url, '最终 URL：' + xhr.responseURL, '返回内容：' + xhr.responseText)
                     processElems(createDocumentByString(xhr.responseText));
-                } else {
+                } catch (e) {
                     console.error('[自动无缝翻页] - 处理获取到的下一页内容时出现问题，请检查！', 'URL：' + url, '最终 URL：' + xhr.responseURL, '返回状态：' + xhr.statusText, '返回内容：' + xhr.responseText);
                 }
             };
@@ -2177,7 +2182,7 @@ function: {
         } else { // 获取主体元素失败后，尝试重新获取
             console.log(curSite.pager.pageE, pageE, curSite.pager.insertP, toE, response)
             if (curSite.retry) {
-                console.warn('[自动无缝翻页] 获取主体元素失败，尝试重新获取...')
+                console.warn('[自动无缝翻页] 获取主体元素失败，' + curSite.retry + '毫秒 后可向下翻网页来触发脚本尝试重新获取...')
                 setTimeout(function(){curSite.pageUrl = '';}, curSite.retry)
             } else {
                 console.error('[自动无缝翻页] 获取主体元素失败...')
