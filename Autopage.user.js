@@ -2743,7 +2743,7 @@ function: {
 <h3 style="font-size: 22px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><strong># 自定义翻页规则（优先级最高，会覆盖同名的外置翻页规则）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
 <details><summary style="cursor: pointer;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><kbd><strong>「 点击展开 查看规则示例 」（为了避免需要的时候还要找，我干脆把常用规则都一股脑塞进去了）</strong></kbd></summary>
 <ul style="list-style: disc; margin-left: 35px;">
-<li>翻页规则为 JSON 格式，因此大家需要多少<strong>了解一点 JSON 的基本格式</strong>（主要就是逗号、转义、双引号等）。</li>
+<li>翻页规则为 JSON 格式，因此大家需要多少<strong>了解一点 JSON 的基本格式</strong>（主要就是末尾逗号、转义、双引号等）。</li>
 <li>具体的翻页规则说明、示例，为了方便更新及补充，我都写到 <strong><a href="https://github.com/XIU2/UserScript/issues/176" target="_blank">Github Issues</a></strong> 里面了。</li>
 <li>脚本会自动格式化规则，因此<strong>无需手动缩进、换行</strong>，只需把规则<strong>插入默认的 { } 中间</strong>即可。</li>
 </ul>
@@ -2752,12 +2752,12 @@ function: {
 
 // "aaa"       是规则名，唯一，因为 自定义翻页规则 优先级最高，所以会覆盖同名的 外置翻页规则
 // "host"      是域名，支持正则表达式（如 示例四），也可以像这样 示例三 那样写多个域名或正则表达式（当然也可以混用）
-// "url"       是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站（如果不知道写什么，那么就写 return fun.isPager() 这样脚本会默认自动匹配当前网站下存在 nextL 及 pageE 元素的网页，大部分网站是没问题的，如果改为匹配 replaceE 或者其他组合，那么请去下面的 Github Issues 里的 内置函数 中查看具体使用方法）
+// "url"       是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站（如果不知道写什么，那么就写 return fun.isPager() 这样脚本会默认自动匹配当前网站下存在 nextL 及 pageE 元素的网页，大部分网站是没问题的，如果改为匹配 replaceE 或者其他组合，那么请去上面的 Github Issues 里的 内置函数 中查看具体使用方法）
 
 // "nextL"     是用来指定含有下一页地址的元素选择器（CSS 或 XPath 都行，一般都是 &lt;a&gt; 元素）
-// "pageE"     是指定要从下一页获取的元素（也就是网页主体内容），并将其插入当前网页中同样元素的末尾
-// "replaceE"  用于将当前网页中的页码元素替换为下一页的页码元素（这样才能无限翻页下去），省略后将会自动判断是替换 nextL 元素自身还是 nextL 元素的父元素（当 nextL 元素后面或前面有其自身 &lt;a&gt; 元素的相邻兄弟元素时脚本会替换其父元素，反之没有相邻兄弟元素则替换其自身，仅限模式1/3/6，且 "js;" 开头的 nextL 规则除外），值为空 "" 时则完全不替换
-// "scrollD"   是用来控制翻页敏感度的（越大就越早触发翻页，访问速度慢的网站需要调大，可省略(记得移除上一行末尾逗号)，省略后默认 2000）
+// "pageE"     是指定要从下一页获取的元素选择器（也就是网页主体内容），并将其插入当前网页中同样元素的末尾
+// "replaceE"  用于将当前网页中的页码元素替换为下一页的页码元素选择器（这样才能无限翻页下去），省略后将会自动判断是替换 nextL 元素自身还是 nextL 元素的父元素（当 nextL 元素后面或前面有其自身 &lt;a&gt; 元素的相邻兄弟元素时脚本会替换其父元素，反之没有相邻兄弟元素则替换其自身，仅限模式1/3/6，且 "js;" 开头的 nextL 规则除外），值为空 "" 时则完全不替换
+// "scrollD"   是用来指定触发翻页的滚动条与底部之间的距离，当滚动条底部距离网页底部之间的距离等于或小于该值时，将触发翻页，因此值越大就越早触发翻页，访问速度慢的网站需要调大，可省略(记得移除上一行末尾逗号)，省略后默认 2000
 
 // "inherits"  是继承标识，当你只需要对某个外置规则中 增删改 部分规则内容时（比如只是修改域名），那么就可以像下面第二个 "aaa" 规则一样写一个同名规则，规则内只需要有要修改的 host 内容，以及 inherits 标识，这样脚本就会将这个自定义翻页规则中的 host 覆盖掉外置翻页规则中的 host，而该翻页规则内的其他规则内容则不变。即更灵活了，无需每次为了修改部分规则而去复制全部规则了，也不用担心我后续更新这个外置规则后，你还需要再次复制一遍来修改。。。
 
@@ -2874,9 +2874,6 @@ function: {
             let Autopage_number = getCSS('#Autopage_number'), shadowRoot = Autopage_number.attachShadow({ mode: 'open' }); // 创建一个 Shadow DOM 避免网页样式影响页码元素
             shadowRoot.innerHTML = _style + _html; // 插入元素
 
-            //document.documentElement.insertAdjacentHTML('beforeend', _style + _html);
-            // 解决 远景论坛 会清理掉前面插入的 CSS 样式的问题
-            //if (location.hostname === 'bbs.pcbeta.com') {setTimeout(function(){document.documentElement.insertAdjacentHTML('beforeend', _style);}, 500);}
             if (curSite.pager && curSite.pager.type == 5) window.top.document.xiu_pausePage = pausePage
             status = getCSS('#Autopage_number_button', shadowRoot);
             // 左键点击事件（临时暂停翻页）
