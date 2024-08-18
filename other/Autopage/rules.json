@@ -3542,13 +3542,13 @@
 		}
 	},
 	"owlook": {
-		"host": ["www.owlook.com.cn","www1.owlook.com.cn"],
-		"url": "return (fun.lp() == '/owllook_content')",
+		"host": ["www.owlook.com.cn","www1.owlook.com.cn","owlook.com.cn"],
+		"url": "/^\\/owllook_content/",
 		"history": true,
 		"pager": {
 			"nextL": "//div[@class='pre_next']/a[contains(text(), '下一')]",
-			"pageE": "#content",
-			"insertP": ["#content",6],
+			"pageE": "#chaptercontent",
+			"insertP": ["#chaptercontent",6],
 			"replaceE": ".pre_next"
 		}
 	},
