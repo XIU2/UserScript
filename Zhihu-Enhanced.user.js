@@ -1033,7 +1033,7 @@ function removeHighlightLink() {
         for (const mutation of mutationsList) {
             for (const target of mutation.addedNodes) {
                 if (target.nodeType != 1 || target.tagName != 'A') break
-                if (target.dataset.zaNotTrackLink && target.href.indexOf('https://www.zhihu.com/search?q=') > -1) {
+                if (target.dataset.zaNotTrackLink && target.href.indexOf('https://zhida.zhihu.com/search?q=') > -1) {
                     target.parentElement.replaceWith(target.textContent);
                 }
             }
@@ -1043,7 +1043,7 @@ function removeHighlightLink() {
     observer.observe(document, { childList: true, subtree: true });
 
     // 针对的是打开网页后直接加载的前面几个回答（上面哪些是针对动态加载的回答）
-    document.querySelectorAll('span > a[data-za-not-track-link][href^="https://www.zhihu.com/search?q="]').forEach(e => e.parentElement.replaceWith(e.textContent))
+    document.querySelectorAll('span > a[data-za-not-track-link][href^="https://zhida.zhihu.com/search?q="]').forEach(e => e.parentElement.replaceWith(e.textContent))
 }
 
 
