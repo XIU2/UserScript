@@ -3788,7 +3788,7 @@
 		}
 	},
 	"AO3 - 列表页/搜索页": {
-		"host": "archiveofourown.org",
+		"host": ["archiveofourown.org","i.ao3is.top"],
 		"url": "return (fun.indexOF(/\\/works$/) || fun.lp() == '/works/search')",
 		"pager": {
 			"nextL": "li.next a",
@@ -3797,9 +3797,9 @@
 			"scrollD": 2500
 		}
 	},
-	"AO3-阅读页": {
-		"host": "archiveofourown.org",
-		"url": "return (fun.indexOF(/\\/works\\/\\d+\\/chapters\\//))",
+	"AO3 - 阅读页": {
+		"host": ["archiveofourown.org","i.ao3is.top"],
+		"url": "/\\/works\\/\\d+\\/chapters\\//",
 		"history": true,
 		"pager": {
 			"nextL": "li.chapter.next a",
