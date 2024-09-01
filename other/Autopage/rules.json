@@ -6037,6 +6037,19 @@
 			"replaceE": ".comic-show-content-nav"
 		}
 	},
+	"污污漫画": {
+        "host": "www.comicbox.xyz",
+        "url": "/^\\/chapter\\/\\d+/",
+        "style": ".global-navbar",
+        "pager": {
+            "type": 6,
+            "nextL": "//div[@class='fanye']/a[text()='下一章']",
+            "pageE": ".comicpage>div",
+            "replaceE": ".fanye",
+            "loadTime": 1000,
+            "scrollD": 4000
+        }
+    },
 	"禁漫天堂": {
 		"host": ["18comic.vip","18comic.org","/^jm-?comic[0-9]?\\.[a-z]+$/"],
 		"url": "if (fun.indexOF(/^\\/photo\\//)){fun.src_bF(fun.getAllCSS('.scramble-page'), [0,'img[data-original]:not(.lazy-loaded)','data-original']); setTimeout(()=>{document.body.appendChild(document.createElement('script')).textContent = `var old_onImageLoaded = onImageLoaded; onImageLoaded = function(e){aid = parseInt(/photos\\\\/\\\\d+/.exec(e.src)[0].replace('photos/','')); if(aid>scramble_id){old_onImageLoaded(e);}}`}, 3000); return true}",
