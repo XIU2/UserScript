@@ -1,6 +1,6 @@
 {
 	"百度搜索": {
-		"host": ["www.baidu.com", "ipv6.baidu.com"],
+		"host": ["www.baidu.com","ipv6.baidu.com"],
 		"url": "fun.isUrlC(); if (fun.isMobile()) {location.hostname = 'm.baidu.com';} else {return (fun.lp() == '/s')}",
 		"style": ".new-pmd .c-img-border {position: initial !important;} .op-bk-polysemy-video__wrap.c-gap-bottom {display: none !important;}",
 		"history": true,
@@ -12,8 +12,8 @@
 	},
 	"百度搜索 - 手机版": {
 		"host": "m.baidu.com",
-		"url": "return (location.pathname.slice(location.pathname.length - 2, location.pathname.length) == '/s')",
-		"style": "div.result[tpl='recommend_list'], #page-copyright, .hint-fold-results-box",
+		"url": "return (location.pathname.slice(location.pathname.length - 2,location.pathname.length) == '/s')",
+		"style": "div.result[tpl='recommend_list'],#page-copyright,.hint-fold-results-box",
 		"history": true,
 		"pager": {
 			"nextL": "a[class^='new-nextpage']",
@@ -33,45 +33,45 @@
 	},
 	"谷歌搜索 - 手机版": {
 		"host": "/^www\\.google\\./",
-		"url": "return (fun.lp() == '/search' && (!fun.indexOF('tbm=', 's') || (fun.indexOF('tbm=nws', 's') || fun.indexOF('tbm=vid', 's') || fun.indexOF('tbm=bks', 's'))) && (fun.indexOF('sclient=mobile', 's') || fun.isMobile()))",
+		"url": "return (fun.lp() == '/search' && (!fun.indexOF('tbm=','s') || (fun.indexOF('tbm=nws','s') || fun.indexOF('tbm=vid','s') || fun.indexOF('tbm=bks','s'))) && (fun.indexOF('sclient=mobile','s') || fun.isMobile()))",
 		"pager": {
 			"nextL": "footer>div:first-child a[aria-label]",
-			"pageE": "id('main')/div[position()>1][position()<last()] | //style[not(contains(text(), 'table,div,span,p{display:none}'))] | //body/script[@nonce][not(@src)][starts-with(text(), '(function(){var s=')]",
+			"pageE": "id('main')/div[position()>1][position()<last()] | //style[not(contains(text(),'table,div,span,p{display:none}'))] | //body/script[@nonce][not(@src)][starts-with(text(),'(function(){var s=')]",
 			"replaceE": "#main>footer>div:first-child",
 			"scriptT": 2,
 			"scrollD": 2500
 		},
 		"function": {
-			"bF": "fun.getAllCSS('#main img[id^=dimg],#main img[id^=rimg]').forEach(function (img) {img.id = 'old_'+img.id;}); if(!fun.indexOF('tbm=vid', 's') && fun.indexOF('tbm=', 's')){return pageE}else{pageE.forEach(function (img) {fun.getAllCSS('img[id^=dimg]:not([data-atf])', img).forEach(function (img1) {img1.setAttribute('data-atf', '1');})}); return pageE}"
+			"bF": "fun.getAllCSS('#main img[id^=dimg],#main img[id^=rimg]').forEach(function (img) {img.id = 'old_'+img.id;}); if(!fun.indexOF('tbm=vid','s') && fun.indexOF('tbm=','s')){return pageE}else{pageE.forEach(function (img) {fun.getAllCSS('img[id^=dimg]:not([data-atf])',img).forEach(function (img1) {img1.setAttribute('data-atf','1');})}); return pageE}"
 		}
 	},
 	"谷歌搜索": {
 		"host": "/^www\\.google\\./",
-		"url": "return (fun.lp() == '/search' && (!fun.indexOF('tbm=', 's') || (fun.indexOF('tbm=nws', 's') || fun.indexOF('tbm=vid', 's') || fun.indexOF('tbm=bks', 's'))))",
+		"url": "return (fun.lp() == '/search' && (!fun.indexOF('tbm=','s') || (fun.indexOF('tbm=nws','s') || fun.indexOF('tbm=vid','s') || fun.indexOF('tbm=bks','s'))))",
 		"history": true,
 		"pager": {
-			"nextL": "#pnnext, footer>div:first-child a[aria-label]",
-			"pageE": "id('search')/div | id('rso')/div | //style[not(contains(text(), 'table,div,span,p{display:none}'))] | //body/script[@nonce][not(@src)][starts-with(text(), '(function(){var s=') or starts-with(text(), '(function(){google.ldi')]",
-			"replaceE": "#navcnt, #rcnt div[role='navigation'], #botstuff div[role='navigation'], #main>footer>div:first-child",
+			"nextL": "#pnnext,footer>div:first-child a[aria-label]",
+			"pageE": "id('search')/div | id('rso')/div | //style[not(contains(text(),'table,div,span,p{display:none}'))] | //body/script[@nonce][not(@src)][starts-with(text(),'(function(){var s=') or starts-with(text(),'(function(){google.ldi')]",
+			"replaceE": "#navcnt,#rcnt div[role='navigation'],#botstuff div[role='navigation'],#main>footer>div:first-child",
 			"scriptT": 2,
 			"scrollD": 2500
 		},
 		"function": {
-			"bF": "fun.getAllCSS('#search img[id^=dimg],#search img[id^=rimg],#rso img[id^=dimg],#rso img[id^=rimg]').forEach(function (img) {img.id = 'old_'+img.id;}); if(!fun.indexOF('tbm=vid', 's') && fun.indexOF('tbm=', 's')){return pageE}else{pageE.forEach(function (img) {fun.getAllCSS('img[id^=dimg]:not([data-atf])', img).forEach(function (img1) {img1.setAttribute('data-atf', '1');})}); return pageE}"
+			"bF": "fun.getAllCSS('#search img[id^=dimg],#search img[id^=rimg],#rso img[id^=dimg],#rso img[id^=rimg]').forEach(function (img) {img.id = 'old_'+img.id;}); if(!fun.indexOF('tbm=vid','s') && fun.indexOF('tbm=','s')){return pageE}else{pageE.forEach(function (img) {fun.getAllCSS('img[id^=dimg]:not([data-atf])',img).forEach(function (img1) {img1.setAttribute('data-atf','1');})}); return pageE}"
 		}
 	},
 	"必应搜索 + 手机版": {
 		"host": ["www.bing.com","cn.bing.com","www4.bing.com","global.bing.com"],
 		"url": "if (fun.lp() == '/search') {if (fun.isMobile() && document.documentElement.lang != 'zh') {return false;} else {return true;}}",
-		"style": "#b_footer, .b_msg, #bnp_rich_div",
+		"style": "#b_footer,.b_msg,#bnp_rich_div",
 		"history": true,
 		"pager": {
-			"nextL": "a.sb_pagN, a.sb_halfnext, a.sb_fullnpl",
+			"nextL": "a.sb_pagN,a.sb_halfnext,a.sb_fullnpl",
 			"pageE": "#b_results>li.b_algo",
-			"replaceE": "#b_results>.b_pag, #b_PagAboveFooter"
+			"replaceE": "#b_results>.b_pag,#b_PagAboveFooter"
 		},
 		"function": {
-			"bF": "pageE.forEach(function (one) {fun.getAllCSS('div.rms_iac[data-src]', one).forEach(function (one1) {one1.outerHTML = `<img src=\"${one1.dataset.src}\" height=\"32\" width=\"32\" role=\"presentation\" class=\"rms_img\">`; }) }); return pageE"
+			"bF": "pageE.forEach(function (one) {fun.getAllCSS('div.rms_iac[data-src]',one).forEach(function (one1) {one1.outerHTML = `<img src=\"${one1.dataset.src}\" height=\"32\" width=\"32\" role=\"presentation\" class=\"rms_img\">`; }) }); return pageE"
 		}
 	},
 	"搜狗搜索": {
@@ -118,7 +118,7 @@
 		"url": "return (fun.lp() == '/search/' || fun.isMobile())",
 		"history": true,
 		"pager": {
-			"nextL": "#page-bottom a[class*='containerRight_'], #page-bottom a[class*='container_']",
+			"nextL": "#page-bottom a[class*='containerRight_'],#page-bottom a[class*='container_']",
 			"pageE": "#results>div",
 			"replaceE": "#page-bottom"
 		}
@@ -128,12 +128,12 @@
 		"url": "/^\\/search/",
 		"history": true,
 		"pager": {
-			"nextL": "//div[contains(@class, '-pagination')]/a[string()='下一页']",
+			"nextL": "//div[contains(@class,'-pagination')]/a[string()='下一页']",
 			"pageE": "div[class*='-result-list']>.result-content[data-i]",
 			"replaceE": "div[class*='-pagination']"
 		},
 		"function": {
-			"bF": "if (fun.getXpath('//div[contains(@class,\"-header\") and string()=\"相关搜索\"]', pageE[pageE.length - 1])) {pageE[pageE.length - 1].style.display = 'none';}; return pageE"
+			"bF": "if (fun.getXpath('//div[contains(@class,\"-header\") and string()=\"相关搜索\"]',pageE[pageE.length - 1])) {pageE[pageE.length - 1].style.display = 'none';}; return pageE"
 		}
 	},
 	"神马搜索": {
@@ -155,7 +155,7 @@
 			"replaceE": "#page"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-isrc]','data-isrc'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-isrc]','data-isrc'])"
 		}
 	},
 	"360 搜索": {
@@ -165,11 +165,11 @@
 		"history": true,
 		"pager": {
 			"nextL": "a#snext",
-			"pageE": "ul.result>li, style:not(src)",
+			"pageE": "ul.result>li,style:not(src)",
 			"replaceE": "#page"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-isrc]','data-isrc'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-isrc]','data-isrc'])"
 		}
 	},
 	"DuckDuckGo 搜索": {
@@ -182,7 +182,7 @@
 		"url": "/\\/search/",
 		"history": false,
 		"pager": {
-			"nextL": "js; return fun.getNextF('//div[contains(@class, \"pagination\")]/form[./button[@class=\"pagination__next-prev-button next\"]]')",
+			"nextL": "js; return fun.getNextF('//div[contains(@class,\"pagination\")]/form[./button[@class=\"pagination__next-prev-button next\"]]')",
 			"pageE": "section.w-gl--desktop>div",
 			"replaceE": ".pagination"
 		}
@@ -192,9 +192,9 @@
 		"url": "/^\\/search\\//",
 		"history": true,
 		"pager": {
-			"nextL": "a.Pager-Item_type_next, a.pager__item_kind_next",
-			"pageE": "#search-result, style",
-			"replaceE": ".Pager, .pager"
+			"nextL": "a.Pager-Item_type_next,a.pager__item_kind_next",
+			"pageE": "#search-result,style",
+			"replaceE": ".Pager,.pager"
 		}
 	},
 	"Yandex 搜索 - 视频": {
@@ -238,7 +238,7 @@
 	},
 	"Qwant 搜索": {
 		"host": "www.qwant.com",
-		"url": "fun.isUrlC(); return (fun.indexOF('q=', 's') && fun.indexOF('t=web', 's'))",
+		"url": "fun.isUrlC(); return (fun.indexOF('q=','s') && fun.indexOF('t=web','s'))",
 		"pager": {
 			"type": 2,
 			"nextL": "button[data-testid='buttonShowMore']"
@@ -268,7 +268,7 @@
 	"Presearch": {
 		"host": "presearch.com",
 		"url": "/^\\/search/",
-		"style": "[x-if^='state.results.pages']+div, .text-gray-300>[x-data]",
+		"style": "[x-if^='state.results.pages']+div,.text-gray-300>[x-data]",
 		"pager": {
 			"type": 6,
 			"nextL": "a[\\:class*='${state.results.pages[state.results.pages.length-1]']",
@@ -284,7 +284,7 @@
 		"history": true,
 		"pager": {
 			"nextL": "a.pagination__num--next",
-			"pageE": ".content-answers-top-wrap, .content-answers-top-wrap~div",
+			"pageE": ".content-answers-top-wrap,.content-answers-top-wrap~div",
 			"replaceE": ".pagination"
 		}
 	},
@@ -302,11 +302,11 @@
 		"url": "if (location.hostname == 'jump2.bdimg.com') location.hostname = 'tieba.baidu.com'; return (fun.indexOF('/p/')) ",
 		"iframe": true,
 		"thread": true,
-		"style": ".d_sign_split, img.j_user_sign, .d_author .d_pb_icons, .save_face_bg, .save_face_bg_2, li.d_name a.icon_tbworld, .lzl_cnt a.icon_tbworld, .topic_list_box.topic-fixed {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text, .red-text, .vip_red, .vip-red, .vip_red:hover, .vip-red:hover, .vip_red:visited, .vip-red:visited {color: #2d64b3 !important;}",
+		"style": ".d_sign_split,img.j_user_sign,.d_author .d_pb_icons,.save_face_bg,.save_face_bg_2,li.d_name a.icon_tbworld,.lzl_cnt a.icon_tbworld,.topic_list_box.topic-fixed {display: none !important;} a.p_author_face.j_frame_guide {background: none repeat scroll 0 0 #FFF !important;border: 1px solid #CCC !important;padding: inherit !important;} .red_text,.red-text,.vip_red,.vip-red,.vip_red:hover,.vip-red:hover,.vip_red:visited,.vip-red:visited {color: #2d64b3 !important;}",
 		"pager": {
 			"type": 5,
 			"nextL": "//li[contains(@class,'pb_list_pager')]/a[text()='下一页']",
-			"style": "ul.tbui_aside_float_bar, .core_title_wrap_bright.tbui_follow_fixed.core_title_absolute_bright {display: none !important;}"
+			"style": "ul.tbui_aside_float_bar,.core_title_wrap_bright.tbui_follow_fixed.core_title_absolute_bright {display: none !important;}"
 		}
 	},
 	"百度贴吧": {
@@ -316,13 +316,13 @@
 		"history": false,
 		"pager": {
 			"nextL": "js; if (fun.getCSS('a.next.pagination-item')) return (fun.getCSS('a.next.pagination-item').href + '&pagelets=frs-list%2Fpagelet%2Fthread&pagelets_stamp=' + new Date().getTime())",
-			"pageE": "//script[contains(text(), 'Bigpipe.register(\"frs-list/pagelet/thread_list\", ')]",
+			"pageE": "//script[contains(text(),'Bigpipe.register(\"frs-list/pagelet/thread_list\", ')]",
 			"insertP": ["#thread_list",3],
 			"interval": 2000,
 			"scrollD": 3000
 		},
 		"function": {
-			"bF": "let scriptText = pageE[0].textContent.replace('Bigpipe.register(\"frs-list/pagelet/thread_list\", ',''); scriptText = scriptText.slice(0, scriptText.indexOf(').')); let temp = document.createElement('div'); temp.innerHTML = JSON.parse(scriptText).content; fun.getCSS('#frs_list_pager').innerHTML = fun.getCSS('#frs_list_pager',temp).innerHTML; return fun.src_bF(fun.getAllCSS('#thread_list>li',temp))"
+			"bF": "let scriptText = pageE[0].textContent.replace('Bigpipe.register(\"frs-list/pagelet/thread_list\", ',''); scriptText = scriptText.slice(0,scriptText.indexOf(').')); let temp = document.createElement('div'); temp.innerHTML = JSON.parse(scriptText).content; fun.getCSS('#frs_list_pager').innerHTML = fun.getCSS('#frs_list_pager',temp).innerHTML; return fun.src_bF(fun.getAllCSS('#thread_list>li',temp))"
 		}
 	},
 	"豆瓣": {
@@ -347,7 +347,7 @@
 		"url": "return (fun.lp() == '/top250' || fun.indexOF(/^\\/subject\\/\\d+\\/(episode|tv_discuss|reviews|photos)/) || fun.indexOF(/^\\/people\\/.+\\/(do|wish|collect)/) || fun.indexOF(/^\\/celebrity\\/\\d+\\/(movies|photos)/))",
 		"pager": {
 			"nextL": "link[rel='next']",
-			"pageE": ".grid_view, #comments, .review-list, .interest-list, .grid-view, .grid_view>ul>li, .poster-col3>li",
+			"pageE": ".grid_view,#comments,.review-list,.interest-list,.grid-view,.grid_view>ul>li,.poster-col3>li",
 			"replaceE": ".paginator",
 			"scrollD": 2500
 		}
@@ -368,23 +368,23 @@
 		"url": "return (fun.indexOF(/^\\/(doulist|tag)\\//) || fun.lp() == '/group/explore' || ((fun.indexOF(/^\\/people\\/.+\\/status/) && fun.indexOF('tab=','s') && !fun.indexOF('tab=collect','s'))) || (fun.indexOF(/^\\/note\\/\\d+\\//) && fun.indexOF('type=','s')))",
 		"pager": {
 			"nextL": "link[rel='next']",
-			"pageE": ".doulist-item, .article>.mod:not([id='doulist-info']), .channel-item, .list",
+			"pageE": ".doulist-item,.article>.mod:not([id='doulist-info']),.channel-item,.list",
 			"replaceE": ".paginator"
 		}
 	},
 	"豆瓣 - 小组/讨论区 - 帖子内": {
-		"host": ["www.douban.com", "movie.douban.com"],
+		"host": ["www.douban.com","movie.douban.com"],
 		"url": "return (fun.indexOF('/group/topic/') || fun.indexOF(/^\\/subject\\/.+\\/discussion\\/\\d+/))",
 		"thread": true,
 		"pager": {
 			"nextL": "link[rel='next']",
-			"pageE": ".comment-item, .list>ul>li",
+			"pageE": ".comment-item,.list>ul>li",
 			"replaceE": ".paginator",
 			"scrollD": 2500
 		}
 	},
 	"豆瓣 - 小组/讨论区": {
-		"host": ["www.douban.com", "movie.douban.com"],
+		"host": ["www.douban.com","movie.douban.com"],
 		"url": "/^\\/(group|subject)\\/.+\\/discussion/",
 		"blank": 3,
 		"pager": {
@@ -411,12 +411,12 @@
 			"scrollD": 2500
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[loadlate]','loadlate'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[loadlate]','loadlate'])"
 		}
 	},
 	"The Movie Database": {
 		"host": "www.themoviedb.org",
-		"url": "if (fun.indexOF('/search/')){return true;}else{setTimeout(()=>{document.querySelector('#pagination_page_1 a.load_more').click();}, 1000)}",
+		"url": "if (fun.indexOF('/search/')){return true;}else{setTimeout(()=>{document.querySelector('#pagination_page_1 a.load_more').click();},1000)}",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next_page",
@@ -457,9 +457,9 @@
 		"host": "bbs.tianya.cn",
 		"url": "/\\/list/",
 		"pager": {
-			"nextL": "//div[contains(@class, 'pages')]/div[@class='links']/a[text()='下一页']",
+			"nextL": "//div[contains(@class,'pages')]/div[@class='links']/a[text()='下一页']",
 			"pageE": ".tab-bbs-list>tbody:not(:first-of-type)",
-			"replaceE": "//div[contains(@class, 'pages')]"
+			"replaceE": "//div[contains(@class,'pages')]"
 		}
 	},
 	"天涯社区 - 帖子内": {
@@ -498,7 +498,7 @@
 		"gmxhr": true,
 		"pager": {
 			"nextL": "#pagebbtm a[title='下一页']",
-			"pageE": "#topicrows>tbody, #topicrows>script",
+			"pageE": "#topicrows>tbody,#topicrows>script",
 			"replaceE": "div[name='pageball']",
 			"scriptT": 2
 		},
@@ -516,7 +516,7 @@
 		"retry": 1000,
 		"pager": {
 			"nextL": "#pagebbtm a[title*='下一页']",
-			"pageE": "id('m_posts_c')/* | //script[contains(text(), 'commonui.userInfo.setAll')]",
+			"pageE": "id('m_posts_c')/* | //script[contains(text(),'commonui.userInfo.setAll')]",
 			"replaceE": "div[name='pageball']",
 			"scriptT": 2
 		}
@@ -537,17 +537,17 @@
 		"blank": 3,
 		"pager": {
 			"nextL": ".page_current+a",
-			"pageE": ".cell.item, #notifications>div, #TopicsNode>div, #Main>.box>.dock_area,#Main>.box>.dock_area+.inner,#Main>.box>.dock_area+.cell:not([style]), table.data>tbody>tr:not(:first-child)",
+			"pageE": ".cell.item,#notifications>div,#TopicsNode>div,#Main>.box>.dock_area,#Main>.box>.dock_area+.inner,#Main>.box>.dock_area+.cell:not([style]), table.data>tbody>tr:not(:first-child)",
 			"replaceE": "//a[@class='page_current']/../.."
 		}
 	},
 	"煎蛋网": {
 		"host": "jandan.net",
 		"url": "/^(\\/$|\\/page\\/)/",
-		"style": "#nav_prev, #nav_next, .post.f:not(.list-post)",
+		"style": "#nav_prev,#nav_next,.post.f:not(.list-post)",
 		"history": false,
 		"pager": {
-			"nextL": "//div[@class='wp-pagenavi']/a[contains(text(), '下一页') or contains(text(), '更多文章')]",
+			"nextL": "//div[@class='wp-pagenavi']/a[contains(text(),'下一页') or contains(text(),'更多文章')]",
 			"pageE": "#content>.list-post",
 			"replaceE": ".wp-pagenavi"
 		},
@@ -567,15 +567,15 @@
 	"煎蛋网 - 吐槽": {
 		"host": "jandan.net",
 		"url": "/^\\/(qa|pic|ooxx|treehole)/",
-		"style": "#nav_prev, #nav_next, #tucao-gg {display: none !important;} .jandan-vote a.tucao-btn23:link {color: #c8c7cc !important;} .jandan-tucao {background-color: #fafaf9 !important;}",
+		"style": "#nav_prev,#nav_next,#tucao-gg {display: none !important;} .jandan-vote a.tucao-btn23:link {color: #c8c7cc !important;} .jandan-tucao {background-color: #fafaf9 !important;}",
 		"pager": {
 			"nextL": "a.previous-comment-page",
-			"pageE": "ol.commentlist>li[id^='comment-'], head>script:not([src])",
+			"pageE": "ol.commentlist>li[id^='comment-'],head>script:not([src])",
 			"replaceE": ".cp-pagenavi",
 			"scriptT": 2
 		},
 		"function": {
-			"bF": "fun.getAllCSS('a.tucao-btn, a.comment-like.like, a.comment-unlike.unlike').forEach(function (now) {now.className = now.className.replace('tucao-btn', 'tucao-btn23').replace('comment-unlike', 'comment-unlike23').replace('comment-like', 'comment-like23');}); return pageE"
+			"bF": "fun.getAllCSS('a.tucao-btn,a.comment-like.like,a.comment-unlike.unlike').forEach(function (now) {now.className = now.className.replace('tucao-btn','tucao-btn23').replace('comment-unlike','comment-unlike23').replace('comment-like','comment-like23');}); return pageE"
 		}
 	},
 	"龙的天空": {
@@ -583,7 +583,7 @@
 		"url": "fun.isUrlC(); return (fun.indexOF('/forum/'))",
 		"history": false,
 		"pager": {
-			"nextL": "js; let next = fun.getCSS('li.ant-pagination-next'), page; if (next && next.getAttribute('aria-disabled') === 'false') { page = fun.getCSS('li.ant-pagination-item-active[title]'); if (page && page.title) {return (location.origin + location.pathname + '?page=' + ++page.title);}}; return '';",
+			"nextL": "js; let next = fun.getCSS('li.ant-pagination-next'),page; if (next && next.getAttribute('aria-disabled') === 'false') { page = fun.getCSS('li.ant-pagination-item-active[title]'); if (page && page.title) {return (location.origin + location.pathname + '?page=' + ++page.title);}}; return '';",
 			"pageE": "//div[@class='main-title']/../.. | //head/style[@data-emotion-css]",
 			"replaceE": "ul.ant-pagination"
 		}
@@ -594,7 +594,7 @@
 		"thread": true,
 		"history": false,
 		"pager": {
-			"nextL": "js; let next = fun.getCSS('li.ant-pagination-next'), page; if (next && next.getAttribute('aria-disabled') === 'false') { page = fun.getCSS('li.ant-pagination-item-active[title]'); if (page && page.title) {return (location.origin + location.pathname + '?page=' + ++page.title);}}; return '';",
+			"nextL": "js; let next = fun.getCSS('li.ant-pagination-next'),page; if (next && next.getAttribute('aria-disabled') === 'false') { page = fun.getCSS('li.ant-pagination-item-active[title]'); if (page && page.title) {return (location.origin + location.pathname + '?page=' + ++page.title);}}; return '';",
 			"pageE": "//div[@class='main-content']/.. | //head/style[@data-emotion-css]",
 			"replaceE": "ul.ant-pagination"
 		}
@@ -602,7 +602,7 @@
 	"水木社区": {
 		"host": "www.newsmth.net",
 		"url": "return (location.href.indexOf('board/') != -1)",
-		"style": "[id*='banner'], [class*='banner']",
+		"style": "[id*='banner'],[class*='banner']",
 		"blank": 4,
 		"pager": {
 			"nextL": ".page-select+li.page-normal>a",
@@ -614,7 +614,7 @@
 	"水木社区 - 帖子内": {
 		"host": "www.newsmth.net",
 		"url": "return (location.href.indexOf('article/') != -1)",
-		"style": "[id*='banner'], [class*='banner']",
+		"style": "[id*='banner'],[class*='banner']",
 		"thread": true,
 		"pager": {
 			"nextL": ".page-select+li.page-normal>a",
@@ -669,12 +669,12 @@
 			"replaceE": ".pagination>ul"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-normal]','data-normal'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-normal]','data-normal'])"
 		}
 	},
 	"2DFan - 评论": {
 		"host": ["2dfan.com","www.2dfan.com","ddfan.org","/^ddfan\\.[a-z]+$/","/^galge\\.[a-z]+$/","/^fan2d\\.[a-z]+$/"],
-		"url": "if (fun.getCSS('#comments')&&fun.getCSS('.pagination')){[].slice.call(fun.getAllCSS('#comments>div')).reverse().forEach((e)=>{document.querySelector('#comments>.pagination').insertAdjacentElement('beforebegin', e);});return true}",
+		"url": "if (fun.getCSS('#comments')&&fun.getCSS('.pagination')){[].slice.call(fun.getAllCSS('#comments>div')).reverse().forEach((e)=>{document.querySelector('#comments>.pagination').insertAdjacentElement('beforebegin',e);});return true}",
 		"history": false,
 		"pager": {
 			"nextL": "a[rel='prev']",
@@ -703,11 +703,11 @@
 		"url": "fun.isUrlC(); return (fun.indexOF('/community/'))",
 		"pager": {
 			"nextL": "li.pagination-item.is-active+li>a",
-			"pageE": ".data-wrapper>section.community-card, style",
-			"replaceE": "//ul[./li[contains(@class, 'pagination-item')]]"
+			"pageE": ".data-wrapper>section.community-card,style",
+			"replaceE": "//ul[./li[contains(@class,'pagination-item')]]"
 		},
 		"function": {
-			"bF": "pageE.forEach(function (one) { one.querySelectorAll('.g-load-img-wrap, .tw-absolute.tw-cursor-pointer, .avatar').forEach(function (now) { fun.getCSS('noscript+img', now).src = fun.getCSS('noscript>img', now).src; }); }); return pageE"
+			"bF": "pageE.forEach(function (one) { one.querySelectorAll('.g-load-img-wrap,.tw-absolute.tw-cursor-pointer,.avatar').forEach(function (now) { fun.getCSS('noscript+img',now).src = fun.getCSS('noscript>img',now).src; }); }); return pageE"
 		}
 	},
 	"宽带山论坛": {
@@ -726,14 +726,14 @@
 		"thread": true,
 		"pager": {
 			"nextL": "//div[@class='pages']/a[text()='>>']",
-			"pageE": "#reply_list_panel>*, script[src*='ui/js/kds.js']",
+			"pageE": "#reply_list_panel>*,script[src*='ui/js/kds.js']",
 			"replaceE": ".pages",
 			"scriptT": 2
 		}
 	},
 	"篱笆网论坛": {
 		"host": "www.libaclub.com",
-		"url": "fun.insStyle('li.ui-list-merchant-ad, .ui-nav-appImage {display: none !important;}'); return (fun.lp() == '/' || fun.indexOF('/date_'))",
+		"url": "fun.insStyle('li.ui-list-merchant-ad,.ui-nav-appImage {display: none !important;}'); return (fun.lp() == '/' || fun.indexOF('/date_'))",
 		"pager": {
 			"nextL": "//div[@class='ui-crumbs-more']/a[@class='fn-link'][1]",
 			"pageE": "ul.ui-list>li:not(.ui-list-item-head):not(.ui-list-merchant-ad)",
@@ -755,7 +755,7 @@
 		"thread": true,
 		"pager": {
 			"nextL": "a.ui-paging-next",
-			"pageE": ".ui-box-content>div.ui-topic, .ui-box-content>a[name]",
+			"pageE": ".ui-box-content>div.ui-topic,.ui-box-content>a[name]",
 			"insertP": [".ui-box-content",3],
 			"replaceE": "div.ui-paging"
 		}
@@ -774,7 +774,7 @@
 		"host": "www.libaclub.com",
 		"url": "/\\/facade.php/",
 		"pager": {
-			"nextL": "//div[@class='ui-page']/a[contains(text(), '下一页')]",
+			"nextL": "//div[@class='ui-page']/a[contains(text(),'下一页')]",
 			"pageE": ".ui-box-main>ul.ui-list>li",
 			"replaceE": "div.ui-page"
 		}
@@ -793,7 +793,7 @@
 		"host": "www.taoguba.com.cn",
 		"url": "/\\/(bbs|zongban|dianzan|jinghua)\\//",
 		"pager": {
-			"nextL": "js; let next = fun.getCSS('.next-page.pageDisabled'), next_ = '/'; if (next) {next = next.getAttribute('onclick').replace('gotoPage(','').replace(')','').split(','); if (fun.indexOF(/\\/dianzan|jinghua\\//)) next_ = '-'; if (parseInt(next[0]) <= parseInt(next[2])) {return (`${location.origin}/${location.pathname.split('/')[1]}/${next[0]}${next_}${next[1]}`)};}; return '';",
+			"nextL": "js; let next = fun.getCSS('.next-page.pageDisabled'),next_ = '/'; if (next) {next = next.getAttribute('onclick').replace('gotoPage(','').replace(')','').split(','); if (fun.indexOF(/\\/dianzan|jinghua\\//)) next_ = '-'; if (parseInt(next[0]) <= parseInt(next[2])) {return (`${location.origin}/${location.pathname.split('/')[1]}/${next[0]}${next_}${next[1]}`)};}; return '';",
 			"pageE": ".items-comment-list",
 			"replaceE": ".t_page"
 		}
@@ -802,7 +802,7 @@
 		"host": "www.taoguba.com.cn",
 		"url": "/\\/shenghuoba\\//",
 		"pager": {
-			"nextL": "js; let next = fun.getCSS('#N_go_pageBtn'), next_ = location.pathname.split('/')[2].split('-')[0]; if (next && (parseInt(next.dataset.now) + 1 <= parseInt(next.dataset.total))) {if (!next_) next_ = 'H'; return (`${location.origin}/shenghuoba/${next_}-${parseInt(next.dataset.now) + 1}`)}; return '';",
+			"nextL": "js; let next = fun.getCSS('#N_go_pageBtn'),next_ = location.pathname.split('/')[2].split('-')[0]; if (next && (parseInt(next.dataset.now) + 1 <= parseInt(next.dataset.total))) {if (!next_) next_ = 'H'; return (`${location.origin}/shenghuoba/${next_}-${parseInt(next.dataset.now) + 1}`)}; return '';",
 			"pageE": ".lifeContent-topicList-item",
 			"replaceE": ".N_sortPage "
 		}
@@ -812,7 +812,7 @@
 		"url": "/\\/Article\\//",
 		"thread": true,
 		"pager": {
-			"nextL": "js; let next = fun.getXpath('//div[contains(@class, \"t_page01\")]/a[contains(text(), \"下一页\")]');if (next) {next = next.getAttribute('onclick').replace('gotoPageTopic(','').replace(')','').split(','); if (parseInt(next[0]) <= parseInt(next[1])) {return (`${location.origin}/Article/${fun.getCSS(\"#looktopicID\").value}/${next[0]}`)}}; return '';",
+			"nextL": "js; let next = fun.getXpath('//div[contains(@class,\"t_page01\")]/a[contains(text(),\"下一页\")]');if (next) {next = next.getAttribute('onclick').replace('gotoPageTopic(','').replace(')','').split(','); if (parseInt(next[0]) <= parseInt(next[1])) {return (`${location.origin}/Article/${fun.getCSS(\"#looktopicID\").value}/${next[0]}`)}}; return '';",
 			"pageE": ".list-reply:not([style*=display])>div[id]",
 			"replaceE": ".t_page"
 		},
@@ -824,12 +824,12 @@
 		"host": "bbs.lieyou888.com",
 		"url": "/^\\/forum/",
 		"pager": {
-			"nextL": "//div[contains(@class, '_pageNav')]/a[text()='下一页']",
+			"nextL": "//div[contains(@class,'_pageNav')]/a[text()='下一页']",
 			"pageE": "ul.gb-bbs-list>li",
 			"replaceE": "._pageNav"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[original]', 'original'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[original]','original'])"
 		}
 	},
 	"汽车之家论坛": {
@@ -855,7 +855,7 @@
 	},
 	"飞客网论坛": {
 		"host": "www.flyert.com",
-		"url": "return (fun.indexOF('/forum-') || fun.indexOF('mod=forumdisplay', 's'))",
+		"url": "return (fun.indexOF('/forum-') || fun.indexOF('mod=forumdisplay','s'))",
 		"pager": {
 			"nextL": "a.nxt:not([href*='javascript'])",
 			"pageE": "#threadlist table>tbody[id^='normalthread_']",
@@ -865,7 +865,7 @@
 	},
 	"飞客网论坛 - 帖子内": {
 		"host": "www.flyert.com",
-		"url": "return (fun.indexOF('/forum') || fun.indexOF('mod=viewthread', 's'))",
+		"url": "return (fun.indexOF('/forum') || fun.indexOF('mod=viewthread','s'))",
 		"thread": true,
 		"pager": {
 			"nextL": "a.nxt:not([href*='javascript'])",
@@ -968,7 +968,7 @@
 	},
 	"北+ - 用户页": {
 		"host": ["/^((www|bbs)\\.)?(soul|snow|south|spring|summer|north|white|level|east)-plus\\.(net|org)$/","bbs.imoutolove.me"],
-		"url": "return (fun.lp() == '/u.php' && (fun.indexOF('action-topic-', 's') || fun.indexOF('action-post-', 's')))",
+		"url": "return (fun.lp() == '/u.php' && (fun.indexOF('action-topic-','s') || fun.indexOF('action-post-','s')))",
 		"pager": {
 			"nextL": "//div[@class='pages']/ul/li[./b]/following-sibling::li[1][not(@class)]/a[not(text()='»')]",
 			"pageE": "#u-contentmain table tr",
@@ -977,7 +977,7 @@
 	},
 	"纯美苹果园": {
 		"host": "www.goddessfantasy.net",
-		"url": "return (fun.indexOF('board=', 's'))",
+		"url": "return (fun.indexOF('board=','s'))",
 		"pager": {
 			"nextL": "//div[contains(@class,'pagelinks')]/a[@class='navPages' and text()='»']",
 			"pageE": ".table_grid>tbody>tr",
@@ -986,7 +986,7 @@
 	},
 	"纯美苹果园 - 帖子内": {
 		"host": "www.goddessfantasy.net",
-		"url": "return (fun.indexOF('topic=', 's'))",
+		"url": "return (fun.indexOF('topic=','s'))",
 		"thread": true,
 		"pager": {
 			"nextL": "//div[contains(@class,'pagelinks')]/a[@class='navPages' and text()='»']",
@@ -998,8 +998,8 @@
 		"host": ["adnmb3.com","www.tnmb.org","nimingban.xyz","nimingban.org","www.nmbxd.com","www.nmbxd1.com"],
 		"url": "/\\/(m|Mobile)\\/(f|timeline)\\//",
 		"pager": {
-			"nextL": "//li[contains(@class, 'pagination-next')]//a[text()='下一页']",
-			"pageE": ".h-middle>div[id^='threads_'], .h-middle>hr.h-middle>div[id^='threads_'], .h-middle>hr:nth-of-type(n+2), script[src$='/h.mobile.js']",
+			"nextL": "//li[contains(@class,'pagination-next')]//a[text()='下一页']",
+			"pageE": ".h-middle>div[id^='threads_'],.h-middle>hr.h-middle>div[id^='threads_'],.h-middle>hr:nth-of-type(n+2),script[src$='/h.mobile.js']",
 			"insertP": ["#h-threads-pagination",1],
 			"replaceE": "#h-threads-pagination",
 			"scriptT": 2
@@ -1010,8 +1010,8 @@
 		"url": "/\\/m\\/t\\//",
 		"thread": true,
 		"pager": {
-			"nextL": "//li[contains(@class, 'pagination-next')]//a[text()='下一页']",
-			"pageE": ".h-threads-replylist>div, script[src$='/h.mobile.js']",
+			"nextL": "//li[contains(@class,'pagination-next')]//a[text()='下一页']",
+			"pageE": ".h-threads-replylist>div,script[src$='/h.mobile.js']",
 			"replaceE": "#h-threads-pagination",
 			"scriptT": 2
 		}
@@ -1020,9 +1020,9 @@
 		"host": ["adnmb3.com","www.tnmb.org","nimingban.xyz","nimingban.org","www.nmbxd.com","www.nmbxd1.com"],
 		"url": "/\\/(f|Forum)\\//",
 		"pager": {
-			"nextL": "//ul[contains(@class, 'pagination')]//a[text()='下一页']",
-			"pageE": ".h-threads-list>*, script[src$='/h.desktop.js']",
-			"replaceE": "//ul[contains(@class, 'pagination')]",
+			"nextL": "//ul[contains(@class,'pagination')]//a[text()='下一页']",
+			"pageE": ".h-threads-list>*,script[src$='/h.desktop.js']",
+			"replaceE": "//ul[contains(@class,'pagination')]",
 			"scriptT": 2
 		}
 	},
@@ -1031,9 +1031,9 @@
 		"url": "/\\/t\\//",
 		"thread": true,
 		"pager": {
-			"nextL": "//ul[contains(@class, 'pagination')]//a[text()='下一页']",
-			"pageE": ".h-threads-list>.h-threads-item>.h-threads-item-replys, .h-threads-list>.h-threads-item>.h-threads-item-replies, script[src$='/h.desktop.js']",
-			"replaceE": "//ul[contains(@class, 'pagination')]",
+			"nextL": "//ul[contains(@class,'pagination')]//a[text()='下一页']",
+			"pageE": ".h-threads-list>.h-threads-item>.h-threads-item-replys,.h-threads-list>.h-threads-item>.h-threads-item-replies,script[src$='/h.desktop.js']",
+			"replaceE": "//ul[contains(@class,'pagination')]",
 			"scriptT": 2
 		}
 	},
@@ -1090,7 +1090,7 @@
 		"url": "/\\/(forum\\/\\d)|search/",
 		"pager": {
 			"nextL": "li.ipsPagination_next:not(.ipsPagination_inactive)>a",
-			"pageE": "ol.ipsDataList>li[data-rowid], ol.ipsStream>li",
+			"pageE": "ol.ipsDataList>li[data-rowid],ol.ipsStream>li",
 			"replaceE": "ul.ipsPagination"
 		}
 	},
@@ -1156,7 +1156,7 @@
 		"host": "answers.microsoft.com",
 		"url": "/\\/forum\\/all\\//",
 		"pager": {
-			"nextL": "js; return fun.getNextEP('.pageNumberLayout.selectedPageNumber+span.pageNumberLayout>a', 'page=', /page=\\d+/)",
+			"nextL": "js; return fun.getNextEP('.pageNumberLayout.selectedPageNumber+span.pageNumberLayout>a','page=',/page=\\d+/)",
 			"pageE": ".thread-message",
 			"replaceE": ".pagingControl"
 		}
@@ -1166,14 +1166,14 @@
 		"url": "return fun.isPager()",
 		"pager": {
 			"nextL": "a.pager-next",
-			"pageE": "li.post-list-item, li.content-item",
+			"pageE": "li.post-list-item,li.content-item",
 			"replaceE": ".nsk-pager"
 		}
 	},
 	"Pixiv - 分类页": {
 		"host": "www.pixiv.net",
-		"url": "fun.isUrlC(); if (fun.isMobile()) {return false}; if (fun.lp() == '/') {fun.blank();} else if (fun.indexOF('/tags/')) {return true;} else if (fun.indexOF('/artworks/')) {setTimeout(()=>{fun.getXpath('//button[contains(string(), \"查看全部\") or contains(string(), \"See all\") or contains(string(), \"すべて見る\") or contains(string(), \"모두 보기\")]').click();},3000)}",
-		"style": "ul[class*='-1 ']>li {display: inline !important;} #root{margin-bottom: -175px;} ul>li>button[class^='sc-'], a[href^='/premium/lead/lp'] {display: none !important;}",
+		"url": "fun.isUrlC(); if (fun.isMobile()) {return false}; if (fun.lp() == '/') {fun.blank();} else if (fun.indexOF('/tags/')) {return true;} else if (fun.indexOF('/artworks/')) {setTimeout(()=>{fun.getXpath('//button[contains(string(),\"查看全部\") or contains(string(),\"See all\") or contains(string(),\"すべて見る\") or contains(string(),\"모두 보기\")]').click();},3000)}",
+		"style": "ul[class*='-1 ']>li {display: inline !important;} #root{margin-bottom: -175px;} ul>li>button[class^='sc-'],a[href^='/premium/lead/lp'] {display: none !important;}",
 		"iframe": true,
 		"pager": {
 			"type": 5,
@@ -1184,7 +1184,7 @@
 		"host": "www.pixiv.net",
 		"url": "if (fun.isMobile()) {return false}; return (fun.indexOF('/users/') && fun.indexOF(/\\/(artworks|illustrations|manga)/))",
 		"iframe": true,
-		"style": "ul[class*='-1 ']>li {display: inline !important;} #root{margin-bottom: -125px;} ul>li>button[class^='sc-'][style='background-color: rgb(0, 0, 0);'], a[href^='/premium/lead/lp'] {display: none !important;}",
+		"style": "ul[class*='-1 ']>li {display: inline !important;} #root{margin-bottom: -125px;} ul>li>button[class^='sc-'][style='background-color: rgb(0,0,0);'],a[href^='/premium/lead/lp'] {display: none !important;}",
 		"pager": {
 			"type": 5,
 			"nextL": "a[aria-disabled='false'][class*='filterProps-Styled-Component'][href]:last-child"
@@ -1193,7 +1193,7 @@
 	"Pixiv - 手机版 - 分类页": {
 		"host": "www.pixiv.net",
 		"url": "if (!fun.isMobile()) {return false}; if (fun.indexOF('/tags/')) {if (self != top) {fun.insStyle('.search-header {display: none !important;}')}; return true;} else if (fun.indexOF('/artworks/')) {setTimeout(()=>{fun.getCSS('.work-details-thumb-buttons>.button-link').click();},3000)}",
-		"style": ".banner-ad-footer-scale, footer",
+		"style": ".banner-ad-footer-scale,footer",
 		"iframe": true,
 		"pager": {
 			"type": 5,
@@ -1202,8 +1202,8 @@
 	},
 	"Pixiv - 手机版 - 用户作品页": {
 		"host": "www.pixiv.net",
-		"url": "if (!fun.isMobile()) {return false}; if (fun.indexOF('/users/') && fun.indexOF(/\\/(artworks|illustrations|manga)/)) {if (self != top) {fun.insStyle('.masthead.cover-bg, .user-details {display: none !important;}')}; return true}",
-		"style": ".banner-ad-footer-scale, footer {display: none !important;} .user-details {margin-top: 0 !important;}",
+		"url": "if (!fun.isMobile()) {return false}; if (fun.indexOF('/users/') && fun.indexOF(/\\/(artworks|illustrations|manga)/)) {if (self != top) {fun.insStyle('.masthead.cover-bg,.user-details {display: none !important;}')}; return true}",
+		"style": ".banner-ad-footer-scale,footer {display: none !important;} .user-details {margin-top: 0 !important;}",
 		"iframe": true,
 		"pager": {
 			"type": 5,
@@ -1269,7 +1269,7 @@
 		"style": ".collects {display: block;}",
 		"pager": {
 			"nextL": ".tcdPageCode>span.current+a.tcdNumber",
-			"pageE": "//div[@class='content_list_box'] | //body/script[contains(text(), 'function loadcount()')]",
+			"pageE": "//div[@class='content_list_box'] | //body/script[contains(text(),'function loadcount()')]",
 			"replaceE": ".tcdPageCode",
 			"scriptT": 2
 		},
@@ -1323,11 +1323,11 @@
 	"千图网": {
 		"host": "www.58pic.com",
 		"url": "/\\/(c|tupian|piccate|pmulti|scene)\\//",
-		"style": ".qtw-card.place-box, .card-lazy, .is-line .is-back, .qtd-next-card, .login-model, .login-tip-page, .login-tip-header {display: none !important;} .pic-container.qtd-card-line-container>.qtd-card, .pic-container.qtd-card-mansory-container>.qtd-card {width: 316px;height: 428px;} .search-page-container {position: initial !important;}",
+		"style": ".qtw-card.place-box,.card-lazy,.is-line .is-back,.qtd-next-card,.login-model,.login-tip-page,.login-tip-header {display: none !important;} .pic-container.qtd-card-line-container>.qtd-card,.pic-container.qtd-card-mansory-container>.qtd-card {width: 316px;height: 428px;} .search-page-container {position: initial !important;}",
 		"pager": {
 			"type": 3,
 			"nextL": "//div[contains(@class,'page-box')]//a[text()='下一页']",
-			"pageE": ".qtd-card-container>.qtd-card[data-id], .pic-container>.active, .pic-container>.qtd-card[data-id], .card-grid-box.is-new:not(.favorites-box)>div, .list-box>div",
+			"pageE": ".qtd-card-container>.qtd-card[data-id],.pic-container>.active,.pic-container>.qtd-card[data-id],.card-grid-box.is-new:not(.favorites-box)>div,.list-box>div",
 			"replaceE": ".page-box"
 		},
 		"function": {
@@ -1336,11 +1336,11 @@
 	},
 	"千库网": {
 		"host": "588ku.com",
-		"style": ".listlogin-box.listloginBox, .CLdialogV1, .editIndexEntry, .globalRSideB",
+		"style": ".listlogin-box.listloginBox,.CLdialogV1,.editIndexEntry,.globalRSideB",
 		"pager": {
-			"nextL": "//ul[contains(@class, 'page-list')]//a[text()='下一页']",
-			"pageE": ".data-box .dataList, .data-box .data-list",
-			"insertP": [".data-box .dataList, .data-box .data-list",3],
+			"nextL": "//ul[contains(@class,'page-list')]//a[text()='下一页']",
+			"pageE": ".data-box .dataList,.data-box .data-list",
+			"insertP": [".data-box .dataList,.data-box .data-list",3],
 			"replaceE": "ul.page-list"
 		},
 		"function": {
@@ -1349,10 +1349,10 @@
 	},
 	"昵图网": {
 		"host": ["www.nipic.com","soso.nipic.com"],
-		"style": "li.search-works-item, a.search-works-nextpage",
+		"style": "li.search-works-item,a.search-works-nextpage",
 		"pager": {
-			"nextL": "//a[@title='下一页' or text()='下一页'][not(contains(@class, 'search-works-nextpage'))]",
-			"pageE": "li.new-search-works-item, li.new-works-box",
+			"nextL": "//a[@title='下一页' or text()='下一页'][not(contains(@class,'search-works-nextpage'))]",
+			"pageE": "li.new-search-works-item,li.new-works-box",
 			"replaceE": ".common-page-box"
 		},
 		"function": {
@@ -1362,10 +1362,10 @@
 	"摄图网": {
 		"host": ["699pic.com","xsj.699pic.com"],
 		"url": "return fun.isPager('r')",
-		"style": ".lastNavItem, .yaoxinAct-rukou",
+		"style": ".lastNavItem,.yaoxinAct-rukou",
 		"pager": {
 			"nextL": ".downPage",
-			"pageE": ".swipeboxEx>*, .search-video-wrap>.video-list>ul, ul.music-list, #all-fonts-box, .img-list>.img-list-box, .video-list-box",
+			"pageE": ".swipeboxEx>*,.search-video-wrap>.video-list>ul,ul.music-list,#all-fonts-box,.img-list>.img-list-box,.video-list-box",
 			"replaceE": ".pagelist",
 			"scriptT": 2
 		},
@@ -1388,10 +1388,10 @@
 	"我图网": {
 		"host": ["www.ooopic.com","so.ooopic.com","weili.ooopic.com"],
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/weili_'))",
-		"style": ".overWidth.clearfix.masonry {height: auto !important;} .pic-list, .video-list {position: relative !important;float: left !important;top: auto !important;left: auto !important;}",
+		"style": ".overWidth.clearfix.masonry {height: auto !important;} .pic-list,.video-list {position: relative !important;float: left !important;top: auto !important;left: auto !important;}",
 		"history": false,
 		"pager": {
-			"nextL": "a.next_page, a.so-next",
+			"nextL": "a.next_page,a.so-next",
 			"pageE": ".pic-item",
 			"replaceE": ".page"
 		},
@@ -1409,7 +1409,7 @@
 			"replaceE": ".pagelist"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-url]', 'data-url'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-url]','data-url'])"
 		}
 	},
 	"包图网 - 字体页": {
@@ -1422,7 +1422,7 @@
 			"replaceE": ".pagelist"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-url]', 'data-url'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-url]','data-url'])"
 		}
 	},
 	"包图网": {
@@ -1435,7 +1435,7 @@
 			"replaceE": ".pagelist"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-url]', 'data-url'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-url]','data-url'])"
 		}
 	},
 	"vcg.com": {
@@ -1460,13 +1460,13 @@
 			"replaceE": "div>.paginator"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[data-lazy]', 'data-lazy'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-lazy]','data-lazy'])"
 		}
 	},
 	"Pngtree": {
 		"host": ["pngtree.com","zh.pngtree.com"],
 		"url": "return (!fun.indexOF('/freepng/') && !fun.indexOF('/freebackground/'))",
-		"style": "div[class*='-banner'], .COLLECT, .v2-footer, #v2-foot, .transform-login {display: none !important;} img[data-original] {opacity: 1 !important;}",
+		"style": "div[class*='-banner'],.COLLECT,.v2-footer,#v2-foot,.transform-login {display: none !important;} img[data-original] {opacity: 1 !important;}",
 		"pager": {
 			"type": 6,
 			"nextL": ".nextPage",
@@ -1490,7 +1490,7 @@
 	},
 	"Unsplash": {
 		"host": "unsplash.com",
-		"url": "fun.isUrlC(); if(fun.indexOF('/s/photos/')){setTimeout((f=fun)=>{f.getXpath(\"//button[text()='Load more photos']\").click();}, 2000)}"
+		"url": "fun.isUrlC(); if(fun.indexOF('/s/photos/')){setTimeout((f=fun)=>{f.getXpath(\"//button[text()='Load more photos']\").click();},2000)}"
 	},
 	"图行天下": {
 		"host": "www.photophoto.cn",
@@ -1530,11 +1530,11 @@
 		"host": "www.iconfont.cn",
 		"url": "fun.isUrlC(); return (fun.indexOF(/^\\/(search|collections|illustrations|illustrations_3d|lotties)\\/index/))",
 		"blank": 2,
-		"style": ".footer, header .bind-tips, .block-pagination-wrap, #magix_vf_main .block-sub-banner:not([p-id='96']), #J_block_sidebar",
+		"style": ".footer,header .bind-tips,.block-pagination-wrap,#magix_vf_main .block-sub-banner:not([p-id='96']),#J_block_sidebar",
 		"iframe": true,
 		"pager": {
 			"type": 5,
-			"nextL": "js; return fun.getNextEP('li.active+li:not(.disabled)>a', 'page=', /page=\\d+/)",
+			"nextL": "js; return fun.getNextEP('li.active+li:not(.disabled)>a','page=',/page=\\d+/)",
 			"scrollD": 1000
 		}
 	},
@@ -1617,8 +1617,8 @@
 		"history": false,
 		"pager": {
 			"nextL": "a.nxt:not([href^='javascript']) ,a.next:not([href^='javascript'])",
-			"pageE": "id('threadlist')//table[./tbody[contains(@id, 'normalthread_')]]/tbody[not(@id='separatorline')]",
-			"replaceE": ".pg, .pages"
+			"pageE": "id('threadlist')//table[./tbody[contains(@id,'normalthread_')]]/tbody[not(@id='separatorline')]",
+			"replaceE": ".pg,.pages"
 		}
 	},
 	"学犀牛 - 帖子内": {
@@ -1644,7 +1644,7 @@
 	"学犀牛 - 分类页": {
 		"host": "www.xuexiniu.com",
 		"pager": {
-			"nextL": "//a[@class='page-link' and contains(text(), '下一页')]",
+			"nextL": "//a[@class='page-link' and contains(text(),'下一页')]",
 			"pageE": ".row>.col-sm-6",
 			"replaceE": "ul.pagination"
 		}
@@ -1667,7 +1667,7 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-url]','data-url'])"
 		}
 	},
 	"下得乐": {
@@ -1689,7 +1689,7 @@
 			"replaceE": "#pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-url]','data-url'])"
 		}
 	},
 	"建E室内设计网": {
@@ -1698,7 +1698,7 @@
 		"pager": {
 			"type": 6,
 			"nextL": ".pagination li.active+li>a",
-			"pageE": "#ajax_ul_list>div, #caselist>li",
+			"pageE": "#ajax_ul_list>div,#caselist>li",
 			"replaceE": ".pagination",
 			"loadTime": 1500,
 			"scrollD": 4000
@@ -1709,7 +1709,7 @@
 		"url": "return ((fun.indexOF('/list/') && fun.getCSS('.index-family')) || fun.indexOF('/search/'))",
 		"pager": {
 			"nextL": ".next>a",
-			"pageE": ".index-family ul:not(.page)>li:not(.head), script[src*='base.js'], .inform-list>ul>li",
+			"pageE": ".index-family ul:not(.page)>li:not(.head),script[src*='base.js'],.inform-list>ul>li",
 			"replaceE": ".page",
 			"scriptT": 2
 		}
@@ -1771,7 +1771,7 @@
 		"pager": {
 			"type": 3,
 			"nextL": "li.next>a",
-			"pageE": ".news_warp_center>*, script[src*='common.js']",
+			"pageE": ".news_warp_center>*,script[src*='common.js']",
 			"replaceE": ".pagewrap",
 			"scrollE": ".pagewrap",
 			"scriptT": 2,
@@ -1782,8 +1782,8 @@
 		"host": "mod.3dmgame.com",
 		"history": true,
 		"pager": {
-			"nextL": "js; return fun.getNextEP('//li[@class=\"page-list active\"]/following-sibling::li[contains(@class, \"page-list\")]/a', 'Page=', /Page=\\d+/)",
-			"pageE": "//div[contains(@class, 'game-mod-list') or contains(@class, 'search-mod-list')] | //script[not(@src or @type)][contains(text(), '.game-mod-page') or contains(text(), '.search-mod-page')]",
+			"nextL": "js; return fun.getNextEP('//li[@class=\"page-list active\"]/following-sibling::li[contains(@class,\"page-list\")]/a','Page=',/Page=\\d+/)",
+			"pageE": "//div[contains(@class,'game-mod-list') or contains(@class,'search-mod-list')] | //script[not(@src or @type)][contains(text(),'.game-mod-page') or contains(text(),'.search-mod-page')]",
 			"scriptT": 2
 		}
 	},
@@ -1792,7 +1792,7 @@
 		"url": "/keyword=/",
 		"pager": {
 			"nextL": "span.curr+a",
-			"pageE": ".search_lis, .search_wrap>script[src='/p/js/pager.min.js'], .search_wrap>script:not([src])",
+			"pageE": ".search_lis,.search_wrap>script[src='/p/js/pager.min.js'],.search_wrap>script:not([src])",
 			"scriptT": 2
 		},
 		"function": {
@@ -1826,7 +1826,7 @@
 		"url": "/^\\/news/",
 		"pager": {
 			"nextL": "a.p_curpage+a:not(.p_redirect)",
-			"pageE": ".n_lone, .list-body-news-item",
+			"pageE": ".n_lone,.list-body-news-item",
 			"replaceE": ".p_bar"
 		}
 	},
@@ -1854,7 +1854,7 @@
 	},
 	"游侠网 - 攻略页": {
 		"host": "gl.ali213.net",
-		"style": ".n_show_b, a.morezjjump",
+		"style": ".n_show_b,a.morezjjump",
 		"blank": 3,
 		"pager": {
 			"type": 3,
@@ -1867,7 +1867,7 @@
 	},
 	"游侠网 - 图库": {
 		"host": "pic.ali213.net",
-		"style": "a.prev, a.next",
+		"style": "a.prev,a.next",
 		"pager": {
 			"nextL": "a.next",
 			"pageE": "#image-show>img",
@@ -1882,7 +1882,7 @@
 			"type": 3,
 			"nextL": "//div[@class='page_css']/a[text()='下一页']",
 			"pageE": ".Mid2L_con>*:not(.gs_nc_editor):not(.pagecss):not(.page_css):not(.gs_ccs_solve):not(.post_ding)",
-			"insertP": [".Mid2L_con>.pagecss, .Mid2L_con>.page_css",1],
+			"insertP": [".Mid2L_con>.pagecss,.Mid2L_con>.page_css",1],
 			"replaceE": ".page_css",
 			"scrollE": ".page_css",
 			"forceHTTPS": true,
@@ -1897,7 +1897,7 @@
 		"url": "fun.isPager('p')",
 		"pager": {
 			"type": 6,
-			"nextL": "js; return fun.getNextEP('.cur-page+li', 'page=', /page=\\d+/)",
+			"nextL": "js; return fun.getNextEP('.cur-page+li','page=',/page=\\d+/)",
 			"pageE": "ul.list-container>li",
 			"replaceE": ".page-num-list",
 			"loadTime": 300
@@ -1905,9 +1905,9 @@
 	},
 	"机核 GCORES": {
 		"host": "www.gcores.com",
-		"url": "fun.isUrlC(); fun.getAllCSS('.navLayout_side, .gtabs, .loadingPlaceholder>.row').forEach(function (o) {o.innerHTML = o.innerHTML;}); return (fun.lp() != '/' && (fun.indexOF('/collections/') || !fun.indexOF(/\\/\\d+$/)))",
+		"url": "fun.isUrlC(); fun.getAllCSS('.navLayout_side,.gtabs,.loadingPlaceholder>.row').forEach(function (o) {o.innerHTML = o.innerHTML;}); return (fun.lp() != '/' && (fun.indexOF('/collections/') || !fun.indexOF(/\\/\\d+$/)))",
 		"pager": {
-			"nextL": "li.pagination_item.is_active+li>a, li.pagination_item.active+li>a",
+			"nextL": "li.pagination_item.is_active+li>a,li.pagination_item.active+li>a",
 			"pageE": ".loadingPlaceholder>.row>div",
 			"replaceE": ".pagination"
 		}
@@ -1917,7 +1917,7 @@
 		"url": "fun.isUrlC(); return (fun.lp() == '/mods')",
 		"blank": 4,
 		"pager": {
-			"nextL": "js; let n = fun.getCSS('.page-number-container:not(.page-number)+.page-number-container>a'), m = fun.getSearch('m')||'20'; if (n && n.innerText){return fun.getNextSP((parseInt(n.innerText)-1)*parseInt(m), 'o=', /o=\\d+/);}",
+			"nextL": "js; let n = fun.getCSS('.page-number-container:not(.page-number)+.page-number-container>a'),m = fun.getSearch('m')||'20'; if (n && n.innerText){return fun.getNextSP((parseInt(n.innerText)-1)*parseInt(m),'o=',/o=\\d+/);}",
 			"pageE": "article.project-card",
 			"replaceE": ".paginates"
 		}
@@ -1926,7 +1926,7 @@
 		"host": "www.spigotmc.org",
 		"url": "/\\/resources\\/(categories|authors)?/",
 		"pager": {
-			"nextL": "//a[@class='text' and contains(text(), '>')]",
+			"nextL": "//a[@class='text' and contains(text(),'>')]",
 			"pageE": "li.resourceListItem",
 			"replaceE": ".PageNav"
 		}
@@ -1937,7 +1937,7 @@
 		"style": "[data-name='worldgen-list']+.common-comment-block",
 		"pager": {
 			"nextL": ".page-item.active+.page-item>a",
-			"pageE": ".modlist-list-frame>.modlist-block, .worldgen-list, .verify-list-list-table>tbody>tr, .history-list-frame, .search-result-list",
+			"pageE": ".modlist-list-frame>.modlist-block,.worldgen-list,.verify-list-list-table>tbody>tr,.history-list-frame,.search-result-list",
 			"replaceE": ".pagination:not([data-name='comment-list'])"
 		}
 	},
@@ -1986,7 +1986,7 @@
 		"style": ".forum_paging_controls",
 		"history": true,
 		"pager": {
-			"nextL": "js; return fun.getNextUP('ctp=', /ctp=\\d+/, location.pathname, '2', fun.getCSS('span.commentthread_pagelinks>a:last-child').textContent)",
+			"nextL": "js; return fun.getNextUP('ctp=',/ctp=\\d+/,location.pathname,'2',fun.getCSS('span.commentthread_pagelinks>a:last-child').textContent)",
 			"pageE": ".commentthread_comments>.commentthread_comment",
 			"replaceE": ".forum_paging .forum_paging_summary",
 			"scriptT": 1
@@ -1997,7 +1997,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "//ul[@class='pager']//a[text()='下一页']",
-			"pageE": "//h2[contains(text(), '所有游戏') or contains(text(), '搜索结果')]/following-sibling::div[1]/div",
+			"pageE": "//h2[contains(text(),'所有游戏') or contains(text(),'搜索结果')]/following-sibling::div[1]/div",
 			"replaceE": "ul.pager"
 		}
 	},
@@ -2041,7 +2041,7 @@
 		"pager": {
 			"nextL": "#pageheader .gensmall strong~a",
 			"pageE": "#pagecontent>table.tablebg:not(:nth-last-child(2)):not(:nth-child(2))",
-			"replaceE": "#pagecontent >table:not(.tablebg), #pageheader p.gensmall"
+			"replaceE": "#pagecontent >table:not(.tablebg),#pageheader p.gensmall"
 		}
 	},
 	"cs.rin.ru - 搜索页": {
@@ -2050,7 +2050,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "#wrapcentre>.nav strong~a",
-			"pageE": "#wrapcentre>form>table.tablebg>tbody>tr[class^='row'], #wrapcentre>form>table.tablebg>tbody>tr[valign]",
+			"pageE": "#wrapcentre>form>table.tablebg>tbody>tr[class^='row'],#wrapcentre>form>table.tablebg>tbody>tr[valign]",
 			"replaceE": "#wrapcentre>div"
 		}
 	},
@@ -2065,17 +2065,17 @@
 		}
 	},
 	"RuTracker - 帖子列表": {
-		"host": ["rutracker.org", "rutracker.net"],
+		"host": ["rutracker.org","rutracker.net"],
 		"url": "/(viewforum|tracker)\\.php/",
 		"blank": 4,
 		"pager": {
-			"nextL": "#pagination b~a.pg, .nav b~a.pg",
-			"pageE": "tr[id^='tr-'], tr[id^='trs-']",
-			"replaceE": "#pagination, .bottom_info>.nav"
+			"nextL": "#pagination b~a.pg,.nav b~a.pg",
+			"pageE": "tr[id^='tr-'],tr[id^='trs-']",
+			"replaceE": "#pagination,.bottom_info>.nav"
 		}
 	},
 	"RuTracker - 帖子内": {
-		"host": ["rutracker.org", "rutracker.net"],
+		"host": ["rutracker.org","rutracker.net"],
 		"url": "/viewtopic\\.php/",
 		"thread": true,
 		"pager": {
@@ -2100,7 +2100,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "//span[@class='pnext']/..",
-			"pageE": ".short_item, .comments-tree-item",
+			"pageE": ".short_item,.comments-tree-item",
 			"replaceE": ".bottom-page"
 		}
 	},
@@ -2146,8 +2146,8 @@
 		"history": true,
 		"pager": {
 			"type": 6,
-			"nextL": "js; return fun.getNextEP('.vui_pagenation--btn-num.vui_button--active+button.vui_pagenation--btn-num', 'page=', /page=\\d+/)",
-			"pageE": ".video-list-item, .media-list>div, .video-list>div",
+			"nextL": "js; return fun.getNextEP('.vui_pagenation--btn-num.vui_button--active+button.vui_pagenation--btn-num','page=',/page=\\d+/)",
+			"pageE": ".video-list-item,.media-list>div,.video-list>div",
 			"replaceE": ".vui_pagenation--btns",
 			"loadTime": 600,
 			"scrollD": 3000
@@ -2197,7 +2197,7 @@
 			"replaceE": ".mainPage"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-url]','data-url'])"
 		}
 	},
 	"91 美剧网": {
@@ -2218,7 +2218,7 @@
 		"url": "/^\\/vod_(type|show|search)/",
 		"pager": {
 			"nextL": "#page a[title='下一页']",
-			"pageE": "ul.search-result>a, ul.show-list>li",
+			"pageE": "ul.search-result>a,ul.show-list>li",
 			"replaceE": "#page"
 		},
 		"function": {
@@ -2231,14 +2231,14 @@
 		"pager": {
 			"nextL": ".pagego a",
 			"pageE": ".list>ul>li",
-			"replaceE": ".newpages, .pagego, #float_show"
+			"replaceE": ".newpages,.pagego,#float_show"
 		}
 	},
 	"吐槽弹幕网 - 搜索页": {
 		"host": "www.tucao.one",
-		"url": "return (fun.indexOF('search', 's'))",
+		"url": "return (fun.indexOF('search','s'))",
 		"pager": {
-			"nextL": "//a[@class='a1'][contains(text(), '下一页')]",
+			"nextL": "//a[@class='a1'][contains(text(),'下一页')]",
 			"pageE": ".search_list>*",
 			"replaceE": ".pages"
 		}
@@ -2256,7 +2256,7 @@
 		"host": "www.nicotv.me",
 		"url": "return (fun.indexOF('/search') || fun.indexOF('/type'))",
 		"pager": {
-			"nextL": "//ul[contains(@class, 'pagination ')]//a[text()='»']",
+			"nextL": "//ul[contains(@class,'pagination ')]//a[text()='»']",
 			"pageE": "ul.list-unstyled>li",
 			"replaceE": "ul.pagination "
 		},
@@ -2269,7 +2269,7 @@
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/man'))",
 		"blank": 3,
 		"pager": {
-			"nextL": "//div[contains(@class, 'page')]/a[text()='>']",
+			"nextL": "//div[contains(@class,'page')]/a[text()='>']",
 			"pageE": ".index-tj>ul>li",
 			"replaceE": ".page"
 		},
@@ -2308,7 +2308,7 @@
 		"history": false,
 		"blank": 3,
 		"pager": {
-			"nextL": "js; let next = fun.getCSS('a.paginate_button.next');if (next && next.className.indexOf('disabled') === -1) {let oldList = fun.getCSS('#table-list>tbody').innerHTML;if (oldList) {next.click(); fun.getCSS('#table-list>tbody').insertAdjacentHTML('afterbegin', oldList);}}",
+			"nextL": "js; let next = fun.getCSS('a.paginate_button.next');if (next && next.className.indexOf('disabled') === -1) {let oldList = fun.getCSS('#table-list>tbody').innerHTML;if (oldList) {next.click(); fun.getCSS('#table-list>tbody').insertAdjacentHTML('afterbegin',oldList);}}",
 			"pageE": "#table-list>tbody",
 			"scrollD": 800
 		}
@@ -2318,7 +2318,7 @@
 		"url": "/^\\/[a-z]/",
 		"pager": {
 			"type": 2,
-			"nextL": "button.get-next-page:not([disabled]), .wpf-more-topics>a",
+			"nextL": "button.get-next-page:not([disabled]),.wpf-more-topics>a",
 			"interval": 1000
 		}
 	},
@@ -2359,7 +2359,7 @@
 	"磁力狗": {
 		"host": ["clg.im","ciligou.top","clg00.site"],
 		"url": "/^\\/search/",
-		"style": "body, html {overflow-x: initial !important;}",
+		"style": "body,html {overflow-x: initial !important;}",
 		"blank": 3,
 		"pager": {
 			"nextL": ".pagination>li.active+li>a",
@@ -2398,7 +2398,7 @@
 		"host": "gaoqing.fm",
 		"pager": {
 			"type": 2,
-			"nextL": ".col-md-12>a, #loadmore>a",
+			"nextL": ".col-md-12>a,#loadmore>a",
 			"interval": 1500
 		}
 	},
@@ -2415,7 +2415,7 @@
 		"host": ["dmhy.org","www.dmhy.org","share.dmhy.org","dmhy.anoneko.com"],
 		"url": "return fun.isPager('r')",
 		"pager": {
-			"nextL": "//div[@class='nav_title']/a[contains(text(), '下一')]",
+			"nextL": "//div[@class='nav_title']/a[contains(text(),'下一')]",
 			"pageE": "#topic_list>tbody>tr",
 			"replaceE": ".table.clear .nav_title"
 		},
@@ -2427,7 +2427,7 @@
 		"host": "mikanani.me",
 		"url": "/^\\/Home\\/Classic/",
 		"pager": {
-			"nextL": "js; return fun.getNextEPN('.pagination>li.active+li:not([style]):not([class])>a', /\\/\\d+$/, '/')",
+			"nextL": "js; return fun.getNextEPN('.pagination>li.active+li:not([style]):not([class])>a',/\\/\\d+$/,'/')",
 			"pageE": "//table/tbody/tr | //body/script[contains(text(),'.classic-view-pagination')]",
 			"scriptT": 2
 		}
@@ -2438,7 +2438,7 @@
 		"hiddenPN": true
 	},
 	"扶她动漫": {
-		"host": ["futaacg.com", "www.futaacg.com"],
+		"host": ["futaacg.com","www.futaacg.com"],
 		"pager": {
 			"nextL": "ul.pagination a[rel='next']",
 			"pageE": ".topic-list>div",
@@ -2450,7 +2450,7 @@
 		"url": "return (fun.lp() == '/' || fun.lp() == '/index.php')",
 		"pager": {
 			"nextL": "a.disabled+a:not(.disabled)",
-			"pageE": ".full2, .full2+script",
+			"pageE": ".full2,.full2+script",
 			"replaceE": ".full3.buttons",
 			"scriptT": 2
 		}
@@ -2469,7 +2469,7 @@
 		"host": "bangumi.moe",
 		"url": "/^\\/lite/",
 		"pager": {
-			"nextL": "//section/a[./span[contains(@class, 'next')]]",
+			"nextL": "//section/a[./span[contains(@class,'next')]]",
 			"pageE": "li.torrent-li",
 			"replaceE": ".page-btn-section"
 		}
@@ -2485,7 +2485,7 @@
 	"MioBT/简单动漫": {
 		"host": "miobt.com",
 		"pager": {
-			"nextL": "//a[@class='nextprev'][contains(text(), '〉') or contains(text(), '下一页') or contains(text(), '»')]",
+			"nextL": "//a[@class='nextprev'][contains(text(),'〉') or contains(text(),'下一页') or contains(text(),'»')]",
 			"pageE": "#data_list>tr",
 			"replaceE": ".pages"
 		}
@@ -2501,7 +2501,7 @@
 	},
 	"SkrBT / BT1207": {
 		"host": ["/skrbt/","/bt1207/"],
-		"url": "return (fun.getCSS(\"link[href*='/skrbt/'], img[src*='/skrbt/'], img[src*='/bt1207/']\") && fun.lp() == '/search')",
+		"url": "return (fun.getCSS(\"link[href*='/skrbt/'],img[src*='/skrbt/'],img[src*='/bt1207/']\") && fun.lp() == '/search')",
 		"history": true,
 		"pager": {
 			"nextL": "js;let page = fun.getCSS('a[onclick][aria-label=\"Next\"]'); if (page) {page = /(?<=\\()\\d+(?=\\))/.exec(page.onclick)[0];} else {return '';}; if (page) {return fun.getNextF('#search-form').replace(/p=\\d+/,'p=' + page)} else {return '';}",
@@ -2516,7 +2516,7 @@
 		"url": "return (fun.lp()=='/')",
 		"blank": 3,
 		"pager": {
-			"nextL": "a[rel='next'], li.next>a",
+			"nextL": "a[rel='next'],li.next>a",
 			"pageE": "table.torrent-list>tbody>tr",
 			"replaceE": "ul.pagination"
 		}
@@ -2526,7 +2526,7 @@
 		"url": "/^\\/browse-movies/",
 		"blank": 3,
 		"pager": {
-			"nextL": "//ul[contains(@class, 'tsc_pagination')]/li[./a[@class='current']]/following-sibling::li[1]/a",
+			"nextL": "//ul[contains(@class,'tsc_pagination')]/li[./a[@class='current']]/following-sibling::li[1]/a",
 			"pageE": ".browse-movie-wrap",
 			"replaceE": ".tsc_pagination"
 		}
@@ -2596,7 +2596,7 @@
 		"host": "/^idope\\..+/",
 		"url": "/^\\/torrent-list\\//",
 		"pager": {
-			"nextL": "js; return fun.getNextEP('.page[style]+.page','p=', /p=\\d+/)",
+			"nextL": "js; return fun.getNextEP('.page[style]+.page','p=',/p=\\d+/)",
 			"pageE": ".resultdiv",
 			"replaceE": "#div3"
 		}
@@ -2674,7 +2674,7 @@
 		"host": "webhd.top",
 		"url": "return (fun.lp() == '/' || fun.indexOF('/list/new'))",
 		"pager": {
-			"nextL": "//a[@class='page-link'][contains(text(), '下一页')]",
+			"nextL": "//a[@class='page-link'][contains(text(),'下一页')]",
 			"pageE": ".col-lg-9 .bg-white.shadow-sm.rounded-3>.row.gx-0",
 			"replaceE": "ul.pagination"
 		}
@@ -2684,7 +2684,7 @@
 		"url": "/\\/search/",
 		"blank": 3,
 		"pager": {
-			"nextL": "//a[@class='page-link'][contains(text(), '下一页')]",
+			"nextL": "//a[@class='page-link'][contains(text(),'下一页')]",
 			"pageE": ".col-lg-9 .bg-white.shadow-sm.rounded-3",
 			"insertP": ["nav[aria-label='pagination']",1],
 			"replaceE": "ul.pagination"
@@ -2744,7 +2744,7 @@
 		"url": "return (fun.lp() === '/sub/')",
 		"history": true,
 		"pager": {
-			"nextL": "js; return fun.getNextEP('#pl-current+a[href]:not([id])', 'page=', /page=\\d+/)",
+			"nextL": "js; return fun.getNextEP('#pl-current+a[href]:not([id])','page=',/page=\\d+/)",
 			"pageE": ".resultcard>div:not(#top-banner):not(#bottom-banner):not(.pagelinkcard)",
 			"insertP": [".pagelinkcard",1],
 			"replaceE": ".pagelinkcard"
@@ -2761,10 +2761,10 @@
 	},
 	"字幕库 zmk": {
 		"host": ["zmk.pw","zimuku.org","zimuku.pw"],
-		"url": "if (!fun.indexOF('/detail/') && !fun.indexOF('/subs/')) {if (fun.lp() == '/') {fun.getCSS('.box>.table').insertAdjacentHTML('beforebegin', '<div class=\"pagination\"></div>')}; return true;}",
+		"url": "if (!fun.indexOF('/detail/') && !fun.indexOF('/subs/')) {if (fun.lp() == '/') {fun.getCSS('.box>.table').insertAdjacentHTML('beforebegin','<div class=\"pagination\"></div>')}; return true;}",
 		"pager": {
 			"nextL": "a.next",
-			"pageE": ".item, .box>.table>tbody>tr",
+			"pageE": ".item,.box>.table>tbody>tr",
 			"replaceE": ".pagination"
 		},
 		"function": {
@@ -2826,7 +2826,7 @@
 	"漫本": {
 		"host": "www.manben.com",
 		"url": "if (fun.indexOF(/^\\/m\\d+/)) {if (fun.getCookie('showtype') != '2') {document.cookie='showtype=2; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';location.reload();}else{return true;}}",
-		"style": ".main{height: auto !important;overflow-y: hidden !important;} #comicContain img {min-height: 300px;} .comic-contain li{margin: 0 !important;} img.imgFloat_1, img.imgFloat_2, span.comic-ft {display: none !important;}",
+		"style": ".main{height: auto !important;overflow-y: hidden !important;} #comicContain img {min-height: 300px;} .comic-contain li{margin: 0 !important;} img.imgFloat_1,img.imgFloat_2,span.comic-ft {display: none !important;}",
 		"history": true,
 		"pager": {
 			"nextL": "#mainControlNext",
@@ -2837,18 +2837,18 @@
 			"interval": 5000
 		},
 		"function": {
-			"aF": "let _img=''; for (let i=0;i<newImgs.length;i++){_img += `<li><img src=\"${newImgs[i]}\"></li>`;}; document.getElementById('comicContain').insertAdjacentHTML('beforeend', _img);"
+			"aF": "let _img=''; for (let i=0;i<newImgs.length;i++){_img += `<li><img src=\"${newImgs[i]}\"></li>`;}; document.getElementById('comicContain').insertAdjacentHTML('beforeend',_img);"
 		}
 	},
 	"好漫 6": {
 		"host": "www.haoman6.com",
 		"url": "/\\/chapter\\//",
-		"style": ".rd-guess, .rd-aside, .page-index__btn {display: none !important;} .rd-article__pic {display: initial !important;} .rd-article__pic>img {margin: 0 auto;display: block;height: auto;min-height: 200px;}",
+		"style": ".rd-guess,.rd-aside,.page-index__btn {display: none !important;} .rd-article__pic {display: initial !important;} .rd-article__pic>img {margin: 0 auto;display: block;height: auto;min-height: 200px;}",
 		"history": true,
 		"pager": {
 			"nextL": "js;return (location.origin + fun.getCSS('a.rd-aside__item.j-rd-next').getAttribute('_href'))",
 			"pageE": ".rd-article-wr>div",
-			"replaceE": "a.last-crumb, .rd-aside",
+			"replaceE": "a.last-crumb,.rd-aside",
 			"interval": 2000
 		},
 		"function": {
@@ -2869,8 +2869,8 @@
 	},
 	"好漫 8": {
 		"host": "www.haoman8.com",
-		"url": "if (fun.indexOF(/^\\/comic\\/\\d+\\/\\d+$/)){if (fun.getCookie('pmode') != '2') {document.cookie='pmode=2; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';location.reload();}else{fun.src_bF(fun.getAllCSS('img[data-echo]'), [0,'img[data-echo]','data-echo']); return true;}}",
-		"style": "#readerContainer {position: initial !important;overflow: hidden !important;} #js_pageInfoText, #js_pageProgress, #js_ftAutoBtn {display: none !important;}",
+		"url": "if (fun.indexOF(/^\\/comic\\/\\d+\\/\\d+$/)){if (fun.getCookie('pmode') != '2') {document.cookie='pmode=2; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';location.reload();}else{fun.src_bF(fun.getAllCSS('img[data-echo]'),[0,'img[data-echo]','data-echo']); return true;}}",
+		"style": "#readerContainer {position: initial !important;overflow: hidden !important;} #js_pageInfoText,#js_pageProgress,#js_ftAutoBtn {display: none !important;}",
 		"pager": {
 			"nextL": "js;return (location.origin + fun.getCSS('#js_pageNextBtn').getAttribute('_href'))",
 			"pageE": ".acgn-reader-chapter__item[id]",
@@ -2878,7 +2878,7 @@
 			"interval": 4000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-echo]','data-echo'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-echo]','data-echo'])"
 		}
 	},
 	"好漫 8 - 分类/搜索页": {
@@ -2898,14 +2898,14 @@
 		"pager": {
 			"nextL": "js; let next=fun.getXpath(\"//a[@class='pages'][contains(text(),'下一頁')][not(starts-with(@href,'thend.asp'))]\");if (next) {return next.href;} else {next=fun.getXpath(\"//a[@class='pages'][contains(string(),'下一話')]\");if (next) return next.href;}",
 			"pageE": "img[onload]",
-			"replaceE": "body > table > tbody > tr:first-child, body > table > tbody > tr:nth-child(4)",
+			"replaceE": "body > table > tbody > tr:first-child,body > table > tbody > tr:nth-child(4)",
 			"interval": 0
 		}
 	},
 	"动漫啦": {
 		"host": "www.dongman.la",
-		"url": "if (fun.indexOF('/chapter/')) {fun.src_bF(fun.getAllCSS('img.mdui-img-fluid[data-srcset]:not([src])'), [0,'img[data-srcset]','data-srcset']); return true}",
-		"style": "button.prePic, button.nextPic, footer, header, #left-drawer {display: none !important;} body, #app {padding: 0 !important;} .slick-track {width: 100% !important;} .lazyBox {width: 100%; display: inline-block;}",
+		"url": "if (fun.indexOF('/chapter/')) {fun.src_bF(fun.getAllCSS('img.mdui-img-fluid[data-srcset]:not([src])'),[0,'img[data-srcset]','data-srcset']); return true}",
+		"style": "button.prePic,button.nextPic,footer,header,#left-drawer {display: none !important;} body,#app {padding: 0 !important;} .slick-track {width: 100% !important;} .lazyBox {width: 100%; display: inline-block;}",
 		"history": true,
 		"pager": {
 			"nextL": "//footer//a[./label[text()='下一章']]",
@@ -2916,7 +2916,7 @@
 			"scrollD": 3000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-srcset]','data-srcset'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-srcset]','data-srcset'])"
 		}
 	},
 	"动漫啦 - 分类页": {
@@ -2969,21 +2969,21 @@
 			"nextL": "js; let next = fun.getXpath(\"//ul[@class='view-bottom-bar']//a[text()='下一章' and not(contains(@href,'-end'))]\"); if (next && next.href) {return (location.origin + next.href.split(\"'\")[1]);}",
 			"pageE": "//body/script[starts-with(text(),'eval(')]",
 			"insertP": ["body",3],
-			"replaceE": ".view-bottom-bar, .winnextchapter, .view-fix-bottom-bar",
+			"replaceE": ".view-bottom-bar,.winnextchapter,.view-fix-bottom-bar",
 			"scriptT": 2,
 			"interval": 4000
 		},
 		"function": {
-			"aF": "let _img=''; for (let i=0;i<newImgs.length;i++){_img += `<img src=\"${newImgs[i]}\">`;}; document.getElementById('cp_img').insertAdjacentHTML('beforeend', _img);"
+			"aF": "let _img=''; for (let i=0;i<newImgs.length;i++){_img += `<img src=\"${newImgs[i]}\">`;}; document.getElementById('cp_img').insertAdjacentHTML('beforeend',_img);"
 		}
 	},
 	"漫画柜": {
 		"host": ["www.mhgui.com","tw.mhgui.com","www.manhuagui.com","tw.manhuagui.com"],
-		"url": "if (fun.indexOF(/\\/comic\\/\\d+\\/\\d+\\.html/)) {if (localStorage.getItem('pageFunc') != '0') {localStorage.setItem('pageFunc', '0'); location.reload();}; setTimeout(()=>{SMH.imgData = function(n) {imgDate = n;return}; fun.insScript('body > script:not([src])'); let _img = '', imgPath = `${location.protocol}//i.hamreus.com${imgDate.path}`; for (let i = 0; i < imgDate.files.length; i++) {_img += `<img src=\"${imgPath + imgDate.files[i]}?e=${imgDate.sl.e}&m=${imgDate.sl.m}\">`;}; document.getElementById('mangaBox').innerHTML = _img;},500); return true;}",
-		"style": ".sub-btn, .tc {display: none !important;} #mangaBox > img {min-height: 300px; width: auto !important;height: auto !important;display: block !important;margin: 0 auto !important;max-width: 99% !important;}",
+		"url": "if (fun.indexOF(/\\/comic\\/\\d+\\/\\d+\\.html/)) {if (localStorage.getItem('pageFunc') != '0') {localStorage.setItem('pageFunc','0'); location.reload();}; setTimeout(()=>{SMH.imgData = function(n) {imgDate = n;return}; fun.insScript('body > script:not([src])'); let _img = '',imgPath = `${location.protocol}//i.hamreus.com${imgDate.path}`; for (let i = 0; i < imgDate.files.length; i++) {_img += `<img src=\"${imgPath + imgDate.files[i]}?e=${imgDate.sl.e}&m=${imgDate.sl.m}\">`;}; document.getElementById('mangaBox').innerHTML = _img;},500); return true;}",
+		"style": ".sub-btn,.tc {display: none !important;} #mangaBox > img {min-height: 300px; width: auto !important;height: auto !important;display: block !important;margin: 0 auto !important;max-width: 99% !important;}",
 		"history": true,
 		"pager": {
-			"nextL": "js; let url = location.origin + location.pathname.replace(imgDate.cid.toString(), imgDate.nextId.toString()); if (imgDate.nextId && url != location.href) return url",
+			"nextL": "js; let url = location.origin + location.pathname.replace(imgDate.cid.toString(),imgDate.nextId.toString()); if (imgDate.nextId && url != location.href) return url",
 			"pageE": "body>script:not([src])",
 			"insertP": ["body",3],
 			"scriptT": 2,
@@ -2991,7 +2991,7 @@
 			"scrollD": 2500
 		},
 		"function": {
-			"aF": "let _img = '', imgPath = `${location.protocol}//i.hamreus.com${imgDate.path}`; for (let i = 0; i < imgDate.files.length; i++) {_img += `<img src=\"${imgPath + imgDate.files[i]}?e=${imgDate.sl.e}&m=${imgDate.sl.m}\">`;}; document.getElementById('mangaBox').insertAdjacentHTML('beforeend', _img);"
+			"aF": "let _img = '',imgPath = `${location.protocol}//i.hamreus.com${imgDate.path}`; for (let i = 0; i < imgDate.files.length; i++) {_img += `<img src=\"${imgPath + imgDate.files[i]}?e=${imgDate.sl.e}&m=${imgDate.sl.m}\">`;}; document.getElementById('mangaBox').insertAdjacentHTML('beforeend',_img);"
 		}
 	},
 	"漫画柜 - 分类页": {
@@ -3000,7 +3000,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": ".current+a",
-			"pageE": ".book-list>ul, .book-result>ul",
+			"pageE": ".book-list>ul,.book-result>ul",
 			"replaceE": ".pager"
 		},
 		"function": {
@@ -3009,19 +3009,19 @@
 	},
 	"漫画DB": {
 		"host": "www.manhuadb.com",
-		"url": "if (fun.indexOF(/^\\/manhua\\/\\d+\\/.+\\.html/)) {if (fun.getCSS('img.img-fluid.show-pic')){fun.getCSS('img.img-fluid.show-pic').style.display = 'none';}; setTimeout(()=>{let _img = '', data = document.querySelector('.vg-r-data'), imgDate = JSON.parse(atob(img_data));for (let i = 0; i < imgDate.length; i++) {_img += `<img class=\"img-fluid show-pic\" src=\"${data.dataset.host + data.dataset.img_pre + imgDate[i].img}\">`;};document.querySelector('.pjax-container').insertAdjacentHTML('beforeend', _img);},500); return true;}",
-		"style": ".row.m-0.pt-3.ad_2_wrap, .row.m-0.ad_1_wrap, .pagination.justify-content-center, #left, #right {display: none !important;} .pjax-container>img {min-height: 300px;}",
+		"url": "if (fun.indexOF(/^\\/manhua\\/\\d+\\/.+\\.html/)) {if (fun.getCSS('img.img-fluid.show-pic')){fun.getCSS('img.img-fluid.show-pic').style.display = 'none';}; setTimeout(()=>{let _img = '',data = document.querySelector('.vg-r-data'),imgDate = JSON.parse(atob(img_data));for (let i = 0; i < imgDate.length; i++) {_img += `<img class=\"img-fluid show-pic\" src=\"${data.dataset.host + data.dataset.img_pre + imgDate[i].img}\">`;};document.querySelector('.pjax-container').insertAdjacentHTML('beforeend',_img);},500); return true;}",
+		"style": ".row.m-0.pt-3.ad_2_wrap,.row.m-0.ad_1_wrap,.pagination.justify-content-center,#left,#right {display: none !important;} .pjax-container>img {min-height: 300px;}",
 		"history": true,
 		"pager": {
 			"nextL": "//ol[@class='links-of-books num_div']//a[@class='active ']/../following-sibling::li[1]/a",
 			"pageE": "//body/script[starts-with(text(),'var img_data')]",
 			"insertP": ["body",3],
-			"replaceE": ".vg-r-data, ol.links-of-books",
+			"replaceE": ".vg-r-data,ol.links-of-books",
 			"scriptT": 2,
 			"interval": 4000
 		},
 		"function": {
-			"aF": "let _img = '', data = fun.getCSS('.vg-r-data'), imgDate = JSON.parse(atob(img_data));for (let i = 0; i < imgDate.length; i++) {_img += `<img class=\"img-fluid show-pic\" src=\"${data.dataset.host + data.dataset.img_pre + imgDate[i].img}\">`;};fun.getCSS('.pjax-container').insertAdjacentHTML('beforeend', _img)"
+			"aF": "let _img = '',data = fun.getCSS('.vg-r-data'),imgDate = JSON.parse(atob(img_data));for (let i = 0; i < imgDate.length; i++) {_img += `<img class=\"img-fluid show-pic\" src=\"${data.dataset.host + data.dataset.img_pre + imgDate[i].img}\">`;};fun.getCSS('.pjax-container').insertAdjacentHTML('beforeend',_img)"
 		}
 	},
 	"漫画DB - 分类页": {
@@ -3029,7 +3029,7 @@
 		"url": "/\\/(list|update|search)/",
 		"blank": 3,
 		"pager": {
-			"nextL": "//div[contains(@class, 'pagination')]//a[contains(text(), '下一页') or contains(text(), '下页')]",
+			"nextL": "//div[contains(@class,'pagination')]//a[contains(text(),'下一页') or contains(text(),'下页')]",
 			"pageE": ".comic-main-section",
 			"replaceE": ".pagination"
 		},
@@ -3039,8 +3039,8 @@
 	},
 	"快岸漫画": {
 		"host": "www.kanbook.net",
-		"url": "if (fun.indexOF(/^\\/\\d+\\/\\d+\\/\\d+/)) {if (fun.getCSS('img.img-fluid')){fun.getCSS('img.img-fluid').style.display = 'none';}; setTimeout(()=>{let _img = '';for (let i = 0; i < imagesUrlArr.length; i++) {_img += `<img class=\"img-fluid d-md-block mx-auto\" src=\"${host + imagesUrlArr[i]}\">`;};document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend', _img);},500); return true;}",
-		"style": ".pagination.justify-content-center, #left, #right, p[id^='page_c_'] {display: none !important;} .content-wrapper>img {min-height: 300px;}",
+		"url": "if (fun.indexOF(/^\\/\\d+\\/\\d+\\/\\d+/)) {if (fun.getCSS('img.img-fluid')){fun.getCSS('img.img-fluid').style.display = 'none';}; setTimeout(()=>{let _img = '';for (let i = 0; i < imagesUrlArr.length; i++) {_img += `<img class=\"img-fluid d-md-block mx-auto\" src=\"${host + imagesUrlArr[i]}\">`;};document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend',_img);},500); return true;}",
+		"style": ".pagination.justify-content-center,#left,#right,p[id^='page_c_'] {display: none !important;} .content-wrapper>img {min-height: 300px;}",
 		"history": true,
 		"pager": {
 			"nextL": "js; if (next_part != '' && next_part != location.pathname) return (location.origin + next_part)",
@@ -3050,13 +3050,13 @@
 			"interval": 4000
 		},
 		"function": {
-			"aF": "let _img = '';for (let i = 0; i < imagesUrlArr.length; i++) {_img += `<img class=\"img-fluid d-md-block mx-auto\" src=\"${host + imagesUrlArr[i]}\">`;};fun.getCSS('.content-wrapper').insertAdjacentHTML('beforeend', _img);"
+			"aF": "let _img = '';for (let i = 0; i < imagesUrlArr.length; i++) {_img += `<img class=\"img-fluid d-md-block mx-auto\" src=\"${host + imagesUrlArr[i]}\">`;};fun.getCSS('.content-wrapper').insertAdjacentHTML('beforeend',_img);"
 		}
 	},
 	"动漫戏说": {
 		"host": "comic.acgn.cc",
 		"url": "if(fun.indexOF('/view-')){fun.getAllCSS('.pic[_src][id]').forEach(e => {e.outerHTML = `<div class='pic' _src><img src='${e.getAttribute('_src')}' class='img1'></div>`;}); return true;}",
-		"style": ".img1 {cursor: initial !important;} .btn_wrap, #ss-toolbar {display: none !important;}",
+		"style": ".img1 {cursor: initial !important;} .btn_wrap,#ss-toolbar {display: none !important;}",
 		"history": true,
 		"pager": {
 			"nextL": "#next_chapter",
@@ -3103,20 +3103,20 @@
 	},
 	"漫画星球 / 6 漫画": {
 		"host": ["/\\.mhxqiu/","/^www\\.sixmh\\d\\./"],
-		"url": "if (fun.indexOF(/\\/\\d+\\.html/)) {return true;} else if (fun.indexOF(/\\/\\d+\\/$/)) {setTimeout(()=>{if (document.getElementById('zhankai')) document.getElementById('zhankai').click();}, 500);}",
-		"style": ".imgFloat_1, .imgFloat_2, .main_control, span.comic-ft {display: none !important;} html, body, #mainView {height: auto !important;} body.view .main ul.comic-contain li{margin:0 auto !important;} .comic-contain .loaded{box-shadow: none !important;}",
+		"url": "if (fun.indexOF(/\\/\\d+\\.html/)) {return true;} else if (fun.indexOF(/\\/\\d+\\/$/)) {setTimeout(()=>{if (document.getElementById('zhankai')) document.getElementById('zhankai').click();},500);}",
+		"style": ".imgFloat_1,.imgFloat_2,.main_control,span.comic-ft {display: none !important;} html,body,#mainView {height: auto !important;} body.view .main ul.comic-contain li{margin:0 auto !important;} .comic-contain .loaded{box-shadow: none !important;}",
 		"history": true,
 		"pager": {
 			"nextL": "#mainControlNext",
 			"pageE": "//script[contains(text(),'eval')]",
 			"insertP": ["body",3],
-			"replaceE": ".main_control, h1.chaptername_title, span.title-comicHeading",
+			"replaceE": ".main_control,h1.chaptername_title,span.title-comicHeading",
 			"scriptT": 2,
 			"interval": 4000,
 			"scrollD": 3000
 		},
 		"function": {
-			"aF": "let _img = ''; for (let i=0;i<newImgs.length;i++) {_img += `<li><div style=\"display: inline-block;zoom: 1;\"><img src=\"${newImgs[i]}\" class=\"loaded lazy\" style=\"opacity: 1;box-shadow:none;\"></div></li>`;}; document.getElementById('comicContain').insertAdjacentHTML('beforeend', _img);"
+			"aF": "let _img = ''; for (let i=0;i<newImgs.length;i++) {_img += `<li><div style=\"display: inline-block;zoom: 1;\"><img src=\"${newImgs[i]}\" class=\"loaded lazy\" style=\"opacity: 1;box-shadow:none;\"></div></li>`;}; document.getElementById('comicContain').insertAdjacentHTML('beforeend',_img);"
 		}
 	},
 	"漫画星球 - 分类页": {
@@ -3143,13 +3143,13 @@
 			"interval": 4000
 		},
 		"function": {
-			"aF": "let _img = ''; for (let i=0;i<newImgs.length;i++) {_img += `<div class=\"chapter-img-box\"><img src=\"${newImgs[i]}\"></div>`;}; document.getElementById('mainView_img').insertAdjacentHTML('beforeend', _img);"
+			"aF": "let _img = ''; for (let i=0;i<newImgs.length;i++) {_img += `<div class=\"chapter-img-box\"><img src=\"${newImgs[i]}\"></div>`;}; document.getElementById('mainView_img').insertAdjacentHTML('beforeend',_img);"
 		}
 	},
 	"风之动漫": {
 		"host": ["www.fffdm.com","manhua.fffdm.com"],
 		"url": "fun.isUrlC();return (location.pathname.split('/').length >= 4)",
-		"style": "#header, footer {display: none !important;} #mhpic {display: block !important;margin: 0 auto !important;}",
+		"style": "#header,footer {display: none !important;} #mhpic {display: block !important;margin: 0 auto !important;}",
 		"history": true,
 		"pager": {
 			"type": 6,
@@ -3162,12 +3162,12 @@
 	"包子漫画": {
 		"host": ["www.czmanga.com","cn.czmanga.com","www.webmota.com","cn.webmota.com","cn.baozimh.com","www.twmanga.com","www.kukuc.co","cn.kukuc.co"],
 		"url": "if (fun.indexOF('/chapter/')) {return true;} else if (fun.indexOF('/comic/')) {if (fun.getCSS('#button_show_all_chatper')) {fun.getCSS('#button_show_all_chatper').click();}}",
-		"style": "#footer, #header {display: none !important;} .header, .bottom-bar {opacity: 0.3;}",
+		"style": "#footer,#header {display: none !important;} .header,.bottom-bar {opacity: 0.3;}",
 		"history": true,
 		"pager": {
 			"nextL": ".comic-chapter>.next_chapter>a",
 			"pageE": ".comic-contain>div",
-			"replaceE": ".comic-chapter>.next_chapter, .bottom-bar, .header .title"
+			"replaceE": ".comic-chapter>.next_chapter,.bottom-bar,.header .title"
 		}
 	},
 	"包子漫画org": {
@@ -3183,25 +3183,25 @@
 	"新新漫画": {
 		"host": ["www.77mh.nl","www.77mh.xyz","www.77mh.me"],
 		"url": "if (fun.indexOF(/\\/\\d+\\.html/)) {setTimeout(()=>{let _img = ''; for (let i = 0; i < arr.length; i++){_img += `<img src=\"${img_qianz}${arr[i]}\">`;}; document.getElementById('comicImg').innerHTML = _img;},500); return true;}",
-		"style": ".page_num, #bdtopbot {display: none !important;} #comicImg > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}",
+		"style": ".page_num,#bdtopbot {display: none !important;} #comicImg > img {display: block !important;margin: 0 auto !important; border: none !important; padding: 0 !important; max-width: 99% !important; height: auto !important;}",
 		"pager": {
 			"nextL": "js; if (nextLink_b != '' && nextLink_b != location.pathname) return (location.origin + nextLink_b)",
-			"pageE": "//script[not(@src)][contains(text(), 'eval(')]|//script[contains(@src,'ct.js')]",
+			"pageE": "//script[not(@src)][contains(text(),'eval(')]|//script[contains(@src,'ct.js')]",
 			"insertP": ["body",3],
 			"scriptT": 2,
 			"interval": 4000,
 			"scrollD": 5000
 		},
 		"function": {
-			"aF": "setTimeout(()=>{let _img = ''; msg = msg.split('|'); for (let i = 0; i < msg.length; i++){_img += `<img src=\"${img_qianz}${msg[i]}\">`;}; document.getElementById('comicImg').insertAdjacentHTML('beforeend', _img);},1000)"
+			"aF": "setTimeout(()=>{let _img = ''; msg = msg.split('|'); for (let i = 0; i < msg.length; i++){_img += `<img src=\"${img_qianz}${msg[i]}\">`;}; document.getElementById('comicImg').insertAdjacentHTML('beforeend',_img);},1000)"
 		}
 	},
 	"新新漫画 - 分类页": {
 		"host": ["www.77mh.nl","so.77mh.nl","www.77mh.xyz","so.77mh.xyz","www.77mh.me","so.77mh.me"],
-		"url": "if (fun.indexOF('/colist_')) {setTimeout(()=>{if (document.getElementById('listmore1')) document.getElementById('listmore1').click();}, 500)}else{return true;}",
+		"url": "if (fun.indexOF('/colist_')) {setTimeout(()=>{if (document.getElementById('listmore1')) document.getElementById('listmore1').click();},500)}else{return true;}",
 		"blank": 3,
 		"pager": {
-			"nextL": "a.current+a, a.next",
+			"nextL": "a.current+a,a.next",
 			"pageE": ".ar_list_co>ul",
 			"replaceE": ".pages_s"
 		}
@@ -3215,7 +3215,7 @@
 			"replaceE": "#pagelink"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[_src]','_src'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[_src]','_src'])"
 		}
 	},
 	"笔屋漫画": {
@@ -3238,8 +3238,8 @@
 		"pager": {
 			"type": 3,
 			"nextL": "li.thisclass+li>a",
-			"pageE": ".article-content img, #newsArticle img, .listl>ul, ul.news_list_1",
-			"replaceE": ".pagination, .pages, .page"
+			"pageE": ".article-content img,#newsArticle img,.listl>ul,ul.news_list_1",
+			"replaceE": ".pagination,.pages,.page"
 		}
 	},
 	"古风漫画网 / 优酷漫画 / 36 漫画 / 360 漫画 / 漫漫台 / 古漫画 / 前未漫画 / 下拉式漫画 / 漫画1234 - 分类页": {
@@ -3248,14 +3248,14 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "li.next>a",
-			"pageE": "li.item-lg, .list-comic",
+			"pageE": "li.item-lg,.list-comic",
 			"replaceE": "ul.pagination"
 		}
 	},
 	"古风漫画网 / 优酷漫画 / 36 漫画 / 360 漫画 / 漫漫台 / 古漫画 / 前未漫画 / 下拉式漫画 / 漫画1234": {
 		"host": ["www.gufengmh.com","/^www\\.gufengmh\\d/","www.123gf.com","36manga.com","www.36manga.com","36manhua.com","www.36manhua.com","www.36man.cc","www.manmantai.com","www.xlsmh.com","www.gmh1234.com"],
-		"url": "if (fun.indexOF(/\\/\\d+\\.html$/)) {if (/^www\\.(123gf|ykmh|izhegu|qianwee|manmantai)\\.com$/.test(location.hostname)|| location.hostname.indexOf('36man') != -1) {if (localStorage.getItem('chapterScroll') != '\"pagination\"') {localStorage.setItem('chapterScroll', '\"pagination\"'); location.reload();} else {setTimeout(()=>{let _img = '',host = SinMH.getResHostDomain(); if (/^www\\.(ykmh|izhegu)\\.com$/.test(location.hostname)) {chapterPath=''}else if (location.hostname.indexOf('36man') == -1||location.hostname=='www.123gf.com'||location.hostname=='www.gmh1234.com'){host+='/'}; if (location.hostname == 'www.36man.cc' ||(location.hostname == 'www.manmantai.com' && chapterImages[0].slice(0,4) == 'http')){host=''}; for (let i=0;i<chapterImages.length;i++){_img += `<img src=\"${host}${chapterPath}${chapterImages[i]}\">`;}; document.getElementById('images').innerHTML = _img;}, 500); return true;}} else if (localStorage.getItem('chapterScroll') != '\"scroll\"') {localStorage.setItem('chapterScroll', '\"scroll\"'); location.reload();}else{return true}}",
-		"style": ".img_land_prev, .img_land_next, #sider-left, #sider-right, p.img_info, .tc, .chapter-view + .w996, .chapter-view>div[style]:not([id]):not([class]) {display: none !important;} #images{min-height: 6000px !important;} #images>img {display: inline-block !important;min-height: 400px;margin: 0 auto !important;border: none !important;padding: 0 !important;max-width: 99% !important;height: auto !important;}",
+		"url": "if (fun.indexOF(/\\/\\d+\\.html$/)) {if (/^www\\.(123gf|ykmh|izhegu|qianwee|manmantai)\\.com$/.test(location.hostname)|| location.hostname.indexOf('36man') != -1) {if (localStorage.getItem('chapterScroll') != '\"pagination\"') {localStorage.setItem('chapterScroll','\"pagination\"'); location.reload();} else {setTimeout(()=>{let _img = '',host = SinMH.getResHostDomain(); if (/^www\\.(ykmh|izhegu)\\.com$/.test(location.hostname)) {chapterPath=''}else if (location.hostname.indexOf('36man') == -1||location.hostname=='www.123gf.com'||location.hostname=='www.gmh1234.com'){host+='/'}; if (location.hostname == 'www.36man.cc' ||(location.hostname == 'www.manmantai.com' && chapterImages[0].slice(0,4) == 'http')){host=''}; for (let i=0;i<chapterImages.length;i++){_img += `<img src=\"${host}${chapterPath}${chapterImages[i]}\">`;}; document.getElementById('images').innerHTML = _img;},500); return true;}} else if (localStorage.getItem('chapterScroll') != '\"scroll\"') {localStorage.setItem('chapterScroll','\"scroll\"'); location.reload();}else{return true}}",
+		"style": ".img_land_prev,.img_land_next,#sider-left,#sider-right,p.img_info,.tc,.chapter-view + .w996,.chapter-view>div[style]:not([id]):not([class]) {display: none !important;} #images{min-height: 6000px !important;} #images>img {display: inline-block !important;min-height: 400px;margin: 0 auto !important;border: none !important;padding: 0 !important;max-width: 99% !important;height: auto !important;}",
 		"history": true,
 		"pager": {
 			"nextL": "js; let url = comicUrl.replace('.html','/') + nextChapterData.id + '.html'; if (nextChapterData.id != null && url && url != '.html' && url != location.href) return url",
@@ -3266,13 +3266,13 @@
 			"scrollD": 4000
 		},
 		"function": {
-			"aF": "let _img = '',host = SinMH.getResHostDomain(); if (/^www\\.(ykmh|100fanwo|izhegu|xlsmh)\\.com$/.test(location.hostname)) {chapterPath=''}else if (location.hostname.indexOf('36man') == -1||location.hostname=='www.123gf.com'||location.hostname=='www.gmh1234.com'){host+='/'}; if (location.hostname == 'www.36man.cc' ||(location.hostname == 'www.manmantai.com' && chapterImages[0].slice(0,4) == 'http') ||location.hostname == 'www.xlsmh.com'){host=''};  for (let i=0;i<chapterImages.length;i++){_img += `<img src=\"${host}${chapterPath}${chapterImages[i]}\">`;}; document.getElementById('images').insertAdjacentHTML('beforeend', _img);"
+			"aF": "let _img = '',host = SinMH.getResHostDomain(); if (/^www\\.(ykmh|100fanwo|izhegu|xlsmh)\\.com$/.test(location.hostname)) {chapterPath=''}else if (location.hostname.indexOf('36man') == -1||location.hostname=='www.123gf.com'||location.hostname=='www.gmh1234.com'){host+='/'}; if (location.hostname == 'www.36man.cc' ||(location.hostname == 'www.manmantai.com' && chapterImages[0].slice(0,4) == 'http') ||location.hostname == 'www.xlsmh.com'){host=''};  for (let i=0;i<chapterImages.length;i++){_img += `<img src=\"${host}${chapterPath}${chapterImages[i]}\">`;}; document.getElementById('images').insertAdjacentHTML('beforeend',_img);"
 		}
 	},
 	"爱漫之家 / 733 动漫": {
 		"host": ["www.52fuman.xyz","www.733.so"],
 		"url": "if (fun.indexOF(/\\/\\d+\\.html$/)) {let _img='',imgArr=qTcms_S_m_murl.split('$qingtiandy$'); for (let i=0;i<imgArr.length;i++){if(location.hostname == 'www.733.so'){imgArr[i]=f_qTcms_Pic_curUrl_realpic(imgArr[i])};_img += `<img src=\"${imgArr[i]}\">`;}; fun.getCSS('#qTcms_Pic_middle td').innerHTML=_img; return true}",
-		"style": "#sider-left, #sider-right, .tc.w996 {display: none !important;} #images{min-height: 6000px !important;} #qTcms_Pic_middle img {display: inline-block !important;min-height: 400px;margin: 0 auto !important;border: none !important;padding: 0 !important;max-width: 99% !important;height: auto !important;}",
+		"style": "#sider-left,#sider-right,.tc.w996 {display: none !important;} #images{min-height: 6000px !important;} #qTcms_Pic_middle img {display: inline-block !important;min-height: 400px;margin: 0 auto !important;border: none !important;padding: 0 !important;max-width: 99% !important;height: auto !important;}",
 		"history": true,
 		"pager": {
 			"nextL": "js; if (qTcms_Pic_nextArr.slice(0,10) != 'javascript') return location.origin + qTcms_Pic_nextArr",
@@ -3283,7 +3283,7 @@
 			"scrollD": 4000
 		},
 		"function": {
-			"aF": "let _img='',imgArr=base64_decode(qTcms_S_m_murl_e).split('$qingtiandy$'); for (let i=0;i<imgArr.length;i++){if(location.hostname == 'www.733.so'){imgArr[i]=f_qTcms_Pic_curUrl_realpic(imgArr[i])};_img += `<img src=\"${imgArr[i]}\">`;}; fun.getCSS('#qTcms_Pic_middle td').insertAdjacentHTML('beforeend', _img);"
+			"aF": "let _img='',imgArr=base64_decode(qTcms_S_m_murl_e).split('$qingtiandy$'); for (let i=0;i<imgArr.length;i++){if(location.hostname == 'www.733.so'){imgArr[i]=f_qTcms_Pic_curUrl_realpic(imgArr[i])};_img += `<img src=\"${imgArr[i]}\">`;}; fun.getCSS('#qTcms_Pic_middle td').insertAdjacentHTML('beforeend',_img);"
 		}
 	},
 	"二次元动漫": {
@@ -3305,7 +3305,7 @@
 		"pager": {
 			"nextL": "//div[@class='fanye'][1]/a[@href][text()='下一页' or text()='下一话']",
 			"pageE": ".comicpage",
-			"replaceE": ".fanye, h1.title",
+			"replaceE": ".fanye,h1.title",
 			"interval": 1000
 		},
 		"function": {
@@ -3324,13 +3324,13 @@
 	},
 	"COLAMANGA 漫画": {
 		"host": "www.colamanga.com",
-		"url": "if (fun.indexOF('.html')){if (!(fun.getCookie('mh_readmode') === '' || fun.getCookie('mh_readmode') === '3')) {document.cookie='mh_readmode=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; location.reload();}; return true;} else if (fun.indexOF(/\\/\\d+\\/$/)) {setTimeout(()=>{if (document.querySelector('a.website-display-all')) document.querySelector('a.website-display-all').click();}, 500);}",
-		"style": ".mh_readend, .mh_footpager, .mh_readmode, .fed-foot-info",
+		"url": "if (fun.indexOF('.html')){if (!(fun.getCookie('mh_readmode') === '' || fun.getCookie('mh_readmode') === '3')) {document.cookie='mh_readmode=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; location.reload();}; return true;} else if (fun.indexOF(/\\/\\d+\\/$/)) {setTimeout(()=>{if (document.querySelector('a.website-display-all')) document.querySelector('a.website-display-all').click();},500);}",
+		"style": ".mh_readend,.mh_footpager,.mh_readmode,.fed-foot-info",
 		"iframe": true,
 		"history": true,
 		"pager": {
 			"type": 5,
-			"nextL": "//a[contains(@class, 'read_page_link') and contains(string(), '下一章')][not(contains(@href, 'javascript'))]",
+			"nextL": "//a[contains(@class,'read_page_link') and contains(string(),'下一章')][not(contains(@href,'javascript'))]",
 			"interval": 4000,
 			"scrollD": 500
 		}
@@ -3340,12 +3340,12 @@
 		"url": "return (fun.lp() == '/show' || fun.lp() == '/search')",
 		"blank": 4,
 		"pager": {
-			"nextL": "js; return fun.getNextEP('.fed-page-info a.fed-btns-green+a[onclick]', 'page=', /page=\\d+/)",
-			"pageE": "ul.fed-list-info > li, dl.fed-deta-info",
+			"nextL": "js; return fun.getNextEP('.fed-page-info a.fed-btns-green+a[onclick]','page=',/page=\\d+/)",
+			"pageE": "ul.fed-list-info > li,dl.fed-deta-info",
 			"replaceE": ".fed-page-info"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [1,'a[data-original]','data-original'])"
+			"bF": "return fun.src_bF(pageE,[1,'a[data-original]','data-original'])"
 		}
 	},
 	"flamescans 漫画": {
@@ -3406,7 +3406,7 @@
 		"style": ".readbg.mt10",
 		"history": true,
 		"pager": {
-			"nextL": "//div[contains(@class, 'articlebtn')]/a[contains(text(), '下一页') or contains(text(), '下一章')]",
+			"nextL": "//div[contains(@class,'articlebtn')]/a[contains(text(),'下一页') or contains(text(),'下一章')]",
 			"pageE": "#BookText",
 			"insertP": ["#BookText",6],
 			"replaceE": ".articlebtn"
@@ -3417,15 +3417,15 @@
 		"url": "/^\\/(lists|all)\\//",
 		"blank": 3,
 		"pager": {
-			"nextL": "id('pager')//a[contains(text(), '下一页')]",
-			"pageE": "ul.search-list, .books-list",
+			"nextL": "id('pager')//a[contains(text(),'下一页')]",
+			"pageE": "ul.search-list,.books-list",
 			"replaceE": "#pager"
 		}
 	},
 	"御书网 - 手机版": {
 		"host": "m.yushubo.com",
 		"url": "/^\\/read_/",
-		"style": ".member, iframe, [data-url], article[id^='article'], [style*='position:']",
+		"style": ".member,iframe,[data-url],article[id^='article'],[style*='position:']",
 		"history": true,
 		"pager": {
 			"nextL": "//a[@class='btn-next'][text()='下一页' or text()='下一章']",
@@ -3436,18 +3436,18 @@
 	},
 	"搜小说": {
 		"host": "www.soxscc.org",
-		"url": "if (fun.indexOF(/\\/\\d{4,}.html/)) {fun.xs_bF(fun.getAllCSS('.content'), [/(<br>)?(&nbsp;)+您可以在百度.+?最新章节！/, '']); return true}",
-		"style": ".content>p, img",
+		"url": "if (fun.indexOF(/\\/\\d{4,}.html/)) {fun.xs_bF(fun.getAllCSS('.content'),[/(<br>)?(&nbsp;)+您可以在百度.+?最新章节！/,'']); return true}",
+		"style": ".content>p,img",
 		"history": true,
 		"pager": {
-			"nextL": "//font[contains(text(), '下一章')]/following-sibling::a[1]",
+			"nextL": "//font[contains(text(),'下一章')]/following-sibling::a[1]",
 			"pageE": ".content",
 			"insertP": [".content",6],
 			"insertP6Br": true,
 			"replaceE": ".pagego"
 		},
 		"function": {
-			"bF": "return fun.xs_bF(pageE, [/(<br>)?(&nbsp;)+您可以在百度.+?最新章节！/, ''])"
+			"bF": "return fun.xs_bF(pageE,[/(<br>)?(&nbsp;)+您可以在百度.+?最新章节！/,''])"
 		}
 	},
 	"和图书": {
@@ -3467,7 +3467,7 @@
 		"url": "/^\\/owllook_content/",
 		"history": true,
 		"pager": {
-			"nextL": "//div[@class='pre_next']/a[contains(text(), '下一')]",
+			"nextL": "//div[@class='pre_next']/a[contains(text(),'下一')]",
 			"pageE": "#chaptercontent",
 			"insertP": ["#chaptercontent",6],
 			"replaceE": ".pre_next"
@@ -3486,8 +3486,8 @@
 	},
 	"读书族小说网": {
 		"host": "m.xiaoshuo77.net",
-		"url": "if (fun.indexOF('.html')) {fun.xs_bF(fun.getAllCSS('#novelcontent'), [/(<br>)?(&nbsp;)+内容未完，下一页.*$|【本章阅读.*$/, '<br>']); return true}",
-		"style": "#novelcontent>p, img",
+		"url": "if (fun.indexOF('.html')) {fun.xs_bF(fun.getAllCSS('#novelcontent'),[/(<br>)?(&nbsp;)+内容未完，下一页.*$|【本章阅读.*$/,'<br>']); return true}",
+		"style": "#novelcontent>p,img",
 		"history": true,
 		"pager": {
 			"nextL": ".page_chapter a.p4",
@@ -3496,7 +3496,7 @@
 			"replaceE": ".page_chapter"
 		},
 		"function": {
-			"bF": "return fun.xs_bF(pageE, [/(<br>)?(&nbsp;)+内容未完，下一页.*$|【本章阅读.*$/, '<br>'])"
+			"bF": "return fun.xs_bF(pageE,[/(<br>)?(&nbsp;)+内容未完，下一页.*$|【本章阅读.*$/,'<br>'])"
 		}
 	},
 	"笔趣阁 - cnhxfilm.com": {
@@ -3512,16 +3512,16 @@
 	},
 	"铅笔小说": {
 		"host": ["www.23qb.com","www.23qb.net","m.x23qb.com"],
-		"url": "if (fun.indexOF(/\\/book\\/\\d+\\/.+\\.html/)) {fun.xs_bF(fun.getAllCSS('#mlfy_main_text>*'), [/（继续下一页）.+|铅笔小说.+/, '']); return true}",
+		"url": "if (fun.indexOF(/\\/book\\/\\d+\\/.+\\.html/)) {fun.xs_bF(fun.getAllCSS('#mlfy_main_text>*'),[/（继续下一页）.+|铅笔小说.+/,'']); return true}",
 		"history": true,
 		"pager": {
 			"nextL": "js; if (ReadParams.url_next.slice(ReadParams.url_next.length-5) === '.html') return (location.origin + ReadParams.url_next)",
-			"pageE": "id('TextContent')/p | //script[contains(text(), 'ReadParams')]",
+			"pageE": "id('TextContent')/p | //script[contains(text(),'ReadParams')]",
 			"replaceE": ".chepnav",
 			"scriptT": 2
 		},
 		"function": {
-			"bF": "return fun.xs_bF(pageE, [/.*继续下一页.*|.*铅笔小说.*/, ''])"
+			"bF": "return fun.xs_bF(pageE,[/.*继续下一页.*|.*铅笔小说.*/,''])"
 		}
 	},
 	"铅笔小说 - 分类页": {
@@ -3529,12 +3529,12 @@
 		"url": "return (fun.lp() != '/' && !fun.indexOF(/\\/book\\/\\d+\\//))",
 		"blank": 3,
 		"pager": {
-			"nextL": ".pages a.next, .pages>strong+a",
+			"nextL": ".pages a.next,.pages>strong+a",
 			"pageE": "#sitebox>dl",
 			"replaceE": ".pages"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0, 'img[_src]', '_src'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[_src]','_src'])"
 		}
 	},
 	"7017k小说网": {
@@ -3551,14 +3551,14 @@
 	},
 	"柒六八文学小说网": {
 		"host": ["www.778668.com","m.778668.com"],
-		"url": "if(fun.indexOF(/^\\/.+\\/\\d+_\\d+\\.html$/)){fun.xs_bF(fun.getAllCSS('.pt-read-text>p,#pt-pop>a>font>p'), [/(^微信小程序.+|本章未完，请点击.+页$)/, '']); return true}",
+		"url": "if(fun.indexOF(/^\\/.+\\/\\d+_\\d+\\.html$/)){fun.xs_bF(fun.getAllCSS('.pt-read-text>p,#pt-pop>a>font>p'),[/(^微信小程序.+|本章未完，请点击.+页$)/,'']); return true}",
 		"retry": 3000,
 		"pager": {
 			"nextL": "a.pt-nextchapter[href$='.html'],.pt-nextchapter>a[href$='.html']",
 			"pageE": ".pt-read-text>p,#pt-pop>a>font>p"
 		},
 		"function": {
-			"bF": "return fun.xs_bF(pageE, [/(^微信小程序.+|本章未完，请点击.+页$)/, ''])"
+			"bF": "return fun.xs_bF(pageE,[/(^微信小程序.+|本章未完，请点击.+页$)/,''])"
 		}
 	},
 	"皇帝之家": {
@@ -3566,7 +3566,7 @@
 		"url": "/chapter-\\d+\\.html/",
 		"history": true,
 		"pager": {
-			"nextL": "//div[contains(@class, 'tag-view-type')]//a[text()='下一章']",
+			"nextL": "//div[contains(@class,'tag-view-type')]//a[text()='下一章']",
 			"pageE": ".tagCol>p",
 			"insertP": [".tagCol>p",6],
 			"replaceE": ".tag-view-type"
@@ -3586,7 +3586,7 @@
 		"url": "if (fun.indexOF(/\\/book\\/\\d+\\/.+\\.html/)) {fun.insStyle('.reward-section {display: none !important;}');} else if (fun.indexOF('/cat/')) {return true;}",
 		"history": true,
 		"pager": {
-			"nextL": "//ul[@class='pagination']/li/a[contains(text(), '下一页')]",
+			"nextL": "//ul[@class='pagination']/li/a[contains(text(),'下一页')]",
 			"pageE": ".rank-book-list>div",
 			"replaceE": "ul.pagination"
 		}
@@ -3594,10 +3594,10 @@
 	"话本小说网": {
 		"host": "www.ihuaben.com",
 		"url": "return (fun.indexOF(/\\/\\d{4,}.html/))",
-		"style": ".discription>p>i, img, #container, #BDBannerBottom_PC, iframe, .navFooter {display: none !important;} .discription>p {font-size: 16px; min-height: 24px; padding-bottom: 24px;}",
+		"style": ".discription>p>i,img,#container,#BDBannerBottom_PC,iframe,.navFooter {display: none !important;} .discription>p {font-size: 16px; min-height: 24px; padding-bottom: 24px;}",
 		"history": true,
 		"pager": {
-			"nextL": "id('preAndNextBar')/a[contains(text(), '下一章')]",
+			"nextL": "id('preAndNextBar')/a[contains(text(),'下一章')]",
 			"pageE": "#contentsource>p",
 			"insertP": [".discription",3],
 			"replaceE": "#preAndNextBar"
@@ -3609,7 +3609,7 @@
 		"history": true,
 		"pager": {
 			"nextL": "//div[@class='mlfy_page']/a[contains(text(),'下一页') or contains(text(),'下一章')]",
-			"pageE": "#TextContent>*:not(div), head>style",
+			"pageE": "#TextContent>*:not(div),head>style",
 			"replaceE": ".mlfy_page"
 		},
 		"function": {
@@ -3647,7 +3647,7 @@
 		"history": true,
 		"pager": {
 			"nextL": "js; if (ReadParams.url_next.slice(ReadParams.url_next.length-5) === '.html') return (location.origin + ReadParams.url_next)",
-			"pageE": "id('acontentz')/*[name()='p' or name()='img' or name()='br'] | //body/script[contains(text(), 'var ReadParams')] | //body/script[contains(@src, '/readtools.js')] | //head/style",
+			"pageE": "id('acontentz')/*[name()='p' or name()='img' or name()='br'] | //body/script[contains(text(),'var ReadParams')] | //body/script[contains(@src,'/readtools.js')] | //head/style",
 			"scriptT": 2
 		},
 		"function": {
@@ -3704,7 +3704,7 @@
 		"pager": {
 			"nextL": "li.chapter.next a",
 			"pageE": "#workskin>div",
-			"replaceE": "#main ul.navigation, #feedback>ul.actions"
+			"replaceE": "#main ul.navigation,#feedback>ul.actions"
 		}
 	},
 	"红袖招": {
@@ -3753,7 +3753,7 @@
 		"url": "/^\\/.+/",
 		"pager": {
 			"nextL": "a.page-next",
-			"pageE": ".app-item-content, .article-item-content",
+			"pageE": ".app-item-content,.article-item-content",
 			"replaceE": ".pagination-content"
 		}
 	},
@@ -3864,7 +3864,7 @@
 		"url": "return (fun.indexOF('/special'))",
 		"pager": {
 			"nextL": "#pageGroup>span+a",
-			"pageE": ".special>.item, .articleWrapper>div",
+			"pageE": ".special>.item,.articleWrapper>div",
 			"replaceE": "#pageGroup",
 			"forceHTTPS": true
 		}
@@ -3900,8 +3900,8 @@
 		"host": "www.423down.com",
 		"pager": {
 			"nextL": "//span[@class='current']/following-sibling::a[1] | //span[@class='page-numbers current']/preceding-sibling::a[1]",
-			"pageE": ".content>.excerpt, .commentlist>li",
-			"replaceE": ".paging, .pagenav"
+			"pageE": ".content>.excerpt,.commentlist>li",
+			"replaceE": ".paging,.pagenav"
 		}
 	},
 	"华军软件园": {
@@ -3909,7 +3909,7 @@
 		"url": "/^\\/(sort\\/.+|search)/",
 		"pager": {
 			"nextL": ".g-pages a.z-cur+a",
-			"pageE": ".m-list, .m-list2",
+			"pageE": ".m-list,.m-list2",
 			"replaceE": ".g-pages"
 		}
 	},
@@ -3935,7 +3935,7 @@
 		"pager": {
 			"nextL": ".pagenavi a[title='下一页']",
 			"pageE": "#postlist>div.entry",
-			"replaceE": ".pagenavi-button, .pagenavi"
+			"replaceE": ".pagenavi-button,.pagenavi"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE)"
@@ -3960,7 +3960,7 @@
 	},
 	"老殁 | 殁漂遥 - 搜索页/分类页": {
 		"host": "www.mpyit.com",
-		"url": "return (fun.indexOF('/category/') || fun.indexOF('?s=', 's'))",
+		"url": "return (fun.indexOF('/category/') || fun.indexOF('?s=','s'))",
 		"pager": {
 			"nextL": "a.page-numbers[title='下一页']",
 			"pageE": "#content>div[class^='entry_box']",
@@ -3969,9 +3969,9 @@
 	},
 	"腾龙工作室": {
 		"host": "www.tenlonstudio.com",
-		"url": "return (fun.lp() !== '/' && !fun.indexOF('.html') && fun.getXpath('//div[@class=\"btn-pager\"]/a[contains(text(), \"❯\")]'))",
+		"url": "return (fun.lp() !== '/' && !fun.indexOF('.html') && fun.getXpath('//div[@class=\"btn-pager\"]/a[contains(text(),\"❯\")]'))",
 		"pager": {
-			"nextL": "//div[@class='btn-pager']/a[contains(text(), '❯')]",
+			"nextL": "//div[@class='btn-pager']/a[contains(text(),'❯')]",
 			"pageE": "li.post-list-item",
 			"replaceE": ".ajax-pager"
 		}
@@ -3981,14 +3981,14 @@
 		"url": "return (fun.lp() !== '/' && !fun.indexOF('.html'))",
 		"history": true,
 		"pager": {
-			"nextL": "js; return fun.getNextUPN(/(?<=\\/page\\/)\\d+/, /\\/page\\/\\d+/, '/page/', '', '2', fun.getCSS('.btn-group>button:last-of-type').textContent)",
+			"nextL": "js; return fun.getNextUPN(/(?<=\\/page\\/)\\d+/,/\\/page\\/\\d+/,'/page/','','2',fun.getCSS('.btn-group>button:last-of-type').textContent)",
 			"pageE": "li.post-list-item"
 		}
 	},
 	"异星软件空间": {
 		"host": "www.yxssp.com",
 		"pager": {
-			"nextL": "//div[contains(@class, 'page-nav')]/a[last()]",
+			"nextL": "//div[contains(@class,'page-nav')]/a[last()]",
 			"pageE": ".td-modules-container.td-module-number4>div",
 			"replaceE": ".page-nav.td-pb-padding-side"
 		}
@@ -4011,7 +4011,7 @@
 			"replaceE": "#pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-lazy-src]','data-lazy-src'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-lazy-src]','data-lazy-src'])"
 		}
 	},
 	"小鱼儿 yr 系统 - 搜索页": {
@@ -4032,7 +4032,7 @@
 			"replaceE": ".jz_pagenation_wrap"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [1, 'a[data-original]', 'data-original'])"
+			"bF": "return fun.src_bF(pageE,[1,'a[data-original]','data-original'])"
 		}
 	},
 	"sordum": {
@@ -4061,12 +4061,12 @@
 			"replaceE": ".page_nav"
 		},
 		"function": {
-			"bF": "pageE.forEach(function (one) {let now = one.querySelector('.slideUp, .elementFade'); if (now) {now.className = now.className.replace('slideUp','slideUpRun').replace('elementFade','elementFadeRun');};}); return pageE"
+			"bF": "pageE.forEach(function (one) {let now = one.querySelector('.slideUp,.elementFade'); if (now) {now.className = now.className.replace('slideUp','slideUpRun').replace('elementFade','elementFadeRun');};}); return pageE"
 		}
 	},
 	"dlandroid": {
 		"host": "dlandroid.com",
-		"url": "return (fun.indexOF('/cat/') || (fun.lp() === '/' && fun.indexOF('?s=', 's')))",
+		"url": "return (fun.indexOF('/cat/') || (fun.lp() === '/' && fun.indexOF('?s=','s')))",
 		"pager": {
 			"nextL": "a.next.page-numbers",
 			"pageE": "div.post",
@@ -4083,7 +4083,7 @@
 		"pager": {
 			"type": 3,
 			"nextL": "a.nextpostslink",
-			"pageE": "[role='main'] .listWidget>div:not([class]), #primary .listWidget>div:not([class])",
+			"pageE": "[role='main'] .listWidget>div:not([class]),#primary .listWidget>div:not([class])",
 			"replaceE": ".pagination"
 		}
 	},
@@ -4098,7 +4098,7 @@
 	"windowslatest": {
 		"host": "www.windowslatest.com",
 		"pager": {
-			"nextL": "//div[contains(@class, 'page-nav')]/a[last()]",
+			"nextL": "//div[contains(@class,'page-nav')]/a[last()]",
 			"pageE": ".td-ss-main-content>div:not(.td-block-title-wrap):not(.page-nav)",
 			"replaceE": ".page-nav"
 		}
@@ -4130,14 +4130,14 @@
 		"history": true,
 		"pager": {
 			"nextL": "//div[@class='paginator']//span/strong/../../following-sibling::td[1]//a",
-			"pageE": "#tablelibgen>tbody>tr, .paginator+script:not([src])",
+			"pageE": "#tablelibgen>tbody>tr,.paginator+script:not([src])",
 			"replaceE": ".paginator",
 			"scriptT": 2
 		}
 	},
 	"ScienceDirect": {
 		"host": "www.sciencedirect.com",
-		"url": "fun.isUrlC(); if (fun.lp() == '/search') {setTimeout(()=>{fun.insStyle('html, body {height: ' + (document.documentElement.scrollHeight || document.body.scrollHeight) + 'px;}')}, 2000); return true}",
+		"url": "fun.isUrlC(); if (fun.lp() == '/search') {setTimeout(()=>{fun.insStyle('html,body {height: ' + (document.documentElement.scrollHeight || document.body.scrollHeight) + 'px;}')},2000); return true}",
 		"style": "footer",
 		"blank": 3,
 		"iframe": true,
@@ -4153,7 +4153,7 @@
 		"history": true,
 		"pager": {
 			"nextL": "//div[@class='paginator ' or @class='paginator']//span/strong/../../following-sibling::td[1]//a",
-			"pageE": "//*[@id='searchResultBox'] | //script[contains(string(), 'pagerOptions')]",
+			"pageE": "//*[@id='searchResultBox'] | //script[contains(string(),'pagerOptions')]",
 			"replaceE": ".paginator",
 			"scriptT": 2
 		},
@@ -4184,9 +4184,9 @@
 		"url": "return (fun.indexOF('/search/q') || fun.indexOF('/paper/'))",
 		"history": true,
 		"pager": {
-			"nextL": "js; return fun.getNextEP('.pagination li.active+li>a', 'pageIndex=', /pageIndex=\\d+/)",
-			"pageE": ".magazine-senior-search-results-list>ul>li, .magazine-model-content-new>ul>li",
-			"insertP": [".magazine-senior-search-results-list>ul, .magazine-model-content-new>ul",3],
+			"nextL": "js; return fun.getNextEP('.pagination li.active+li>a','pageIndex=',/pageIndex=\\d+/)",
+			"pageE": ".magazine-senior-search-results-list>ul>li,.magazine-model-content-new>ul>li",
+			"insertP": [".magazine-senior-search-results-list>ul,.magazine-model-content-new>ul",3],
 			"replaceE": ".pagination"
 		}
 	},
@@ -4226,7 +4226,7 @@
 		"url": "return (fun.indexOF('/f-') || fun.indexOF('search.php'))",
 		"style": "tr.forum_head",
 		"pager": {
-			"nextL": "//div[contains(@class, 'xmc_Pages')]//a[text()='下一页']",
+			"nextL": "//div[contains(@class,'xmc_Pages')]//a[text()='下一页']",
 			"pageE": ".forum_body table>tbody",
 			"replaceE": ".xmc_Pages"
 		}
@@ -4237,7 +4237,7 @@
 		"style": "tr.forum_head",
 		"thread": true,
 		"pager": {
-			"nextL": "//div[contains(@class, 'xmc_Pages')]//a[text()='下一页']",
+			"nextL": "//div[contains(@class,'xmc_Pages')]//a[text()='下一页']",
 			"pageE": "#maincontent>table>tbody:not(.header)",
 			"replaceE": ".xmc_Pages"
 		}
@@ -4246,7 +4246,7 @@
 		"host": "muchong.com",
 		"url": "return (fun.lp() == '/bbs/kaoyan.php')",
 		"pager": {
-			"nextL": "//div[contains(@class, 'xmc_Pages')]//a[text()='下一页']",
+			"nextL": "//div[contains(@class,'xmc_Pages')]//a[text()='下一页']",
 			"pageE": ".forum_body_manage",
 			"replaceE": ".xmc_Pages"
 		}
@@ -4294,10 +4294,10 @@
 		}
 	},
 	"谷歌学术": {
-		"host": ["/^scholar\\.google\\./", "xs2.dailyheadlines.cc","xueshu.dailyheadlines.cc","sc.panda321.com","scholar.lanfanshu.cn","scholar.mirrors.pw"],
+		"host": ["/^scholar\\.google\\./","xs2.dailyheadlines.cc","xueshu.dailyheadlines.cc","sc.panda321.com","scholar.lanfanshu.cn","scholar.mirrors.pw"],
 		"history": true,
 		"pager": {
-			"nextL": "//a[./span[contains(@class, 'next')]]",
+			"nextL": "//a[./span[contains(@class,'next')]]",
 			"pageE": "#gs_res_ccl_mid>*",
 			"replaceE": "#gs_n",
 			"scriptT": 1
@@ -4330,7 +4330,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "a[rel='next']",
-			"pageE": "#questions>div, .js-search-results>div:first-child>div, #tags-browser>div, #user-browser>div:first-child>div",
+			"pageE": "#questions>div,.js-search-results>div:first-child>div,#tags-browser>div,#user-browser>div:first-child>div",
 			"replaceE": ".pager"
 		}
 	},
@@ -4339,19 +4339,19 @@
 		"url": "fun.isUrlC(); return (fun.lp() == '/search' || fun.indexOF('/questions'))",
 		"pager": {
 			"nextL": "//a[@class='page-link'][text()='下一页']",
-			"pageE": "ul.list-group>li, li.list-group-item",
+			"pageE": "ul.list-group>li,li.list-group-item",
 			"replaceE": "ul.pagination"
 		}
 	},
 	"w3cschool.cn": {
 		"host": "www.w3cschool.cn",
 		"url": "return (location.pathname.split('/').length>2)",
-		"style": ".widget-body, #rfbanner",
+		"style": ".widget-body,#rfbanner",
 		"history": true,
 		"pager": {
 			"nextL": ".next-link>a",
-			"pageE": "#pro-mian-header, .content-bg",
-			"replaceE": ".content-links, .splitter-sidebar"
+			"pageE": "#pro-mian-header,.content-bg",
+			"replaceE": ".content-links,.splitter-sidebar"
 		}
 	},
 	"w3school.com.cn": {
@@ -4363,9 +4363,9 @@
 			"type": 3,
 			"nextL": "js; let next = fun.getCSS('li.next>a[href]'); if (next && next.href.indexOf('/index.') === -1) return next.href",
 			"pageE": "#maincontent>*:not([class*='prenextnav']):not(#bpn):not(#tpn)",
-			"insertP": ["id('bpn') | //div[contains(@class, 'prenextnav')][last()]",1],
-			"replaceE": "ul.prenext, #navsecond",
-			"scrollE": "id('bpn') | //div[contains(@class, 'prenextnav')][last()]",
+			"insertP": ["id('bpn') | //div[contains(@class,'prenextnav')][last()]",1],
+			"replaceE": "ul.prenext,#navsecond",
+			"scrollE": "id('bpn') | //div[contains(@class,'prenextnav')][last()]",
 			"forceHTTPS": true,
 			"scrollD": 800
 		}
@@ -4386,7 +4386,7 @@
 		"history": true,
 		"pager": {
 			"nextL": "//ul[@class='membership']/li[not(a)]/following-sibling::li[1]/a",
-			"pageE": ".article-heading, .article-body",
+			"pageE": ".article-heading,.article-body",
 			"replaceE": ".right-column ul.membership",
 			"forceHTTPS": true
 		}
@@ -4394,13 +4394,13 @@
 	"菜鸟教程": {
 		"host": "www.runoob.com",
 		"url": "return (location.pathname.split('/').length>2 && fun.getCSS('#leftcolumn'))",
-		"style": "#comments, #postcomments, #respond, #footer {display: none !important;} .article-intro h1:not(:nth-of-type(1)) {margin: 30px 0 10px 0;} .middle-column {min-height: 1000px;}",
+		"style": "#comments,#postcomments,#respond,#footer {display: none !important;} .article-intro h1:not(:nth-of-type(1)) {margin: 30px 0 10px 0;} .middle-column {min-height: 1000px;}",
 		"history": true,
 		"pager": {
 			"type": 3,
 			"nextL": "js; let next = fun.getCSS('#leftcolumn>a[style]~a[href]'); if (next && next.href.split('/').length === location.href.split('/').length && next.href.split('/')[3] === location.href.split('/')[3]) {return next.href;}; next.href = location.href; return ''",
-			"pageE": "#content>*, script[src*='assets/js/main.min.js']",
-			"replaceE": ".previous-next-links, #leftcolumn",
+			"pageE": "#content>*,script[src*='assets/js/main.min.js']",
+			"replaceE": ".previous-next-links,#leftcolumn",
 			"scrollE": ".article>.sidebar-box",
 			"scriptT": 2,
 			"forceHTTPS": true,
@@ -4411,17 +4411,17 @@
 		"host": "www.cnblogs.com",
 		"url": "return fun.isPager('p')",
 		"pager": {
-			"nextL": "//div[@class='pager']//a[contains(text(), '>')]",
+			"nextL": "//div[@class='pager']//a[contains(text(),'>')]",
 			"pageE": "#post_list>article",
 			"replaceE": ".pager"
 		}
 	},
 	"博客园 - 文章列表 - 个人": {
 		"host": "www.cnblogs.com",
-		"url": "if (location.pathname.split('/').length === 3 && fun.getCSS('.topicListFooter')) { if (!fun.getCSS('#homepage_top_pager')) {fun.getCSS('#centercontent, .forFlow').insertAdjacentHTML('afterbegin', '<div id=\"homepage_top_pager\" class=\"topicListFooter\"></div>'); fun.getCSS('#centercontent, .forFlow').insertAdjacentHTML('beforeend', '<div id=\"homepage_bottom_pager\" class=\"topicListFooter\"></div>');}; return true}",
+		"url": "if (location.pathname.split('/').length === 3 && fun.getCSS('.topicListFooter')) { if (!fun.getCSS('#homepage_top_pager')) {fun.getCSS('#centercontent,.forFlow').insertAdjacentHTML('afterbegin','<div id=\"homepage_top_pager\" class=\"topicListFooter\"></div>'); fun.getCSS('#centercontent,.forFlow').insertAdjacentHTML('beforeend','<div id=\"homepage_bottom_pager\" class=\"topicListFooter\"></div>');}; return true}",
 		"blank": 3,
 		"pager": {
-			"nextL": "//div[@class='topicListFooter']//a[contains(text(), '下一页')]",
+			"nextL": "//div[@class='topicListFooter']//a[contains(text(),'下一页')]",
 			"pageE": "div.day",
 			"replaceE": ".topicListFooter"
 		}
@@ -4429,7 +4429,7 @@
 	"博客园 - 搜索页": {
 		"host": "zzk.cnblogs.com",
 		"pager": {
-			"nextL": "//div[@class='pager']//a[contains(text(), '>')]",
+			"nextL": "//div[@class='pager']//a[contains(text(),'>')]",
 			"pageE": "div.searchItem",
 			"replaceE": ".pager"
 		}
@@ -4437,7 +4437,7 @@
 	"力扣": {
 		"host": "leetcode-cn.com",
 		"url": "return (fun.lp() == '/')",
-		"style": "html, body {height: 100%; overflow: unset !important;}",
+		"style": "html,body {height: 100%; overflow: unset !important;}",
 		"pager": {
 			"type": 2,
 			"nextL": "button[class*='-LoadMoreButton']"
@@ -4457,7 +4457,7 @@
 		"url": "return (fun.lp() == '/' || fun.indexOF(/^\\/(go|topics|articles|projects|resources)/))",
 		"pager": {
 			"nextL": "li.next>a",
-			"pageE": ".cell.item, .topic, .article, .resources",
+			"pageE": ".cell.item,.topic,.article,.resources",
 			"replaceE": ".pagination"
 		}
 	},
@@ -4466,7 +4466,7 @@
 		"url": "fun.isUrlC(); return (fun.lp() == '/' || fun.lp() == '/jobs' || fun.lp() == '/search' || (fun.indexOF('/topics') && !fun.indexOF(/^\\/topics\\/\\d+/)))",
 		"pager": {
 			"nextL": "li.next>a",
-			"pageE": ".item-list, .result",
+			"pageE": ".item-list,.result",
 			"replaceE": ".pagination"
 		}
 	},
@@ -4475,7 +4475,7 @@
 		"url": "/^\\/docs\\//",
 		"style": "#TableOfContents",
 		"pager": {
-			"nextL": ".bd-sidenav-active+li>a, .bd-toc-item.active+.bd-toc-item>a",
+			"nextL": ".bd-sidenav-active+li>a,.bd-toc-item.active+.bd-toc-item>a",
 			"pageE": "main>*",
 			"replaceE": ".bd-links"
 		}
@@ -4502,7 +4502,7 @@
 		"url": "return (fun.indexOF(/^\\/(nav|topic)/) || (fun.indexOF(/^\\/u_\\d+/) && !fun.indexOF(/^\\/u_\\d+\\/\\d+/)))",
 		"pager": {
 			"nextL": "li.next>a",
-			"pageE": ".date-list, #common-article-listbox-1, ul.search-artical",
+			"pageE": ".date-list,#common-article-listbox-1,ul.search-artical",
 			"replaceE": ".pagination"
 		}
 	},
@@ -4514,7 +4514,7 @@
 		"pager": {
 			"nextL": "//main//a[@class='navigation-tree__link' and @data-state='active']/following-sibling::a[@class='navigation-tree__link'][not(@target='_blank')] | //main//a[@class='navigation-tree__link' and @data-state='active']/following-sibling::div[@class='navigation-tree__nested']/a[@class='navigation-tree__link'][not(@target='_blank')] | //main//a[@class='navigation-tree__link' and @data-state='active']/../following-sibling::div[@class='navigation-tree__nested']/a[@class='navigation-tree__link'][not(@target='_blank')]",
 			"pageE": "main article>*",
-			"replaceE": "main navigation-tree, main .scrollbar"
+			"replaceE": "main navigation-tree,main .scrollbar"
 		}
 	},
 	"pypi.org": {
@@ -4531,7 +4531,7 @@
 		"url": "return (fun.indexOF('/explore/') || fun.indexOF(/\\/(issues|pulls|releases|tags)$/))",
 		"pager": {
 			"nextL": "a[rel='next']",
-			"pageE": ".items>.item, .issue-wrapper, .pull-request__wrapper, .release-tag-item, .tag-item",
+			"pageE": ".items>.item,.issue-wrapper,.pull-request__wrapper,.release-tag-item,.tag-item",
 			"replaceE": ".pagination",
 			"scrollD": 2500
 		}
@@ -4558,7 +4558,7 @@
 		"url": "/(tab=(stars|repositories)|\\/network\\/dependents|^\\/notifications\\/subscriptions(\\?|$))/",
 		"pager": {
 			"nextL": ".paginate-container>div>:last-child",
-			"pageE": "#user-starred-repos div[class^='col-']:first-of-type>div:not(.position-relative):not(.paginate-container), #user-repositories-list>ul>li, .Box>[data-test-id='dg-repo-pkg-dependent'], #threads-unsubscribe-form>ul>li",
+			"pageE": "#user-starred-repos div[class^='col-']:first-of-type>div:not(.position-relative):not(.paginate-container),#user-repositories-list>ul>li,.Box>[data-test-id='dg-repo-pkg-dependent'],#threads-unsubscribe-form>ul>li",
 			"replaceE": ".paginate-container",
 			"scrollD": 2500
 		}
@@ -4568,7 +4568,7 @@
 		"url": "return (fun.indexOF(/\\/(issues|pulls|discussions|releases)$/) || fun.indexOF('/discussions/categories') || fun.indexOF(/\\/actions($|\\/workflows)/) || fun.indexOF(/^\\/orgs\\/.+\\/repositories/))",
 		"pager": {
 			"nextL": "a.next_page",
-			"pageE": "div[id^='issue_'], ul[aria-labelledby='discussions-list']>li, #release_page_title+div[data-pjax]>section, div[id^='check_suite_'], #org-repositories li.Box-row",
+			"pageE": "div[id^='issue_'],ul[aria-labelledby='discussions-list']>li,#release_page_title+div[data-pjax]>section,div[id^='check_suite_'],#org-repositories li.Box-row",
 			"replaceE": ".pagination",
 			"scrollD": 2500
 		}
@@ -4589,7 +4589,7 @@
 		"pager": {
 			"nextL": "nav.paginate-container>a[aria-label='Next']",
 			"pageE": "li.notifications-list-item",
-			"replaceE": "nav.paginate-container, .js-notifications-list-paginator-counts",
+			"replaceE": "nav.paginate-container,.js-notifications-list-paginator-counts",
 			"scrollD": 2500
 		}
 	},
@@ -4597,9 +4597,9 @@
 		"host": "github.com",
 		"url": "/\\/search\\?/",
 		"pager": {
-			"nextL": "js; if (fun.getCSS('a[aria-current=page]')) {return fun.getNextEP('a[aria-current=page]+a', 'p=', /p=\\d+/)} else {return fun.getCSS('a.next_page').href}",
-			"pageE": "[data-testid=results-list]>div, .repo-list>li, .code-list-item, #commit_search_results>div, .issue-list-item, .discussion-list-item, #package_search_results>div, #marketplace_search_results>div:first-child>div, .topic-list-item, #wiki_search_results>div:first-child>div, #user_search_results>div:first-child>div",
-			"replaceE": "nav[class^='Pagination__PaginationContainer'], .pagination"
+			"nextL": "js; if (fun.getCSS('a[aria-current=page]')) {return fun.getNextEP('a[aria-current=page]+a','p=',/p=\\d+/)} else {return fun.getCSS('a.next_page').href}",
+			"pageE": "[data-testid=results-list]>div,.repo-list>li,.code-list-item,#commit_search_results>div,.issue-list-item,.discussion-list-item,#package_search_results>div,#marketplace_search_results>div:first-child>div,.topic-list-item,#wiki_search_results>div:first-child>div,#user_search_results>div:first-child>div",
+			"replaceE": "nav[class^='Pagination__PaginationContainer'],.pagination"
 		}
 	},
 	"Github - Gist - Search/discover": {
@@ -4614,7 +4614,7 @@
 	},
 	"OI-Wiki": {
 		"host": "oi-wiki.org",
-		"style": "blockquote.page-copyright, h2#__comments, form#gitalk-form",
+		"style": "blockquote.page-copyright,h2#__comments,form#gitalk-form",
 		"history": true,
 		"pager": {
 			"nextL": "li.md-nav__item.md-nav__item--active.md-nav__item--nested li.md-nav__item--active+li a",
@@ -4630,8 +4630,8 @@
 		"history": true,
 		"pager": {
 			"nextL": "a.hvr-bounce-to-left",
-			"pageE": "#main>.mt-4 >div>.mb-4, #article_body",
-			"replaceE": ".col-12.font-title, #sidebar"
+			"pageE": "#main>.mt-4 >div>.mb-4,#article_body",
+			"replaceE": ".col-12.font-title,#sidebar"
 		}
 	},
 	"果壳网": {
@@ -4648,7 +4648,7 @@
 		"style": ".pagination",
 		"history": true,
 		"pager": {
-			"nextL": "js; return fun.getNextUPN(/(?<=\\/page\\/)\\d+/, /\\/page\\/\\d+/, '/page/', '', '2', fun.getCSS('.pagination>button.end').textContent)",
+			"nextL": "js; return fun.getNextUPN(/(?<=\\/page\\/)\\d+/,/\\/page\\/\\d+/,'/page/','','2',fun.getCSS('.pagination>button.end').textContent)",
 			"pageE": ".content li.color-border"
 		}
 	},
@@ -4709,7 +4709,7 @@
 		"url": "/\\/list_/",
 		"history": true,
 		"pager": {
-			"nextL": "js; return fun.getNextUPN(/(?<=\\/list_)\\d+(?=\\.shtml)/, /\\/list_.+/, '/list_', '.shtml', '2', fun.getXpath('id(\"Pagination\")/*[contains(@class,\"next\")]/preceding-sibling::*[1]').textContent)",
+			"nextL": "js; return fun.getNextUPN(/(?<=\\/list_)\\d+(?=\\.shtml)/,/\\/list_.+/,'/list_','.shtml','2',fun.getXpath('id(\"Pagination\")/*[contains(@class,\"next\")]/preceding-sibling::*[1]').textContent)",
 			"pageE": ".column-list>li"
 		}
 	},
@@ -4719,7 +4719,7 @@
 		"pager": {
 			"nextL": "//li[@class='next-page']/a | //div[@class='btn-pager']/a[text()='❯']",
 			"pageE": "#post-list>ul>li",
-			"replaceE": ".pagination, .b2-pagenav.post-nav"
+			"replaceE": ".pagination,.b2-pagenav.post-nav"
 		}
 	},
 	"致美化 - 分类页": {
@@ -4760,7 +4760,7 @@
 		"style": ".pager-wrap",
 		"history": true,
 		"pager": {
-			"nextL": "js; return fun.getNextUP('page=', /page=\\d+/)",
+			"nextL": "js; return fun.getNextUP('page=',/page=\\d+/)",
 			"pageE": "#res_list>div"
 		}
 	},
@@ -4770,7 +4770,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "a.btn:not([href])+a.btn.btn-line",
-			"pageE": ".search-item, .forum-topic-item",
+			"pageE": ".search-item,.forum-topic-item",
 			"replaceE": ".page-num-box"
 		}
 	},
@@ -4786,7 +4786,7 @@
 	},
 	"wikihow - 搜索页": {
 		"host": ["www.wikihow.com","zh.wikihow.com"],
-		"url": "return (fun.indexOF('/wikiHowTo') && fun.indexOF('?search=', 's'))",
+		"url": "return (fun.indexOF('/wikiHowTo') && fun.indexOF('?search=','s'))",
 		"pager": {
 			"nextL": "#searchresults_footer>a.buttonright",
 			"pageE": "#searchresults_list>a",
@@ -4816,7 +4816,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next_page",
-			"pageE": "ol#browse-script-list>li, .script-discussion-list, .discussion-list>div",
+			"pageE": "ol#browse-script-list>li,.script-discussion-list,.discussion-list>div",
 			"replaceE": ".pagination"
 		}
 	},
@@ -4826,7 +4826,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "li.active+li>a",
-			"pageE": ".panel>table>tbody>tr.tr-link, .panel>.table-responsive>table>tbody>tr.tr-link, [id^='comment-']",
+			"pageE": ".panel>table>tbody>tr.tr-link,.panel>.table-responsive>table>tbody>tr.tr-link,[id^='comment-']",
 			"replaceE": ".pagination"
 		}
 	},
@@ -4856,7 +4856,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "//a[@class='page-link' and text()='下一页']",
-			"pageE": "table.table >tbody>tr:not(:first-child), .result-item, .question-item, script[src^='/js/site.js']",
+			"pageE": "table.table >tbody>tr:not(:first-child),.result-item,.question-item,script[src^='/js/site.js']",
 			"replaceE": "ul.pagination",
 			"scriptT": 2
 		}
@@ -4904,7 +4904,7 @@
 		"host": ["www.smzdm.com","search.smzdm.com"],
 		"url": "return (location.hostname === 'search.smzdm.com' || fun.indexOF('/fenlei/') || fun.indexOF(/\\/mall\\/.+\\/.+/))",
 		"pager": {
-			"nextL": "//ul[@class='pagenation-list']//a[contains(text() ,'下一页')] | //ul[@class='pagenation-list']/li[contains(@class, 'next-page')]/a",
+			"nextL": "//ul[@class='pagenation-list']//a[contains(text() ,'下一页')] | //ul[@class='pagenation-list']/li[contains(@class,'next-page')]/a",
 			"pageE": "#feed-main-list>li",
 			"replaceE": "ul.pagenation-list"
 		}
@@ -4933,7 +4933,7 @@
 		"blank": 3,
 		"pager": {
 			"type": 6,
-			"nextL": "js; return fun.getNextEP('li.ant-pagination-item-active+li.ant-pagination-item>a', 'page=', /page=\\d+/)",
+			"nextL": "js; return fun.getNextEP('li.ant-pagination-item-active+li.ant-pagination-item>a','page=',/page=\\d+/)",
 			"pageE": ".pull-right .p-list>.item",
 			"replaceE": ".ant-pagination",
 			"loadTime": 500,
@@ -4955,8 +4955,8 @@
 		"host": "search.kongfz.com",
 		"url": "/^\\/item_result\\//",
 		"pager": {
-			"nextL": "js;return fun.getNextEP('.item-page.active+a.item-page', 'pagenum=', /pagenum=\\d+/)",
-			"pageE": "#listBox>div, script[src*=Isbn_item-result_item-result_page]",
+			"nextL": "js;return fun.getNextEP('.item-page.active+a.item-page','pagenum=',/pagenum=\\d+/)",
+			"pageE": "#listBox>div,script[src*=Isbn_item-result_item-result_page]",
 			"replaceE": ".pager",
 			"scriptT": 2
 		}
@@ -4966,7 +4966,7 @@
 		"url": "return (fun.lp() == '/' || fun.lp() == '/page')",
 		"history": true,
 		"pager": {
-			"nextL": "js; return fun.getNextUP('currentPage=', /currentPage=\\d+/, '/page', '2', fun.getCSS('ul.pager').dataset.totalpage)",
+			"nextL": "js; return fun.getNextUP('currentPage=',/currentPage=\\d+/,'/page','2',fun.getCSS('ul.pager').dataset.totalpage)",
 			"pageE": ".document-piece",
 			"replaceE": "ul.pager"
 		}
@@ -4976,7 +4976,7 @@
 		"url": "return (fun.lp() == '/s/search')",
 		"history": true,
 		"pager": {
-			"nextL": "js; return fun.getNextEP('a.cut-page-item.active+a.cut-page-item', 'currentPage=', /currentPage=\\d+/)",
+			"nextL": "js; return fun.getNextEP('a.cut-page-item.active+a.cut-page-item','currentPage=',/currentPage=\\d+/)",
 			"pageE": ".document-piece",
 			"replaceE": ".cut-page"
 		}
@@ -4996,7 +4996,7 @@
 		"style": "li.nextpage {display: none !important;} .alist>ul {height: auto !important;} .alist>ul>li {position: static !important; float: left !important; height: 550px !important;}",
 		"pager": {
 			"nextL": "//div[@class='page']/a[contains(text(),'下一页')]",
-			"pageE": ".slist>ul>li:not(.nextpage), .alist>ul>li",
+			"pageE": ".slist>ul>li:not(.nextpage),.alist>ul>li",
 			"replaceE": ".page"
 		}
 	},
@@ -5034,7 +5034,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": ".active+a",
-			"pageE": ".posts_block, .image_body, table.all_tags, table.scores, table#comments",
+			"pageE": ".posts_block,.image_body,table.all_tags,table.scores,table#comments",
 			"replaceE": ".numeric_pages"
 		}
 	},
@@ -5044,12 +5044,12 @@
 		"style": ".lazy-img {opacity: 1 !important;}",
 		"pager": {
 			"nextL": ".page>a[title='下一页']",
-			"pageE": "div[class*='-container'] div[class*='-con']>ul>li, div[class*='-container'] div[class*='-con']>div[class*='-wrap']>ul>li",
-			"insertP": ["div[class*='-container'] div[class*='-con']>ul, div[class*='-container'] div[class*='-con']>div[class*='-wrap']>ul",3],
+			"pageE": "div[class*='-container'] div[class*='-con']>ul>li,div[class*='-container'] div[class*='-con']>div[class*='-wrap']>ul>li",
+			"insertP": ["div[class*='-container'] div[class*='-con']>ul,div[class*='-container'] div[class*='-con']>div[class*='-wrap']>ul",3],
 			"replaceE": ".page"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[_src]','_src'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[_src]','_src'])"
 		}
 	},
 	"UrleBird": {
@@ -5057,7 +5057,7 @@
 		"url": "/^\\/(trending|user|hash|song)\\//",
 		"pager": {
 			"type": 2,
-			"nextL": "#btn_more_videos:not([disabled]), #load_more:not([disabled]), #hash_load_more:not([disabled]), #song_load_more:not([disabled])"
+			"nextL": "#btn_more_videos:not([disabled]),#load_more:not([disabled]),#hash_load_more:not([disabled]),#song_load_more:not([disabled])"
 		}
 	},
 	"UrleBird - videos": {
@@ -5146,7 +5146,7 @@
 		"host": ["www.gushiwen.cn","so.gushiwen.cn","m.gushiwen.cn","shiwens.com"],
 		"pager": {
 			"nextL": "a.amore",
-			"pageE": ".left .sons:not([id]), .sonspic",
+			"pageE": ".left .sons:not([id]),.sonspic",
 			"replaceE": ".pagesright"
 		}
 	},
@@ -5185,7 +5185,7 @@
 		"url": "/^\\/(xuexiao|data|shijuan)\\/($|\\?|p)/",
 		"pager": {
 			"nextL": ".fy>strong+a",
-			"pageE": ".xxlb>.sk, .m1_z>.lbk, .m1_z>.m2_lb",
+			"pageE": ".xxlb>.sk,.m1_z>.lbk,.m1_z>.m2_lb",
 			"replaceE": ".fy"
 		}
 	},
@@ -5193,9 +5193,9 @@
 		"host": "tech.meituan.com",
 		"url": "/^\\/($|page|tags)/",
 		"pager": {
-			"nextL": "a[aria-label='Next'], a.home-browser-more-btn",
+			"nextL": "a[aria-label='Next'],a.home-browser-more-btn",
 			"pageE": ".post-container-wrapper",
-			"replaceE": ".pagination, .home-more-container"
+			"replaceE": ".pagination,.home-more-container"
 		}
 	},
 	"CocoaControls": {
@@ -5233,7 +5233,7 @@
 			"replaceE": ".pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-url]','data-url'])"
 		}
 	},
 	"Xvideos": {
@@ -5241,7 +5241,7 @@
 		"url": "return fun.isPager('p,r')",
 		"blank": 3,
 		"pager": {
-			"nextL": "a.next-page, a.next",
+			"nextL": "a.next-page,a.next",
 			"pageE": ".mozaique>*",
 			"replaceE": ".pagination"
 		},
@@ -5253,11 +5253,11 @@
 	"PornHub": {
 		"host": "/\\.pornhub\\.com$/",
 		"url": "/^\\/video/",
-		"style": ".footerContentWrapper, .pre-footer",
+		"style": ".footerContentWrapper,.pre-footer",
 		"blank": 3,
 		"pager": {
 			"nextL": "li.page_next>a",
-			"pageE": "#videoSearchResult>li.pcVideoListItem, #videoCategory>li.pcVideoListItem",
+			"pageE": "#videoSearchResult>li.pcVideoListItem,#videoCategory>li.pcVideoListItem",
 			"replaceE": ".pagination3"
 		},
 		"function": {
@@ -5283,7 +5283,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "#wp_navNext",
-			"pageE": ".videoblock_list:not([id*='_vid_']):not([id*='_premium_']), .content_limit>ul>li.channel-box",
+			"pageE": ".videoblock_list:not([id*='_vid_']):not([id*='_premium_']),.content_limit>ul>li.channel-box",
 			"replaceE": "#w_pagination"
 		},
 		"function": {
@@ -5297,11 +5297,11 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "#pagination_next",
-			"pageE": "#category_video_list .video_box, #result_container>.video_box, .sectionWrapper .video_box",
+			"pageE": "#category_video_list .video_box,#result_container>.video_box,.sectionWrapper .video_box",
 			"replaceE": "#pagination"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-thumb]','data-thumb'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-thumb]','data-thumb'])"
 		}
 	},
 	"Thumbzilla": {
@@ -5339,11 +5339,11 @@
 	"EPORNER": {
 		"host": "www.eporner.com",
 		"url": "return (!fun.indexOF('/video-'))",
-		"style": "#mainBlogPosts, .footer-text, footer",
+		"style": "#mainBlogPosts,.footer-text,footer",
 		"blank": 3,
 		"pager": {
 			"nextL": ".nmnext",
-			"pageE": "#vidresults>[id], script[src*='/ajax']",
+			"pageE": "#vidresults>[id],script[src*='/ajax']",
 			"replaceE": ".numlist2",
 			"scriptT": 2
 		},
@@ -5358,7 +5358,7 @@
 		"pager": {
 			"nextL": ".pagination-next",
 			"pageE": ".video-thumb",
-			"replaceE": ".pagination, .mobilePager"
+			"replaceE": ".pagination,.mobilePager"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE)"
@@ -5404,7 +5404,7 @@
 		"url": "/^\\/thread/",
 		"pager": {
 			"nextL": "//div[@class='pages']/a[text()='下一頁']",
-			"pageE": "#tbody>tr, .list.t_one, .list.t_one+.line",
+			"pageE": "#tbody>tr,.list.t_one,.list.t_one+.line",
 			"replaceE": ".pages"
 		}
 	},
@@ -5415,7 +5415,7 @@
 		"thread": true,
 		"pager": {
 			"nextL": "//div[@class='pages']/a[text()='下一頁']",
-			"pageE": "#main>.t.t2, #main>a[name],#main>form>.t.t2, #main>form>a[name], #main>div[style*='overflow:hidden'], #main>.line",
+			"pageE": "#main>.t.t2,#main>a[name],#main>form>.t.t2,#main>form>a[name],#main>div[style*='overflow:hidden'],#main>.line",
 			"replaceE": ".pages"
 		}
 	},
@@ -5444,9 +5444,9 @@
 		"url": "return (!fun.indexOF(/^\\/archives\\/\\d/))",
 		"blank": 3,
 		"pager": {
-			"nextL": "li.active_page+li>a, .navigation>.floatleft>a",
-			"pageE": "#index-news>.posts-default, #archive-posts>.posts-default",
-			"replaceE": "#wp_page_numbers, .navigation"
+			"nextL": "li.active_page+li>a,.navigation>.floatleft>a",
+			"pageE": "#index-news>.posts-default,#archive-posts>.posts-default",
+			"replaceE": "#wp_page_numbers,.navigation"
 		}
 	},
 	"H 次元": {
@@ -5479,7 +5479,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "a.pagination-next",
-			"pageE": ".movie-list, #videos, #makers, #series, #actors>div",
+			"pageE": ".movie-list,#videos,#makers,#series,#actors>div",
 			"replaceE": ".pagination"
 		}
 	},
@@ -5489,7 +5489,7 @@
 		"style": "#waterfall>.item {position: static !important; float: left !important; height: 400px !important;}",
 		"blank": 3,
 		"pager": {
-			"nextL": "#next, .pagination>.active+li>a",
+			"nextL": "#next,.pagination>.active+li>a",
 			"pageE": "#waterfall>.item",
 			"replaceE": ".pagination"
 		}
@@ -5500,7 +5500,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": ".pagination>li.active+li>a",
-			"pageE": "ul.videos, ul.playlists, div.models",
+			"pageE": "ul.videos,ul.playlists,div.models",
 			"replaceE": ".pagination"
 		}
 	},
@@ -5551,7 +5551,7 @@
 			"replaceE": ".pages"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[img]','img'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[img]','img'])"
 		}
 	},
 	"porn78.info": {
@@ -5570,7 +5570,7 @@
 		"blank": 3,
 		"pager": {
 			"type": 6,
-			"nextL": "js; return fun.getNextEP('a.active.item+a.item:not(.icon)', 'page=', /page=\\d+/)",
+			"nextL": "js; return fun.getNextEP('a.active.item+a.item:not(.icon)','page=',/page=\\d+/)",
 			"pageE": ".grid_cell",
 			"replaceE": ".pagination",
 			"loadTime": 1200,
@@ -5593,7 +5593,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": ".pager>a:last-child[href]",
-			"pageE": ".item.columns:not(.native_ads), .columns.model_chunk",
+			"pageE": ".item.columns:not(.native_ads),.columns.model_chunk",
 			"replaceE": ".pager"
 		}
 	},
@@ -5650,7 +5650,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "a.pagination-next",
-			"pageE": "body>.container>.card, body>.container>.columns",
+			"pageE": "body>.container>.card,body>.container>.columns",
 			"replaceE": ".pagination"
 		}
 	},
@@ -5660,7 +5660,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "span.pageback>a",
-			"pageE": ".Po_topic, .Po_u_topic",
+			"pageE": ".Po_topic,.Po_u_topic",
 			"replaceE": ".PageBar"
 		}
 	},
@@ -5670,7 +5670,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
-			"pageE": ".video, table.pubgroup>tbody>tr:not(#header), table.post",
+			"pageE": ".video,table.pubgroup>tbody>tr:not(#header),table.post",
 			"replaceE": ".page_selector"
 		}
 	},
@@ -5680,8 +5680,8 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "a.gonext",
-			"pageE": ".movie-list, .articles-list, .actress-list",
-			"replaceE": "//a[contains(@class, 'gonext')]/..",
+			"pageE": ".movie-list,.articles-list,.actress-list",
+			"replaceE": "//a[contains(@class,'gonext')]/..",
 			"scrollD": 2500
 		}
 	},
@@ -5704,7 +5704,7 @@
 			"nextL": "section.active li.active+li.wave-effect>a",
 			"pageE": "section.model-items-container:first-of-type>ul",
 			"insertP": ["section.active>ul",5],
-			"replaceE": "section.active .pagination, section.model-items-container:not([style='display: none;']):first-of-type .pagination"
+			"replaceE": "section.active .pagination,section.model-items-container:not([style='display: none;']):first-of-type .pagination"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE)"
@@ -5727,7 +5727,7 @@
 		"url": "return fun.isPager()",
 		"pager": {
 			"nextL": "li[class*=pfhover]+li>a",
-			"pageE": "tr.dtr, head>style",
+			"pageE": "tr.dtr,head>style",
 			"replaceE": "div[class^=pages]",
 			"scriptT": 1
 		}
@@ -5738,7 +5738,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next_page",
-			"pageE": ".image-list>.card, .prof-list>.prof-card",
+			"pageE": ".image-list>.card,.prof-list>.prof-card",
 			"replaceE": "[id='pagenation']"
 		}
 	},
@@ -5783,7 +5783,7 @@
 			"replaceE": ".pagination-row"
 		},
 		"function": {
-			"aF": "document.body.appendChild(document.createElement('script')).textContent = 'window.document.dispatchEvent(new Event(\"DOMContentLoaded\", {bubbles: true,cancelable: true}));'"
+			"aF": "document.body.appendChild(document.createElement('script')).textContent = 'window.document.dispatchEvent(new Event(\"DOMContentLoaded\",{bubbles: true,cancelable: true}));'"
 		}
 	},
 	"7mmtv - 漫画": {
@@ -5867,7 +5867,7 @@
 			"scrollD": 2500
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-srcset]','data-srcset'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-srcset]','data-srcset'])"
 		}
 	},
 	"hanime1 - 漫画": {
@@ -5881,27 +5881,27 @@
 		}
 	},
 	"污污漫画": {
-        "host": "www.comicbox.xyz",
-        "url": "/^\\/chapter\\/\\d+/",
-        "style": ".global-navbar",
-        "pager": {
-            "type": 6,
-            "nextL": "//div[@class='fanye']/a[text()='下一章']",
-            "pageE": ".comicpage>div",
-            "replaceE": ".fanye",
-            "loadTime": 1000,
-            "scrollD": 4000
-        }
-    },
+		"host": "www.comicbox.xyz",
+		"url": "/^\\/chapter\\/\\d+/",
+		"style": ".global-navbar",
+		"pager": {
+			"type": 6,
+			"nextL": "//div[@class='fanye']/a[text()='下一章']",
+			"pageE": ".comicpage>div",
+			"replaceE": ".fanye",
+			"loadTime": 1000,
+			"scrollD": 4000
+		}
+	},
 	"禁漫天堂": {
 		"host": ["18comic.vip","18comic.org","/^jm-?comic[0-9]?\\.[a-z]+$/"],
-		"url": "if (fun.indexOF(/^\\/photo\\//)){fun.src_bF(fun.getAllCSS('.scramble-page'), [0,'img[data-original]:not(.lazy-loaded)','data-original']); setTimeout(()=>{document.body.appendChild(document.createElement('script')).textContent = `var old_onImageLoaded = onImageLoaded; onImageLoaded = function(e){aid = parseInt(/photos\\\\/\\\\d+/.exec(e.src)[0].replace('photos/','')); if(aid>scramble_id){old_onImageLoaded(e);}}`}, 3000); return true}",
-		"style": "[data-group], div[data-page], .thumb-overlay-albums>*:not(.scramble-page):not(.scramble-page1) {display: none !important;} #Comic_Top_Nav[style*='display: block'] {opacity: 0.3;}",
+		"url": "if (fun.indexOF(/^\\/photo\\//)){fun.src_bF(fun.getAllCSS('.scramble-page'),[0,'img[data-original]:not(.lazy-loaded)','data-original']); setTimeout(()=>{document.body.appendChild(document.createElement('script')).textContent = `var old_onImageLoaded = onImageLoaded; onImageLoaded = function(e){aid = parseInt(/photos\\\\/\\\\d+/.exec(e.src)[0].replace('photos/','')); if(aid>scramble_id){old_onImageLoaded(e);}}`},3000); return true}",
+		"style": "[data-group],div[data-page],.thumb-overlay-albums>*:not(.scramble-page):not(.scramble-page1) {display: none !important;} #Comic_Top_Nav[style*='display: block'] {opacity: 0.3;}",
 		"history": true,
 		"pager": {
 			"nextL": "#next_series>a[href]",
 			"pageE": ".scramble-page,.scramble-page1",
-			"replaceE": ".menu-bolock-ul, #next_series",
+			"replaceE": ".menu-bolock-ul,#next_series",
 			"interval": 5000,
 			"scrollD": 3000
 		},
@@ -5912,7 +5912,7 @@
 	"禁漫天堂 - 分类页": {
 		"host": ["18comic.vip","18comic.org","/^jm-?comic[0-9]?\\.[a-z]+$/"],
 		"url": "/^\\/(albums|search|blogs|videos|movies)/",
-		"style": ".row>[style='z-index: 0;'], .col-lg-3.col-md-3.col-sm-3.col-xs-6",
+		"style": ".row>[style='z-index: 0;'],.col-lg-3.col-md-3.col-sm-3.col-xs-6",
 		"blank": 3,
 		"pager": {
 			"nextL": "#wrapper>.container>div:not(.row)>.pagination .prevnext",
@@ -5933,7 +5933,7 @@
 			"scrollD": 3000
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-lazy-src]','data-lazy-src'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-lazy-src]','data-lazy-src'])"
 		}
 	},
 	"18 禁漫": {
@@ -5943,10 +5943,10 @@
 		"pager": {
 			"nextL": "//div[@class='c']/a[text()='下一頁' or text()='下一章'][not(@class='n fanye')]",
 			"pageE": ".e>img:not([style='display:none;'])",
-			"replaceE": ".c, .b"
+			"replaceE": ".c,.b"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[data-url]','data-url'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[data-url]','data-url'])"
 		}
 	},
 	"ACG漫画网": {
@@ -5955,7 +5955,7 @@
 		"style": ".pre_picture,.next_picture",
 		"pager": {
 			"nextL": ".page>span+a:not(.a1)",
-			"pageE": ".manga-picture>picture, #list>li",
+			"pageE": ".manga-picture>picture,#list>li",
 			"replaceE": ".page"
 		}
 	},
@@ -5966,8 +5966,8 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "//table[@class='ptt']//a[string()='>'] | id('next') | id('unext')",
-			"pageE": ".itg>div, .itg>tbody>tr:not(:first-of-type), #gdt>div:not(.c), #img",
-			"replaceE": ".ptt, .ptb, .sn, .searchnav"
+			"pageE": ".itg>div,.itg>tbody>tr:not(:first-of-type),#gdt>div:not(.c),#img",
+			"replaceE": ".ptt,.ptb,.sn,.searchnav"
 		}
 	},
 	"nhentai": {
@@ -5976,9 +5976,9 @@
 		"style": "section#image-container img {max-width: 100% !important;height: auto !important;display: block !important;margin: 0 auto !important;}",
 		"blank": 3,
 		"pager": {
-			"nextL": "a.next, .current+a.page",
-			"pageE": ".container>.gallery, #image-container img",
-			"replaceE": ".pagination, .reader-pagination"
+			"nextL": "a.next,.current+a.page",
+			"pageE": ".container>.gallery,#image-container img",
+			"replaceE": ".pagination,.reader-pagination"
 		},
 		"function": {
 			"bF": "if (fun.getCSS('.container>.gallery') && typeof _n_app !== 'undefined' && _n_app.options.blacklisted_tags != null && _n_app.options.blacklisted_tags.length != 0) {pageE.forEach(function (one) {let tags = one.dataset.tags.split(' ');for (let i=0; i < tags.length; i++){for (let ii=0; ii < _n_app.options.blacklisted_tags.length; ii++){if (tags[i] == _n_app.options.blacklisted_tags[ii]) {one.classList.add('blacklisted');};};};});}; return fun.src_bF(pageE)"
@@ -6003,10 +6003,10 @@
 	},
 	"hitomi": {
 		"host": "hitomi.la",
-		"url": "if(fun.indexOF('/reader/')){setTimeout(()=>{let _img='<div id=\"comicImages\" tabindex=\"1\" class=\"fitVertical\">';for (let i=0;i<2;i++){_img += `<img src=\"${url_from_url_from_hash(galleryinfo['id'], our_galleryinfo[i], 'webp', undefined, 'a')}\">`;};document.getElementById('comicImages').outerHTML = _img+'</div>';window.imgIndex = 1;},500);return true;}",
+		"url": "if(fun.indexOF('/reader/')){setTimeout(()=>{let _img='<div id=\"comicImages\" tabindex=\"1\" class=\"fitVertical\">';for (let i=0;i<2;i++){_img += `<img src=\"${url_from_url_from_hash(galleryinfo['id'],our_galleryinfo[i],'webp',undefined,'a')}\">`;};document.getElementById('comicImages').outerHTML = _img+'</div>';window.imgIndex = 1;},500);return true;}",
 		"style": "body {height: auto !important; overflow: auto !important;} #comicImages.fitVertical img {margin: 0 auto;display: block;max-height: calc(1000px - 41px);} .navbar-static-top {display: none;}",
 		"pager": {
-			"nextL": "js;if(window.imgIndex +1 >= our_galleryinfo.length){return}; document.getElementById('comicImages').insertAdjacentHTML('beforeend', `<img src=\"${url_from_url_from_hash(galleryinfo['id'], our_galleryinfo[window.imgIndex], 'webp', undefined, 'a')}\">`); window.imgIndex+=1;",
+			"nextL": "js;if(window.imgIndex +1 >= our_galleryinfo.length){return}; document.getElementById('comicImages').insertAdjacentHTML('beforeend',`<img src=\"${url_from_url_from_hash(galleryinfo['id'],our_galleryinfo[window.imgIndex],'webp',undefined,'a')}\">`); window.imgIndex+=1;",
 			"scrollD": 1000
 		}
 	},
@@ -6015,7 +6015,7 @@
 		"url": "/^\\/\\d+\\/\\d+\\//",
 		"pager": {
 			"nextL": "js; return (location.origin+fun.getCSS('ul.chapter_select option[selected]').previousElementSibling.value)",
-			"pageE": ".chapter-content>img, .chapter-content>br",
+			"pageE": ".chapter-content>img,.chapter-content>br",
 			"replaceE": ".chapter_select",
 			"interval": 2000
 		},
@@ -6030,16 +6030,16 @@
 		"pager": {
 			"nextL": "//a[text()='»']",
 			"pageE": ".thumb-item-flow",
-			"replaceE": ".pagination, .col-md-8>.btn-group:first-child"
+			"replaceE": ".pagination,.col-md-8>.btn-group:first-child"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [1,'[data-bg]','data-bg'])"
+			"bF": "return fun.src_bF(pageE,[1,'[data-bg]','data-bg'])"
 		}
 	},
 	"yande": {
 		"host": ["konachan.net","konachan.com","yande.re"],
 		"url": "return (fun.lp() == '/post')",
-		"style": ".javascript-hide {display: inline-block !important;} ul#post-list-posts img, ul#post-list-posts .inner{width: auto !important; height: auto !important;} ul#post-list-posts li {width: 33% !important;} a.directlink {margin: 0 !important;}",
+		"style": ".javascript-hide {display: inline-block !important;} ul#post-list-posts img,ul#post-list-posts .inner{width: auto !important; height: auto !important;} ul#post-list-posts li {width: 33% !important;} a.directlink {margin: 0 !important;}",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next_page",
@@ -6053,7 +6053,7 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "a[alt='next']",
-			"pageE": ".thumbnail-container, span.thumb",
+			"pageE": ".thumbnail-container,span.thumb",
 			"replaceE": "#paginator"
 		}
 	},
@@ -6092,9 +6092,9 @@
 		"url": "return (fun.lp() == '/' || fun.indexOF(/^\\/(tag|page|hentai-images)\\//))",
 		"blank": 3,
 		"pager": {
-			"nextL": "a.next, .current+.minithumb>a",
-			"pageE": ".thumb, #doujin>a",
-			"replaceE": ".navigation, #miniThumbContainer"
+			"nextL": "a.next,.current+.minithumb>a",
+			"pageE": ".thumb,#doujin>a",
+			"replaceE": ".navigation,#miniThumbContainer"
 		}
 	},
 	"LoLHentai": {
@@ -6110,12 +6110,12 @@
 	"Hentai Cosplays - 图片页": {
 		"host": ["/hentai-cosplays\\.com$/","/porn-images-xxx\\.com$/","/hentai-img\\.com$/"],
 		"url": "/^\\/image\\//",
-		"style": ".icon-good-thumbnail, .icon-bad-thumbnail {display: none !important;} .icon-overlay img {min-height: 200px;}",
+		"style": ".icon-good-thumbnail,.icon-bad-thumbnail {display: none !important;} .icon-overlay img {min-height: 200px;}",
 		"pager": {
 			"type": 3,
-			"nextL": "id('paginator')//a[contains(text(), '>')] | //a[@rel='next']",
-			"pageE": "#detail_list, #display_image_detail>.icon-overlay",
-			"replaceE": "#paginator, .paginator_area"
+			"nextL": "id('paginator')//a[contains(text(),'>')] | //a[@rel='next']",
+			"pageE": "#detail_list,#display_image_detail>.icon-overlay",
+			"replaceE": "#paginator,.paginator_area"
 		}
 	},
 	"Hentai Cosplays - 分类页": {
@@ -6124,9 +6124,9 @@
 		"blank": 3,
 		"pager": {
 			"type": 3,
-			"nextL": "a.nextpostslink, a.paginator_page[rel='next']",
-			"pageE": "#center>#display_area_image>#image-list, #page>#right_sidebar>#entry_list",
-			"replaceE": ".wp-pagenavi, #page>#page_nation"
+			"nextL": "a.nextpostslink,a.paginator_page[rel='next']",
+			"pageE": "#center>#display_area_image>#image-list,#page>#right_sidebar>#entry_list",
+			"replaceE": ".wp-pagenavi,#page>#page_nation"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE)"
@@ -6134,17 +6134,17 @@
 	},
 	"绅士仓库": {
 		"host": "/^cangku\\./",
-		"url": "if (document.title.indexOf('绅士') == -1){return}; fun.isUrlC(); if (fun.lp() != '/rank'){setTimeout(`let a='.mr-auto,.navbar-brand.active,.simple-navbar';if(location.pathname.indexOf('/search/')!=-1){a='.mr-auto,.navbar-brand.active'};document.querySelectorAll(a).forEach(function (o) {o.innerHTML = o.innerHTML;})`, 1500);} return (fun.lp() == '/' || fun.indexOF('/category/') || fun.indexOF('/user/'))",
+		"url": "if (document.title.indexOf('绅士') == -1){return}; fun.isUrlC(); if (fun.lp() != '/rank'){setTimeout(`let a='.mr-auto,.navbar-brand.active,.simple-navbar';if(location.pathname.indexOf('/search/')!=-1){a='.mr-auto,.navbar-brand.active'};document.querySelectorAll(a).forEach(function (o) {o.innerHTML = o.innerHTML;})`,1500);} return (fun.lp() == '/' || fun.indexOF('/category/') || fun.indexOF('/user/'))",
 		"history": true,
 		"pager": {
 			"type": 6,
-			"nextL": "js; return fun.getNextEP('li.number.active+li.number', 'page=', /page=\\d+/)",
-			"pageE": ".post-list>.row, .category-post>.row, #user-post>.row, #user-favorite>.row, #user-comment .comment-list",
+			"nextL": "js; return fun.getNextEP('li.number.active+li.number','page=',/page=\\d+/)",
+			"pageE": ".post-list>.row,.category-post>.row,#user-post>.row,#user-favorite>.row,#user-comment .comment-list",
 			"replaceE": ".el-pager",
 			"loadTime": 1500
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [1,'div[data-src]','data-src'])"
+			"bF": "return fun.src_bF(pageE,[1,'div[data-src]','data-src'])"
 		}
 	},
 	"绅士仓库 - 排行/作者墙": {
@@ -6190,7 +6190,7 @@
 		"pager": {
 			"type": 3,
 			"nextL": "a[rel=next]",
-			"pageE": "img.my-1, #main>.grid>div",
+			"pageE": "img.my-1,#main>.grid>div",
 			"replaceE": "nav[role=navigation]"
 		}
 	},
@@ -6201,9 +6201,9 @@
 		"pager": {
 			"type": 3,
 			"nextL": "//a[@class='pagination-link is-current']/../following-sibling::*[1]/a",
-			"pageE": ".article-fulltext>p, .main-body>.blog.columns",
+			"pageE": ".article-fulltext>p,.main-body>.blog.columns",
 			"replaceE": ".pagination",
-			"scrollE": ".article-fulltext+hr, .pagination.is-small"
+			"scrollE": ".article-fulltext+hr,.pagination.is-small"
 		}
 	},
 	"秀人集": {
@@ -6211,7 +6211,7 @@
 		"url": "return (fun.isPager() && fun.lp() != '/' && !fun.indexOF('/search/'))",
 		"pager": {
 			"nextL": ".current+a",
-			"pageE": ".content>p, .update_area li.i_list",
+			"pageE": ".content>p,.update_area li.i_list",
 			"replaceE": ".page"
 		}
 	},
@@ -6220,7 +6220,7 @@
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/search/'))",
 		"pager": {
 			"nextL": ".current+a",
-			"pageE": ".article-content>p, body.home .related_posts>ul",
+			"pageE": ".article-content>p,body.home .related_posts>ul",
 			"replaceE": ".pagination"
 		}
 	},
@@ -6238,14 +6238,14 @@
 		"host": ["www.mmm131.com","m.mmm131.com"],
 		"url": "return (fun.lp() != '/')",
 		"pager": {
-			"nextL": ".page_now+a, .paging>a:not(.rw), #xbtn",
-			"pageE": ".content-pic, dl.list-left>dd:not([class='page']), article:not([id])>.single-post-content img, #content>article[id]",
-			"replaceE": ".content-page, .page, .paging, #webpage"
+			"nextL": ".page_now+a,.paging>a:not(.rw),#xbtn",
+			"pageE": ".content-pic,dl.list-left>dd:not([class='page']),article:not([id])>.single-post-content img,#content>article[id]",
+			"replaceE": ".content-page,.page,.paging,#webpage"
 		}
 	},
 	"mm131_m": {
 		"host": "m.mmm131.com",
-		"style": ".bannert, .bannerb, bannert_ios, .bannerb_ios",
+		"style": ".bannert,.bannerb,bannert_ios,.bannerb_ios",
 		"pager": {
 			"type": 2,
 			"nextL": "#webpage>span[onclick]",
@@ -6264,8 +6264,8 @@
 		"host": "mrcong.com",
 		"pager": {
 			"nextL": ".current+a",
-			"pageE": "#fukie2>p>img, article.item-list",
-			"replaceE": ".page-link, .pagination",
+			"pageE": "#fukie2>p>img,article.item-list",
+			"replaceE": ".page-link,.pagination",
 			"scrollD": 3000
 		}
 	},
@@ -6274,9 +6274,9 @@
 		"pager": {
 			"type": 3,
 			"nextL": "//a[@class='pagination-next']|//a[@class='pagination-link is-current']/../following-sibling::span[1]/a",
-			"pageE": ".article-fulltext, .main-body>.blog.columns",
+			"pageE": ".article-fulltext,.main-body>.blog.columns",
 			"replaceE": ".pagination",
-			"scrollE": ".pagination[role='navigation'], .article-fulltext~.pagination"
+			"scrollE": ".pagination[role='navigation'],.article-fulltext~.pagination"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE)"
@@ -6290,7 +6290,7 @@
 		"pager": {
 			"type": 3,
 			"nextL": ".page-item.active+li.page-none>a",
-			"pageE": ".content img, header+.list>ul>li",
+			"pageE": ".content img,header+.list>ul>li",
 			"replaceE": ".page"
 		},
 		"function": {
@@ -6320,9 +6320,9 @@
 		"url": "/^\\/(g|gallery|tag)\\//",
 		"pager": {
 			"type": 3,
-			"nextL": "#pages>span +a:not(.a1), a.cur+a",
-			"pageE": "#hgallery>img, #listdiv>ul>li",
-			"replaceE": "#pages, .pagesYY"
+			"nextL": "#pages>span +a:not(.a1),a.cur+a",
+			"pageE": "#hgallery>img,#listdiv>ul>li",
+			"replaceE": "#pages,.pagesYY"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE)"
@@ -6344,7 +6344,7 @@
 		"pager": {
 			"type": 3,
 			"nextL": "a.current+a",
-			"pageE": ".content_left>p, .update_area ul.update_area_lists>li",
+			"pageE": ".content_left>p,.update_area ul.update_area_lists>li",
 			"replaceE": ".page"
 		}
 	},
@@ -6354,7 +6354,7 @@
 		"pager": {
 			"type": 3,
 			"nextL": "a.current+a",
-			"pageE": ".content_left img, .update_area ul.update_area_lists>li",
+			"pageE": ".content_left img,.update_area ul.update_area_lists>li",
 			"replaceE": ".page"
 		}
 	},
@@ -6364,7 +6364,7 @@
 		"style": "img[onload] {min-height: 500px;}",
 		"pager": {
 			"nextL": ".current+a",
-			"pageE": "img[onload], article.excerpt",
+			"pageE": "img[onload],article.excerpt",
 			"replaceE": ".pagination1",
 			"scrollD": 3000
 		}
@@ -6372,12 +6372,12 @@
 	"ku+taotu": {
 		"host": ["/^www\\.ku\\d+\\./","/^www\\.taotu\\d+\\./"],
 		"url": "return fun.isPager()",
-		"style": ".content img {min-height: 500px;} .Title9, .dibu1, .dibu2 {display: none !important;}",
+		"style": ".content img {min-height: 500px;} .Title9,.dibu1,.dibu2 {display: none !important;}",
 		"pager": {
 			"type": 3,
-			"nextL": ".thisclass+li>a, .this-page+a:not(.no-page)",
-			"pageE": ".content, .TypeList, .m-list.ml1, .slider-c>.row>div",
-			"replaceE": ".NewPages, .page"
+			"nextL": ".thisclass+li>a,.this-page+a:not(.no-page)",
+			"pageE": ".content,.TypeList,.m-list.ml1,.slider-c>.row>div",
+			"replaceE": ".NewPages,.page"
 		}
 	},
 	"kingdom": {
@@ -6386,9 +6386,9 @@
 		"style": ".pic_center img {min-height: 300px;}",
 		"pager": {
 			"type": 3,
-			"nextL": ".page_nowindex+a, a.page_next",
-			"pageE": ".pic_center, .channel_list3",
-			"replaceE": ".pages2, .article_page, .pages"
+			"nextL": ".page_nowindex+a,a.page_next",
+			"pageE": ".pic_center,.channel_list3",
+			"replaceE": ".pages2,.article_page,.pages"
 		}
 	},
 	"kissgoddess": {
@@ -6398,7 +6398,7 @@
 		"pager": {
 			"type": 3,
 			"nextL": "a.a1:last-of-type",
-			"pageE": ".td-gallery-content>img, .td-category-span",
+			"pageE": ".td-gallery-content>img,.td-category-span",
 			"replaceE": "#pages"
 		},
 		"function": {
@@ -6419,8 +6419,8 @@
 		"host": "www.2meinv.com",
 		"pager": {
 			"nextL": "//div[@class='page-show' or contains(@class,'article-page')]/a[text()='下一页']",
-			"pageE": ".pp.hh img, ul.detail-list, .arcmain li, #listcon>ul",
-			"replaceE": ".page-show, .article-page"
+			"pageE": ".pp.hh img,ul.detail-list,.arcmain li,#listcon>ul",
+			"replaceE": ".page-show,.article-page"
 		}
 	},
 	"娱乐吧": {
@@ -6430,7 +6430,7 @@
 		"pager": {
 			"type": 3,
 			"nextL": "//div[@class='paging']/a[text()='下一页']",
-			"pageE": ".b_img:not(:nth-child(7))>ul, .a_img>.main>p",
+			"pageE": ".b_img:not(:nth-child(7))>ul,.a_img>.main>p",
 			"replaceE": ".paging"
 		}
 	},
@@ -6441,7 +6441,7 @@
 		"pager": {
 			"type": 3,
 			"nextL": "li.next-page>a",
-			"pageE": ".entry img, .article-content img",
+			"pageE": ".entry img,.article-content img",
 			"replaceE": "#dm-fy"
 		}
 	},
@@ -6451,8 +6451,8 @@
 		"pager": {
 			"type": 3,
 			"nextL": "//div[@class='page' or @class='fenye']//a[text()='下一页']",
-			"pageE": ".picbox img, #content>.post>.post-content img",
-			"replaceE": ".page, .fenye"
+			"pageE": ".picbox img,#content>.post>.post-content img",
+			"replaceE": ".page,.fenye"
 		}
 	},
 	"imn5_net": {
@@ -6471,7 +6471,7 @@
 		"style": ".moreR {display: none;} #content img {width: auto; max-width: 99%; height: auto; display: block; margin: 0 auto;}",
 		"pager": {
 			"nextL": "li.p_current+li>a",
-			"pageE": "#content img, #dlNews>tbody>tr, .summary",
+			"pageE": "#content img,#dlNews>tbody>tr,.summary",
 			"replaceE": ".pager",
 			"scrollD": 3500
 		}
@@ -6479,7 +6479,7 @@
 	"遛无写真": {
 		"host": "www.6evu.com",
 		"url": "/^\\/\\d+\\.html/",
-		"style": "#post_content>.code-block, .single-ad, .single-adphone",
+		"style": "#post_content>.code-block,.single-ad,.single-adphone",
 		"pager": {
 			"type": 3,
 			"nextL": ".pagelist>span+a",
@@ -6497,20 +6497,20 @@
 		}
 	},
 	"推图网 - 图片页": {
-		"host": ["www.tuiimg.com", "m.tuiimg.com"],
+		"host": ["www.tuiimg.com","m.tuiimg.com"],
 		"url": "if (fun.indexOF(/\\/\\d+\\/$/)) {let _img=''; for (_pd[2]=1;_pd[2]<=_pd[3];_pd[2]++){_img += `<img src=\"${fileurl}${_pd[2]}.jpg\">`;}; document.getElementById('content').innerHTML = _img; return true;}",
-		"style": "#page, #tips",
+		"style": "#page,#tips",
 		"hiddenPN": true
 	},
 	"推图网 - 分类页": {
-		"host": ["www.tuiimg.com", "m.tuiimg.com"],
+		"host": ["www.tuiimg.com","m.tuiimg.com"],
 		"pager": {
-			"nextL": ".page>.now+a, .page>em+a",
-			"pageE": "#main>li, .beauty>ul>li",
+			"nextL": ".page>.now+a,.page>em+a",
+			"pageE": "#main>li,.beauty>ul>li",
 			"replaceE": ".page"
 		},
 		"function": {
-			"bF": "return fun.src_bF(pageE, [0,'img[realsrc]','realsrc'])"
+			"bF": "return fun.src_bF(pageE,[0,'img[realsrc]','realsrc'])"
 		}
 	},
 	"Hit-x-Hot": {
@@ -6530,7 +6530,7 @@
 		"pager": {
 			"type": 3,
 			"nextL": "li.thisclass+li>a",
-			"pageE": ".bodyintroduce, .picbox>img",
+			"pageE": ".bodyintroduce,.picbox>img",
 			"replaceE": ".pageart>ul"
 		}
 	},
@@ -6547,7 +6547,7 @@
 	"微图坊": {
 		"host": "/^www\\.v2ph\\.[a-z]+$/",
 		"url": "/^\\/album\\//",
-		"style": ".album-photo, .photos-list img {opacity: 1 !important; position: unset !important; padding: 0 !important;}",
+		"style": ".album-photo,.photos-list img {opacity: 1 !important; position: unset !important; padding: 0 !important;}",
 		"pager": {
 			"nextL": ".active.page-item+li>a",
 			"pageE": ".album-photo",
@@ -6574,7 +6574,7 @@
 			"type": 3,
 			"nextL": ".current+a",
 			"pageE": ".content>img",
-			"replaceE": ".page-list, .pages"
+			"replaceE": ".page-list,.pages"
 		}
 	},
 	"爱看图吧": {
@@ -6592,8 +6592,8 @@
 		"host": ["www.2avtt.com","m.2avtt.com"],
 		"url": "/\\/\\d+(_\\d+)?\\.html$/",
 		"pager": {
-			"nextL": ".thisclass+li>a, .wallpaper-container>a:last-of-type",
-			"pageE": "#photoMain, .wallpaper-container>a",
+			"nextL": ".thisclass+li>a,.wallpaper-container>a:last-of-type",
+			"pageE": "#photoMain,.wallpaper-container>a",
 			"replaceE": ".page"
 		}
 	},
@@ -6603,8 +6603,8 @@
 		"blank": 3,
 		"pager": {
 			"nextL": "id('d_list_page')/a[text()='下一页'] | //table//a[text()='下一页']",
-			"pageE": "#d_list>ul, table.dc_bar2",
-			"replaceE": "#d_list_page, #d_list_foot, table.dc_bar"
+			"pageE": "#d_list>ul,table.dc_bar2",
+			"replaceE": "#d_list_page,#d_list_foot,table.dc_bar"
 		}
 	},
 	"taotuxp.com": {
