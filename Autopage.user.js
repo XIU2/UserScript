@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.29
+// @version      6.6.30
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动，無需手働點擊下一頁）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -2697,7 +2697,7 @@ function: {
     function customRules() {
         if (getCSS('#Autopage_customRules')) return
 
-        let customRules = JSON.stringify(GM_getValue('menu_customRules', {}), null, 4);
+        let customRules = customStringify(GM_getValue('menu_customRules', {}))
         if (customRules == '{}') customRules = '{\n    \n}'; // 引导用户插入规则的位置
         let _html = `<div style="left: 0; right: 0; top: 0; bottom: 0; width: 100%; height: 100%; margin: auto; padding: 25px 10px 10px 10px; position: fixed; opacity: 0.95; z-index: 9999999; background-color: #eee; color: #222; font-size: 14px; overflow: scroll; text-align: left;">
 <h3 style="font-size: 22px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><strong># 自定义翻页规则（优先级最高，会覆盖同名的外置翻页规则）-【将规则插入默认的 <code>{ }</code> 中间】</strong></h3>
@@ -2780,14 +2780,15 @@ function: {
 <details><summary style="cursor: pointer;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><kbd><strong>「 点击展开 查看所有规则 」（可按 Ctrl+F 搜索规则，脚本内置的通用规则因格式限制无法列出）</strong></kbd></summary>
 <pre id="Autopage_customRules_all" class="notranslate" style="overflow-y: scroll; overflow-x: hidden; height: 500px; word-break: break-all; white-space: pre-wrap;user-select: auto;"> </pre></details>
 
-<textarea id="Autopage_customRules_textarea" style="min-width:95%; min-height:70%; display: block; margin: 10px 0 10px 0; white-space:pre; overflow:scroll; resize: revert; text-transform: initial;" placeholder="留空等于默认的 {}，请把规则插入 {} 之间">${customRules}</textarea>
+<textarea id="Autopage_customRules_textarea" style="min-width:95%; min-height:70%; display: block; margin: 10px 0 10px 0; white-space:pre; overflow:scroll; resize: revert; text-transform: initial;" placeholder="留空等于默认的 {}，请把规则插入 {} 之间"></textarea>
 <button id="Autopage_customRules_save" style="margin-right: 20px;">保存并刷新</button><button id="Autopage_customRules_cancel">取消修改</button>
 </div>`
         document.documentElement.insertAdjacentHTML('beforeend', `<div id="Autopage_customRules" style="display: initial !important;position: fixed !important;z-index: 9999999 !important;"></div>`);
         let Autopage_customRules = getCSS('#Autopage_customRules'), shadowRoot = Autopage_customRules.attachShadow({ mode: 'open' }); // 创建一个 Shadow DOM 避免网页样式影响自定义翻页规则元素
         shadowRoot.innerHTML = _html; // 插入元素
         document.documentElement.style.overflow = document.body.style.overflow = 'hidden'; // 避免网页本身滚动
-        getCSS('#Autopage_customRules_all', shadowRoot).textContent = JSON.stringify(DBSite2, null, 4); // 单独插入全部规则列表，避免被 insertAdjacentHTML 语义化 HTML 标签
+        getCSS('#Autopage_customRules_textarea', shadowRoot).textContent = customRules; // 单独插入自定义规则，避免被 insertAdjacentHTML 语义化 HTML 标签
+        getCSS('#Autopage_customRules_all', shadowRoot).textContent = customStringify(DBSite2); // 单独插入全部规则列表，避免被 insertAdjacentHTML 语义化 HTML 标签
         //let b=Object.entries(DBSite2)
         //for (var i = 0; i < b.length; i++) {console.log(b[i][0], b[i][1].host);}
         // 点击事件
@@ -2807,6 +2808,15 @@ function: {
         }
         getCSS('#Autopage_customRules_cancel', shadowRoot).onclick = function () {document.documentElement.style.overflow = document.body.style.overflow = ''; getCSS('#Autopage_customRules').remove();}
     }
+
+    // 自定义的 stringify 函数，将 [ ] 内的元素从默认的 换行显示 格式化为 一行显示，用于显示自定义翻页规则等给用户看的场景
+    function customStringify(obj) {
+        return JSON.stringify(obj, null, 4)
+            .replace(/(: \[)([\s\S]*?)(\],?\n)/g, (match, p1, p2, p3) => {
+            return p1 + p2.replace(/\n/g, '').replace(/\s{4}/g, '') + p3;
+        });
+    }
+
     // 显示页码
     function pageNumber(type) {
         if (curSite.SiteTypeID === 0 || curSite.hiddenPN || (curSite.pager && curSite.pager.type == 5 && self != top)) {if (getCSS('#Autopage_number') && getCSS('#Autopage_number').shadowRoot) {getCSS('#Autopage_number_button', getCSS('#Autopage_number').shadowRoot).style.display = 'none';}; return}
