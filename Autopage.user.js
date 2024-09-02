@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.28
+// @version      6.6.29
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动，無需手働點擊下一頁）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -960,7 +960,7 @@ function: {
                 }
             }, //               NexusMods posts
             manhuacat: {
-                host: ['www.manhuacat.com', 'www.maofly.com','www.manhuafei.com'],
+                host: 'www.manhuacat.com',
                 url: ()=> {if (indexOF(/\/(manga|manhua)\/\d+\/.+\.html/)) {
                     if (getCookie('is_pull') == 'true') { // 强制关闭 [下拉] 模式
                         document.cookie='is_pull=false; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/'; // 写入 Cookie 关闭 [下拉] 模式
@@ -979,7 +979,7 @@ function: {
                     interval: 3000,
                     scrollD: 4000
                 }
-            }, //         漫画猫 + 漫画飞
+            }, //         漫画猫
             hicomic: {
                 host: 'www.hicomic.net',
                 url: ()=> {if (indexOF('/chapters/')) {
@@ -1112,31 +1112,7 @@ function: {
                     replaceE: '.page-pagination',
                     scrollD: 1000
                 }
-            }, //      Xmanhua 漫画 - 分类/搜索页
-            coolkeyan: {
-                host: 'www.coolkeyan.com',
-                url: ()=> {if (location.hash.indexOf('/project/') > -1) curSite = DBSite.coolkeyan;},
-                style: '.q-img {height: auto !important;} .q-img__image {max-height: 1000px !important;} .row.q-my-sm.q-gutter-sm {display: none !important;}',
-                pager: {
-                    type: 4,
-                    nextL: coolkeyan_nextL,
-                    insertP: ['//div[contains(@class, "q-img__image")][last()]', 4],
-                    insertE: coolkeyan_insertE,
-                    interval: 0
-                }
-            }, //             酷科研
-            nsfc: {
-                host: ['output.nsfc.gov.cn', 'kd.nsfc.gov.cn'],
-                url: ()=> {if (indexOF('/conclusionProject/')) curSite = DBSite.nsfc;},
-                style: '#pageNoUl {display: none !important;}',
-                pager: {
-                    type: 4,
-                    nextL: nsfc_nextL,
-                    insertP: ['#pageNoUl', 1],
-                    insertE: nsfc_insertE,
-                    interval: 0
-                }
-            } //                   国家自然科学基金
+            } //      Xmanhua 漫画 - 分类/搜索页
         };
         // 合并 自定义规则、外置规则、内置规则（注：Object.assign 合并对象时，同名会后者覆盖前者）
         if (Object.keys(GM_getValue('menu_customRules', {})).length === 0) { // 如果自定义规则为空，则直接合并 外置规则、内置规则
@@ -1731,46 +1707,6 @@ function: {
                 xmanhua_nextL();
             }
         }
-    }
-
-
-    // [国家自然科学基金] 获取下一页地址
-    function nsfc_nextL() {
-        let id = decodeURIComponent(document.location.href.split('/')[document.location.href.split('/').length - 1]), data
-        if (!document.nowPageNum) document.nowPageNum = 2
-        data = `id=${id}&index=${document.nowPageNum}`
-        if (data === curSite.pageUrl) return
-        curSite.pageUrl = data
-        getPageE_(location.origin + '/baseQuery/data/completeProjectReport', 'json', 'POST', data); // 访问下一页 URL 获取
-    }
-    // [国家自然科学基金] 插入数据
-    function nsfc_insertE(pageE, type) {
-        if (!pageE || pageE.code != 200) {curSite.SiteTypeID = 0; return}
-        if (!pageE.data.hasnext) {curSite.SiteTypeID = 0} else {document.nowPageNum++}
-        pageNumIncrement()
-        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), `<img style="width: 100%;" data-magnify="gallery" data-src="${pageE.data.url}" src="${pageE.data.url}">`);
-    }
-
-
-
-    // [酷科研] 获取下一页地址
-    function coolkeyan_nextL() {
-        if (!getCSS('.q-img__image')) return
-        let id = getCSS('.q-breadcrumbs--last > span.q-breadcrumbs__el'), data
-        if (id && id.textContent) {id=parseInt(id.textContent)} else {return}
-        if (!document.nowPageNum) document.nowPageNum = 2
-        data = `ratify_no=${id}&index=${document.nowPageNum}`
-        if (data === curSite.pageUrl) return
-        curSite.pageUrl = data
-        getPageE_(location.origin + '/api/funds/nsfc/creport?' + data, 'json', 'GET'); // 访问下一页 URL 获取
-    }
-    // [酷科研] 插入数据
-    function coolkeyan_insertE(pageE, type) {
-        if (!pageE || pageE == {}) {curSite.SiteTypeID = 0; return}
-        if (!pageE.url) {curSite.SiteTypeID = 0; return} else {document.nowPageNum++}
-        pageNumIncrement()
-        getCSS('.q-img>div[style*="padding-bottom"]').style.paddingBottom = `${(document.nowPageNum * 1000) - 1000}px`
-        getOne(curSite.pager.insertP[0]).insertAdjacentHTML(getAddTo(curSite.pager.insertP[1]), `<div class="q-img__image absolute-full" style="background-size: contain; background-position: 50% 50%; background-image: url('${pageE.url}'); top: ${(document.nowPageNum * 1000) - 2000}px"></div>`);
     }
 
 
