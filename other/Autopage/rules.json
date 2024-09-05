@@ -5959,6 +5959,32 @@
 			"replaceE": ".page"
 		}
 	},
+	"rule34comic.party": {
+		"host": "rule34comic.party",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".item.pager.next>a",
+			"pageE": ".item.thumb ",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
+	"rule34comic.party - read": {
+		"host": "rule34comic.party",
+		"url": "if(fun.indexOF(/^\\/read\\/.*\\/\\d+/)){document.querySelector('img[data-original]').src=document.querySelector('img[data-original]').dataset.original;setTimeout(()=>{fun.src_bF(fun.getAllCSS('img.hidden[data-src]'));},2000);document.body.appendChild(document.createElement('script')).textContent = 'document.querySelector(\\'.thumbs-gallery-read\\').addEventListener(\\'error\\', function(event) {if (event.target.tagName === \\'IMG\\') {const img = event.target;console.log(`重试加载图片: ${img.src} 尝试 ${img.dataset.attempts}`);img.src = img.src;}}, true);';return true;}",
+		"style": ".video_container img.hidden{display: block !important;} .read-comic-prev,.read-comic-next,#scrollToFixed{display: none !important;}",
+		"pager": {
+			"nextL": "a.read-comic-next",
+			"pageE": ".thumbs-gallery-read>img",
+			"replaceE": "a.read-comic-next"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"E-Hentai": {
 		"host": ["e-hentai.org","exhentai.org"],
 		"url": "if(fun.getCSS('.itg,#gdt,#img')){setTimeout(()=>{window.nl=()=>{return false}},2000);return true}",
