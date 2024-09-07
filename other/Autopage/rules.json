@@ -4573,6 +4573,15 @@
 			"scrollD": 2500
 		}
 	},
+	"Github - Commits": {
+		"host": "github.com",
+		"url": "/\\/commits/",
+		"blank": 4,
+		"pager": {
+			"nextL": "a[data-testid=pagination-next-button]:not([aria-disabled])",
+			"pageE": ".Timeline-Item"
+		}
+	},
 	"Github - Tags": {
 		"host": "github.com",
 		"url": "/\\/tags$/",
