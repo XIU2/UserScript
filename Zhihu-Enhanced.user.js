@@ -3,10 +3,10 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.3.6
+// @version      2.3.7
 // @author       X.I.U
-// @description  屏蔽首页视频、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、屏蔽用户、屏蔽关键词、移除高亮链接、屏蔽盐选内容/热榜杂项、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、区分问题文章、直达问题按钮、默认站外直链...
-// @description:zh-TW  屏蔽首頁視頻、默認收起回答、快捷收起回答/評論、快捷回到頂部、屏蔽用戶、屏蔽關鍵詞、移除高亮鏈接、屏蔽鹽選內容、淨化搜索熱門、淨化標題消息、默認高清原圖（無水印）、置頂顯示時間、完整問題時間、區分問題文章、默認站外直鏈...
+// @description  屏蔽指定类别（视频、盐选、文章、想法、关注[赞同了XX/关注了XX]等等）、屏蔽用户、屏蔽关键词、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、区分问题文章、移除高亮链接、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、直达问题按钮、默认站外直链...
+// @description:zh-TW  屏蔽指定類別（視頻、鹽選、文章、想法、關注[贊同了XX/關注了XX]等等）、屏蔽用戶、屏蔽關鍵詞、默認收起回答、快捷收起回答/評論、快捷回到頂部、區分問題文章、移除高亮鏈接、默認高清原圖（無水印）、默認站外直鏈...
 // @description:en  A more personalized Zhihu experience~
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
@@ -44,6 +44,8 @@ var menu_ALL = [
     ['menu_blockTypeVideo', '视频 [首页、搜索页、问题页]', '视频（首页、搜索页、问题页）', true],
     ['menu_blockTypeArticle', '文章 [首页、搜索页]', '文章（首页、搜索页）', false],
     ['menu_blockTypePin', '想法 [首页]', '想法（首页）', false],
+    ['menu_blockTypeFollowAgree', '赞同了XX [首页 - 关注]', '赞同了XX（首页 - 关注）', false],
+    ['menu_blockTypeFollowQuestion', '关注了XX [首页 - 关注]', '关注了XX（首页 - 关注）', false],
     ['menu_blockTypeTopic', '话题 [搜索页]', '话题（搜索页）', false],
     ['menu_blockTypeSearch', '杂志文章、盐选专栏、相关搜索等 [搜索页]', '相关搜索、杂志、盐选等（搜索页）', false],
     ['menu_blockYanXuan', '盐选内容 [问题页]', '盐选内容（问题页）', false],
@@ -75,9 +77,9 @@ function registerMenuCommand() {
             if (menu_value('menu_blockKeywords')) menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockKeywords()});
         } else if (menu_ALL[i][0] === 'menu_blockKeywordsComment') { // 只有 [屏蔽指定关键词] 启用时，才注册菜单 [屏蔽关键词 - 评论区]
             if (menu_value('menu_blockKeywords')) menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
-        } else if (menu_ALL[i][0] === 'menu_blockType') {
-            menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_setting('checkbox', menu_ALL[i][1], menu_ALL[i][2], true, [menu_ALL[i+1], menu_ALL[i+2], menu_ALL[i+3], menu_ALL[i+4], menu_ALL[i+5], menu_ALL[i+6], menu_ALL[i+7]])});
-        } else if (menu_ALL[i][0] != 'menu_blockTypeVideo' && menu_ALL[i][0] != 'menu_blockTypeArticle' && menu_ALL[i][0] != 'menu_blockTypePin' && menu_ALL[i][0] != 'menu_blockTypeTopic' && menu_ALL[i][0] != 'menu_blockTypeSearch' && menu_ALL[i][0] != 'menu_blockYanXuan' && menu_ALL[i][0] != 'menu_blockTypeLiveHot') {
+        } else if (menu_ALL[i][0] === 'menu_blockType') { // 屏蔽指定类别 使用单独的设置界面
+            menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_setting('checkbox', menu_ALL[i][1], menu_ALL[i][2], true, [menu_ALL[i+1], menu_ALL[i+2], menu_ALL[i+3], menu_ALL[i+4], menu_ALL[i+5], menu_ALL[i+6], menu_ALL[i+7], menu_ALL[i+8], menu_ALL[i+9]])});
+        } else if (menu_ALL[i][0].indexOf('menu_blockType') == -1 && menu_ALL[i][0] != 'menu_blockYanXuan') { // 排除使用单独设置界面的 屏蔽指定类别 项
             menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
         }
     }
@@ -925,6 +927,12 @@ function blockType(type) {
         document.lastChild.appendChild(document.createElement('style')).textContent = `.VideoAnswerPlayer, .VideoAnswerPlayer video, .VideoAnswerPlayer-video, .VideoAnswerPlayer-iframe {display: none !important;}`;
         name = '.VideoAnswerPlayer'
         document.querySelectorAll(name).forEach(function(item){blockType_(item);})
+    } else if (type === 'follow') { // 首页 - 关注
+        if (!menu_value('menu_blockTypeFollowAgree') && !menu_value('menu_blockTypeFollowQuestion')) return
+        if (menu_value('menu_blockTypeFollowAgree')) name = '.TopstoryItem-isFollow .FeedSource-byline' // 赞同了XX
+        if (menu_value('menu_blockTypeFollowQuestion')) {if (name) {name += ',.ContentItem[data-za-detail-view-path-module=QuestionItem]:not(.AnswerItem):not(.PinItem)'} else {name = '.ContentItem[data-za-detail-view-path-module=QuestionItem]:not(.AnswerItem):not(.PinItem)'}} // 关注了XX
+        if (!name) return
+        document.querySelectorAll(name).forEach(function(item){blockType_(item);})
     } else { // 首页
         if (!menu_value('menu_blockTypeVideo') && !menu_value('menu_blockTypeArticle') && !menu_value('menu_blockTypePin')) return
         if (menu_value('menu_blockTypeVideo')) document.lastChild.appendChild(document.createElement('style')).textContent = `.Card .ZVideoItem-video, .VideoAnswerPlayer video, nav.TopstoryTabs > a[aria-controls="Topstory-zvideo"] {display: none !important;}`;
@@ -971,6 +979,11 @@ function blockType(type) {
             }
         } else if (location.pathname.indexOf('/question/') > -1) { // 问题页
             if (menu_value('menu_blockTypeVideo')) findParentElement(titleA, 'List-item').hidden = true;
+        } else if (location.pathname.indexOf('/follow') > -1) { // 首页 - 关注
+            if (type === 'follow') {
+                if ((menu_value('menu_blockTypeFollowAgree') && titleA.className.indexOf('FeedSource-byline') != -1) || (menu_value('menu_blockTypeFollowQuestion') && titleA.dataset.zaDetailViewPathModule == 'QuestionItem')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isFollow').hidden = true; // 赞同了XX + 关注了XX
+            }
+            if (titleA.className == 'ContentItem PinItem' && menu_value('menu_blockTypePin')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isFollow').hidden = true; // 如果是想法
         } else { // 首页
             if (titleA.className == 'ContentItem PinItem') { // 如果是想法（针对无标题）
                 if (menu_value('menu_blockTypePin')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;
@@ -982,7 +995,7 @@ function blockType(type) {
                 if (findParentElement(titleA, 'ContentItem AnswerItem').querySelector('.VideoAnswerPlayer')) {
                     if (menu_value('menu_blockTypeVideo')) {findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true; findParentElement(titleA, 'ContentItem AnswerItem').remove();}
                 }
-            } else if (titleA.href.indexOf('/education/video-course/') > -1) { // 如果是視頻課程
+            } else if (titleA.href.indexOf('/education/video-course/') > -1) { // 如果是视频课程
                 if (menu_value('menu_blockTypeVideo')) {findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;}
             } else if (titleA.href.indexOf('zhuanlan.zhihu.com') > -1) { // 如果是文章
                 if (menu_value('menu_blockTypeArticle')) findParentElement(titleA, 'Card TopstoryItem TopstoryItem-isRecommend').hidden = true;
@@ -1619,6 +1632,7 @@ function blockHotOther() {
             } else if (location.pathname == '/follow') { // 关注
                 blockKeywords('follow'); //                                    屏蔽指定关键词
                 blockType(); //                                                屏蔽指定类别（视频/文章等）
+                blockType('follow'); //                                        屏蔽指定类别（赞同了XX/关注了XX等）
             } else {
                 blockUsers();
             }
