@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.3.8
+// @version      2.3.9
 // @author       X.I.U
 // @description  屏蔽指定类别（视频、盐选、文章、想法、关注[赞同了XX/关注了XX]等等）、屏蔽用户、屏蔽关键词、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、区分问题文章、移除高亮链接、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、直达问题按钮、默认站外直链...
 // @description:zh-TW  屏蔽指定類別（視頻、鹽選、文章、想法、關注[贊同了XX/關注了XX]等等）、屏蔽用戶、屏蔽關鍵詞、默認收起回答、快捷收起回答/評論、快捷回到頂部、區分問題文章、移除高亮鏈接、默認高清原圖（無水印）、默認站外直鏈...
@@ -657,7 +657,7 @@ function blockUsers(type) {
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType != 1) return
                     //console.log(target, target.className)
-                    if (target.className && (target.className.indexOf('css-') == 0 || target.style == 'opacity: 1;')) {
+                    if (target.tagName == 'DIV' && target.className && (target.className.indexOf('css-') == 0 || target.style == 'opacity: 1;')) {
                         const item = target.querySelector('.MemberButtonGroup.ProfileButtonGroup.HoverCard-buttons'),
                               item1 = target.querySelector('img.Avatar+div span.UserLink>a.UserLink-link[data-za-detail-view-element_name=User]');
                         if (item1) {
@@ -1178,40 +1178,6 @@ function questionRichTextMore() {
 }
 
 
-// 知乎免登录
-function removeLogin() {
-    const removeLoginModal = (mutationsList, observer) => {
-        for (const mutation of mutationsList) {
-            for (const target of mutation.addedNodes) {
-                if (target.nodeType != 1) return
-                if (target.querySelector('.signFlowModal')) {
-                    let button = target.querySelector('.Button.Modal-closeButton.Button--plain');
-                    if (button) button.click();
-                } else if (getXpath('//button[text()="立即登录/注册"]',target)) {
-                    target.remove();
-                }
-            }
-        }
-    };
-
-    // 未登录时才会监听并移除登录弹窗
-    if(location.hostname === 'zhuanlan.zhihu.com') { // 如果是文章页
-        if (!document.querySelector('.ColumnPageHeader-profile>.AppHeader-menu')) { // 未登录
-            const observer = new MutationObserver(removeLoginModal);
-            observer.observe(document, { childList: true, subtree: true });
-            if (getXpath('//button[text()="登录/注册"]')) getXpath('//button[text()="登录/注册"]').outerHTML = '<a class="Button AppHeader-login Button--blue" href="https://www.zhihu.com/signin" target="_blank">登录/注册</a>'; // [登录] 按钮跳转至登录页面
-        }
-    } else { // 不是文章页
-        if (!document.querySelector('.AppHeader-profile>.AppHeader-menu')) { // 未登录
-            const observer = new MutationObserver(removeLoginModal);
-            observer.observe(document, { childList: true, subtree: true });
-            document.lastElementChild.appendChild(document.createElement('style')).textContent = '.Question-mainColumnLogin, button.AppHeader-login {display: none !important;}'; // 屏蔽问题页中间的登录提示
-            if (getXpath('//button[text()="登录/注册"]')) getXpath('//button[text()="登录/注册"]').outerHTML = '<a class="Button AppHeader-login Button--blue" href="https://www.zhihu.com/signin" target="_blank">登录/注册</a>'; // [登录] 按钮跳转至登录页面
-        }
-    }
-}
-
-
 // 净化标题消息
 function cleanTitles() {
     if (!menu_value('menu_cleanTitles')) return
@@ -1518,7 +1484,6 @@ function blockHotOther() {
         }
     })
 
-    removeLogin(); // 移除登录弹窗，Violentmonkey 不能延迟执行这个
     cleanTitles(); // 净化标题消息，不能延迟执行
     // Violentmonkey 比 Tampermonkey 加载更早，会导致一些元素还没加载，因此需要延迟一会儿
     // Tampermonkey 4.18.0 版本可能需要延迟一会执行
