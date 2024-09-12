@@ -22,7 +22,7 @@
 // @connect      gitdl.cn
 // @connect      ghproxy.cc
 // @connect      ghproxy.net
-// @connect      mirror.ghproxy.com
+// @connect      ghp.ci
 // @connect      github.moeyy.xyz
 // @connect      jsd.onmicrosoft.cn
 // @connect      cdn.jsdelivr.us
@@ -102,7 +102,7 @@
         'https://ghproxy.cc/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghp.ci/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        //'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://cdn.jsdelivr.us/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://jsd.onmicrosoft.cn/gh/XIU2/UserScript/other/Autopage/rules.json',
         //'https://gcore.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
@@ -123,7 +123,7 @@
         'https://raw.yzuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghp.ci/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        //'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
     ],
           loadMoreExclude1 = ['.smzdm.com','stackoverflow.com'],
           loadMoreExclude2 = ['.steampowered.com','.zcool.com.cn'];
