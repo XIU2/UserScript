@@ -2104,6 +2104,16 @@
 			"replaceE": ".bottom-page"
 		}
 	},
+	"steamrip": {
+		"host": "steamrip.com",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.next.page-numbers,li.the-next-page>a",
+			"pageE": "li.post-item,.post-element",
+			"replaceE": ".pages-numbers"
+		}
+	},
 	"GBAtemp - 帖子内": {
 		"host": "gbatemp.net",
 		"url": "/^\\/threads\\//",
