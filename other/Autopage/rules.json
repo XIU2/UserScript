@@ -3111,6 +3111,16 @@
 			"replaceE": ".uk-pagination"
 		}
 	},
+	"如漫画": {
+		"host": "www.rumanhua.com",
+		"url": "return fun.isPager('n')",
+		"pager": {
+			"type": 6,
+			"nextL": ".main_control>a",
+			"pageE": ".chapter-img-box",
+			"replaceE": ".main_control"
+		}
+	},
 	"漫画星球 / 6 漫画": {
 		"host": ["/\\.mhxqiu/","/^www\\.sixmh\\d\\./"],
 		"url": "if (fun.indexOF(/\\/\\d+\\.html/)) {return true;} else if (fun.indexOF(/\\/\\d+\\/$/)) {setTimeout(()=>{if (document.getElementById('zhankai')) document.getElementById('zhankai').click();},500);}",
