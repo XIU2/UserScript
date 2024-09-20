@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.5.5
+// @version      1.5.6
 // @author       X.I.U
 // @description  文件排序、刷新不回根目录、快捷返回上一级（右键网页空白处）、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、一键复制所有分享链接、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、优化编辑框初始大小
 // @match        *://lanzou.com/u
@@ -148,6 +148,7 @@
 
     if (window.top.location.pathname === '/u' || window.top.location.pathname.indexOf('account.php') > -1 || window.top.location.pathname.indexOf('mydisk.php') > -1) { // 后台页
         if (window.top.location.href != 'https://pc.woozooo.com/mydisk.php') window.top.location.href = 'https://pc.woozooo.com/mydisk.php';
+        RememberLoginStatus() // 通过延长 cookie 到期时间来一直记住登录状态
         var mainframe;
         iframe();
     } else if (window.top.location.pathname.indexOf('%') > -1) { // > 带密码的分享链接页面
@@ -197,16 +198,16 @@
                 shareLink = location.origin + shareLink[0]
                 let password = location.pathname.replace('%E5%AF%86%E7%A0%81',':').replace(/%([A-Z]|[0-9]){2}/ig, '').split(':')
                 if (password.length > 0) {
-                    location.replace(shareLink + '?password=' + password[password.length - 1])
+                    location.replace(shareLink + '?pwd=' + password[password.length - 1])
                 }
             }
         }
     }
 
 
-    // 自动输入密码（仅支持访问 带密码的分享链接 时）
+    // 自动输入密码（仅支持访问 带密码的分享链接 时，比如上面 [带密码的分享链接自动输密码] 功能重定向后的链接）
     function enterPassword() {
-        if (location.search.indexOf('?password=') > -1) {
+        if (location.search.indexOf('?pwd=') > -1 || location.search.indexOf('?passwd=') > -1 || location.search.indexOf('?password=') > -1) {
             let password = location.search.split('=')
             if (password.length > 0) {
                 document.getElementById('pwd').value = password[password.length - 1]
@@ -622,6 +623,24 @@
         };
         const observer = new MutationObserver(callback);
         observer.observe(mainframe.document, { childList: true, subtree: true });
+    }
+
+    // 通过延长 cookie 到期时间来一直记住登录状态
+    function RememberLoginStatus() {
+        // 获取 Cookie
+        function getCookie(name) {
+            if (!name) return ''
+            let arr = document.cookie.split(';');
+            name += '=';
+            for (let i=0; i<arr.length; i++) {let now = arr[i].trim();if (now.indexOf(name) == 0) return now.substring(name.length, now.length);}
+            return '';
+        }
+
+        const ylogin = getCookie('ylogin'), phpdisk_info = getCookie('phpdisk_info')
+        if (ylogin !== '' && phpdisk_info !== '') { // 如果已登录(有相应 cookie)，那么就延长至浏览器支持的到期时间上限（不同浏览器对到期时间的限制不一样，一般是 1-5 年）
+            document.cookie='ylogin=' + ylogin + '; domain=.woozooo.com; expires=Thu, 18 Dec 2099 12:00:00 GMT; path=/'
+            document.cookie='phpdisk_info=' + phpdisk_info + '; domain=pc.woozooo.com; expires=Thu, 18 Dec 2099 12:00:00 GMT; path=/'
+        }
     }
 
     // 文件排序
