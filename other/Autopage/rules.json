@@ -2311,6 +2311,15 @@
 			"replaceE": "#container>div[style='text-align: center; line-height: 36px;']"
 		}
 	},
+	"子夜动漫": {
+		"host": "www.ziyedm.com",
+		"url": "return fun.isPager()",
+		"pager": {
+			"nextL": ".page-active+a",
+			"pageE": ".content-list>li",
+			"replaceE": ".pages"
+		}
+	},
 	"anime1": {
 		"host": "anime1.me",
 		"url": "/^\\/$/",
