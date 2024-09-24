@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.32
+// @version      6.6.33
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动，無需手働點擊下一頁）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -14,7 +14,6 @@
 // @connect      userscript.h233.eu.org
 // @connect      bitbucket.org
 // @connect      js.cdn.haah.net
-// @connect      jsdelivr.b-cdn.net
 // @connect      raw.ixnic.net
 // @connect      raw.nuaa.cf
 // @connect      raw.yzuu.cf
@@ -109,7 +108,6 @@
         'https://jsd.onmicrosoft.cn/gh/XIU2/UserScript/other/Autopage/rules.json',
         //'https://gcore.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://fastly.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
-        'https://jsdelivr.b-cdn.net/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://cdn.jsdmirror.com/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://jsd.proxy.aks.moe/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://jsdelivr.pai233.top/gh/XIU2/UserScript/other/Autopage/rules.json',
@@ -504,12 +502,12 @@ pager: {
            nextText:    按钮文本，当按钮文本 = 该文本时，才会点击按钮加载下一页（避免一瞬间加载太多次下一页，下同）
            nextTextOf:  按钮文本的一部分，当按钮文本包含该文本时，才会点击按钮加载下一页
            nextHTML:    按钮内元素，当按钮内元素 = 该元素内容时，才会点击按钮加载下一页
-           interval:    点击间隔时间，对于没有按钮文字变化的按钮，可以手动指定间隔时间（单位 ms，默认 500，当指定上面三个时，会忽略 interval）
+           interval:    点击间隔时间，对于没有按钮文字变化的按钮，可以手动指定间隔时间（省略后默认 500ms，当指定上面三个时，会忽略 interval）
            isHidden:    只有下一页按钮可见时（没有被隐藏），才会点击
 
        3 = 依靠 [基准元素] 与 [浏览器可视区域底部] 之间的距离缩小来触发翻页（适用于：主体元素下方内容太多 且 高度不固定时）
            scrollE:     作为基准线的元素（一般为底部页码元素），和 replaceE 一样的话可以省略
-           scrollD:     基准元素 - 可视区域底部
+           scrollD:     当 [基准元素] 与 [可视区域底部] 之间的距离 等于或小于该值时，将触发翻页，省略后默认 2000
 
        4 = 动态加载类网站（适用于：简单的动态加载内容网站）
            insertE:     用来插入元素的函数
@@ -519,7 +517,7 @@ pager: {
            iframe:      这个必须加到 pager{} 外面（这样才会在该域名的 iframe 框架下运行脚本）
 
        6 = 通过 iframe 获取下一页动态加载内容插入本页，只有一个娃（适用于：部分动态加载内容的网站，与上面不同的是，该模式适合简单的网页，没有复杂事件什么的）
-           loadTime:    预留的网页加载时间，确保网页内容加载完成
+           loadTime:    预留的网页加载时间，确保网页内容加载完成（省略后默认为 300ms）
 
     nextL:    下一页链接所在元素
     pageE:    要从下一页获取的元素
@@ -537,7 +535,7 @@ pager: {
          注意：如 pageE 中选择了多类元素，则不能省略 insertP（比如包含 `,` 与 `|` 符号），除非另外的选择器是 <script> <style> <link> 标签
 
     replaceE: 要替换为下一页内容的元素（比如页码），省略后将会自动判断是替换 nextL 元素还是 nextL 的父元素（当 nextL 元素后面或前面有 <a> 的相邻兄弟元素时替换其父元素，反之替换其自身，仅限模式1/3/6，且 js 代码除外），值为空 "" 时则完全不替换
-    scrollD： 翻页动作触发点（[滚动条] 与 [网页底部] 之间的距离），数值越大，越早开始翻页，一般是访问网页速度越慢，该值就需要越大，省略后默认 2000
+    scrollD： 当 [滚动条] 与 [网页底部] 之间的距离 等于或小于该值时，将触发翻页，因此值越大就越早触发翻页，访问速度慢的网站需要调大，可省略(记得移除上一行末尾逗号)，省略后默认 2000
 
     scriptT:  单独插入 <script> 标签
        0 = 下一页的所有 <script> 标签
@@ -545,7 +543,7 @@ pager: {
        2 = 下一页主体元素 (pageE) 的同级 <script> 标签
        3 = 下一页主体元素 (pageE) 的子元素 <script> 标签
 
-    interval:   翻页后间隔时间（单位 ms）
+    interval:   翻页后间隔时间（省略后默认 500ms）
     forceHTTPS: 下一页链接强制 HTTPS
 },
 function: {
