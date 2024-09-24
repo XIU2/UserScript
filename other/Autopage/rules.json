@@ -2320,6 +2320,19 @@
 			"replaceE": ".pages"
 		}
 	},
+	"番薯动漫": {
+		"host": ["/^www\\.fanshudm\\.[a-z]+$/","/^www\\.fsdm\\d+\\.[a-z]+$/"],
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".page-next",
+			"pageE": "a.module-poster-item",
+			"replaceE": "#page"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"anime1": {
 		"host": "anime1.me",
 		"url": "/^\\/$/",
