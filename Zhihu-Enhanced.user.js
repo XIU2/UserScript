@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.3.9
+// @version      2.3.10
 // @author       X.I.U
 // @description  屏蔽指定类别（视频、盐选、文章、想法、关注[赞同了XX/关注了XX]等等）、屏蔽用户、屏蔽关键词、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、区分问题文章、移除高亮链接、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、直达问题按钮、默认站外直链...
 // @description:zh-TW  屏蔽指定類別（視頻、鹽選、文章、想法、關注[贊同了XX/關注了XX]等等）、屏蔽用戶、屏蔽關鍵詞、默認收起回答、快捷收起回答/評論、快捷回到頂部、區分問題文章、移除高亮鏈接、默認高清原圖（無水印）、默認站外直鏈...
@@ -1046,7 +1046,7 @@ function removeHighlightLink() {
         for (const mutation of mutationsList) {
             for (const target of mutation.addedNodes) {
                 if (target.nodeType != 1 || target.tagName != 'A') break
-                if (target.dataset.zaNotTrackLink && target.href.indexOf('https://zhida.zhihu.com/search?q=') > -1) {
+                if (target.dataset.zaNotTrackLink && target.href.indexOf('https://zhida.zhihu.com/search?') > -1) {
                     target.parentElement.replaceWith(target.textContent);
                 }
             }
@@ -1056,7 +1056,7 @@ function removeHighlightLink() {
     observer.observe(document, { childList: true, subtree: true });
 
     // 针对的是打开网页后直接加载的前面几个回答（上面哪些是针对动态加载的回答）
-    document.querySelectorAll('span > a[data-za-not-track-link][href^="https://zhida.zhihu.com/search?q="]').forEach(e => e.parentElement.replaceWith(e.textContent))
+    document.querySelectorAll('span > a[data-za-not-track-link][href^="https://zhida.zhihu.com/search?"]').forEach(e => e.parentElement.replaceWith(e.textContent))
 }
 
 
@@ -1324,7 +1324,7 @@ function topTime_post() {
         t.classList.add('xiu-time');
     }
 
-    //发布时间置顶
+    // 置顶显示时间
     if (menu_value('menu_publishTop') && !(document.querySelector('.Post-Header > .ContentItem-time')) && !(document.querySelector('.ContentItem-meta > .ContentItem-time'))) {
         let temp_time = t.cloneNode(true);
         temp_time.style.padding = '0px';
@@ -1345,7 +1345,7 @@ function topTime_allTime(t) {
 }
 
 
-// 发布时间置顶
+// 置顶显示时间
 function topTime_publishTop(t, _this, _class) {
     if (!menu_value('menu_publishTop')) return
     if (!t.parentNode.classList.contains(_class)) {
