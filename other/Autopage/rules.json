@@ -2333,6 +2333,19 @@
 			"bF": "return fun.src_bF(pageE,[1,'a[data-original]','data-original'])"
 		}
 	},
+	"NyaFun 动漫": {
+		"host": "www.nyacg.net",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".page-info>a[title='下一页']",
+			"pageE": ".public-list-box",
+			"replaceE": ".pages"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"anime1": {
 		"host": "anime1.me",
 		"url": "/^\\/$/",
