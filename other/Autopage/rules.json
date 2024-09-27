@@ -2346,6 +2346,19 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"奇米奇米动漫": {
+		"host": "www.qimiqimi.net",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.page_current+a",
+			"pageE": ".img-list>li",
+			"replaceE": ".list-page"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE,[0,'img[original]','original'])"
+		}
+	},
 	"anime1": {
 		"host": "anime1.me",
 		"url": "/^\\/$/",
