@@ -2320,6 +2320,19 @@
 			"replaceE": ".pages"
 		}
 	},
+	"omofun 动漫": {
+		"host": ["/^omofun[a-z]\\.[a-z]+$/","dilidilidm.com"],
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "//a[@class='active']/../following-sibling::li[1]/a",
+			"pageE": ".hl-list-item",
+			"replaceE": ".hl-page-wrap"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE,[1,'a[data-original]','data-original'])"
+		}
+	},
 	"anime1": {
 		"host": "anime1.me",
 		"url": "/^\\/$/",
