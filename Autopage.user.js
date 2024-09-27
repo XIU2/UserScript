@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.33
+// @version      6.6.34
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动，無需手働點擊下一頁）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -398,7 +398,7 @@
 
         } else if (getCSS('.stui-page, .stui-page__item, #long-page, .myui-page, .myui-page__item')) {
             console.info(`[自动无缝翻页] - 部分影视网站`); return 300;
-        } else if (getCSS('#page') && getCSS('.module-items')) {
+        } else if (getCSS('#page') && getCSS('.module-items,a.module-poster-item')) {
             console.info(`[自动无缝翻页] - 部分影视网站 2`); return 301;
 
         } else if (getCSS('.ArticleImageBox, .PictureList') && getCSS('.article_page') && getXpath('//div[contains(@class,"article_page")]//a[text()="下一页"]')) {
@@ -693,8 +693,8 @@ function: {
                 blank: 3,
                 style: '.module-poster-item, .module-items>* {display: inline-block !important;}',
                 pager: {
-                    nextL: '#page a[title="下一页"], a.page-number.page-next',
-                    pageE: '.module-items>*',
+                    nextL: '#page a[title="下一页"], a.page-next',
+                    pageE: '.module-items>*, a.module-poster-item',
                     replaceE: '#page'
                 },
                 function: {
@@ -2263,7 +2263,7 @@ function: {
         }
         return url
     }
-    // 通用型获取下一页地址（从 URL 中获取页码，URL 替换 pathname 路径）
+    // 通用型获取下一页地址（从 URL 中获取页码，并页码+1，URL 替换 pathname 路径，后三个参数可以省略）
     function getNextUPN(urlReg, reg, a, b = '', initP = '2', endP) {
         let nextNum = urlReg.exec(location.pathname);
         if (nextNum) {
@@ -2286,7 +2286,7 @@ function: {
         url = location.origin + url + location.search;
         return url
     }
-    // 通用型获取下一页地址（从 URL 中获取页码，URL 替换 page= 参数）
+    // 通用型获取下一页地址（从 URL 中获取页码，并页码+1，URL 替换 page= 参数，后三个参数可以省略）
     function getNextUP(pf, reg, lp = location.pathname, initP = '2', endP) {
         let nextNum = getSearch(pf.replace('=',''));
         if (nextNum) {
