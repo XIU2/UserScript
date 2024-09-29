@@ -2460,6 +2460,16 @@
 			"interval": 1500
 		}
 	},
+	"VCB-Studio": {
+		"host": "vcb-s.com",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".active+li>a",
+			"pageE": ".article",
+			"replaceE": ".pagination"
+		}
+	},
 	"爱恋动漫/漫猫动漫/末日动漫": {
 		"host": ["www.kisssub.org","www.comicat.org","www.anix.moe","/^(share|www)\\.acgnx\\./"],
 		"pager": {
@@ -2469,6 +2479,7 @@
 			"scrollD": 2500
 		}
 	},
+	
 	"动漫花园": {
 		"host": ["dmhy.org","www.dmhy.org","share.dmhy.org","dmhy.anoneko.com"],
 		"url": "return fun.isPager('r')",
