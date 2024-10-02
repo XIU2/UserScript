@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.35
+// @version      6.6.36
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动，無需手働點擊下一頁）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -667,7 +667,7 @@ function: {
                 history: true,
                 retry: 3000,
                 pager: {
-                    nextL: '//a[contains(text(), "下一章") or contains(text(), "下一页") or contains(text(), "下一节")]',
+                    nextL: 'js; const a=[fun.getNextE(\'//a[contains(text(), "下一页")]\'),fun.getNextE(\'//a[contains(text(), "下一章")]\'),fun.getNextE(\'//a[contains(text(), "下一节")]\')];if (a[0]){return a[0];}else if(a[1]){return a[1];}else if(a[2]){return a[2];}',
                     insertP6Br: false,
                     replaceE: '//a[contains(text(), "下一章") or contains(text(), "下一页") or contains(text(), "下一节")]/parent::*'
                 },
@@ -1604,7 +1604,7 @@ function: {
     function mangabz_nextL() {
         var url = '';
         if (MANGABZ_PAGE === MANGABZ_IMAGE_COUNT) { // 下一话
-            if (getNextE('//a[./img[contains(@src, "icon_xiayizhang")]]')) getPageE_(curSite.pageUrl); // 访问下一话 URL 获取
+            if (getNextE_('//a[./img[contains(@src, "icon_xiayizhang")]]')) getPageE_(curSite.pageUrl); // 访问下一话 URL 获取
         } else { // 下一页
             if (!mkey) var mkey = '';
             url = location.origin + location.pathname + 'chapterimage.ashx' + `?cid=${MANGABZ_CID}&page=${MANGABZ_PAGE + 1}&key=${(mkey)}&_cid=${MANGABZ_CID}&_mid=${MANGABZ_MID}&_dt=${MANGABZ_VIEWSIGN_DT}&_sign=${MANGABZ_VIEWSIGN}`
@@ -1643,7 +1643,7 @@ function: {
     function dm5_nextL() {
         var url = '';
         if (DM5_PAGE === DM5_IMAGE_COUNT) { // 下一话
-            if (getNextE('//div[@class="view-paging"]//a[text()="下一章"]')) getPageE_(curSite.pageUrl); // 访问下一话 URL 获取
+            if (getNextE_('//div[@class="view-paging"]//a[text()="下一章"]')) getPageE_(curSite.pageUrl); // 访问下一话 URL 获取
         } else { // 下一页
             if (!mkey) var mkey = '';
             url = location.origin + location.pathname + 'chapterfun.ashx' + `?cid=${DM5_CID}&page=${DM5_PAGE + 1}&key=${(mkey)}&language=1&gtk=6&_cid=${DM5_CID}&_mid=${DM5_MID}&_dt=${DM5_VIEWSIGN_DT}&_sign=${DM5_VIEWSIGN}`
@@ -1682,7 +1682,7 @@ function: {
     function xmanhua_nextL() {
         var url = '';
         if (unsafeWindow[unsafeWindow.MH_PREFIX23+'PAGE'] === unsafeWindow[unsafeWindow.MH_PREFIX23+'IMAGE_COUNT']) { // 下一话
-            if (getNextE('//a[./img[contains(@src, "reader-bottom-right-2.png")]]')) getPageE_(curSite.pageUrl); // 访问下一话 URL 获取
+            if (getNextE_('//a[./img[contains(@src, "reader-bottom-right-2.png")]]')) getPageE_(curSite.pageUrl); // 访问下一话 URL 获取
         } else { // 下一页
             if (!mkey) var mkey = '';
             url = location.origin + location.pathname + 'chapterimage.ashx' + `?cid=${unsafeWindow[unsafeWindow.MH_PREFIX23+'CID']}&page=${unsafeWindow[unsafeWindow.MH_PREFIX23+'PAGE'] + 1}&key=${(mkey)}&_cid=${unsafeWindow[unsafeWindow.MH_PREFIX23+'_CID']}&_mid=${unsafeWindow[unsafeWindow.MH_PREFIX23+'MID']}&_dt=${unsafeWindow[unsafeWindow.MH_PREFIX23+'VIEWSIGN_DT']}&_sign=${unsafeWindow[unsafeWindow.MH_PREFIX23+'VIEWSIGN']}`
@@ -1778,7 +1778,7 @@ function: {
 
                     // <<<<< 翻页类型 4（部分简单的动态加载类网站）>>>>>
                 } else if (curSite.pager.type === 4) {
-                    intervalPause(); if (typeof curSite.pager.nextL == 'function') {curSite.pager.nextL();} else if (getNextE(curSite.pager.nextL)) {getPageE_(curSite.pageUrl);}
+                    intervalPause(); if (typeof curSite.pager.nextL == 'function') {curSite.pager.nextL();} else if (getNextE_(curSite.pager.nextL)) {getPageE_(curSite.pageUrl);}
 
                     // <<<<< 翻页类型 5（插入 iframe 方式来加载下一页）>>>>>
                 } else if (curSite.pager.type === 5) {
@@ -2197,27 +2197,45 @@ function: {
         return pageE
     }
 
-    // 通用型获取下一页地址（从 元素 中获取页码）
-    function getNextE(css) {
-        if (!css) css = curSite.pager.nextL;
-        let next = getOne(css);
-        if (next && next.nodeType === 1 && next.href && next.href.slice(0,4) === 'http' && next.getAttribute('href').slice(0,1) !== '#') {
-            if (next.href != curSite.pageUrl) {
-                if (curSite.pager.forceHTTPS && location.protocol === 'https:') {
-                    if (next.href.replace(/^http:/,'https:') === curSite.pageUrl) {
-                        return false
-                    }
-                    curSite.pageUrl = next.href.replace(/^http:/,'https:');
+    // 通用型获取下一页地址（从 元素 中获取页码）该函数仅供脚本内部调用
+    function getNextE_(css) {
+        if (!css) css = curSite.pager.nextL; // 如果没有指定 css 参数，那么就使用规则中的 nextL
+        let next = getOne(css); // 获取含有下一页地址的元素
+        if (next && next.nodeType === 1 && next.href && next.href.slice(0,4) === 'http' && next.getAttribute('href').slice(0,1) !== '#') { // 确定元素存在且 href 是正常链接
+            if (next.href != curSite.pageUrl) { // 如果取到的下一页 URL 和上一次取到的 URL（也就是当前 URL）不一样
+                if (curSite.pager.forceHTTPS && location.protocol === 'https:') { // 如果规则要求强制 HTTPS，且当前网页的协议也是 HTTPS，那么就需要修改 URL 为 HTTPS
+                    if (next.href.replace(/^http:/,'https:') === curSite.pageUrl) {return false;} // 如果修改为 HTTPS 后和上一次取到的 URL（也就是当前 URL）一样，就返回 false
+                    curSite.pageUrl = next.href.replace(/^http:/,'https:'); // 反之返回修改 HTTPS 后的 URL
                 } else {
                     curSite.pageUrl = next.href;
                 }
-            } else {
-                return false
+            } else { // 如果取到的下一页 URL 和上一次取到的 URL（也就是当前 URL）一样，那么代表没有下一页了，就返回 false
+                return false;
             }
             //console.log(curSite.pageUrl)
-            return true
+            return true;
         }
-        return false
+        return false; // 如果元素不存在 或 href 非正常链接，就返回false
+    }
+    // 通用型获取下一页地址（从 元素 中获取页码）该函数用于规则中调用（fun.getNextE() 这样）
+    function getNextE(css) {
+        if (!css) { // 考虑到可能被非 nextL 规则内调用，所以还是需要做一个判断
+            if (typeof curSite.pager.nextL == 'string' && curSite.pager.nextL.match(/^js;/) === null) {css = curSite.pager.nextL;} else {return '';}
+        }
+        let next = getOne(css); // 获取含有下一页地址的元素
+        if (next && next.nodeType === 1 && next.href && next.href.slice(0,4) === 'http' && next.getAttribute('href').slice(0,1) !== '#') { // 确定元素存在且 href 是正常链接
+            if (next.href != curSite.pageUrl) { // 如果取到的下一页 URL 和上一次取到的 URL（也就是当前 URL）不一样
+                if (curSite.pager.forceHTTPS && location.protocol === 'https:') { // 如果规则要求强制 HTTPS，且当前网页的协议也是 HTTPS，那么就需要修改 URL 为 HTTPS
+                    if (next.href.replace(/^http:/,'https:') === curSite.pageUrl) {return '';} // 如果修改为 HTTPS 后和上一次取到的 URL（也就是当前 URL）一样，就返回空
+                    return next.href.replace(/^http:/,'https:'); // 反之返回修改 HTTPS 后的 URL
+                } else {
+                    return next.href;
+                }
+            } else { // 如果取到的下一页 URL 和上一次取到的 URL（也就是当前 URL）一样，那么代表没有下一页了，就返回空
+                return '';
+            }
+        }
+        return ''; // 如果元素不存在 或 href 非正常链接，就返回空
     }
     // 通用型获取下一页地址（从 元素 中获取页码，URL 替换 page= 参数）
     function getNextEP(css, pf, reg) {
@@ -2347,7 +2365,7 @@ function: {
             } catch (e) {
                 console.error('[自动无缝翻页] - 当前网页规则 "nextL" 内 JS 代码有误，请检查！', e, curSite.pager.nextL);
             }
-        } else if (getNextE()) {
+        } else if (getNextE_()) {
             func(curSite.pageUrl);
         }
         //console.log(curSite.pageUrl);
