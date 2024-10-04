@@ -3449,6 +3449,15 @@
 			"replaceE": "#page-container"
 		}
 	},
+	"起点图数据": {
+		"host": "www.qidiantu.com",
+		"url": "/^\\/info\\/\\d+/",
+		"pager": {
+			"nextL": ".pagination>.active+li>a",
+			"pageE": ".alert-info~.panel.panel-default",
+			"replaceE": ".pagination"
+		}
+	},
 	"七猫中文 - 阅读页": {
 		"host": "www.qimao.com",
 		"url": "return (fun.indexOF(/\\/shuku\\/\\d+-\\d+\\//) || fun.indexOF('/reader/index/'))",
