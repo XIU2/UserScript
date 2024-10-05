@@ -6110,6 +6110,28 @@
 			"bF": "if (fun.getCSS('.container>.gallery') && typeof _n_app !== 'undefined' && _n_app.options.blacklisted_tags != null && _n_app.options.blacklisted_tags.length != 0) {pageE.forEach(function (one) {let tags = one.dataset.tags.split(' ');for (let i=0; i < tags.length; i++){for (let ii=0; ii < _n_app.options.blacklisted_tags.length; ii++){if (tags[i] == _n_app.options.blacklisted_tags[ii]) {one.classList.add('blacklisted');};};};});}; return fun.src_bF(pageE)"
 		}
 	},
+	"HentaiFox": {
+		"host": "hentaifox.com",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".active+li.page-item:not(.disabled)>a",
+			"pageE": ".lc_galleries>.thumb",
+			"replaceE": ".pagination"
+		}
+	},
+	"HentaiFox-g": {
+		"host": "hentaifox.com",
+		"url": "if(fun.indexOF(/^\\/g\\/\\d+\\/\\d+\\//)){const a=fun.getCSS('#gimg');a.parentElement.outerHTML=a.outerHTML;return true;}",
+		"style": ".page_next,.page_prev,.gallery_pagination",
+		"pager": {
+			"nextL": "js; return fun.getNextUPN(/^\\/g\\/\\d+\\/(\\d+)/,/(?<=^\\/g\\/\\d+)\\/\\d+\\//,'/','/','2',fun.getCSS('.total_pages').textContent)",
+			"pageE": ".full_image img"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"9hentai": {
 		"host": "www1.9hentai.com",
 		"url": "/^\\/g\\/\\d+\\/\\d+\\//",
@@ -6118,7 +6140,6 @@
 			"nextL": "a[data-target='#jumpPageModal']+a",
 			"pageE": "#img-reader",
 			"replaceE": ".viewer-control",
-			"scrollD": 2000,
 			"loadTime": 500
 		}
 	},
