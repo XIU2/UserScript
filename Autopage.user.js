@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.36
+// @version      6.6.37
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动，無需手働點擊下一頁）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -25,7 +25,6 @@
 // @connect      ghp.ci
 // @connect      github.moeyy.xyz
 // @connect      jsd.onmicrosoft.cn
-// @connect      cdn.jsdelivr.us
 // @connect      gcore.jsdelivr.net
 // @connect      fastly.jsdelivr.net
 // @connect      cdn.jsdmirror.com
@@ -96,15 +95,14 @@
         'https://bitbucket.org/xiu2/userscript/raw/master/other/Autopage/rules.json',
         'https://raw.kkgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://gitdl.cn/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        //'https://raw.incept.pw/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.incept.pw/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.ixnic.net/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://raw.nuaa.cf/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://raw.yzuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
+        //'https://raw.nuaa.cf/XIU2/UserScript/master/other/Autopage/rules.json',
+        //'https://raw.yzuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.cc/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghp.ci/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        //'https://cdn.jsdelivr.us/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://jsd.onmicrosoft.cn/gh/XIU2/UserScript/other/Autopage/rules.json',
         //'https://gcore.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://fastly.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
@@ -120,8 +118,8 @@
         'https://raw.kkgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://gitdl.cn/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.ixnic.net/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://raw.nuaa.cf/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://raw.yzuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
+        //'https://raw.nuaa.cf/XIU2/UserScript/master/other/Autopage/rules.json',
+        //'https://raw.yzuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghp.ci/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
@@ -1121,34 +1119,39 @@ function: {
                 }
             } //      Xmanhua 漫画 - 分类/搜索页
         };
+        //console.log(GM_getValue('menu_customRules', {}))
+        let _customRules = GM_getValue('menu_customRules', {}),
+            _rules = GM_getValue('menu_rules', {})
+        if (Object.prototype.toString.call(_customRules) !== '[object Object]') {_customRules={};}
+        if (Object.prototype.toString.call(_rules) !== '[object Object]') {_rules={};}
+        let _customRulesKeys = Object.keys(_customRules),
+            _rulesKeys = Object.keys(_rules)
         // 合并 自定义规则、外置规则、内置规则（注：Object.assign 合并对象时，同名会后者覆盖前者）
-        if (Object.keys(GM_getValue('menu_customRules', {})).length === 0) { // 如果自定义规则为空，则直接合并 外置规则、内置规则
-            DBSite = Object.assign({}, GM_getValue('menu_rules', {}), DBSite);
-            DBSite2 = GM_getValue('menu_rules', {});
+        if (_customRulesKeys.length === 0) { // 如果自定义规则为空，则直接合并 外置规则、内置规则
+            DBSite = Object.assign({}, _rules, DBSite);
+            DBSite2 = structuredClone(_rules); // DBSite2 是提供给 自定义翻页规则界面 - 所有规则 显示用的
         } else { // 如果有自定义规则，为避免外置规则覆盖同名的自定义规则，要先判断并移除同名的外置规则
-            let a = GM_getValue('menu_customRules', {}), a1 = Object.keys(a),
-                b = GM_getValue('menu_rules', {}), b1 = Object.keys(b)
-            for (let i = 0; i < a1.length; i++) { // 循环 [自定义规则-对象名] 数组
-                if (b1.indexOf(a1[i]) != -1) { // 在 [外置规则-对象名] 数组中，寻找是否有同名的 [自定义规则-对象名]
-                    if (a[a1[i]].inherits === true){ // 如果该同名的自定义规则对象含有 inherits 继承标识，则将同名的两者合并（自定义 覆盖 外置）
+            for (let i = 0; i < _customRulesKeys.length; i++) { // 循环 [自定义规则-对象名] 数组
+                if (_rulesKeys.indexOf(_customRulesKeys[i]) != -1) { // 在 [外置规则-对象名] 数组中，寻找是否有同名的 [自定义规则-对象名]
+                    if (_customRules[_customRulesKeys[i]].inherits === true){ // 如果该同名的自定义规则对象含有 inherits 继承标识，则将同名的两者合并（自定义 覆盖 外置）
                         // 如果自定义规则中包含 "pager":{} 规则，则需要先合并 pager 后再去合并整体规则（否则 pager 会被自定义规则完整覆盖）
-                        if (a[a1[i]].pager != undefined && b[a1[i]].pager != undefined) {a[a1[i]].pager = Object.assign({}, b[a1[i]].pager, a[a1[i]].pager)}
-                        a[a1[i]] = Object.assign({}, b[a1[i]], a[a1[i]]);
+                        if (_customRules[_customRulesKeys[i]].pager != undefined && _rules[_customRulesKeys[i]].pager != undefined) {_customRules[_customRulesKeys[i]].pager = Object.assign({}, _rules[_customRulesKeys[i]].pager, _customRules[_customRulesKeys[i]].pager)}
+                        _customRules[_customRulesKeys[i]] = Object.assign({}, _rules[_customRulesKeys[i]], _customRules[_customRulesKeys[i]]);
                     }
-                    delete b[a1[i]] // 删除外置规则中的同名，这样后续合并时，外置规则才不会覆盖自定义规则的同名规则
+                    delete _rules[_customRulesKeys[i]] // 删除外置规则中的同名，这样后续合并时，外置规则才不会覆盖自定义规则的同名规则
                 };
             }
-            DBSite = Object.assign({}, a, b, DBSite);
-            DBSite2 = Object.assign({}, JSON.parse(JSON.stringify(a)), JSON.parse(JSON.stringify(b))); // 为了避免对象的后续变化影响 DBSite2 内容（如 SiteTypeID），需要对 a b 变量进行完全克隆，使其完全独立
+            DBSite = Object.assign({}, _customRules, _rules, DBSite);
+            DBSite2 = Object.assign({}, structuredClone(_customRules), structuredClone(_rules)); // 为了避免对象的后续变化影响 DBSite2 内容（如 SiteTypeID 等），需要对 a b 变量进行深拷贝，使其完全独立
         }
 
         // 生成 SiteTypeID
         setSiteTypeID();
         //console.log(DBSite)
     }
-    // 外置翻页规则
+    // 更新外置翻页规则
     function getRulesUrl(update = false) {
-        // 如果是原来的时间格式 或 刚安装脚本，则需要立即更新
+        // 如果是 旧版本的字符串时间格式（当前为数字格式）或 刚安装脚本（取不到值会返回字符串 '' 空），则需要立即更新
         if (typeof(GM_getValue('menu_ruleUpdateTime', '')) == 'string') {update = true; if (scriptHandler != 'AdGuard') {alert('请点击【确定】开始首次获取【外置翻页规则】（大概几秒\n\n在此期间请不要 操作/跳转/关闭 当前网页~\n\n如果不小心没获取成功也没事，可以去脚本菜单中手动【更新外置翻页规则】即可（浏览器右上角 Tampermonkey 扩展图标内的脚本菜单\n\n\n另外，想要【临时暂停翻页】请点击左下角悬浮的【页码】按钮\n\n如果每次打开网页都会看到该提示，说明你的 油猴脚本管理器与本脚本之间 存在兼容性问题，请更换其他试试！');} else {urlArr2 = urlArr}}
 
         if (update) { // 手动更新（或安装后首次更新）
@@ -1170,8 +1173,8 @@ function: {
                 timeout: 4000,
                 onload: function (response) {
                     try {
-                        //console.log('最终 URL：' + response.finalUrl, '返回内容：',response.response, response.responseHeaders)
-                        if (response.response) {
+                        //console.log('最终 URL：' + response.finalUrl, '返回内容：',response.status,response.response,response.responseText, response.responseHeaders)
+                        if (response.status === 200 && response.response && Object.prototype.toString.call(response.response) === '[object Object]' && Object.keys(response.response).length > 100) {
                             GM_setValue('menu_rules', response.response); // 写入最新规则
                             GM_setValue('menu_ruleUpdateTime', parseInt(+new Date()/1000)); // 写入当前时间戳
 
@@ -1188,7 +1191,7 @@ function: {
 
                             if (n) GM_notification({text: '✅ 已更新外置翻页规则！\n如果依然无法翻页，说明还不支持当前网页，点击此处提交申请~', timeout: 5000, onclick: function(){GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});}});
                         } else {
-                            console.log('URL：' + url);
+                            console.log('URL：' + url, response);
                             GM_notification({text: '❌ 为空！更新失败，请再试几次...\n如果依然更新失败，请联系作者解决...', timeout: 5000});
                             if (n) {urlArr2.splice(urlArr2.indexOf(url), 1)} else {urlArr.splice(urlArr.indexOf(url), 1)}
                         }
@@ -2220,7 +2223,7 @@ function: {
     // 通用型获取下一页地址（从 元素 中获取页码）该函数用于规则中调用（fun.getNextE() 这样）
     function getNextE(css) {
         if (!css) { // 考虑到可能被非 nextL 规则内调用，所以还是需要做一个判断
-            if (typeof curSite.pager.nextL == 'string' && curSite.pager.nextL.match(/^js;/) === null) {css = curSite.pager.nextL;} else {return '';}
+            if (typeof curSite.pager.nextL == 'string' && curSite.pager.nextL.match(/^js;/i) === null) {css = curSite.pager.nextL;} else {return '';}
         }
         let next = getOne(css); // 获取含有下一页地址的元素
         if (next && next.nodeType === 1 && next.href && next.href.slice(0,4) === 'http' && next.getAttribute('href').slice(0,1) !== '#') { // 确定元素存在且 href 是正常链接
@@ -2931,7 +2934,7 @@ function: {
     function setSiteTypeID() {
         let num = 0
         for (let val in DBSite) {
-            DBSite[val].SiteTypeID = num = num + 1;
+            DBSite[val].SiteTypeID = ++num;
         }
     }
     // 遍历 loadMoreExclude 数组，判断是否包含域名
