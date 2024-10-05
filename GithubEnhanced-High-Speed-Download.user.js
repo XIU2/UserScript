@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.6.7
+// @version      2.6.8
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)、添加 git clone 命令
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)
@@ -91,8 +91,8 @@
         //['https://github.tmby.shop/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [blog.tmby.shop] 提供'],
         //['https://dgithub.xyz', '美国', '[美国 西雅图] - 该公益加速源由 [dgithub.xyz] 提供'],
         //['https://gh-proxy.ygxz.in/https://github.com', '美国', '[美国 洛杉矶] - 该公益加速源由 [@一个小站 www.ygxz.in] 提供'],
-        //['https://hub.nuaa.cf', '美国', '[美国 洛杉矶] - 该公益加速源由 [FastGit 群组成员] 提供'],
-        //['https://hub.yzuu.cf', '美国', '[美国 纽约] - 该公益加速源由 [FastGit 群组成员] 提供'],
+        //['https://hub.nuaa.cf', '美国', '[美国 洛杉矶] - 该公益加速源由 [FastGit 群组成员] 提供'], // 证书到期
+        //['https://hub.yzuu.cf', '美国', '[美国 纽约] - 该公益加速源由 [FastGit 群组成员] 提供'], // 证书到期
         //['https://hub.scholar.rr.nu', '美国', '[美国 纽约] - 该公益加速源由 [FastGit 群组成员] 提供'], // 证书到期
         //['https://hub.whtrys.space', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [FastGit 群组成员] 提供'],
     ], clone_ssh_url = [
@@ -103,7 +103,6 @@
         ['https://raw.githubusercontent.com', 'Github 原生', '[日本 东京]'],
         ['https://raw.kkgithub.com', '香港 1', '[中国香港、日本、新加坡等] - 该公益加速源由 [help.kkgithub.com] 提供'],
         ['https://jsd.proxy.aks.moe/gh', '香港 2', '[中国 香港] - 该公益加速源由 [cdn.akass.cn] 提供&#10;&#10; - 缓存：有（官方标注 2 小时）'],
-        //['https://cdn.jsdelivr.us/gh', '香港 3', '[中国 香港] - 该公益加速源由 [@ayao] 提供&#10;&#10; - 缓存：有'], // 挂了
         ['https://gitdl.cn/https://raw.githubusercontent.com', '香港 4', '[中国香港] - 该公益加速源由 [gitdl] 提供'],
         ['https://ghp.ci/https://raw.githubusercontent.com', '韩国', '[日本、韩国、新加坡、美国、德国等]（CDN 不固定） - 该公益加速源由 [ghproxy] 提供'],
         ['https://ghproxy.net/https://raw.githubusercontent.com', '日本 1', '[日本 大阪] - 该公益加速源由 [ghproxy] 提供'],
@@ -113,7 +112,7 @@
         //['https://jsdelivr.b-cdn.net/gh', '其他', '[中国香港、台湾、日本、新加坡等]（CDN 不固定） - 该公益加速源由 [@rttwyjz] 提供&#10;&#10; - 缓存：有'], // 疑似 SNI 阻断
         //['https://github.moeyy.xyz/https://raw.githubusercontent.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@Moeyy] 提供'],
         //['https://raw.cachefly.998111.xyz', '其他 4', '[新加坡、日本、印度等]（Anycast CDN 不固定） - 该公益加速源由 [@XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxX0] 提供&#10;&#10; - 缓存：有（约 12 小时）'], // 证书到期
-        //['https://raw.incept.pw', '香港', '[中国香港、美国] - 该公益加速源由 [FastGit 群组成员] 提供'], // ERR_SSL_PROTOCOL_ERROR
+        ['https://raw.incept.pw', '新加坡', '[新加坡] - 该公益加速源由 [FastGit 群组成员] 提供'],
         //['https://ghproxy.cc/https://raw.githubusercontent.com', '美国', '[美国 洛杉矶] - 该公益加速源由 [@yionchiii lau] 提供'],
         //['https://cf.ghproxy.cc/https://raw.githubusercontent.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@yionchiii lau] 提供'],
         //['https://www.ghproxy.cc/https://raw.githubusercontent.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@yionchiii lau] 提供'],
@@ -125,8 +124,8 @@
         //['https://dgithub.xyz', '美国', '[美国 西雅图] - 该公益加速源由 [dgithub.xyz] 提供'],
         //['https://gh-proxy.ygxz.in/https://github.com', '美国', '[美国 洛杉矶] - 该公益加速源由 [@一个小站 www.ygxz.in] 提供'],
         //['https://raw.ixnic.net', '美国', '[美国 洛杉矶] - 该公益加速源由 [@黃埔興國] 提供'],
-        //['https://raw.nuaa.cf', '美国', '[美国 洛杉矶] - 该公益加速源由 [FastGit 群组成员] 提供'],
-        //['https://raw.yzuu.cf', '美国', '[美国 纽约] - 该公益加速源由 [FastGit 群组成员] 提供'],
+        //['https://raw.nuaa.cf', '美国', '[美国 洛杉矶] - 该公益加速源由 [FastGit 群组成员] 提供'], // 证书到期
+        //['https://raw.yzuu.cf', '美国', '[美国 纽约] - 该公益加速源由 [FastGit 群组成员] 提供'], // 证书到期
         //['https://raw.scholar.rr.nu', '美国', '[美国 纽约] - 该公益加速源由 [FastGit 群组成员] 提供'], // 证书到期
         //['https://raw.gitmirror.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [GitMirror] 提供&#10;&#10; - 缓存：有'],
         //['https://cdn.54188.cf/gh', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [PencilNavigator] 提供&#10;&#10; - 缓存：有'],
