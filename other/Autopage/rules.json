@@ -2883,7 +2883,7 @@
 		}
 	},
 	"DL-Raw": {
-		"host": "dl-raw.se",
+		"host": "dl-raw.ac",
 		"url": "/^\\/($|\\?s=|tag|page|category)/",
 		"blank": 3,
 		"pager": {
