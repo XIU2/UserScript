@@ -5707,6 +5707,16 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"AVJOY": {
+		"host": "avjoy.me",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".active+li.page-item>a",
+			"pageE": ".content-left>.content-row>div",
+			"replaceE": ".pagination"
+		}
+	},
 	"AV6K": {
 		"host": "av6k.com",
 		"url": "return (fun.lp() != '/' && !fun.indexOF('/search') && !fun.indexOF(/\\/\\d+\\.html$/))",
