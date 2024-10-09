@@ -2311,8 +2311,7 @@
 			"replaceE": "#container>div[style='text-align: center; line-height: 36px;']"
 		}
 	},
-	"子夜动漫": {
-		"host": "www.ziyedm.com",
+	"子夜动漫/七味网 类通用规则": {
 		"url": "return fun.isPager()",
 		"pager": {
 			"nextL": ".page-active+a",
