@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.41
+// @version      6.6.42
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动，無需手働點擊下一頁）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -2502,7 +2502,25 @@ function: {
         return document.title.indexOf(title) > -1;
     }
     // 判断规则中的 nextL、pageE、insertP、replaceE 元素是否存在于当前网页
-    function isPager(type = 'n,p') {
+    function isPager(type) {
+        if (!type) { // 如果没有指定要判断的元素类型参数，那么需要设置默认值
+            if (!DBSiteNow.pager) return false; // 如果连 pager 都没有，那么直接返回 false
+            if (DBSiteNow.pager.type === undefined || DBSiteNow.pager.type === 1 || DBSiteNow.pager.type === 3 || DBSiteNow.pager.type === 6) { // 如果是翻页模式 1 3 6，那么默认值可能是 n、p、n,p 三种
+                // 判断 nextL 是不是选择器（字符串 + 非 js; 开头）
+                if (typeof DBSiteNow.pager.nextL == 'string' && DBSiteNow.pager.nextL.match(/^js;/i) === null) {type = 'n';}
+                // 判断 pageE 是否不是空
+                if (DBSiteNow.pager.pageE) {
+                    // 如果 type 是空的，说明上面 nextL 判断结果为否，那么就是 p，反之则就是 n,p
+                    if (!type) {type = 'p';}else{type = 'n,p';}
+                }
+            } else if (DBSiteNow.pager.type === 2 || DBSiteNow.pager.type === 5) { // 如果是翻页模式 2 6，那么默认值只能是 n 一种
+                // 判断 nextL 是不是选择器（字符串 + 非 js; 开头）
+                if (typeof DBSiteNow.pager.nextL == 'string' && DBSiteNow.pager.nextL.match(/^js;/i) === null) {type = 'n';}
+            } else if (DBSiteNow.pager.type === 4) { // 如果是翻页模式 4，那么是不能使用 isPager 的（因为基本上都是脚本内的函数）
+                return false;
+            }
+            if (!type) return false; // 如果上面的判断中 nextL 和 pageE 都为否，那么 type 就还是空的，则直接返回 false
+        }
         const typeArr = 'n,p'.split(',');
         for (let i = 0; i < typeArr.length; i++) {
             switch (typeArr[i]) {
@@ -2594,7 +2612,7 @@ function: {
 // 下面示例是把所有规则都塞进去了，但实际上大部分都用不上，大多数网站只需要像第一个 "aaa" 这样的规则（下方 示例一 中 url、replaceE、scrollD 均可按需省略）：
 
 // "aaa"       是规则名，唯一，因为 自定义翻页规则 优先级最高，所以会覆盖同名的 外置翻页规则
-// "host"      是域名，支持正则表达式（如 示例四），也可以像这样 示例三 那样写多个域名或正则表达式（当然也可以混用）
+// "host"      是域名，支持正则表达式（如 示例四），也可以像这样 示例三 那样写多个域名或正则表达式（当然也可以混用），如果省略，则默认匹配所有域名（会对所有域名匹配 url 规则判断，可以当成一个简单的外置/自定义通用规则的方案）
 // "url"       是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站（如果不知道写什么，那么就写 return fun.isPager() 这样脚本会默认自动匹配当前网站下存在 nextL 及 pageE 元素的网页，大部分网站是没问题的，如果改为匹配 replaceE 或者其他组合，那么请去上面的 Github Issues 里的 内置函数 中查看具体使用方法）
 
 // "nextL"     是用来指定含有下一页地址的元素选择器（CSS 或 XPath 都行，一般都是 &lt;a&gt; 元素）
