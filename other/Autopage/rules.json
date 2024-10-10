@@ -4893,6 +4893,15 @@
 			"replaceE": "nav.elementor-pagination"
 		}
 	},
+	"中华典藏": {
+		"host": "www.zhonghuadiancang.com",
+		"url": "/\\/\\d+\\.html$/",
+		"pager": {
+			"nextL": "//div[@class='m-page']//button[text()='下一章']/..",
+			"pageE": "#content>p",
+			"replaceE": ".m-page"
+		}
+	},
 	"AfreecaTV": {
 		"host": "www.afreecatv.com",
 		"pager": {
