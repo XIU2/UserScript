@@ -4269,6 +4269,18 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"IEU OpenGWAS project": {
+		"host": "gwas.mrcieu.ac.uk",
+		"url": "/^\\/datasets\\//",
+		"pager": {
+			"type": 3,
+			"nextL": ".next>a",
+			"pageE": "#search tbody>tr",
+			"replaceE": ".pagination",
+			"interval": 0,
+			"scrollD": 200
+		}
+	},
 	"维普网": {
 		"host": "www.cqvip.com",
 		"url": "/\\/search/",
