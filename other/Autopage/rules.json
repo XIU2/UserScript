@@ -1438,6 +1438,18 @@
 			"bF": "return fun.src_bF(pageE,[0,'img[data-url]','data-url'])"
 		}
 	},
+	"全景酷逊素材": {
+		"host": ["www.360kuxun.com","png.360kuxun.com"],
+		"url": "return fun.isPager()",
+		"pager": {
+			"nextL": "//a[@class='next page-numbers'] | //div[@class='pagebox']/a[text()='下一页 »']",
+			"pageE": ".card-columns",
+			"replaceE": ".pagination,.pagebox"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"vcg.com": {
 		"host": "www.vcg.com",
 		"url": "fun.isUrlC(); return fun.indexOF(/^\\/creative-(image|illustration)\\//)",
