@@ -2463,6 +2463,19 @@
 			"interval": 1500
 		}
 	},
+	"Kimivod": {
+		"host": "kimivod.com",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".pagination__next",
+			"pageE": ".container_list>.post",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"VCB-Studio": {
 		"host": "vcb-s.com",
 		"url": "return fun.isPager()",
