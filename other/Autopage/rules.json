@@ -2235,6 +2235,19 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"网飞猫": {
+		"host": ["www.ncat1.app","/^www\\.nca(t)?\\d+\\.com$/"],
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".page-item-next",
+			"pageE": ".module-item",
+			"replaceE": ".pagenation-box"
+		},
+		"function": {
+			"bF": "pageE.forEach((a)=>{let b=fun.getCSS('img[data-original]:not(#noneCoverImg)',a); b.src=window.RDUL[0]+b.dataset.original});return pageE;"
+		}
+	},
 	"ZzzFun 动漫": {
 		"host": "www.zzzfun.com",
 		"url": "/^\\/vod_(type|show|search)/",
