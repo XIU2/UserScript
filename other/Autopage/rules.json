@@ -381,6 +381,9 @@
 			"pageE": ".comment-item,.list>ul>li",
 			"replaceE": ".paginator",
 			"scrollD": 2500
+		},
+		"function": {
+			"aF": "fun.getAllCSS('.cmt-img:not([data-render-type=video])>img[data-render-type=gif]:not([data-status=playing])').forEach((img)=>{img.outerHTML='<video class=\"image-gif-player\" loop=\"\" preload=\"auto\" autoplay=\"\" poster=\"'+img.dataset.orig+'\" crossorigin=\"anonymous\" playsinline=\"true\" webkit-playsinline=\"true\" type=\"video/mp4\" src=\"'+img.dataset.orig.replace('.jpg','.mp4')+'\" data-status=\"playing\" style=\"display: block;\"></video>';})"
 		}
 	},
 	"豆瓣 - 小组/讨论区": {
