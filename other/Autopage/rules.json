@@ -6503,6 +6503,19 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"foamgirl": {
+		"host": "foamgirl.net",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".page-numbers.current+a:not(.prev)",
+			"pageE": ".imageclick-imgbox,#index_ajax_list>li",
+			"replaceE": ".nav-links"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"美图乐": {
 		"host": "meitulu.cc",
 		"url": "return fun.isPager()",
