@@ -6385,6 +6385,16 @@
 			"replaceE": ".paginator"
 		}
 	},
+	"绅士漫画 - 阅读页(非下拉阅读)": {
+		"host": ["/^(www\\.)?(wnacg|htcomic)\\./","/^(www\\.)?qy\\d\\.ru/"],
+		"url": "if(fun.indexOF(/^\\/photos-view-id-\\d+\\.html/) || fun.indexOF('?ctl=photos&act=view&id=','s')){const img=fun.getCSS('#picarea');img.parentElement.outerHTML=img.outerHTML;return true;}",
+		"style": "#tuzaoblock,#bodywrap,.tocaowrap",
+		"pager": {
+			"nextL": "js;const next=fun.getCSS('.pageselect>[selected]+option');if(next){return location.href.replace(/\\d+/,next.value);}",
+			"pageE": "#picarea",
+			"replaceE": ".newpagewrap"
+		}
+	},
 	"灵梦御所": {
 		"host": "blog.reimu.net",
 		"url": "return (!fun.indexOF('/post/') && !fun.getCSS('#comments,.comments-area,#disqus_thread'))",
