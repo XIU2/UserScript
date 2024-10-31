@@ -6378,6 +6378,7 @@
 	"绅士漫画": {
 		"host": ["/^(www\\.)?(wnacg|htcomic)\\./","/^(www\\.)?qy\\d\\.ru/"],
 		"url": "/^\\/(albums|search|photos-index)/",
+		"style": "a.btn[href^='/photos-slide-']{color:#fff !important;background:#ff604a !important;font-weight:bold !important;font-size:22px !important;letter-spacing:10px !important;width:210px !important;height:30px !important;}",
 		"blank": 3,
 		"pager": {
 			"nextL": "span.thispage+a",
