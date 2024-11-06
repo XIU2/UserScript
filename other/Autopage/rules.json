@@ -485,6 +485,15 @@
 			"replaceE": "ul.hupu-rc-pagination"
 		}
 	},
+	"虎扑社区 - 搜索页": {
+		"host": "bbs.hupu.com",
+		"url": "/^\\/search/",
+		"pager": {
+			"nextL": "js; return fun.getNextEP('li.hupu-rc-pagination-item-active+li.hupu-rc-pagination-item>a','page=',/page=\\d+/)",
+			"pageE": ".content-outline",
+			"replaceE": ".hupu-rc-pagination"
+		}
+	},
 	"虎扑社区": {
 		"host": "bbs.hupu.com",
 		"url": "return fun.isPager('r')",
