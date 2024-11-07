@@ -5414,12 +5414,12 @@
 	},
 	"PornHub": {
 		"host": "/\\.pornhub\\.com$/",
-		"url": "/^\\/video/",
+		"url": "return fun.isPager()",
 		"style": ".footerContentWrapper,.pre-footer",
 		"blank": 3,
 		"pager": {
-			"nextL": "li.page_next>a",
-			"pageE": "#videoSearchResult>li.pcVideoListItem,#videoCategory>li.pcVideoListItem",
+			"nextL": ".page_next>a",
+			"pageE": ".container ul.videos:not(#bottomVideos)>li[data-video-id], .container ul.videoList>li[data-video-id]",
 			"replaceE": ".pagination3"
 		},
 		"function": {
