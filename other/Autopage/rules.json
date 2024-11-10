@@ -3836,6 +3836,16 @@
 			"replaceE": "#main ul.navigation,#feedback>ul.actions"
 		}
 	},
+	"boxnovel.com": {
+		"host": "boxnovel.com",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "#manga-reading-nav-foot .next_page,.nav-previous.float-left>a",
+			"pageE": ".reading-content>.text-left>p,.page-listing-item",
+			"replaceE": "#manga-reading-nav-head,#manga-reading-nav-foot,.paging-navigation"
+		}
+	},
 	"红袖招": {
 		"host": "hongxiuzhao.org",
 		"url": "return (fun.getCSS('.pager')&&fun.getCSS('.article-content'))",
