@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.3.10
+// @version      2.3.11
 // @author       X.I.U
 // @description  屏蔽指定类别（视频、盐选、文章、想法、关注[赞同了XX/关注了XX]等等）、屏蔽用户、屏蔽关键词、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、区分问题文章、移除高亮链接、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、直达问题按钮、默认站外直链...
 // @description:zh-TW  屏蔽指定類別（視頻、鹽選、文章、想法、關注[贊同了XX/關注了XX]等等）、屏蔽用戶、屏蔽關鍵詞、默認收起回答、快捷收起回答/評論、快捷回到頂部、區分問題文章、移除高亮鏈接、默認高清原圖（無水印）、默認站外直鏈...
@@ -1154,7 +1154,7 @@ function addToQuestion() {
             titleA.innerHTML = titleA.innerHTML.replace('?', "？")
         }
         if (/answer\/\d+/.test(titleA.href)) { //  如果是指向回答的问题（而非指向纯问题的链接）
-            titleA.insertAdjacentHTML('afterend', `<a class="zhihu_e_toQuestion VoteButton" href="${titleA.parentElement.querySelector('meta[itemprop="url"]').content}" target="_blank">直达问题</a>`);
+            titleA.insertAdjacentHTML('afterend', `<a class="zhihu_e_toQuestion VoteButton" href="${titleA.parentElement.parentElement.querySelector('meta[itemprop="url"]').content}" target="_blank">直达问题</a>`);
         }
     }
 
