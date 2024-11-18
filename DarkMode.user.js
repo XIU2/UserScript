@@ -3,7 +3,7 @@
 // @name:zh-CN   护眼模式
 // @name:zh-TW   護眼模式
 // @name:en      Dark Mode
-// @version      1.5.4
+// @version      1.5.5
 // @author       X.I.U
 // @description  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
 // @description:zh-CN  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
@@ -498,9 +498,9 @@
 
     // 判断当前是白天还是晚上
     function isDaytime() {
-        let nowTime = new Date('2022-03-07 ' + new Date().getHours() + ':' + new Date().getMinutes() + ':00').getTime()/1000, time = GM_getValue('menu_customTime').split('|');
-        time[0] = new Date('2022-03-07 ' + time[0] + ':00').getTime()/1000;
-        time[1] = new Date('2022-03-07 ' + time[1] + ':00').getTime()/1000;
+        let nowTime = new Date('2022/03/07 ' + new Date().getHours() + ':' + new Date().getMinutes() + ':00').getTime()/1000, time = GM_getValue('menu_customTime').split('|');
+        time[0] = new Date('2022/03/07 ' + time[0] + ':00').getTime()/1000;
+        time[1] = new Date('2022/03/07 ' + time[1] + ':00').getTime()/1000;
         if (time[0] < time[1]){
             if (nowTime > time[0] && nowTime < time[1]) return true
             return false
