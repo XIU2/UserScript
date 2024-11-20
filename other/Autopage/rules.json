@@ -5904,6 +5904,28 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"TaSexy": {
+		"host": "www.tasexy.top",
+		"url": "return fun.isPager()",
+		"style": ".iframe,li[id^=sexy_]",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.active+a",
+			"pageE": ".list_box>ul:nth-of-type(2)~ul",
+			"replaceE": ".pages"
+		}
+	},
+	"16k.club": {
+		"host": "www.16k.club",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"type": 6,
+			"nextL": ".m-pagination-next>a",
+			"pageE": ".container>.row.grid",
+			"replaceE": ".pagination"
+		}
+	},
 	"GGBases": {
 		"host": "www.ggbases.com",
 		"url": "return fun.isPager()",
