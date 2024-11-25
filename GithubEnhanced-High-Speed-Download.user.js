@@ -292,7 +292,7 @@
         let href_split = html.value.split(location.host)[1],
             html_parent = '<div style="margin-top: 4px;" class="XIU2-GC ' + html.parentElement.className + '">',
             url = '', _html = '', _gitClone = '';
-        html.nextElementSibling.hidden = true; // 隐藏右侧复制按钮（考虑到能直接点击复制，就不再重复实现复制按钮事件了）
+        if (html.nextElementSibling) html.nextElementSibling.hidden = true; // 隐藏右侧复制按钮（考虑到能直接点击复制，就不再重复实现复制按钮事件了）
         if (html.parentElement.nextElementSibling.tagName === 'SPAN'){
             html.parentElement.nextElementSibling.textContent += ' (↑点击上面文字可复制)'
         }
