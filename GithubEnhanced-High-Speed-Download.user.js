@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:en      Github Enhancement - High Speed Download
-// @version      2.6.9
+// @version      2.6.10
 // @author       X.I.U
 // @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)、添加 git clone 命令
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)
@@ -197,7 +197,7 @@
             for (const mutation of mutationsList) {
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType !== 1) return
-                    if (target.tagName === 'DIV' && target.parentElement.id === '__primerPortalRoot__') {
+                    if (target.tagName === 'DIV' && target.parentElement && target.parentElement.id === '__primerPortalRoot__') {
                         addDownloadZIP(target);
                         addGitClone(target);
                         addGitCloneSSH(target);
@@ -288,7 +288,7 @@
 
     // Git Clone
     function addGitClone(target) {
-        let html = target.querySelector('input[value^="https:"]');if (!html) return
+        let html = target.querySelector('input[value^="https:"]:not([title])');if (!html) return
         let href_split = html.value.split(location.host)[1],
             html_parent = '<div style="margin-top: 4px;" class="XIU2-GC ' + html.parentElement.className + '">',
             url = '', _html = '', _gitClone = '';
@@ -319,7 +319,7 @@
 
     // Git Clone SSH
     function addGitCloneSSH(target) {
-        let html = target.querySelector('input[value^="git@"]');if (!html) return
+        let html = target.querySelector('input[value^="git@"]:not([title])');if (!html) return
         let href_split = html.value.split(':')[1],
             html_parent = '<div style="margin-top: 4px;" class="XIU2-GCS ' + html.parentElement.className + '">',
             url = '', _html = '', _gitClone = '';
