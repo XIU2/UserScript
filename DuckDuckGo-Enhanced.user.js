@@ -3,7 +3,7 @@
 // @name:zh-CN   DuckDuckGo 增强
 // @name:zh-TW   DuckDuckGo 增強
 // @name:en      DuckDuckGo Enhancements
-// @version      1.0.4
+// @version      1.0.5
 // @author       X.I.U
 // @description  屏蔽指定域名、链接不携来源、快捷回到顶部（右键两侧空白处）
 // @description:zh-CN  屏蔽指定域名、链接不携来源、快捷回到顶部（右键两侧空白处）
@@ -89,7 +89,7 @@ a[data-testid="result-title-a"]{display: inline-block}`
                     if (target.tagName == 'LI' && target.dataset.layout == 'organic') {
                         Process(target)
                     } else if (target.tagName == 'OL' && target.className == 'react-results--main') {
-                        target.childNodes.forEach(li=>{Process(li)})
+                        target.childNodes.forEach(li=>{Process(li);})
                     }
                 }
             }
@@ -98,15 +98,17 @@ a[data-testid="result-title-a"]{display: inline-block}`
         observer.observe(document, { childList: true, subtree: true });
 
         function Process(target) {
-            const a = target.querySelector('h2>a,a[data-testid="result-title-a]"')
-            if (a && checkDomain(a.href.split('/')[2])) {
-                target.hidden = true
-            } else {
-                // 链接不携来源
-                addRel(target);
+            const a = target.querySelector('h2>a,a[data-testid=result-title-a]')
+            if (a) {
+                if (checkDomain(a.href.split('/')[2])) {
+                    target.hidden = true
+                } else {
+                    // 链接不携来源
+                    addRel(target);
 
-                // 添加屏蔽按钮
-                addBlockDomainBtn(target, a, a.href.split('/')[2]);
+                    // 添加屏蔽按钮
+                    addBlockDomainBtn(target, a, a.href.split('/')[2]);
+                }
             }
         }
     }
@@ -131,7 +133,7 @@ a[data-testid="result-title-a"]{display: inline-block}`
     // 添加屏蔽按钮
     function addBlockDomainBtn(doc, toElement, domain) {
         if (!GM_getValue('menu_blockDomainBtn')) return
-        if (toElement) {
+        if (toElement && !doc.querySelector('button.blockDomainBtn')) {
             toElement.insertAdjacentHTML('afterend', `<button class="btn blockDomainBtn" data-domain="${domain}" title="点击在搜索结果中屏蔽 [ ${domain} ] 域名">屏蔽</button>`);
             doc.querySelector('button.blockDomainBtn').addEventListener('click', function(e) {
                 e.stopPropagation();
