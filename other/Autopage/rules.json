@@ -6195,9 +6195,11 @@
 		"style": "#img {max-width: 100% !important;height: auto !important;min-height: 400px;}",
 		"blank": 3,
 		"pager": {
-			"nextL": "//table[@class='ptt']//a[string()='>'] | id('next') | id('unext')",
+			"type": 3,
+			"nextL": "//table[@class='ptb']//a[string()='>'] | (//a[@id='next'])[last()] | id('dnext')",
 			"pageE": ".itg>div,.itg>tbody>tr:not(:first-of-type),#gdt>*:not(.c),#img",
-			"replaceE": ".ptt,.ptb,.sn,.searchnav"
+			"replaceE": ".ptt,.ptb,.sn,.searchnav",
+			"scrollE": "//table[@class='ptb'] | (//a[@id='next'])[last()] | id('dnext')"
 		}
 	},
 	"nhentai": {
