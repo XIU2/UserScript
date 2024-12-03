@@ -5200,6 +5200,16 @@
 			"replaceE": ".pager"
 		}
 	},
+	"10wallpaper.com": {
+		"host": "10wallpaper.com",
+		"url": "return fun.isPager()",
+		"style": "#pics-list>p {display: inline-block !important;}",
+		"pager": {
+			"nextL": ".nowpg+a",
+			"pageE": "#pics-list>p",
+			"replaceE": ".pg_pointer"
+		}
+	},
 	"Anime Pictures": {
 		"host": "anime-pictures.net",
 		"url": "return (fun.indexOF('/pictures/') && !fun.indexOF('/view_post/'))",
