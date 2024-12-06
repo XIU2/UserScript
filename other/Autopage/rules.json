@@ -1361,11 +1361,12 @@
 	},
 	"昵图网": {
 		"host": ["www.nipic.com","soso.nipic.com"],
+		"url": "return fun.isPager()",
 		"style": "li.search-works-item,a.search-works-nextpage",
 		"pager": {
-			"nextL": "//a[@title='下一页' or text()='下一页'][not(contains(@class,'search-works-nextpage'))]",
-			"pageE": "li.new-search-works-item,li.new-works-box",
-			"replaceE": ".common-page-box"
+			"nextL": ".common-page-box>.page-num-on+a,.seo-page>.seo-page-on+a",
+			"pageE": "#img-list-outer>li.new-search-works-item,li.new-works-box",
+			"replaceE": ".common-page-box,.seo-page"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE)"
