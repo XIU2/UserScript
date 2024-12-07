@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.42
+// @version      6.6.43
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动，無需手働點擊下一頁）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -228,7 +228,7 @@
                                         if (new Function('fun', DBSite[now].url)(window.autoPage)) {curSite = DBSite[now];} else {if (urlC === true) {support = true;}; break;}
                                     }
                                 } catch (e) {
-                                    console.error('[自动无缝翻页] - 当前网页规则 "url" 有误，请检查！', e, DBSite[now].url);
+                                    console.error('[自动无缝翻页] - 当前网页规则 "url" 匹配出错，请检查：\n', DBSite[now].url + '\n\n', e);
                                 }
                             }
                         } else {
@@ -259,7 +259,7 @@
 
                                 }
                             } catch (e) {
-                                console.error('[自动无缝翻页] - 当前网页规则 "url" 有误，请检查！', e, DBSite[now].url);
+                                console.error('[自动无缝翻页] - 当前网页规则 "url" 匹配出错，请检查：\n', DBSite[now].url + '\n\n', e);
                             }
                         }
                     } else {
@@ -731,7 +731,7 @@ function: {
                 pager: {
                     type: 2,
                     nextL: '#autopbn',
-                    nextTextOf: '下一'
+                    interval: 800
                 }
             }, //       Discuz! 论坛 - 帖子列表（自带无缝加载下一页按钮的）
             discuz_guide: {
@@ -742,16 +742,17 @@ function: {
                     replaceE: '.pg, .pages',
                     forceHTTPS: true
                 }
-            }, //       Discuz! 论坛 - 导读页 及 帖子列表（不带无缝加载下一页按钮的）
+            }, //       Discuz! 论坛 - 导读页 及 帖子列表（不带无缝加载下一页按钮的，或存在按钮但只是单纯跳转下一页链接的）
             discuz_waterfall: {
                 ignore: true,
+                style: '.pgbtn',
                 pager: {
                     nextL: 'a.nxt:not([href^="javascript"]) ,a.next:not([href^="javascript"])',
-                    pageE: '#waterfall > li',
+                    pageE: '#waterfall > li, #waterfall > dl',
                     replaceE: '.pg, .pages',
                     forceHTTPS: true
                 }
-            }, //   Discuz! 论坛 - 图片模式的帖子列表（不带无缝加载下一页按钮的）
+            }, //   Discuz! 论坛 - 图片模式的帖子列表（不带无缝加载下一页按钮的，或存在按钮但只是单纯跳转下一页链接的）
             discuz_thread: {
                 ignore: true,
                 thread: true,
@@ -1381,8 +1382,15 @@ function: {
     }
     // [Discuz! 论坛] 图片模式列表样式预处理
     function waterfallStyle() {
-        let width = getCSS('#waterfall > li:first-child').style.width;
-        if (width) insStyle(`#waterfall {height: auto !important; width: 100% !important;} #waterfall > li {width: ${width} !important; float: left !important; position: inherit !important; left: auto !important; top: auto !important;}`);
+        let waterfall_ = getCSS('#waterfall > li:first-child');
+        if (waterfall_ && waterfall_.style && waterfall_.style.width) {
+            insStyle(`#waterfall {height: auto !important; width: 100% !important;} #waterfall > li {width: ${waterfall_.style.width} !important; float: left !important; position: inherit !important; left: auto !important; top: auto !important;}`);
+        } else {
+            waterfall_ = getAllCSS('#waterfall > dl');
+            if (waterfall_ && waterfall_.length > 5) {
+                insStyle(`#waterfall > dl {display: unset !important;}`);
+            }
+        }
     }
 
 
@@ -1669,7 +1677,7 @@ function: {
                     //console.log('URL：' + url, '最终 URL：' + xhr.responseURL, '返回内容：' + xhr.responseText)
                     processElems(createDocumentByString(xhr.responseText));
                 } catch (e) {
-                    console.error('[自动无缝翻页] - 处理获取到的下一页内容时出现问题，请检查！', 'URL：' + url, '最终 URL：' + xhr.responseURL, '返回状态：' + xhr.statusText, '返回内容：' + xhr.responseText);
+                    console.error('[自动无缝翻页] - 处理获取到的下一页内容时出现问题，请检查！\n', e, '\nURL：' + url, '\n最终 URL：' + xhr.responseURL, '\n返回状态：' + xhr.statusText, '\n返回内容：' + xhr.responseText);
                 }
             };
             xhr.onerror = function() {
@@ -1698,7 +1706,7 @@ function: {
                         //console.log('URL：' + url, '最终 URL：' + response.finalUrl, '返回内容：' + response.responseText)
                         processElems(createDocumentByString(response.responseText));
                     } catch (e) {
-                        console.error('[自动无缝翻页] - 处理获取到的下一页内容时出现问题，请检查！', e, 'URL：' + url, '最终 URL：' + response.finalUrl, '返回状态：' + response.statusText, '返回内容：' + response.responseText);
+                        console.error('[自动无缝翻页] - 处理获取到的下一页内容时出现问题，请检查！\n', e, '\nURL：' + url, '\n最终 URL：' + response.finalUrl, '\n返回状态：' + response.statusText, '\n返回内容：' + response.responseText);
                     }
                 },
                 onerror: function (response) {
@@ -2221,7 +2229,7 @@ function: {
                 curSite.pageUrl = tempUrl;
                 func(curSite.pageUrl);
             } catch (e) {
-                console.error('[自动无缝翻页] - 当前网页规则 "nextL" 内 JS 代码有误，请检查！', e, curSite.pager.nextL);
+                console.error('[自动无缝翻页] - 当前网页规则 "nextL" 内 JS 代码有误，请检查：\n', curSite.pager.nextL + '\n\n', e);
             }
         } else if (getNextE_()) {
             func(curSite.pageUrl);
