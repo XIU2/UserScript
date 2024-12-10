@@ -5406,6 +5406,14 @@
 			"replaceE": ".page"
 		}
 	},
+	"中國評論新聞": {
+		"host": "hk.crntt.com",
+		"url": "return fun.isPager('n')",
+		"pager": {
+			"nextL": "//img[contains(@src,'next_page.gif')]/..|//a[text()='下一頁']",
+			"pageE": "table[width='100%'][border='0'][cellspacing='0'][cellpadding='0'][height='200']>tbody>tr, table[width='97%'][border='0'][cellspacing='0'][cellpadding='5']>tbody>tr:not(:last-child)"
+		}
+	},
 	"东方资讯": {
 		"host": "mini.eastday.com",
 		"url": "/\\/nsa\\//",
