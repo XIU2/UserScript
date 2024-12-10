@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:en      Zhihu enhancement
-// @version      2.3.11
+// @version      2.3.12
 // @author       X.I.U
 // @description  屏蔽指定类别（视频、盐选、文章、想法、关注[赞同了XX/关注了XX]等等）、屏蔽用户、屏蔽关键词、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、区分问题文章、移除高亮链接、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、直达问题按钮、默认站外直链...
 // @description:zh-TW  屏蔽指定類別（視頻、鹽選、文章、想法、關注[贊同了XX/關注了XX]等等）、屏蔽用戶、屏蔽關鍵詞、默認收起回答、快捷收起回答/評論、快捷回到頂部、區分問題文章、移除高亮鏈接、默認高清原圖（無水印）、默認站外直鏈...
@@ -50,6 +50,7 @@ var menu_ALL = [
     ['menu_blockTypeSearch', '杂志文章、盐选专栏、相关搜索等 [搜索页]', '相关搜索、杂志、盐选等（搜索页）', false],
     ['menu_blockYanXuan', '盐选内容 [问题页]', '盐选内容（问题页）', false],
     ['menu_blockTypeLiveHot', '热榜文章、直播、广告等 [热榜]', '热榜文章、直播、广告等 [热榜]', true],
+    ['menu_cleanHighlightLink', '移除高亮链接 (高亮的文字链接)', '移除高亮链接', true],
     ['menu_cleanSearch', '净化搜索热门 (默认搜索词及热门搜索)', '净化搜索热门', false],
     ['menu_cleanTitles', '净化标题消息 (标题中的私信/消息)', '净化标题提醒', false],
     ['menu_questionRichTextMore', '展开问题描述', '展开问题描述', false],
@@ -1041,7 +1042,8 @@ function findParentElement(item, className, type = false) {
 
 
 // 移除高亮链接
-function removeHighlightLink() {
+function cleanHighlightLink() {
+    if (!menu_value('menu_cleanHighlightLink')) return;
     const callback = (mutationsList, observer) => {
         for (const mutation of mutationsList) {
             for (const target of mutation.addedNodes) {
@@ -1494,7 +1496,7 @@ function blockHotOther() {
     }
 
     function start(){
-        removeHighlightLink(); //                                              移除高亮链接
+        cleanHighlightLink(); //                                              移除高亮链接
         originalPic();directLink(); // 先立即执行一次
         setInterval(originalPic,500); //                                       默认高清原图（无水印）
         setInterval(directLink, 500); //                                       默认站外直链
