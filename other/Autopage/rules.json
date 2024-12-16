@@ -2349,12 +2349,12 @@
 			"replaceE": "#container>div[style='text-align: center; line-height: 36px;']"
 		}
 	},
-	"omofun 动漫": {
-		"host": ["/^omofun[a-z]\\.[a-z]+$/","dilidilidm.com"],
+	"嘀哩嘀哩 动漫+omofun 动漫": {
+		"host": ["dilidilidm.com","/^(www\\.)omofun[a-z]\\.[a-z]+$/"],
 		"url": "return fun.isPager()",
 		"blank": 3,
 		"pager": {
-			"nextL": "//a[@class='active']/../following-sibling::li[1]/a",
+			"nextL": "//ul[contains(@class,'hl-page-wrap')]//a[@class='active']/../following-sibling::li[1]/a",
 			"pageE": ".hl-list-item",
 			"replaceE": ".hl-page-wrap"
 		},
