@@ -6349,6 +6349,18 @@
 			"replaceE": ".paginator"
 		}
 	},
+	"kemono.su": {
+		"host": "kemono.su",
+		"url": "/^\\/posts/",
+		"blank": 3,
+		"pager": {
+			"type": 6,
+			"nextL": "a.next",
+			"pageE": ".card-list__items",
+			"replaceE": ".paginator>menu",
+			"loadTime": 1000
+		}
+	},
 	"Hentai Foundry": {
 		"host": "www.hentai-foundry.com",
 		"url": "return (fun.lp() != '/' && fun.isPager('p'))",
