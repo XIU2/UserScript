@@ -363,12 +363,12 @@
 			"loadTime": 1000
 		}
 	},
-	"豆瓣 - 片单/标签/小组讨论精选/广播/日记": {
+	"豆瓣 - 片单/标签/人物图片/人物作品/小组讨论精选/广播/日记": {
 		"host": "www.douban.com",
-		"url": "return (fun.indexOF(/^\\/(doulist|tag)\\//) || fun.lp() == '/group/explore' || ((fun.indexOF(/^\\/people\\/.+\\/status/) && fun.indexOF('tab=','s') && !fun.indexOF('tab=collect','s'))) || (fun.indexOF(/^\\/note\\/\\d+\\//) && fun.indexOF('type=','s')))",
+		"url": "return (fun.indexOF(/^\\/(doulist|tag)\\//) || fun.indexOF(/^\\/personage\\/\\d+\\/(photos|creations)/) || fun.lp() == '/group/explore' || ((fun.indexOF(/^\\/people\\/.+\\/status/) && fun.indexOF('tab=','s') && !fun.indexOF('tab=collect','s'))) || (fun.indexOF(/^\\/note\\/\\d+\\//) && fun.indexOF('type=','s')))",
 		"pager": {
 			"nextL": "link[rel='next']",
-			"pageE": ".doulist-item,.article>.mod:not([id='doulist-info']),.channel-item,.list",
+			"pageE": ".doulist-item,.article>.mod:not([id='doulist-info']),ul.pics>li,ul.creations>li.creation,.channel-item,.list",
 			"replaceE": ".paginator"
 		}
 	},
