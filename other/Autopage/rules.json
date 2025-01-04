@@ -802,7 +802,7 @@
 	},
 	"淘股吧 - 生活圈": {
 		"host": "www.tgb.cn",
-		"url": "/\\/shenghuoba\\//",
+		"url": "/^\\/shenghuoba\\//",
 		"pager": {
 			"nextL": "js; let next = fun.getCSS('#N_go_pageBtn'),next_ = location.pathname.split('/')[2].split('-')[0]; if (next && (parseInt(next.dataset.now) + 1 <= parseInt(next.dataset.total))) {if (!next_) next_ = 'H'; return (`${location.origin}/shenghuoba/${next_}-${parseInt(next.dataset.now) + 1}`)}; return '';",
 			"pageE": ".lifeContent-topicList-item",
