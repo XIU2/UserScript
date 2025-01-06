@@ -6440,7 +6440,7 @@
 		}
 	},
 	"绅士漫画": {
-		"host": ["/^(www\\.)?(wnacg|htcomic)\\./","/^(www\\.)?qy\\d\\.ru/"],
+		"host": ["/^(www\\.)?(wnacg|htcomic)\\.[a-z]+$/","/^(www\\.)?(qy|wn)\\d+\\.[a-z]+$/"],
 		"url": "/^\\/(albums|search|photos-index)/",
 		"style": "a.btn[href^='/photos-slide-']{color:#fff !important;background:#ff604a !important;font-weight:bold !important;font-size:22px !important;letter-spacing:10px !important;width:210px !important;height:30px !important;}",
 		"blank": 3,
@@ -6451,7 +6451,7 @@
 		}
 	},
 	"绅士漫画 - 阅读页(非下拉阅读)": {
-		"host": ["/^(www\\.)?(wnacg|htcomic)\\./","/^(www\\.)?qy\\d\\.ru/"],
+		"host": ["/^(www\\.)?(wnacg|htcomic)\\.[a-z]+$/","/^(www\\.)?(qy|wn)\\d+\\.[a-z]+$/"],
 		"url": "if(fun.indexOF(/^\\/photos-view-id-\\d+\\.html/) || fun.indexOF('?ctl=photos&act=view&id=','s')){const img=fun.getCSS('#picarea');img.parentElement.outerHTML=img.outerHTML;return true;}",
 		"style": "#tuzaoblock,#bodywrap,.tocaowrap",
 		"pager": {
