@@ -6460,6 +6460,18 @@
 			"replaceE": ".newpagewrap"
 		}
 	},
+	"鸟鸟韩漫": {
+        "host": ["/^nnhanman\\.[a-z]+/","/^nnhanman\\d\\.com/","/^nnhm\\d\\.[a-z]+/"],
+        "url": "/^\\/comic\\/.+\\/chapter-\\d+\\.html/",
+        "pager": {
+            "nextL": "#k_Pic_nextArr",
+            "pageE": "#m_r_imgbox_0 img",
+            "replaceE": "#action"
+        },
+        "function": {
+            "bF": "return fun.src_bF(pageE)"
+        }
+    },
 	"灵梦御所": {
 		"host": "blog.reimu.net",
 		"url": "return (!fun.indexOF('/post/') && !fun.getCSS('#comments,.comments-area,#disqus_thread'))",
