@@ -78,7 +78,7 @@ Tampermonkey 为了顺应 Chrome 的 Manifest V3 要求，在 v5.0.0 版本中�
 
 ****
 
-## 赞赏支持
+## 如果脚本帮到你的话就 "打赏" 一下吧~🎉✨
 
 ![微信赞赏](https://github.com/XIU2/XIU2/blob/master/img/zs-01.png)![支付宝赞赏](https://github.com/XIU2/XIU2/blob/master/img/zs-02.png)
 
