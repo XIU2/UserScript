@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.44
+// @version      6.6.45
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动，無需手働點擊下一頁）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -13,23 +13,27 @@
 // @connect      userscript.xiu2.us.kg
 // @connect      userscript.h233.eu.org
 // @connect      bitbucket.org
-// @connect      js.cdn.haah.net
-// @connect      raw.ixnic.net
-// @connect      raw.nuaa.cf
-// @connect      raw.yzuu.cf
-// @connect      raw.kkgithub.com
-// @connect      raw.incept.pw
-// @connect      gitdl.cn
-// @connect      ghproxy.cc
-// @connect      ghproxy.net
-// @connect      ghp.ci
-// @connect      github.moeyy.xyz
 // @connect      jsd.onmicrosoft.cn
+// @connect      wget.la
+// @connect      cdn.wget.la
+// @connect      ghgo.xyz
+// @connect      raw.ixnic.net
+// @connect      ghproxy.cc
+// @connect      raw.github.site
+// @connect      raw.github.store
+// @connect      raw.dgithub.xyz
+// @connect      gh-proxy.ygxz.in
+// @connect      ghproxy.net
+// @connect      github.moeyy.xyz
+// @connect      cdn.jsdmirror.com
+// @connect      js.cdn.haah.net
+// @connect      gh.akass.cn
+// @connect      raw.kkgithub.com
 // @connect      gcore.jsdelivr.net
 // @connect      fastly.jsdelivr.net
-// @connect      cdn.jsdmirror.com
 // @connect      jsd.proxy.aks.moe
 // @connect      jsdelivr.pai233.top
+// @connect      gh-proxy.com
 // @connect      www.xuexiniu.com
 // @connect      bbs.xuexiniu.com
 // @connect      weili.ooopic.com
@@ -89,39 +93,33 @@
 
 (function() {
     'use strict';
-    const urlArr = [ // 外置翻页规则更新地址分流，以确保更新成功率（记得 connect）
-        'https://userscript.h233.eu.org/other/Autopage/rules.json',
-        //'https://userscript.xiu2.us.kg/other/Autopage/rules.json',
-        'https://bitbucket.org/xiu2/userscript/raw/master/other/Autopage/rules.json',
+    let urlArr = [ // 外置翻页规则更新地址分流，以确保更新成功率（记得 connect）
+        'https://cdn.jsdmirror.com/gh/XIU2/UserScript/other/Autopage/rules.json',
+        'https://js.cdn.haah.net/gh/XIU2/UserScript/other/Autopage/rules.json',
+        'https://gh.akass.cn/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.kkgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://gitdl.cn/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://raw.incept.pw/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://raw.ixnic.net/XIU2/UserScript/master/other/Autopage/rules.json',
-        //'https://raw.nuaa.cf/XIU2/UserScript/master/other/Autopage/rules.json',
-        //'https://raw.yzuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://ghproxy.cc/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://ghp.ci/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://jsd.onmicrosoft.cn/gh/XIU2/UserScript/other/Autopage/rules.json',
         //'https://gcore.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://fastly.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
-        'https://cdn.jsdmirror.com/gh/XIU2/UserScript/other/Autopage/rules.json',
-        'https://jsd.proxy.aks.moe/gh/XIU2/UserScript/other/Autopage/rules.json',
+        //'https://jsd.proxy.aks.moe/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://jsdelivr.pai233.top/gh/XIU2/UserScript/other/Autopage/rules.json',
-        'https://js.cdn.haah.net/gh/XIU2/UserScript/other/Autopage/rules.json',
-    ], urlArr2 = [
+        'https://gh-proxy.com/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
+    ]
+    const urlArr2 = [
         'https://userscript.h233.eu.org/other/Autopage/rules.json',
         //'https://userscript.xiu2.us.kg/other/Autopage/rules.json',
         'https://userscript.xiu2.xyz/other/Autopage/rules.json',
         'https://bitbucket.org/xiu2/userscript/raw/master/other/Autopage/rules.json',
-        'https://raw.kkgithub.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://gitdl.cn/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://jsd.onmicrosoft.cn/gh/XIU2/UserScript/other/Autopage/rules.json',
+        'https://wget.la/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://cdn.wget.la/gh/XIU2/UserScript/other/Autopage/rules.json',
+        'https://ghgo.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://raw.ixnic.net/XIU2/UserScript/master/other/Autopage/rules.json',
-        //'https://raw.nuaa.cf/XIU2/UserScript/master/other/Autopage/rules.json',
-        //'https://raw.yzuu.cf/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://ghproxy.cc/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.github.site/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.github.store/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://raw.dgithub.xyz/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://gh-proxy.ygxz.in//https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
-        'https://ghp.ci/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://github.moeyy.xyz/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
     ],
           loadMoreExclude1 = ['.smzdm.com','stackoverflow.com'],
@@ -136,6 +134,7 @@
         ['menu_rules', '更新外置翻页规则 (每天自动)', '更新外置翻页规则 (每天自动)', {}],
         ['menu_customRules', '自定义翻页规则', '自定义翻页规则', {}]
     ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, DBSite2, DBSiteNow, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname, scriptHandler;
+    urlArr.push(...urlArr2); // 合并数组
     window.autoPage = {lp: ()=>location.pathname, indexOF: indexOF, isMobile: isMobile, isUrlC: isUrlC, isPager: isPager, isTitle: isTitle, blank: forceTarget, getAll: getAll, getOne: getOne, getAllXpath: getAllXpath, getXpath: getXpath, getAllCSS: getAllCSS, getCSS: getCSS, getNextE: getNextE, getNextEP: getNextEP, getNextSP: getNextSP, getNextEPN: getNextEPN, getNextUPN: getNextUPN, getNextUP: getNextUP, getNextF: getNextF, getSearch: getSearch, getCookie: getCookie, insStyle: insStyle, insScript: insScript, cleanuEvent: cleanuEvent, src_bF: src_bF, xs_bF: xs_bF, pageNumIncrement: pageNumIncrement}
     if (typeof GM_info != 'undefined') {scriptHandler = GM_info.scriptHandler;} else if (typeof GM != 'undefined' && typeof GM.info != 'undefined') {scriptHandler = GM.info.scriptHandler;} else {scriptHandler = '';}
     for (let i=0;i<menuAll.length;i++){ // 如果读取到的值为 null 就写入默认值
