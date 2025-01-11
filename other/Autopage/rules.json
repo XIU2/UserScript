@@ -5641,7 +5641,7 @@
 		}
 	},
 	"MissAV": {
-		"host": ["missav.com","/^missav\\d+\\.com$/","/^missav.[a-z]+/"],
+		"host": ["/^missav.[a-z]+/","/^missav\\d+\\.com$/"],
 		"url": "return ((fun.indexOF(/^\\/dm\\d+\\//) || fun.indexOF('/search/') || fun.indexOF(/\\/\\(actresses|actors|genres|series|makers|directors\\)\\//)) && fun.isPager('n'))",
 		"blank": 3,
 		"pager": {
