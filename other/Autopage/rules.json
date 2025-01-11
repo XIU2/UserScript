@@ -3472,6 +3472,32 @@
 			"scrollD": 3000
 		}
 	},
+	"MYCOMIC": {
+        "host": "mycomic.com",
+        "url": "/^\\/chapters\\/\\d+/",
+        "style": ".-mx-4.sm\\:mx-0,.-mx-4.sm\\:mx-0+div {display: none !important;} header {opacity: 0.4;}",
+        "pager": {
+            "nextL": "div[data-flux-button-group]>a:last-child",
+            "pageE": "img.page",
+            "replaceE": "div[data-flux-button-group]"
+        },
+        "function": {
+            "bF": "return fun.src_bF(pageE)"
+        }
+    },
+    "MYCOMIC - 资料页": {
+        "host": "mycomic.com",
+        "url": "/^\\/comics([^\\/]|$)/",
+        "blank": 3,
+        "pager": {
+            "nextL": "span[aria-current]+a",
+            "pageE": ".group.relative",
+            "replaceE": "nav[role=navigation]"
+        },
+        "function": {
+            "bF": "return fun.src_bF(pageE)"
+        }
+    },
 	"起点中文": {
 		"host": "www.qidian.com",
 		"url": "/^\\/(all|rank|finish|free)/",
