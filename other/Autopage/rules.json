@@ -3473,31 +3473,31 @@
 		}
 	},
 	"MYCOMIC": {
-        "host": "mycomic.com",
-        "url": "/^\\/chapters\\/\\d+/",
-        "style": ".-mx-4.sm\\:mx-0,.-mx-4.sm\\:mx-0+div {display: none !important;} header {opacity: 0.4;}",
-        "pager": {
-            "nextL": "div[data-flux-button-group]>a:last-child",
-            "pageE": "img.page",
-            "replaceE": "div[data-flux-button-group]"
-        },
-        "function": {
-            "bF": "return fun.src_bF(pageE)"
-        }
-    },
-    "MYCOMIC - 资料页": {
-        "host": "mycomic.com",
-        "url": "/^\\/comics([^\\/]|$)/",
-        "blank": 3,
-        "pager": {
-            "nextL": "span[aria-current]+a",
-            "pageE": ".group.relative",
-            "replaceE": "nav[role=navigation]"
-        },
-        "function": {
-            "bF": "return fun.src_bF(pageE)"
-        }
-    },
+		"host": "mycomic.com",
+		"url": "/^\\/chapters\\/\\d+/",
+		"style": ".-mx-4.sm\\:mx-0,.-mx-4.sm\\:mx-0+div {display: none !important;} header {opacity: 0.4;}",
+		"pager": {
+			"nextL": "div[data-flux-button-group]>a:last-child",
+			"pageE": "img.page",
+			"replaceE": "div[data-flux-button-group]"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
+	"MYCOMIC - 资料页": {
+		"host": "mycomic.com",
+		"url": "/^\\/comics([^\\/]|$)/",
+		"blank": 3,
+		"pager": {
+			"nextL": "span[aria-current]+a",
+			"pageE": ".group.relative",
+			"replaceE": "nav[role=navigation]"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"起点中文": {
 		"host": "www.qidian.com",
 		"url": "/^\\/(all|rank|finish|free)/",
@@ -3705,6 +3705,17 @@
 		},
 		"function": {
 			"bF": "return fun.xs_bF(pageE,[/(^微信小程序.+|本章未完，请点击.+页$)/,''])"
+		}
+	},
+	"TXT小说网 exotxt.net": {
+		"host": "www.exotxt.net",
+		"url": "/^\\/\\d+\\/\\d+\\/\\d+(_\\d+)?\\.html",
+		"style": ".info_dv1>p:last-of-type,#tag_news",
+		"pager": {
+			"type": 6,
+			"nextL": "//div[@class='read_btn']/a[text()='下一章'][not(contains(@href,'index.html'))]",
+			"pageE": ".info_dv1>p:not(:last-of-type)",
+			"replaceE": ".read_btn"
 		}
 	},
 	"皇帝之家": {
@@ -6487,17 +6498,17 @@
 		}
 	},
 	"鸟鸟韩漫": {
-        "host": ["/^nnhanman\\.[a-z]+/","/^nnhanman\\d\\.com/","/^nnhm\\d\\.[a-z]+/"],
-        "url": "/^\\/comic\\/.+\\/chapter-\\d+\\.html/",
-        "pager": {
-            "nextL": "#k_Pic_nextArr",
-            "pageE": "#m_r_imgbox_0 img",
-            "replaceE": "#action"
-        },
-        "function": {
-            "bF": "return fun.src_bF(pageE)"
-        }
-    },
+		"host": ["/^nnhanman\\.[a-z]+/","/^nnhanman\\d\\.com/","/^nnhm\\d\\.[a-z]+/"],
+		"url": "/^\\/comic\\/.+\\/chapter-\\d+\\.html/",
+		"pager": {
+			"nextL": "#k_Pic_nextArr",
+			"pageE": "#m_r_imgbox_0 img",
+			"replaceE": "#action"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"灵梦御所": {
 		"host": "blog.reimu.net",
 		"url": "return (!fun.indexOF('/post/') && !fun.getCSS('#comments,.comments-area,#disqus_thread'))",
