@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.47
+// @version      6.6.48
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动，無需手働點擊下一頁）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -131,7 +131,7 @@
         ['menu_page_number', '显示当前页码及点击暂停翻页', '显示当前页码及点击暂停翻页', true],
         ['menu_pause_page', '左键双击网页空白处暂停翻页', '左键双击网页空白处暂停翻页', false],
         ['menu_history', '添加历史记录+修改地址/标题', '添加历史记录+修改地址/标题', true],
-        ['menu_rules', '更新外置翻页规则 (每天自动)', '更新外置翻页规则 (每天自动)', {}],
+        ['menu_rules', '更新外置翻页规则 (定期自动)', '更新外置翻页规则 (定期自动)', {}],
         ['menu_customRules', '自定义翻页规则', '自定义翻页规则', {}]
     ], menuId = [], webType = 0, curSite = {SiteTypeID: 0}, DBSite, DBSite2, DBSiteNow, pausePage = true, pageNum = {now: 1, _now: 1}, urlC = false, nowLocation = '', lp = location.pathname, scriptHandler;
     urlArr.push(...urlArr2); // 合并数组
@@ -167,7 +167,7 @@
                     webType = doesItSupport(); // 判断网站类型（即是否支持），顺便直接赋值
                     if (webType === 0) {
                         menuId[0] = GM_registerMenuCommand('❌ 当前网页暂不支持 [点击申请]', function(){GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
-                        menuId[1] = GM_registerMenuCommand('🔄 更新外置翻页规则 (每天自动)', function(){getRulesUrl(true)});
+                        menuId[1] = GM_registerMenuCommand('🔄 更新外置翻页规则 (定期自动)', function(){getRulesUrl(true)});
                         menuId[2] = GM_registerMenuCommand('#️⃣ 自定义翻页规则', function(){customRules()});
                         //console.info('[自动无缝翻页] - 暂不支持当前网页 [ ' + location.href + ' ]，申请支持: https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/419215/feedback');
                         return
@@ -402,7 +402,7 @@
             console.info(`[自动无缝翻页] - 部分影视网站 2`); return 301;
 
         } else if (getCSS('.ArticleImageBox, .PictureList') && getCSS('.article_page') && getXpath('//div[contains(@class,"article_page")]//a[text()="下一页"]')) {
-            console.info(`[自动无缝翻页] - 部分美女图站 - 手机版`); return 302;
+            console.info(`[自动无缝翻页] - 部分美图网站 - 手机版`); return 302;
         } else if (getCSS('meta[content^=SearXNG i], link[href*=SearXNG i], script[src*=SearXNG i]')) {
             console.info(`[自动无缝翻页] - <SearXNG> 元搜索引擎`); return 303;
 
@@ -413,7 +413,7 @@
         } else if (getCSS('#txt, .txt') && getCSS('#pb_next, .url_next') && getCSS('.chapter-control, .chapter-page-btn')) {
             console.info(`[自动无缝翻页] - <笔趣阁 2> 模板的小说网站`); return 202;
         } else if ((getCSS('meta[name="description" i][content*="小说"], meta[name="description" i][content*="章节"], meta[name="description" i][content*="阅读"], meta[name="keywords" i][content*="笔趣"]') || location.hostname.indexOf('biqu')!=-1 || document.title.match(/笔趣阁|小说|章/)!=null) && getXpath('//a[contains(text(), "下一章") or contains(text(), "下一页") or contains(text(), "下一节")]')) {
-            let biquge3_pageE= ['[id="chapter_content" i]','[class~="chapter_content" i]','[id="chaptercontent" i]','[class~="chaptercontent" i]','[class~="read_chapterdetail" i]','[id="booktext" i]','[class~="booktext" i]','[id="txtcontent" i]','[class~="txtcontent" i]','[id="textcontent" i]','[class~="textcontent" i]','[id="read-content" i]','[class~="read-content" i]','[id="txtnav" i]','[class~="txtnav" i]','[id="txt" i][class~="txt" i]','[id="contents" i]','[class~="contents" i]','[id="content" i]','[class~="content" i]']
+            let biquge3_pageE= ['[id="chapter_content" i]','[class~="chapter_content" i]','[id="chaptercontent" i]','[class~="chaptercontent" i]','[class~="read_chapterdetail" i]','[id="booktext" i]','[class~="booktext" i]','[id="txtcontent" i]','[class~="txtcontent" i]','[id="textcontent" i]','[class~="textcontent" i]','[id="read-content" i]','[class~="read-content" i]','[id="txtnav" i]','[class~="txtnav" i]','[id="txt" i][class~="txt" i]','[id="contents" i]','[class~="contents" i]','[id="content" i]','[class~="content" i]','[id="contentbox" i]']
             for(let biquge3_pageE_ of biquge3_pageE) {if (getAllCSS(biquge3_pageE_).length === 1) {DBSite.biquge3.pager.pageE = biquge3_pageE_;DBSite.biquge3.pager.insertP = [biquge3_pageE_,6];DBSite.biquge3.style = biquge3_pageE_+'>.readinline, ' + DBSite.biquge3.style;break;}}
             if (DBSite.biquge3.pager.pageE != undefined) {console.info(`[自动无缝翻页] - <笔趣阁 3> 模板的小说网站`); return 203;}
         }
@@ -463,7 +463,7 @@
                     curSite = DBSite.yingshi; break;
                 case 301: // < 部分影视网站 2 >
                     curSite = DBSite.yingshi2; break;
-                case 302: // < 部分美女图站 - 手机版 >
+                case 302: // < 部分美图网站 - 手机版 >
                     curSite = DBSite.meinvtu_m; break;
                 case 303: // < SearXNG 元搜索引擎 >
                     document.cookie='infinite_scroll=1; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';
@@ -724,7 +724,7 @@ function: {
                     replaceE: '.article_page',
                     scrollD: 500
                 }
-            }, //          部分美女图站 - 手机版
+            }, //          部分美图网站 - 手机版
             discuz_forum: {
                 ignore: true,
                 pager: {
