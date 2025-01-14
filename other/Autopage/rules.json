@@ -5772,6 +5772,16 @@
 			"bF": "return fun.src_bF(pageE,[0,'img[img]','img'])"
 		}
 	},
+	"tokyomotion": {
+		"host": "www.tokyomotion.net",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".prevnext",
+			"pageE": "(//div[@class='row']/div[@class='col-sm-12']/div[@class='row'])[last()]/div",
+			"replaceE": ".pagination"
+		}
+	},
 	"porn78.info": {
 		"host": ["porn78.info","nyaa.porn78.info"],
 		"url": "return fun.isPager('n')",
