@@ -3818,7 +3818,7 @@
 		"history": true,
 		"pager": {
 			"nextL": "js; if (ReadParams.url_next.slice(ReadParams.url_next.length-5) === '.html') return (location.origin + ReadParams.url_next)",
-			"pageE": "id('acontentz')/*[name()='p' or name()='img' or name()='br'] | //body/script[contains(text(),'var ReadParams')] | //body/script[contains(@src,'/readtools.js')] | //head/style",
+			"pageE": "id('acontent')/*[name()='p' or name()='img' or name()='br'] | //body/script[contains(text(),'var ReadParams')] | //body/script[contains(@src,'/readtools.js')] | //head/style",
 			"scriptT": 2
 		},
 		"function": {
