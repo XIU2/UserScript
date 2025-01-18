@@ -6224,12 +6224,12 @@
 		}
 	},
 	"ACG漫画网": {
-		"host": ["acgmhs.com","www.acgmhs.com"],
+		"host": "/^(www\\.)?acgmh[a-z]\\.com$/",
 		"url": "return fun.isPager()",
 		"style": ".pre_picture,.next_picture",
 		"pager": {
 			"nextL": ".page>span+a:not(.a1)",
-			"pageE": ".manga-picture>picture,#list>li",
+			"pageE": ".manga-picture>picture,.manga-picture>img,#list>li",
 			"replaceE": ".page"
 		}
 	},
