@@ -6855,7 +6855,7 @@
 		"pager": {
 			"type": 3,
 			"nextL": ".justify-center.items-center+div>a.bg-pink-500+a, .flex.space-x-2>a.hover\\:bg-pink-500",
-			"pageE": "//div[@class='md:px-16 xl:px-20 max-w-3xl mx-auto justify-center items-center flex flex-col min-h-screen']/div | (//div[@class='my-6' or @id='S:0']/div[@class='grid grid-cols-1 md:grid-cols-3 gap-y-6 gap-x-4 xl:grid-cols-4'])[last()]/div"
+			"pageE": "//div[@class='md:px-16 xl:px-20 max-w-3xl mx-auto justify-center items-center flex flex-col min-h-screen']/div | (//div[@class='mx-auto max-w-7xl px-4' or @id='S:0']//div[@class='grid grid-cols-1 md:grid-cols-3 gap-y-6 gap-x-4 xl:grid-cols-4'])[last()]/div"
 		}
 	},
 	"遛无写真": {
