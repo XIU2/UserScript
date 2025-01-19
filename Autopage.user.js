@@ -506,7 +506,7 @@ pager: {
            isHidden:    只有下一页按钮可见时（没有被隐藏），才会点击
 
        3 = 依靠 [基准元素] 与 [浏览器可视区域底部] 之间的距离缩小来触发翻页（适用于：主体元素下方内容太多 且 高度不固定时）
-           scrollE:     作为基准线的元素（一般为底部页码元素），和 replaceE 一样的话可以省略
+           scrollE:     作为基准线的元素（一般为底部页码元素），省略后默认等同 replaceE（如果这个也未指定则改用 nextL）
            scrollD:     当 [基准元素] 与 [可视区域底部] 之间的距离 等于或小于该值时，将触发翻页，省略后默认 2000
 
        4 = 动态加载类网站（适用于：简单的动态加载内容网站）
@@ -1608,7 +1608,13 @@ function: {
                 scrollD = curSite.pager.scrollD;
             // <<<<< 翻页类型 3（依靠 [基准元素] 与 [浏览器可视区域底部] 之间的距离缩小来触发翻页）>>>>>
             if (curSite.pager.type === 3) {
-                if (!curSite.pager.scrollE) curSite.pager.scrollE = curSite.pager.replaceE; // 默认基准元素是页码
+                if (!curSite.pager.scrollE) { // 当 scrollE 未指定时
+                    if(curSite.pager.replaceE) { // 如果指定了 replaceE，则默认 scrollE 为 replaceE
+                        curSite.pager.scrollE = curSite.pager.replaceE;
+                    } else { // 如果 replaceE 也未指定，则默认 scrollE 为 nextL
+                        curSite.pager.scrollE = curSite.pager.nextL;
+                    }
+                }
                 let scrollE = getOne(curSite.pager.scrollE);
                 //console.log(scrollE.offsetTop, scrollE.offsetTop - (scrollTop + scrollHeight), scrollD, scrollTop + scrollHeight, curSite.SiteTypeID)
                 if (scrollE.offsetTop - (scrollTop + scrollHeight) <= scrollD) {intervalPause(); checkURL(getPageE);}
