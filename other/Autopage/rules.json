@@ -6720,6 +6720,16 @@
 			"replaceE": ".page"
 		}
 	},
+	"xiurentu.pics": {
+		"host": "xiurentu.pics",
+		"url": "return fun.isPager()",
+		"pager": {
+			"type": 3,
+			"nextL": "a[rel=next]",
+			"pageE": "img.block.my-1,#main>.grid.gap-3.grid-cols-2.md\\:grid-cols-3.lg\\:grid-cols-4>div",
+			"replaceE": "nav[role=navigation]"
+		}
+	},
 	"美人图": {
 		"host": "/^meirentu\\..+/",
 		"url": "return fun.isPager()",
