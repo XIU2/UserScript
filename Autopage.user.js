@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.50
+// @version      6.6.51
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动，無需手働點擊下一頁）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -204,7 +204,12 @@
         for (let now in DBSite) { // 遍历 对象
             if (DBSite[now].ignore) continue; // 如果是特殊的内置规则（如通用规则）则跳过直接继续下一个循环
 
-            DBSiteNow = structuredClone(DBSite[now]) // 供其他函数在 域名/URL 判断阶段使用（深度克隆是为了在后续 url 规则中通过操作 rule 对象变量来修改当前网页规则时，不会间接影响到 DBSite[now] 本身）
+            // 供其他函数在 域名/URL 判断阶段使用
+            if (typeof DBSite[now].url == 'function'){
+                DBSiteNow = DBSite[now] // 如果是脚本内置规则就没必要深度克隆了（用不上 rule 对象变量，毕竟是可以直接操作自身的）
+            } else {
+                DBSiteNow = structuredClone(DBSite[now]) //深度克隆是为了在后续 url 规则中通过操作 rule 对象变量来修改当前网页规则时，不会间接影响到 DBSite[now] 本身
+            }
 
             // 如果是 数组
             if (Array.isArray(DBSite[now].host)) {
