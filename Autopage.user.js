@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:en      AutoPager
-// @version      6.6.49
+// @version      6.6.50
 // @author       X.I.U
 // @description  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动，無需手働點擊下一頁）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
@@ -166,7 +166,7 @@
                 } else { // 不在禁用列表中
                     webType = doesItSupport(); // 判断网站类型（即是否支持），顺便直接赋值
                     if (webType === 0) {
-                        menuId[0] = GM_registerMenuCommand('❌ 当前网页暂不支持 [点击申请]', function(){GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
+                        menuId[0] = GM_registerMenuCommand('❌ 当前网页暂不支持 [点击申请] (或无需翻页)', function(){GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});GM_openInTab('https://greasyfork.org/zh-CN/scripts/419215/feedback', {active: true,insert: true,setParent: true});});
                         menuId[1] = GM_registerMenuCommand('🔄 更新外置翻页规则 (定期自动)', function(){getRulesUrl(true)});
                         menuId[2] = GM_registerMenuCommand('#️⃣ 自定义翻页规则', function(){customRules()});
                         //console.info('[自动无缝翻页] - 暂不支持当前网页 [ ' + location.href + ' ]，申请支持: https://github.com/XIU2/UserScript / https://greasyfork.org/zh-CN/scripts/419215/feedback');
@@ -204,7 +204,7 @@
         for (let now in DBSite) { // 遍历 对象
             if (DBSite[now].ignore) continue; // 如果是特殊的内置规则（如通用规则）则跳过直接继续下一个循环
 
-            DBSiteNow = DBSite[now] // 供其他函数在 域名/URL 判断阶段使用
+            DBSiteNow = structuredClone(DBSite[now]) // 供其他函数在 域名/URL 判断阶段使用（深度克隆是为了在后续 url 规则中通过操作 rule 对象变量来修改当前网页规则时，不会间接影响到 DBSite[now] 本身）
 
             // 如果是 数组
             if (Array.isArray(DBSite[now].host)) {
@@ -223,8 +223,8 @@
                                 try {
                                     if (DBSite[now].url.slice(0,1) === '/') { // 如果是正则，则对 URL 路径进行匹配
                                         if (new RegExp(DBSite[now].url.slice(1,DBSite[now].url.length-1), 'i').test(location.pathname + location.search) === true) {curSite = DBSite[now];} else {if (urlC === true) {support = true;}; break;}
-                                    } else { // 如果是函数，那就执行代码
-                                        if (new Function('fun', DBSite[now].url)(window.autoPage)) {curSite = DBSite[now];} else {if (urlC === true) {support = true;}; break;}
+                                    } else { // 如果是函数，那就执行代码（url 规则中可通过操作 rule 这个对象变量来修改当前网页实际应用的规则）
+                                        if (new Function('fun','rule', DBSite[now].url)(window.autoPage,DBSiteNow)) {curSite = DBSiteNow;} else {if (urlC === true) {support = true;}; break;}
                                     }
                                 } catch (e) {
                                     console.error('[自动无缝翻页] - 当前网页规则 "url" 匹配出错，请检查：\n', DBSite[now].url + '\n\n', e);
@@ -252,9 +252,8 @@
                             try {
                                 if (DBSite[now].url.slice(0,1) === '/') { // 如果是正则，则对 URL 路径进行匹配
                                     if (new RegExp(DBSite[now].url.slice(1,DBSite[now].url.length-1), 'i').test(location.pathname + location.search) === true) {curSite = DBSite[now];} else {if (urlC === true) {support = true;}; continue;}
-                                } else { // 如果是函数，那就执行代码
-
-                                    if (new Function('fun', DBSite[now].url)(window.autoPage)) {curSite = DBSite[now];} else {if (urlC === true) {support = true;}; continue;}
+                                } else { // 如果是函数，那就执行代码（url 规则中可通过操作 rule 这个对象变量来修改当前网页实际应用的规则）
+                                    if (new Function('fun','rule', DBSite[now].url)(window.autoPage,DBSiteNow)) {curSite = DBSiteNow;} else {if (urlC === true) {support = true;}; continue;}
 
                                 }
                             } catch (e) {
@@ -1113,7 +1112,7 @@ function: {
                 };
             }
             DBSite = Object.assign({}, _customRules, _rules, DBSite);
-            DBSite2 = Object.assign({}, structuredClone(_customRules), structuredClone(_rules)); // 为了避免对象的后续变化影响 DBSite2 内容（如 SiteTypeID 等），需要对 a b 变量进行深拷贝，使其完全独立
+            DBSite2 = Object.assign({}, structuredClone(_customRules), structuredClone(_rules)); // 为了避免对象的后续变化影响 DBSite2 内容（如 SiteTypeID 等），需要对JSON对象变量进行深拷贝，使其完全独立
         }
 
         // 生成 SiteTypeID
