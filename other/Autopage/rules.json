@@ -5703,7 +5703,7 @@
 	},
 	"MissAV": {
 		"host": ["/^missav.[a-z]+/","/^missav\\d+\\.com$/"],
-		"url": "return ((fun.indexOF(/^\\/dm\\d+\\//) || fun.indexOF('/search/') || fun.indexOF(/\\/\\(actresses|actors|genres|series|makers|directors\\)\\//)) && fun.isPager('n'))",
+		"url": "if((fun.indexOF(/^\\/dm\\d+\\//) || fun.indexOF('/search/') || fun.indexOF(/\\/\\(actresses|actors|genres|series|makers|directors\\)\\//)) && fun.isPager('n')){if(fun.isMobile()){rule.blank=0;};return true;}",
 		"blank": 3,
 		"pager": {
 			"nextL": "a[rel=next]",
