@@ -5200,7 +5200,7 @@
 		"url": "return fun.isPager()",
 		"blank": 3,
 		"pager": {
-			"nextL": "//button[@name='link_page']/b/../../following-sibling::a[1]",
+			"nextL": "(//tr[@style='vertical-align:top'])[1]//button[@class='bt_sml_main'][starts-with(text(), '下')]/..",
 			"pageE": "tr.listbg",
 			"replaceE": "tr[style='vertical-align:top']:first-child"
 		}
