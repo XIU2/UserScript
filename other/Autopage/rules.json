@@ -1927,6 +1927,16 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"modland": {
+		"host": "www.modland.net",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "li.active.page-item+li>a",
+			"pageE": ".mods>.post",
+			"replaceE": ".pagination"
+		}
+	},
 	"Modrinth": {
 		"host": "modrinth.com",
 		"url": "fun.isUrlC(); return (fun.lp() == '/mods')",
