@@ -1927,6 +1927,15 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"机游网": {
+		"host": "pcgamexiazai.com",
+		"url": "/^\\/games/",
+		"pager": {
+			"nextL": "li.active+li>a",
+			"pageE": ".game-box>li",
+			"replaceE": ".pagination"
+		}
+	},
 	"modland": {
 		"host": "www.modland.net",
 		"url": "return fun.isPager()",
