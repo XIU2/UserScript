@@ -7051,7 +7051,7 @@
 	"黑料网": {
 		"host": ["18hlw.com","www.hlwxx.com","/.*/"],
 		"url": "return (!fun.indexOF('/archives/') && fun.isTitle('黑料网') && fun.isPager())",
-		"style": ".video-item {height: auto !important;} #notice_container, .infomation{display: none !important;}",
+		"style": ".video-item {height: auto !important;} #notice_container, .infomation, .addbox{display: none !important;}",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next",
