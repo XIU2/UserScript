@@ -3751,6 +3751,16 @@
 			"replaceE": ".read_btn"
 		}
 	},
+	"得奇小说网": {
+		"host": "www.deqixs.com",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "//div[@class='prenext']/span/a[text()='下一页' or text()='下一章']|//div[@class='page']//a[text()='下一页']",
+			"pageE": ".con>p,.item",
+			"replaceE": ".prenext,.page"
+		}
+	},
 	"皇帝之家": {
 		"host": "www.huangdizhijia.com",
 		"url": "/chapter-\\d+\\.html/",
