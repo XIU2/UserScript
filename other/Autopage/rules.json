@@ -6442,7 +6442,7 @@
 	},
 	"kemono.su": {
 		"host": "kemono.su",
-		"url": "/^\\/posts/",
+		"url": "/^\\/(posts|patreon|artists)/",
 		"blank": 3,
 		"pager": {
 			"type": 6,
