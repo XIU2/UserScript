@@ -4546,6 +4546,15 @@
 			"scrollD": 1000
 		}
 	},
+	"再问科研": {
+		"host": "www.izaiwen.cn",
+		"url": "return fun.isPager()",
+		"pager": {
+			"nextL": ".page-item.active+li>a",
+			"pageE": ".item-box",
+			"replaceE": ".pagination"
+		}
+	},
 	"StackOverflow": {
 		"host": "stackoverflow.com",
 		"url": "return (fun.lp() == '/search' || (fun.indexOF(/^\\/questions/) && !fun.indexOF(/^\\/questions\\/\\d+/)) || fun.lp() == '/tags' || fun.lp() == '/users')",
