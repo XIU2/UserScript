@@ -3751,6 +3751,19 @@
 			"replaceE": ".read_btn"
 		}
 	},
+	"繁体小说 www.novels.com.tw": {
+		"host": "www.novels.com.tw",
+		"url": "/\\d\\.html\\?aid/",
+		"style": ".container>aside",
+		"pager": {
+			"type": 6,
+			"nextL": "#next_url",
+			"pageE": "#article.content>p",
+			"replaceE": ".read_nav",
+			"loadTime": 1000,
+			"scrollD": 1000
+		}
+	},
 	"得奇小说网": {
 		"host": "www.deqixs.com",
 		"url": "return fun.isPager()",
