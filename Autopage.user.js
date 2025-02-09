@@ -5,9 +5,9 @@
 // @name:ru      Автостраничник
 // @version      6.6.51
 // @author       X.I.U
-// @description  Append the next page content to the bottom seamlessly (like a waterfall, Unlimited scrolling, no need to manually click on the next page)~
+// @description  ⭐Append the next page content to the bottom seamlessly (like a waterfall, Unlimited scrolling, no need to manually click on the next page) ⭐, support various forums, social networking, games, comics, novels, academics, search engines (Google, Bing, Yahoo...) and other websites~
 // @description:zh-TW  ⭐無縫加載 下一頁內容 至網頁底部（類似瀑布流，无限滚动，無需手働點擊下一頁）⭐，支持各論壇、社交、遊戲、漫畫、小說、學術、搜索引擎(Google、Bing、Yahoo...) 等網站~
-// @description:en  Плавно добавляет содержимое следующей страницы к нижней части (как водопад, неограниченная прокрутка, не нужно вручную нажимать на следующую страницу)~
+// @description:en  ⭐Плавно добавляет содержимое следующей страницы к нижней части (как водопад, неограниченная прокрутка, не нужно вручную нажимать на следующую страницу) ⭐, поддерживает различные форумы, соцсети, игры, комиксы, романы, научные статьи, поисковики (Google, Bing, Yahoo...) и другие сайты~
 // @match        *://*/*
 // @connect      userscript.xiu2.xyz
 // @connect      userscript.xiu2.us.kg
