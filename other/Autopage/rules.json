@@ -6661,10 +6661,13 @@
 	},
 	"爱妹子": {
 		"host": "xx.knit.bid",
+		"url": "return fun.getCSS('li.active+li>a')",
+		"blank": 4,
 		"pager": {
-			"type": 2,
-			"nextL": ".ias_trigger>a",
-			"scrollD": 3000
+			"type": 3,
+			"nextL": "js; return fun.getNextEPN('li.active+li>a',/page\\/\\d+\\//,'page/','/')",
+			"pageE": ".image-container>article, .image-container>.item-image",
+			"replaceE": ".pagination"
 		}
 	},
 	"MrCong": {
