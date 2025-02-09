@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name         Github 增强 - 高速下载
+// @name         Github Enhancement - High Speed Download
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
-// @name:en      Github Enhancement - High Speed Download
+// @name:ru      Улучшение GitHub – быстрое скачивание
 // @version      2.6.13
 // @author       X.I.U
-// @description  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)、添加 git clone 命令
+// @description  High-speed download of Git Clone/SSH, Release, Raw, Code(ZIP) and other files (Based on public welfare), project list file quick download (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)
 // @description:zh-TW  高速下載 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、項目列表單文件快捷下載 (☁)
-// @description:en  High-speed download of Git Clone/SSH, Release, Raw, Code(ZIP) and other files (Based on public welfare), project list file quick download (☁)
+// @description:ru  Высокоскоростная загрузка Git Clone/SSH, Release, Raw, кода (ZIP) и других файлов (на основе общественного благосостояния), быстрая загрузка файлов из списка проектов (☁)
 // @match        *://github.com/*
 // @match        *://hub.whtrys.space/*
 // @match        *://dgithub.xyz/*
