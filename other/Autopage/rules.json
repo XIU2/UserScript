@@ -6681,6 +6681,9 @@
 			"nextL": "js; return fun.getNextEPN('li.active+li>a',/page\\/\\d+\\//,'page/','/')",
 			"pageE": ".image-container>article, .image-container>.item-image",
 			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
 		}
 	},
 	"MrCong": {
