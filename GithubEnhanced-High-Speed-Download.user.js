@@ -8,7 +8,7 @@
 // @description  High-speed download of Git Clone/SSH, Release, Raw, Code(ZIP) and other files (Based on public welfare), project list file quick download (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)
 // @description:zh-TW  高速下載 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、項目列表單文件快捷下載 (☁)
-// @description:ru  Высокоскоростная загрузка Git Clone/SSH, Release, Raw, кода (ZIP) и других файлов (на основе общественного благосостояния), быстрая загрузка файлов из списка проектов (☁)
+// @description:ru  Высокоскоростная загрузка Git Clone/SSH, выпусков, изначальных файлов, кода (ZIP) и других файлов (на основе общественного благосостояния), быстрая загрузка файлов из списка проектов (☁)
 // @match        *://github.com/*
 // @match        *://hub.whtrys.space/*
 // @match        *://dgithub.xyz/*
