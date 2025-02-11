@@ -1,8 +1,12 @@
 // ==UserScript==
-// @name         Ping.Sx 增强
+// @name         Ping.Sx enhancement
+// @name:zh-CN   Ping.Sx 增强
+// @name:zh-TW   Ping.Sx 增強
 // @version      1.0.3
 // @author       X.I.U
-// @description  一键复制所有 IP、清理 IP 链接（点击复制而不是跳转）、快捷回到顶部（右键两侧空白处）
+// @description  Copy all IPs with one click, clean IP links (click Copy instead of Jump), and quickly go back to the top (blank space on both sides of the right click).
+// @description:zh-CN  一键复制所有 IP、清理 IP 链接（点击复制而不是跳转）、快捷回到顶部（右键两侧空白处）
+// @description:zh-TW  一鍵複製所有 IP、清理 IP 鏈接（點擊複製而不是跳轉）、快捷回到頂部（右鍵兩側空白處）
 // @match        https://ping.sx/ping*
 // @match        https://ping.sx/dig*
 // @match        https://ping.sx/check-port*
