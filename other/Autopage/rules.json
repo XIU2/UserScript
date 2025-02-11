@@ -5076,7 +5076,7 @@
 		}
 	},
 	"GreasyFork": {
-		"host": ["greasyfork.org","sleazyfork.org"],
+		"host": ["greasyfork.org","cn-greasyfork.org","sleazyfork.org"],
 		"url": "return (fun.indexOF(/\\/(scripts|feedback)$/) || fun.indexOF(/\\/scripts\\/(by-site|libraries|code-search)/) || (fun.indexOF('/discussions') && !fun.indexOF(/\\/\\d+/)))",
 		"blank": 3,
 		"pager": {
