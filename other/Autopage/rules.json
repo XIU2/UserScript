@@ -3900,6 +3900,17 @@
 			"replaceE": ".noveltitle[height]"
 		}
 	},
+	"樱花文学 novnov": {
+		"host": "novnov.net",
+		"url": "/^\\/(book\\/chapter\\/|library|search)/",
+		"style": ".nextbox,.linea",
+		"blank": 3,
+		"pager": {
+			"nextL": ".nextp>a,li.current+li>a",
+			"pageE": ".novelcontent>p,.vlist>.nlist>li,.searchlist>ul>li",
+			"replaceE": ".footerbox,.changepage"
+		}
+	},
 	"AO3 - 列表页/搜索页": {
 		"host": ["archiveofourown.org","i.ao3is.top"],
 		"url": "return (fun.indexOF(/\\/works$/) || fun.lp() == '/works/search')",
