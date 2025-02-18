@@ -6346,8 +6346,8 @@
 		}
 	},
 	"nhentai": {
-		"host": ["nhentai.net","nhentai.to","nhentai.xxx"],
-		"url": "if (fun.indexOF(/^\\/g\\/\\d+\\/\\d+\\//)){const imageA = document.querySelector('#image-container>a'); imageA.outerHTML=imageA.innerHTML;return true;} else if (fun.getCSS('a.next') && fun.getCSS('.gallery')){return true;}",
+		"host": ["nhentai.net","nhentai.to","web.zorocdn.xyz"],
+		"url": "if (fun.indexOF(/^\\/g\\/\\d+\\/\\d+\\//)){const imageA = document.querySelector('#image-container>a'); imageA.outerHTML=imageA.innerHTML;return true;} else {return (fun.getCSS('a.next') && fun.getCSS('.gallery'));}",
 		"style": "section#image-container img {max-width: 100% !important;height: auto !important;display: block !important;margin: 0 auto !important;}",
 		"blank": 3,
 		"pager": {
