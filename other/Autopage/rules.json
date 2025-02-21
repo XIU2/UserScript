@@ -5540,6 +5540,26 @@
 			"bF": "return fun.src_bF(pageE,[0,'img[data-url]','data-url'])"
 		}
 	},
+	"美食天下": {
+        "host": "www.meishichina.com",
+        "url": "return fun.isPager()",
+        "pager": {
+            "nextL": ".now_page+a",
+            "pageE": ".main .plist>li",
+            "replaceE": ".ui-page-inner"
+        },
+        "function": {
+            "bF": "return fun.src_bF(pageE)"
+        }
+    },
+    "美食天下2": {
+        "host": "home.meishichina.com",
+        "url": "return fun.isPager()",
+        "pager": {
+            "type": 2,
+            "nextL": "#recipeindex_living_loading>a"
+        }
+    },
 	"Xvideos": {
 		"host": ["www.xnxx.com","www.xvideos.com"],
 		"url": "return fun.isPager('p,r')",
