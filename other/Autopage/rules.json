@@ -6972,7 +6972,7 @@
 		}
 	},
 	"24FA": {
-		"host": ["/^(www\\.)?24fa\\.[a-z]+$/","/^(www\\.)?24fa.?\\.com$/","/^(www\\.)?\\d{3}w\\.cc$/","/^(www\\.)?\\d{3}\\.(mom|one)$"],
+		"host": ["/^(www\\.)?24fa\\.[a-z]+$/","/^(www\\.)?24fa.?\\.com$/","/^(www\\.)?24[a-z]{2}\\.cc$/","/^(www\\.)?\\d{3}w\\.cc$/","/^(www\\.)?\\d{3}\\.(mom|one)$"],
 		"url": "return (fun.isTitle('24FA') && fun.isPager())",
 		"style": ".moreR {display: none;} #content img {width: auto; max-width: 99%; height: auto; display: block; margin: 0 auto;}",
 		"pager": {
