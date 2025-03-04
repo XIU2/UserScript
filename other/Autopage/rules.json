@@ -2219,6 +2219,15 @@
 			"replaceE": ".pagination_wrap"
 		}
 	},
+	"mini4k.io": {
+		"host": "mini4k.io",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.pager__item--next",
+			"pageE": "li.column"
+		}
+	},
 	"厂长资源": {
 		"host": ["czspp.com","www.czspp.com"],
 		"url": "return fun.isPager()",
