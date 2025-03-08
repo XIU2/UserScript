@@ -5814,6 +5814,16 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"av6k.org": {
+		"host": "tv.av6k.org",
+		"url": "if(fun.lp() !== '/')return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".thisclass+li>a",
+			"pageE": ".listA",
+			"replaceE": ".pages_c"
+		}
+	},
 	"JavDB": {
 		"host": "/^javdb/",
 		"url": "return (fun.isTitle('JavDB') && !fun.indexOF('/v/') && fun.isPager('r'))",
