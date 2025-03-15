@@ -4827,14 +4827,24 @@
 			"replaceE": ".paginate-container"
 		}
 	},
-	"Github - Issues/Pull/Discussions/Releases/Actions/OrgRepositories": {
+	"Github - Pull/Discussions/Releases/Actions/OrgRepositories": {
 		"host": "github.com",
-		"url": "return (fun.indexOF(/\\/(issues|pulls|discussions|releases)$/) || fun.indexOF('/discussions/categories') || fun.indexOF(/\\/actions($|\\/workflows)/) || fun.indexOF(/^\\/orgs\\/.+\\/repositories/))",
+		"url": "return (fun.indexOF(/\\/(pulls|discussions|releases)$/) || fun.indexOF('/discussions/categories') || fun.indexOF(/\\/actions($|\\/workflows)/) || fun.indexOF(/^\\/orgs\\/.+\\/repositories/))",
 		"blank": 4,
 		"pager": {
 			"nextL": "a.next_page",
 			"pageE": "div[id^='issue_'],ul[aria-labelledby='discussions-list']>li,#release_page_title+div[data-pjax]>section,div[id^='check_suite_'],#org-repositories li.Box-row",
 			"replaceE": ".pagination"
+		}
+	},
+	"Github - Issues": {
+		"host": "github.com",
+		"url": "return fun.indexOF(/\\/issues$/)",
+		"blank": 4,
+		"pager": {
+			"nextL": "js; return fun.getNextEP('a[aria-current]+a:not([aria-disabled])','page=',/page=\\d+/)",
+			"pageE": "div[class^='IssueRow-module_']",
+			"replaceE": "nav[class^=prc-Pagination-PaginationContainer-]"
 		}
 	},
 	"Github - Commits": {
@@ -4844,7 +4854,7 @@
 		"blank": 4,
 		"pager": {
 			"nextL": "a[data-testid=pagination-next-button]:not([aria-disabled])",
-			"pageE": ".Timeline-Item"
+			"pageE": "div[class^='prc-Timeline-Timeline-']>div>div"
 		}
 	},
 	"Github - Tags": {
@@ -4873,9 +4883,9 @@
 		"style": "header.AppHeader {position: fixed !important;width: 100% !important;top: 0px !important;z-index: 100 !important;} .application-main {margin-top: 64px !important;}",
 		"blank": 4,
 		"pager": {
-			"nextL": "a[rel=next][class^=Pagination]",
+			"nextL": "a[rel=next][class^=prc-Pagination]",
 			"pageE": "[data-testid=results-list]>div,.repo-list>li,.code-list-item,#commit_search_results>div,.issue-list-item,.discussion-list-item,#package_search_results>div,#marketplace_search_results>div:first-child>div,.topic-list-item,#wiki_search_results>div:first-child>div,#user_search_results>div:first-child>div",
-			"replaceE": "nav[class^='Pagination__PaginationContainer'],.pagination"
+			"replaceE": "nav[class^=prc-Pagination-PaginationContainer]"
 		}
 	},
 	"Github - Gist - Search/discover": {
