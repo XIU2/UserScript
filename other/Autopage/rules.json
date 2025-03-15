@@ -5,7 +5,7 @@
 		"style": ".new-pmd .c-img-border {position: initial !important;} .op-bk-polysemy-video__wrap.c-gap-bottom {display: none !important;}",
 		"history": true,
 		"pager": {
-			"nextL": "id('page')//a[contains(text(),'下一页')]",
+			"nextL": "#page a.n",
 			"pageE": "#content_left",
 			"replaceE": "#page"
 		}
