@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:ru      Улучшение GitHub – быстрое скачивание
-// @version      2.6.17
+// @version      2.6.18
 // @author       X.I.U
 // @description  High-speed download of Git Clone/SSH, Release, Raw, Code(ZIP) and other files (Based on public welfare), project list file quick download (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)
@@ -249,7 +249,7 @@
 
     // Download ZIP
     function addDownloadZIP(target) {
-        let html = target.querySelector('ul[class^=List__ListBox-sc-]>li:last-child');if (!html) return
+        let html = target.querySelector('ul[class^=prc-ActionList-ActionList-]>li:last-child');if (!html) return
         let href_script = document.querySelector('react-partial[partial-name=repos-overview]>script[data-target="react-partial.embeddedData"]'),
             href_slice = href_script.textContent.slice(href_script.textContent.indexOf('"zipballUrl":"')+14),
             href = href_slice.slice(0, href_slice.indexOf('"')),
