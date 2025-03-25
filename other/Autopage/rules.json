@@ -5547,7 +5547,7 @@
 		}
 	},
 	"中國評論新聞": {
-		"host": "hk.crntt.com",
+		"host": ["www.crntt.com","hk.crntt.com"],
 		"url": "return fun.isPager('n')",
 		"pager": {
 			"nextL": "//img[contains(@src,'next_page.gif')]/..|//a[text()='下一頁']",
