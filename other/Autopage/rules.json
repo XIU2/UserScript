@@ -5185,6 +5185,20 @@
 			"replaceE": ".s-pagination-container"
 		}
 	},
+	"Amazon - gp": {
+		"host": "/^www\\.amazon\\.([a-z]+|com?\\.[a-z]+)$/",
+		"url": "return fun.isPager()",
+		"style": "#navFooter,#rhf",
+		"blank": 3,
+		"pager": {
+			"type": 6,
+			"nextL": ".a-selected+li.a-normal>a",
+			"pageE": "#gridItemRoot",
+			"replaceE": ".a-pagination",
+			"loadTime": 7000,
+			"scrollD": 1000
+		}
+	},
 	"eBay": {
 		"host": "/^(www|[a-z]{2})\\.ebay\\.([a-z]+|com?\\.[a-z]+)$/",
 		"url": "/^\\/sch\\//",
