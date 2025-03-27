@@ -6495,15 +6495,14 @@
 		"url": "if(fun.indexOF(/\\/p\\/\\d\\/$/)){let t = setInterval(()=>{if(typeof chapter_preloaded_images !== 'undefined'){let _img=''; for (let i=0;i<=chapter_preloaded_images.length;i++){_img += `<img src=\"${chapter_preloaded_images[i]}\">`;}; document.querySelector('.reading-content').innerHTML = _img;clearInterval(t);}},500); return true;}",
 		"hiddenPN": true
 	},
-	"hitomi": {
-		"host": "hitomi.la",
-		"url": "if(fun.indexOF('/reader/')){setTimeout(()=>{let _img='<div id=\"comicImages\" tabindex=\"1\" class=\"fitVertical\">';for (let i=0;i<2;i++){_img += `<img src=\"${url_from_url_from_hash(galleryinfo['id'],our_galleryinfo[i],'webp',undefined,'a')}\">`;};document.getElementById('comicImages').outerHTML = _img+'</div>';window.imgIndex = 1;},500);return true;}",
-		"style": "body {height: auto !important; overflow: auto !important;} #comicImages.fitVertical img {margin: 0 auto;display: block;max-height: calc(1000px - 41px);} .navbar-static-top {display: none;}",
-		"pager": {
-			"nextL": "js;if(window.imgIndex +1 >= our_galleryinfo.length){return}; document.getElementById('comicImages').insertAdjacentHTML('beforeend',`<img src=\"${url_from_url_from_hash(galleryinfo['id'],our_galleryinfo[window.imgIndex],'webp',undefined,'a')}\">`); window.imgIndex+=1;",
-			"scrollD": 1000
-		}
-	},
+    "hitomi": {
+        "host": "hitomi.la",
+        "url": "if(fun.indexOF('/reader/')){window.imgIndex = 1;return true;}",
+        "style": "body {height: auto !important; overflow: auto !important;} #comicImages.fitVertical img {margin: 0 auto;display: block;max-height: calc(1000px - 41px);} .navbar-static-top {display: none;}",
+        "pager": {
+            "nextL": "js;if(window.imgIndex +1 >= our_galleryinfo.length){return}; document.getElementById('comicImages').insertAdjacentHTML('beforeend',`<img src=\"${url_from_url_from_hash(galleryinfo['id'],our_galleryinfo[window.imgIndex],(our_galleryinfo[0].hasavif?'avif':'webp'))}\">`);window.imgIndex+=1;fun.pageNumIncrement();"
+        }
+    },
 	"MANGA1000": {
 		"host": "manga1000.top",
 		"url": "/^\\/\\d+\\/\\d+\\//",
