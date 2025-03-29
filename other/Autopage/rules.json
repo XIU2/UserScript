@@ -6495,14 +6495,14 @@
 		"url": "if(fun.indexOF(/\\/p\\/\\d\\/$/)){let t = setInterval(()=>{if(typeof chapter_preloaded_images !== 'undefined'){let _img=''; for (let i=0;i<=chapter_preloaded_images.length;i++){_img += `<img src=\"${chapter_preloaded_images[i]}\">`;}; document.querySelector('.reading-content').innerHTML = _img;clearInterval(t);}},500); return true;}",
 		"hiddenPN": true
 	},
-    "hitomi": {
-        "host": "hitomi.la",
-        "url": "if(fun.indexOF('/reader/')){window.imgIndex = 1;return true;}",
-        "style": "body {height: auto !important; overflow: auto !important;} #comicImages.fitVertical img {margin: 0 auto;display: block;max-height: calc(1000px - 41px);} .navbar-static-top {display: none;}",
-        "pager": {
-            "nextL": "js;if(window.imgIndex +1 >= our_galleryinfo.length){return}; document.getElementById('comicImages').insertAdjacentHTML('beforeend',`<img src=\"${url_from_url_from_hash(galleryinfo['id'],our_galleryinfo[window.imgIndex],(our_galleryinfo[0].hasavif?'avif':'webp'))}\">`);window.imgIndex+=1;fun.pageNumIncrement();"
-        }
-    },
+	"hitomi": {
+		"host": "hitomi.la",
+		"url": "if(fun.indexOF('/reader/')){window.imgIndex = 1;return true;}",
+		"style": "body {height: auto !important; overflow: auto !important;} #comicImages.fitVertical img {margin: 0 auto;display: block;max-height: calc(1000px - 41px);} .navbar-static-top {display: none;}",
+		"pager": {
+			"nextL": "js;if(window.imgIndex +1 >= our_galleryinfo.length){return}; document.getElementById('comicImages').insertAdjacentHTML('beforeend',`<img src=\"${url_from_url_from_hash(galleryinfo['id'],our_galleryinfo[window.imgIndex],(our_galleryinfo[0].hasavif?'avif':'webp'))}\">`);window.imgIndex+=1;fun.pageNumIncrement();"
+		}
+	},
 	"MANGA1000": {
 		"host": "manga1000.top",
 		"url": "/^\\/\\d+\\/\\d+\\//",
@@ -6580,6 +6580,19 @@
 			"pageE": ".card-list__items",
 			"replaceE": ".paginator>menu",
 			"loadTime": 1000
+		}
+	},
+	"xchina.co": {
+		"host": ["xchina.co","/^xchina\\.[a-z]+$/","crxs.me","litu100.xyz","8se.me","shise.me"],
+		"url": "return fun.isPager()",
+		"style": ".quickGuide,.outer-banner,.item[class*=exoclick],.photos>div,.media,.static-container-4,.static-container-5,.recommendation_widget",
+		"pager": {
+			"type": 3,
+			"nextL": "a.next",
+			"pageE": ".videos>div.item:not([class*=exoclick]), .videos>.video, .list>div.item:not([class*=exoclick]), .photos>a, .fiction-body>.content>p, .fiction-body>.content>.chapters, .lists>a, .comic>div:not([class])",
+			"replaceE": ".pager,.prevNext",
+			"scrollE": ".pager+div+.pager,.prevNext",
+			"scrollD": 1000
 		}
 	},
 	"Hentai Foundry": {
