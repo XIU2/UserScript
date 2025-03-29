@@ -4840,9 +4840,10 @@
 	"Github - Issues": {
 		"host": "github.com",
 		"url": "return fun.indexOF(/\\/issues$/)",
+		"style": "[class*='IssueItem-module__ListItem_'] div[class*=LoadingSkeleton]",
 		"blank": 4,
 		"pager": {
-			"nextL": "js; return fun.getNextEP('a[aria-current]+a:not([aria-disabled])','page=',/page=\\d+/)",
+			"nextL": "js; return fun.getNextUP('page=',/page=\\d+/,fun.lp(),'2',fun.getXpath('//a[@rel=\\'next\\'][not(@aria-disabled)]/preceding-sibling::a[1][not(@aria-current)]').textContent)",
 			"pageE": "div[class^='IssueRow-module_']",
 			"replaceE": "nav[class^=prc-Pagination-PaginationContainer-]"
 		}
