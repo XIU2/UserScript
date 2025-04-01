@@ -6480,6 +6480,30 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"HentaiEra": {
+		"host": "hentaiera.com",
+		"url": "return fun.isPager()",
+		"style": ".blacklisted {z-index: 0;opacity: 1;-webkit-filter: none;filter: none;pointer-events: auto;}",
+		"blank": 3,
+		"pager": {
+			"nextL": ".pgi_itm.active+li.pgi_itm:not(.disabled)>a",
+			"pageE": ".thumb",
+			"replaceE": ".pagination"
+		}
+	},
+	"HentaiEra-gallery": {
+		"host": "hentaiera.com",
+		"url": "/^\\/gallery\\/\\d+/",
+		"hiddenPN": true
+	},
+	"HentaiEra-view": {
+		"host": "hentaiera.com",
+		"url": "if(fun.indexOF(/^\\/view\\/\\d+\\/\\d+\\//)){const a=fun.getCSS('#gimg');a.src=a.dataset.src;a.parentElement.outerHTML=a.outerHTML;window.scrollTo=()=>{return false;};return true;}",
+		"style": ".page_next,.page_prev,.nav_pagination,#footer_bar",
+		"pager": {
+			"nextL": "js; const next = fun.getCSS('.nav_next:not([disabled])');if(next){let gimg = fun.getCSS('#gimg'),gimg_clone = gimg.cloneNode();gimg_clone.src='';gimg.insertAdjacentElement('afterend', gimg_clone);gimg.id='';next.click();fun.pageNumIncrement();}"
+		}
+	},
 	"9hentai": {
 		"host": "www1.9hentai.com",
 		"url": "/^\\/g\\/\\d+\\/\\d+\\//",
