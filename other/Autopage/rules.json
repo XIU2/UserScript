@@ -2055,6 +2055,20 @@
 			"replaceE": ".ajax-pager"
 		}
 	},
+	"koyso": {
+		"host": "koyso.com",
+		"url": "return fun.isPager()",
+		"style": ".skeleton",
+		"blank": 4,
+		"pager": {
+			"nextL": "js; return fun.getNextEP('.page_num[style]+a.page_num','page=',/page=\\d+/)",
+			"pageE": ".games_content",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"cs.rin.ru - 帖子列表": {
 		"host": "cs.rin.ru",
 		"url": "return (fun.lp() == '/forum/viewforum.php')",
