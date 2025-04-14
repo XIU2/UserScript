@@ -6327,8 +6327,8 @@
 		}
 	},
 	"禁漫天堂": {
-		"host": ["18comic.vip","18comic.org","/^jm-?comic[0-9]?\\.[a-z]+$/"],
-		"url": "if (fun.indexOF(/^\\/photo\\//)){fun.src_bF(fun.getAllCSS('.scramble-page'),[0,'img[data-original]:not(.lazy-loaded)','data-original']); setTimeout(()=>{document.body.appendChild(document.createElement('script')).textContent = `var old_onImageLoaded = onImageLoaded; onImageLoaded = function(e){aid = parseInt(/photos\\\\/\\\\d+/.exec(e.src)[0].replace('photos/','')); if(aid>scramble_id){old_onImageLoaded(e);}}`},3000); return true}",
+		"host": ["18comic.vip","18comic.org","/^jmcomic-zzz.[a-z]+$/","/^18comic-[a-z]+.[a-z]+$/","/^jm-?comic[0-9]?\\.[a-z]+$/"],
+		"url": "if (fun.indexOF(/^\\/photo\\//)){setTimeout(()=>{document.body.appendChild(document.createElement('script')).textContent = `var old_onImageLoaded = onImageLoaded; onImageLoaded = function(e){aid = parseInt(/photos\\\\/\\\\d+/.exec(e.src)[0].replace('photos/','')); if(aid>scramble_id){old_onImageLoaded(e);}}`; fun.src_bF(fun.getAllCSS('.scramble-page'),[0,'img[data-original]:not(.lazy-loaded)','data-original']);},3000); return true}",
 		"style": "[data-group],div[data-page],.thumb-overlay-albums>*:not(.scramble-page):not(.scramble-page1) {display: none !important;} #Comic_Top_Nav[style*='display: block'] {opacity: 0.3;}",
 		"history": true,
 		"pager": {
@@ -6343,7 +6343,7 @@
 		}
 	},
 	"禁漫天堂 - 分类页": {
-		"host": ["18comic.vip","18comic.org","/^jm-?comic[0-9]?\\.[a-z]+$/"],
+		"host": ["18comic.vip","18comic.org","/^jmcomic-zzz.[a-z]+$/","/^18comic-[a-z]+.[a-z]+$/","/^jm-?comic[0-9]?\\.[a-z]+$/"],
 		"url": "/^\\/(albums|search|blogs|videos|movies)/",
 		"style": ".row>[style='z-index: 0;'],.col-lg-3.col-md-3.col-sm-3.col-xs-6",
 		"blank": 3,
