@@ -7235,6 +7235,16 @@
 			"replaceE": ".pagelist"
 		}
 	},
+	"4khd.com": {
+		"host": ["4khd.com","yrsdu.xxtt.ink"],
+		"url": "/^\\/content\\//",
+		"pager": {
+			"type": 3,
+			"nextL": ".numpages.current+li>a",
+			"pageE": "#basicExample>a",
+			"replaceE": ".page-links"
+		}
+	},
 	"俊美图": {
 		"host": "www.meijuntu.com",
 		"url": "return fun.isPager('r')",
