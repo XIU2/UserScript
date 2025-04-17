@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.5.12
+// @version      1.5.13
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -220,12 +220,13 @@ html[data-theme=light] .AppHeader-notifications:not([aria-label=通知])>div:fir
 `,
             style_widescreenDisplayCollection = `/* 宽屏显示 - 收藏页 */
 .CollectionsDetailPage-mainColumn {width: inherit !important;}
-.CollectionsDetailPage-mainColumn+div, {display: none !important;}
+.CollectionsDetailPage-mainColumn+div {display: none !important;}
 .CollectionsDetailPage {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
 `,
             style_widescreenDisplayPost = `/* 宽屏显示 - 文章页 */
 .Post-SideActions {left: calc(10vw) !important;}
-.Post-NormalMain .Post-Header, .Post-NormalMain>div, .Post-NormalSub>div {width: ${GM_getValue('menu_widescreenDisplayWidth')}px !important;}
+.Post-Row-Content-right {display: none !important;}
+.Post-Row-Content, .Post-Row-Content-left {width: ${GM_getValue('menu_widescreenDisplayWidth')}px !important;}
 `,
             style_widescreenDisplayPeople = `/* 宽屏显示 - 用户主页 */
 .Profile-mainColumn {width: inherit !important;}
@@ -335,7 +336,7 @@ html {scrollbar-width: thin; scrollbar-color: #3f4752 #22272e;}
 
 /* 背景颜色 - 专栏/文章 */
 html[data-theme=dark] .WhiteBg-body, html[data-theme=dark] .Post-content {background: #22272E !important;}
-html[data-theme=dark] .ColumnPageHeader, html[data-theme=dark] .BottomInfo {background: #1c2129 !important;}
+html[data-theme=dark] .ColumnPageHeader, html[data-theme=dark] .BottomInfo, html[data-theme=dark] .Post-Row-Content .Post-Row-Content-left {background: #1c2129 !important;}
 
 /* 按钮颜色 */
 .TopstoryTabs-link.is-active, html[data-theme=dark] .TopstoryTabs-link.is-active, html[data-theme=dark] .VoteButton, .Tag, html[data-theme=dark] .Tag, html[data-theme=dark] .HotListNav-item.is-active, html[data-theme=dark] .RichText a.UserLink-link {color: #3faaff !important;}
@@ -350,6 +351,9 @@ html[data-theme=dark] .Reward-TipjarDialog-amountList .Button--red, html[data-th
 
 /* 赞同 */
 html[data-theme=dark] .VoteButton.is-active {color: #d6edff !important;}
+
+/* 创作中心 - 分析图表 */
+html[data-theme=dark] .CreatorSection-body .AnalyticsChart text {fill: #adbac7 !important;}
 `,
             style_darkMode_1_x = `/* 问题日志页 */
 html[data-theme=dark] .zu-top {background: #2D333B !important;border: none !important;}
