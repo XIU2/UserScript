@@ -6784,6 +6784,19 @@
 			"replaceE": "nav[role=navigation]"
 		}
 	},
+	"fulitu.cc": {
+		"host": "www.fulitu.cc",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".next>a",
+			"pageE": "#masonry>.item",
+			"replaceE": ".page-navigator"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"xiutaku": {
 		"host": "xiutaku.com",
 		"url": "return fun.isPager()",
