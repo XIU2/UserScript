@@ -5855,10 +5855,11 @@
 		"url": "if((fun.indexOF(/^\\/dm\\d+\\//) || fun.indexOF('/search/') || fun.indexOF(/\\/\\(actresses|actors|genres|series|makers|directors\\)\\//)) && fun.isPager('n')){if(fun.isMobile()){rule.blank=0;};return true;}",
 		"blank": 3,
 		"pager": {
+			"type": 3,
 			"nextL": "a[rel=next]",
 			"pageE": "div[x-init*=initLozad]>div",
-			"replaceE": "//span[@aria-current='page']/..",
-			"scrollD": 1000
+			"replaceE": "//span[@aria-current='page']/../../..",
+			"scrollD": 500
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE)"
