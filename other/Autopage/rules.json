@@ -556,38 +556,14 @@
 	"煎蛋网": {
 		"host": "jandan.net",
 		"url": "/^(\\/$|\\/page\\/)/",
-		"style": "#nav_prev,#nav_next,.post.f:not(.list-post)",
-		"history": false,
+		"style": ".nav_prev,.nav_next,.post-item>.col-md-12,.post.f:not(.list-post)",
 		"pager": {
-			"nextL": "//div[@class='wp-pagenavi']/a[contains(text(),'下一页') or contains(text(),'更多文章')]",
-			"pageE": "#content>.list-post",
-			"replaceE": ".wp-pagenavi"
+			"nextL": "//div[@class='page-navi']/a[contains(text(),'下一页') or contains(text(),'更多文章')]",
+			"pageE": ".post-list>.post-item",
+			"replaceE": ".page-navi"
 		},
 		"function": {
 			"bF": "return fun.src_bF(pageE)"
-		}
-	},
-	"煎蛋网 - 大杂烩": {
-		"host": "jandan.net",
-		"url": "/^\\/dzh$/",
-		"pager": {
-			"type": 2,
-			"nextL": ".show_more",
-			"interval": 1500
-		}
-	},
-	"煎蛋网 - 吐槽": {
-		"host": "jandan.net",
-		"url": "/^\\/(qa|pic|ooxx|treehole)/",
-		"style": "#nav_prev,#nav_next,#tucao-gg {display: none !important;} .jandan-vote a.tucao-btn23:link {color: #c8c7cc !important;} .jandan-tucao {background-color: #fafaf9 !important;}",
-		"pager": {
-			"nextL": "a.previous-comment-page",
-			"pageE": "ol.commentlist>li[id^='comment-'],head>script:not([src])",
-			"replaceE": ".cp-pagenavi",
-			"scriptT": 2
-		},
-		"function": {
-			"bF": "fun.getAllCSS('a.tucao-btn,a.comment-like.like,a.comment-unlike.unlike').forEach(function (now) {now.className = now.className.replace('tucao-btn','tucao-btn23').replace('comment-unlike','comment-unlike23').replace('comment-like','comment-like23');}); return pageE"
 		}
 	},
 	"龙的天空": {
