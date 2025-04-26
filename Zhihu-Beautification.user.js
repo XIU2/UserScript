@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.5.13
+// @version      1.5.14
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -205,33 +205,43 @@ html[data-theme=light] .AppHeader-notifications:not([aria-label=通知])>div:fir
 .Topstory-mainColumn, .QuestionWaiting-mainColumn {width: inherit !important;}
 .Topstory-mainColumn+div,[data-za-detail-view-path-module="RightSideBar"] {display: none !important;}
 .Topstory-container {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
+@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Topstory-container {width: 97% !important;}}
 `,
             style_widescreenDisplayQuestion = `/* 宽屏显示 - 问题页 */
 .Question-mainColumn, .ListShortcut, .QuestionWaiting-mainColumn {width: inherit !important;}
 .Question-mainColumn+div,[data-za-detail-view-path-module="RightSideBar"], .Question-sideColumn, .GlobalSideBar {display: none !important;}
 .QuestionWaiting-mainColumn {margin-right: 0 !important;}
 .Question-main {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
+@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Question-main {width: auto !important;}}
+@media only screen and (max-width: ${GM_getValue('menu_widescreenDisplayWidth')-100}px) {.Question-main {width: 98.5% !important;}}
 .AuthorInfo {max-width: 100% !important;}
 `,
             style_widescreenDisplaySearch = `/* 宽屏显示 - 搜索页 */
 .SearchMain, .ContentLayout-mainColumn, .Club-mainColumn, .Post-mainColumn, [data-za-detail-view-path-module=TopicItem]>div:first-child {width: inherit !important;}
 .SearchMain+div, .ContentLayout-sideColumn, .Card.QuestionHeaderTopicMeta, .ClubSideBar, [data-za-detail-view-path-module=TopicItem]>div:not(:first-child) {display: none !important;}
 .Search-container, .ContentLayout, .Club-container, .Post-container, [data-za-detail-view-path-module=TopicItem] {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
+@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Search-container, .ContentLayout, .Club-container, .Post-container, [data-za-detail-view-path-module=TopicItem] {width: 97.5% !important;}}
 `,
             style_widescreenDisplayCollection = `/* 宽屏显示 - 收藏页 */
 .CollectionsDetailPage-mainColumn {width: inherit !important;}
 .CollectionsDetailPage-mainColumn+div {display: none !important;}
 .CollectionsDetailPage {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
+@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.CollectionsDetailPage {width: 98.5% !important;}}
 `,
             style_widescreenDisplayPost = `/* 宽屏显示 - 文章页 */
+.Post-content {min-width: auto !important;}
 .Post-SideActions {left: calc(10vw) !important;}
 .Post-Row-Content-right {display: none !important;}
-.Post-Row-Content, .Post-Row-Content-left {width: ${GM_getValue('menu_widescreenDisplayWidth')}px !important;}
+.Post-Row-Content, .Post-Row-Content-left, .RichContent-actions {width: ${GM_getValue('menu_widescreenDisplayWidth')}px !important;}
+@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Post-Row-Content, .Post-Row-Content-left, .RichContent-actions {width: auto !important;}}
+@media only screen and (max-width: ${GM_getValue('menu_widescreenDisplayWidth')-100}px) {.Post-Row-Content, .Post-Row-Content-left, .RichContent-actions {width: 98% !important;}}
 `,
             style_widescreenDisplayPeople = `/* 宽屏显示 - 用户主页 */
 .Profile-mainColumn {width: inherit !important;}
 .Profile-mainColumn+div,[data-za-module="RightSideBar"],.Profile-sideColumn {display: none !important;}
 .Profile-main, #ProfileHeader {width: ${GM_getValue('menu_widescreenDisplayWidth')}px !important;}
+@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Profile-main, #ProfileHeader {width: auto !important;}}
+@media only screen and (max-width: ${GM_getValue('menu_widescreenDisplayWidth')-100}px) {.Profile-main, #ProfileHeader {width: 98.5% !important;}}
 `,
             style_2 = `/* 隐藏在各列表中查看文章时开头显示的大图，不影响文章、专栏页面 */
 .RichContent img.ArticleItem-image {display: none !important;}
