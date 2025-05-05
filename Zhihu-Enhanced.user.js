@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:ru      Улучшение Zhihu
-// @version      2.3.13
+// @version      2.3.14
 // @author       X.I.U
 // @description  A more personalized Zhihu experience~
 // @description:zh-CN  屏蔽指定类别（视频、盐选、文章、想法、关注[赞同了XX/关注了XX]等等）、屏蔽用户、屏蔽关键词、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、区分问题文章、移除高亮链接、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、直达问题按钮、默认站外直链...
@@ -1115,6 +1115,8 @@ function addTypeTips() {
     let style = `font-weight: bold;font-size: 13px;padding: 1px 4px 0;border-radius: 2px;display: inline-block;vertical-align: top;margin: ${(location.pathname === '/search') ? '2' : '4'}px 4px 0 0;`
     document.body.appendChild(document.createElement('style')).textContent = `/* 区分问题文章 */
 .AnswerItem .ContentItem-title a:not(.zhihu_e_toQuestion)::before {content:'问题';color: #f68b83;background-color: #f68b8333;${style}}
+/* 针对的是部分搜索词下搜索页开头的 "最新讨论" 之类的非常规元素 */
+.HotLanding-contentItem .ContentItem[data-za-detail-view-path-module=Content] .ContentItem-title a:not(.zhihu_e_toQuestion)::before {content:'问题';color: #f68b83;background-color: #f68b8333;${style}}
 .TopstoryQuestionAskItem .ContentItem-title a:not(.zhihu_e_toQuestion)::before {content:'问题';color: #ff5a4e;background-color: #ff5a4e33;${style}}
 .ZVideoItem .ContentItem-title a::before, .ZvideoItem .ContentItem-title a::before {content:'视频';color: #00BCD4;background-color: #00BCD433;${style}}
 .PinItem .ContentItem-title a::before {content:'想法';color: #4CAF50;background-color: #4CAF5033;${style}}
@@ -1157,7 +1159,9 @@ function addToQuestion() {
             titleA.innerHTML = titleA.innerHTML.replace('?', "？")
         }
         if (/answer\/\d+/.test(titleA.href)) { //  如果是指向回答的问题（而非指向纯问题的链接）
-            titleA.insertAdjacentHTML('afterend', `<a class="zhihu_e_toQuestion VoteButton" href="${titleA.parentElement.parentElement.querySelector('meta[itemprop="url"]').content}" target="_blank">直达问题</a>`);
+            const titleA_meta = titleA.parentElement.parentElement.querySelector('meta[itemprop="url"]'); // 获取该问题页地址
+            if (!titleA_meta) return // 判断元素是否存在（针对的是部分搜索词下搜索页开头的 "最新讨论" 之类的非常规元素）
+            titleA.insertAdjacentHTML('afterend', `<a class="zhihu_e_toQuestion VoteButton" href="${titleA_meta.content}" target="_blank">直达问题</a>`);
         }
     }
 
