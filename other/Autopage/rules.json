@@ -892,6 +892,15 @@
 			"replaceE": ".pagination"
 		}
 	},
+		"CPC中文印刷社区": {
+		"host": "www.cnprint.org",
+		"url": "if(fun.indexOF(/^\\/bbs\\/forumdisplay\\.php/)){rule.blank=3;return true;}else if(fun.indexOF(/^\\/bbs\\/showthread\\.php/)){return true;}",
+		"pager": {
+			"nextL": "a[rel=next]",
+			"pageE": "tbody[id^=threadbits_forum_]>tr, #posts>div[align]",
+			"replaceE": ".pagenav"
+		}
+	},
 	"TGFC Lifestyle": {
 		"host": "bbs.tgfcer.com",
 		"url": "return (fun.lp() == '/forumdisplay.php' || fun.indexOF('/forum'))",
