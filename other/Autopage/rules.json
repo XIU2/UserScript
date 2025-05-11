@@ -4848,7 +4848,7 @@
 	},
 	"Github - Issues": {
 		"host": "github.com",
-		"url": "/\\/issues$/",
+		"url": "return fun.indexOF(/\\/issues$/)",
 		"style": "[class*='IssueItem-module__ListItem_'] div[class*=LoadingSkeleton]",
 		"blank": 6,
 		"pager": {
