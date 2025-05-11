@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:ru      Автостраничник
-// @version      6.6.56
+// @version      6.6.57
 // @author       X.I.U
 // @description  ⭐Append the next page content to the bottom seamlessly (like a waterfall, Unlimited scrolling, no need to manually click on the next page) ⭐, support various forums, social networking, games, comics, novels, academics, search engines (Google, Bing, Yahoo...) and other websites~
 // @description:zh-CN  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
@@ -2178,7 +2178,7 @@ function: {
             if (endP && (parseInt(nextNum) > parseInt(endP))) return ''
         } else {
             nextNum = initP;
-            if (endP && (parseInt(nextNum) >= parseInt(endP))) return ''
+            if (endP && (parseInt(nextNum) > parseInt(endP))) return ''
         }
         let url = '';
         if (location.pathname) {
@@ -2195,13 +2195,13 @@ function: {
     }
     // 通用型获取下一页地址（从 URL 中获取页码，并页码+1，URL 替换 page= 参数，后三个参数可以省略）
     function getNextUP(pf, reg, lp = location.pathname, initP = '2', endP) {
-        let nextNum = getSearch(pf.replace('=',''));
-        if (nextNum) {
-            nextNum = String(parseInt(nextNum)+1);
-            if (endP && (parseInt(nextNum) > parseInt(endP))) return ''
-        } else {
-            nextNum = initP;
-            if (endP && (parseInt(nextNum) >= parseInt(endP))) return ''
+        let nextNum = getSearch(pf.replace('=','')); // 获取参数中的 page= 值
+        if (nextNum) { // 如果参数中存在 page=
+            nextNum = String(parseInt(nextNum)+1); // 下一页页码就是当前页码参数值 +1
+            if (endP && (parseInt(nextNum) > parseInt(endP))) return '' // 如果 endP 为真且 下一页页码 大于 endP(页码最大值)则终止
+        } else { // 如果参数中不存在 page=
+            nextNum = initP; // 因为不存在，所以一般都代表当前是位于第 1 页，那么下一页页码就设置为初始页码（默认 2）
+            if (endP && (parseInt(nextNum) > parseInt(endP))) return '' // 如果 endP 为真且 下一页页码 大于 endP(页码最大值)则终止
         }
         let url = '';
         if (location.search) {
@@ -2635,7 +2635,7 @@ function: {
 
 // "aaa"       是规则名，唯一，因为 自定义翻页规则 优先级最高，所以会覆盖同名的 外置翻页规则
 // "host"      是域名，支持正则表达式（如 示例四），也可以像这样 示例三 那样写多个域名或正则表达式（当然也可以混用），如果省略，则默认匹配所有域名（会对所有域名匹配 url 规则判断，可以当成一个简单的外置/自定义通用规则的方案）
-// "url"       是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站（如果不知道写什么，那么就写 return fun.isPager() 这样脚本会默认自动匹配当前网站下存在 nextL 及 pageE 元素的网页，大部分网站是没问题的，如果改为匹配 replaceE 或者其他组合，那么请去上面的 Github Issues 里的 内置函数 中查看具体使用方法；另外，url 规则中可通过操作 rule 这个对象变量来修改当前网页实际应用的规则，如 rule.pager.pageE='#a' 具体示例也见 Github Issues 里。）
+// "url"       是用来控制哪些网站中页面适用该规则，省略后代表该规则应用于全站（如果不知道写什么，那么就写 return fun.isPager() 这样脚本会默认自动匹配当前网站下存在 nextL 及 pageE 元素的网页，大部分网站是没问题的，如果改为匹配 replaceE 或者其他组合，那么请去上面的 Github Issues 里的 内置函数 中查看具体使用方法；另外，url 规则中可通过操作 rule 这个对象变量来修改当前网页实际应用的规则，如 rule.pager.pageE='#a' 具体示例也见 Github Issues 里）
 
 // "nextL"     是用来指定含有下一页地址的元素选择器（CSS 或 XPath 都行，一般都是 &lt;a&gt; 元素）
 // "pageE"     是指定要从下一页获取的元素选择器（也就是网页主体内容），并将其插入当前网页中同样元素的末尾
