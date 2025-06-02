@@ -342,16 +342,17 @@
 			"replaceE": "#paginator"
 		}
 	},
-	"豆瓣 - top250/分集短评/剧评影评/在看/想看/看过/作品/图片": {
-		"host": ["movie.douban.com","music.douban.com","book.douban.com"],
-		"url": "return (fun.lp() == '/top250' || fun.indexOF(/^\\/subject\\/\\d+\\/(episode|tv_discuss|reviews|photos)/) || fun.indexOF(/^\\/people\\/.+\\/(do|wish|collect)/) || fun.indexOF(/^\\/celebrity\\/\\d+\\/(movies|photos)/))",
-		"pager": {
-			"nextL": "link[rel='next']",
-			"pageE": ".grid_view,#comments,.review-list,.interest-list,.grid-view,.grid_view>ul>li,.poster-col3>li",
-			"replaceE": ".paginator",
-			"scrollD": 2500
-		}
-	},
+    "豆瓣 - top250/分集短评/剧评影评/在看/想看/看过/作品/图片": {
+        "host": ["movie.douban.com","music.douban.com","book.douban.com"],
+        "url": "return (fun.lp() == '/top250' || fun.indexOF(/^\\/subject\\/\\d+\\/(episode|tv_discuss|reviews|photos)/) || fun.indexOF(/^\\/people\\/.+\\/(do|wish|collect)/) || fun.indexOF(/^\\/celebrity\\/\\d+\\/(movies|photos)/))",
+        "blank": 5,
+        "pager": {
+            "nextL": "link[rel='next']",
+            "pageE": ".grid_view,.article>.indent>p.ul,.article>.indent>table,#comments,.review-list,.interest-list,.grid-view,.grid_view>ul>li,.poster-col3>li",
+            "replaceE": ".paginator",
+            "scrollD": 2500
+        }
+    },
 	"豆瓣 - 广播/日记/书评/影评评论": {
 		"host": ["www.douban.com","book.douban.com","movie.douban.com"],
 		"url": "return ((fun.indexOF(/^\\/people\\/.+\\/status/) && (!fun.indexOF('tab=','s') || fun.indexOF('tab=comment','s'))) || (fun.indexOF(/^\\/note\\/\\d+\\//) && !fun.indexOF('type=','s')) || fun.indexOF(/^\\/review\\/\\d+\\//))",
