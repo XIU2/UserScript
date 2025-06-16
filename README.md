@@ -86,7 +86,7 @@ Tampermonkey 为了顺应 Chrome 的 Manifest V3 要求，在 v5.0.0 版本中�
 
 ## Sponsor
 
-<a href="https://dartnode.com" title="Powered by DartNode - Free VPS for Open Source"><img src="https://dartnode.com/branding/DN-Open-Source-sm.png" alt="Powered by DartNode" width="50%"></a>
+<a href="https://dartnode.com" title="Powered by DartNode - Free VPS for Open Source"><img src="https://dartnode.com/branding/DN-Open-Source-sm.png" alt="Powered by DartNode" width="40%"></a>
 
 > 该赞助者向本项目提供了**公益服务器**用以优化体验！  
 > This sponsor has provided **a non-profit server** for this project to enhance the user experience!
