@@ -2061,7 +2061,7 @@
 		}
 	},
 	"koyso": {
-		"host": "koyso.com",
+		"host": "koyso.to",
 		"url": "return fun.isPager()",
 		"style": ".skeleton",
 		"blank": 4,
@@ -4864,6 +4864,15 @@
 			"nextL": "a.next_page",
 			"pageE": "div[id^='issue_'],ul[aria-labelledby='discussions-list']>li,#release_page_title+div[data-pjax]>section,div[id^='check_suite_'],#org-repositories li.Box-row",
 			"replaceE": ".pagination"
+		}
+	},
+	"Github - Issue": {
+		"host": "github.com",
+		"url": "return fun.indexOF(/\\/issues\\/\\d+$/)",
+		"pager": {
+			"type": 2,
+			"nextL": "button[data-testid=issue-timeline-load-more-load-top][aria-disabled=false]",
+			"scrollD": 9999
 		}
 	},
 	"Github - Issues": {
