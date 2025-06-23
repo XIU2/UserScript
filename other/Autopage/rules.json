@@ -4866,12 +4866,12 @@
 			"replaceE": ".pagination"
 		}
 	},
-	"Github - Issue": {
+	"Github - Issue/Discussions/Pull - loadmore": {
 		"host": "github.com",
-		"url": "return fun.indexOF(/\\/issues\\/\\d+$/)",
+		"url": "return fun.indexOF(/\\/(issues|discussions|pull)\\/\\d+$/)",
 		"pager": {
 			"type": 2,
-			"nextL": "button[data-testid=issue-timeline-load-more-load-top][aria-disabled=false]",
+			"nextL": "button[data-testid=issue-timeline-load-more-load-top][aria-disabled=false], button.ajax-pagination-btn[data-disable-with=Loading…]:not([disabled])",
 			"scrollD": 9999
 		}
 	},
