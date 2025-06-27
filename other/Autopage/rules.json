@@ -5992,12 +5992,12 @@
 	},
 	"Netflav": {
 		"host": "netflav.com",
-		"url": "return (fun.lp() != '/' && !fun.indexOF(/^\\/(video|actress|browse|genre)$/))",
+		"url": "fun.isUrlC(); return (fun.lp() != '/' && !fun.indexOF(/^\\/(video|actress|browse|genre)$/))",
 		"blank": 3,
 		"pager": {
 			"type": 6,
 			"nextL": "js; return fun.getNextEP('a.active.item+a.item:not(.icon)','page=',/page=\\d+/)",
-			"pageE": ".grid_cell",
+			"pageE": ".grid_0_cell",
 			"replaceE": ".pagination",
 			"loadTime": 1200,
 			"scrollD": 3000
