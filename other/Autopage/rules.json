@@ -6169,6 +6169,16 @@
 			"replaceE": ".pages"
 		}
 	},
+	"caribbeancom": {
+		"host": ["www.caribbeancom.com","en.caribbeancom.com"],
+		"url": "return (fun.isPager()|fun.indexOF(/\\/(listpages|search)\\//))",
+		"blank": 3,
+		"pager": {
+			"nextL": "a[rel=next]",
+			"pageE": ".list>.flex-grid>.grid-item, .grid.is-movie>.entry",
+			"replaceE": ".pagination"
+		}
+	},
 	"16k.club": {
 		"host": "www.16k.club",
 		"url": "return fun.isPager()",
