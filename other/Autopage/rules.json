@@ -912,7 +912,7 @@
 			"replaceE": ".pagination"
 		}
 	},
-		"CPC中文印刷社区": {
+	"CPC中文印刷社区": {
 		"host": "www.cnprint.org",
 		"url": "if(fun.indexOF(/^\\/bbs\\/forumdisplay\\.php/)){rule.blank=3;return true;}else if(fun.indexOF(/^\\/bbs\\/showthread\\.php/)){return true;}",
 		"pager": {
@@ -939,6 +939,36 @@
 			"nextL": ".pages a.next",
 			"pageE": ".viewthread",
 			"replaceE": ".pages"
+		}
+	},
+	"archlinuxcn - bbs": {
+		"host": "bbs.archlinuxcn.org",
+		"url": "/^\\/(viewforum|viewtopic)\\.php/",
+		"blank": 3,
+		"pager": {
+			"nextL": "a[rel=next]",
+			"pageE": "#vf tbody>tr, .blockpost[id]",
+			"replaceE": ".pagelink"
+		}
+	},
+	"archlinuxcn - wiki": {
+		"host": "wiki.archlinuxcn.org",
+		"url": "/^\\/wzh\\/index\\.php/",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.mw-nextlink",
+			"pageE": ".mw-search-result",
+			"replaceE": ".mw-pager-navigation-bar"
+		}
+	},
+	"archlinux - aur": {
+		"host": "aur.archlinux.org",
+		"url": "/^\\/packages/",
+		"blank": 3,
+		"pager": {
+			"nextL": "span.page+a.page",
+			"pageE": "#pkglist-results tbody>tr",
+			"replaceE": ".pkglist-nav"
 		}
 	},
 	"北+": {
