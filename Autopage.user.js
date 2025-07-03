@@ -36,6 +36,7 @@
 // @connect      jsd.proxy.aks.moe
 // @connect      jsdelivr.pai233.top
 // @connect      gh-proxy.com
+// @connect      hk.gh-proxy.com
 // @connect      www.xuexiniu.com
 // @connect      bbs.xuexiniu.com
 // @connect      weili.ooopic.com
@@ -105,8 +106,9 @@
         //'https://gcore.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://fastly.jsdelivr.net/gh/XIU2/UserScript/other/Autopage/rules.json',
         //'https://jsd.proxy.aks.moe/gh/XIU2/UserScript/other/Autopage/rules.json',
-        'https://jsdelivr.pai233.top/gh/XIU2/UserScript/other/Autopage/rules.json',
+        //'https://jsdelivr.pai233.top/gh/XIU2/UserScript/other/Autopage/rules.json',
         'https://gh-proxy.com/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
+        'https://hk.gh-proxy.com/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
     ]
     const urlArr2 = [
         'https://userscript.h233.eu.org/other/Autopage/rules.json',
