@@ -941,8 +941,8 @@
 			"replaceE": ".pages"
 		}
 	},
-	"archlinuxcn - bbs": {
-		"host": "bbs.archlinuxcn.org",
+	"archlinux - bbs": {
+		"host": ["bbs.archlinux.org","bbs.archlinuxcn.org"],
 		"url": "/^\\/(viewforum|viewtopic)\\.php/",
 		"blank": 3,
 		"pager": {
@@ -951,8 +951,8 @@
 			"replaceE": ".pagelink"
 		}
 	},
-	"archlinuxcn - wiki": {
-		"host": "wiki.archlinuxcn.org",
+	"archlinux - wiki": {
+		"host": ["wiki.archlinux.org","wiki.archlinuxcn.org"],
 		"url": "/^\\/wzh\\/index\\.php/",
 		"blank": 3,
 		"pager": {
