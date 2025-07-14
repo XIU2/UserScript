@@ -6667,6 +6667,7 @@
 	"Danbooru": {
 		"host": ["danbooru.donmai.us","e621.net"],
 		"url": "return (fun.lp() == '/' || fun.lp() == '/posts')",
+		"style": ".post-preview:not(.blacklist-initialized),.image-container:not(.blacklist-initialized){visibility: initial !important;}",
 		"blank": 3,
 		"pager": {
 			"nextL": "a[rel='next']",
