@@ -2948,7 +2948,7 @@
 		}
 	},
 	"字幕库 zmk": {
-		"host": ["zmk.pw","zimuku.org","zimuku.pw"],
+		"host": ["srtku.com","zmk.pw","zimuku.org","zimuku.pw"],
 		"url": "if (!fun.indexOF('/detail/') && !fun.indexOF('/subs/')) {if (fun.lp() == '/') {fun.getCSS('.box>.table').insertAdjacentHTML('beforebegin','<div class=\"pagination\"></div>')}; return true;}",
 		"pager": {
 			"nextL": "a.next",
