@@ -5987,6 +5987,16 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"JAV吧 JAV8": {
+		"host": ["jav98.xyz","/^jav8\\.[a-z]+$/"],
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".pagination-next",
+			"pageE": "a.work",
+			"replaceE": ".pagination"
+		}
+	},
 	"JieAV": {
 		"host": ["www.jieav.com","www.qinav.com","www.qinimg.com","www.yinmh.com","www.txtxi.com","www.dnaav.com","www.jiedm.com","www.ruav.xyz","www.feiav.com"],
 		"url": "return fun.isPager('r')",
