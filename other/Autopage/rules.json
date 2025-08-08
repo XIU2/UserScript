@@ -35,14 +35,9 @@
 		"host": "/^www\\.google\\./",
 		"url": "return (fun.lp() == '/search' && (!fun.indexOF('tbm=','s') || (fun.indexOF('tbm=nws','s') || fun.indexOF('tbm=vid','s') || fun.indexOF('tbm=bks','s'))) && (fun.indexOF('sclient=mobile','s') || fun.isMobile()))",
 		"pager": {
-			"nextL": "footer>div:first-child a[aria-label]",
-			"pageE": "id('main')/div[position()>1][position()<last()] | //style[not(contains(text(),'table,div,span,p{display:none}'))] | //body/script[@nonce][not(@src)][starts-with(text(),'(function(){var s=')]",
-			"replaceE": "#main>footer>div:first-child",
-			"scriptT": 2,
-			"scrollD": 2500
-		},
-		"function": {
-			"bF": "fun.getAllCSS('#main img[id^=dimg],#main img[id^=rimg]').forEach(function (img) {img.id = 'old_'+img.id;}); if(!fun.indexOF('tbm=vid','s') && fun.indexOF('tbm=','s')){return pageE}else{pageE.forEach(function (img) {fun.getAllCSS('img[id^=dimg]:not([data-atf])',img).forEach(function (img1) {img1.setAttribute('data-atf','1');})}); return pageE}"
+			"type": 2,
+			"nextL": "#botstuff a[jsaction][href][aria-label]>div",
+			"isHidden": true
 		}
 	},
 	"谷歌搜索": {
@@ -51,13 +46,10 @@
 		"history": true,
 		"pager": {
 			"nextL": "#pnnext,footer>div:first-child a[aria-label]",
-			"pageE": "id('search')/div | id('rso')/div | //style[not(contains(text(),'table,div,span,p{display:none}'))] | //body/script[@nonce][not(@src)][starts-with(text(),'(function(){var s=') or starts-with(text(),'(function(){google.ldi')]",
+			"pageE": "id('search')/div | id('rso')/div | //style[not(contains(text(),'table,div,span,p{display:none}'))] | //body//script[@nonce][not(@src)][contains(text(),'_setImagesSrc')]",
 			"replaceE": "#navcnt,#rcnt div[role='navigation'],#botstuff div[role='navigation'],#main>footer>div:first-child",
 			"scriptT": 2,
 			"scrollD": 2500
-		},
-		"function": {
-			"bF": "fun.getAllCSS('#search img[id^=dimg],#search img[id^=rimg],#rso img[id^=dimg],#rso img[id^=rimg]').forEach(function (img) {img.id = 'old_'+img.id;}); if(!fun.indexOF('tbm=vid','s') && fun.indexOF('tbm=','s')){return pageE}else{pageE.forEach(function (img) {fun.getAllCSS('img[id^=dimg]:not([data-atf])',img).forEach(function (img1) {img1.setAttribute('data-atf','1');})}); return pageE}"
 		}
 	},
 	"必应搜索 + 手机版": {
