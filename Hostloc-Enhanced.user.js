@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         全球主机交流论坛增强
-// @version      1.5.1
+// @version      1.5.2
 // @author       X.I.U
 // @description  自动签到（访问空间 +22 积分）、屏蔽用户（黑名单）、屏蔽关键词（帖子标题）、回帖小尾巴、自动无缝翻页、快捷回到顶部（右键网页两侧空白处）、收起预览帖子（左键网页两侧空白处）、屏蔽投票贴、快速添加链接、屏蔽阅读权限 255 帖子、预览帖子快速回复带签名、显示是否在线、显示帖子内隐藏回复
 // @match        *://hostloc.com/*
@@ -454,7 +454,7 @@
             if (item.querySelector('[id^="userinfo"] > .i.y em')) {
                 let icon = (item.querySelector('[id^="userinfo"] > .i.y em').textContent === '当前在线') ? '🌝' : '🌚';
                 let divStatus = document.createElement('div');
-                divStatus.style = 'position: absolute;margin: -8px 0 0 8px;padding: 0px 1px;background-color: #ffffff;border-radius: 50%;z-index: 999999;';
+                divStatus.style = 'position: absolute;margin: -8px 0 0 8px;padding: 0px 1px;background-color: #ffffff;border-radius: 50%;z-index: 302;';
                 divStatus.textContent = icon;
                 let mochu = item.querySelector('.avatar');
                 mochu.parentNode.insertBefore(divStatus, mochu);
@@ -473,7 +473,7 @@
                     blockButton.className = 'XIU-block-button';
                     blockButton.title = `屏蔽用户: ${username}`;
                     blockButton.textContent = '🚫';
-                    blockButton.style.cssText = 'position: absolute;margin: -8px 0px 0px 8px;padding: 0px 0.5px;top: 0px;right: 10px;background-color: #F26C4F;border-radius: 50%;cursor: pointer;z-index: 999999;box-shadow: 0 2px 4px rgba(0,0,0,0.2);transition: all 0.3s ease;';
+                    blockButton.style.cssText = 'position: absolute;margin: -8px 0px 0px 8px;padding: 0px 0.5px;top: 0px;right: 10px;background-color: #F26C4F;border-radius: 50%;cursor: pointer;z-index: 302;box-shadow: 0 2px 4px rgba(0,0,0,0.2);transition: all 0.3s ease;';
 
                     // 鼠标悬停效果
                     if (!document.getElementById('XIU-block-style')) {
