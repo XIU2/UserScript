@@ -5951,6 +5951,9 @@
 			"nextL": "js; let next = fun.getXpath(\"//li[@class='page-item' and ./span[contains(@class,'active')]]/following-sibling::li/a\"); if (next) {return `${location.origin}${location.pathname}?mode=async&function=get_block&block_id=${next.dataset.blockId}&${next.dataset.parameters.replace('from_videos+','from_videos=' + next.textContent + '&').replaceAll(':','=').replaceAll(';','&').replaceAll('+','&')}&_=${+new Date()}`;}",
 			"pageE": "section>.row",
 			"replaceE": ".pagination"
+		},
+		"function": {
+			"aF": "const newItems = fun.getAll('img[data-preview]:not(.preview-initialized)'); newItems.forEach(item => item.classList.add('preview-initialized')); $(newItems).videopreview();"
 		}
 	},
 	"JavDisk": {
