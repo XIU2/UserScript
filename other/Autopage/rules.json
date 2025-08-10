@@ -7371,5 +7371,25 @@
 			"pageE": ".content-list>li",
 			"replaceE": ".pages"
 		}
-	}
+	},
+	"YUME - 世界线": {
+        "host": "yume.ly",
+        "url": "return (!fun.indexOF('/element'))",
+        "pager": {
+            "nextL": "//div[@class='page_inner']//a[text()='下一页››']",
+            "pageE": "[id^='column']:not([id$='B']) > div:not(.page_inner)",
+            "replaceE": ".page_inner",
+            "scrollD": 2000
+        }
+    },
+    "YUME - 元素": {
+        "host": "yume.ly",
+        "url": "return (fun.indexOF('/element'))",
+        "pager": {
+            "nextL": "//div[@class='page_inner']//a[text()='下一页››']",
+            "pageE": "#tagList",
+            "replaceE": ".page_inner",
+            "scrollD": 2000
+        }
+    }
 }
