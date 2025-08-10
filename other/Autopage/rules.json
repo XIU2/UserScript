@@ -6695,11 +6695,11 @@
 	"xchina.co": {
 		"host": ["xchina.co","/^xchina\\.[a-z]+$/","crxs.me","litu100.xyz","8se.me","shise.me"],
 		"url": "return fun.isPager()",
-		"style": ".quickGuide,.outer-banner,.item[class*=exoclick],.photos>div,.media,.static-container-4,.static-container-5,.recommendation_widget",
+		"style": ".quickGuide,.outer-banner,.item[class*=exoclick],.item[class=item],.photos>div,.media,.static-container-4,.static-container-5,.recommendation_widget",
 		"pager": {
 			"type": 3,
-			"nextL": "a.next",
-			"pageE": ".videos>div.item:not([class*=exoclick]), .videos>.video, .list>div.item:not([class*=exoclick]), .photos>a, .fiction-body>.content>p, .fiction-body>.content>.chapters, .lists>a, .comic>div:not([class])",
+			"nextL": "a.pager-next",
+			"pageE": ".videos>div.item:not([class*=exoclick]):not([class=item]), .videos>.video, .list>div.item:not([class*=exoclick]):not([class=item]), .photos>a, .fiction-body>.content>p, .fiction-body>.content>.chapters, .lists>a, .comic>div:not([class])",
 			"replaceE": ".pager,.prevNext",
 			"scrollE": ".pager+div+.pager,.prevNext",
 			"scrollD": 1000
