@@ -642,7 +642,7 @@
 		}
 	},
 	"番组计划": {
-		"host": ["bgm.tv","bangumi.tv"],
+		"host": ["bgm.tv","bangumi.tv","chii.in"],
 		"url": "return (fun.indexOF(/\\/(browser|subject_search|tag|wish)/) || fun.isPager())",
 		"blank": 3,
 		"pager": {
@@ -652,7 +652,7 @@
 		}
 	},
 	"番组计划 - 小组帖子列表": {
-		"host": ["bgm.tv","bangumi.tv"],
+		"host": ["bgm.tv","bangumi.tv","chii.in"],
 		"url": "/\\/forum/",
 		"pager": {
 			"nextL": "//div[@class='page_inner']/a[text()='››']",
