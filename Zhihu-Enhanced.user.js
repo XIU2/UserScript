@@ -3,11 +3,11 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:ru      Улучшение Zhihu
-// @version      2.3.16
+// @version      2.3.17
 // @author       X.I.U
 // @description  A more personalized Zhihu experience~
-// @description:zh-CN  移除登录弹窗、屏蔽指定类别（视频、盐选、文章、想法、关注[赞同/关注了XX]等）、屏蔽用户、屏蔽关键词、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、区分问题文章、移除高亮链接、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、直达问题按钮、默认站外直链...
-// @description:zh-TW  移除登錄彈窗、屏蔽指定類別（視頻、鹽選、文章、想法、關注[贊同/關注了XX]等）、屏蔽用戶、屏蔽關鍵詞、默認收起回答、快捷收起回答/評論、快捷回到頂部、區分問題文章、移除高亮鏈接、默認高清原圖（無水印）、默認站外直鏈...
+// @description:zh-CN  移除登录弹窗、屏蔽指定类别（视频、盐选、文章、想法、关注[赞同/关注了XX]等）、屏蔽低赞/低评回答、屏蔽用户、屏蔽关键词、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、区分问题文章、移除高亮链接、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、直达问题按钮、默认站外直链...
+// @description:zh-TW  移除登錄彈窗、屏蔽指定類別（視頻、鹽選、文章、想法、關注[贊同/關注了XX]等）、屏蔽低贊/低評回答、屏蔽用戶、屏蔽關鍵詞、默認收起回答、快捷收起回答/評論、快捷回到頂部、區分問題文章、移除高亮鏈接、默認高清原圖（無水印）、默認站外直鏈...
 // @description:ru  Более персонализированный опыт пользования сайтом Zhihu~
 // @match        *://www.zhihu.com/*
 // @match        *://zhuanlan.zhihu.com/*
@@ -36,6 +36,8 @@ var menu_ALL = [
     ['menu_collapsedAnswer', '一键收起回答/评论', '一键收起回答/评论', true],
     ['menu_collapsedNowAnswer', '快捷收起回答/评论 (点击两侧空白处)', '快捷收起回答/评论', true],
     ['menu_backToTop', '快捷回到顶部 (右键两侧空白处)', '快捷回到顶部', true],
+    ['menu_blockLowUpvoteCount', '屏蔽低赞回答', '屏蔽低赞回答', ''],
+    ['menu_blockLowCommentCount', '屏蔽低评回答', '屏蔽低评回答', ''],
     ['menu_blockUsers', '屏蔽指定用户', '屏蔽指定用户', true],
     ['menu_customBlockUsers', '自定义屏蔽用户', '自定义屏蔽用户', ['故事档案局', '盐选推荐', '盐选科普', '盐选成长计划', '知乎盐选会员', '知乎盐选创作者', '盐选心理', '盐选健康必修课', '盐选奇妙物语', '盐选生活馆', '盐选职场', '盐选文学甄选', '盐选作者小管家', '盐选博物馆', '盐选点金', '盐选测评室', '盐选科技前沿', '盐选会员精品']],
     ['menu_blockKeywords', '屏蔽指定关键词', '屏蔽指定关键词', true],
@@ -73,7 +75,11 @@ function registerMenuCommand() {
     }
     for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
         menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
-        if (menu_ALL[i][0] === 'menu_customBlockUsers') { // 只有 [屏蔽指定用户] 启用时，才注册菜单 [自定义屏蔽用户]
+        if (menu_ALL[i][0] === 'menu_blockLowUpvoteCount') {
+            menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockLowCount(menu_ALL[i][0],'设置要屏蔽 低于多少赞同 的回答？\n（例如设置 50 则赞同数低于 50 的回答会被屏蔽\n（目前该功能适用于 首页信息流、问题页\n（点击 [确定] 修改后，后续加载的回答会立即生效，不影响当前已有\n（如不需要请留空并直接点击 [确定] 即可')});
+        } else if (menu_ALL[i][0] === 'menu_blockLowCommentCount') {
+            menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockLowCount(menu_ALL[i][0],'设置要屏蔽 低于多少评价 的回答？\n（例如设置 20 则评价数低于 20 的回答会被屏蔽\n（目前该功能适用于 首页信息流、问题页\n（点击 [确定] 修改后，后续加载的回答会立即生效，不影响当前已有\n（如不需要请留空并直接点击 [确定] 即可')});
+        } else if (menu_ALL[i][0] === 'menu_customBlockUsers') { // 只有 [屏蔽指定用户] 启用时，才注册菜单 [自定义屏蔽用户]
             if (menu_value('menu_blockUsers')) menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockUsers()});
         } else if (menu_ALL[i][0] === 'menu_customBlockKeywords') { // 只有 [屏蔽指定关键词] 启用时，才注册菜单 [自定义屏蔽关键词]
             if (menu_value('menu_blockKeywords')) menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockKeywords()});
@@ -421,6 +427,78 @@ function isElementInViewport_(el) {
     rect.bottom > 0
   );
 }
+
+
+// 自定义屏蔽低赞/低评回答
+function customBlockLowCount(menu, info) {
+    let newCount = prompt(info, menu_value(menu));
+    if (newCount == '' || /^(0|[1-9]\d*)$/.test(newCount)) { // 检查是否是有效整数
+        GM_setValue(menu, newCount);
+        registerMenuCommand(); // 重新注册脚本菜单
+    }
+};
+
+
+// 屏蔽低赞/低评回答
+function blockLowCount(type) {
+    switch(type) {
+        case 'index':
+            blockLowCount_('.Card.TopstoryItem.TopstoryItem-isRecommend', 'Card TopstoryItem TopstoryItem-isRecommend');
+            break;
+        case 'question':
+            blockLowCount_('.List-item', 'List-item');
+            break;
+    }
+
+
+    function blockLowCount_(className1, className2) {
+        // 前几条因为是直接加载的，而不是动态插入网页的，所以需要单独判断
+        function blockLowCount_now() {
+            document.querySelectorAll(className1).forEach(function(item1){
+                blockLowCount_1(item1,'menu_blockLowUpvoteCount','meta[itemprop=upvoteCount]');
+                blockLowCount_1(item1,'menu_blockLowCommentCount','meta[itemprop=commentCount]');
+            })
+        }
+
+        blockLowCount_now();
+        window.addEventListener('urlchange', function(){
+            setTimeout(blockLowCount_now, 1000); // 网页 URL 变化后再次执行
+        })
+
+        // 这个是监听网页插入事件，用来判断后续网页动态插入的元素
+        const callback = (mutationsList, observer) => {
+            for (const mutation of mutationsList) {
+                for (const target of mutation.addedNodes) {
+                    if (target.nodeType != 1) return
+                    if (target.className === className2) {
+                        blockLowCount_1(target,'menu_blockLowUpvoteCount','meta[itemprop=upvoteCount]');
+                        blockLowCount_1(target,'menu_blockLowCommentCount','meta[itemprop=commentCount]');
+                    }
+                }
+            }
+        };
+        const observer = new MutationObserver(callback);
+        observer.observe(document, { childList: true, subtree: true });
+    }
+
+
+    function blockLowCount_1(item1, menu, css) {
+        if (menu_value(menu)) {
+            let item = item1.querySelector(css);
+            //console.log(item)
+            if (item && item.content && Number(item.content) < Number(menu_value(menu))) {
+                if (menu == 'menu_blockLowUpvoteCount') {
+                    console.log('已屏蔽低赞回答：', item.content + '<' + menu_value(menu), item1);
+                } else {
+                    console.log('已屏蔽低评回答：', item.content + '<' + menu_value(menu), item1);
+                }
+                item1.hidden = true;
+                item1.style.display = 'none';
+            }
+        }
+    }
+}
+
 
 
 // 自定义屏蔽用户
@@ -1551,6 +1629,9 @@ function blockHotOther() {
                 collapsedNowAnswer('.QuestionPage'); //                        收起当前回答 + 快捷返回顶部
                 collapsedNowAnswer('.Question-main'); //                       收起当前回答 + 快捷返回顶部
                 questionRichTextMore(); //                                     展开问题描述
+                if (location.pathname.indexOf('answer') == -1) { //  问题页而不是回答页
+                    blockLowCount('question'); //                              屏蔽低赞/低评回答
+                }
                 blockUsers('question'); //                                     屏蔽指定用户
                 blockYanXuan(); //                                             屏蔽盐选内容
                 blockType('question'); //                                      屏蔽指定类别（视频/文章等）
@@ -1629,6 +1710,7 @@ function blockHotOther() {
             addTypeTips(); //                                                  区分问题文章
             addToQuestion(); //                                                直达问题按钮
             if (location.pathname == '/') { // 推荐
+                blockLowCount('index'); //                                     屏蔽低赞/低评回答
                 blockUsers('index'); //                                        屏蔽指定用户
                 blockKeywords('index'); //                                     屏蔽指定关键词
                 blockType(); //                                                屏蔽指定类别（视频/文章等）
