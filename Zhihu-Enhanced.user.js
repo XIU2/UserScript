@@ -1491,6 +1491,94 @@ function blockHotOther() {
     block();
 }
 
+// 添加在右侧添加作者名称导航栏
+function addAuthorNavSidebar() {
+  // 渲染侧边栏
+  function renderSideBar() {
+    let container;
+    let bar = document.querySelector('#author-nav-sidebar');
+    if (!document.querySelector('#author-nav-sidebar')) {
+      bar = document.createElement('div');
+      const main = document.querySelector('.Question-main');
+      document.createElement('div');
+      bar.id = 'author-nav-sidebar';
+      bar.setAttribute(
+        'style',
+        `
+          width: 0;
+          position: sticky;
+          left: 0;
+          top: 8%;
+          transform: translateX(0.5em)
+        `
+      );
+
+      container = document.createElement('div');
+      container.style.width = 'max-content';
+      container.style.height = '50vh';
+      container.style.overflow = 'auto';
+
+      bar.append(container);
+      main.append(bar);
+    } else {
+      container = bar.firstElementChild;
+    }
+
+    // 获取当前页面回答者名称元素
+    const items = document.querySelectorAll('.AuthorInfo-name');
+    const n = container.childElementCount;
+    for (const item of Array.prototype.slice.call(items, n)) {
+      const div = document.createElement('div');
+      div.onclick = () => {
+        let cur = item;
+        // 寻找父元素
+        while (!cur.classList.contains('List-item')) {
+          cur = cur.parentElement;
+        }
+        window.scrollTo(0, cur.offsetTop);
+      };
+
+      div.setAttribute(
+        'style',
+        'color: #099; margin-bottom: 0.5em; text-decoration-line: underline; cursor: pointer;'
+      );
+      div.innerText = item.innerText;
+      container.append(div);
+    }
+  }
+
+  function addScrollHandle(callback) {
+    window.addEventListener('scroll', function () {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        // 当滚动到页面底部时触发的回调函数
+        callback();
+      }
+    });
+    // 选择要监听的元素
+    const targetElement = document.querySelector('[role="list"]');
+
+    // 创建一个观察器实例
+    const observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function () {
+        // 当元素值发生变化时触发的回调函数
+        renderSideBar();
+      });
+    });
+
+    // 配置观察器的选项
+    const config = {
+      childList: true,
+      subtree: true,
+      characterData: true
+    };
+
+    // 开始观察目标元素
+    observer.observe(targetElement, config);
+  }
+
+  addScrollHandle(() => renderSideBar());
+  renderSideBar();
+}
 
 (function() {
     if (window.onurlchange === undefined) {addUrlChangeEvent();} // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
@@ -1555,6 +1643,7 @@ function blockHotOther() {
                 blockYanXuan(); //                                             屏蔽盐选内容
                 blockType('question'); //                                      屏蔽指定类别（视频/文章等）
                 defaultCollapsedAnswer(); //                                   默认收起回答
+                addAuthorNavSidebar(); //                                      添加回答作者跳转导航
             }
             setInterval(function(){topTime_('.ContentItem.AnswerItem', 'ContentItem-meta')}, 300); // 置顶显示时间
             setTimeout(function(){question_time(); question_author()}, 100); //问题创建时间 + 显示问题作者
