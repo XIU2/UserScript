@@ -15,7 +15,7 @@
 
 ## 脚本列表
 
-> _详细的**脚本介绍、使用说明、截图演示**等信息，请点击 **\[安装\]** 前往 GreasyFork 查看~_  
+> _详细的**脚本介绍、使用说明、截图演示**等信息，请点击 **`[安装]`** 查看~（或去本项目 [Wiki](https://github.com/XIU2/UserScript/wiki) 查看_  
 
 |  | 脚本名称 | 脚本功能 | 安装 \| 备用 |
 | :----: | :---- | :---- | :----: |
@@ -51,8 +51,8 @@
 
 要使用任何脚本，首先需要浏览器安装 **Tampermonkey  脚本管理器扩展（[Chrome](https://xiu.lanzoub.com/b073l8d1e)** / **[Firefox](https://addons.mozilla.org/firefox/addon/tampermonkey/)** / **[Edge](https://microsoftedge.microsoft.com/addons/detail/tampermonkey/iikmkjmpaadaobahmlepeloendndfphd?hl=zh-CN)）。**  
 
-- 点击表格 **\[安装\]** 进入脚本介绍页，点击 **\[安装脚本\]** 后弹出扩展提示，再点击 **\[安装\]** 即可。  
-- 如果 GreasyFork 访问速度太慢，可以选择点击 **\[备用\]** 后弹出扩展提示，再去点击 **\[安装\]** 即可。
+- 点击表格 **`[安装]`** 进入脚本介绍页，点击 **`[安装此脚本]`** 后弹出扩展提示，再点击 **`[安装]`** 即可。  
+- 如果 GreasyFork 访问速度太慢，可以选择点击 **`[备用]`** 后弹出扩展提示，再去点击 **`[安装]`** 即可。
 
 > [!IMPORTANT]
 > - _其他基于 **Chromium** 内核的浏览器（如国内套皮浏览器）一般都可以使用 Chrome 扩展。_  
@@ -93,9 +93,6 @@ Tampermonkey 为了顺应 Chrome 的 Manifest V3 要求，在 v5.0.0 版本中�
 ## Sponsor
 
 <a href="https://dartnode.com" title="Powered by DartNode - Free VPS for Open Source"><img src="https://dartnode.com/branding/DN-Open-Source-sm.png" alt="Powered by DartNode" width="40%"></a>
-
-> 该赞助者向本项目提供了**公益服务器**用以优化体验！  
-> This sponsor has provided **a non-profit server** for this project to enhance the user experience!
 
 ## License
 
