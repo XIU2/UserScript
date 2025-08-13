@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:ru      Улучшение Zhihu
-// @version      2.3.17
+// @version      2.3.18
 // @author       X.I.U
 // @description  A more personalized Zhihu experience~
 // @description:zh-CN  移除登录弹窗、屏蔽指定类别（视频、盐选、文章、想法、关注[赞同/关注了XX]等）、屏蔽低赞/低评回答、屏蔽用户、屏蔽关键词、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、区分问题文章、移除高亮链接、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、直达问题按钮、默认站外直链...
@@ -445,6 +445,9 @@ function blockLowCount(type) {
         case 'index':
             blockLowCount_('.Card.TopstoryItem.TopstoryItem-isRecommend', 'Card TopstoryItem TopstoryItem-isRecommend');
             break;
+        case 'follow':
+            blockLowCount_('.Card.TopstoryItem.TopstoryItem-isFollow', 'Card TopstoryItem TopstoryItem-isFollow');
+            break;
         case 'question':
             blockLowCount_('.List-item', 'List-item');
             break;
@@ -524,6 +527,9 @@ function blockUsers(type) {
     switch(type) {
         case 'index':
             blockUsers_('.Card.TopstoryItem.TopstoryItem-isRecommend', 'Card TopstoryItem TopstoryItem-isRecommend');
+            break;
+        case 'follow':
+            blockUsers_('.Card.TopstoryItem.TopstoryItem-isFollow', 'Card TopstoryItem TopstoryItem-isFollow');
             break;
         case 'question':
             blockUsers_question();
@@ -1569,6 +1575,12 @@ function blockHotOther() {
     block();
 }
 
+// 针对首页互相切换（知乎这里切换是动态加载的），为了避免功能交叉混乱，用户切换后刷新一下网页
+function switchHome() {
+    document.querySelectorAll('a[aria-controls=Topstory-follow]:not(.is-active), a[aria-controls=Topstory-hot]:not(.is-active), a[aria-controls=Topstory-column-square]:not(.is-active)').forEach((a)=>{
+        a.outerHTML = a.outerHTML;
+    })
+}
 
 (function() {
     if (window.onurlchange === undefined) {addUrlChangeEvent();} // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
@@ -1581,23 +1593,8 @@ function blockHotOther() {
                 blockUsers('question'); //                                     屏蔽指定用户
                 blockYanXuan(); //                                             屏蔽盐选内容
             }, 300);
-        } else if (location.pathname == '/') { // 推荐
-            setTimeout(()=>{
-                blockUsers('index'); //                                        屏蔽指定用户
-                blockKeywords('index'); //                                     屏蔽指定关键词
-                blockType(); //                                                屏蔽指定类别（视频/文章等）
-            }, 500);
-        } else if (location.pathname == '/hot') { // 热榜
-            setTimeout(()=>{
-                blockKeywords('index'); //                                     屏蔽指定关键词
-                blockHotOther(); //                                            移除热播杂项
-            }, 500);
-        } else if (location.pathname == '/follow') { // 关注
-            setTimeout(()=>{
-                blockKeywords('follow'); //                                    屏蔽指定关键词
-                blockType(); //                                                屏蔽指定类别（视频/文章等）
-                blockType('follow'); //                                        屏蔽指定类别（赞同了XX/关注了XX等）
-            }, 500);
+        } else if (location.pathname == '/') { // 首页 - 推荐
+            location.reload(); // 针对首页互相切换（知乎这里切换是动态加载的），为了避免功能交叉混乱，用户切换后刷新一下网页
         }
     })
 
@@ -1612,7 +1609,7 @@ function blockHotOther() {
     }
 
     function start(){
-        cleanHighlightLink(); //                                              移除高亮链接
+        cleanHighlightLink(); //                                               移除高亮链接
         originalPic();directLink(); // 先立即执行一次
         setInterval(originalPic,500); //                                       默认高清原图（无水印）
         setInterval(directLink, 500); //                                       默认站外直链
@@ -1700,6 +1697,7 @@ function blockHotOther() {
             setInterval(function(){topTime_('.ContentItem.PinItem', 'ContentItem-meta')}, 300); // 置顶显示时间
 
         } else { //                                                     首页 //
+            switchHome();// 针对首页互相切换（知乎这里切换是动态加载的），为了避免功能交叉混乱，用户切换后刷新一下网页
             // 解决屏蔽类别后，因为首页信息流太少而没有滚动条导致无法加载更多内容的问题
             document.lastElementChild.appendChild(document.createElement('style')).textContent = '.Topstory-container {min-height: 1500px;}';
             if (menu_value('menu_blockTypeVideo')) document.lastChild.appendChild(document.createElement('style')).textContent = `.Card .ZVideoItem-video, nav.TopstoryTabs > a[aria-controls="Topstory-zvideo"] {display: none !important;}`;
@@ -1718,6 +1716,8 @@ function blockHotOther() {
                 blockKeywords('index'); //                                     屏蔽指定关键词
                 blockHotOther(); //                                            屏蔽热榜杂项
             } else if (location.pathname == '/follow') { // 关注
+                //blockLowCount('follow'); //                                    屏蔽低赞/低评回答
+                blockUsers('follow'); //                                       屏蔽指定用户
                 blockKeywords('follow'); //                                    屏蔽指定关键词
                 blockType(); //                                                屏蔽指定类别（视频/文章等）
                 blockType('follow'); //                                        屏蔽指定类别（赞同了XX/关注了XX等）
