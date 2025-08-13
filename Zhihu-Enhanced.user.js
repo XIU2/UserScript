@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:ru      Улучшение Zhihu
-// @version      2.3.18
+// @version      2.3.19
 // @author       X.I.U
 // @description  A more personalized Zhihu experience~
 // @description:zh-CN  移除登录弹窗、屏蔽指定类别（视频、盐选、文章、想法、关注[赞同/关注了XX]等）、屏蔽低赞/低评回答、屏蔽用户、屏蔽关键词、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、区分问题文章、移除高亮链接、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、直达问题按钮、默认站外直链...
@@ -36,8 +36,13 @@ var menu_ALL = [
     ['menu_collapsedAnswer', '一键收起回答/评论', '一键收起回答/评论', true],
     ['menu_collapsedNowAnswer', '快捷收起回答/评论 (点击两侧空白处)', '快捷收起回答/评论', true],
     ['menu_backToTop', '快捷回到顶部 (右键两侧空白处)', '快捷回到顶部', true],
-    ['menu_blockLowUpvoteCount', '屏蔽低赞回答', '屏蔽低赞回答', ''],
-    ['menu_blockLowCommentCount', '屏蔽低评回答', '屏蔽低评回答', ''],
+    ['menu_blockLowCount', '屏蔽低赞低评', '设置要屏蔽 低于多少赞同/评价 的回答（默认不需要留空即可）<br/>（例如设置 0 则无人赞同/评价的回答会被屏蔽<br/>（例如设置 20 则赞同/评价数量低于 20 的回答会被屏蔽<br/>（修改后，后续加载的回答会立即生效，但不影响当前网页已有内容', ''],
+    ['menu_blockLowUpvoteCount', '最低赞同数 [首页]', '最低赞同数（首页）', ''],
+    ['menu_blockLowCommentCount', '最低评价数 [首页]', '最低评价数（首页）', ''],
+    ['menu_blockLowUpvoteCountQuestion', '最低赞同数 [问题页]', '最低赞同数（问题页）', ''],
+    ['menu_blockLowCommentCountQuestion', '最低评价数 [问题页]', '最低评价数（问题页）', ''],
+    ['menu_blockLowUpvoteCountFollow', '最低赞同数 [关注页]', '最低赞同数（关注页）', ''],
+    ['menu_blockLowCommentCountFollow', '最低评价数 [关注页]', '最低评价数（关注页）', ''],
     ['menu_blockUsers', '屏蔽指定用户', '屏蔽指定用户', true],
     ['menu_customBlockUsers', '自定义屏蔽用户', '自定义屏蔽用户', ['故事档案局', '盐选推荐', '盐选科普', '盐选成长计划', '知乎盐选会员', '知乎盐选创作者', '盐选心理', '盐选健康必修课', '盐选奇妙物语', '盐选生活馆', '盐选职场', '盐选文学甄选', '盐选作者小管家', '盐选博物馆', '盐选点金', '盐选测评室', '盐选科技前沿', '盐选会员精品']],
     ['menu_blockKeywords', '屏蔽指定关键词', '屏蔽指定关键词', true],
@@ -75,10 +80,11 @@ function registerMenuCommand() {
     }
     for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
         menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
-        if (menu_ALL[i][0] === 'menu_blockLowUpvoteCount') {
-            menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockLowCount(menu_ALL[i][0],'设置要屏蔽 低于多少赞同 的回答？\n（例如设置 50 则赞同数低于 50 的回答会被屏蔽\n（目前该功能适用于 首页信息流、问题页\n（点击 [确定] 修改后，后续加载的回答会立即生效，不影响当前已有\n（如不需要请留空并直接点击 [确定] 即可')});
-        } else if (menu_ALL[i][0] === 'menu_blockLowCommentCount') {
-            menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockLowCount(menu_ALL[i][0],'设置要屏蔽 低于多少评价 的回答？\n（例如设置 20 则评价数低于 20 的回答会被屏蔽\n（目前该功能适用于 首页信息流、问题页\n（点击 [确定] 修改后，后续加载的回答会立即生效，不影响当前已有\n（如不需要请留空并直接点击 [确定] 即可')});
+        if (menu_ALL[i][0] === 'menu_blockLowCount') {
+            menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_setting('checkbox', menu_ALL[i][1], menu_ALL[i][2], true, [menu_ALL[i+1], menu_ALL[i+2], menu_ALL[i+3], menu_ALL[i+4], menu_ALL[i+5], menu_ALL[i+6]])});
+            //menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockLowCount(menu_ALL[i][0],'设置要屏蔽 低于多少赞同 的回答？\n（例如设置 50 则赞同数低于 50 的回答会被屏蔽\n（目前该功能适用于 首页信息流、问题页\n（点击 [确定] 修改后，后续加载的回答会立即生效，不影响当前已有\n（如不需要请留空并直接点击 [确定] 即可')});
+        //} else if (menu_ALL[i][0] === 'menu_blockLowCommentCount') {
+            //menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockLowCount(menu_ALL[i][0],'设置要屏蔽 低于多少评价 的回答？\n（例如设置 20 则评价数低于 20 的回答会被屏蔽\n（目前该功能适用于 首页信息流、问题页\n（点击 [确定] 修改后，后续加载的回答会立即生效，不影响当前已有\n（如不需要请留空并直接点击 [确定] 即可')});
         } else if (menu_ALL[i][0] === 'menu_customBlockUsers') { // 只有 [屏蔽指定用户] 启用时，才注册菜单 [自定义屏蔽用户]
             if (menu_value('menu_blockUsers')) menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockUsers()});
         } else if (menu_ALL[i][0] === 'menu_customBlockKeywords') { // 只有 [屏蔽指定关键词] 启用时，才注册菜单 [自定义屏蔽关键词]
@@ -87,7 +93,7 @@ function registerMenuCommand() {
             if (menu_value('menu_blockKeywords')) menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
         } else if (menu_ALL[i][0] === 'menu_blockType') { // 屏蔽指定类别 使用单独的设置界面
             menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_setting('checkbox', menu_ALL[i][1], menu_ALL[i][2], true, [menu_ALL[i+1], menu_ALL[i+2], menu_ALL[i+3], menu_ALL[i+4], menu_ALL[i+5], menu_ALL[i+6], menu_ALL[i+7], menu_ALL[i+8], menu_ALL[i+9]])});
-        } else if (menu_ALL[i][0].indexOf('menu_blockType') == -1 && menu_ALL[i][0] != 'menu_blockYanXuan') { // 排除使用单独设置界面的 屏蔽指定类别 项
+        } else if (menu_ALL[i][0].indexOf('menu_blockType') == -1 && menu_ALL[i][0] != 'menu_blockYanXuan' && menu_ALL[i][0].indexOf('menu_blockLow') == -1) { // 排除使用单独设置界面的 屏蔽指定类别 项
             menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
         }
     }
@@ -126,8 +132,10 @@ function menu_setting(type, title, tips, line, menu) {
 .zhihuE_SettingRoot .zhihuE_SettingHeader {padding: 10px 20px;color: #fff;font-weight: bold;background-color: #3994ff;border-radius: 3px 3px 0 0;}
 .zhihuE_SettingRoot .zhihuE_SettingMain {padding: 10px 20px;border-radius: 0 0 3px 3px;}
 .zhihuE_SettingHeader span {float: right;cursor: pointer;}
-.zhihuE_SettingMain input {margin: 10px 6px 10px 0;cursor: pointer;vertical-align:middle}
-.zhihuE_SettingMain label {margin-right: 20px;user-select: none;cursor: pointer;vertical-align:middle}
+.zhihuE_SettingMain input {margin: 10px 6px 10px 0;vertical-align:middle;}
+.zhihuE_SettingMain input[type=text] {margin: 5px 6px 5px 0;padding-block: 0;}
+.zhihuE_SettingMain input[name=zhihuE_Setting_Checkbox] {cursor: pointer;}
+.zhihuE_SettingMain label {margin-right: 20px;user-select: none;cursor: pointer;vertical-align:middle;}
 .zhihuE_SettingMain hr {border: 0.5px solid #f4f4f4;}
 [data-theme="dark"] .zhihuE_SettingRoot {color: #adbac7;background-color: #343A44;}
 [data-theme="dark"] .zhihuE_SettingHeader {color: #d0d0d0;background-color: #2D333B;}
@@ -137,7 +145,9 @@ function menu_setting(type, title, tips, line, menu) {
             <div class="zhihuE_SettingMain"><p>${tips}</p><hr>`
     if (line) _br = '<br>'
     for (let i=0; i<menu.length; i++) {
-        if (GM_getValue(menu[i][0])) {
+        if (menu[i][0].indexOf('menu_blockLow') === 0) {
+            _html += `<label>${menu[i][1]}：<input name="${menu[i][0]}" type="text" oninput="value=value.replace(/[^\\d]/g,'')" value="${GM_getValue(menu[i][0])}" style="width: 50px;"></label>${_br}`
+        } else if (GM_getValue(menu[i][0])) {
             _html += `<label><input name="zhihuE_Setting" type="checkbox" value="${menu[i][0]}" checked="checked">${menu[i][1]}</label>${_br}`
         } else {
             _html += `<label><input name="zhihuE_Setting" type="checkbox" value="${menu[i][0]}">${menu[i][1]}</label>${_br}`
@@ -146,13 +156,19 @@ function menu_setting(type, title, tips, line, menu) {
     _html += `</div></div></div>`
     document.body.insertAdjacentHTML('beforeend', _html); // 插入网页末尾
     setTimeout(function() { // 延迟 100 毫秒，避免太快
+        const doc = document.querySelector('.zhihuE_SettingBackdrop_1');
+        if (!doc) return
         // 关闭按钮 点击事件
-        document.querySelector('.zhihuE_SettingClose').onclick = function(){this.parentElement.parentElement.parentElement.remove();document.querySelector('.zhihuE_SettingStyle').remove();}
+        doc.querySelector('.zhihuE_SettingClose').onclick = function(){this.parentElement.parentElement.parentElement.remove();document.querySelector('.zhihuE_SettingStyle').remove();}
         // 点击周围空白处 = 点击关闭按钮
-        document.querySelector('.zhihuE_SettingBackdrop_2').onclick = function(event){if (event.target == this) {document.querySelector('.zhihuE_SettingClose').click();};}
+        doc.querySelector('.zhihuE_SettingBackdrop_2').onclick = function(event){if (event.target == this) {document.querySelector('.zhihuE_SettingClose').click();};}
         // 复选框 点击事件
-        document.getElementsByName('zhihuE_Setting').forEach(function (checkBox) {
+        doc.querySelectorAll('input[name=zhihuE_Setting_Checkbox]').forEach(function (checkBox) {
             checkBox.addEventListener('click', function(){if (this.checked) {GM_setValue(this.value, true);} else {GM_setValue(this.value, false);}});
+        })
+        // 输入框 变化事件
+        doc.querySelectorAll('input[type=text]').forEach(function (checkBox) {
+            checkBox.onchange = function(){GM_setValue(this.name, this.value);};
         })
     }, 100)
 }
@@ -429,37 +445,27 @@ function isElementInViewport_(el) {
 }
 
 
-// 自定义屏蔽低赞/低评回答
-function customBlockLowCount(menu, info) {
-    let newCount = prompt(info, menu_value(menu));
-    if (newCount == '' || /^(0|[1-9]\d*)$/.test(newCount)) { // 检查是否是有效整数
-        GM_setValue(menu, newCount);
-        registerMenuCommand(); // 重新注册脚本菜单
-    }
-};
-
-
 // 屏蔽低赞/低评回答
 function blockLowCount(type) {
     switch(type) {
         case 'index':
-            blockLowCount_('.Card.TopstoryItem.TopstoryItem-isRecommend', 'Card TopstoryItem TopstoryItem-isRecommend');
+            blockLowCount_('.Card.TopstoryItem.TopstoryItem-isRecommend', 'Card TopstoryItem TopstoryItem-isRecommend', 'menu_blockLowUpvoteCount', 'menu_blockLowCommentCount');
             break;
         case 'follow':
-            blockLowCount_('.Card.TopstoryItem.TopstoryItem-isFollow', 'Card TopstoryItem TopstoryItem-isFollow');
+            blockLowCount_('.Card.TopstoryItem.TopstoryItem-isFollow', 'Card TopstoryItem TopstoryItem-isFollow', 'menu_blockLowUpvoteCountFollow', 'menu_blockLowCommentCountFollow');
             break;
         case 'question':
-            blockLowCount_('.List-item', 'List-item');
+            blockLowCount_('.List-item', 'List-item', 'menu_blockLowUpvoteCountQuestion', 'menu_blockLowCommentCountQuestion');
             break;
     }
 
 
-    function blockLowCount_(className1, className2) {
+    function blockLowCount_(className1, className2, menuUpvote, menuComment) {
         // 前几条因为是直接加载的，而不是动态插入网页的，所以需要单独判断
         function blockLowCount_now() {
             document.querySelectorAll(className1).forEach(function(item1){
-                blockLowCount_1(item1,'menu_blockLowUpvoteCount','meta[itemprop=upvoteCount]');
-                blockLowCount_1(item1,'menu_blockLowCommentCount','meta[itemprop=commentCount]');
+                blockLowCount_1(item1,menuUpvote,'meta[itemprop=upvoteCount]');
+                blockLowCount_1(item1,menuComment,'meta[itemprop=commentCount]');
             })
         }
 
@@ -474,8 +480,8 @@ function blockLowCount(type) {
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType != 1) return
                     if (target.className === className2) {
-                        blockLowCount_1(target,'menu_blockLowUpvoteCount','meta[itemprop=upvoteCount]');
-                        blockLowCount_1(target,'menu_blockLowCommentCount','meta[itemprop=commentCount]');
+                        blockLowCount_1(target,menuUpvote,'meta[itemprop=upvoteCount]');
+                        blockLowCount_1(target,menuComment,'meta[itemprop=commentCount]');
                     }
                 }
             }
@@ -486,14 +492,14 @@ function blockLowCount(type) {
 
 
     function blockLowCount_1(item1, menu, css) {
-        if (menu_value(menu)) {
+        if (GM_getValue(menu)) {
             let item = item1.querySelector(css);
             //console.log(item)
-            if (item && item.content && Number(item.content) < Number(menu_value(menu))) {
-                if (menu == 'menu_blockLowUpvoteCount') {
-                    console.log('已屏蔽低赞回答：', item.content + '<' + menu_value(menu), item1);
+            if (item && item.content && Number(item.content) < Number(GM_getValue(menu))) {
+                if (menu.indexOf('Upvote') !== -1) {
+                    console.log('已屏蔽低赞回答：', item.content + '<' + GM_getValue(menu), item1, type);
                 } else {
-                    console.log('已屏蔽低评回答：', item.content + '<' + menu_value(menu), item1);
+                    console.log('已屏蔽低评回答：', item.content + '<' + GM_getValue(menu), item1, type);
                 }
                 item1.hidden = true;
                 item1.style.display = 'none';
@@ -1716,7 +1722,7 @@ function switchHome() {
                 blockKeywords('index'); //                                     屏蔽指定关键词
                 blockHotOther(); //                                            屏蔽热榜杂项
             } else if (location.pathname == '/follow') { // 关注
-                //blockLowCount('follow'); //                                    屏蔽低赞/低评回答
+                blockLowCount('follow'); //                                    屏蔽低赞/低评回答
                 blockUsers('follow'); //                                       屏蔽指定用户
                 blockKeywords('follow'); //                                    屏蔽指定关键词
                 blockType(); //                                                屏蔽指定类别（视频/文章等）
