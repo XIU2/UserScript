@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.5.16
+// @version      1.5.17
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -138,8 +138,10 @@
 .zhihuE_SettingRoot .zhihuE_SettingHeader {padding: 10px 20px;color: #fff;font-weight: bold;background-color: #3994ff;border-radius: 3px 3px 0 0;}
 .zhihuE_SettingRoot .zhihuE_SettingMain {padding: 10px 20px;border-radius: 0 0 3px 3px;}
 .zhihuE_SettingHeader span {float: right;cursor: pointer;}
-.zhihuE_SettingMain input {margin: 10px 6px 10px 0;cursor: pointer;vertical-align:middle}
-.zhihuE_SettingMain label {margin-right: 20px;user-select: none;cursor: pointer;vertical-align:middle}
+.zhihuE_SettingMain input {margin: 10px 6px 10px 0;vertical-align:middle;}
+.zhihuE_SettingMain input[type=text] {margin: 5px 6px 5px 0;padding-block: 0;}
+.zhihuE_SettingMain input[name=zhihuE_Setting_Checkbox] {cursor: pointer;}
+.zhihuE_SettingMain label {margin-right: 20px;user-select: none;cursor: pointer;vertical-align:middle;}
 .zhihuE_SettingMain hr {border: 0.5px solid #f4f4f4;}
 [data-theme="dark"] .zhihuE_SettingRoot {color: #adbac7;background-color: #343A44;}
 [data-theme="dark"] .zhihuE_SettingHeader {color: #d0d0d0;background-color: #2D333B;}
@@ -150,7 +152,7 @@
         if (line) _br = '<br>'
         for (let i=0; i<menu.length; i++) {
             if (menu[i][0] === 'menu_widescreenDisplayWidth') {
-                _html += `<label>${menu[i][2]}：<input name="${menu[i][0]}" type="text" value="${GM_getValue(menu[i][0])}" style="width: 40px;"></label>${_br}`
+                _html += `<label>${menu[i][2]}：<input name="${menu[i][0]}" type="text" oninput="value=value.replace(/[^\\d]/g,'')" value="${GM_getValue(menu[i][0])}" style="width: 50px;"></label>${_br}`
             } else if (GM_getValue(menu[i][0])) {
                 _html += `<label><input name="zhihuE_Setting_Checkbox" type="checkbox" value="${menu[i][0]}" checked="checked">${menu[i][1]}</label>${_br}`
             } else {
@@ -160,15 +162,20 @@
         _html += `</div></div></div>`
         document.body.insertAdjacentHTML('beforeend', _html); // 插入网页末尾
         setTimeout(function() { // 延迟 100 毫秒，避免太快
+            const doc = document.querySelector('.zhihuE_SettingBackdrop_1');
+            if (!doc) return
             // 关闭按钮 点击事件
-            document.querySelector('.zhihuE_SettingClose').onclick = function(){this.parentElement.parentElement.parentElement.remove();document.querySelector('.zhihuE_SettingStyle').remove();}
+            doc.querySelector('.zhihuE_SettingClose').onclick = function(){this.parentElement.parentElement.parentElement.remove();document.querySelector('.zhihuE_SettingStyle').remove();}
             // 点击周围空白处 = 点击关闭按钮
-            document.querySelector('.zhihuE_SettingBackdrop_2').onclick = function(event){if (event.target == this) {document.querySelector('.zhihuE_SettingClose').click();};}
+            doc.querySelector('.zhihuE_SettingBackdrop_2').onclick = function(event){if (event.target == this) {document.querySelector('.zhihuE_SettingClose').click();};}
             // 复选框 点击事件
-            document.getElementsByName('zhihuE_Setting_Checkbox').forEach(function (checkBox) {
+            doc.querySelectorAll('input[name=zhihuE_Setting_Checkbox]').forEach(function (checkBox) {
                 checkBox.addEventListener('click', function(){if (this.checked) {GM_setValue(this.value, true);} else {GM_setValue(this.value, false);}});
             })
-            document.getElementsByName('menu_widescreenDisplayWidth')[0].onchange = function(){GM_setValue(this.name, this.value);};
+            // 输入框 变化事件
+            doc.querySelectorAll('input[type=text]').forEach(function (checkBox) {
+                checkBox.onchange = function(){GM_setValue(this.name, this.value);};
+            })
         }, 100)
     }
 
