@@ -7334,6 +7334,19 @@
 			"replaceE": "#d_list_page,#d_list_foot,table.dc_bar"
 		}
 	},
+	"Theav": {
+		"host": ["theavporn.com","the01.fun","/^theav\\d{3}\\.com/","/^thepa\\d{2}\\.xyz$/","/^tav\\d{3}\\.xyz$/"],
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".pagination>.item.active+div[class=item]>a",
+			"pageE": ".thumbs>.thumb",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"taotuxp.com": {
 		"host": "www.taotuxp.com",
 		"url": "/^\\/\\d+\\.html/",
