@@ -5606,6 +5606,16 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"中国科普博览 - 科学大院": {
+		"host": "www.kepu.net.cn",
+		"url": "/^\\/dayuan\\//",
+		"pager": {
+			"type": 6,
+			"nextL": ".text_align_center.mt50>span+a",
+			"pageE": ".dy>li",
+			"replaceE": ".text_align_center.mt50"
+		}
+	},
 	"学佛网": {
 		"host": "www.xuefo.tw",
 		"pager": {
