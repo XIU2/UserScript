@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:ru      Автостраничник
-// @version      6.6.59
+// @version      6.6.60
 // @author       X.I.U
 // @description  ⭐Append the next page content to the bottom seamlessly (like a waterfall, Unlimited scrolling, no need to manually click on the next page) ⭐, support various forums, social networking, games, comics, novels, academics, search engines (Google, Bing, Yahoo...) and other websites~
 // @description:zh-CN  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
@@ -207,6 +207,7 @@
         let support = false;
         end:
         for (let now in DBSite) { // 遍历 对象
+            console.log(DBSite[now])
             if (DBSite[now].ignore) continue; // 如果是特殊的内置规则（如通用规则）则跳过直接继续下一个循环
 
             // 供其他函数在 域名/URL 判断阶段使用
@@ -989,6 +990,20 @@ function: {
                     replaceE: '//p[@align][./font[@class="gray"]]'
                 }
             }, //           NexusPHP 论坛
+            "必应搜索 + 手机版": {
+                host: ['www.bing.com','cn.bing.com','www4.bing.com','global.bing.com'],
+                url: ()=> {urlC = true;if (lp == '/search') {curSite = DBSite["必应搜索 + 手机版"];if (isMobile()){curSite.blank=3;curSite.pager.type=6;curSite.pager.loadTime=1500;curSite.pager.scrollD=3000;}}},
+                style: '#b_footer,.b_msg,#bnp_rich_div,.cn_related_search_upsell_container',
+                history: true,
+                pager: {
+                    nextL: 'a.sb_pagN,a.sb_halfnext,a.sb_fullnpl',
+                    pageE: '#b_results>li.b_algo',
+                    replaceE: '#b_results>.b_pag,#b_PagAboveFooter'
+                },
+                function: {
+                    bF: (pageE)=>{pageE.forEach(function (one) {getAllCSS('div.rms_iac[data-src]',one).forEach(function (one1) {one1.outerHTML = `<img src=\"${one1.dataset.src}\" height=\"32\" width=\"32\" role=\"presentation\" class=\"rms_img\">`; }) }); return pageE}
+                }
+            }, //           必应搜索 + 手机版 为了解决部分用户/浏览器下因为 CSP 无法使用的问题，暂时先移动到内置规则
             nexusmods: {
                 host: 'www.nexusmods.com',
                 url: ()=> {urlC = true; if (indexOF(/\/(mods|users)\/\d+/)) {if (indexOF('tab=posts','s')){curSite = DBSite.nexusmods_posts;} else if (indexOF('tab=user+files','s')){curSite = DBSite.nexusmods;}} else if (lp !== '/' && getCSS('.pagination a.page-selected')) {curSite = DBSite.nexusmods;}},
