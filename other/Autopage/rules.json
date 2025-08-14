@@ -54,8 +54,8 @@
 	},
 	"必应搜索 + 手机版": {
 		"host": ["www.bing.com","cn.bing.com","www4.bing.com","global.bing.com"],
-		"url": "if (fun.lp() == '/search') {if (fun.isMobile() && document.documentElement.lang != 'zh') {return false;} else {return true;}}",
-		"style": "#b_footer,.b_msg,#bnp_rich_div",
+		"url": "fun.isUrlC();if (fun.lp() == '/search') {if (fun.isMobile()){rule.blank=3;rule.pager.type=6;rule.pager.loadTime=1000;};return true;}",
+		"style": "#b_footer,.b_msg,#bnp_rich_div,.cn_related_search_upsell_container",
 		"history": true,
 		"pager": {
 			"nextL": "a.sb_pagN,a.sb_halfnext,a.sb_fullnpl",
