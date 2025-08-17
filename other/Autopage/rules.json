@@ -3939,6 +3939,36 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"刺猬猫阅读": {
+		"host": "www.ciweimao.com",
+		"url": "/^\\/chapter\\/\\d+/",
+		"pager": {
+			"type": 6,
+			"nextL": "#J_BtnPageNext",
+			"pageE": "#J_BookRead>p",
+			"replaceE": ".book-read-page",
+			"loadTime": 1000
+		}
+	},
+	"SF轻小说": {
+		"host": "book.sfacg.com",
+		"url": "/^\\/Novel\\/\\d+\\/\\d+\\/\\d+\\//",
+		"pager": {
+			"nextL": "//div[@class='fn-btn']/a[text()='下一章']",
+			"pageE": "#ChapterBody>p",
+			"replaceE": "#article>.fn-btn"
+		}
+	},
+	"SF轻小说 - 书库": {
+		"host": "book.sfacg.com",
+		"url": "/^\\/List\\//",
+		"pager": {
+			"nextL": ".pagebarNext>a",
+			"pageE": ".Comic_Pic_List",
+			"replaceE": ".pagebar",
+			"forceHTTPS": true
+		}
+	},
 	"必读推荐": {
 		"host": "www.bidutuijian.com",
 		"url": "/^\\/books\\/.+\\/(?:(?!0000)\\d{4})\\.html/",
