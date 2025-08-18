@@ -3878,15 +3878,17 @@
 	},
 	"哔哩轻小说": {
 		"host": "www.linovelib.com",
-		"url": "return fun.indexOF(/\\/novel\\/\\d+\\/.+\\.html/)",
+		"url": "if (fun.indexOF(/\\/novel\\/\\d+\\/.+\\.html/)){setTimeout(()=>{let ac=fun.getCSS('#TextContent');if(ac){ac.classList.add('a123456');ac.classList.remove('adv-box');ac.style='display: block !important;';let ax=fun.getXpath(\"//head/style[not(@type)][normalize-space()='']\");document.head.appendChild(document.createElement('style')).textContent = ax.sheet.cssRules[0].cssText.replaceAll('#TextContent ','.a123456#TextContent ');ax.remove();}},300);return true;}",
 		"history": true,
 		"pager": {
+			"type": 6,
 			"nextL": "//div[@class='mlfy_page']/a[contains(text(),'下一页') or contains(text(),'下一章')]",
-			"pageE": "#TextContent>*:not(div),head>style",
-			"replaceE": ".mlfy_page"
+			"pageE": "//div[@id='TextContent'] | //head/style[not(@type)][normalize-space()='']",
+			"replaceE": ".mlfy_page",
+			"loadTime": 1000
 		},
 		"function": {
-			"bF": "if(pageE[0].tagName=='STYLE'){pageE[pageE.length-1].style='font-family: read !important;';pageE[0].textContent=pageE[0].textContent.replace(' p:last-of-type','666')}; return pageE",
+			"bF": "const ra='a'+Math.random().toString(36).slice(-6);pageE.forEach(function (a) {if(a.tagName=='STYLE'){a.textContent=a.sheet.cssRules[0].cssText.replaceAll('#TextContent ','.'+ra+'#TextContent ');}else if(a.tagName=='DIV'){a.classList.add(ra);a.classList.remove('adv-box');a.style='display: block !important;'};}); return pageE",
 			"aF": "document.body.appendChild(document.createElement('script')).textContent='yuedu()'"
 		}
 	},
@@ -3916,15 +3918,17 @@
 	},
 	"哔哩轻小说 - 手机版": {
 		"host": "www.bilinovel.com",
-		"url": "/\\/novel\\/\\d+\\/.+\\.html/",
+		"url": "if (fun.indexOF(/\\/novel\\/\\d+\\/.+\\.html/)){setTimeout(()=>{let ac=fun.getCSS('#acontent');if(ac){ac.classList.add('a123456');ac.classList.remove('adv-box');ac.style='display: block !important;';let ax=fun.getXpath(\"//head/style[not(@type)][normalize-space()='']\");document.head.appendChild(document.createElement('style')).textContent = ax.sheet.cssRules[0].cssText.replaceAll('#acontent ','.a123456#acontent ');ax.remove();}},300);return true;}",
 		"history": true,
 		"pager": {
+			"type": 6,
 			"nextL": "js; if (ReadParams.url_next.slice(ReadParams.url_next.length-5) === '.html') return (location.origin + ReadParams.url_next)",
-			"pageE": "id('acontent')/*[name()='p' or name()='img' or name()='br'] | //body/script[contains(text(),'var ReadParams')] | //body/script[contains(@src,'/readtools.js')] | //head/style",
-			"scriptT": 2
+			"pageE": "//div[@id='acontent'] | //body/script[contains(text(),'var ReadParams')] | //head/style[not(@type)][normalize-space()='']",
+			"scriptT": 2,
+			"loadTime": 1000
 		},
 		"function": {
-			"bF": "if(pageE[0].tagName=='STYLE'){pageE[pageE.length-2].style='font-family: read !important;';pageE[0].textContent=pageE[0].textContent.replace(' p:last-of-type','666')}; return pageE"
+			"bF": "const ra='a'+Math.random().toString(36).slice(-6);pageE.forEach(function (a) {if(a.tagName=='STYLE'){a.textContent=a.sheet.cssRules[0].cssText.replaceAll('#acontent ','.'+ra+'#acontent ');}else if(a.tagName=='DIV'){a.classList.add(ra);a.classList.remove('adv-box');a.style='display: block !important;'};}); return pageE"
 		}
 	},
 	"哔哩轻小说 - 手机版 - 文库": {
