@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:ru      Улучшение Zhihu
-// @version      2.3.20
+// @version      2.3.21
 // @author       X.I.U
 // @description  A more personalized Zhihu experience~
 // @description:zh-CN  移除登录弹窗、屏蔽指定类别（视频、盐选、文章、想法、关注[赞同/关注了XX]等）、屏蔽低赞/低评回答、屏蔽用户、屏蔽关键词、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、区分问题文章、移除高亮链接、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、直达问题按钮、默认站外直链...
@@ -1581,33 +1581,14 @@ function blockHotOther() {
     block();
 }
 
-// 针对首页互相切换（知乎这里切换是动态加载的），为了避免功能交叉混乱，用户切换后刷新一下网页
+// 将关注/推荐/热榜/专栏的选项去掉默认的点击事件改成静态链接（针对首页互相切换（知乎这里切换是动态加载的），为了避免功能交叉混乱
 function switchHome() {
-    document.querySelectorAll('a[aria-controls=Topstory-follow], a[aria-controls=Topstory-hot], a[aria-controls=Topstory-column-square]').forEach((a)=>{
-        a.outerHTML = a.outerHTML;
-    })
+    document.querySelectorAll('a.TopstoryTabs-link').forEach((a)=>{a.outerHTML = a.outerHTML;})
+    document.querySelectorAll('a.TopstoryTabs-link[aria-controls=Topstory-recommend]').forEach((a)=>{a.addEventListener('click', function(e){e.preventDefault();document.cookie='tst=r; expires=Thu, 18 Dec 2099 12:00:00 GMT; domain=.zhihu.com; path=/';location.href=this.href;return false;})})
 }
 
 (function() {
     if (window.onurlchange === undefined) {addUrlChangeEvent();} // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
-    window.addEventListener('urlchange', function(){ // 针对的是从单个回答页跳转到完整回答页时
-        if (location.pathname.indexOf('question') > -1 && location.pathname.indexOf('waiting') === -1 && location.pathname.indexOf('/answer/') === -1) { //       回答页 //
-            setTimeout(function(){
-                collapsedNowAnswer('.QuestionPage'); //                        收起当前回答 + 快捷返回顶部
-                collapsedNowAnswer('.Question-main'); //                       收起当前回答 + 快捷返回顶部
-                questionRichTextMore(); //                                     展开问题描述
-                blockUsers('question'); //                                     屏蔽指定用户
-                blockYanXuan(); //                                             屏蔽盐选内容
-            }, 300);
-        } else if (location.pathname == '/') { // 首页 - 推荐
-            // 针对首页互相切换（知乎这里切换是动态加载的），为了避免功能交叉混乱，用户切换后刷新一下网页
-            if (GM_info.scriptHandler === 'Violentmonkey' || (GM_info.scriptHandler === 'Tampermonkey' && parseFloat(GM_info.version.slice(0,4)) >= 4.18)) {
-              setTimeout(()=>{location.reload();},200);
-            } else {
-              location.reload();
-            }
-        }
-    })
 
     removeLogin(); // 移除登录弹窗，Violentmonkey 不能延迟执行这个
     cleanTitles(); // 净化标题消息，不能延迟执行
@@ -1639,6 +1620,8 @@ function switchHome() {
                 questionRichTextMore(); //                                     展开问题描述
                 if (location.pathname.indexOf('answer') == -1) { //  问题页而不是回答页
                     blockLowCount('question'); //                              屏蔽低赞/低评回答
+                } else { // 将回答页的的查看全部回答选项去掉默认的点击事件改成静态链接，为了避免功能交叉混乱
+                    document.querySelectorAll('div.Card.ViewAll>a').forEach((a)=>{a.outerHTML = a.outerHTML;})
                 }
                 blockUsers('question'); //                                     屏蔽指定用户
                 blockYanXuan(); //                                             屏蔽盐选内容
@@ -1708,32 +1691,32 @@ function switchHome() {
             setInterval(function(){topTime_('.ContentItem.PinItem', 'ContentItem-meta')}, 300); // 置顶显示时间
 
         } else { //                                                     首页 //
-            switchHome();// 针对首页互相切换（知乎这里切换是动态加载的），为了避免功能交叉混乱，用户切换后刷新一下网页
+            switchHome(); // 将关注/推荐/热榜/专栏的选项去掉默认的点击事件改成静态链接（针对首页互相切换（知乎这里切换是动态加载的），为了避免功能交叉混乱
             // 解决屏蔽类别后，因为首页信息流太少而没有滚动条导致无法加载更多内容的问题
             document.lastElementChild.appendChild(document.createElement('style')).textContent = '.Topstory-container {min-height: 1500px;}';
             if (menu_value('menu_blockTypeVideo')) document.lastChild.appendChild(document.createElement('style')).textContent = `.Card .ZVideoItem-video, nav.TopstoryTabs > a[aria-controls="Topstory-zvideo"] {display: none !important;}`;
 
             collapsedNowAnswer('main div'); //                                 收起当前回答 + 快捷返回顶部
             collapsedNowAnswer('.Topstory-container'); //                      收起当前回答 + 快捷返回顶部
-            setInterval(function(){topTime_('.TopstoryItem', 'ContentItem-meta')}, 300); // 置顶显示时间
-            addTypeTips(); //                                                  区分问题文章
-            addToQuestion(); //                                                直达问题按钮
-            if (location.pathname == '/') { // 推荐
-                blockLowCount('index'); //                                     屏蔽低赞/低评回答
-                blockUsers('index'); //                                        屏蔽指定用户
-                blockKeywords('index'); //                                     屏蔽指定关键词
-                blockType(); //                                                屏蔽指定类别（视频/文章等）
-            } else if (location.pathname == '/hot') { // 热榜
-                blockKeywords('index'); //                                     屏蔽指定关键词
-                blockHotOther(); //                                            屏蔽热榜杂项
-            } else if (location.pathname == '/follow') { // 关注
-                blockLowCount('follow'); //                                    屏蔽低赞/低评回答
-                blockUsers('follow'); //                                       屏蔽指定用户
-                blockKeywords('follow'); //                                    屏蔽指定关键词
-                blockType(); //                                                屏蔽指定类别（视频/文章等）
-                blockType('follow'); //                                        屏蔽指定类别（赞同了XX/关注了XX等）
-            } else {
-                blockUsers();
+            if (location.pathname !== '/column-square'){ // 不是首页 - 专栏时
+                setInterval(function(){topTime_('.TopstoryItem', 'ContentItem-meta')}, 300); // 置顶显示时间
+                addTypeTips(); //                                                  区分问题文章
+                addToQuestion(); //                                                直达问题按钮
+                if (location.pathname == '/') { // 推荐
+                    blockLowCount('index'); //                                     屏蔽低赞/低评回答
+                    blockUsers('index'); //                                        屏蔽指定用户
+                    blockKeywords('index'); //                                     屏蔽指定关键词
+                    blockType(); //                                                屏蔽指定类别（视频/文章等）
+                } else if (location.pathname == '/hot') { // 热榜
+                    blockKeywords('index'); //                                     屏蔽指定关键词
+                    blockHotOther(); //                                            屏蔽热榜杂项
+                } else if (location.pathname == '/follow') { // 关注
+                    blockLowCount('follow'); //                                    屏蔽低赞/低评回答
+                    blockUsers('follow'); //                                       屏蔽指定用户
+                    blockKeywords('follow'); //                                    屏蔽指定关键词
+                    blockType(); //                                                屏蔽指定类别（视频/文章等）
+                    blockType('follow'); //                                        屏蔽指定类别（赞同了XX/关注了XX等）
+                }
             }
         }
     }
