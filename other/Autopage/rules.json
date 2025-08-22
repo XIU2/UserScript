@@ -954,11 +954,11 @@
 		}
 	},
 	"archlinux - aur": {
-		"host": "aur.archlinux.org",
+		"host": ["archlinux.org","aur.archlinux.org"],
 		"url": "/^\\/packages/",
 		"blank": 3,
 		"pager": {
-			"nextL": "span.page+a.page",
+			"nextL": ".next>a,span.page+a.page",
 			"pageE": "#pkglist-results tbody>tr",
 			"replaceE": ".pkglist-nav"
 		}
