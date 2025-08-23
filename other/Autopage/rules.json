@@ -4949,7 +4949,7 @@
 		"blank": 4,
 		"pager": {
 			"nextL": "a[data-testid=pagination-next-button]:not([aria-disabled])",
-			"pageE": "div[class^='prc-Timeline-Timeline-']>div>div"
+			"pageE": "div[class^='prc-Timeline-Timeline-']>div"
 		}
 	},
 	"Github - Tags": {
