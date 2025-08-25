@@ -6736,6 +6736,16 @@
 			"loadTime": 1000
 		}
 	},
+	"BepisDB": {
+		"host": "db.bepis.moe",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".page-item.active+li>a",
+			"pageE": "#inner-card-body>div",
+			"replaceE": ".pagination"
+		}
+	},
 	"xchina.co": {
 		"host": ["xchina.co","/^xchina\\.[a-z]+$/","crxs.me","litu100.xyz","8se.me","shise.me"],
 		"url": "return fun.isPager()",
