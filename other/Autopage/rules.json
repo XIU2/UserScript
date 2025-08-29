@@ -3847,6 +3847,19 @@
 			"replaceE": ".prenext,.page"
 		}
 	},
+	"飘天文学": {
+		"host": "www.piaotia.com",
+		"url": "/^\\/html\\/\\d+\\/\\d+\\/\\d+\\.html",
+		"style": "#content>*:not(br):not(:nth-child(1))",
+		"pager": {
+			"type": 6,
+			"nextL": "(//a[contains(text(), '下一章')])[last()]",
+			"pageE": "#content",
+			"insertP": ["#content",6],
+			"replaceE": ".bottomlink",
+			"loadTime": 500
+		}
+	},
 	"皇帝之家": {
 		"host": "www.huangdizhijia.com",
 		"url": "/chapter-\\d+\\.html/",
