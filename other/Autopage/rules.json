@@ -6785,6 +6785,16 @@
 			"scrollD": 1000
 		}
 	},
+	"西斯新聞": {
+		"host": "sexynews.gamme.com.tw",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".navi-next",
+			"pageE": ".List-4",
+			"replaceE": ".navi-pages"
+		}
+	},
 	"Hentai Foundry": {
 		"host": "www.hentai-foundry.com",
 		"url": "return (fun.lp() != '/' && fun.isPager('p'))",
