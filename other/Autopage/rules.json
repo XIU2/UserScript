@@ -5314,7 +5314,7 @@
 		"pager": {
 			"type": 6,
 			"nextL": ".a-selected+li.a-normal>a",
-			"pageE": "#gridItemRoot",
+			"pageE": ".a-ordered-list>li.zg-no-numbers",
 			"replaceE": ".a-pagination",
 			"loadTime": 7000,
 			"scrollD": 1000
