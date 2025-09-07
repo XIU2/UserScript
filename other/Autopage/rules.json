@@ -3904,7 +3904,7 @@
 	},
 	"哔哩轻小说": {
 		"host": "www.linovelib.com",
-		"url": "if (fun.indexOF(/\\/novel\\/\\d+\\/.+\\.html/)){setTimeout(()=>{let ac=fun.getCSS('#TextContent');if(ac){ac.classList.add('a123456');ac.classList.remove('adv-box');ac.style='display: block !important;';let ax=fun.getXpath(\"//head/style[not(@type)][normalize-space()='']\");document.head.appendChild(document.createElement('style')).textContent = ax.sheet.cssRules[0].cssText.replaceAll('#TextContent ','.a123456#TextContent ');ax.remove();}},300);return true;}",
+		"url": "if (fun.indexOF(/\\/novel\\/\\d+\\/.+\\.html/)){setTimeout(()=>{let ac=fun.getCSS('#TextContent');if(ac){ac.classList.add('a123456');ac.classList.remove('adv-box');ac.style='display: block !important;';let ax=fun.getXpath(\"//head/style[not(@type)][normalize-space()='']\");document.head.appendChild(document.createElement('style')).textContent = Array.from(ax.sheet.cssRules).map(r => {return r.cssText;}).join(' ').replaceAll('#TextContent ','.a123456#TextContent ');ax.remove();}},300);return true;}",
 		"history": true,
 		"pager": {
 			"type": 6,
@@ -3914,7 +3914,7 @@
 			"loadTime": 1000
 		},
 		"function": {
-			"bF": "const ra='a'+Math.random().toString(36).slice(-6);pageE.forEach(function (a) {if(a.tagName=='STYLE'){a.textContent=a.sheet.cssRules[0].cssText.replaceAll('#TextContent ','.'+ra+'#TextContent ');}else if(a.tagName=='DIV'){a.classList.add(ra);a.classList.remove('adv-box');a.style='display: block !important;'};}); return pageE",
+			"bF": "const ra='a'+Math.random().toString(36).slice(-6);pageE.forEach(function (a) {if(a.tagName=='STYLE'){a.textContent=Array.from(a.sheet.cssRules).map(r => {return r.cssText;}).join(' ').replaceAll('#TextContent ','.'+ra+'#TextContent ');}else if(a.tagName=='DIV'){a.classList.add(ra);a.classList.remove('adv-box');a.style='display: block !important;'};}); return pageE",
 			"aF": "document.body.appendChild(document.createElement('script')).textContent='yuedu()'"
 		}
 	},
@@ -3944,7 +3944,7 @@
 	},
 	"哔哩轻小说 - 手机版": {
 		"host": "www.bilinovel.com",
-		"url": "if (fun.indexOF(/\\/novel\\/\\d+\\/.+\\.html/)){setTimeout(()=>{let ac=fun.getCSS('#acontent');if(ac){ac.classList.add('a123456');ac.classList.remove('adv-box');ac.style='display: block !important;';let ax=fun.getXpath(\"//head/style[not(@type)][normalize-space()='']\");document.head.appendChild(document.createElement('style')).textContent = ax.sheet.cssRules[0].cssText.replaceAll('#acontent ','.a123456#acontent ');ax.remove();}},300);return true;}",
+		"url": "if (fun.indexOF(/\\/novel\\/\\d+\\/.+\\.html/)){setTimeout(()=>{let ac=fun.getCSS('#acontent');if(ac){ac.classList.add('a123456');ac.classList.remove('adv-box');ac.style='display: block !important;';let ax=fun.getXpath(\"//head/style[not(@type)][normalize-space()='']\");document.head.appendChild(document.createElement('style')).textContent = Array.from(ax.sheet.cssRules).map(r => {return r.cssText;}).join(' ').replaceAll('#acontent ','.a123456#acontent ');ax.remove();}},300);return true;}",
 		"history": true,
 		"pager": {
 			"type": 6,
@@ -3954,7 +3954,7 @@
 			"loadTime": 1000
 		},
 		"function": {
-			"bF": "const ra='a'+Math.random().toString(36).slice(-6);pageE.forEach(function (a) {if(a.tagName=='STYLE'){a.textContent=a.sheet.cssRules[0].cssText.replaceAll('#acontent ','.'+ra+'#acontent ');}else if(a.tagName=='DIV'){a.classList.add(ra);a.classList.remove('adv-box');a.style='display: block !important;'};}); return pageE"
+			"bF": "const ra='a'+Math.random().toString(36).slice(-6);pageE.forEach(function (a) {if(a.tagName=='STYLE'){a.textContent=Array.from(a.sheet.cssRules).map(r => {return r.cssText;}).join(' ').replaceAll('#acontent ','.'+ra+'#acontent ');}else if(a.tagName=='DIV'){a.classList.add(ra);a.classList.remove('adv-box');a.style='display: block !important;'};}); return pageE"
 		}
 	},
 	"哔哩轻小说 - 手机版 - 文库": {
