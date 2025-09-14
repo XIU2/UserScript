@@ -7437,7 +7437,7 @@
 		}
 	},
 	"4khd.com": {
-		"host": ["4khd.com","yrsdu.xxtt.ink"],
+		"host": ["4khd.com","/^(.+)\\.xxtt\\.ink$/"],
 		"url": "/^\\/content\\//",
 		"pager": {
 			"type": 3,
