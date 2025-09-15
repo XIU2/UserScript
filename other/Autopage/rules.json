@@ -1493,6 +1493,19 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"觅元素": {
+		"host": "www.51yuansu.com",
+		"url": "return fun.isPager()",
+		"style": "li.pic-item{max-height: 330px;width: auto;} #f-content>div{position: static !important; float: left !important; width: 285px !important;}",
+		"pager": {
+			"nextL": ".nextpage",
+			"pageE": "li.pic-item,#f-content>div",
+			"replaceE": ".pager-wrap"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"vcg.com": {
 		"host": "www.vcg.com",
 		"url": "fun.isUrlC(); return fun.indexOF(/^\\/creative-(image|illustration)\\//)",
