@@ -2030,11 +2030,22 @@
 	},
 	"CurseForge": {
 		"host": "www.curseforge.com",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".btn-next",
+			"pageE": ".results-container>div",
+			"replaceE": ".pagination"
+		}
+	},
+	"CurseForge - legacy": {
+		"host": "legacy.curseforge.com",
+		"url": "return fun.isPager()",
+		"blank": 3,
 		"pager": {
 			"nextL": ".pagination-next>a",
 			"pageE": "div.my-2",
-			"replaceE": ".pagination",
-			"scrollD": 2500
+			"replaceE": ".pagination"
 		}
 	},
 	"Planet Minecraft": {
