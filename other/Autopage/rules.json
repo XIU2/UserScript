@@ -6693,6 +6693,16 @@
 			"loadTime": 500
 		}
 	},
+	"xxxclub": {
+		"host": "xxxclub.to",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".browsepagination>a:not(.page-link)",
+			"pageE": ".browsetableinside>ul>li:not(:first-child)",
+			"replaceE": ".browsepagination"
+		}
+	},
 	"Orzqwq": {
 		"host": "orzqwq.com",
 		"url": "if(fun.indexOF(/\\/p\\/\\d\\/$/)){let t = setInterval(()=>{if(typeof chapter_preloaded_images !== 'undefined'){let _img=''; for (let i=0;i<=chapter_preloaded_images.length;i++){_img += `<img src=\"${chapter_preloaded_images[i]}\">`;}; document.querySelector('.reading-content').innerHTML = _img;clearInterval(t);}},500); return true;}",
