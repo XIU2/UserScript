@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.5.17
+// @version      1.5.18
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -44,6 +44,8 @@
     }
     registerMenuCommand();
     addStyle();
+    // 向下翻时自动隐藏顶栏
+    if (menu_value('menu_hideTitle')) setTimeout(hideTitle, 2000);
 
     // 注册脚本菜单
     function registerMenuCommand() {
@@ -253,9 +255,9 @@ html[data-theme=light] .AppHeader-notifications:not([aria-label=通知])>div:fir
             style_2 = `/* 隐藏在各列表中查看文章时开头显示的大图，不影响文章、专栏页面 */
 .RichContent img.ArticleItem-image {display: none !important;}
 `,
-            style_3 = `/* 向下翻时自动隐藏顶栏*/
-header.is-hidden {display: none;}
-`,
+//            style_3 = `/* 向下翻时自动隐藏顶栏*/
+//header.is-hidden {display: none;}
+//`,
             style_4 = `/* 调整图片最大高度 */
 .ztext .content_image, .ztext .origin_image, .GifPlayer img {max-height: 500px !important;width: auto !important;}
 `,
@@ -481,8 +483,6 @@ html {filter: brightness(65%) sepia(30%) !important; background-image: url();}
         if (menu_value('menu_picHeight')) style += style_4;
         // 隐藏文章开头大图
         if (menu_value('menu_postimg')) style += style_2;
-        // 向下翻时自动隐藏顶栏
-        if (menu_value('menu_hideTitle')) style += style_3;
 
         if (document.lastChild) {
             document.lastChild.appendChild(style_Add).textContent = style;
@@ -496,6 +496,27 @@ html {filter: brightness(65%) sepia(30%) !important; background-image: url();}
         }
     }
 
+    function hideTitle() {
+        // 获取需要控制的元素
+        const floatingElement = document.getElementsByTagName('header')[0];
+        let beforeScrollTop = document.documentElement.scrollTop || document.body.scrollTop,
+            scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
+            scrollHeight = window.innerHeight || document.documentElement.clientHeight
+
+        window.addEventListener('scroll', function (e) {
+            var afterScrollTop = document.documentElement.scrollTop || document.body.scrollTop,
+                delta = afterScrollTop - beforeScrollTop;
+            //console.log(delta,floatingElement)
+            if (delta == 0) return false;
+            if (delta > 0) {// 向下滚动 隐藏
+                floatingElement.hidden = true;
+            } else {
+                // 向上滚动 显示
+                floatingElement.hidden = false;
+            }
+            beforeScrollTop = afterScrollTop;
+        }, false);
+    }
 
     // 获取知乎 Cookie 中的主题类型
     function getTheme() {
