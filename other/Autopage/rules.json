@@ -7054,6 +7054,23 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"chottie": {
+		"host": "chottie.com",
+		"url": "if (fun.indexOF(/^\\/blog\\/archives/)){fun.insStyle('div[pagetotal]>div>div {display: block !important;} a>.v-image {width: auto !important;}');setTimeout(()=>{fun.getCSS('.v-btn-toggle>button:last-of-type').click();},1000)}"
+	},
+	"XiuRenBox": {
+		"host": "www.xiurenbox.com",
+		"url": "return fun.isPager()",
+		"style": ".page-click-zone",
+		"pager": {
+			"nextL": ".next",
+			"pageE": ".wp-block-image>img",
+			"replaceE": ".simple-page-nav"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [0,'img[data-lazy-src]','data-lazy-src'])"
+		}
+	},
 	"MrCong": {
 		"host": "mrcong.com",
 		"pager": {
