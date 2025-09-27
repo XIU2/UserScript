@@ -1204,7 +1204,7 @@
 		}
 	},
 	"nodeseek": {
-		"host": "www.nodeseek.com",
+		"host": ["www.nodeseek.com","www.deepflood.com"],
 		"url": "return fun.isPager()",
 		"pager": {
 			"nextL": "a.pager-next",
