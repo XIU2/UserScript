@@ -7508,6 +7508,15 @@
 			"replaceE": ".pages"
 		}
 	},
+	"愛麗絲書屋 - 分类/搜索": {
+		"host": "www.alicesw.tw",
+		"url": "/^\\/(lists|search\\.html)/",
+		"pager": {
+			"nextL": ".layui-laypage-next,.active+li>a",
+			"pageE": ".list-group-item,.rec_rullist>ul,ul.txt-list>li",
+			"replaceE": ".pagination,.pager"
+		}
+	},
 	"黑料网": {
 		"host": ["18hlw.com","www.hlwxx.com","/.*/"],
 		"url": "return (!fun.indexOF('/archives/') && fun.isTitle('黑料网') && fun.isPager())",
