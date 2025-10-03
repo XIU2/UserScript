@@ -7509,7 +7509,7 @@
 		}
 	},
 	"愛麗絲書屋 - 分类/搜索": {
-		"host": "www.alicesw.tw",
+		"host": ["www.alicesw.com","www.alicesw.tw","/^(.+)\\.(alicesw2|als1006)\\.([a-z]+)$/"],
 		"url": "/^\\/(lists|search\\.html)/",
 		"pager": {
 			"nextL": ".layui-laypage-next,.active+li>a",
