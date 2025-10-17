@@ -3549,6 +3549,28 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"G站漫画": {
+		"host": ["manhuafree.com","manhuascans.org"],
+		"url": "return fun.isPager('n')",
+		"pager": {
+			"type": 6,
+			"nextL": "#nextChapterLink",
+			"pageE": "#chapcontent>div",
+			"replaceE": "#nextChapterLink,#preChapterLink",
+			"loadTime": 1000,
+			"scrollD": 4000
+		}
+	},
+	"G站漫画 - 分类页": {
+		"host": ["manhuafree.com","manhuascans.org"],
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "a[aria-label^=下]",
+			"pageE": ".cardlist>div",
+			"replaceE": ".cardlist+div"
+		}
+	},
 	"COLAMANGA 漫画": {
 		"host": "www.colamanga.com",
 		"url": "if (fun.indexOF('.html')){if (!(fun.getCookie('mh_readmode') === '' || fun.getCookie('mh_readmode') === '3')) {document.cookie='mh_readmode=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; location.reload();}; return true;} else if (fun.indexOF(/\\/\\d+\\/$/)) {setTimeout(()=>{if (document.querySelector('a.website-display-all')) document.querySelector('a.website-display-all').click();},500);}",
