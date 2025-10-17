@@ -5995,6 +5995,17 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"123av": {
+		"host": ["/^123av\\.[a-z]+$/","/^1av\\.[a-z]+$/"],
+		"url": "return fun.isPager()",
+		"pager": {
+			"nextL": "a[rel=next]",
+			"pageE": ".box-item-list>div, body>script[src*='app.js']",
+			"replaceE": ".pagination",
+			"scriptT": 2,
+			"scrollD": 2000
+		}
+	},
 	"av6k.org": {
 		"host": "/^([0-9a-z-]+\\.)?av6k([0-9a-z]+)?\\.[a-z]+$/",
 		"url": "fun.insStyle('.clickadu,.clickadulist,#footer,.links,.links-top,.links-top2,.links-top3,a[href^=\\'http://\\'],.footlink,body>div[id][style],#shareQrcode');if(fun.isTitle('AV6K') && fun.lp() !== '/' && fun.getAllCSS('.pages_c').length === 2)return fun.isPager()",
