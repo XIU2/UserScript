@@ -6024,8 +6024,17 @@
 			"nextL": "a[rel=next]",
 			"pageE": ".box-item-list>div, body>script[src*='app.js']",
 			"replaceE": ".pagination",
-			"scriptT": 2,
-			"scrollD": 2000
+			"scriptT": 2
+		}
+	},
+	"javxx": {
+		"host": "javxx.com",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".page-item.active+li>a",
+			"pageE": ".vid-items>.item",
+			"replaceE": "ul.pagination"
 		}
 	},
 	"av6k.org": {
