@@ -6029,7 +6029,7 @@
 	},
 	"javxx": {
 		"host": "javxx.com",
-		"url": "return fun.isPager()",
+		"url": "fun.isUrlC();return (!fun.indexOF(/^\\/[a-z]+\\/v\\//) && !fun.indexOF(/^\\/[a-z]+$/))",
 		"blank": 3,
 		"pager": {
 			"nextL": ".page-item.active+li>a",
