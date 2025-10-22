@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         蓝奏云网盘增强
-// @version      1.5.6
+// @version      1.5.7
 // @author       X.I.U
 // @description  文件排序、刷新不回根目录、快捷返回上一级（右键网页空白处）、后退返回上一级、右键文件显示菜单、点击直接下载文件、点击空白进入目录、自动显示更多文件、一键复制所有分享链接、自定义分享链接域名、自动打开/复制分享链接、带密码的分享链接自动输密码、拖入文件自动显示上传框、输入密码后回车确认、优化编辑框初始大小
 // @match        *://lanzou.com/u
@@ -347,10 +347,10 @@
         if (iframe) { // 只有找到 iframe 框架时才会继续运行脚本
             iframe = iframe.contentWindow;
             let timer = setInterval(function(){
-                if (iframe.document.querySelector('.load>[href]')) {
-                    //iframe.document.querySelector('.load>a[href]').target = '_top'
-                    //iframe.document.querySelector('.load>a[href]').click();
-                    GM_openInTab(iframe.document.querySelector('.load>a[href]').href, {active: false, insert: true, setParent: false}); // 后台打开
+                if (iframe.document.querySelector('.load [href]')) {
+                    //iframe.document.querySelector('.load a[href]').target = '_top'
+                    //iframe.document.querySelector('.load a[href]').click();
+                    GM_openInTab(iframe.document.querySelector('.load a[href]').href, {active: false, insert: true, setParent: false}); // 后台打开
                     clearInterval(timer);
                     // 关闭该后台标签页
                     if (GM_info.scriptHandler === 'Violentmonkey') { // Violentmonkey 需要延迟一会儿
