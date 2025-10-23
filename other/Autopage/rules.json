@@ -3470,7 +3470,7 @@
 		}
 	},
 	"古风漫画网 / 优酷漫画 / 36 漫画 / 360 漫画 / 漫漫台 / 古漫画 / 前未漫画 / 下拉式漫画 / 漫画1234 - 分类页": {
-		"host": ["www.gufengmh.com","/^www\\.gufengmh\\d/","www.123gf.com","36manga.com","www.36manga.com","36manhua.com","www.36manhua.com","www.36man.cc","www.manmantai.com","www.xlsmh.com","www.gmh1234.com"],
+		"host": ["www.gufengmh.com","/^www\\.gufengmh\\d/","/^www\\.ykmh\\.[a-z]+$/","www.123gf.com","36manga.com","www.36manga.com","36manhua.com","www.36manhua.com","www.36man.cc","www.manmantai.com","www.xlsmh.com","www.gmh1234.com"],
 		"url": "/^\\/(comic\\/)?(update|list|search)/",
 		"blank": 3,
 		"pager": {
@@ -3480,12 +3480,12 @@
 		}
 	},
 	"古风漫画网 / 优酷漫画 / 36 漫画 / 360 漫画 / 漫漫台 / 古漫画 / 前未漫画 / 下拉式漫画 / 漫画1234": {
-		"host": ["www.gufengmh.com","/^www\\.gufengmh\\d/","www.123gf.com","36manga.com","www.36manga.com","36manhua.com","www.36manhua.com","www.36man.cc","www.manmantai.com","www.xlsmh.com","www.gmh1234.com"],
-		"url": "if (fun.indexOF(/\\/\\d+\\.html$/)) {if (/^www\\.(123gf|ykmh|izhegu|qianwee|manmantai)\\.com$/.test(location.hostname)|| location.hostname.indexOf('36man') != -1) {if (localStorage.getItem('chapterScroll') != '\"pagination\"') {localStorage.setItem('chapterScroll','\"pagination\"'); location.reload();} else {setTimeout(()=>{let _img = '',host = SinMH.getResHostDomain(); if (/^www\\.(ykmh|izhegu)\\.com$/.test(location.hostname)) {chapterPath=''}else if (location.hostname.indexOf('36man') == -1||location.hostname=='www.123gf.com'||location.hostname=='www.gmh1234.com'){host+='/'}; if (location.hostname == 'www.36man.cc' ||(location.hostname == 'www.manmantai.com' && chapterImages[0].slice(0,4) == 'http')){host=''}; for (let i=0;i<chapterImages.length;i++){_img += `<img src=\"${host}${chapterPath}${chapterImages[i]}\">`;}; document.getElementById('images').innerHTML = _img;},500); return true;}} else if (localStorage.getItem('chapterScroll') != '\"scroll\"') {localStorage.setItem('chapterScroll','\"scroll\"'); location.reload();}else{return true}}",
+		"host": ["www.gufengmh.com","/^www\\.gufengmh\\d/","/^www\\.ykmh\\.[a-z]+$/","www.123gf.com","36manga.com","www.36manga.com","36manhua.com","www.36manhua.com","www.36man.cc","www.manmantai.com","www.xlsmh.com","www.gmh1234.com"],
+		"url": "if (fun.indexOF(/\\/\\d+\\.html$/)) {if (/^www\\.(123gf|ykmh|izhegu|qianwee|manmantai)\\.[a-z]+$/.test(location.hostname)|| location.hostname.indexOf('36man') != -1) {if (localStorage.getItem('chapterScroll') != '\"pagination\"') {localStorage.setItem('chapterScroll','\"pagination\"'); location.reload();} else {setTimeout(()=>{let _img = '',host = SinMH.getResHostDomain(); if (/^www\\.(ykmh|izhegu)\\.[a-z]+$/.test(location.hostname)) {chapterPath=''}else if (location.hostname.indexOf('36man') == -1||location.hostname=='www.123gf.com'||location.hostname=='www.gmh1234.com'){host+='/'}; if (/^www\\.(ykmh)\\.[a-z]+$/.test(location.hostname) || location.hostname == 'www.36man.cc' ||(location.hostname == 'www.manmantai.com' && chapterImages[0].slice(0,4) == 'http')){host=''}; for (let i=0;i<chapterImages.length;i++){_img += `<img src=\"${host}${chapterPath}${chapterImages[i]}\">`;}; document.getElementById('images').innerHTML = _img;},500); return true;}} else if (localStorage.getItem('chapterScroll') != '\"scroll\"') {localStorage.setItem('chapterScroll','\"scroll\"'); location.reload();}else{return true}}",
 		"style": ".img_land_prev,.img_land_next,#sider-left,#sider-right,p.img_info,.tc,.chapter-view + .w996,.chapter-view>div[style]:not([id]):not([class]) {display: none !important;} #images{min-height: 6000px !important;} #images>img {display: inline-block !important;min-height: 400px;margin: 0 auto !important;border: none !important;padding: 0 !important;max-width: 99% !important;height: auto !important;}",
 		"history": true,
 		"pager": {
-			"nextL": "js; let url = comicUrl.replace('.html','/') + nextChapterData.id + '.html'; if (nextChapterData.id != null && url && url != '.html' && url != location.href) return url",
+			"nextL": "js; let url = comicUrl.replace('.html','/').replace('http://',location.protocol+'//') + nextChapterData.id + '.html'; if (nextChapterData.id != null && url && url != '.html' && url != location.href) return url",
 			"pageE": "//script[contains(text(),'chapterImages')]",
 			"insertP": ["body",3],
 			"scriptT": 2,
@@ -3493,7 +3493,7 @@
 			"scrollD": 4000
 		},
 		"function": {
-			"aF": "let _img = '',host = SinMH.getResHostDomain(); if (/^www\\.(ykmh|100fanwo|izhegu|xlsmh)\\.com$/.test(location.hostname)) {chapterPath=''}else if (location.hostname.indexOf('36man') == -1||location.hostname=='www.123gf.com'||location.hostname=='www.gmh1234.com'){host+='/'}; if (location.hostname == 'www.36man.cc' ||(location.hostname == 'www.manmantai.com' && chapterImages[0].slice(0,4) == 'http') ||location.hostname == 'www.xlsmh.com'){host=''};  for (let i=0;i<chapterImages.length;i++){_img += `<img src=\"${host}${chapterPath}${chapterImages[i]}\">`;}; document.getElementById('images').insertAdjacentHTML('beforeend',_img);"
+			"aF": "let _img = '',host = SinMH.getResHostDomain(); if (/^www\\.(ykmh|100fanwo|izhegu|xlsmh)\\.[a-z]+$/.test(location.hostname)) {chapterPath=''}else if (location.hostname.indexOf('36man') == -1||location.hostname=='www.123gf.com'||location.hostname=='www.gmh1234.com'){host+='/'}; if (/^www\\.(ykmh)\\.[a-z]+$/.test(location.hostname) || location.hostname == 'www.36man.cc' ||(location.hostname == 'www.manmantai.com' && chapterImages[0].slice(0,4) == 'http') ||location.hostname == 'www.xlsmh.com'){host=''};  for (let i=0;i<chapterImages.length;i++){_img += `<img src=\"${host}${chapterPath}${chapterImages[i]}\">`;}; document.getElementById('images').insertAdjacentHTML('beforeend',_img);"
 		}
 	},
 	"爱漫之家 / 733 动漫": {
