@@ -3668,6 +3668,16 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"起点图数据 - 书单": {
+		"host": "www.qidiantu.com",
+		"url": "/^\\/booklist\\/\\d+/",
+		"blank": 3,
+		"pager": {
+			"nextL": "//a[@class='btn btn-primary'][text()='后十本'][1]",
+			"pageE": ".well.well-sm.table-responsive",
+			"replaceE": "//a[@class='btn btn-primary'][text()='后十本'][1]"
+		}
+	},
 	"七猫中文 - 阅读页": {
 		"host": "www.qimao.com",
 		"url": "return (fun.indexOF(/\\/shuku\\/\\d+-\\d+\\//) || fun.indexOF('/reader/index/'))",
