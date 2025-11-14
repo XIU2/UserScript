@@ -5877,6 +5877,16 @@
 			"replaceE": "#paging"
 		}
 	},
+	"91pron.men": {
+		"host": ["91pron.men","/^.+\\.(yennew\\.com|scvhuen\\.click|bbbsss\\.org)$/"],
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "span[aria-current]+a",
+			"pageE": ".grid.grid-cols-2.md\\:grid-cols-3.xl\\:grid-cols-4.gap-5>div",
+			"replaceE": "//span[@aria-current]/../../.."
+		}
+	},
 	"xHamster": {
 		"host": ["/^[a-z]{2}\\.xhamster\\.com$/","/^[a-z]{2}\\..*(xh).*\\.[a-z]{2,}$/"],
 		"url": "return ((fun.isTitle('xHamster') || fun.getCSS('meta[name=application-name][content=xHamster]')) && !fun.indexOF('/videos/') && !fun.indexOF('/photos/gallery'))",
@@ -5990,6 +6000,15 @@
 			"nextL": ".navigation>span+a",
 			"pageE": ".thumb",
 			"replaceE": ".navigation"
+		}
+	},
+	"underhentai": {
+		"host": "www.underhentai.net",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "span.page-num.active+a.page-num",
+			"pageE": "article.data-block"
 		}
 	},
 	"Avbebe": {
