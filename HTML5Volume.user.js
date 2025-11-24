@@ -3,7 +3,7 @@
 // @name:zh-CN   HTML5 视频音频默认音量
 // @name:zh-TW   HTML5 視訊音訊預設音量
 // @name:ru      Громкость аудио-видео в формате HTML5 по умолчанию
-// @version      1.0.3
+// @version      1.0.4
 // @author       X.I.U
 // @description  Avoid being startled by some video/audio with default 100% volume! And support each website to remember the volume separately...
 // @description:zh-CN  避免被一些默认 100% 音量的视频/音频吓一跳（或社死）！且支持各网站分别记住音量...
@@ -34,11 +34,57 @@
         let nowVolume = ' (跟随全局)'
         if (localStorage.getItem('html5_xiu_currentVolume')) nowVolume = ' [ ' + parseInt(localStorage.getItem('html5_xiu_currentVolume')) + '% ]'
         menu_ID[1] = GM_registerMenuCommand('🔁 忘记当前网站音量' + nowVolume, function(){resetCurrentVolume()});
-        menu_ID[2] = GM_registerMenuCommand('💬 反馈 & 建议', function () {GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true}); GM_openInTab('https://greasyfork.org/zh-CN/scripts/438400/feedback', {active: true,insert: true,setParent: true});});
+        // 强制当前网站使用全局音量（针对部分不支持调节音量的网站）
+        if (menu_forcedToEnable('check')) { // 当前网站是否已存在强制列表中
+            menu_ID[2] = GM_registerMenuCommand('✅ 已强制当前网站使用全局音量 (针对不支持调节音量的)', function(){menu_forcedToEnable('del')});
+            menu_ID[4] = GM_registerMenuCommand('#️⃣ 修改当前网站默认音量 (针对不支持调节音量的)', function(){customCurrentDefaultVolume()});
+        } else {
+            menu_ID[2] = GM_registerMenuCommand('❌ 未强制当前网站使用全局音量 (针对不支持调节音量的)', function(){menu_forcedToEnable('add')});
+        }
+        menu_ID[3] = GM_registerMenuCommand('💬 反馈 & 建议', function () {GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true}); GM_openInTab('https://greasyfork.org/zh-CN/scripts/438400/feedback', {active: true,insert: true,setParent: true});});
     }
 
     insPage();
     currentPage();
+
+    // 强制当前网站使用全局音量（针对部分不支持调节音量的网站）
+    function menu_forcedToEnable(type) {
+        switch(type) {
+            case 'check':
+                if(check()) return true
+                return false
+                break;
+            case 'add':
+                add();
+                break;
+            case 'del':
+                del();
+                break;
+        }
+
+        function check() { // 存在返回真，不存在返回假
+            let websiteList = GM_getValue('menu_forcedToEnable',[]); // 读取网站列表
+            if (websiteList.indexOf(location.host) === -1) return false // 不存在返回假
+            return true
+        }
+
+        function add() {
+            if (check()) return
+            let websiteList = GM_getValue('menu_forcedToEnable',[]); // 读取网站列表
+            websiteList.push(location.host); // 追加网站域名
+            GM_setValue('menu_forcedToEnable', websiteList); // 写入配置
+            location.reload(); // 刷新网页
+        }
+
+        function del() {
+            if (!check()) return
+            let websiteList = GM_getValue('menu_forcedToEnable',[]), // 读取网站列表
+            index = websiteList.indexOf(location.host);
+            websiteList.splice(index, 1); // 删除网站域名
+            GM_setValue('menu_forcedToEnable', websiteList); // 写入配置
+            location.reload(); // 刷新网页
+        }
+    }
 
 
     // 网页本身的 Video Audio 标签
@@ -88,7 +134,9 @@
 
     // 判断该视频/音频元素是否已监听事件
     function isFirstEvent(target) {
-        if (!target.controls) return; // 如果视频/音频已经有了自己的控件（即没有使用 HTML5 默认的控件），则退出
+        if (!menu_forcedToEnable('check')) { // 如果未强制当前网站使用全局音量（针对部分不支持调节音量的网站）
+            if (!target.controls) return; // 如果视频/音频已经有了自己的控件（即没有使用 HTML5 默认的控件），则退出
+        }
         modifyVolume(target);
         // 如果没有该属性，则代表是还未监听事件
         if (target.dataset.html5VolumeXiu != 'true') {
@@ -111,8 +159,18 @@
 
     // 修改全局默认音量
     function customDefaultVolume() {
-        let newValue = parseFloat(prompt('修改全局默认音量，不影响各网站记住的音量，当前网页需刷新后生效~\n范围：0~100 (即 0%~100%，不需要加 % 百分号)\n默认：30', GM_getValue('menu_defaultVolume', 30)));
+        let newValue = parseFloat(prompt('修改全局默认音量，不影响各网站记住的音量，修改后当前网页立即生效~\n范围：0~100 (即 0%~100%，不需要加 % 百分号)\n默认：30', GM_getValue('menu_defaultVolume', 30)));
         if (!Number.isNaN(newValue) && newValue >= 0 && newValue <= 100) {GM_setValue('menu_defaultVolume', newValue);}
+        currentPage(); // 重置当前网页的音量
+        registerMenuCommand(); // 重新注册菜单（刷新菜单上的音量值）
+    }
+
+
+    // 修改当前网站默认音量 (针对不支持调节音量的网站)
+    function customCurrentDefaultVolume() {
+        let newValue = parseFloat(prompt('修改当前网站默认音量 (针对不支持调节音量的网站)，修改后立即生效~\n范围：0~100 (即 0%~100%，不需要加 % 百分号)\n默认：全局默认音量', localStorage.getItem('html5_xiu_currentVolume') || GM_getValue('menu_defaultVolume', 30)));
+        if (!Number.isNaN(newValue) && newValue >= 0 && newValue <= 100) {localStorage.setItem('html5_xiu_currentVolume', newValue);}
+        currentPage(); // 重置当前网页的音量
         registerMenuCommand(); // 重新注册菜单（刷新菜单上的音量值）
     }
 
@@ -121,5 +179,6 @@
     function resetCurrentVolume() {
         if (localStorage.getItem('html5_xiu_currentVolume')) localStorage.removeItem('html5_xiu_currentVolume') // 清理 localStorage
         currentPage(); // 重置当前网页的音量
+        registerMenuCommand(); // 重新注册菜单（刷新菜单上的音量值）
     }
 })();
