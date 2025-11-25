@@ -5888,7 +5888,7 @@
 		}
 	},
 	"xHamster": {
-		"host": ["/^[a-z]{2}\\.xhamster\\.com$/","/^[a-z]{2}\\..*(xh).*\\.[a-z]{2,}$/"],
+		"host": ["xhamster.com","/^[a-z]{2}\\.xhamster\\.com$/","/^[a-z]{2}\\..*(xh).*\\.[a-z]{2,}$/"],
 		"url": "return ((fun.isTitle('xHamster') || fun.getCSS('meta[name=application-name][content=xHamster]')) && !fun.indexOF('/videos/') && !fun.indexOF('/photos/gallery'))",
 		"blank": 3,
 		"pager": {
