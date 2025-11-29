@@ -3,7 +3,7 @@
 // @name:zh-CN   HTML5 视频音频默认音量
 // @name:zh-TW   HTML5 視訊音訊預設音量
 // @name:ru      Громкость аудио-видео в формате HTML5 по умолчанию
-// @version      1.0.4
+// @version      1.0.5
 // @author       X.I.U
 // @description  Avoid being startled by some video/audio with default 100% volume! And support each website to remember the volume separately...
 // @description:zh-CN  避免被一些默认 100% 音量的视频/音频吓一跳（或社死）！且支持各网站分别记住音量...
@@ -138,10 +138,12 @@
             if (!target.controls) return; // 如果视频/音频已经有了自己的控件（即没有使用 HTML5 默认的控件），则退出
         }
         modifyVolume(target);
-        // 如果没有该属性，则代表是还未监听事件
-        if (target.dataset.html5VolumeXiu != 'true') {
-            target.dataset.html5VolumeXiu = 'true'
-            target.addEventListener('volumechange', volumeChangeEvent);
+        if (!menu_forcedToEnable('check')) { // 如果未强制当前网站使用全局音量（针对部分不支持调节音量的网站），毕竟不支持音量调节的网站监听音量变化是没有意义的，反而可能会被网站默认静音什么的搞乱
+            // 如果没有该属性，则代表是还未监听事件
+            if (target.dataset.html5VolumeXiu != 'true') {
+                target.dataset.html5VolumeXiu = 'true'
+                target.addEventListener('volumechange', volumeChangeEvent);
+            }
         }
     }
 
