@@ -5543,6 +5543,17 @@
 			"replaceE": ".pg_pointer"
 		}
 	},
+	"哲风壁纸": {
+		"host": "haowallpaper.com",
+		"url": "/^\\/(homeView|mobileView)($|\\?)/",
+		"blank": 3,
+		"pager": {
+			"type": 6,
+			"nextL": "js; return fun.getNextEP('.page-content>.current+.isDefault','page=',/page=\\d+/)",
+			"pageE": "#main-content .card",
+			"replaceE": ".page-main"
+		}
+	},
 	"Anime Pictures": {
 		"host": "anime-pictures.net",
 		"url": "return (fun.indexOF('/pictures/') && !fun.indexOF('/view_post/'))",
