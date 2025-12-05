@@ -2739,7 +2739,7 @@
 		}
 	},
 	"YTS": {
-		"host": "yts.mx",
+		"host": ["yts.lt","yts.gg","yts.am","yts.ag"],
 		"url": "/^\\/browse-movies/",
 		"blank": 3,
 		"pager": {
