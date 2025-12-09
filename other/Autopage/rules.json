@@ -5468,7 +5468,7 @@
 		}
 	},
 	"kmoe": {
-		"host": ["mox.moe","kox.moe","kxo.moe","koz.moe"],
+		"host": ["mox.moe","kox.moe","kxo.moe","koz.moe","kxx.moe","kzz.moe"],
 		"url": "return fun.isPager()",
 		"blank": 3,
 		"pager": {
