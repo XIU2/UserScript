@@ -5992,7 +5992,7 @@
 		"pager": {
 			"nextL": "a[aria-current=page]+a",
 			"pageE": ".grid>div[data-slot=card]",
-			"replaceE": "nav[aria-label=Pagination]"
+			"replaceE": "//nav[@aria-label='Pagination']/../.."
 		}
 	},
 	"Latino Hentai": {
