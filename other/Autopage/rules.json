@@ -643,20 +643,11 @@
 	},
 	"番组计划": {
 		"host": ["bgm.tv","bangumi.tv","chii.in"],
-		"url": "return (fun.indexOF(/\\/(browser|subject_search|tag|wish)/) || fun.isPager())",
+		"url": "return (fun.indexOF(/\\/(browser|subject_search|tag|wish|forum|comments)/) || fun.isPager())",
 		"blank": 3,
 		"pager": {
 			"nextL": "//div[@class='page_inner']/a[text()='››']",
-			"pageE": "ul#browserItemList>li",
-			"replaceE": ".page_inner"
-		}
-	},
-	"番组计划 - 小组帖子列表": {
-		"host": ["bgm.tv","bangumi.tv","chii.in"],
-		"url": "/\\/forum/",
-		"pager": {
-			"nextL": "//div[@class='page_inner']/a[text()='››']",
-			"pageE": ".topic_list>tbody:last-of-type>tr.topic",
+			"pageE": "ul#browserItemList>li,.topic_list>tbody:last-of-type>tr.topic,#comment_box>.item",
 			"replaceE": ".page_inner"
 		}
 	},
