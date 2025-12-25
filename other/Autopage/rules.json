@@ -5993,6 +5993,17 @@
 			"replaceE": ".pages"
 		}
 	},
+	"肉视频": {
+		"host": ["rou.video","rouva2.xyz"],
+		"url": "/^\\/(t\\/|(v|search)($|\\?))/",
+		"style": ".grid>div[data-slot=card]+div:not([data-slot=card])",
+		"blank": 3,
+		"pager": {
+			"nextL": "a[aria-current=page]+a",
+			"pageE": ".grid>div[data-slot=card]",
+			"replaceE": "nav[aria-label=Pagination]"
+		}
+	},
 	"Latino Hentai": {
 		"host": "latinohentai.com",
 		"url": "return (!fun.indexOF('/ver/'))",
