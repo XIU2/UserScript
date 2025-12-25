@@ -2176,8 +2176,8 @@
 			"replaceE": ".post-pagination"
 		}
 	},
-	"RuTracker - 帖子列表": {
-		"host": ["rutracker.org","rutracker.net"],
+	"RuTracker / Pornolab - 帖子列表": {
+		"host": ["rutracker.org","rutracker.net","pornolab.net"],
 		"url": "/(viewforum|tracker)\\.php/",
 		"blank": 4,
 		"pager": {
@@ -2186,8 +2186,8 @@
 			"replaceE": "#pagination,.bottom_info>.nav"
 		}
 	},
-	"RuTracker - 帖子内": {
-		"host": ["rutracker.org","rutracker.net"],
+	"RuTracker / Pornolab - 帖子内": {
+		"host": ["rutracker.org","rutracker.net","pornolab.net"],
 		"url": "/viewtopic\\.php/",
 		"thread": true,
 		"pager": {
