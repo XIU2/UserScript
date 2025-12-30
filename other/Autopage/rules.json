@@ -2810,7 +2810,7 @@
 		}
 	},
 	"Kickass Torrents": {
-		"host": ["kickasss.to","katcr.to"],
+		"host": ["kickasss.to","katcr.to","kickasstorrent.cr"],
 		"url": "return (fun.lp() != '/' && !fun.indexOF('.html') && !fun.indexOF('/popular'))",
 		"blank": 3,
 		"pager": {
