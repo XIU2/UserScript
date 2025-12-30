@@ -2931,8 +2931,9 @@
 	"SubHD - 论坛": {
 		"host": ["subhd.tv","subhdtw.com","subhd.la","subhd.cc","subhd.me"],
 		"url": "/^\\/forum\\/(forum|ask)/",
+		"blank": 3,
 		"pager": {
-			"nextL": "//a[@class='page-link'][text()='下一页']",
+			"nextL": ".page-item.active+li>a",
 			"pageE": ".bg-white.shadow-sm.rounded-3>div",
 			"replaceE": "nav.clearfix"
 		}
@@ -2940,8 +2941,9 @@
 	"SubHD": {
 		"host": ["subhd.tv","subhdtw.com","subhd.la","subhd.cc","subhd.me"],
 		"url": "return fun.isPager('r')",
+		"blank": 3,
 		"pager": {
-			"nextL": "//a[@class='page-link'][text()='下一页']",
+			"nextL": ".page-item.active+li>a",
 			"pageE": ".bg-white.shadow-sm.rounded-3",
 			"insertP": ["nav.clearfix",1],
 			"replaceE": "nav.clearfix"
