@@ -2829,6 +2829,16 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"TorrentDownloads": {
+		"host": "www.torrentdownloads.pro",
+		"url": "return fun.isPager('r')",
+		"blank": 3,
+		"pager": {
+			"nextL": "//div[@class='pagination_box']//a[text()='>>']",
+			"pageE": ".inner_container>.grey_bar3",
+			"replaceE": ".pagination_box"
+		}
+	},
 	"LimeTorrents": {
 		"host": "/^www\\.limetorrents\\./",
 		"url": "return (fun.isTitle('LimeTorrents') && (fun.indexOF('/search/') || fun.indexOF('/browse-torrents')))",
