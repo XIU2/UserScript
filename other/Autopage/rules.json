@@ -7034,6 +7034,25 @@
 			"replaceE": ".newpagewrap"
 		}
 	},
+	"巴卡漫画": {
+		"host": ["bakamh.com","bakamh.ru","/^baka\\d\\.[a-z]+$/"],
+		"url": "/^\\/manga\\/.+\\/c-/",
+		"pager": {
+			"nextL": ".nav-next>a",
+			"pageE": ".reading-content>.page-break",
+			"replaceE": ".select-pagination,.select-view"
+		}
+	},
+	"巴卡漫画 - 列表页": {
+		"host": ["bakamh.com","bakamh.ru","/^baka\\d\\.[a-z]+$/"],
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.nextpostslink",
+			"pageE": "#loop-content>.page-listing-item",
+			"replaceE": ".wp-pagenavi"
+		}
+	},
 	"鸟鸟韩漫": {
 		"host": ["/^nnhanman\\.[a-z]+/","/^nnhanman\\d\\.com/","/^nnhm\\d\\.[a-z]+/"],
 		"url": "/^\\/comic\\/.+\\/chapter-\\d+\\.html/",
