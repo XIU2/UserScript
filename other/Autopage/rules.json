@@ -4130,6 +4130,17 @@
 			"replaceE": ".pager"
 		}
 	},
+	"八叉书库": {
+		"host": "www.8xsk.xyz",
+		"url": "/^\\/novel\\d+\\/chapter/",
+		"pager": {
+			"type": 6,
+			"nextL": "#next_chap",
+			"pageE": "#chapter-content",
+			"replaceE": ".chapter-nav",
+			"loadTime": 1000
+		}
+	},
 	"蓝鲨": {
 		"host": "www.lan-sha.com",
 		"url": "return (!fun.indexOF('.html'))",
