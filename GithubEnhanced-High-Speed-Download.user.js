@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:ru      Улучшение GitHub – быстрое скачивание
-// @version      2.6.33
+// @version      2.6.34
 // @author       X.I.U
 // @description  High-speed download of Git Clone/SSH, Release, Raw, Code(ZIP) and other files (Based on public welfare), project list file quick download (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)
@@ -52,7 +52,7 @@
         ['https://cdn.gh-proxy.org/https://github.com', '其他', '[Fastly CDN] - 该公益加速源由 [gh-proxy.com] 提供'],
         ['https://edgeone.gh-proxy.org/https://github.com', '其他', '[edgeone] - 该公益加速源由 [gh-proxy.com] 提供'],
         ['https://cors.isteed.cc/github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@Lufs\'s] 提供'],
-        ['https://hub.gitmirror.com/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [GitMirror] 提供'],
+        //['https://hub.gitmirror.com/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [GitMirror] 提供'], // 域名无解析
         //['https://down.sciproxy.com/github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [sciproxy.com] 提供'], // 522
         ['https://ghproxy.it/https://github.com', '美国', '[美国 洛杉矶] - 该公益加速源由 [@yionchilau] 提供'],
         //['https://github.site', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@yionchilau] 提供'], // 挂了
@@ -122,7 +122,7 @@
         //['https://rapidgit.jjda.de5.net/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [热心网友] 提供'],
         //['https://github.yongyong.online/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [github.yongyong.online] 提供'],
         //['https://ghdd.862510.xyz/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [ghdd.862510.xyz] 提供'],
-        //['https://hub.gitmirror.com/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [GitMirror] 提供'],
+        //['https://hub.gitmirror.com/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [GitMirror] 提供'], // 域名无解析
         //['https://gh-proxy.org/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [gh-proxy.com] 提供'],
         //['https://cdn.gh-proxy.org/https://github.com', '其他', '[Fastly CDN] - 该公益加速源由 [gh-proxy.com] 提供'],
         //['https://edgeone.gh-proxy.org/https://github.com', '其他', '[edgeone] - 该公益加速源由 [gh-proxy.com] 提供'],
@@ -184,7 +184,7 @@
         //['https://gh-proxy.ygxz.in//https://raw.githubusercontent.com', '美国', '[美国 洛杉矶] - 该公益加速源由 [@一个小站 www.ygxz.in] 提供&#10;&#10; - 缓存：无（或很短）'], // 被蔷
         //['https://raw.nuaa.cf', '美国', '[美国 洛杉矶] - 该公益加速源由 [FastGit 群组成员] 提供'], // 证书到期
         //['https://raw.yzuu.cf', '美国', '[美国 纽约] - 该公益加速源由 [FastGit 群组成员] 提供'], // 证书到期
-        //['https://hub.gitmirror.com/raw.githubusercontent.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [GitMirror] 提供&#10;&#10; - 缓存：无（或很短）'],
+        //['https://hub.gitmirror.com/raw.githubusercontent.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [GitMirror] 提供&#10;&#10; - 缓存：无（或很短）'], // 域名无解析
         //['https://jsdelivr-cdn.pencilnavrp.990989.xyz/gh', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [PencilNavigator] 提供&#10;&#10; - 缓存：有'],
         //['https://git.yumenaka.net/https://raw.githubusercontent.com', '美国', '[美国 圣何塞]'], // 连接超时
     ], svg = [
