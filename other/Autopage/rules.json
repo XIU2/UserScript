@@ -2730,7 +2730,7 @@
 		}
 	},
 	"YTS": {
-		"host": ["yts.lt","yts.gg","yts.am","yts.ag"],
+		"host": ["yts.bz","yts.lt","yts.gg","yts.am","yts.ag"],
 		"url": "/^\\/browse-movies/",
 		"blank": 3,
 		"pager": {
