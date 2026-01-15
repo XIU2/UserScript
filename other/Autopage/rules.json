@@ -2,7 +2,7 @@
 	"百度搜索": {
 		"host": ["www.baidu.com","ipv6.baidu.com"],
 		"url": "fun.isUrlC(); if (fun.isMobile()) {location.hostname = 'm.baidu.com';} else {return (fun.lp() == '/s')}",
-		"style": ".new-pmd .c-img-border {position: initial !important;} .op-bk-polysemy-video__wrap.c-gap-bottom {display: none !important;}",
+		"style": ".new-pmd .c-img-border {position: initial !important;} .op-bk-polysemy-video__wrap.c-gap-bottom, #content_left:not([style])>.result-op[tpl='new_baikan_index'], #content_left:not([style])>.result-op[tpl='ai_ask'] {display: none !important;}",
 		"history": true,
 		"pager": {
 			"nextL": "#page strong+a:not(.n)",
