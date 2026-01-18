@@ -3906,6 +3906,15 @@
 			"replaceE": ".prenext,.page"
 		}
 	},
+	"爱下电子书": {
+		"host": "ixdzs8.com",
+		"url": "/^\\/read\\/.+\\.html$/",
+		"pager": {
+			"nextL": ".chapter-next",
+			"pageE": ".page-content>section",
+			"replaceE": "chapter-act"
+		}
+	},
 	"飘天文学": {
 		"host": "www.piaotia.com",
 		"url": "/^\\/html\\/\\d+\\/\\d+\\/\\d+\\.html",
