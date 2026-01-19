@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:ru      Автостраничник
-// @version      6.6.67
+// @version      6.6.68
 // @author       X.I.U
 // @description  ⭐Append the next page content to the bottom seamlessly (like a waterfall, Unlimited scrolling, no need to manually click on the next page) ⭐, support various forums, social networking, games, comics, novels, academics, search engines (Google, Bing, Yahoo...) and other websites~
 // @description:zh-CN  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
@@ -1687,11 +1687,12 @@ function: {
 
     // 翻页类型 1/3
     function getPageE(url) {
-        if (!curSite.gmxhr) {
-            // 依靠原生 XMLHttpRequest 尝试解决因缺失跨域 cookie 导致的问题（比如一些使用 Cloudflare CDN 人机验证的网站，会出现脚本后台获取到人机验证页面）
+        // Chrome 浏览器可以依靠改用原生 XMLHttpRequest 尝试解决因缺失跨域 cookie 导致的问题（比如一些使用 Cloudflare CDN 人机验证的网站，会出现脚本后台获取到人机验证页面）
+        // Firefox 浏览器则需要使用 GM_xmlhttpRequest 的 cookiePartition 参数来解决（该参数要 Tampermonkey v5.2 及以上才有）
+        if (!curSite.gmxhr || !navigator.userAgent.includes('Firefox')) {
             const xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
-            xhr.overrideMimeType('text/html; charset=' + (document.characterSet||document.charset||document.inputEncoding));
+            //xhr.overrideMimeType('text/html; charset=' + (document.characterSet||document.charset||document.inputEncoding));
 
             if (curSite.xRequestedWith === true) {xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest')}
             //(curSite.noReferer === true) ? xhr.setRequestHeader('Referer', ''):xhr.setRequestHeader('Referer', location.href)
@@ -1720,11 +1721,14 @@ function: {
             GM_xmlhttpRequest({
                 url: url,
                 method: 'GET',
-                overrideMimeType: 'text/html; charset=' + (document.characterSet||document.charset||document.inputEncoding),
+                //overrideMimeType: 'text/html; charset=' + (document.characterSet||document.charset||document.inputEncoding),
                 headers: {
                     'x-requested-with': (curSite.xRequestedWith === true) ? 'XMLHttpRequest':null,
                     'Referer': (curSite.noReferer === true) ? null:location.href,
                     'Accept': 'text/html,application/xhtml+xml,application/xml'
+                },
+                cookiePartition: { // https://github.com/Tampermonkey/tampermonkey/issues/2057
+                    topLevelSite: location.origin
                 },
                 timeout: 5000,
                 onload: function (response) {
@@ -2736,7 +2740,13 @@ function: {
                 GM_setValue('menu_customRules', customRules)
                 location.reload();
             } catch (e) {
-                const match = e.message.match(/at position (\d+)/),position = parseInt(match[1]);
+                let match = e.message.match(/at position (\d+)/),position;
+                if (match) {
+                    position = parseInt(match[1]);
+                } else {
+                    match = e.message.match(/line (\d+) column (\d+)/i);
+                    position = calculatePositionFromLineColumn(customRules,match[1],match[2])
+                }
                 console.error('自定义规则存在格式错误：\n' + e.message + '\n错误位置为该区域中间：\n------\n' + customRules.slice((position<30)?0:position-30,position+29) + '\n------\n\n常见格式错误：\n1. 逗号：每组 { } 中的最后一个值末尾不能加逗号\n2. 转义：如果正则表达式中含有转义符 \\ 那就要对其再次转义为 \\\\\n3. 引号：规则中冒号左右的内容都需要加上双引号，如果内容中含有双引号则需要对双引号转义（即 \\" 这样），或改为单引号')
                 window.alert('自定义规则存在格式错误：\n' + e.message + '\n错误位置为该区域中间：\n------\n' + customRules.slice((position<30)?0:position-30,position+29) + '\n------\n点击【确定】后脚本会为你定位并选中编辑框中格式错误的文本（部分格式错误定位可能不太精确，但错误一定是在选中文本的附近，如果是选中了行首的空格，则说明格式错误来自上一行末尾逗号）\n\n常见格式错误：\n1. 逗号：每组 { } 中的最后一个值末尾不能加逗号\n2. 转义：如果正则表达式中含有转义符 \\ 那就要对其再次转义为 \\\\\n3. 引号：规则中冒号左右的内容都需要加上双引号，如果内容中含有双引号则需要对双引号转义（即 \\" 这样），或改为单引号');
                 customRules_textarea.selectionStart = position-1; // 选中开始位置
@@ -2745,6 +2755,40 @@ function: {
             }
         }
         getCSS('#Autopage_customRules_cancel', shadowRoot).onclick = function () {document.documentElement.style.overflow = document.body.style.overflow = ''; getCSS('#Autopage_customRules').remove();}
+    }
+
+    /**
+ * 根据行号和列号计算字符串中的 position 位置
+ * @param {string} text - 完整的文本内容
+ * @param {number} line - 行号（从1开始）
+ * @param {number} column - 列号（从1开始）
+ * @returns {number} position 位置（从0开始）
+ */
+    function calculatePositionFromLineColumn(text, line, column) {
+        if (!text || line < 1 || column < 1) {
+            return -1;
+        }
+
+        const lines = text.split('\n');
+
+        // 如果指定行超过文本行数，返回-1
+        if (line > lines.length) {
+            return -1;
+        }
+
+        let position = 0;
+
+        // 计算前 (line-1) 行的总长度（包括换行符）
+        for (let i = 0; i < line - 1; i++) {
+            position += lines[i].length + 1; // +1 表示换行符
+        }
+
+        // 计算当前行的列位置（列号从1开始，position从0开始）
+        // 注意：列号不能超过当前行的长度+1（+1表示可以指向行尾）
+        const currentLine = lines[line - 1];
+        const columnPosition = Math.min(column - 1, currentLine.length);
+
+        return position + columnPosition;
     }
 
     // 自定义的 stringify 函数，将 [ ] 内的元素从默认的 换行显示 格式化为 一行显示，用于显示自定义翻页规则等给用户看的场景
