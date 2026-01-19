@@ -1689,35 +1689,8 @@ function: {
     function getPageE(url) {
         // Chrome 浏览器可以依靠改用原生 XMLHttpRequest 尝试解决因缺失跨域 cookie 导致的问题（比如一些使用 Cloudflare CDN 人机验证的网站，会出现脚本后台获取到人机验证页面）
         // Firefox 浏览器则需要使用 GM_xmlhttpRequest 的 cookiePartition 参数来解决（该参数要 Tampermonkey v5.2 及以上才有）
-        if (!curSite.gmxhr || !navigator.userAgent.includes('Firefox')) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
-            //xhr.overrideMimeType('text/html; charset=' + (document.characterSet||document.charset||document.inputEncoding));
-
-            if (curSite.xRequestedWith === true) {xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest')}
-            //(curSite.noReferer === true) ? xhr.setRequestHeader('Referer', ''):xhr.setRequestHeader('Referer', location.href)
-            xhr.setRequestHeader('Accept', 'text/html,application/xhtml+xml,application/xml')
-
-            xhr.timeout = 5000;
-            xhr.onload = function() {
-                try {
-                    //console.log('URL：' + url, '最终 URL：' + xhr.responseURL, '返回内容：' + xhr.responseText)
-                    processElems(createDocumentByString(xhr.responseText));
-                } catch (e) {
-                    console.error('[自动无缝翻页] - 处理获取到的下一页内容时出现问题，请检查！\n', e, '\nURL：' + url, '\n最终 URL：' + xhr.responseURL, '\n返回状态：' + xhr.statusText, '\n返回内容：' + xhr.responseText);
-                }
-            };
-            xhr.onerror = function() {
-                console.log('URL：' + url, xhr.statusText)
-                GM_notification({text: '❌ 获取下一页失败...', timeout: 5000});
-            };
-            xhr.ontimeout = function() {
-                setTimeout(function(){curSite.pageUrl = '';}, 3000)
-                console.log('URL：' + url, xhr.statusText)
-                GM_notification({text: '❌ 获取下一页超时，可 3 秒后再次滚动网页重试（或尝试刷新网页）...', timeout: 5000});
-            };
-            xhr.send();
-        } else {
+        // 如果翻页规则有 curSite.gmxhr 或是 Firefox 浏览器，则依然使用 GM_xmlhttpRequest+cookiePartition，反之则使用原生 XMLHttpRequest
+        if (curSite.gmxhr || navigator.userAgent.includes('Firefox')) {
             GM_xmlhttpRequest({
                 url: url,
                 method: 'GET',
@@ -1749,8 +1722,37 @@ function: {
                     GM_notification({text: '❌ 获取下一页超时，可 3 秒后再次滚动网页重试（或尝试刷新网页）...', timeout: 5000});
                 }
             });
+        } else {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            //xhr.overrideMimeType('text/html; charset=' + (document.characterSet||document.charset||document.inputEncoding));
+
+            if (curSite.xRequestedWith === true) {xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest')}
+            //(curSite.noReferer === true) ? xhr.setRequestHeader('Referer', ''):xhr.setRequestHeader('Referer', location.href)
+            xhr.setRequestHeader('Accept', 'text/html,application/xhtml+xml,application/xml')
+
+            xhr.timeout = 5000;
+            xhr.onload = function() {
+                try {
+                    //console.log('URL：' + url, '最终 URL：' + xhr.responseURL, '返回内容：' + xhr.responseText)
+                    processElems(createDocumentByString(xhr.responseText));
+                } catch (e) {
+                    console.error('[自动无缝翻页] - 处理获取到的下一页内容时出现问题，请检查！\n', e, '\nURL：' + url, '\n最终 URL：' + xhr.responseURL, '\n返回状态：' + xhr.statusText, '\n返回内容：' + xhr.responseText);
+                }
+            };
+            xhr.onerror = function() {
+                console.log('URL：' + url, xhr.statusText)
+                GM_notification({text: '❌ 获取下一页失败...', timeout: 5000});
+            };
+            xhr.ontimeout = function() {
+                setTimeout(function(){curSite.pageUrl = '';}, 3000)
+                console.log('URL：' + url, xhr.statusText)
+                GM_notification({text: '❌ 获取下一页超时，可 3 秒后再次滚动网页重试（或尝试刷新网页）...', timeout: 5000});
+            };
+            xhr.send();
         }
     }
+
     // 翻页类型 4
     function getPageE_(url, type = '', method = 'GET', data = '', type2) {
         let mimeType,accept;
