@@ -917,6 +917,15 @@
 			"replaceE": ".pagenav"
 		}
 	},
+	"Mobile01 - 论坛": {
+		"host": "www.mobile01.com",
+		"url": "if(fun.indexOF(/^\\/topicdetail\\.php/)){rule.thread=true;return true;}else if(fun.indexOF(/^\\/forumtopic\\.php/)){rule.blank=3;return true;}",
+		"pager": {
+			"nextL": ".l-pagination__page.is-active+li>a",
+			"pageE": ".l-listTable__tbody>.l-listTable__tr,.l-articlePage:not(:nth-child(2))",
+			"replaceE": ".l-pagination"
+		}
+	},
 	"TGFC Lifestyle": {
 		"host": "bbs.tgfcer.com",
 		"url": "return (fun.lp() == '/forumdisplay.php' || fun.indexOF('/forum'))",
