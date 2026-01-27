@@ -3,7 +3,7 @@
 // @name:zh-CN   自动无缝翻页
 // @name:zh-TW   自動無縫翻頁
 // @name:ru      Автостраничник
-// @version      6.6.69
+// @version      6.6.70
 // @author       X.I.U
 // @description  ⭐Append the next page content to the bottom seamlessly (like a waterfall, Unlimited scrolling, no need to manually click on the next page) ⭐, support various forums, social networking, games, comics, novels, academics, search engines (Google, Bing, Yahoo...) and other websites~
 // @description:zh-CN  ⭐无缝加载 下一页内容 至网页底部（类似瀑布流，无限滚动，无需手动点击下一页）⭐，目前支持：【所有「Discuz!、Flarum、phpBB、MyBB、Xiuno、XenForo、NexusPHP...」论坛】【百度、谷歌(Google)、必应(Bing)、搜狗、微信、360、Yahoo、Yandex 等搜索引擎...】、贴吧、豆瓣、知乎、NGA、V2EX、起点中文、千图网、千库网、Pixabay、Pixiv、3DM、游侠网、游民星空、NexusMods、Steam 创意工坊、CS.RIN.RU、RuTracker、BT之家、萌番组、动漫花园、樱花动漫、爱恋动漫、AGE 动漫、Nyaa、SrkBT、RARBG、SubHD、423Down、不死鸟、扩展迷、小众软件、【动漫狂、动漫屋、漫画猫、漫画屋、漫画 DB、HiComic、Mangabz、Xmanhua 等漫画网站...】、PubMed、Z-Library、GreasyFork、Github、StackOverflow（以上仅一小部分常见网站，更多的写不下了...
@@ -418,7 +418,7 @@
         } else if (getCSS('#txt, .txt') && getCSS('#pb_next, .url_next') && getCSS('.chapter-control, .chapter-page-btn')) {
             console.info(`[自动无缝翻页] - <笔趣阁 2> 模板的小说网站`); return 202;
         } else if ((getCSS('meta[name="description" i][content*="小说"], meta[name="description" i][content*="章节"], meta[name="description" i][content*="阅读"], meta[name="description" i][content*="小說"], meta[name="description" i][content*="章節"], meta[name="description" i][content*="閲讀"], meta[name="keywords" i][content*="笔趣"]') || location.hostname.indexOf('biqu')!=-1 || document.title.match(/笔趣阁|小说|小說|章/)!=null) && getXpath('//a[contains(text(), "下一章") or contains(text(), "下一页") or contains(text(), "下一节")]')) {
-            let biquge3_pageE= ['[id="chapter_content" i]','[class~="chapter_content" i]','[id="chaptercontent" i]','[class~="chaptercontent" i]','[class~="read_chapterdetail" i]','[id="booktext" i]','[class~="booktext" i]','[id="txtcontent" i]','[class~="txtcontent" i]','[id="textcontent" i]','[class~="textcontent" i]','[id="read-content" i]','[class~="read-content" i]','[id="txtnav" i]','[class~="txtnav" i]','[id="txt" i][class~="txt" i]','[id="contents" i]','[class~="contents" i]','[id="content" i]','[class~="content" i]','[id="contentbox" i]']
+            let biquge3_pageE= ['[id="chapter_content" i]','[class~="chapter_content" i]','[id="chaptercontent" i]','[class~="chaptercontent" i]','[class~="read_chapterdetail" i]','[id="booktext" i]','[class~="booktext" i]','[id="txtcontent" i]','[class~="txtcontent" i]','[id="textcontent" i]','[class~="textcontent" i]','[id="read-content" i]','[class~="read-content" i]','[id="txtnav" i]','[class~="txtnav" i]','[id="txt" i][class~="txt" i]','[id="contents" i]','[class~="contents" i]','[id="content" i]','[class~="content" i]','[id="contentbox" i]','.container>.con']
             for(let biquge3_pageE_ of biquge3_pageE) {if (getAllCSS(biquge3_pageE_).length === 1) {DBSite.biquge3.pager.pageE = biquge3_pageE_;DBSite.biquge3.pager.insertP = [biquge3_pageE_,6];DBSite.biquge3.style = biquge3_pageE_+'>.readinline, ' + DBSite.biquge3.style;break;}}
             if (DBSite.biquge3.pager.pageE != undefined) {console.info(`[自动无缝翻页] - <笔趣阁 3> 模板的小说网站`); return 203;}
         }
