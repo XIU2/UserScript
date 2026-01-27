@@ -5199,6 +5199,17 @@
 			"pageE": ".column-list>li"
 		}
 	},
+	"Chiphell": {
+		"host": "www.chiphell.com",
+		"url": "/^\\/(article-|portal\\.php)/",
+		"pager": {
+			"type": 3,
+			"nextL": ".nxt",
+			"pageE": "td#article_content,.bm_c.xld>dl",
+			"insertP": ["td#article_content,.bm_c.xld",6],
+			"replaceE": ".pg"
+		}
+	},
 	"致美化": {
 		"host": "zhutix.com",
 		"url": "return fun.isPager('p')",
