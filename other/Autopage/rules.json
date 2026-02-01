@@ -7652,7 +7652,7 @@
 		}
 	},
 	"4khd.com": {
-		"host": ["4khd.com","/^(.+)\\.xxtt\\.ink$/"],
+		"host": ["4khd.com","www.4khd.com","/^(.+)\\.xxtt\\.ink$/","/^(.+)\\.uuss\\.uk$/"],
 		"url": "/^\\/content\\//",
 		"pager": {
 			"type": 3,
