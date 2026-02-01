@@ -2271,6 +2271,16 @@
 			"pageE": "a[data-id]"
 		}
 	},
+	"SteamUnlocked": {
+		"host": "steamunlocked.org",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "span.page-numbers.current+a",
+			"pageE": ".cover-item.category",
+			"replaceE": ".nav-links"
+		}
+	},
 	"bilibili - 搜索页": {
 		"host": "search.bilibili.com",
 		"url": "fun.isUrlC(); return ((fun.lp() == '/all' || fun.lp() == '/video' || fun.lp() == '/pgc' || fun.lp() == '/article') && !fun.getCSS('ul.video-list') && !fun.getCSS('#article-list'))",
