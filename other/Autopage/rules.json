@@ -3276,6 +3276,32 @@
 			"bF": "return fun.src_bF(pageE)"
 		}
 	},
+	"SF漫画": {
+		"host": "manhua.sfacg.com",
+		"url": "if (fun.indexOF(/^\\/mh\\/.+\\/\\d+\\//)) {setTimeout(()=>{let _img=''; for (let i=0;i<picAy.length;i++){_img += `<img src=\"${picAy[i]}\">`;}; document.getElementById('curPic').parentElement.outerHTML = _img;rule.pager.scrollD = 3000;},1000); rule.pager.scrollD = -9999999; return true;}",
+		"style": ".page_turning>a[href='javascript:PrePage();'], .page_turning>a[href='javascript:NextPage();'], #pageSel, #Pages, .tucao {display: none !important;} .Reduction_left{width: auto !important;}",
+		"history": true,
+		"pager": {
+			"nextL": "js; if(nextChap != 0) {return (location.origin + '/mh/' + comicFolder + '/' + nextChap + '/');}",
+			"pageE": "#PicArea>tbody>tr>td>script",
+			"insertP": ["body",3],
+			"replaceE": ".Reduction_left",
+			"scriptT": 2,
+			"interval": 4000
+		},
+		"function": {
+			"aF": "common.getPics(c,chapId,nv,fn,function (json) {picAy = json.data;if (picAy.length == 0) {return;} else {let _img=''; for (let i=0;i<picAy.length;i++){_img += `<img src=\"${picAy[i]}\">`;}; fun.getCSS('#PicArea>tbody>tr>td>img').parentElement.insertAdjacentHTML('beforeend',_img);};}, function (info) {Message(info, 2);});"
+		}
+	},
+	"SF漫画 - 书库": {
+		"host": "manhua.sfacg.com",
+		"url": "return fun.isPager()",
+		"pager": {
+			"nextL": ".pagebarNext>a",
+			"pageE": "ul.Comic_Pic_List",
+			"replaceE": ".pagebar"
+		}
+	},
 	"快岸漫画": {
 		"host": "www.kanbook.net",
 		"url": "if (fun.indexOF(/^\\/\\d+\\/\\d+\\/\\d+/)) {if (fun.getCSS('img.img-fluid')){fun.getCSS('img.img-fluid').style.display = 'none';}; setTimeout(()=>{let _img = '';for (let i = 0; i < imagesUrlArr.length; i++) {_img += `<img class=\"img-fluid d-md-block mx-auto\" src=\"${host + imagesUrlArr[i]}\">`;};document.querySelector('.content-wrapper').insertAdjacentHTML('beforeend',_img);},500); return true;}",
