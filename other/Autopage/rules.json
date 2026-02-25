@@ -7376,6 +7376,16 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"xsnvshen": {
+		"host": "/^(www|m)\\.xsnvshen\\.[a-z]+$/",
+		"url": "if(!fun.isMobile() && fun.indexOF(/^\\/album\\/\\d+/)){rule.pager={};rule.hiddenPN=true;rule.blank=0;rule.style='.workContentWrapper {display: none !important;} .showlists.hide {display: unset !important;} .showlists li {float: unset !important;} .swl-item .swi-hd {width: unset !important;height: unset !important;} .showlists img {max-width: unset !important;max-height: unset !important;width: 100% !important;}';return true;}else{return fun.isPager();}",
+		"blank": 3,
+		"pager": {
+			"nextL": "#pageNum .active+a,.pg_next",
+			"pageE": ".camWholeBoxUl>li,.container>#arcbox img,.body>.list.cl>li",
+			"replaceE": "#pageNum"
+		}
+	},
 	"秀人美女": {
 		"host": ["/^www\\.xrmn.+/","/^www.xiu\\d+\\./"],
 		"url": "return (fun.isPager() && fun.indexOF(/(^\\/.)|(\\d+\\.html$)/))",
