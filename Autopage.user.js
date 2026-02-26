@@ -112,7 +112,7 @@
         'https://wget.la/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         'https://ghfast.top/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json',
         //'https://ghproxy.cfd/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json', // 超时
-        'https://raw.dgithub.xyz/XIU2/UserScript/master/other/Autopage/rules.json',
+        //'https://raw.dgithub.xyz/XIU2/UserScript/master/other/Autopage/rules.json', // 证书挂了
         //'https://ghproxy.net/https://raw.githubusercontent.com/XIU2/UserScript/master/other/Autopage/rules.json', // 挂了
     ],
           loadMoreExclude1 = ['.smzdm.com','stackoverflow.com'],
