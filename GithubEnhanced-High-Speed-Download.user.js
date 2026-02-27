@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:ru      Улучшение GitHub – быстрое скачивание
-// @version      2.6.35
+// @version      2.6.36
 // @author       X.I.U
 // @description  High-speed download of Git Clone/SSH, Release, Raw, Code(ZIP) and other files (Based on public welfare), project list file quick download (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)
@@ -267,7 +267,7 @@
                         addDownloadZIP(target);
                         addGitClone(target);
                         addGitCloneSSH(target);
-                    } else if (target.tagName === 'DIV' && target.className.indexOf('Box-sc-') != -1) {
+                    } else if (target.tagName === 'DIV' && target.className.indexOf('LocalTab-module__') != -1) {
                         if (target.querySelector('input[value^="https:"]')) {
                             addGitCloneClear('.XIU2-GCS'); addGitClone(target);
                         } else if (target.querySelector('input[value^="git@"]')) {
@@ -366,8 +366,8 @@
             html_parent = '<div style="margin-top: 4px;" class="XIU2-GC ' + html.parentElement.className + '">',
             url = '', _html = '', _gitClone = '';
         if (html.nextElementSibling) html.nextElementSibling.hidden = true; // 隐藏右侧复制按钮（考虑到能直接点击复制，就不再重复实现复制按钮事件了）
-        if (html.parentElement.nextElementSibling.tagName === 'SPAN'){
-            html.parentElement.nextElementSibling.textContent += ' (↑点击上面文字可复制)'
+        if (html.parentElement.nextElementSibling.tagName === 'P'){
+            html.parentElement.nextElementSibling.textContent += ' (↑点击文字自动复制)'
         }
         if (GM_getValue('menu_gitClone')) {_gitClone='git clone '; html.value = _gitClone + html.value; html.setAttribute('value', html.value);}
         // 克隆原 Git Clone 元素
@@ -397,8 +397,8 @@
             html_parent = '<div style="margin-top: 4px;" class="XIU2-GCS ' + html.parentElement.className + '">',
             url = '', _html = '', _gitClone = '';
         html.nextElementSibling.hidden = true; // 隐藏右侧复制按钮（考虑到能直接点击复制，就不再重复实现复制按钮事件了）
-        if (html.parentElement.nextElementSibling.tagName === 'SPAN'){
-            html.parentElement.nextElementSibling.textContent += ' (↑点击文字可复制)'
+        if (html.parentElement.nextElementSibling.tagName === 'P'){
+            html.parentElement.nextElementSibling.textContent += ' (↑点击自动复制)'
         }
         if (GM_getValue('menu_gitClone')) {_gitClone='git clone '; html.value = _gitClone + html.value; html.setAttribute('value', html.value);}
         // 克隆原 Git Clone SSH 元素
