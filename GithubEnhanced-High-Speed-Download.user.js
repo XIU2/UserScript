@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:ru      Улучшение GitHub – быстрое скачивание
-// @version      2.6.36
+// @version      2.6.37
 // @author       X.I.U
 // @description  High-speed download of Git Clone/SSH, Release, Raw, Code(ZIP) and other files (Based on public welfare), project list file quick download (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)
@@ -264,9 +264,10 @@
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType !== 1) return
                     if (target.tagName === 'DIV' && target.parentElement && target.parentElement.id === '__primerPortalRoot__') {
-                        addDownloadZIP(target);
                         addGitClone(target);
                         addGitCloneSSH(target);
+                        addDownloadZIP(target);
+                        //setTimeout(()=>{addDownloadZIP(target)}, 300);
                     } else if (target.tagName === 'DIV' && target.className.indexOf('LocalTab-module__') != -1) {
                         if (target.querySelector('input[value^="https:"]')) {
                             addGitCloneClear('.XIU2-GCS'); addGitClone(target);
@@ -325,11 +326,14 @@
 
     // Download ZIP
     function addDownloadZIP(target) {
-        let html = target.querySelector('ul[class^=prc-ActionList-ActionList-]>li:last-child');if (!html) return
-        let href_script = document.querySelector('react-partial[partial-name=repos-overview]>script[data-target="react-partial.embeddedData"]'),
-            href_slice = href_script.textContent.slice(href_script.textContent.indexOf('"zipballUrl":"')+14),
-            href = href_slice.slice(0, href_slice.indexOf('"')),
-            url = '', _html = '', new_download_url = get_New_download_url();
+        const html = target.querySelector('ul[class^=prc-ActionList-ActionList-]>li:last-child');if (!html) return
+        let href = html.querySelector('a[href^="/"][href$=".zip"]');if (!href || !href.getAttribute('href')) return
+        href = href.getAttribute('href');
+        //const href_script = document.querySelector('react-partial[partial-name=repos-overview]>script[data-target="react-partial.embeddedData"]');if (!href_script) return
+        //const href = JSON.parse(href_script.textContent).props.initialPayload.overview.codeButton.local.platformInfo.zipballUrl
+        /*let href_slice = href_script.textContent.slice(href_script.textContent.indexOf('"zipballUrl":"')+14),
+            href = href_slice.slice(0, href_slice.indexOf('"')),*/
+        let url = '', _html = '', new_download_url = get_New_download_url();
 
         // 克隆原 Download ZIP 元素，并定位 <a> <span> 标签
         let html_clone = html.cloneNode(true),
