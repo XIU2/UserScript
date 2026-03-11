@@ -3376,6 +3376,34 @@
 			"replaceE": ".main_control"
 		}
 	},
+	"开心漫": {
+		"host": "www.kaixinman.com",
+		"url": "/^\\/chapter\\//",
+		"pager": {
+			"type": 6,
+			"nextL": "//div[@class='chapter-toolbar']/a[text()='下一章']",
+			"pageE": ".chapter-image",
+			"replaceE": ".chapter-toolbar",
+			"loadTime": 1000,
+			"scrollD": 4000
+		},
+		"function": {
+			"bF": "pageE.forEach((i)=>{i.className=i.className.replace('loading','');i.style.cssText='background-image: none;';i.innerHTML='<img src=\"'+i.dataset.original+'\" referrerpolicy=\"no-referrer\">'}); return fun.src_bF(pageE)"
+		}
+	},
+	"开心漫 - 列表": {
+		"host": "www.kaixinman.com",
+		"url": "/^\\/category\\//",
+		"blank": 3,
+		"pager": {
+			"nextL": ".page>li.active.hidden-sm+li>a",
+			"pageE": ".vodlist",
+			"replaceE": ".page"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE, [1, 'div[data-original]', 'data-original'])"
+		}
+	},
 	"漫画星球 / 6 漫画": {
 		"host": ["/\\.mhxqiu/","/^www\\.sixmh\\d\\./"],
 		"url": "if (fun.indexOF(/\\/\\d+\\.html/)) {return true;} else if (fun.indexOF(/\\/\\d+\\/$/)) {setTimeout(()=>{if (document.getElementById('zhankai')) document.getElementById('zhankai').click();},500);}",
