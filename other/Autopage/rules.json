@@ -689,6 +689,19 @@
 			"aF": "Forum.B.lazyThumbnail();Forum.Common.drawNoImageCanvas();"
 		}
 	},
+	"巴哈姆特動畫瘋 - list": {
+		"host": "ani.gamer.com.tw",
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": "a.next",
+			"pageE": ".theme-list-block>a",
+			"replaceE": ".page_control"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
 	"懂车帝论坛": {
 		"host": "www.dongchedi.com",
 		"url": "fun.isUrlC(); return (fun.indexOF('/community/'))",
