@@ -189,9 +189,19 @@
 			"replaceE": "#pagination"
 		}
 	},
+	"Yandex 搜索 - 手机版": {
+		"host": ["ya.ru","yandex.com","yandex.ru","yandex.ua","yandex.by","yandex.kz","yandex.uz","yandex.com.tr"],
+		"url": "/^\\/search\\/touch\\//",
+		"pager": {
+			"type": 2,
+			"nextL": ".Pager:not(.Pager_progress_yes)>button.Pager-More",
+			"interval": 1500,
+			"scrollD": 1000
+		}
+	},
 	"Yandex 搜索": {
-		"host": ["yandex.com","yandex.ru","yandex.ua","yandex.by","yandex.kz","yandex.uz","yandex.com.tr"],
-		"url": "/^\\/search\\//",
+		"host": ["ya.ru","yandex.com","yandex.ru","yandex.ua","yandex.by","yandex.kz","yandex.uz","yandex.com.tr"],
+		"url": "/^\\/search/",
 		"history": true,
 		"pager": {
 			"nextL": "a.Pager-Item_type_next,a.pager__item_kind_next",
@@ -200,7 +210,7 @@
 		}
 	},
 	"Yandex 搜索 - 视频": {
-		"host": ["yandex.com","yandex.ru","yandex.ua","yandex.by","yandex.kz","yandex.uz","yandex.com.tr"],
+		"host": ["ya.ru","yandex.com","yandex.ru","yandex.ua","yandex.by","yandex.kz","yandex.uz","yandex.com.tr"],
 		"url": "/^\\/video\\/search/",
 		"hiddenPN": true,
 		"pager": {
