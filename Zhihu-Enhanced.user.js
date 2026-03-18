@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:ru      Улучшение Zhihu
-// @version      2.3.26
+// @version      2.3.27
 // @author       X.I.U
 // @description  A more personalized Zhihu experience~
 // @description:zh-CN  移除登录弹窗、屏蔽指定类别（视频、盐选、文章、想法、关注[赞同/关注了XX]等）、屏蔽低赞/低评回答、屏蔽用户、屏蔽关键词、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、区分问题文章、移除高亮链接、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、直达问题按钮、默认站外直链...
@@ -48,6 +48,7 @@ var menu_ALL = [
     ['menu_blockKeywords', '屏蔽指定关键词', '屏蔽指定关键词', true],
     ['menu_blockKeywordsComment', '屏蔽关键词 - 评论区', '屏蔽关键词 - 评论区', true],
     ['menu_customBlockKeywords', '自定义屏蔽关键词', '自定义屏蔽关键词', []],
+    ['menu_addSelectedBlockKeywords', '添加选中文字到屏蔽词 ↑', '添加选中文字到屏蔽词', []],
     ['menu_blockType', '屏蔽指定类别 (视频/文章等)', '勾选 = 屏蔽该类别的信息流', ''],
     ['menu_blockTypeVideo', '视频 [首页、搜索页、问题页、关注页]', '视频（首页、搜索页、问题页、关注页）', true],
     ['menu_blockTypeArticle', '文章 [首页、搜索页、关注页]', '文章（首页、搜索页、关注页）', false],
@@ -87,17 +88,18 @@ function registerMenuCommand() {
             //menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockLowCount(menu_ALL[i][0],'设置要屏蔽 低于多少评价 的回答？\n（例如设置 20 则评价数低于 20 的回答会被屏蔽\n（目前该功能适用于 首页信息流、问题页\n（点击 [确定] 修改后，后续加载的回答会立即生效，不影响当前已有\n（如不需要请留空并直接点击 [确定] 即可')});
         } else if (menu_ALL[i][0] === 'menu_customBlockUsers') { // 只有 [屏蔽指定用户] 启用时，才注册菜单 [自定义屏蔽用户]
             if (menu_value('menu_blockUsers')) menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockUsers()});
-        } else if (menu_ALL[i][0] === 'menu_customBlockKeywords') { // 只有 [屏蔽指定关键词] 启用时，才注册菜单 [自定义屏蔽关键词]
-            if (menu_value('menu_blockKeywords')) menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockKeywords()});
         } else if (menu_ALL[i][0] === 'menu_blockKeywordsComment') { // 只有 [屏蔽指定关键词] 启用时，才注册菜单 [屏蔽关键词 - 评论区]
             if (menu_value('menu_blockKeywords')) menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
+        } else if (menu_ALL[i][0] === 'menu_customBlockKeywords') { // 只有 [屏蔽指定关键词] 启用时，才注册菜单 [自定义屏蔽关键词]
+            if (menu_value('menu_blockKeywords')) menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){customBlockKeywords()});
+        } else if (menu_ALL[i][0] === 'menu_addSelectedBlockKeywords') { // 只有 [屏蔽指定关键词] 启用时，才注册菜单 [添加选中文字到屏蔽词]
+            if (menu_value('menu_blockKeywords')) menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){addSelectedKeywordToBlocklist()});
         } else if (menu_ALL[i][0] === 'menu_blockType') { // 屏蔽指定类别 使用单独的设置界面
             menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_setting('checkbox', menu_ALL[i][1], menu_ALL[i][2], true, [menu_ALL[i+1], menu_ALL[i+2], menu_ALL[i+3], menu_ALL[i+4], menu_ALL[i+5], menu_ALL[i+6], menu_ALL[i+7], menu_ALL[i+8], menu_ALL[i+9]])});
         } else if (menu_ALL[i][0].indexOf('menu_blockType') == -1 && menu_ALL[i][0] != 'menu_blockYanXuan' && menu_ALL[i][0].indexOf('menu_blockLow') == -1) { // 排除使用单独设置界面的 屏蔽指定类别 项
             menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
         }
     }
-    if (menu_value('menu_blockKeywords')) menu_ID[menu_ID.length] = GM_registerMenuCommand('#️⃣ 添加选中文字到屏蔽词', function(){addSelectedKeywordToBlocklist()});
     menu_ID[menu_ID.length] = GM_registerMenuCommand('💬 反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419081/feedback', {active: true,insert: true,setParent: true});});
 }
 
@@ -843,13 +845,10 @@ function blockUsers(type) {
 
 // 缓存最近一次选中的文字，避免从右键脚本菜单回调中取不到当前选区
 var selectedTextForBlockKeywords = '';
-
-
 // 规范化屏蔽词文本：压缩多余空白并去掉首尾空格
 function normalizeBlockKeywordText(text) {
     return (text || '').replace(/\s+/g, ' ').trim();
 }
-
 
 // 读取当前选中的文字，兼容输入框和普通页面选区
 function getSelectedBlockKeywordText() {
@@ -864,7 +863,6 @@ function getSelectedBlockKeywordText() {
     return normalizeBlockKeywordText(text);
 }
 
-
 // 记录最近一次选中的文字，供右键脚本菜单 [添加选中文字到屏蔽词] 使用
 function rememberSelectedBlockKeyword() {
     const updateSelectedBlockKeyword = function() {
@@ -874,7 +872,6 @@ function rememberSelectedBlockKeyword() {
     document.addEventListener('contextmenu', updateSelectedBlockKeyword, true);
     window.addEventListener('urlchange', function(){selectedTextForBlockKeywords = '';});
 }
-
 
 // 将当前选中的文字直接加入 [自定义屏蔽关键词] 列表
 function addSelectedKeywordToBlocklist() {
