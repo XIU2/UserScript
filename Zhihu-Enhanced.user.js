@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:ru      Улучшение Zhihu
-// @version      2.3.25
+// @version      2.3.26
 // @author       X.I.U
 // @description  A more personalized Zhihu experience~
 // @description:zh-CN  移除登录弹窗、屏蔽指定类别（视频、盐选、文章、想法、关注[赞同/关注了XX]等）、屏蔽低赞/低评回答、屏蔽用户、屏蔽关键词、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、区分问题文章、移除高亮链接、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、直达问题按钮、默认站外直链...
@@ -97,6 +97,7 @@ function registerMenuCommand() {
             menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
         }
     }
+    if (menu_value('menu_blockKeywords')) menu_ID[menu_ID.length] = GM_registerMenuCommand('#️⃣ 添加选中文字到屏蔽词', function(){addSelectedKeywordToBlocklist()});
     menu_ID[menu_ID.length] = GM_registerMenuCommand('💬 反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/419081/feedback', {active: true,insert: true,setParent: true});});
 }
 
@@ -837,6 +838,67 @@ function blockUsers(type) {
             GM_notification({text: `没有在屏蔽列表中找到该用户...`, timeout: 3000});
         }
     }
+}
+
+
+// 缓存最近一次选中的文字，避免从右键脚本菜单回调中取不到当前选区
+var selectedTextForBlockKeywords = '';
+
+
+// 规范化屏蔽词文本：压缩多余空白并去掉首尾空格
+function normalizeBlockKeywordText(text) {
+    return (text || '').replace(/\s+/g, ' ').trim();
+}
+
+
+// 读取当前选中的文字，兼容输入框和普通页面选区
+function getSelectedBlockKeywordText() {
+    let text = '';
+    const activeElement = document.activeElement;
+    if (activeElement && ((activeElement.tagName === 'TEXTAREA') || (activeElement.tagName === 'INPUT' && /^(?:text|search|url|tel|password)$/i.test(activeElement.type))) && typeof activeElement.selectionStart === 'number') {
+        text = activeElement.value.slice(activeElement.selectionStart, activeElement.selectionEnd);
+    }
+    if (!text && window.getSelection) {
+        text = window.getSelection().toString();
+    }
+    return normalizeBlockKeywordText(text);
+}
+
+
+// 记录最近一次选中的文字，供右键脚本菜单 [添加选中文字到屏蔽词] 使用
+function rememberSelectedBlockKeyword() {
+    const updateSelectedBlockKeyword = function() {
+        selectedTextForBlockKeywords = getSelectedBlockKeywordText();
+    }
+    document.addEventListener('selectionchange', updateSelectedBlockKeyword);
+    document.addEventListener('contextmenu', updateSelectedBlockKeyword, true);
+    window.addEventListener('urlchange', function(){selectedTextForBlockKeywords = '';});
+}
+
+
+// 将当前选中的文字直接加入 [自定义屏蔽关键词] 列表
+function addSelectedKeywordToBlocklist() {
+    if (!menu_value('menu_blockKeywords')) {
+        GM_notification({text: '请先开启 [屏蔽指定关键词] 功能~', timeout: 3000});
+        return
+    }
+
+    const keyword = getSelectedBlockKeywordText() || selectedTextForBlockKeywords;
+    if (!keyword) {
+        GM_notification({text: '未检测到选中的文字，请先选中内容后再使用该菜单~', timeout: 3000});
+        return
+    }
+
+    let keywords = (GM_getValue('menu_customBlockKeywords') || []).map(function(item){return normalizeBlockKeywordText(item)}).filter(function(item){return item !== ''});
+    if (keywords.some(function(item){return item.toLowerCase() === keyword.toLowerCase();})) {
+        GM_notification({text: `屏蔽词 [${keyword}] 已存在，无需重复添加~`, timeout: 3000});
+        return
+    }
+
+    keywords.push(keyword);
+    GM_setValue('menu_customBlockKeywords', keywords);
+    registerMenuCommand(); // 同步刷新缓存的菜单值
+    GM_notification({text: `已添加屏蔽词 [${keyword}]\n后续加载的标题/评论会按该关键词过滤~`, timeout: 4000});
 }
 
 
@@ -1593,6 +1655,7 @@ function switchHomeRecommend() {
 
 (function() {
     if (window.onurlchange === undefined) {addUrlChangeEvent();} // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
+    rememberSelectedBlockKeyword(); // 记录当前选中的文字，供右键脚本菜单直接加入屏蔽词
 
     removeLogin(); // 移除登录弹窗，Violentmonkey 不能延迟执行这个
     cleanTitles(); // 净化标题消息，不能延迟执行
