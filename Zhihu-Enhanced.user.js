@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:ru      Улучшение Zhihu
-// @version      2.3.27
+// @version      2.3.28
 // @author       X.I.U
 // @description  A more personalized Zhihu experience~
 // @description:zh-CN  移除登录弹窗、屏蔽指定类别（视频、盐选、文章、想法、关注[赞同/关注了XX]等）、屏蔽低赞/低评回答、屏蔽用户、屏蔽关键词、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、区分问题文章、移除高亮链接、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、直达问题按钮、默认站外直链...
@@ -36,7 +36,7 @@ var menu_ALL = [
     ['menu_collapsedAnswer', '一键收起回答/评论', '一键收起回答/评论', true],
     ['menu_collapsedNowAnswer', '快捷收起回答/评论 (点击两侧空白处)', '快捷收起回答/评论', true],
     ['menu_backToTop', '快捷回到顶部 (右键两侧空白处)', '快捷回到顶部', true],
-    ['menu_blockLowCount', '屏蔽低赞低评', '设置要屏蔽 低于多少赞同/评价 的回答（默认不需要留空即可）<br/>（例如设置 0 则无人赞同/评价的回答会被屏蔽<br/>（例如设置 20 则赞同/评价数量低于 20 的回答会被屏蔽<br/>（修改后，后续加载的回答会立即生效，但不影响当前网页已有内容', ''],
+    ['menu_blockLowCount', '屏蔽低赞低评', '设置要屏蔽 低于多少赞同/评价 的回答/文章（默认不需要留空即可）<br/>（例如设置 0 则无人赞同/评价的回答/文章会被屏蔽<br/>（例如设置 20 则赞同/评价数量低于 20 的回答/文章会被屏蔽<br/>（修改后，后续加载的回答/文章会立即生效，但不影响当前网页已有内容', ''],
     ['menu_blockLowUpvoteCount', '最低赞同数 [首页]', '最低赞同数（首页）', ''],
     ['menu_blockLowCommentCount', '最低评价数 [首页]', '最低评价数（首页）', ''],
     ['menu_blockLowUpvoteCountQuestion', '最低赞同数 [问题页]', '最低赞同数（问题页）', ''],
@@ -448,7 +448,7 @@ function isElementInViewport_(el) {
 }
 
 
-// 屏蔽低赞/低评回答
+// 屏蔽低赞/低评回答/文章
 function blockLowCount(type) {
     switch(type) {
         case 'index':
@@ -461,14 +461,16 @@ function blockLowCount(type) {
             blockLowCount_('.List-item', 'List-item', 'menu_blockLowUpvoteCountQuestion', 'menu_blockLowCommentCountQuestion');
             break;
     }
+    console.log(type)
 
 
     function blockLowCount_(className1, className2, menuUpvote, menuComment) {
         // 前几条因为是直接加载的，而不是动态插入网页的，所以需要单独判断
         function blockLowCount_now() {
             document.querySelectorAll(className1).forEach(function(item1){
-                blockLowCount_1(item1,menuUpvote,'meta[itemprop=upvoteCount]');
-                blockLowCount_1(item1,menuComment,'meta[itemprop=commentCount]');
+                console.log(item1)
+                blockLowCount_1(item1,menuUpvote,'upvote_num');
+                blockLowCount_1(item1,menuComment,'comment_num');
             })
         }
 
@@ -483,8 +485,8 @@ function blockLowCount(type) {
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType != 1) return
                     if (target.className === className2) {
-                        blockLowCount_1(target,menuUpvote,'meta[itemprop=upvoteCount]');
-                        blockLowCount_1(target,menuComment,'meta[itemprop=commentCount]');
+                        blockLowCount_1(target,menuUpvote,'upvote_num');
+                        blockLowCount_1(target,menuComment,'comment_num');
                     }
                 }
             }
@@ -494,18 +496,17 @@ function blockLowCount(type) {
     }
 
 
-    function blockLowCount_1(item1, menu, css) {
+    function blockLowCount_1(item, menu, type) {
         if (GM_getValue(menu)) {
-            let item = item1.querySelector(css);
-            //console.log(item)
-            if (item && item.content && Number(item.content) < Number(GM_getValue(menu))) {
-                if (menu.indexOf('Upvote') !== -1) {
-                    console.log('已屏蔽低赞回答：', item.content + '<' + GM_getValue(menu), item1, type);
-                } else {
-                    console.log('已屏蔽低评回答：', item.content + '<' + GM_getValue(menu), item1, type);
+            let item_ContentItem = item.querySelector('.ContentItem')
+            if (item_ContentItem && item_ContentItem.dataset.zaExtraModule) {
+                let item2 = JSON.parse(item_ContentItem.dataset.zaExtraModule);
+                //console.log(item2)
+                if (item2 && item2.card.content && Number(item2.card.content[type]) < Number(GM_getValue(menu))) {
+                    console.log('已屏蔽' + (type === 'upvote_num' ? '低赞':'低评') + (item_ContentItem.classList.contains('AnswerItem') ? '回答':'文章') + '：', item2.card.content[type] + '<' + GM_getValue(menu), item);
+                    item.hidden = true;
+                    item.style.display = 'none';
                 }
-                item1.hidden = true;
-                item1.style.display = 'none';
             }
         }
     }
@@ -1684,7 +1685,7 @@ function switchHomeRecommend() {
                 collapsedNowAnswer('.Question-main'); //                       收起当前回答 + 快捷返回顶部
                 questionRichTextMore(); //                                     展开问题描述
                 if (location.pathname.indexOf('answer') == -1) { //  问题页而不是回答页
-                    blockLowCount('question'); //                              屏蔽低赞/低评回答
+                    blockLowCount('question'); //                              屏蔽低赞/低评回答/文章
                 } else { // 将回答页的的查看全部回答选项去掉默认的点击事件改成静态链接，为了避免功能交叉混乱
                     document.querySelectorAll('div.Card.ViewAll>a').forEach((a)=>{a.outerHTML = a.outerHTML;})
                 }
@@ -1768,7 +1769,7 @@ function switchHomeRecommend() {
                 addTypeTips(); //                                                  区分问题文章
                 addToQuestion(); //                                                直达问题按钮
                 if (location.pathname == '/') { // 推荐
-                    blockLowCount('index'); //                                     屏蔽低赞/低评回答
+                    blockLowCount('index'); //                                     屏蔽低赞/低评回答/文章
                     blockUsers('index'); //                                        屏蔽指定用户
                     blockKeywords('index'); //                                     屏蔽指定关键词
                     blockType(); //                                                屏蔽指定类别（视频/文章等）
@@ -1776,7 +1777,7 @@ function switchHomeRecommend() {
                     blockKeywords('index'); //                                     屏蔽指定关键词
                     blockHotOther(); //                                            屏蔽热榜杂项
                 } else if (location.pathname == '/follow') { // 关注
-                    blockLowCount('follow'); //                                    屏蔽低赞/低评回答
+                    blockLowCount('follow'); //                                    屏蔽低赞/低评回答/文章
                     blockUsers('follow'); //                                       屏蔽指定用户
                     blockKeywords('follow'); //                                    屏蔽指定关键词
                     blockType(); //                                                屏蔽指定类别（视频/文章等）
