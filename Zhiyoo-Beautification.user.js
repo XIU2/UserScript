@@ -35,8 +35,8 @@
 }
 /* 调整帖子内，隐藏内容提示区域样式 */
 .locked a {
-	color: #ffffff;
-	border: 1px dashed #ffffff;
+	color: #2d0a12;
+	border: 1px dashed #2d0a12;
 	padding: 0 5px 3px;
 	margin: 0 5px;
 	font-size: 20px;
