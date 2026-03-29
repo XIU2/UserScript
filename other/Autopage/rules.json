@@ -943,6 +943,15 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"TFW2005": {
+		"host": "www.tfw2005.com",
+		"url": "if(fun.indexOF(/^\\/boards\\/forums\\//)){rule.blank=3;}else if(fun.indexOF(/^\\/boards\\/threads\\//)){rule.pager.pageE='ol#messageList>li';rule.thread=true;}else{return false;};return true",
+		"pager": {
+			"nextL": ".PageNav .currentPage+a[href], .PageNav .currentPage+a+span>span>a:first-child",
+			"pageE": "ol.discussionListItems>li",
+			"replaceE": ".PageNav"
+		}
+	},
 	"CPC中文印刷社区": {
 		"host": "www.cnprint.org",
 		"url": "if(fun.indexOF(/^\\/bbs\\/forumdisplay\\.php/)){rule.blank=3;return true;}else if(fun.indexOF(/^\\/bbs\\/showthread\\.php/)){return true;}",
