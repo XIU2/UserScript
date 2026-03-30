@@ -5438,9 +5438,9 @@
 		"url": "return (fun.indexOF(/\\/(scripts|feedback)$/) || fun.indexOF(/\\/scripts\\/(by-site|libraries|code-search)/) || (fun.indexOF('/discussions') && !fun.indexOF(/\\/\\d+/)))",
 		"blank": 3,
 		"pager": {
-			"nextL": "a.next_page",
+			"nextL": "a[aria-current=page]+a",
 			"pageE": "ol#browse-script-list>li,.script-discussion-list,.discussion-list>div",
-			"replaceE": ".pagination"
+			"replaceE": ".pagy"
 		}
 	},
 	"OpenUserJS": {
