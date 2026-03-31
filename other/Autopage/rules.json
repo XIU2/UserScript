@@ -7210,6 +7210,31 @@
 			"replaceE": ".wp-pagenavi"
 		}
 	},
+	"色漫天堂": {
+		"host": "smtt6.com",
+		"url": "/^\\/man-hua-yue-du\\//",
+		"pager": {
+			"nextL": "//div[@class='positionFooter']//a[text()='下一章']",
+			"pageE": "#conch-content img.lazy",
+			"replaceE": ".positionFooter",
+			"scrollD": 4000
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE)"
+		}
+	},
+	"色漫天堂 - 分类页": {
+		"host": "smtt6.com",
+		"url": "/^\\/man-hua-lei-bie/",
+		"pager": {
+			"nextL": "//li[@class='hl-hidden-xs']/a[@class='active']/../following-sibling::li[1]/a",
+			"pageE": "ul.hl-vod-list>li",
+			"replaceE": ".hl-page-wrap"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE,[1,'a[data-original]','data-original'])"
+		}
+	},
 	"鸟鸟韩漫": {
 		"host": ["/^nnhanman\\.[a-z]+/","/^nnhanman\\d\\.com/","/^nnhm\\d\\.[a-z]+/"],
 		"url": "/^\\/comic\\/.+\\/chapter-\\d+\\.html/",
