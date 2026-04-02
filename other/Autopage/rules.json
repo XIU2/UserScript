@@ -2153,6 +2153,18 @@
 			"replaceE": "ul.page-numbers"
 		}
 	},
+	"NS头号玩家": {
+		"host": ["nsthwj.cn","nsthwj.vip"],
+		"url": "return fun.isPager()",
+		"pager": {
+			"nextL": "a.page-next",
+			"pageE": ".posts-warp>div.col",
+			"replaceE": ".pagination"
+		},
+		"function": {
+			"bF": "return fun.src_bF(pageE,[1,'a[data-bg]','data-bg'])"
+		}
+	},
 	"4K 游戏网": {
 		"host": "4k-w.com",
 		"url": "return (fun.indexOF('/game/') || fun.indexOF('s=','s'))",
