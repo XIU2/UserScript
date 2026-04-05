@@ -4196,6 +4196,17 @@
 			"forceHTTPS": true
 		}
 	},
+	"oop.tw": {
+		"host": "www.oop.tw",
+		"url": "/^\\/areada\\//",
+		"pager": {
+			"type": 6,
+			"nextL": "#next_url",
+			"pageE": "#article>p",
+			"replaceE": ".reading-nav",
+			"scrollD": 5000
+		}
+	},
 	"必读推荐": {
 		"host": "www.bidutuijian.com",
 		"url": "/^\\/books\\/.+\\/(?:(?!0000)\\d{4})\\.html/",
