@@ -4377,7 +4377,7 @@
 		"url": "return (fun.lp() == '/' && !location.search)",
 		"pager": {
 			"type": 2,
-			"nextL": ".active .load-more",
+			"nextL": ".gh-load-more>button",
 			"interval": 1000,
 			"scrollD": 4000
 		}
