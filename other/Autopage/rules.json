@@ -5806,6 +5806,16 @@
 			"scriptT": 0
 		}
 	},
+	"Hpoi手办维基": {
+		"host": "www.hpoi.net",
+		"url": "/^\\/hobby\\/all/",
+		"pager": {
+			"nextL": "js; return fun.getNextEP('.hpoi-page-active+li:not(.hpoi-pagination-ellipsis)>a, .hpoi-page-active+li.hpoi-pagination-ellipsis+li:not(.hpoi-pagination-ellipsis)>a','page=',/page=\\d+/)",
+			"pageE": ".hpoi-glyphicons-list>li",
+			"replaceE": ".hpoi-pagination",
+			"scrollD": 1000
+		}
+	},
 	"资本市场电子化信息披露平台": {
 		"host": "eid.csrc.gov.cn",
 		"url": "/\\/\\d+\\/index/",
