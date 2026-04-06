@@ -1263,7 +1263,7 @@
 		"iframe": true,
 		"pager": {
 			"type": 5,
-			"nextL": "a[aria-disabled='false'][class*='filterProps-Styled-Component'][href]:last-child"
+			"nextL": "button[aria-current=true]+a:not([aria-disabled])"
 		}
 	},
 	"Pixiv - 用户作品页": {
@@ -1273,7 +1273,7 @@
 		"style": "ul[class*='-1 ']>li {display: inline !important;} #root{margin-bottom: -125px;} ul>li>button[class^='sc-'][style='background-color: rgb(0,0,0);'],a[href^='/premium/lead/lp'] {display: none !important;}",
 		"pager": {
 			"type": 5,
-			"nextL": "a[aria-disabled='false'][class*='filterProps-Styled-Component'][href]:last-child"
+			"nextL": "span.charcoal-pagination-button[aria-current=page]+a.charcoal-pagination-button"
 		}
 	},
 	"Pixiv - 手机版 - 分类页": {
@@ -1283,7 +1283,7 @@
 		"iframe": true,
 		"pager": {
 			"type": 5,
-			"nextL": "a.next"
+			"nextL": "button[aria-current=true]+a"
 		}
 	},
 	"Pixiv - 手机版 - 用户作品页": {
