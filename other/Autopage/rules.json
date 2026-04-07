@@ -1021,7 +1021,7 @@
 		}
 	},
 	"北+": {
-		"host": ["/^((www|bbs)\\.)?(soul|snow|south|spring|summer|north|white|level|east)-plus\\.(net|org)$/","bbs.imoutolove.me"],
+		"host": ["/^((www|bbs)\\.)?(soul|snow|south|spring|summer|north|white|level|east|blue)-plus\\.(net|org)$/","bbs.imoutolove.me"],
 		"url": "return (fun.lp() == '/thread.php' || fun.lp() == '/search.php')",
 		"pager": {
 			"nextL": "//div[@class='pages']/ul/li[./b]/following-sibling::li[1][not(@class)]/a[not(text()='»')]",
@@ -1030,7 +1030,7 @@
 		}
 	},
 	"北+ - 图墙": {
-		"host": ["/^((www|bbs)\\.)?(soul|snow|south|spring|summer|north|white|level|east)-plus\\.(net|org)$/","bbs.imoutolove.me"],
+		"host": ["/^((www|bbs)\\.)?(soul|snow|south|spring|summer|north|white|level|east|blue)-plus\\.(net|org)$/","bbs.imoutolove.me"],
 		"url": "return (fun.lp() == '/thread_new.php')",
 		"style": "img.lazy {display: inline !important;}",
 		"pager": {
@@ -1043,7 +1043,7 @@
 		}
 	},
 	"北+ - 帖子内": {
-		"host": ["/^((www|bbs)\\.)?(soul|snow|south|spring|summer|north|white|level|east)-plus\\.(net|org)$/","bbs.imoutolove.me"],
+		"host": ["/^((www|bbs)\\.)?(soul|snow|south|spring|summer|north|white|level|east|blue)-plus\\.(net|org)$/","bbs.imoutolove.me"],
 		"url": "return (fun.lp() == '/read.php')",
 		"thread": true,
 		"pager": {
@@ -1053,7 +1053,7 @@
 		}
 	},
 	"北+ - 用户页": {
-		"host": ["/^((www|bbs)\\.)?(soul|snow|south|spring|summer|north|white|level|east)-plus\\.(net|org)$/","bbs.imoutolove.me"],
+		"host": ["/^((www|bbs)\\.)?(soul|snow|south|spring|summer|north|white|level|east|blue)-plus\\.(net|org)$/","bbs.imoutolove.me"],
 		"url": "return (fun.lp() == '/u.php' && (fun.indexOF('action-topic-','s') || fun.indexOF('action-post-','s')))",
 		"pager": {
 			"nextL": "//div[@class='pages']/ul/li[./b]/following-sibling::li[1][not(@class)]/a[not(text()='»')]",
