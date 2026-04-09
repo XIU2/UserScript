@@ -2866,15 +2866,6 @@
 			"pageE": ".download>tbody>tr:not(:nth-last-child(-n+2))"
 		}
 	},
-	"Knaben": {
-		"host": "knaben.eu",
-		"url": "/^\\/(search|browse)\\//",
-		"blank": 3,
-		"pager": {
-			"nextL": "#nextPage",
-			"pageE": "tbody>tr"
-		}
-	},
 	"idope": {
 		"host": "/^idope\\..+/",
 		"url": "/^\\/torrent-list\\//",
@@ -2924,6 +2915,25 @@
 			"replaceE": ".search_stat"
 		}
 	},
+	"EXT Torrents": {
+        "host": "ext.to",
+        "url": "/^\\/browse\\//",
+        "blank": 3,
+        "pager": {
+            "nextL": ".pages>li.active+li>a",
+            "pageE": ".found-content-block table>tbody>tr",
+            "replaceE": ".pages"
+        }
+    },
+    "Knaben": {
+        "host": "knaben.org",
+        "url": "/^\\/(search|browse)\\//",
+        "pager": {
+            "nextL": "#nextPage",
+            "pageE": ".table.caption-top>tbody>tr",
+            "replaceE": ".pageNumbers"
+        }
+    },
 	"BTDig": {
 		"host": "btdig.com",
 		"url": "/^\\/search/",
