@@ -7606,6 +7606,12 @@
 			"replaceE": "#dm-fy"
 		}
 	},
+	"凸凹吧 tuao.cc": {
+        "host": "www.tuao.cc",
+        "url": "if(fun.indexOF(/^\\/Articles\\/Content\\//)){let raw=fun.getCSS('#rawContent');if(raw){raw.style.cssText='';return true;}}",
+        "style": "#pageContainer,#pagination,body>div:last-of-type,ins",
+        "hiddenPN": true
+    },
 	"仙女图": {
 		"host": "www.xiannvtu.com",
 		"url": "/^\\/v\\//",
