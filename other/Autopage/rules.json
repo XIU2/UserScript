@@ -6698,7 +6698,7 @@
 		}
 	},
 	"hanime1": {
-		"host": "hanime1.me",
+		"host": ["hanime1.me","hanimeone.me"],
 		"url": "/^\\/search/",
 		"blank": 3,
 		"pager": {
@@ -6712,7 +6712,7 @@
 		}
 	},
 	"hanime1 - 漫画 - 分类页": {
-		"host": "hanime1.me",
+		"host": ["hanime1.me","hanimeone.me"],
 		"url": "return (fun.lp() == '/comics' || fun.indexOF(/^\\/(tags|artists|characters|parodies|groups)\\//))",
 		"blank": 3,
 		"pager": {
@@ -6727,7 +6727,7 @@
 		}
 	},
 	"hanime1 - 漫画": {
-		"host": "hanime1.me",
+		"host": ["hanime1.me","hanimeone.me"],
 		"url": "/^\\/comic\\/\\d+\\/\\d/",
 		"style": "#current-page-image {display: block !important; margin: 0 auto !important; max-height: calc(250vh) !important;}",
 		"pager": {
