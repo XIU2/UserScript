@@ -5711,6 +5711,17 @@
 			"replaceE": ".numeric_pages"
 		}
 	},
+	"AnimeCharactersDataBase - ux_search": {
+		"host": "www.animecharactersdatabase.com",
+		"url": "/^\\/ux_search\\.php/",
+		"blank": 3,
+		"pager": {
+			"type": 3,
+			"nextL": "#uxthumbs>.flexcontainer>a.flexitem.bg2.fgw.pad:last-child",
+			"pageE": "#uxthumbs>a",
+			"replaceE": "#uxthumbs>.flexcontainer"
+		}
+	},
 	"新片场": {
 		"host": "www.xinpianchang.com",
 		"url": "return (fun.lp() != '/')",
