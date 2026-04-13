@@ -2879,24 +2879,24 @@
 		}
 	},
 	"EXT Torrents": {
-        "host": "ext.to",
-        "url": "/^\\/browse\\//",
-        "blank": 3,
-        "pager": {
-            "nextL": ".pages>li.active+li>a",
-            "pageE": ".found-content-block table>tbody>tr",
-            "replaceE": ".pages"
-        }
-    },
-    "Knaben": {
-        "host": "knaben.org",
-        "url": "/^\\/(search|browse)\\//",
-        "pager": {
-            "nextL": "#nextPage",
-            "pageE": ".table.caption-top>tbody>tr",
-            "replaceE": ".pageNumbers"
-        }
-    },
+		"host": "ext.to",
+		"url": "/^\\/browse\\//",
+		"blank": 3,
+		"pager": {
+			"nextL": ".pages>li.active+li>a",
+			"pageE": ".found-content-block table>tbody>tr",
+			"replaceE": ".pages"
+		}
+	},
+	"Knaben": {
+		"host": "knaben.org",
+		"url": "/^\\/(search|browse)\\//",
+		"pager": {
+			"nextL": "#nextPage",
+			"pageE": ".table.caption-top>tbody>tr",
+			"replaceE": ".pageNumbers"
+		}
+	},
 	"BTDig": {
 		"host": "btdig.com",
 		"url": "/^\\/search/",
@@ -7607,11 +7607,11 @@
 		}
 	},
 	"凸凹吧 tuao.cc": {
-        "host": "www.tuao.cc",
-        "url": "if(fun.indexOF(/^\\/Articles\\/Content\\//)){let raw=fun.getCSS('#rawContent');if(raw){raw.style.cssText='';return true;}}",
-        "style": "#pageContainer,#pagination,body>div:last-of-type,ins",
-        "hiddenPN": true
-    },
+		"host": "www.tuao.cc",
+		"url": "if(fun.indexOF(/^\\/Articles\\/Content\\//)){let d=document.querySelector('#imgData');if(d&&d.value){let a=d.value.split('|');if(a.length>4){const container=document.getElementById('pageContainer');let i=4;const timer=setInterval(()=>{if(i>=a.length){clearInterval(timer);return};const img=document.createElement('img');img.src=atob(a[i]);container.appendChild(img);i++},1000)};return true};}",
+		"style": "#pagination,body>div:last-of-type,ins",
+		"hiddenPN": true
+	},
 	"仙女图": {
 		"host": "www.xiannvtu.com",
 		"url": "/^\\/v\\//",
