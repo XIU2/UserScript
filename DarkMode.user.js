@@ -3,6 +3,7 @@
 // @name:zh-CN   护眼模式
 // @name:zh-TW   護眼模式
 // @name:ru      Тёмный режим
+// @name:en      Dark Mode
 // @version      1.5.6
 // @author       X.I.U
 // @description  Simple and effective network-wide eye protection mode (night mode, dark mode, black mode)
@@ -25,20 +26,187 @@
 // @namespace    https://github.com/XIU2/UserScript
 // @supportURL   https://github.com/XIU2/UserScript
 // @homepageURL  https://github.com/XIU2/UserScript
+// @downloadURL https://update.greasyfork.org/scripts/426377/%E6%8A%A4%E7%9C%BC%E6%A8%A1%E5%BC%8F.user.js
+// @updateURL https://update.greasyfork.org/scripts/426377/%E6%8A%A4%E7%9C%BC%E6%A8%A1%E5%BC%8F.meta.js
 // ==/UserScript==
 
 (function() {
     'use strict';
+
+    var translations = {
+        "zh-CN": {
+            "✅ 已启用 (点击对当前网站禁用)": "✅ 已启用 (点击对当前网站禁用)",
+            "❌ 已禁用 (点击对当前网站启用)": "❌ 已禁用 (点击对当前网站启用)",
+            "白天保持开启 (比晚上亮一点点)": "白天保持开启 (比晚上亮一点点)",
+            "白天保持开启": "白天保持开启",
+            "护眼模式跟随浏览器": "护眼模式跟随浏览器",
+            "智能排除自带暗黑模式的网页 (beta)": "智能排除自带暗黑模式的网页 (beta)",
+            "✅ 已强制当前网站启用护眼模式 (👆)": "✅ 已强制当前网站启用护眼模式 (👆)",
+            "❌ 未强制当前网站启用护眼模式 (👆)": "❌ 未强制当前网站启用护眼模式 (👆)",
+            "点击切换模式": "点击切换模式",
+            "自定义当前模式": "自定义当前模式",
+            "自定义昼夜时间": "自定义昼夜时间",
+            "晚上自动切换模式": "晚上自动切换模式",
+            "💬 反馈 & 建议": "💬 反馈 & 建议",
+
+            "白天、晚上使用不同模式，修改后立即生效~\n格式：白天模式|晚上模式\n例如：1|3（即白天模式 1 晚上模式 3）\n默认：留空（即关闭该功能）":
+            "白天、晚上使用不同模式，修改后立即生效~\n格式：白天模式|晚上模式\n例如：1|3（即白天模式 1 晚上模式 3）\n默认：留空（即关闭该功能）",
+
+            "自定义 [模式 1]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|亮度 (晚上)\n默认：60|50（均为百分比 1~100，不需要 % 符号）":
+            "自定义 [模式 1]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|亮度 (晚上)\n默认：60|50（均为百分比 1~100，不需要 % 符号）",
+
+            "自定义 [模式 2]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|暖色 (白天)|亮度 (晚上)|暖色 (晚上)\n默认：60|40|50|50（均为百分比 1~100，不需要 % 符号）":
+            "自定义 [模式 2]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|暖色 (白天)|亮度 (晚上)|暖色 (晚上)\n默认：60|40|50|50（均为百分比 1~100，不需要 % 符号）",
+
+            "自定义 [模式 3]，修改后立即生效 (部分网页可能需要刷新)~\n格式：反色\n默认：90（均为百分比 50~100，不需要 % 符号）":
+            "自定义 [模式 3]，修改后立即生效 (部分网页可能需要刷新)~\n格式：反色\n默认：90（均为百分比 50~100，不需要 % 符号）",
+
+            "自定义 [模式 3] 排除目标，修改后立即生效 (部分网页可能需要刷新)~\n格式：CSS 选择器 (如果不会写可以找我)\n默认：img, .img, video, [style*=\"background\"][style*=\"url\"], svg\n (使用英文逗号间隔，末尾不要有逗号)":
+            "自定义 [模式 3] 排除目标，修改后立即生效 (部分网页可能需要刷新)~\n格式：CSS 选择器 (如果不会写可以找我)\n默认：img, .img, video, [style*=\"background\"][style*=\"url\"], svg\n (使用英文逗号间隔，末尾不要有逗号)",
+
+            "自定义脚本内和白天/晚上相关的时间，修改后刷新网页生效~\n格式：6:00|18:30 (即 6:00 ~ 18:30 之间是白天时间)\n也支持反向设置：14:00|12:00 (即 12:00 ~ 14:00 之间是夜晚时间)":
+            "自定义脚本内和白天/晚上相关的时间，修改后刷新网页生效~\n格式：6:00|18:30 (即 6:00 ~ 18:30 之间是白天时间)\n也支持反向设置：14:00|12:00 (即 12:00 ~ 14:00 之间是夜晚时间)",
+
+            "[公式]": "[公式]",
+            "[护眼模式] html:": "[护眼模式] html:",
+            "[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜...": "[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜...",
+            "[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜....": "[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜...."
+        },
+
+        "zh-TW": {
+            "✅ 已启用 (点击对当前网站禁用)": "✅ 已啟用 (點擊對當前網站禁用)",
+            "❌ 已禁用 (点击对当前网站启用)": "❌ 已禁用 (點擊對當前網站啟用)",
+            "白天保持开启 (比晚上亮一点点)": "白天保持開啟 (比晚上亮一點點)",
+            "白天保持开启": "白天保持開啟",
+            "护眼模式跟随浏览器": "護眼模式跟隨瀏覽器",
+            "智能排除自带暗黑模式的网页 (beta)": "智能排除自帶暗黑模式的網頁 (beta)",
+            "✅ 已强制当前网站启用护眼模式 (👆)": "✅ 已強制當前網站啟用護眼模式 (👆)",
+            "❌ 未强制当前网站启用护眼模式 (👆)": "❌ 未強制當前網站啟用護眼模式 (👆)",
+            "点击切换模式": "點擊切換模式",
+            "自定义当前模式": "自訂當前模式",
+            "自定义昼夜时间": "自訂晝夜時間",
+            "晚上自动切换模式": "晚上自動切換模式",
+            "💬 反馈 & 建议": "💬 反饋 & 建議",
+
+            "白天、晚上使用不同模式，修改后立即生效~\n格式：白天模式|晚上模式\n例如：1|3（即白天模式 1 晚上模式 3）\n默认：留空（即关闭该功能）":
+            "白天、晚上使用不同模式，修改後立即生效~\n格式：白天模式|晚上模式\n例如：1|3（即白天模式 1 晚上模式 3）\n預設：留空（即關閉該功能）",
+
+            "自定义 [模式 1]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|亮度 (晚上)\n默认：60|50（均为百分比 1~100，不需要 % 符号）":
+            "自訂 [模式 1]，修改後立即生效 (部分網頁可能需要重新整理)~\n格式：亮度 (白天)|亮度 (晚上)\n預設：60|50（均為百分比 1~100，不需要 % 符號）",
+
+            "自定义 [模式 2]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|暖色 (白天)|亮度 (晚上)|暖色 (晚上)\n默认：60|40|50|50（均为百分比 1~100，不需要 % 符号）":
+            "自訂 [模式 2]，修改後立即生效 (部分網頁可能需要重新整理)~\n格式：亮度 (白天)|暖色 (白天)|亮度 (晚上)|暖色 (晚上)\n預設：60|40|50|50（均為百分比 1~100，不需要 % 符號）",
+
+            "自定义 [模式 3]，修改后立即生效 (部分网页可能需要刷新)~\n格式：反色\n默认：90（均为百分比 50~100，不需要 % 符号）":
+            "自訂 [模式 3]，修改後立即生效 (部分網頁可能需要重新整理)~\n格式：反色\n預設：90（均為百分比 50~100，不需要 % 符號）",
+
+            "自定义 [模式 3] 排除目标，修改后立即生效 (部分网页可能需要刷新)~\n格式：CSS 选择器 (如果不会写可以找我)\n默认：img, .img, video, [style*=\"background\"][style*=\"url\"], svg\n (使用英文逗号间隔，末尾不要有逗号)":
+            "自訂 [模式 3] 排除目標，修改後立即生效 (部分網頁可能需要重新整理)~\n格式：CSS 選擇器 (如果不會寫可以找我)\n預設：img, .img, video, [style*=\"background\"][style*=\"url\"], svg\n (使用英文逗號間隔，末尾不要有逗號)",
+
+            "自定义脚本内和白天/晚上相关的时间，修改后刷新网页生效~\n格式：6:00|18:30 (即 6:00 ~ 18:30 之间是白天时间)\n也支持反向设置：14:00|12:00 (即 12:00 ~ 14:00 之间是夜晚时间)":
+            "自訂腳本內和白天/晚上相關的時間，修改後重新整理網頁生效~\n格式：6:00|18:30 (即 6:00 ~ 18:30 之間是白天時間)\n也支援反向設定：14:00|12:00 (即 12:00 ~ 14:00 之間是夜晚時間)",
+
+            "[公式]": "[公式]",
+            "[护眼模式] html:": "[護眼模式] html:",
+            "[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜...": "[護眼模式] 檢測到當前網頁自帶暗黑模式，停用本腳本濾鏡...",
+            "[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜....": "[護眼模式] 檢測到當前網頁自帶暗黑模式，停用本腳本濾鏡...."
+        },
+
+        "ru": {
+            "✅ 已启用 (点击对当前网站禁用)": "✅ Включено (нажмите, чтобы отключить для этого сайта)",
+            "❌ 已禁用 (点击对当前网站启用)": "❌ Отключено (нажмите, чтобы включить для этого сайта)",
+            "白天保持开启 (比晚上亮一点点)": "Включено днём (чуть ярче, чем ночью)",
+            "白天保持开启": "Включено днём",
+            "护眼模式跟随浏览器": "Следовать настройкам браузера",
+            "智能排除自带暗黑模式的网页 (beta)": "Авто-исключение сайтов с тёмной темой (beta)",
+            "✅ 已强制当前网站启用护眼模式 (👆)": "✅ Принудительно включено (👆)",
+            "❌ 未强制当前网站启用护眼模式 (👆)": "❌ Не принудительно включено (👆)",
+            "点击切换模式": "Нажмите для переключения",
+            "自定义当前模式": "Настроить режим",
+            "自定义昼夜时间": "Настроить время дня/ночи",
+            "晚上自动切换模式": "Автопереключение ночью",
+            "💬 反馈 & 建议": "💬 Обратная связь и предложения",
+
+            "白天、晚上使用不同模式，修改后立即生效~\n格式：白天模式|晚上模式\n例如：1|3（即白天模式 1 晚上模式 3）\n默认：留空（即关闭该功能）":
+            "Разные режимы днём и ночью, изменения применяются сразу~\nФормат: день|ночь\nПример: 1|3\nПо умолчанию: пусто (выкл.)",
+
+            "自定义 [模式 1]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|亮度 (晚上)\n默认：60|50（均为百分比 1~100，不需要 % 符号）":
+            "Настройка [режим 1], применяется сразу~\nФормат: яркость (день)|яркость (ночь)\nПо умолчанию: 60|50",
+
+            "自定义 [模式 2]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|暖色 (白天)|亮度 (晚上)|暖色 (晚上)\n默认：60|40|50|50（均为百分比 1~100，不需要 % 符号）":
+            "Настройка [режим 2], применяется сразу~\nФормат: яркость|тепло|яркость|тепло\nПо умолчанию: 60|40|50|50",
+
+            "自定义 [模式 3]，修改后立即生效 (部分网页可能需要刷新)~\n格式：反色\n默认：90（均为百分比 50~100，不需要 % 符号）":
+            "Настройка [режим 3], применяется сразу~\nФормат: инверсия\nПо умолчанию: 90",
+
+            "自定义 [模式 3] 排除目标，修改后立即生效 (部分网页可能需要刷新)~\n格式：CSS 选择器 (如果不会写可以找我)\n默认：img, .img, video, [style*=\"background\"][style*=\"url\"], svg\n (使用英文逗号间隔，末尾不要有逗号)":
+            "Исключения [режим 3], применяется сразу~\nФормат: CSS селекторы\nПо умолчанию: img, .img, video...",
+
+            "自定义脚本内和白天/晚上相关的时间，修改后刷新网页生效~\n格式：6:00|18:30 (即 6:00 ~ 18:30 之间是白天时间)\n也支持反向设置：14:00|12:00 (即 12:00 ~ 14:00 之间是夜晚时间)":
+            "Настройка времени дня/ночи\nФормат: 6:00|18:30",
+
+            "[公式]": "[формула]",
+            "[护眼模式] html:": "[режим защиты глаз] html:",
+            "[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜...": "[режим защиты глаз] обнаружена тёмная тема, фильтр отключён...",
+            "[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜....": "[режим защиты глаз] обнаружена тёмная тема, фильтр отключён...."
+        },
+
+        "en": {
+            "✅ 已启用 (点击对当前网站禁用)": "✅ Enabled (click to disable for this site)",
+            "❌ 已禁用 (点击对当前网站启用)": "❌ Disabled (click to enable for this site)",
+            "白天保持开启 (比晚上亮一点点)": "Keep enabled during the day (slightly brighter than night)",
+            "白天保持开启": "Keep enabled during the day",
+            "护眼模式跟随浏览器": "Follow browser dark mode",
+            "智能排除自带暗黑模式的网页 (beta)": "Auto exclude sites with built-in dark mode (beta)",
+            "✅ 已强制当前网站启用护眼模式 (👆)": "✅ Forced enabled for this site (👆)",
+            "❌ 未强制当前网站启用护眼模式 (👆)": "❌ Not forced for this site (👆)",
+            "点击切换模式": "Click to switch mode",
+            "自定义当前模式": "Customize current mode",
+            "自定义昼夜时间": "Customize day/night time",
+            "晚上自动切换模式": "Auto switch at night",
+            "💬 反馈 & 建议": "💬 Feedback & Suggestions",
+
+            "白天、晚上使用不同模式，修改后立即生效~\n格式：白天模式|晚上模式\n例如：1|3（即白天模式 1 晚上模式 3）\n默认：留空（即关闭该功能）":
+            "Use different modes for day/night, takes effect immediately~\nFormat: day|night\nExample: 1|3\nDefault: empty (disabled)",
+
+            "自定义 [模式 1]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|亮度 (晚上)\n默认：60|50（均为百分比 1~100，不需要 % 符号）":
+            "Customize [Mode 1], takes effect immediately~\nFormat: brightness (day)|brightness (night)\nDefault: 60|50",
+
+            "自定义 [模式 2]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|暖色 (白天)|亮度 (晚上)|暖色 (晚上)\n默认：60|40|50|50（均为百分比 1~100，不需要 % 符号）":
+            "Customize [Mode 2], takes effect immediately~\nFormat: brightness|warmth|brightness|warmth\nDefault: 60|40|50|50",
+
+            "自定义 [模式 3]，修改后立即生效 (部分网页可能需要刷新)~\n格式：反色\n默认：90（均为百分比 50~100，不需要 % 符号）":
+            "Customize [Mode 3], takes effect immediately~\nFormat: invert\nDefault: 90",
+
+            "自定义 [模式 3] 排除目标，修改后立即生效 (部分网页可能需要刷新)~\n格式：CSS 选择器 (如果不会写可以找我)\n默认：img, .img, video, [style*=\"background\"][style*=\"url\"], svg\n (使用英文逗号间隔，末尾不要有逗号)":
+            "Customize [Mode 3] exclusions, takes effect immediately~\nFormat: CSS selectors\nDefault: img, .img, video...",
+
+            "自定义脚本内和白天/晚上相关的时间，修改后刷新网页生效~\n格式：6:00|18:30 (即 6:00 ~ 18:30 之间是白天时间)\n也支持反向设置：14:00|12:00 (即 12:00 ~ 14:00 之间是夜晚时间)":
+            "Customize day/night time\nFormat: 6:00|18:30",
+
+            "[公式]": "[formula]",
+            "[护眼模式] html:": "[Eye Care Mode] html:",
+            "[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜...": "[Eye Care Mode] detected built-in dark mode, disabling filter...",
+            "[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜....": "[Eye Care Mode] detected built-in dark mode, disabling filter...."
+        }
+    };
+
+    var language = navigator.languages.find(l => l in translations) || 'zh-CN';
+
+    function tr(original, lang = language) {
+        return translations[lang][original] || original;
+    }
+
     var menu_ALL = [
-        ['menu_disable', '✅ 已启用 (点击对当前网站禁用)', '❌ 已禁用 (点击对当前网站启用)', []],
-        ['menu_runDuringTheDay', '白天保持开启 (比晚上亮一点点)', '白天保持开启', true],
-        ['menu_darkModeAuto', '护眼模式跟随浏览器', '护眼模式跟随浏览器', false],
-        ['menu_autoRecognition', '智能排除自带暗黑模式的网页 (beta)', '智能排除自带暗黑模式的网页 (beta)', true],
-        ['menu_forcedToEnable', '✅ 已强制当前网站启用护眼模式 (👆)', '❌ 未强制当前网站启用护眼模式 (👆)', []],
-        ['menu_darkModeType', '点击切换模式', '点击切换模式', 2],
-        ['menu_customMode', '自定义当前模式', '自定义当前模式', true], ['menu_customMode1',,,'60|50'], ['menu_customMode2',,,'60|40|50|50'], ['menu_customMode3',,,'90'], ['menu_customMode3_exclude',,,'img, .img, video, [style*="background"][style*="url"], svg'],
-        ['menu_customTime', '自定义昼夜时间', '自定义昼夜时间', '6:00|18:00'],
-        ['menu_autoSwitch', '晚上自动切换模式', '晚上自动切换模式', ''],
+        ['menu_disable', tr('✅ 已启用 (点击对当前网站禁用)'), tr('❌ 已禁用 (点击对当前网站启用)'), []],
+        ['menu_runDuringTheDay', tr('白天保持开启 (比晚上亮一点点)'), tr('白天保持开启'), true],
+        ['menu_darkModeAuto', tr('护眼模式跟随浏览器'), tr('护眼模式跟随浏览器'), false],
+        ['menu_autoRecognition', tr('智能排除自带暗黑模式的网页 (beta)'), tr('智能排除自带暗黑模式的网页 (beta)'), true],
+        ['menu_forcedToEnable', tr('✅ 已强制当前网站启用护眼模式 (👆)'), tr('❌ 未强制当前网站启用护眼模式 (👆)'), []],
+        ['menu_darkModeType', tr('点击切换模式'), tr('点击切换模式'), 2],
+        ['menu_customMode', tr('自定义当前模式'), tr('自定义当前模式'), true], ['menu_customMode1',,,'60|50'], ['menu_customMode2',,,'60|40|50|50'], ['menu_customMode3',,,'90'], ['menu_customMode3_exclude',,,'img, .img, video, [style*="background"][style*="url"], svg'],
+        ['menu_customTime', tr('自定义昼夜时间'), tr('自定义昼夜时间'), '6:00|18:00'],
+        ['menu_autoSwitch', tr('晚上自动切换模式'), tr('晚上自动切换模式'), ''],
     ], menu_ID = [];
     for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
@@ -67,7 +235,7 @@
                     return
                 } else {
                     if (GM_getValue('menu_darkModeAuto') && !window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                        menu_ID[i] = GM_registerMenuCommand(`❌ 当前浏览器为白天模式 (点击关闭 [护眼模式跟随浏览器])`, function(){GM_setValue('menu_darkModeAuto', false);location.reload();});
+                        menu_ID[i] = GM_registerMenuCommand(tr(`❌ 当前浏览器为白天模式 (点击关闭 [护眼模式跟随浏览器])`), function(){GM_setValue('menu_darkModeAuto', false);location.reload();});
                         return
                     }
                     menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][1]}`, function(){menu_disable('add')});
@@ -115,7 +283,7 @@
                 menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][3]?'✅':'❌'} ${menu_ALL[i][1]}`, function(){menu_switch(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`,`${menu_ALL[i][2]}`)});
             }
         }
-        menu_ID[menu_ID.length] = GM_registerMenuCommand('💬 反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/426377/feedback', {active: true,insert: true,setParent: true});});
+        menu_ID[menu_ID.length] = GM_registerMenuCommand(tr('💬 反馈 & 建议'), function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});window.GM_openInTab('https://greasyfork.org/zh-CN/scripts/426377/feedback', {active: true,insert: true,setParent: true});});
     }
 
 
@@ -127,14 +295,14 @@
 
     // 晚上自动切换模式
     function menu_customAutoSwitch() {
-        let newAutoSwitch = prompt('白天、晚上使用不同模式，修改后立即生效~\n格式：白天模式|晚上模式\n例如：1|3（即白天模式 1 晚上模式 3）\n默认：留空（即关闭该功能）', GM_getValue('menu_autoSwitch'));
+        let newAutoSwitch = prompt(tr('白天、晚上使用不同模式，修改后立即生效~\n格式：白天模式|晚上模式\n例如：1|3（即白天模式 1 晚上模式 3）\n默认：留空（即关闭该功能）'), GM_getValue('menu_autoSwitch'));
         if (newAutoSwitch === '') {
             GM_setValue('menu_autoSwitch', '');
         } else if (newAutoSwitch != null) {
             if (newAutoSwitch.split('|').length == 2) {
                 GM_setValue('menu_autoSwitch', newAutoSwitch);
             } else {
-                alert(`填入内容格式错误...`);
+                alert(tr(`填入内容格式错误...`));
             }
         }
         registerMenuCommand(); // 重新注册脚本菜单
@@ -162,17 +330,17 @@
         let newMods, tip, defaults, name;
         switch(getAutoSwitch()) {
             case 1:
-                tip = '自定义 [模式 1]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|亮度 (晚上)\n默认：60|50（均为百分比 1~100，不需要 % 符号）';
+                tip = tr('自定义 [模式 1]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|亮度 (晚上)\n默认：60|50（均为百分比 1~100，不需要 % 符号）');
                 defaults = '60|50';
                 name = 'menu_customMode1';
                 break;
             case 2:
-                tip = '自定义 [模式 2]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|暖色 (白天)|亮度 (晚上)|暖色 (晚上)\n默认：60|40|50|50（均为百分比 1~100，不需要 % 符号）';
+                tip = tr('自定义 [模式 2]，修改后立即生效 (部分网页可能需要刷新)~\n格式：亮度 (白天)|暖色 (白天)|亮度 (晚上)|暖色 (晚上)\n默认：60|40|50|50（均为百分比 1~100，不需要 % 符号）');
                 defaults = '60|40|50|50';
                 name = 'menu_customMode2';
                 break;
             case 3:
-                tip = '自定义 [模式 3]，修改后立即生效 (部分网页可能需要刷新)~\n格式：反色\n默认：90（均为百分比 50~100，不需要 % 符号）';
+                tip = tr('自定义 [模式 3]，修改后立即生效 (部分网页可能需要刷新)~\n格式：反色\n默认：90（均为百分比 50~100，不需要 % 符号）');
                 defaults = '90';
                 name = 'menu_customMode3';
                 break;
@@ -186,7 +354,7 @@
             registerMenuCommand(); // 重新注册脚本菜单
         }
         if (getAutoSwitch() == 3) {
-            tip = '自定义 [模式 3] 排除目标，修改后立即生效 (部分网页可能需要刷新)~\n格式：CSS 选择器 (如果不会写可以找我)\n默认：img, .img, video, [style*="background"][style*="url"], svg\n (使用英文逗号间隔，末尾不要有逗号)';
+            tip = tr('自定义 [模式 3] 排除目标，修改后立即生效 (部分网页可能需要刷新)~\n格式：CSS 选择器 (如果不会写可以找我)\n默认：img, .img, video, [style*="background"][style*="url"], svg\n (使用英文逗号间隔，末尾不要有逗号)');
             defaults = 'img, .img, video, [style*="background"][style*="url"], svg';
             name = 'menu_customMode3_exclude';
             newMods = prompt(tip, GM_getValue(`${name}`));
@@ -207,7 +375,7 @@
 
     // 自定义昼夜时间
     function menu_customTime() {
-        let newMods = prompt('自定义脚本内和白天/晚上相关的时间，修改后刷新网页生效~\n格式：6:00|18:30 (即 6:00 ~ 18:30 之间是白天时间)\n也支持反向设置：14:00|12:00 (即 12:00 ~ 14:00 之间是夜晚时间)', GM_getValue('menu_customTime'));
+        let newMods = prompt(tr('自定义脚本内和白天/晚上相关的时间，修改后刷新网页生效~\n格式：6:00|18:30 (即 6:00 ~ 18:30 之间是白天时间)\n也支持反向设置：14:00|12:00 (即 12:00 ~ 14:00 之间是夜晚时间)'), GM_getValue('menu_customTime'));
         if (newMods === '') {
             GM_setValue('menu_customTime', '6:00|18:00');
             registerMenuCommand(); // 重新注册脚本菜单
@@ -361,10 +529,10 @@
             style_22_firefox = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important; background-image: url();}`,
             style_31 = `html {filter: invert(${style_30[0]}%) !important; text-shadow: 0 0 0 !important;}
             ${menu_value('menu_customMode3_exclude')} {filter: invert(1) !important;}
-            img[alt="[公式]"] {filter: none !important;}`,
+            img[alt=${tr("[公式]")}] {filter: none !important;}`,
             style_31_firefox = `html {filter: invert(${style_30[0]}%) !important; background-image: url(); text-shadow: 0 0 0 !important;}
             ${menu_value('menu_customMode3_exclude')} {filter: invert(1) !important;}
-            img[alt="[公式]"] {filter: none !important;}`,
+            img[alt=${tr("[公式]")}] {filter: none !important;}`,
             style_31_scrollbar = `::-webkit-scrollbar {height: 12px !important;}
 ::-webkit-scrollbar-thumb {border-radius: 0;border-color: transparent;border-style: dashed;background-color: #3f4752 !important;background-clip: padding-box;transition: background-color .32s ease-in-out;}
 ::-webkit-scrollbar-corner {background: #202020 !important;}
@@ -440,7 +608,7 @@
             if (document.body) {
                 clearInterval(timer); // 取消定时器（每 5 毫秒一次的）
                 setTimeout(function(){ // 为了避免太快 body 的 CSS 还没加载上，先延迟 150 毫秒（缺点就是可能会出现短暂一闪而过的暗黑滤镜）
-                    console.log('[护眼模式] html:', window.getComputedStyle(document.lastElementChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
+                    console.log(tr('[护眼模式] html:'), window.getComputedStyle(document.lastElementChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor);
                     if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastElementChild).backgroundColor === 'rgba(0, 0, 0, 0)' && !(document.querySelector('head>meta[name="color-scheme"],head>link[href^="resource:"]') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                         // 如果 body 没有 CSS 背景颜色（或是在资源页 且 浏览器为白天模式），那就需要添加一个背景颜色，否则影响滤镜效果
                         let style_Add2 = document.createElement('style');
@@ -453,7 +621,7 @@
                             for (let i=0;i<websiteList.length;i++){ // 这些网站强制启用护眼模式滤镜
                                 if (websiteList[i] === location.host) return
                             }
-                            console.log('[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜...')
+                            console.log(tr('[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜...'));
                             document.getElementById('XIU2DarkMode').remove();
                             remove = true;
                         }
@@ -462,7 +630,7 @@
 
                 // 用来解决一些 CSS 加载缓慢的网站，可能会出现没有正确排除的问题，在没有找到更好的办法之前，先这样凑活着用
                 setTimeout(function(){
-                    console.log('[护眼模式] html:', window.getComputedStyle(document.lastElementChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
+                    console.log(tr('[护眼模式] html:'), window.getComputedStyle(document.lastElementChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor);
                     if ((document.querySelector('head>meta[name="color-scheme"],head>link[href^="resource:"]') && window.matchMedia('(prefers-color-scheme: dark)').matches) || (document.querySelector('html[class*=dark], html[data-dark-theme*=dark], html[data-theme*=dark], html[data-color-mode*=dark], body[class*=dark]')) || (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)') || (getColorValue(document.body) > 0 && getColorValue(document.body) < 898989) || (getColorValue(document.lastElementChild) > 0 && getColorValue(document.lastElementChild) < 898989) || (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastElementChild).backgroundColor === 'rgb(0, 0, 0)')) {
                         // 如果是在资源页 且 浏览器为暗黑模式，或 html/body 元素包含 dark 标识，或底色为黑色 (等于0,0,0) 或深色 (小于 89,89,89)，就停用本脚本滤镜
                         if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
@@ -470,7 +638,7 @@
                                 if (websiteList[i] === location.host) return
                             }
                             if (remove) return
-                            console.log('[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜....')
+                            console.log(tr('[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜....'))
                             if (document.getElementById('XIU2DarkMode')) document.getElementById('XIU2DarkMode').remove();
                             if (document.getElementById('XIU2DarkMode2')) document.getElementById('XIU2DarkMode2').remove();
                         }
