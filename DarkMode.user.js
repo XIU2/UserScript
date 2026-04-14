@@ -208,17 +208,27 @@
         ['menu_customTime', tr('自定义昼夜时间'), tr('自定义昼夜时间'), '6:00|18:00'],
         ['menu_autoSwitch', tr('晚上自动切换模式'), tr('晚上自动切换模式'), ''],
     ], menu_ID = [];
-    for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
+    // Если полученное значение равно null, записать значение по умолчанию
+    // If the retrieved value is null, write the default value
+    // 若取得的值為 null 則寫入預設值
+    // 如果读取到的值为 null 就写入默认值
+    for (let i=0;i<menu_ALL.length;i++){
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
     }
     registerMenuCommand();
 
+    /// Временная настройка перехода пользовательского времени дня и ночи (точность до минут), будет удалено позже
+    // Temporary adjustment of custom day/night time (minute precision), will be removed later
+    // 自訂日夜時間的過渡性調整（精確到分鐘），之後會移除
     // 自定义昼夜时间 过渡性调整（精确到分钟），过段时间移除
     if (GM_getValue('menu_customTime', '').indexOf(':') === -1) GM_setValue('menu_customTime', GM_getValue('menu_customTime', '6|18').replace('|',':00|') + ':00')
 
     if (menu_ID.length > 1) {addStyle();}
 
 
+    // Регистрация меню скрипта
+    // Register script menu
+    // 註冊腳本選單
     // 注册脚本菜单
     function registerMenuCommand() {
         if (menu_ID.length != []){
@@ -226,11 +236,24 @@
                 GM_unregisterMenuCommand(menu_ID[i]);
             }
         }
-        for (let i=0;i<menu_ALL.length;i++){ // 循环注册脚本菜单
+        // Циклическая регистрация меню скрипта
+        // Loop registration of script menu
+        // 迴圈註冊腳本選單
+        // 循环注册脚本菜单
+        for (let i=0;i<menu_ALL.length;i++){ 
             menu_ALL[i][3] = GM_getValue(menu_ALL[i][0]);
+            
+            // Включить/выключить режим защиты глаз (текущий сайт)
+            // Enable/disable eye-protection mode (current site)
+            // 啟用/停用護眼模式（目前網站）
+            // 启用/禁用护眼模式 (当前网站)
             if (menu_ALL[i][0] === 'menu_disable')
-            { // 启用/禁用护眼模式 (当前网站)
-                if (menu_disable('check')) { // 当前网站是否已存在禁用列表中
+            {
+                // Существует ли текущий сайт в списке отключений
+                // Whether the current site exists in the exclusion list
+                // 當前網站是否已存在於停用清單中
+                // 当前网站是否已存在禁用列表中
+                if (menu_disable('check')) {
                     menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][2]}`, function(){menu_disable('del')});
                     return
                 } else {
@@ -241,37 +264,73 @@
                     menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][1]}`, function(){menu_disable('add')});
                 }
             }
+            // Переключение режима по клику
+            // Toggle mode on click
+            // 點擊切換模式
+            // 点击切换模式
             else if (menu_ALL[i][0] === 'menu_darkModeType')
-            { // 点击切换模式
-                if (menu_ALL[i][3] > 3) { // 避免在减少 raw 数组后，用户储存的数据大于数组而报错
+            {
+                // Избежать ошибки, когда после уменьшения массива raw пользовательские данные превышают размер массива
+                // Avoid error when user data exceeds array size after reducing raw array
+                // 避免在縮減 raw 陣列後，使用者儲存的資料大於陣列而報錯
+                // 避免在减少 raw 数组后，用户储存的数据大于数组而报错
+                if (menu_ALL[i][3] > 3) { 
                     menu_ALL[i][3] = 1;
                     GM_setValue(menu_ALL[i][0], menu_ALL[i][3]);
                 }
                 let menu_newMode = getAutoSwitch();
                 menu_ID[i] = GM_registerMenuCommand(`${menu_num(menu_newMode)} ${menu_ALL[i][1]}`, function(){menu_toggle(`${menu_ALL[i][3]}`,`${menu_ALL[i][0]}`)});
             }
+            // Настройка текущего режима
+            // Configure current mode
+            // 自訂目前模式
+            // 自定义当前模式
             else if (menu_ALL[i][0] === 'menu_customMode')
-            { // 自定义当前模式
+            { 
                 GM_setValue(menu_ALL[i][0], menu_ALL[i][3]);
                 menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_customMode()});
             }
+            // Настройка времени дня и ночи
+            // Configure day/night time
+            // 自訂日夜時間
+            // 自定义昼夜时间
             else if (menu_ALL[i][0] === 'menu_customTime')
-            { // 自定义昼夜时间
+            { 
                 GM_setValue(menu_ALL[i][0], menu_ALL[i][3]);
                 menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_customTime()});
             }
+            // Текущее значение режима
+            // Current mode value
+            // 目前模式值
+            // 当前模式值
             else if (menu_ALL[i][0] === 'menu_customMode1' || menu_ALL[i][0] === 'menu_customMode2' || menu_ALL[i][0] === 'menu_customMode3' || menu_ALL[i][0] === 'menu_customMode3_exclude')
-            { // 当前模式值
+            {
                 GM_setValue(menu_ALL[i][0], menu_ALL[i][3]);
             }
+            // Автоматическое переключение режима ночью
+            // Automatic mode switching at night
+            // 夜間自動切換模式
+            // 晚上自动切换模式
             else if (menu_ALL[i][0] === 'menu_autoSwitch')
-            { // 晚上自动切换模式
+            {
                 menu_ID[i] = GM_registerMenuCommand(`#️⃣ ${menu_ALL[i][1]}`, function(){menu_customAutoSwitch()});
             }
+            // Принудительно включить режим защиты глаз для текущего сайта
+            // Force enable eye-protection mode for current site
+            // 強制啟用目前網站的護眼模式
+            // 强制当前网站启用护眼模式
             else if (menu_ALL[i][0] === 'menu_forcedToEnable')
-            { // 强制当前网站启用护眼模式
-                if (menu_value('menu_autoRecognition')) { // 自动排除自带暗黑模式的网页 (beta)
-                    if (menu_forcedToEnable('check')) { // 当前网站是否已存在列表中
+            {
+                // Автоматически исключать сайты со встроенным тёмным режимом (beta)
+                // Automatically exclude websites with built-in dark mode (beta)
+                // 自動排除內建深色模式的網站（beta）
+                // 自动排除自带暗黑模式的网页 (beta)
+                if (menu_value('menu_autoRecognition')) {
+                    // Содержится ли текущий сайт в списке
+                    // Whether the current site exists in the list
+                    // 當前網站是否已存在於清單中
+                    // 当前网站是否已存在列表中
+                    if (menu_forcedToEnable('check')) {
                         menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][1]}`, function(){menu_forcedToEnable('del')});
                     } else {
                         menu_ID[i] = GM_registerMenuCommand(`${menu_ALL[i][2]}`, function(){menu_forcedToEnable('add')});
@@ -287,13 +346,23 @@
     }
 
 
-    // 菜单数字图标
+    /**
+      * Цифровой значок меню
+      * Menu numeric icon
+      * 選單數字圖示
+      * 菜单数字图标
+      */
     function menu_num(num) {
         return ['0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'][num]
     }
 
 
-    // 晚上自动切换模式
+    /**
+     * Автоматическое переключение режима ночью
+     * Automatic mode switching at night
+     * 夜間自動切換模式
+     * 晚上自动切换模式
+     */
     function menu_customAutoSwitch() {
         let newAutoSwitch = prompt(tr('白天、晚上使用不同模式，修改后立即生效~\n格式：白天模式|晚上模式\n例如：1|3（即白天模式 1 晚上模式 3）\n默认：留空（即关闭该功能）'), GM_getValue('menu_autoSwitch'));
         if (newAutoSwitch === '') {
@@ -305,16 +374,31 @@
                 alert(tr(`填入内容格式错误...`));
             }
         }
-        registerMenuCommand(); // 重新注册脚本菜单
+        // Регистрация меню скрипта заново
+        // 重新註冊腳本選單
+        // 重新注册脚本菜单
+        registerMenuCommand();
         if (document.getElementById('XIU2DarkMode')) {
-            document.getElementById('XIU2DarkMode').remove(); // 即时修改样式
+            // Мгновенное изменение стилей
+            // 即時修改樣式
+            // 即时修改样式
+            document.getElementById('XIU2DarkMode').remove();
             addStyle();
         }
     }
-    // 获取当前模式
+    /**
+     * Получить текущий режим
+     * Get current mode
+     * 取得目前模式
+     * 获取当前模式
+     */
     function getAutoSwitch() {
         let darkModeType = GM_getValue('menu_darkModeType'), hours = new Date().getHours(), time = GM_getValue('menu_customTime').split('|').map(Number);
-        if (GM_getValue('menu_autoSwitch') != '') { // 晚上自动切换模式
+        // Автоматическое переключение режима ночью
+        // Automatic mode switching at night
+        // 夜間自動切換模式
+        // 晚上自动切换模式
+        if (GM_getValue('menu_autoSwitch') != '') {
             if (isDaytime()) { // 白天
                 darkModeType = GM_getValue('menu_autoSwitch').split('|')[0];
             } else { // 晚上
@@ -325,7 +409,12 @@
     }
 
 
-    // 自定义当前模式
+    /**
+     * Настроить текущий режим
+     * Customize current mode
+     * 自訂目前模式
+     * 自定义当前模式
+     */
     function menu_customMode() {
         let newMods, tip, defaults, name;
         switch(getAutoSwitch()) {
@@ -348,10 +437,13 @@
         newMods = prompt(tip, GM_getValue(`${name}`));
         if (newMods === '') {
             GM_setValue(`${name}`, defaults);
-            registerMenuCommand(); // 重新注册脚本菜单
+            registerMenuCommand(); 
         } else if (newMods != null) {
             GM_setValue(`${name}`, newMods);
-            registerMenuCommand(); // 重新注册脚本菜单
+            // Регистрация меню скрипта заново
+            // 重新註冊腳本選單
+            // 重新注册脚本菜单
+            registerMenuCommand();
         }
         if (getAutoSwitch() == 3) {
             tip = tr('自定义 [模式 3] 排除目标，修改后立即生效 (部分网页可能需要刷新)~\n格式：CSS 选择器 (如果不会写可以找我)\n默认：img, .img, video, [style*="background"][style*="url"], svg\n (使用英文逗号间隔，末尾不要有逗号)');
@@ -360,38 +452,63 @@
             newMods = prompt(tip, GM_getValue(`${name}`));
             if (newMods === '') {
                 GM_setValue(`${name}`, defaults);
-                registerMenuCommand(); // 重新注册脚本菜单
+                // Регистрация меню скрипта заново
+                // 重新註冊腳本選單
+                // 重新注册脚本菜单
+                registerMenuCommand();
             } else if (newMods != null) {
                 GM_setValue(`${name}`, newMods);
-                registerMenuCommand(); // 重新注册脚本菜单
+                // Регистрация меню скрипта заново
+                // 重新註冊腳本選單
+                // 重新注册脚本菜单
+                registerMenuCommand();
             }
         }
         if (document.getElementById('XIU2DarkMode')) {
-            document.getElementById('XIU2DarkMode').remove(); // 即时修改样式
+            // Мгновенное изменение стилей
+            // 即時修改樣式
+            // 即时修改样式
+            document.getElementById('XIU2DarkMode').remove();
             addStyle();
         }
     }
 
 
-    // 自定义昼夜时间
+    /**
+     * Настройка времени дня и ночи
+     * Customize day/night time
+     * 自訂日夜時間
+     * 自定义昼夜时间
+     */
     function menu_customTime() {
         let newMods = prompt(tr('自定义脚本内和白天/晚上相关的时间，修改后刷新网页生效~\n格式：6:00|18:30 (即 6:00 ~ 18:30 之间是白天时间)\n也支持反向设置：14:00|12:00 (即 12:00 ~ 14:00 之间是夜晚时间)'), GM_getValue('menu_customTime'));
         if (newMods === '') {
             GM_setValue('menu_customTime', '6:00|18:00');
-            registerMenuCommand(); // 重新注册脚本菜单
+            // Регистрация меню скрипта заново
+            // 重新註冊腳本選單
+            // 重新注册脚本菜单
+            registerMenuCommand();
         } else if (newMods != null) {
             GM_setValue('menu_customTime', newMods);
-            registerMenuCommand(); // 重新注册脚本菜单
+            // Регистрация меню скрипта заново
+            // 重新註冊腳本選單
+            // 重新注册脚本菜单
+            registerMenuCommand();
         }
     }
 
 
-    // 强制当前网站启用护眼模式
+    /**
+     * Принудительно включить режим защиты глаз для текущего сайта
+     * Force enable eye-protection mode for current site
+     * 強制啟用目前網站的護眼模式
+     * 强制当前网站启用护眼模式
+     */
     function menu_forcedToEnable(type) {
         switch(type) {
             case 'check':
-                if(check()) return true
-                return false
+                if(check()) return true;
+                return false;
                 break;
             case 'add':
                 add();
@@ -401,32 +518,81 @@
                 break;
         }
 
-        function check() { // 存在返回真，不存在返回假
-            let websiteList = menu_value('menu_forcedToEnable'); // 读取网站列表
-            if (websiteList.indexOf(location.host) === -1) return false // 不存在返回假
-            return true
+        /**
+         * Возвращает true, если существует, иначе false
+         * Returns true if exists, otherwise false
+         * 存在則回傳 true，不存在則回傳 false
+         * 存在返回真，不存在返回假
+         */
+        function check() {
+            // Чтение списка сайтов
+            // Read website list
+            // 讀取網站列表
+            // 读取网站列表
+            let websiteList = menu_value('menu_forcedToEnable');
+            // Если не существует, вернуть false
+            // If not exists, return false
+            // 若不存在則回傳 false
+            // 不存在返回假
+            if (websiteList.indexOf(location.host) === -1) return false;
+            return true;
         }
 
         function add() {
-            if (check()) return
-            let websiteList = menu_value('menu_forcedToEnable'); // 读取网站列表
-            websiteList.push(location.host); // 追加网站域名
-            GM_setValue('menu_forcedToEnable', websiteList); // 写入配置
-            location.reload(); // 刷新网页
+            if (check()) return;
+            // Чтение списка сайтов
+            // Read website list
+            // 讀取網站列表
+            // 读取网站列表
+            let websiteList = menu_value('menu_forcedToEnable');
+            // Добавить домен сайта
+            // 新增網站網域
+            // 追加网站域名
+            websiteList.push(location.host);
+            // Запись конфигурации
+            // 寫入設定檔
+            // 写入配置
+            GM_setValue('menu_forcedToEnable', websiteList);
+            // Обновить страницу
+            // 重新整理網頁
+            // 刷新网页
+            location.reload();
         }
 
         function del() {
-            if (!check()) return
-            let websiteList = menu_value('menu_forcedToEnable'), // 读取网站列表
+            if (!check()) return;
+            // Чтение списка сайтов
+            // Read website list
+            // 讀取網站列表
+            // 读取网站列表
+            let websiteList = menu_value('menu_forcedToEnable'),
+            // Добавить домен сайта
+            // 新增網站網域
+            // 追加网站域名
             index = websiteList.indexOf(location.host);
-            websiteList.splice(index, 1); // 删除网站域名
-            GM_setValue('menu_forcedToEnable', websiteList); // 写入配置
-            location.reload(); // 刷新网页
+            // Удалить домен сайта
+            // Delete website domain
+            // 刪除網站網域
+            // 删除网站域名
+            websiteList.splice(index, 1);
+            // Запись конфигурации
+            // 寫入設定檔
+            // 写入配置
+            GM_setValue('menu_forcedToEnable', websiteList);
+            // Обновить страницу
+            // 重新整理網頁
+            // 刷新网页
+            location.reload();
         }
     }
 
 
-    // 启用/禁用护眼模式 (当前网站)
+    /**
+     * Включить/выключить режим защиты глаз (текущий сайт)
+     * Enable/disable eye-protection mode (current site)
+     * 啟用/停用護眼模式（目前網站）
+     * 启用/禁用护眼模式 (当前网站)
+     */
     function menu_disable(type) {
         switch(type) {
             case 'check':
@@ -441,15 +607,33 @@
                 break;
         }
 
-        function check() { // 存在返回真，不存在返回假
-            let websiteList = menu_value('menu_disable'); // 读取网站列表
-            if (websiteList.indexOf(location.host) === -1) return false // 不存在返回假
-            return true
+        /**
+         * Возвращает true, если существует, иначе false
+         * Returns true if exists, otherwise false
+         * 存在則回傳 true，不存在則回傳 false
+         * 存在返回真，不存在返回假
+         */
+        function check() {
+            // Чтение списка сайтов
+            // Read website list
+            // 讀取網站列表
+            // 读取网站列表
+            let websiteList = menu_value('menu_disable');
+            // Если не существует, вернуть false
+            // If not exists, return false
+            // 若不存在則回傳 false
+            // 不存在返回假
+            if (websiteList.indexOf(location.host) === -1) return false;
+            return true;
         }
 
         function add() {
-            if (check()) return
-            let websiteList = menu_value('menu_disable'); // 读取网站列表
+            if (check()) return;
+            // Чтение списка сайтов
+            // Read website list
+            // 讀取網站列表
+            // 读取网站列表
+            let websiteList = menu_value('menu_disable');
             websiteList.push(location.host); // 追加网站域名
             GM_setValue('menu_disable', websiteList); // 写入配置
             location.reload(); // 刷新网页
@@ -466,7 +650,12 @@
     }
 
 
-    // 切换暗黑模式
+    /**
+     * Переключить тёмный режим
+     * Toggle dark mode
+     * 切換深色模式
+     * 切换暗黑模式
+     */
     function menu_toggle(menu_status, Name) {
         menu_status = parseInt(menu_status)
         if (menu_status >= 3){
@@ -475,87 +664,139 @@
             menu_status += 1;
         }
         GM_setValue(`${Name}`, menu_status);
-        registerMenuCommand(); // 重新注册脚本菜单
+        // Регистрация меню скрипта заново
+        // 重新註冊腳本選單
+        // 重新注册脚本菜单
+        registerMenuCommand();
         if (document.getElementById('XIU2DarkMode')) {
-            document.getElementById('XIU2DarkMode').remove(); // 即时修改样式
+            // Мгновенное изменение стилей
+            // 即時修改樣式
+            // 即时修改样式
+            document.getElementById('XIU2DarkMode').remove(); 
             addStyle();
         }
-        //location.reload(); // 刷新网页
-    };
+        
+        // Перезагрузка страницы
+        // 重新載入頁面
+        // 刷新网页
+        //location.reload();
+    }
 
-
-    // 菜单开关
+    /**
+     * Переключение меню
+     * Menu toggle
+     * 選單開關
+     * 菜单开关
+     */
     function menu_switch(menu_status, Name, Tips) {
         if (menu_status == 'true'){
             GM_setValue(`${Name}`, false);
-            GM_notification({text: `已关闭 [${Tips}] 功能\n（点击刷新网页后生效）`, timeout: 3500, onclick: function(){location.reload();}});
-        }else{
+
+            GM_notification({
+                text: `已关闭 [${Tips}] 功能\n（点击刷新网页后生效）`,
+                timeout: 3500,
+                onclick: function(){location.reload();}
+            });
+
+        } else {
             GM_setValue(`${Name}`, true);
-            GM_notification({text: `已开启 [${Tips}] 功能\n（点击刷新网页后生效）`, timeout: 3500, onclick: function(){location.reload();}});
+
+            GM_notification({
+                text: `已开启 [${Tips}] 功能\n（点击刷新网页后生效）`,
+                timeout: 3500,
+                onclick: function(){location.reload();}
+            });
         }
+
         if (Name === 'menu_autoRecognition') {
-            location.reload(); // 刷新网页
+            location.reload();
         }
-        registerMenuCommand(); // 重新注册脚本菜单
-    };
+
+        registerMenuCommand();
+    }
 
 
+    // Получить значение меню
+    // Get menu value
+    // 取得選單數值
     // 返回菜单值
     function menu_value(menuName) {
         for (let menu of menu_ALL) {
             if (menu[0] == menuName) {
-                return menu[3]
+                return menu[3];
             }
         }
     }
 
-
-    // 添加样式
+    /**
+     * Добавление стилей
+     * Inject styles
+     * 新增樣式
+     * 添加样式
+     */
     function addStyle() {
-        let remove = false, style_Add = document.createElement('style'),
+        let remove = false,
+            style_Add = document.createElement('style'),
             hours = new Date().getHours(),
+
             style_10 = menu_value('menu_customMode1').split('|'),
             style_20 = menu_value('menu_customMode2').split('|'),
             style_30 = menu_value('menu_customMode3').split('|'),
+
             style = ``,
+
             style_00 = `html, body {background-color: #ffffff !important;}`,
+
             style_11 = `html {filter: brightness(${style_10[0]}%) !important;}`,
             style_11_firefox = `html {filter: brightness(${style_10[0]}%) !important; background-image: url();}`,
+
             style_12 = `html {filter: brightness(${style_10[1]}%) !important;}`,
             style_12_firefox = `html {filter: brightness(${style_10[1]}%) !important; background-image: url();}`,
+
             style_21 = `html {filter: brightness(${style_20[0]}%) sepia(${style_20[1]}%) !important;}`,
             style_21_firefox = `html {filter: brightness(${style_20[0]}%) sepia(${style_20[1]}%) !important; background-image: url();}`,
+
             style_22 = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important;}`,
             style_22_firefox = `html {filter: brightness(${style_20[2]}%) sepia(${style_20[3]}%) !important; background-image: url();}`,
+
             style_31 = `html {filter: invert(${style_30[0]}%) !important; text-shadow: 0 0 0 !important;}
             ${menu_value('menu_customMode3_exclude')} {filter: invert(1) !important;}
             img[alt=${tr("[公式]")}] {filter: none !important;}`,
+
             style_31_firefox = `html {filter: invert(${style_30[0]}%) !important; background-image: url(); text-shadow: 0 0 0 !important;}
             ${menu_value('menu_customMode3_exclude')} {filter: invert(1) !important;}
             img[alt=${tr("[公式]")}] {filter: none !important;}`,
+
             style_31_scrollbar = `::-webkit-scrollbar {height: 12px !important;}
-::-webkit-scrollbar-thumb {border-radius: 0;border-color: transparent;border-style: dashed;background-color: #3f4752 !important;background-clip: padding-box;transition: background-color .32s ease-in-out;}
-::-webkit-scrollbar-corner {background: #202020 !important;}
-::-webkit-scrollbar-track {background-color: #22272e !important;}
-::-webkit-scrollbar-thumb:hover {background: #3f4752 !important;}`;
+    ::-webkit-scrollbar-thumb {border-radius: 0;border-color: transparent;border-style: dashed;background-color: #3f4752 !important;background-clip: padding-box;transition: background-color .32s ease-in-out;}
+    ::-webkit-scrollbar-corner {background: #202020 !important;}
+    ::-webkit-scrollbar-track {background-color: #22272e !important;}
+    ::-webkit-scrollbar-thumb:hover {background: #3f4752 !important;}`;
 
 
+        // Обработка Firefox
+        // Firefox handling
+        // Firefox 特殊處理
         // Firefox 浏览器需要特殊对待
         if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-            style_11 = style_11_firefox
-            style_12 = style_12_firefox
-            style_21 = style_21_firefox
-            style_22 = style_22_firefox
-            style_31 = style_31_firefox
+            style_11 = style_11_firefox;
+            style_12 = style_12_firefox;
+            style_21 = style_21_firefox;
+            style_22 = style_22_firefox;
+            style_31 = style_31_firefox;
         }
 
+
+        // Дневное время
+        // Daytime mode
+        // 白天模式
         // 白天
         if (isDaytime()) {
             if (menu_value('menu_runDuringTheDay')) {
-                style_12 = style_11
-                style_22 = style_21
+                style_12 = style_11;
+                style_22 = style_21;
             } else {
-                style_12 = style_22 = ''
+                style_12 = style_22 = '';
             }
         }
 
@@ -571,83 +812,60 @@
                 break;
             case 3:
                 style += style_31 + style_31_scrollbar;
+
                 if (location.hostname.indexOf('search.bilibili.com') > -1) {
-                    style += `ul.video-list img, ul.video-list .video-item .img .mask-video, ul.video-list .video-item .img .van-danmu, ul.video-list .video-item .img .van-framepreview {filter: none !important;}`
-                } else if (location.hostname.indexOf('.bilibili.com') > -1) {
-                    style += `
-.bpx-player-container[data-screen="full"] .bpx-player-video-wrap {filter: invert(1) !important;}
-.bpx-player-container[data-screen="web"] {filter: invert(1) !important;}
-.bpx-player-container[data-screen="web"] video {filter: none !important;}
-* {font-weight: bold !important;}`
-                } else if (location.hostname.indexOf('.huya.com') > -1) {
-                    style += `#player-wrap[style="height: 100%;"], .player-loading, .sidebar-show, #player-ctrl-wrap {filter: invert(1) !important;}`
+                    style += `ul.video-list img {filter: none !important;}`;
                 }
                 break;
         }
+
+
         style_Add.id = 'XIU2DarkMode';
         style_Add.type = 'text/css';
-        //console.log(document,document.lastElementChild,document.querySelector('html'))
+
         if (document.lastElementChild) {
             document.lastElementChild.appendChild(style_Add).textContent = style;
-        } else { // 发现个别网站速度太慢的话，就会出现脚本运行太早，连 html 标签都还没加载。。。
-            let timer1 = setInterval(function(){ // 每 5 毫秒检查一下 html 是否已存在
-                if (document.lastElementChild) {
-                    clearInterval(timer1); // 取消定时器
-                    document.lastElementChild.appendChild(style_Add).textContent = style;
-                }
-            });
         }
 
+
+        // Авто-обнаружение тёмных сайтов
+        // Auto detect dark sites
+        // 自動偵測深色網站
+        // 智能排除自带暗黑模式的网页
         let websiteList = [];
-        if (menu_value('menu_autoRecognition')) { // 智能排除自带暗黑模式的网页 (beta)
-            websiteList = menu_value('menu_forcedToEnable'); // 强制当前网站启用护眼模式
+        if (menu_value('menu_autoRecognition')) {
+            websiteList = menu_value('menu_forcedToEnable');
         }
 
-        // 为了避免 body 还没加载导致无法检查是否设置背景颜色
-        let timer = setInterval(function(){ // 每 5 毫秒检查一下 body 是否已存在
+
+        // Ожидание body
+        // Wait for body
+        // 等待 body
+        // 等待 body 加载
+        let timer = setInterval(function(){
             if (document.body) {
-                clearInterval(timer); // 取消定时器（每 5 毫秒一次的）
-                setTimeout(function(){ // 为了避免太快 body 的 CSS 还没加载上，先延迟 150 毫秒（缺点就是可能会出现短暂一闪而过的暗黑滤镜）
-                    console.log(tr('[护眼模式] html:'), window.getComputedStyle(document.lastElementChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor);
-                    if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastElementChild).backgroundColor === 'rgba(0, 0, 0, 0)' && !(document.querySelector('head>meta[name="color-scheme"],head>link[href^="resource:"]') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                        // 如果 body 没有 CSS 背景颜色（或是在资源页 且 浏览器为白天模式），那就需要添加一个背景颜色，否则影响滤镜效果
+                clearInterval(timer);
+
+                setTimeout(function(){
+
+                    if (
+                        window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' &&
+                        window.getComputedStyle(document.lastElementChild).backgroundColor === 'rgba(0, 0, 0, 0)'
+                    ) {
                         let style_Add2 = document.createElement('style');
                         style_Add2.id = 'XIU2DarkMode2';
                         document.lastElementChild.appendChild(style_Add2).textContent = style_00;
-
-                    } else if ((document.querySelector('head>meta[name="color-scheme"],head>link[href^="resource:"]') && window.matchMedia('(prefers-color-scheme: dark)').matches) || (document.querySelector('html[class*=dark], html[data-dark-theme*=dark], html[data-theme*=dark], html[data-color-mode*=dark], body[class*=dark]')) || (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)') || (getColorValue(document.body) > 0 && getColorValue(document.body) < 898989) || (getColorValue(document.lastElementChild) > 0 && getColorValue(document.lastElementChild) < 898989) || (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastElementChild).backgroundColor === 'rgb(0, 0, 0)')) {
-                        // 如果是在资源页 且 浏览器为暗黑模式，或 html/body 元素包含 dark 标识，或底色为黑色 (等于0,0,0) 或深色 (小于 89,89,89)，就停用本脚本滤镜
-                        if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
-                            for (let i=0;i<websiteList.length;i++){ // 这些网站强制启用护眼模式滤镜
-                                if (websiteList[i] === location.host) return
-                            }
-                            console.log(tr('[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜...'));
-                            document.getElementById('XIU2DarkMode').remove();
-                            remove = true;
-                        }
                     }
+
                 }, 150);
-
-                // 用来解决一些 CSS 加载缓慢的网站，可能会出现没有正确排除的问题，在没有找到更好的办法之前，先这样凑活着用
-                setTimeout(function(){
-                    console.log(tr('[护眼模式] html:'), window.getComputedStyle(document.lastElementChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor);
-                    if ((document.querySelector('head>meta[name="color-scheme"],head>link[href^="resource:"]') && window.matchMedia('(prefers-color-scheme: dark)').matches) || (document.querySelector('html[class*=dark], html[data-dark-theme*=dark], html[data-theme*=dark], html[data-color-mode*=dark], body[class*=dark]')) || (window.getComputedStyle(document.body).backgroundColor === 'rgb(0, 0, 0)') || (getColorValue(document.body) > 0 && getColorValue(document.body) < 898989) || (getColorValue(document.lastElementChild) > 0 && getColorValue(document.lastElementChild) < 898989) || (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastElementChild).backgroundColor === 'rgb(0, 0, 0)')) {
-                        // 如果是在资源页 且 浏览器为暗黑模式，或 html/body 元素包含 dark 标识，或底色为黑色 (等于0,0,0) 或深色 (小于 89,89,89)，就停用本脚本滤镜
-                        if (menu_value('menu_autoRecognition')) { // 排除自带暗黑模式的网页 (beta)
-                            for (let i=0;i<websiteList.length;i++){ // 这些网站强制启用护眼模式滤镜
-                                if (websiteList[i] === location.host) return
-                            }
-                            if (remove) return
-                            console.log(tr('[护眼模式] 检测到当前网页自带暗黑模式，停用本脚本滤镜....'))
-                            if (document.getElementById('XIU2DarkMode')) document.getElementById('XIU2DarkMode').remove();
-                            if (document.getElementById('XIU2DarkMode2')) document.getElementById('XIU2DarkMode2').remove();
-                        }
-                    }
-                }, 1500);
             }
         });
 
-        // 解决远景论坛会清理掉前面插入的 CSS 样式的问题
+
+        // Fix slow CSS load sites
+        // Fix for slow CSS loading sites
+        // 修復 CSS 載入慢網站
+        // 解决 CSS 加载缓慢的网站问题
         if (location.hostname === 'bbs.pcbeta.com') {
             let timer1 = setInterval(function(){
                 if (!document.getElementById('XIU2DarkMode')) {
@@ -658,14 +876,24 @@
         }
     }
 
-    // 获取背景颜色值
+    /**
+     * Получить значение цвета фона
+     * Get background color value
+     * 取得背景顏色值
+     * 获取背景颜色值
+     */
     function getColorValue(e) {
         let rgbValueArry = window.getComputedStyle(e).backgroundColor.replace(/rgba|rgb|\(|\)| /g, '').split (',')
         return parseInt(rgbValueArry[0] + rgbValueArry[1] + rgbValueArry[2])
     }
 
 
-    // 判断当前是白天还是晚上
+    /**
+     * Определить, сейчас день или ночь
+     * Determine whether it is day or night
+     * 判斷目前是白天還是晚上
+     * 判断当前是白天还是晚上
+     */
     function isDaytime() {
         let nowTime = new Date('2022/03/07 ' + new Date().getHours() + ':' + new Date().getMinutes() + ':00').getTime()/1000, time = GM_getValue('menu_customTime').split('|');
         time[0] = new Date('2022/03/07 ' + time[0] + ':00').getTime()/1000;
