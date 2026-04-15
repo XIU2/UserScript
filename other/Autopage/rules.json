@@ -7355,7 +7355,7 @@
 		}
 	},
 	"爱妹子": {
-		"host": "xx.knit.bid",
+		"host": ["xx.knit.bid","www.lovecutes.com"],
 		"url": "return fun.getCSS('li.active+li>a')",
 		"blank": 4,
 		"pager": {
