@@ -3,7 +3,7 @@
 // @name:zh-CN   护眼模式
 // @name:zh-TW   護眼模式
 // @name:ru      Тёмный режим
-// @version      1.5.7
+// @version      1.5.8
 // @author       X.I.U
 // @description  Simple and effective network-wide eye protection mode (night mode, dark mode, black mode)
 // @description:zh-CN  简单有效的全网通用护眼模式（夜间模式、暗黑模式、深色模式）
@@ -441,8 +441,8 @@
                 clearInterval(timer); // 取消定时器（每 5 毫秒一次的）
                 setTimeout(function(){ // 为了避免太快 body 的 CSS 还没加载上，先延迟 150 毫秒（缺点就是可能会出现短暂一闪而过的暗黑滤镜）
                     console.log('[护眼模式] html:', window.getComputedStyle(document.lastElementChild).backgroundColor, 'body:', window.getComputedStyle(document.body).backgroundColor)
-                    if (window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastElementChild).backgroundColor === 'rgba(0, 0, 0, 0)' && !(document.querySelector('head>meta[name="color-scheme"],head>link[href^="resource:"]') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                        // 如果 body 没有 CSS 背景颜色（或是在资源页 且 浏览器为白天模式），那就需要添加一个背景颜色，否则影响滤镜效果
+                    if (!(checkChallenge()) && window.getComputedStyle(document.body).backgroundColor === 'rgba(0, 0, 0, 0)' && window.getComputedStyle(document.lastElementChild).backgroundColor === 'rgba(0, 0, 0, 0)' && !(document.querySelector('head>meta[name="color-scheme"],head>link[href^="resource:"]') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                        // 如果不是在 (CF CDN 的人机验证页面 且 浏览器为暗黑模式) 或 body 没有 CSS 背景颜色（或是在资源页 且 浏览器为白天模式），那就需要添加一个背景颜色，否则影响滤镜效果
                         let style_Add2 = document.createElement('style');
                         style_Add2.id = 'XIU2DarkMode2';
                         document.lastElementChild.appendChild(style_Add2).textContent = style_00;
@@ -492,7 +492,7 @@
 
     // Cloudflare CDN 的人机验证界面特殊处理
     function checkChallenge() {
-        return (window.matchMedia('(prefers-color-scheme: dark)').matches && document.querySelector('body>script[data-cf-beacon]'))
+        return (window.matchMedia('(prefers-color-scheme: dark)').matches && document.querySelector('head>meta[content*="https://challenges.cloudflare.com"]') && document.querySelector('body>script[nonce]'))
     }
 
     // 获取背景颜色值
