@@ -6161,6 +6161,16 @@
 			"replaceE": ".pages"
 		}
 	},
+	"2048 论坛": {
+		"host": "hjd2048.com",
+		"url": "/\\/thread\\.php/",
+		"style": "tr[onmouseover]",
+		"pager": {
+			"nextL": ".pages>b+a",
+			"pageE": "#ajaxtable>tbody[style]>tr",
+			"replaceE": ".pages"
+		}
+	},
 	"M系镜像": {
 		"host": "mirror.chromaso.net",
 		"url": "if(fun.indexOF(/^\\/thread\\/.+/)){rule.thread=true;rule.pager.pageE='.container>.mm-post';return true;}else if(fun.indexOF(/^\\/(forum|search)\\/.+/)){rule.blank=3;return true;}",
