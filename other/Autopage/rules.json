@@ -1191,6 +1191,16 @@
 			"replaceE": ".pagination:not(#breadcrumb_multipage_popup)"
 		}
 	},
+	"kaspersky 论坛": {
+		"host": "forum.kaspersky.com",
+		"url": "/^\\/forum\\//",
+		"blank": 3,
+		"pager": {
+			"nextL": ".ipsPagination_next>a",
+			"pageE": ".ipsDataItem",
+			"replaceE": "div[data-role=tablePagination]>.ipsPagination"
+		}
+	},
 	"ptt.cc": {
 		"host": "www.ptt.cc",
 		"url": "/^\\/bbs\\/.+\\/index/",
