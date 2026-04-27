@@ -5980,7 +5980,7 @@
 	},
 	"Xvideos": {
 		"host": ["www.xnxx.com","www.xvideos.com"],
-		"url": "return fun.isPager('p,r')",
+		"url": "if(fun.isPager('p,r')){if(fun.indexOF(/^\\/best\\//)){rule.pager.pageE='.mozaique>*,head>script:not([src]),head>script[src$=\\'/runtime.bundle.js\\']';rule.pager.scriptT=2;rule.function.aF='';};return true;}",
 		"blank": 3,
 		"pager": {
 			"nextL": "a.next-page,a.next",
