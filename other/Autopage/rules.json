@@ -7399,6 +7399,7 @@
 		"pager": {
 			"nextL": ".next",
 			"pageE": ".wp-block-image>img",
+			"insertP": [".content-main",3],
 			"replaceE": ".simple-page-nav"
 		},
 		"function": {
