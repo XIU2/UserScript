@@ -6509,8 +6509,18 @@
 			"replaceE": ".pagination"
 		}
 	},
+	"18AV": {
+		"host": ["18av.mm-cg.com","/^mjv\\d{3}\\.com$/"],
+		"url": "return fun.isPager()",
+		"blank": 3,
+		"pager": {
+			"nextL": ".previous-next a",
+			"pageE": ".post",
+			"replaceE": ".pagination-row"
+		}
+	},
 	"JavBooks": {
-		"host": ["javbooks.com","jmvbt.com","/^[a-z]{2}\\d{4}\\.com$/"],
+		"host": ["javbooks.com","jmvbt.com","/^jkk\\d{3}\\.com$/"],
 		"url": "return (fun.isTitle('Javbooks') && !fun.indexOF('/content_'))",
 		"blank": 3,
 		"pager": {
