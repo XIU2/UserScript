@@ -291,12 +291,40 @@ function collapsedAnswer() {
 }
 
 
+// 判断一次点击是否来自空白区域
+function isZhihuEBlankSideClick(event, root) {
+    let target = event.target;
+    if (!target || target.nodeType !== 1 || !root || !root.contains(target)) return false
+    if (target == root) return true
+
+    // 正文、卡片、评论、按钮、链接等区域不触发
+    const contentSelectors = [
+        'a', 'button', 'input', 'textarea', 'select', 'label', '[role=button]', '[contenteditable=true]',
+        '.Card', '.List-item', '.TopstoryItem', '.ContentItem', '.RichContent', '.Comments-container',
+        '.QuestionHeader', '.QuestionHeader-main', '.QuestionHeader-side', '.GlobalSideBar', '.TopstoryTabs',
+        '.Modal', '.Popover', '.HoverCard', '.AppHeader', '.SearchBar', '.HotSearchCard'
+    ].join(', ');
+    if (target.closest(contentSelectors)) return false
+
+    // 页面骨架、信息流外层容器作为空白区域触发
+    const blankContainerSelectors = [
+        '.Topstory', '.Topstory-container', '.QuestionPage', '.Question-main', '.Search-container',
+        '.Profile-main', '.CollectionsDetailPage', 'main', 'main[role=main]', '.App-main'
+    ].join(', ');
+    return !!target.closest(blankContainerSelectors)
+}
+
+
 // 收起当前回答、评论（监听点击事件，点击网页两侧空白处）
 function collapsedNowAnswer(selectors) {
     backToTop(selectors) // 快捷回到顶部
     if (!menu_value('menu_collapsedNowAnswer')) return
-    document.querySelector(selectors).onclick = function(event){
-        if (event.target == this) {
+    const doc = document.querySelector(selectors);
+    if (!doc) return
+    doc.onclick = function(event){
+        if (isZhihuEBlankSideClick(event, this)) {
+            if (event.zhihuE_collapsedNowHandled) return
+            event.zhihuE_collapsedNowHandled = true
             // 下面这段主要是 [收起回答]，顺便 [收起评论]（如果展开了的话）
             let rightButton = document.querySelector('.ContentItem-actions.Sticky.RichContent-actions.is-fixed.is-bottom')
             if (rightButton) { // 悬浮在底部的 [收起回答]（此时正在浏览回答内容 [中间区域]）
@@ -419,8 +447,12 @@ function collapsedNowAnswer(selectors) {
 // 回到顶部（监听点击事件，鼠标右键点击网页两侧空白处）
 function backToTop(selectors) {
     if (!menu_value('menu_backToTop')) return
-    document.querySelector(selectors).oncontextmenu = function(event){
-        if (event.target == this) {
+    const doc = document.querySelector(selectors);
+    if (!doc) return
+    doc.oncontextmenu = function(event){
+        if (isZhihuEBlankSideClick(event, this)) {
+            if (event.zhihuE_backToTopHandled) return
+            event.zhihuE_backToTopHandled = true
             event.preventDefault();
             window.scrollTo(0,0)
         }
@@ -1763,6 +1795,7 @@ function switchHomeRecommend() {
             if (menu_value('menu_blockTypeVideo')) document.lastChild.appendChild(document.createElement('style')).textContent = `.Card .ZVideoItem-video, nav.TopstoryTabs > a[aria-controls="Topstory-zvideo"] {display: none !important;}`;
 
             collapsedNowAnswer('main div'); //                                 收起当前回答 + 快捷返回顶部
+            collapsedNowAnswer('.Topstory'); //                                收起当前回答 + 快捷返回顶部（兼容知乎新版首页左侧空白区域）
             collapsedNowAnswer('.Topstory-container'); //                      收起当前回答 + 快捷返回顶部
             if (location.pathname !== '/column-square'){ // 不是首页 - 专栏时
                 setInterval(function(){topTime_('.TopstoryItem', 'ContentItem-meta')}, 300); // 置顶显示时间
