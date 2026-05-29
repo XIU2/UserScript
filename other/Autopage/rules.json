@@ -2085,28 +2085,6 @@
 			"replaceE": "//a[contains(@class,'active')]/.."
 		}
 	},
-	"Steam 创意工坊 - 项目列表": {
-		"host": "steamcommunity.com",
-		"url": "return (fun.indexOF('/workshop/browse') || fun.indexOF('/myworkshopfiles/'))",
-		"pager": {
-			"nextL": "//a[@class='pagebtn' and text()='>']",
-			"pageE": ".workshopBrowseItems>*,.workshopItemSubscription,.workshopItemSubscription+script",
-			"replaceE": ".workshopBrowsePaging,.workshopBrowsePagingWithBG",
-			"scriptT": 2
-		}
-	},
-	"Steam 社区 - 活动评论": {
-		"host": "steamcommunity.com",
-		"url": "return (fun.indexOF(/eventcomments\\/\\d/))",
-		"style": ".forum_paging_controls",
-		"history": true,
-		"pager": {
-			"nextL": "js; return fun.getNextUP('ctp=',/ctp=\\d+/,location.pathname,'2',fun.getCSS('span.commentthread_pagelinks>a:last-child').textContent)",
-			"pageE": ".commentthread_comments>.commentthread_comment",
-			"replaceE": ".forum_paging .forum_paging_summary",
-			"scriptT": 1
-		}
-	},
 	"小霸王其乐无穷": {
 		"host": "www.yikm.net",
 		"blank": 3,
