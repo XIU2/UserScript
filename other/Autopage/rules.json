@@ -7235,6 +7235,15 @@
 			"replaceE": ".wp-pagenavi"
 		}
 	},
+	"JComic": {
+		"host": "jcomic.net",
+		"url": "/^\\/page\\//",
+		"pager": {
+			"nextL": "//div[@class='container']//a/button[text()='下一章']/..",
+			"pageE": ".container>.container+.row.col-lg-12.col-md-12.col-xs-12>img",
+			"replaceE": ".container>.row.col-lg-12.col-md-12.col-xs-12:first-child"
+		}
+	},
 	"色漫天堂": {
 		"host": "smtt6.com",
 		"url": "/^\\/man-hua-yue-du\\//",
