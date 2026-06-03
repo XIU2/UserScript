@@ -7244,6 +7244,15 @@
 			"replaceE": ".container>.row.col-lg-12.col-md-12.col-xs-12:first-child"
 		}
 	},
+	"JComic - cat": {
+		"host": "jcomic.net",
+		"url": "/^\\/cat\\//",
+		"pager": {
+			"nextL": ".pagination>.active+li>a",
+			"pageE": "body>.container>div>.row.col-lg-4.col-md-6.col-xs-12",
+			"replaceE": ".pagination"
+		}
+	},
 	"色漫天堂": {
 		"host": "smtt6.com",
 		"url": "/^\\/man-hua-yue-du\\//",
