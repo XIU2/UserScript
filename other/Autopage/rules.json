@@ -7645,7 +7645,7 @@
 		}
 	},
 	"凸凹吧 tuao.cc": {
-		"host": ["www.tuao.cc","www.nnao.cc"],
+		"host": ["www.tuao.cc","www.nnao.cc","www.24ao.cc"],
 		"url": "if(fun.indexOF(/^\\/Articles\\/Content\\//)){let d=document.querySelector('#imgData');if(d&&d.value){let a=d.value.split('|');if(a.length>4){const container=document.getElementById('pageContainer');let i=4;const timer=setInterval(()=>{if(i>=a.length){clearInterval(timer);return};const img=document.createElement('img');img.src=atob(a[i]);container.appendChild(img);i++},1000)};return true};}",
 		"style": "#pagination,body>div:last-of-type,ins",
 		"hiddenPN": true
