@@ -3,7 +3,7 @@
 // @name:zh-CN   知乎增强
 // @name:zh-TW   知乎增強
 // @name:ru      Улучшение Zhihu
-// @version      2.3.29
+// @version      2.3.30
 // @author       X.I.U
 // @description  A more personalized Zhihu experience~
 // @description:zh-CN  移除登录弹窗、屏蔽指定类别（视频、盐选、文章、想法、关注[赞同/关注了XX]等）、屏蔽低赞/低评、屏蔽用户、屏蔽关键词、默认收起回答、快捷收起回答/评论（左键两侧）、快捷回到顶部（右键两侧）、区分问题文章、移除高亮链接、净化搜索热门、净化标题消息、展开问题描述、显示问题作者、默认高清原图（无水印）、置顶显示时间、完整问题时间、直达问题按钮、默认站外直链...
@@ -65,7 +65,8 @@ var menu_ALL = [
     ['menu_questionRichTextMore', '展开问题描述', '展开问题描述', false],
     ['menu_publishTop', '置顶显示时间', '置顶显示时间', true],
     ['menu_typeTips', '区分问题文章', '区分问题文章', true],
-    ['menu_toQuestion', '直达问题按钮', '直达问题按钮', true]
+    ['menu_toQuestion', '直达问题按钮', '直达问题按钮', true],
+    ['menu_markOnlyVisibleToMyself', '标记仅自己可见的评论', '标记仅自己可见的评论（接口返回 is_visible_only_to_myself 为 true）', true]
 ], menu_ID = [];
 for (let i=0;i<menu_ALL.length;i++){ // 如果读取到的值为 null 就写入默认值
     if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
@@ -1651,6 +1652,166 @@ function switchHomeRecommend() {
     document.querySelectorAll('header.AppHeader nav>a:not([target])[href="https://www.zhihu.com/"]').forEach((a)=>{a.addEventListener('click', function(e){e.preventDefault();document.cookie='tst=r; expires=Thu, 18 Dec 2099 12:00:00 GMT; domain=.zhihu.com; path=/';location.href=this.href;return false;})})
 }
 
+
+// 标记仅自己可见的评论 ---------------------------------------------------------
+// 知乎评论接口（/api/v4/comment*）返回的每条评论中含有 is_visible_only_to_myself 字段：
+//   false = 所有人可见； true = 仅自己可见（别人看不到，常见于被折叠/限流的回复）
+// 由于该字段只存在于接口返回的 JSON 中、页面 DOM 并不会暴露，所以需要拦截网络请求来获取，
+// 再通过「作者名 + 评论文字」生成签名，与页面中渲染出来的评论一一对应并打上标记。
+var zhihuE_onlyVisibleSign = {}; // 缓存：仅自己可见评论的签名集合
+
+// 生成评论签名（作者名 + 规范化后的评论文字），用于接口数据与 DOM 对应
+function zhihuE_commentSign(author, text) {
+    return (author || '').trim() + '' + (text || '').replace(/\s+/g, ' ').trim();
+}
+
+// 将接口返回的 HTML 评论内容转为纯文字（与 DOM 中 .CommentContent.textContent 保持一致）
+function zhihuE_htmlToText(html) {
+    if (html == null) return '';
+    let tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent || '';
+}
+
+// 递归记录单条评论（含其子评论）的 仅自己可见 标记
+function zhihuE_recordComment(c) {
+    if (!c || typeof c !== 'object') return;
+    if (c.author && c.content != null && c.is_visible_only_to_myself === true) {
+        let name = (c.author.member && c.author.member.name) || c.author.name || '';
+        zhihuE_onlyVisibleSign[zhihuE_commentSign(name, zhihuE_htmlToText(c.content))] = true;
+    }
+    if (Array.isArray(c.child_comments)) c.child_comments.forEach(zhihuE_recordComment); // 子评论
+    if (c.comment) zhihuE_recordComment(c.comment); // 部分接口（如发表评论）会把评论包在 comment 字段里
+}
+
+// 解析评论接口返回的 JSON 文本，并刷新页面已有评论的标记
+function zhihuE_parseCommentJson(text) {
+    try {
+        let obj = (typeof text === 'string') ? JSON.parse(text) : text;
+        if (!obj || typeof obj !== 'object') return;
+        let arr = obj.data || obj.comments;
+        if (Array.isArray(arr)) {
+            arr.forEach(zhihuE_recordComment);
+        } else if (obj.id && obj.author) { // 单条评论（如发表/回复评论后的返回）
+            zhihuE_recordComment(obj);
+        } else {
+            return;
+        }
+        zhihuE_rescanComments(); // 接口数据可能晚于 DOM 渲染到达，需重新扫描一次已渲染的评论
+    } catch (e) {}
+}
+
+// 给某条评论加上「仅自己可见」标记（放在评论下方的时间、省份后面，不改动评论原本样式）
+function zhihuE_markComment(content) {
+    if (!content || content.dataset.zhihuEVis) return;
+    content.dataset.zhihuEVis = '1';
+    let badge = document.createElement('span');
+    badge.className = 'zhihuE-onlyVisibleBadge';
+    badge.textContent = '仅自己可见';
+    badge.title = '该评论仅自己可见（is_visible_only_to_myself = true），其他人看不到这条回复';
+    // 评论内容下方通常紧跟一行底部信息栏（时间、IP 属地省份、赞/回复等按钮）
+    let footer = content.nextElementSibling;
+    if (footer && footer.querySelector('button')) {
+        // 把徽章插到第一个操作按钮之前 = 时间和省份的后面
+        let firstBtn = footer.querySelector('button'), ref = firstBtn;
+        while (ref.parentElement && ref.parentElement !== footer) ref = ref.parentElement; // 提升到 footer 的直接子节点
+        footer.insertBefore(badge, ref);
+    } else {
+        // 兜底：直接放在评论内容下方
+        content.insertAdjacentElement('afterend', badge);
+    }
+}
+
+// 根据评论作者头像定位评论节点，命中签名则标记（traversal 与脚本中屏蔽评论的逻辑保持一致）
+function zhihuE_tryMarkByAvatar(avatar) {
+    if (!avatar || !avatar.parentElement) return;
+    let node = avatar.parentElement.parentElement;
+    if (!node || !node.parentElement || !node.parentElement.parentElement) return;
+    node = node.parentElement.parentElement; // 头像 img 向上 4 层 = 评论节点
+    let content = node.querySelector('.CommentContent');
+    if (!content || content.dataset.zhihuEVis) return;
+    if (zhihuE_onlyVisibleSign[zhihuE_commentSign(avatar.alt, content.textContent)]) {
+        zhihuE_markComment(content);
+    }
+}
+
+// 扫描页面中当前已渲染的全部评论
+function zhihuE_rescanComments() {
+    document.querySelectorAll('a[href^="https://www.zhihu.com/people/"]>img.Avatar[alt]').forEach(zhihuE_tryMarkByAvatar);
+}
+
+// 拦截评论接口（fetch + XMLHttpRequest），获取 is_visible_only_to_myself 字段
+function zhihuE_hookCommentApi() {
+    // 在沙箱（@sandbox JavaScript）下，需要 patch 页面真正的 window 才能拦截页面发起的请求
+    const win = (typeof unsafeWindow !== 'undefined' && unsafeWindow) ? unsafeWindow : window;
+    if (win._zhihuE_commentHooked) return;
+    win._zhihuE_commentHooked = true;
+    const isCommentApi = (url) => typeof url === 'string' && url.indexOf('/api/v4/comment') > -1;
+
+    // fetch
+    if (typeof win.fetch === 'function') {
+        const _fetch = win.fetch;
+        win.fetch = function(input, init) {
+            let url = (typeof input === 'string') ? input : (input && input.url);
+            let p = _fetch.apply(this, arguments);
+            if (isCommentApi(url)) {
+                p.then(function(resp) {
+                    try { resp.clone().text().then(function(t){ zhihuE_parseCommentJson(t); }).catch(function(){}); } catch (e) {}
+                    return resp;
+                }).catch(function(){});
+            }
+            return p;
+        };
+    }
+
+    // XMLHttpRequest
+    const _open = win.XMLHttpRequest.prototype.open;
+    const _send = win.XMLHttpRequest.prototype.send;
+    win.XMLHttpRequest.prototype.open = function(method, url) {
+        this._zhihuE_url = url;
+        return _open.apply(this, arguments);
+    };
+    win.XMLHttpRequest.prototype.send = function() {
+        if (isCommentApi(this._zhihuE_url)) {
+            this.addEventListener('load', function() {
+                try { zhihuE_parseCommentJson(this.responseText); } catch (e) {}
+            });
+        }
+        return _send.apply(this, arguments);
+    };
+}
+
+// 标记仅自己可见的评论（主入口）
+function markOnlyVisibleToMyself() {
+    if (!menu_value('menu_markOnlyVisibleToMyself')) return;
+    if (window._zhihuE_onlyVisibleInited) return;
+    window._zhihuE_onlyVisibleInited = true;
+
+    // 注入样式（仅徽章样式，不改动评论本身）
+    document.head.appendChild(document.createElement('style')).textContent = `.zhihuE-onlyVisibleBadge {display:inline-block;margin:0 8px 0 0;padding:0 8px;font-size:12px;line-height:18px;border-radius:9px;color:#fff;background:#f5a623;font-weight:bold;vertical-align:middle;}`;
+
+    zhihuE_hookCommentApi(); // 拦截评论接口
+
+    // 监听后续动态加载/插入的评论
+    const observer = new MutationObserver(function(mutationsList) {
+        for (const mutation of mutationsList) {
+            for (const target of mutation.addedNodes) {
+                if (target.nodeType != 1) continue;
+                if (target.matches && target.matches('a[href^="https://www.zhihu.com/people/"]>img.Avatar[alt]')) {
+                    zhihuE_tryMarkByAvatar(target);
+                } else if (target.querySelectorAll) {
+                    target.querySelectorAll('a[href^="https://www.zhihu.com/people/"]>img.Avatar[alt]').forEach(zhihuE_tryMarkByAvatar);
+                }
+            }
+        }
+    });
+    observer.observe(document, { childList: true, subtree: true });
+
+    zhihuE_rescanComments(); // 兜底扫描一次已渲染评论
+}
+// -----------------------------------------------------------------------------
+
+
 (function() {
     if (window.onurlchange === undefined) {addUrlChangeEvent();} // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
     rememberSelectedBlockKeyword(); // 记录当前选中的文字，供右键脚本菜单直接加入屏蔽词
@@ -1677,6 +1838,7 @@ function switchHomeRecommend() {
         }
         closeFloatingComments(); //                                            快捷关闭悬浮评论（监听点击事件，点击网页两侧空白处）
         blockKeywords('comment'); //                                           屏蔽指定关键词（评论）
+        markOnlyVisibleToMyself(); //                                          标记仅自己可见的评论
 
 
         if (location.pathname.indexOf('question') > -1 && location.href.indexOf('/log') == -1) { //       回答页 //
