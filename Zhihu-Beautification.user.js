@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.5.20
+// @version      1.5.21
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -240,10 +240,11 @@ html[data-theme=light] .AppHeader-notifications:not([aria-label=通知])>div:fir
             style_widescreenDisplayPost = `/* 宽屏显示 - 文章页 */
 .Post-content {min-width: auto !important;}
 .Post-SideActions {left: calc(10vw) !important;}
-.Post-Row-Content-right {display: none !important;}
-.Post-Row-Content, .Post-Row-Content-left, .RichContent-actions {width: ${GM_getValue('menu_widescreenDisplayWidth')}px !important;}
-@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Post-Row-Content, .Post-Row-Content-left, .RichContent-actions {width: auto !important;}}
-@media only screen and (max-width: ${GM_getValue('menu_widescreenDisplayWidth')-100}px) {.Post-Row-Content, .Post-Row-Content-left, .RichContent-actions {width: 98% !important;}}
+.Post-Row-Content-right, .Post-content > div:has(.Post-Main) > div:nth-child(2) {display: none !important;}
+.Post-Row-Content, .Post-content > div:has(.Post-Main) {box-sizing: border-box !important; width: calc(${GM_getValue('menu_widescreenDisplayWidth')}px + 72px) !important; max-width: 100% !important;}
+.Post-Row-Content-left, .Post-content > div:has(.Post-Main) > div:first-child, .Post-content > div:has(.Post-Main) > div:first-child > div:first-child {box-sizing: border-box !important; width: calc(${GM_getValue('menu_widescreenDisplayWidth')}px + 40px) !important; max-width: 100% !important;}
+.Post-Main, .Post-Header, .RichContent-actions {box-sizing: border-box !important; width: ${GM_getValue('menu_widescreenDisplayWidth')}px !important; max-width: 100% !important;}
+@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+122}px) {.Post-Row-Content, .Post-content > div:has(.Post-Main) {width: 98% !important;} .Post-Row-Content-left, .Post-content > div:has(.Post-Main) > div:first-child, .Post-content > div:has(.Post-Main) > div:first-child > div:first-child, .Post-Main, .Post-Header, .RichContent-actions {width: 100% !important; max-width: 100% !important;}}
 `,
             style_widescreenDisplayPeople = `/* 宽屏显示 - 用户主页 */
 .Profile-mainColumn {width: inherit !important;}
@@ -479,7 +480,7 @@ html {filter: brightness(65%) sepia(30%) !important; background-image: url();}
         if (menu_value('menu_widescreenDisplayQuestion') && location.pathname.indexOf('/question/') > -1) style += style_widescreenDisplayQuestion;
         if (menu_value('menu_widescreenDisplaySearch') && (location.pathname === '/search' || location.pathname.indexOf('/club/') > -1 || location.pathname.indexOf('/topic/') > -1)) style += style_widescreenDisplaySearch;
         if (menu_value('menu_widescreenDisplayCollection') && location.pathname.indexOf('/collection/') > -1) style += style_widescreenDisplayCollection;
-        if (menu_value('menu_widescreenDisplayPost') && location.hostname.indexOf('zhuanlan') > -1 && (location.pathname.indexOf('/edit') === -1 || location.pathname.indexOf('/write') === -1)) style += style_widescreenDisplayPost;
+        if (menu_value('menu_widescreenDisplayPost') && location.hostname.indexOf('zhuanlan') > -1 && location.pathname.indexOf('/edit') === -1 && location.pathname.indexOf('/write') === -1) style += style_widescreenDisplayPost;
         if (menu_value('menu_widescreenDisplayPeople') && location.pathname.indexOf('/people/') > -1) style += style_widescreenDisplayPeople;
 
         // 调整图片最大高度
