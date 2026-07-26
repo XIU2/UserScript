@@ -34,7 +34,7 @@
     const download_url_us = [
         ['https://gh.h233.eu.org/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@X.I.U/XIU2] 提供'],
         //['https://gh.api.99988866.xyz/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [github.com/hunshcn/gh-proxy] 提供'], // 官方演示站用的人太多了
-        ['https://rapidgit.jjda.de5.net/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [热心网友] 提供'],
+        //['https://rapidgit.jjda.de5.net/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [热心网友] 提供'],//挂了，522超时
         ['https://gh.ddlc.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [@mtr-static-official] 提供'],
         ['https://gh-proxy.org/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [gh-proxy.com] 提供'],
         //['https://hk.gh-proxy.org/https://github.com', '其他', '[中国香港] - 该公益加速源由 [gh-proxy.com] 提供'],
@@ -46,7 +46,7 @@
         ['https://gh.jasonzeng.dev/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [gh.jasonzeng.dev] 提供'],
         ['https://gh.monlor.com/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [gh.monlor.com] 提供'],
         //['https://fastgit.cc/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [fastgit.cc] 提供'], // 挂了
-        ['https://github.tbedu.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [github.tbedu.top] 提供'],
+        //['https://github.tbedu.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [github.tbedu.top] 提供'],//挂了 DNS_PROBE_FINISHED_NXDOMAIN
         ['https://github.geekery.cn/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [github.geekery.cn] 提供'],
         ['https://github.ednovas.xyz/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [github.ednovas.xyz] 提供'],
         ['https://ghfile.geekertao.top/https://github.com', '美国', '[美国 Cloudflare CDN] - 该公益加速源由 [ghfile.geekertao.top] 提供'],
@@ -99,7 +99,7 @@
         //['https://jsd.proxy.aks.moe/gh', '香港 2', '[中国 香港] - 该公益加速源由 [cdn.akass.cn] 提供'], // 证书错误
         ['https://wget.la/https://raw.githubusercontent.com', '香港 1', '[中国香港、中国台湾、日本、美国等]（CDN 不固定） - 该公益加速源由 [ucdn.me] 提供&#10;&#10; - 缓存：无（或很短）'],
         ['https://hk.gh-proxy.org/https://raw.githubusercontent.com', '香港 2', '[中国香港] - 该公益加速源由 [gh-proxy.com] 提供&#10;&#10; - 缓存：有（官方注明 2 小时）'],
-        ['https://hub.glowp.xyz/https://raw.githubusercontent.com', '香港 3', '[中国香港] - 该公益加速源由 [hub.glowp.xyz] 提供&#10;&#10; - 缓存：有'],
+        //['https://hub.glowp.xyz/https://raw.githubusercontent.com', '香港 3', '[中国香港] - 该公益加速源由 [hub.glowp.xyz] 提供&#10;&#10; - 缓存：有'], //域名到期失效
         //['https://gitproxy.click/https://raw.githubusercontent.com', '香港', '[中国 香港] - 该公益加速源由 [gitproxy.click] 提供'], // 输出错误
         //['https://cdn.moran233.xyz/https://raw.githubusercontent.com', '香港', '[中国 香港] - 该公益加速源由 [cdn.moran233.xyz] 提供'], // 404
         //['https://gitdl.cn/https://raw.githubusercontent.com', '香港 3', '[中国香港] - 该公益加速源由 [gitdl] 提供&#10;&#10; - 缓存：有'], // 输出文件错误

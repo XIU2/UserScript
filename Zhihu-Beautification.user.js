@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.5.20
+// @version      1.5.23
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -13,6 +13,7 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_notification
+// @grant        window.onurlchange
 // @sandbox      JavaScript
 // @license      GPL-3.0 License
 // @run-at       document-start
@@ -27,9 +28,9 @@
         ['menu_widescreenDisplay', '宽屏显示', '勾选 = 该页面开启宽屏显示（刷新后查看效果）', ''],
         ['menu_widescreenDisplayIndex', '首页', '宽屏显示', true],
         ['menu_widescreenDisplayQuestion', '问题页', '宽屏显示', true],
-        ['menu_widescreenDisplaySearch', '搜索页、话题页、圈子', '宽屏显示', true],
+        ['menu_widescreenDisplaySearch', '搜索页、话题页', '宽屏显示', true],
         ['menu_widescreenDisplayCollection', '收藏页', '宽屏显示', true],
-        ['menu_widescreenDisplayPost', '文章页', '宽屏显示', false],
+        ['menu_widescreenDisplayPost', '文章页(暂不可用)', '宽屏显示', false],
         ['menu_widescreenDisplayPeople', '用户主页', '用户主页', false],
         ['menu_widescreenDisplayWidth', '宽屏宽度', '宽屏宽度 (默认 1000)', '1000'],
         ['menu_darkMode', '暗黑模式', '暗黑模式', true],
@@ -43,7 +44,11 @@
         if (GM_getValue(menu_ALL[i][0]) == null){GM_setValue(menu_ALL[i][0], menu_ALL[i][3])};
     }
     registerMenuCommand();
+    if (window.onurlchange === undefined) {addUrlChangeEvent();} // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
     addStyle();
+    window.addEventListener('urlchange', function(){ // 网页 URL 动态变化后再次执行（针对在任何页面搜索时）
+        if (menu_value('menu_widescreenDisplaySearch') && (location.pathname === '/search' || location.pathname.indexOf('/club/') > -1 || location.pathname.indexOf('/topic/') > -1)) {addStyle()};
+    })
     // 向下翻时自动隐藏顶栏
     if (menu_value('menu_hideTitle')) setTimeout(hideTitle, 2000);
 
@@ -217,19 +222,19 @@ html[data-theme=light] .AppHeader-notifications:not([aria-label=通知])>div:fir
 @media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Topstory-container {width: 97% !important;}}
 `,
             style_widescreenDisplayQuestion = `/* 宽屏显示 - 问题页 */
-.Question-mainColumn, .ListShortcut, .QuestionWaiting-mainColumn {width: inherit !important;}
+.QuestionWaiting-mainColumn {width: inherit !important;}
 .Question-mainColumn+div,[data-za-detail-view-path-module="RightSideBar"], .Question-sideColumn, .GlobalSideBar {display: none !important;}
 .QuestionWaiting-mainColumn {margin-right: 0 !important;}
-.Question-main {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
-@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Question-main {width: auto !important;}}
-@media only screen and (max-width: ${GM_getValue('menu_widescreenDisplayWidth')-100}px) {.Question-main {width: 98.5% !important;}}
+.Question-mainColumn, .ListShortcut {width: ${GM_getValue('menu_widescreenDisplayWidth')}px; margin: auto!important;}
+@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Question-mainColumn, .ListShortcut {width: auto !important;}}
+@media only screen and (max-width: ${GM_getValue('menu_widescreenDisplayWidth')-100}px) {.Question-mainColumn, .ListShortcut {width: 98.5% !important;}}
 .AuthorInfo {max-width: 100% !important;}
 `,
             style_widescreenDisplaySearch = `/* 宽屏显示 - 搜索页 */
-.SearchMain, .ContentLayout-mainColumn, .Club-mainColumn, .Post-mainColumn, [data-za-detail-view-path-module=TopicItem]>div:first-child {width: inherit !important;}
-.SearchMain+div, .ContentLayout-sideColumn, .Card.QuestionHeaderTopicMeta, .ClubSideBar, [data-za-detail-view-path-module=TopicItem]>div:not(:first-child) {display: none !important;}
-.Search-container, .ContentLayout, .Club-container, .Post-container, [data-za-detail-view-path-module=TopicItem] {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
-@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Search-container, .ContentLayout, .Club-container, .Post-container, [data-za-detail-view-path-module=TopicItem] {width: 97.5% !important;}}
+.SearchMain, .App-main>[data-za-detail-view-path-module=TopicItem]>div:first-child {width: inherit !important;}
+.SearchMain+div,  .App-main>[data-za-detail-view-path-module=TopicItem]>div:not(:first-child) {display: none !important;}
+.Search-container, .App-main>[data-za-detail-view-path-module=TopicItem] {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
+@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Search-container, .App-main>[data-za-detail-view-path-module=TopicItem] {width: 97.5% !important;}}
 `,
             style_widescreenDisplayCollection = `/* 宽屏显示 - 收藏页 */
 .CollectionsDetailPage-mainColumn {width: inherit !important;}
@@ -523,7 +528,7 @@ html {filter: brightness(65%) sepia(30%) !important; background-image: url();}
 
     // 获取知乎 Cookie 中的主题类型
     function getTheme() {
-        let name = 'theme=',
+        let name = 'themeApp=',
             ca = document.cookie.split(';');
         for (let i=0; i<ca.length; i++) {
             let c = ca[i].trim();
@@ -536,15 +541,37 @@ html {filter: brightness(65%) sepia(30%) !important; background-image: url();}
     function setTheme(theme) {
         switch(theme) {
             case 'light':
-                document.cookie='theme=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+                document.cookie='themeApp=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=.zhihu.com';
                 document.lastChild.setAttribute('data-theme', 'light');
                 location.reload(); // 刷新网页
                 break;
             case 'dark':
-                document.cookie='theme=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/';
+                document.cookie='themeApp=dark; expires=Thu, 18 Dec 2031 12:00:00 GMT; path=/; domain=.zhihu.com';
                 document.lastChild.setAttribute('data-theme', 'dark');
                 if (GM_getValue('menu_darkMode')) location.reload(); // 刷新网页
                 break;
         }
+    }
+
+
+    // 自定义 urlchange 事件（用来监听 URL 变化）
+    function addUrlChangeEvent() {
+        history.pushState = ( f => function pushState(){
+            var ret = f.apply(this, arguments);
+            window.dispatchEvent(new Event('pushstate'));
+            window.dispatchEvent(new Event('urlchange'));
+            return ret;
+        })(history.pushState);
+
+        history.replaceState = ( f => function replaceState(){
+            var ret = f.apply(this, arguments);
+            window.dispatchEvent(new Event('replacestate'));
+            window.dispatchEvent(new Event('urlchange'));
+            return ret;
+        })(history.replaceState);
+
+        window.addEventListener('popstate',()=>{
+            window.dispatchEvent(new Event('urlchange'))
+        });
     }
 })();
