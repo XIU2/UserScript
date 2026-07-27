@@ -296,115 +296,118 @@ function collapsedAnswer() {
 function collapsedNowAnswer(selectors) {
     backToTop(selectors) // 快捷回到顶部
     if (!menu_value('menu_collapsedNowAnswer')) return
-    document.querySelector(selectors).onclick = function(event){
-        if (event.target == this) {
-            // 下面这段主要是 [收起回答]，顺便 [收起评论]（如果展开了的话）
-            let rightButton = document.querySelector('.ContentItem-actions.Sticky.RichContent-actions.is-fixed.is-bottom')
-            if (rightButton) { // 悬浮在底部的 [收起回答]（此时正在浏览回答内容 [中间区域]）
-                // 固定的 [收起评论]（先看看是否展开评论）
-                let commentCollapseButton = rightButton.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
-                //console.log('111')
-                if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) commentCollapseButton.click();
-                // 再去收起回答
-                rightButton = rightButton.querySelector('.ContentItem-rightButton[data-zop-retract-question]')
-                //console.log('222')
-                if (rightButton) rightButton.click();
+    let element = document.querySelector(selectors)
+    if (element) {
+        element.onclick = function(event){
+            if (event.target == this) {
+                // 下面这段主要是 [收起回答]，顺便 [收起评论]（如果展开了的话）
+                let rightButton = document.querySelector('.ContentItem-actions.Sticky.RichContent-actions.is-fixed.is-bottom')
+                if (rightButton) { // 悬浮在底部的 [收起回答]（此时正在浏览回答内容 [中间区域]）
+                    // 固定的 [收起评论]（先看看是否展开评论）
+                    let commentCollapseButton = rightButton.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
+                    //console.log('111')
+                    if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) commentCollapseButton.click();
+                    // 再去收起回答
+                    rightButton = rightButton.querySelector('.ContentItem-rightButton[data-zop-retract-question]')
+                    //console.log('222')
+                    if (rightButton) rightButton.click();
 
-            } else { // 固定在回答底部的 [收起回答]（此时正在浏览回答内容 [尾部区域]）
+                } else { // 固定在回答底部的 [收起回答]（此时正在浏览回答内容 [尾部区域]）
 
-                // 悬浮的 [收起评论]（此时正在浏览评论内容 [中间区域]）
-                //if (getXpath('//button[text()="收起评论"]',document.querySelector('.Comments-container'))) {getXpath('//button[text()="收起评论"]',document.querySelector('.Comments-container')).click();console.log('asfaf')}
+                    // 悬浮的 [收起评论]（此时正在浏览评论内容 [中间区域]）
+                    //if (getXpath('//button[text()="收起评论"]',document.querySelector('.Comments-container'))) {getXpath('//button[text()="收起评论"]',document.querySelector('.Comments-container')).click();console.log('asfaf')}
 
-                let answerCollapseButton_ = false;
-                for (let el of document.querySelectorAll('.ContentItem-rightButton[data-zop-retract-question]')) { // 遍历所有回答底部的 [收起] 按钮
-                    if (isElementInViewport(el)) { // 判断该 [收起] 按钮是否在可视区域内
-                        // 固定的 [收起评论]（先看看是否展开评论，即存在 [收起评论] 按钮）
-                        let commentCollapseButton = el.parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
-                        // 如果展开了评论，就收起评论
-                        //console.log('333')
-                        //if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) commentCollapseButton.click();
-                        if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) {
-                            commentCollapseButton.click();
-                            if (!isElementInViewport(commentCollapseButton)) scrollTo(0,el.offsetTop+50)
-                        }
-                        //console.log('444')
-                        el.click() // 再去收起回答
-                        answerCollapseButton_ = true; // 如果找到并点击收起了，就没必要执行下面的代码了（可视区域中没有 [收起回答] 时）
-                        break
-                    }
-                }
-                // 针对完全看不到 [收起回答] 按钮时（如 [头部区域]，以及部分明明很长却不显示悬浮横条的回答）
-                if (!answerCollapseButton_) {
-                    for (let el of document.querySelectorAll('.List-item, .Card.AnswerCard, .Card.TopstoryItem')) { // 遍历所有回答主体元素
-                        if (isElementInViewport_(el)) { // 判断该回答是否在可视区域内
+                    let answerCollapseButton_ = false;
+                    for (let el of document.querySelectorAll('.ContentItem-rightButton[data-zop-retract-question]')) { // 遍历所有回答底部的 [收起] 按钮
+                        if (isElementInViewport(el)) { // 判断该 [收起] 按钮是否在可视区域内
                             // 固定的 [收起评论]（先看看是否展开评论，即存在 [收起评论] 按钮）
-                            let commentCollapseButton = el.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
+                            let commentCollapseButton = el.parentNode.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                             // 如果展开了评论，就收起评论
-                            //console.log('555',commentCollapseButton)
+                            //console.log('333')
+                            //if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) commentCollapseButton.click();
                             if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) {
                                 commentCollapseButton.click();
                                 if (!isElementInViewport(commentCollapseButton)) scrollTo(0,el.offsetTop+50)
                             }
-                            let answerCollapseButton__ = el.querySelector('.ContentItem-rightButton[data-zop-retract-question]');
-                            //console.log('666')
-                            if (answerCollapseButton__) answerCollapseButton__.click() // 再去收起回答
+                            //console.log('444')
+                            el.click() // 再去收起回答
+                            answerCollapseButton_ = true; // 如果找到并点击收起了，就没必要执行下面的代码了（可视区域中没有 [收起回答] 时）
                             break
                         }
                     }
-                }
-            }
-
-            // 下面这段只针对 [收起评论]（如果展开了的话）
-            let commentCollapseButton_ = false, commentCollapseButton__ = false;
-            // 悬浮的 [收起评论]（此时正在浏览评论内容 [中间区域]）
-            let commentCollapseButton = getXpath('//button[text()="收起评论"]',document.querySelector('.Comments-container'))
-            if (commentCollapseButton) {
-                //console.log('777', commentCollapseButton)
-                commentCollapseButton.click();
-            } else { // 固定的 [收起评论]（此时正在浏览评论内容 [头部区域]）
-                let commentCollapseButton_1 = document.querySelectorAll('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type, .ContentItem-action > button.Button.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
-                if (commentCollapseButton_1.length > 0) {
-                    for (let el of commentCollapseButton_1) {
-                        if (el.textContent.indexOf('收起评论') > -1) {
-                            if (isElementInViewport(el)) {
-                                //console.log('888')
-                                el.click()
-                                commentCollapseButton_ = true // 如果找到并点击了，就没必要执行下面的代码了（可视区域中没有 [收起评论] 时）
+                    // 针对完全看不到 [收起回答] 按钮时（如 [头部区域]，以及部分明明很长却不显示悬浮横条的回答）
+                    if (!answerCollapseButton_) {
+                        for (let el of document.querySelectorAll('.List-item, .Card.AnswerCard, .Card.TopstoryItem')) { // 遍历所有回答主体元素
+                            if (isElementInViewport_(el)) { // 判断该回答是否在可视区域内
+                                // 固定的 [收起评论]（先看看是否展开评论，即存在 [收起评论] 按钮）
+                                let commentCollapseButton = el.querySelector('button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
+                                // 如果展开了评论，就收起评论
+                                //console.log('555',commentCollapseButton)
+                                if (commentCollapseButton && commentCollapseButton.textContent.indexOf('收起评论') > -1) {
+                                    commentCollapseButton.click();
+                                    if (!isElementInViewport(commentCollapseButton)) scrollTo(0,el.offsetTop+50)
+                                }
+                                let answerCollapseButton__ = el.querySelector('.ContentItem-rightButton[data-zop-retract-question]');
+                                //console.log('666')
+                                if (answerCollapseButton__) answerCollapseButton__.click() // 再去收起回答
                                 break
                             }
                         }
                     }
                 }
-                if (commentCollapseButton_ == false) { // 可视区域中没有 [收起评论] 时（此时正在浏览评论内容 [头部区域] + [尾部区域](不上不下的，既看不到固定的 [收起评论] 又看不到悬浮的 [收起评论])），需要判断可视区域中是否存在评论元素
-                    let commentCollapseButton_1 = document.querySelectorAll('.Comments-container')
+
+                // 下面这段只针对 [收起评论]（如果展开了的话）
+                let commentCollapseButton_ = false, commentCollapseButton__ = false;
+                // 悬浮的 [收起评论]（此时正在浏览评论内容 [中间区域]）
+                let commentCollapseButton = getXpath('//button[text()="收起评论"]',document.querySelector('.Comments-container'))
+                if (commentCollapseButton) {
+                    //console.log('777', commentCollapseButton)
+                    commentCollapseButton.click();
+                } else { // 固定的 [收起评论]（此时正在浏览评论内容 [头部区域]）
+                    let commentCollapseButton_1 = document.querySelectorAll('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type, .ContentItem-action > button.Button.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                     if (commentCollapseButton_1.length > 0) {
                         for (let el of commentCollapseButton_1) {
-                            if (isElementInViewport(el)) {
-                                let parentElement = findParentElement(el, 'List-item') || findParentElement(el, 'Card '),
-                                    commentCollapseButton = parentElement.querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
-                                if (commentCollapseButton.textContent.indexOf('收起评论') > -1) {
-                                    //console.log('999')
-                                    commentCollapseButton.click()
-                                    if (!isElementInViewport(commentCollapseButton)) {console.log(parentElement,parentElement.offsetTop,parentElement.offsetHeight);scrollTo(0,parentElement.offsetTop+parentElement.offsetHeight-50)}
-                                    commentCollapseButton__ = true // 如果找到并点击了，就没必要执行下面的代码了（可视区域中没有 评论元素 时）
+                            if (el.textContent.indexOf('收起评论') > -1) {
+                                if (isElementInViewport(el)) {
+                                    //console.log('888')
+                                    el.click()
+                                    commentCollapseButton_ = true // 如果找到并点击了，就没必要执行下面的代码了（可视区域中没有 [收起评论] 时）
                                     break
                                 }
                             }
                         }
                     }
-                    if (commentCollapseButton__ == false) { // 如果上面的都没找到，那么就尝试寻找评论末尾的 [评论回复框]
-                        let commentCollapseButton_2 = document.querySelectorAll('.Editable-content')
-                        if (commentCollapseButton_2.length > 0) {
-                            for (let el of commentCollapseButton_2) {
+                    if (commentCollapseButton_ == false) { // 可视区域中没有 [收起评论] 时（此时正在浏览评论内容 [头部区域] + [尾部区域](不上不下的，既看不到固定的 [收起评论] 又看不到悬浮的 [收起评论])），需要判断可视区域中是否存在评论元素
+                        let commentCollapseButton_1 = document.querySelectorAll('.Comments-container')
+                        if (commentCollapseButton_1.length > 0) {
+                            for (let el of commentCollapseButton_1) {
                                 if (isElementInViewport(el)) {
                                     let parentElement = findParentElement(el, 'List-item') || findParentElement(el, 'Card '),
-                                    commentCollapseButton = parentElement.querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
-                                    //console.log(commentCollapseButton)
+                                        commentCollapseButton = parentElement.querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
                                     if (commentCollapseButton.textContent.indexOf('收起评论') > -1) {
-                                        //console.log('101010')
+                                        //console.log('999')
                                         commentCollapseButton.click()
                                         if (!isElementInViewport(commentCollapseButton)) {console.log(parentElement,parentElement.offsetTop,parentElement.offsetHeight);scrollTo(0,parentElement.offsetTop+parentElement.offsetHeight-50)}
+                                        commentCollapseButton__ = true // 如果找到并点击了，就没必要执行下面的代码了（可视区域中没有 评论元素 时）
                                         break
+                                    }
+                                }
+                            }
+                        }
+                        if (commentCollapseButton__ == false) { // 如果上面的都没找到，那么就尝试寻找评论末尾的 [评论回复框]
+                            let commentCollapseButton_2 = document.querySelectorAll('.Editable-content')
+                            if (commentCollapseButton_2.length > 0) {
+                                for (let el of commentCollapseButton_2) {
+                                    if (isElementInViewport(el)) {
+                                        let parentElement = findParentElement(el, 'List-item') || findParentElement(el, 'Card '),
+                                            commentCollapseButton = parentElement.querySelector('.ContentItem-actions > button.Button.ContentItem-action.Button--plain.Button--withIcon.Button--withLabel:first-of-type')
+                                        //console.log(commentCollapseButton)
+                                        if (commentCollapseButton.textContent.indexOf('收起评论') > -1) {
+                                            //console.log('101010')
+                                            commentCollapseButton.click()
+                                            if (!isElementInViewport(commentCollapseButton)) {console.log(parentElement,parentElement.offsetTop,parentElement.offsetHeight);scrollTo(0,parentElement.offsetTop+parentElement.offsetHeight-50)}
+                                            break
+                                        }
                                     }
                                 }
                             }
@@ -420,10 +423,13 @@ function collapsedNowAnswer(selectors) {
 // 回到顶部（监听点击事件，鼠标右键点击网页两侧空白处）
 function backToTop(selectors) {
     if (!menu_value('menu_backToTop')) return
-    document.querySelector(selectors).oncontextmenu = function(event){
-        if (event.target == this) {
-            event.preventDefault();
-            window.scrollTo(0,0)
+    let element = document.querySelector(selectors)
+    if (element) {
+        element.oncontextmenu = function(event){
+            if (event.target == this) {
+                event.preventDefault();
+                window.scrollTo(0,0)
+            }
         }
     }
 }
@@ -1844,7 +1850,7 @@ function markOnlyVisibleToMyself() {
         if (location.pathname.indexOf('question') > -1 && location.href.indexOf('/log') == -1) { //       回答页 //
             if (location.pathname.indexOf('waiting') == -1) {
                 collapsedNowAnswer('.QuestionPage'); //                        收起当前回答 + 快捷返回顶部
-                collapsedNowAnswer('.Question-main'); //                       收起当前回答 + 快捷返回顶部
+                collapsedNowAnswer('.QuestionPage>#AnswerFormPortalContainer+div>div:first-child'); //收起当前回答 + 快捷返回顶部
                 questionRichTextMore(); //                                     展开问题描述
                 if (location.pathname.indexOf('answer') == -1) { //  问题页而不是回答页
                     blockLowCount('question'); //                              屏蔽低赞/低评回答/文章
