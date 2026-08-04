@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         知乎美化
-// @version      1.5.23
+// @version      1.5.24
 // @author       X.I.U
 // @description  宽屏显示、暗黑模式（4种）、暗黑模式跟随浏览器、屏蔽首页活动广告、隐藏文章开头大图、调整图片最大高度、向下翻时自动隐藏顶栏
 // @match        *://www.zhihu.com/*
@@ -267,6 +267,8 @@ html[data-theme=light] .AppHeader-notifications:not([aria-label=通知])>div:fir
 .ztext .content_image, .ztext .origin_image, .GifPlayer img {max-height: 500px !important;width: auto !important;}
 `,
             style_darkMode_1 = `/* 暗黑模式（方案 1） */
+/* 首页工具条宽度 */
+html[data-theme=dark] .Card.TopstoryItem.TopstoryItem-isRecommend .ContentItem-actions, .Card.TopstoryItem.TopstoryItem-isFollow .ContentItem-actions {margin: 0 -16px -10px;}
 /* 右上角 通知/私信 红点颜色 */
 html[data-theme=dark] .AppHeader-notifications:not([aria-label=通知])>div:first-of-type, html[data-theme=dark] .AppHeader-messages:not([aria-label=私信])>div:first-of-type {color: #ffffff !important;border: 2px solid #2d333b !important;}
 /* 文字颜色 */
