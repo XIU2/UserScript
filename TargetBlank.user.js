@@ -28,6 +28,8 @@
         Array.from(document.links).forEach(function (_this) { // 排除特殊链接
             if (_this.onclick || _this.href.slice(0,4) != 'http' || _this.getAttribute('href').slice(0,1) === '#') {
                 _this.target = '_self'
+            } else {
+                _this.rel = 'noopener noreferrer'
             }
         })
         document.querySelectorAll('form').forEach(function (_this) { // 排除 form 标签
