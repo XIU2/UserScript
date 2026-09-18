@@ -39,7 +39,7 @@
         if (menu_streamline){menu_streamline_ = "√";}else{menu_streamline_ = "×";}
 
         menu_streamline_ID = GM_registerMenuCommand(`[ ${menu_streamline_} ] 精简美化`, function(){menu_switch(menu_streamline,'xiu2_menu_streamline','精简美化')});
-        menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {window.GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
+        menu_feedBack_ID = GM_registerMenuCommand('反馈 & 建议', function () {GM_openInTab('https://github.com/XIU2/UserScript#xiu2userscript', {active: true,insert: true,setParent: true});});
     }
 
     // 菜单开关
