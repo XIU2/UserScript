@@ -5124,7 +5124,7 @@
 		"blank": 4,
 		"pager": {
 			"nextL": "a.next_page",
-			"pageE": "div[id^='issue_'],ul[aria-labelledby='discussions-list']>li,#release_page_title+div[data-pjax]>section,div[id^='check_suite_'],#org-repositories li.Box-row",
+			"pageE": "div[id^='issue_'],ul[aria-labelledby='discussions-list']>li,#release_page_title+div section[data-release-anchor],div[id^='check_suite_'],#org-repositories li.Box-row",
 			"replaceE": ".pagination"
 		}
 	},

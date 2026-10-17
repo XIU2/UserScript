@@ -2,11 +2,11 @@
 // @name         Ping.Sx enhancement
 // @name:zh-CN   Ping.Sx 增强
 // @name:zh-TW   Ping.Sx 增強
-// @version      1.0.3
+// @version      1.0.4
 // @author       X.I.U
 // @description  Copy all IPs with one click, clean IP links (click Copy instead of Jump), and quickly go back to the top (blank space on both sides of the right click).
-// @description:zh-CN  一键复制所有 IP、清理 IP 链接（点击复制而不是跳转）、快捷回到顶部（右键两侧空白处）
-// @description:zh-TW  一鍵複製所有 IP、清理 IP 鏈接（點擊複製而不是跳轉）、快捷回到頂部（右鍵兩側空白處）
+// @description:zh-CN  一键复制所有 IP、快捷回到顶部（右键两侧空白处）
+// @description:zh-TW  一鍵複製所有 IP、快捷回到頂部（右鍵兩側空白處）
 // @match        https://ping.sx/ping*
 // @match        https://ping.sx/dig*
 // @match        https://ping.sx/check-port*
@@ -36,20 +36,107 @@
     // 站长之家
     // let ip = new Array(); document.querySelectorAll('[name=ip]>a').forEach(function(_this) {ip.push(_this.innerText);});console.log(Array.from(new Set(ip)).sort().toString().replaceAll(',','\n'))
 
-    window.addEventListener('urlchange', function() {addCopyButton(); cleanLinks(); backToTop();});
+    window.addEventListener('urlchange', function() {addCopyButton(); /*cleanLinks();*/ backToTop();});
 
     setTimeout(addCopyButton, 2000); // 添加复制按钮
-    setTimeout(cleanLinks, 2000); //    清理链接（可以直接点击复制单个 IP）
+    //setTimeout(cleanLinks, 2000); //    清理链接（可以直接点击复制单个 IP）
     setTimeout(backToTop, 2000); //     快捷回到顶部（右键左右两侧空白处）
 
 
     // 添加复制按钮
     function addCopyButton() {
         if (document.querySelector('#copy_233, #copynocn_233')) return
+        const aa = `
+        <style>/* ---------- 右下角悬浮按钮容器 ---------- */
+        .floating-actions {
+            position: fixed;
+            bottom: 75px;
+            right: 7px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            z-index: 99999;
+            align-items: center;
+            /* 让按钮在容器中居中（水平方向） */;
+        }
+
+        /* ---------- 单个按钮样式 ---------- */
+        .floating-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: #ffffff;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow:0 6px 20px rgba(26, 47, 78, 0.30),0 2px 6px rgba(0, 0, 0, 0.08);
+            transition:transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),background 0.25s ease,box-shadow 0.25s ease;
+            text-decoration: none;
+            position: relative;
+            /* 为 tooltip 定位 */;
+        }
+
+        /* 按钮悬停效果 */
+        .floating-btn:hover {
+            background: var(--accent-border);
+            box-shadow:0 10px 28px rgba(26, 47, 78, 0.40),0 4px 10px rgba(0, 0, 0, 0.10);
+        }
+
+        /* 按钮点击反馈 */
+        .floating-btn:active {
+            transform: scale(0.92) translateY(0px);
+            box-shadow: 0 4px 12px rgba(26, 47, 78, 0.25);
+        }
+        /* ---------- 悬浮提示 (Tooltip) ---------- */
+        .floating-btn .tooltip {
+            position: absolute;
+            right: 68px;
+            /* 在按钮左侧露出 */
+            top: 50%;
+            transform: translateY(-50%) scale(0.92);
+            background: rgba(10, 20, 35, 0.88);
+            backdrop-filter: blur(6px);
+            color: #f0f4fe;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.20);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            opacity: 0;
+            pointer-events: none;
+            transition:opacity 0.2s ease,transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: right center;
+        }
+
+        /* 悬停时显示 tooltip */
+        .floating-btn:hover .tooltip {
+            opacity: 1;
+            transform: translateY(-50%) scale(1);
+        }
+        </style>
+        <div class="floating-actions">
+        <button class="floating-btn" id="copy_233" aria-label="一键复制所有 IP">
+            Copy
+            <span class="tooltip">一键复制所有 IP</span>
+        </button>
+        <button class="floating-btn" id="copynocn_233" aria-label="一键复制所有 IP (国内除外)">
+            Copy
+            <del><em>(Cn)</em></del>
+            <span class="tooltip">一键复制所有 IP (国内除外)</span>
+        </button>
+        </div>`
+        document.body.insertAdjacentHTML('beforeend', aa);
         // 复制全部
-        document.querySelector('header ul').insertAdjacentHTML('afterbegin', `<li><a title="复制当前页面下的所有 IP 地址到剪切板" class="text-gray-600 hover:text-gray-900 px-3 lg:px-5 py-2 flex items-center transition duration-150 ease-in-out" href="javascript:void(0);" title="一键复制所有 IP" id="copy_233">Copy</a></li>`);
+        //document.querySelector('header nav.tool-navigation').insertAdjacentHTML('beforeend', `<a title="复制当前页面下的所有 IP 地址到剪切板" style="gap: unset;font-weight: bold;" class="tool-navigation-link" href="javascript:void(0);" title="一键复制所有 IP" id="copy_233">Copy</a></li>`);
         // 复制非 CN 的 IP
-        document.querySelector('header ul').insertAdjacentHTML('afterbegin', `<li><a title="复制当前页面下的所有 IP 地址（国内除外）到剪切板" class="text-gray-600 hover:text-gray-900 px-3 lg:px-5 py-2 flex items-center transition duration-150 ease-in-out" href="javascript:void(0);" title="一键复制非 CN IP" id="copynocn_233">Copy<del><em>(Cn)</em></del></a></li>`);
+        //document.querySelector('header nav.tool-navigation').insertAdjacentHTML('beforeend', `<a title="复制当前页面下的所有 IP 地址（国内除外）到剪切板" style="gap: unset;font-weight: bold;" class="tool-navigation-link" href="javascript:void(0);" title="一键复制非 CN IP" id="copynocn_233">Copy<del><em>(Cn)</em></del></a></li>`);
         document.getElementById('copy_233').addEventListener('click', addCopyButtonEvent1)
         document.getElementById('copynocn_233').addEventListener('click', addCopyButtonEvent2)
     }
@@ -58,7 +145,7 @@
     // 复制按钮点击事件
     function addCopyButtonEvent1() {
         let ip = new Array();
-        document.querySelectorAll('span.select-all > a[href]').forEach(function(_this) {ip.push(_this.innerText);})
+        document.querySelectorAll('tbody span.dns-value > a[href]').forEach(function(_this) {ip.push(_this.innerText);})
         if (ip.length > 0) {
             if (GM_getValue('menu_separator')) {
                 GM_setClipboard(unique(ip).toString().replaceAll(',','\n'), 'text');
@@ -69,9 +156,9 @@
     }
     function addCopyButtonEvent2() {
         let ip = new Array();
-        document.querySelectorAll('span.select-all > a[href]').forEach(function(_this) {
-            let img = findParentElement(_this, 'TR').querySelector('img.max-w-none');
-            if (img) {if (img.alt != 'CN Flag') ip.push(_this.innerText);}
+        document.querySelectorAll('tbody span.dns-value > a[href]').forEach(function(_this) {
+            let img = findParentElement(_this, 'TR').querySelector('img');
+            if (img) {if (img.alt != 'China') ip.push(_this.innerText);}
         })
         if (ip.length > 0) {
             if (GM_getValue('menu_separator')) {
@@ -84,13 +171,14 @@
 
 
     // 清理链接（可以直接点击复制单个 IP）
-    function cleanLinks() {
+    /*function cleanLinks() {
         const callback = (mutationsList, observer) => {
             for (const mutation of mutationsList) {
                 for (const target of mutation.addedNodes) {
                     if (target.nodeType != 1) return
-                    if (target.tagName === 'TD' && target.className.indexOf('w-4/12') > -1) {
-                        target.querySelectorAll('span.select-all > a[href]').forEach(function(_this) {
+                    console.log(target)
+                    if (target.tagName === 'DIV' && target.className === 'dns-answer-line') {
+                        target.querySelectorAll('span.dns-value > a[href]').forEach(function(_this) {
                             _this.href = 'javascript:void(0);';
                             _this.target = '_self';
                         })
@@ -100,12 +188,12 @@
         };
         const observer = new MutationObserver(callback);
         observer.observe(document, { childList: true, subtree: true });
-    }
+    }*/
 
 
     // 快捷回到顶部（右键左右两侧空白处）
     function backToTop() {
-        document.querySelector('section.relative').oncontextmenu = function(e){
+        document.querySelector('main#main-content').oncontextmenu = function(e){
             if (e.target == this) {
                 e.preventDefault();
                 window.scrollTo(0,0);

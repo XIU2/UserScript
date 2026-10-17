@@ -3,7 +3,7 @@
 // @name:zh-CN   Github 增强 - 高速下载
 // @name:zh-TW   Github 增強 - 高速下載
 // @name:ru      Улучшение GitHub – быстрое скачивание
-// @version      2.6.39
+// @version      2.6.41
 // @author       X.I.U
 // @description  High-speed download of Git Clone/SSH, Release, Raw, Code(ZIP) and other files (Based on public welfare), project list file quick download (☁)
 // @description:zh-CN  高速下载 Git Clone/SSH、Release、Raw、Code(ZIP) 等文件 (公益加速)、项目列表单文件快捷下载 (☁)
@@ -65,7 +65,7 @@
         ['https://gh.zwy.one/https://github.com', '美国', '[美国 洛杉矶] - 该公益加速源由 [gh.zwy.one] 提供'],
         ['https://ghproxy.monkeyray.net/https://github.com', '美国', '[美国 洛杉矶] - 该公益加速源由 [ghproxy.monkeyray.net] 提供'],
     //], download_url = [ // 为了缓解非美国公益节点压力（考虑到很多人无视前面随机的美国节点），干脆也将其加入随机
-        ['https://ghproxy.net/https://github.com', '其他', '[英国伦敦] - 该公益加速源由 [ghproxy.net] 提供&#10;&#10;提示：希望大家尽量多使用美国节点（每次随机 负载均衡），&#10;避免流量都集中到亚洲公益节点，减少成本压力，公益才能更持久~'],
+        ['https://ghproxy.net/https://github.com', '其他', '[法国] - 该公益加速源由 [ghproxy.net] 提供&#10;&#10;提示：希望大家尽量多使用美国节点（每次随机 负载均衡），&#10;避免流量都集中到亚洲公益节点，减少成本压力，公益才能更持久~'],
         ['https://ghfast.top/https://github.com', '其他', '[日本、韩国、新加坡、美国、德国等]（CDN 不固定） - 该公益加速源由 [ghproxy.link] 提供&#10;&#10;提示：希望大家尽量多使用美国节点（每次随机 负载均衡），&#10;避免流量都集中到亚洲公益节点，减少成本压力，公益才能更持久~'],
         ['https://wget.la/https://github.com', '其他', '[中国香港、中国台湾、日本、美国等]（CDN 不固定） - 该公益加速源由 [ucdn.me] 提供&#10;&#10;提示：希望大家尽量多使用美国节点（每次随机 负载均衡），&#10;避免流量都集中到亚洲公益节点，减少成本压力，公益才能更持久~'],
         //['https://hub.glowp.xyz/https://github.com', '其他', '[中国香港] - 该公益加速源由 [hub.glowp.xyz] 提供&#10;&#10;提示：希望大家尽量多使用美国节点（每次随机 负载均衡），&#10;避免流量都集中到亚洲公益节点，减少成本压力，公益才能更持久~'],
@@ -80,7 +80,7 @@
         ['https://ghfast.top/https://github.com', '韩国', '[日本、韩国、新加坡、美国、德国等]（CDN 不固定） - 该公益加速源由 [ghproxy] 提供'],
         //['https://gh.catmak.name/https://raw.githubusercontent.com', '韩国', '[韩国 首尔] - 该公益加速源由 [gh.catmak.name] 提供'],
         ['https://githubfast.com', '韩国', '[韩国] - 该公益加速源由 [Github Fast] 提供'],
-        //['https://ghproxy.net/https://github.com', '日本', '[日本 大阪] - 该公益加速源由 [ghproxy.net] 提供'], // 挂了
+        //['https://ghproxy.net/https://github.com', '法国', '[法国] - 该公益加速源由 [ghproxy.net] 提供'],
         //['https://proxy.yaoyaoling.net/https://github.com', '日本', '[日本 东京] - 该公益加速源由 [proxy.yaoyaoling.net] 提供'],
         //['https://g.blfrp.cn/https://github.com', '日本', '[日本 东京] - 该公益加速源由 [g.blfrp.cn] 提供'],
         //['https://raw.bgithub.xyz', '荷兰', '[荷兰] - 该公益加速源由 [bgithub.xyz] 提供&#10;&#10; - 缓存：有'],
@@ -105,7 +105,7 @@
         //['https://gitdl.cn/https://raw.githubusercontent.com', '香港 3', '[中国香港] - 该公益加速源由 [gitdl] 提供&#10;&#10; - 缓存：有'], // 输出文件错误
         ['https://ghfast.top/https://raw.githubusercontent.com', '韩国', '[日本、韩国、新加坡、美国、德国等]（CDN 不固定） - 该公益加速源由 [ghproxy.link] 提供&#10;&#10; - 缓存：无（或很短）'],
         ['https://gh.catmak.name/https://raw.githubusercontent.com', '韩国', '[韩国 首尔] - 该公益加速源由 [gh.catmak.name] 提供'],
-        //['https://ghproxy.net/https://raw.githubusercontent.com', '日本 1', '[日本 大阪] - 该公益加速源由 [ghproxy.net] 提供&#10;&#10; - 缓存：有（约 10 分钟）'], // 挂了
+        //['https://ghproxy.net/https://raw.githubusercontent.com', '法国', '[日本 大阪] - 该公益加速源由 [法国] 提供&#10;&#10; - 缓存：有（约 10 分钟）'],
         ['https://fastly.jsdelivr.net/gh', '日本 1', '[日本 东京] - 该公益加速源由 [JSDelivr CDN] 提供&#10;&#10; - 缓存：有&#10; - 不支持大小超过 50 MB 的文件&#10; - 不支持版本号格式的分支名（如 v1.2.3）'],
         ['https://cdn.gh-proxy.org/https://raw.githubusercontent.com', '日本 2', '[Fastly CDN] - 该公益加速源由 [gh-proxy.com] 提供&#10;&#10; - 缓存：有'],
         //['https://jsdelivr.pai233.top/gh', '日本 3', '[日本 东京]（Vercel Anycast） - 该公益加速源由 [blog.pai233.top] 提供&#10;&#10; - 缓存：有'], // This deployment is temporarily paused
@@ -173,7 +173,7 @@
     if (window.onurlchange === undefined) addUrlChangeEvent();
     window.addEventListener('urlchange', function() {
         colorMode(); // 适配白天/夜间主题模式
-        if (location.pathname.indexOf('/releases')) addRelease(); // Release 加速
+        if (location.pathname.indexOf('/releases')) setTimeout(addRelease, 1000); // Release 加速
         setTimeout(addRawFile, 1000); // Raw 加速
         setTimeout(addRawDownLink, 2000); // Raw 单文件快捷下载（☁），延迟 2 秒执行，避免被 pjax 刷掉
         setTimeout(addRawDownLink_, 1000); // 在浏览器返回/前进时重新添加 Raw 下载链接（☁）鼠标事件
@@ -248,7 +248,7 @@
                     }
                     _html += `<a style="${style[0]}" class="btn" href="${url}" target="_blank" title="${new_download_url[i][2]}\n\n提示：如果不想要点击链接在前台打开空白新标签页（一闪而过影响体验），\n可以 [鼠标中键] 或 [Ctrl+鼠标左键] 点击加速链接即可在后台打开新标签页！" rel="noreferrer noopener nofollow">${new_download_url[i][1]}</a>`
                 }
-                _this.parentElement.nextElementSibling.insertAdjacentHTML('beforeend', _html + '</div>');
+                _this.parentElement.parentElement.nextElementSibling.insertAdjacentHTML('beforeend', _html + '</div>');
             });
         }
     }
