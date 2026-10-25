@@ -116,7 +116,7 @@
         //['https://jsdelivr.b-cdn.net/gh', '其他', '[中国香港、中国台湾、日本、新加坡等]（CDN 不固定） - 该公益加速源由 [@rttwyjz] 提供&#10;&#10; - 缓存：有'], // 疑似 SNI 阻断
     ], svg = [
         '<svg class="octicon octicon-cloud-download" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M9 12h2l-3 3-3-3h2V7h2v5zm3-8c0-.44-.91-3-4.5-3C5.08 1 3 2.92 3 5 1.02 5 0 6.52 0 8c0 1.53 1 3 3 3h3V9.7H3C1.38 9.7 1.3 8.28 1.3 8c0-.17.05-1.7 1.7-1.7h1.3V5c0-1.39 1.56-2.7 3.2-2.7 2.55 0 3.13 1.55 3.2 1.8v1.2H12c.81 0 2.7.22 2.7 2.2 0 2.09-2.25 2.2-2.7 2.2h-2V11h2c2.08 0 4-1.16 4-3.5C16 5.06 14.08 4 12 4z"></path></svg>'
-    ], style = ['padding:0 6px; margin-right: -1px; border-radius: 2px; background-color: var(--XIU2-background-color); border-color: var(--borderColor-default); font-size: 11px; color: var(--XIU2-font-color);'];
+    ];
 
     if (menu_rawFast == null){menu_rawFast = 1; GM_setValue('xiu2_menu_raw_fast', 1)};
     if (GM_getValue('menu_rawDownLink') == null){GM_setValue('menu_rawDownLink', true)};
@@ -165,14 +165,12 @@
         registerMenuCommand(); // 重新注册脚本菜单
     };
 
-    colorMode(); // 适配白天/夜间主题模式
     setTimeout(addRawFile, 1000); // Raw 加速
     setTimeout(addRawDownLink, 2000); // Raw 单文件快捷下载（☁），延迟 2 秒执行，避免被 pjax 刷掉
 
     // Tampermonkey v4.11 版本添加的 onurlchange 事件 grant，可以监控 pjax 等网页的 URL 变化
     if (window.onurlchange === undefined) addUrlChangeEvent();
     window.addEventListener('urlchange', function() {
-        colorMode(); // 适配白天/夜间主题模式
         if (location.pathname.indexOf('/releases')) setTimeout(addRelease, 1000); // Release 加速
         setTimeout(addRawFile, 1000); // Raw 加速
         setTimeout(addRawDownLink, 2000); // Raw 单文件快捷下载（☁），延迟 2 秒执行，避免被 pjax 刷掉
@@ -231,14 +229,25 @@
     // Release
     function addRelease() {
         let html = document.querySelectorAll('.Box-footer'); if (html.length == 0 || location.pathname.indexOf('/releases') == -1) return
-        let divDisplay = 'margin-left: -90px;', new_download_url = get_New_download_url();
-        if (document.documentElement.clientWidth > 755) {divDisplay = 'margin-top: -3px;margin-left: 8px;display: inherit;';}; // 调整小屏幕时的样式
-        html[0].appendChild(document.createElement('style')).textContent = '@media (min-width: 768px) {.Box-footer li.Box-row>div>span.color-fg-muted {min-width: 27px !important;}}';
+        let new_download_url = get_New_download_url(),
+            style_Add = document.getElementById('XIU2-RS-Style') || document.createElement('style');
+        // 加速源连成一个 Github 原生按钮组（btn），固定换行到文件名下方并与左侧图标左对齐
+        style_Add.id = 'XIU2-RS-Style';
+        style_Add.textContent = `
+            .XIU2-RSN {flex-wrap: wrap;}
+            .XIU2-RS {display: inline-flex; width: 100%; margin-top: 4px;}
+            .XIU2-RS .btn {display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; height: 24px; padding: 0 clamp(4px, 0.8vw, 8px); font-size: 12px; font-weight: 400; color: var(--fgColor-muted); background-color: transparent; border-color: var(--borderColor-default); border-radius: 0; margin-left: -1px;}
+            .XIU2-RS .btn:first-child {border-radius: 6px 0 0 6px; margin-left: 0;}
+            .XIU2-RS .btn:last-child {border-radius: 0 6px 6px 0;}
+            .XIU2-RS .btn:hover {position: relative; z-index: 1; color: var(--fgColor-default); background-color: var(--bgColor-muted);}
+        `;
+        html[0].appendChild(style_Add);
         for (const current of html) {
-            if (current.querySelector('.XIU2-RS')) continue
             current.querySelectorAll('li.Box-row a').forEach(function (_this) {
-                let href = _this.href.split(location.host),
-                    url = '', _html = `<div class="XIU2-RS" style="${divDisplay}">`;
+                let li = _this.closest('li.Box-row'); if (!li || li.querySelector('.XIU2-RS')) return
+                let cell = li.firstElementChild, // 文件名所在列
+                    href = _this.href.split(location.host),
+                    url = '', _html = `<div class="XIU2-RS">`;
 
                 for (let i=0;i<new_download_url.length;i++) {
                     if (new_download_url[i][3] !== undefined && url.indexOf('/archive/') !== -1) {
@@ -246,9 +255,10 @@
                     } else {
                         url = new_download_url[i][0] + href[1]
                     }
-                    _html += `<a style="${style[0]}" class="btn" href="${url}" target="_blank" title="${new_download_url[i][2]}\n\n提示：如果不想要点击链接在前台打开空白新标签页（一闪而过影响体验），\n可以 [鼠标中键] 或 [Ctrl+鼠标左键] 点击加速链接即可在后台打开新标签页！" rel="noreferrer noopener nofollow">${new_download_url[i][1]}</a>`
+                    _html += `<a class="btn" href="${url}" target="_blank" title="${new_download_url[i][2]}\n\n提示：如果不想要点击链接在前台打开空白新标签页（一闪而过影响体验），\n可以 [鼠标中键] 或 [Ctrl+鼠标左键] 点击加速链接即可在后台打开新标签页！" rel="noreferrer noopener nofollow">${new_download_url[i][1]}</a>`
                 }
-                _this.parentElement.parentElement.nextElementSibling.insertAdjacentHTML('beforeend', _html + '</div>');
+                cell.classList.add('XIU2-RSN');
+                cell.insertAdjacentHTML('beforeend', _html + '</div>');
             });
         }
     }
@@ -456,32 +466,6 @@
             trElm.onmouseover = mouseOverHandler;
             trElm.onmouseout = mouseOutHandler;
         });
-    }
-
-
-    // 适配白天/夜间主题模式
-    function colorMode() {
-        let style_Add;
-        if (document.getElementById('XIU2-Github')) {style_Add = document.getElementById('XIU2-Github')} else {style_Add = document.createElement('style'); style_Add.id = 'XIU2-Github'; style_Add.type = 'text/css';}
-        let backColor = '#ffffff', fontColor = '#888888';
-
-        if (document.lastElementChild.dataset.colorMode === 'dark') { // 如果是夜间模式
-            if (document.lastElementChild.dataset.darkTheme === 'dark_dimmed') {
-                backColor = '#272e37'; fontColor = '#768390';
-            } else {
-                backColor = '#161a21'; fontColor = '#97a0aa';
-            }
-        } else if (document.lastElementChild.dataset.colorMode === 'auto') { // 如果是自动模式
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches || document.lastElementChild.dataset.lightTheme.indexOf('dark') > -1) { // 如果浏览器是夜间模式 或 白天模式是 dark 的情况
-                if (document.lastElementChild.dataset.darkTheme === 'dark_dimmed') {
-                    backColor = '#272e37'; fontColor = '#768390';
-                } else if (document.lastElementChild.dataset.darkTheme.indexOf('light') == -1) { // 排除夜间模式是 light 的情况
-                    backColor = '#161a21'; fontColor = '#97a0aa';
-                }
-            }
-        }
-
-        document.lastElementChild.appendChild(style_Add).textContent = `.XIU2-RS a {--XIU2-background-color: ${backColor}; --XIU2-font-color: ${fontColor};}`;
     }
 
 
