@@ -225,21 +225,23 @@ html[data-theme=light] .AppHeader-notifications:not([aria-label=通知])>div:fir
 .QuestionWaiting-mainColumn {width: inherit !important;}
 .Question-mainColumn+div,[data-za-detail-view-path-module="RightSideBar"], .Question-sideColumn, .GlobalSideBar {display: none !important;}
 .QuestionWaiting-mainColumn {margin-right: 0 !important;}
-.Question-mainColumn, .ListShortcut {width: ${GM_getValue('menu_widescreenDisplayWidth')}px; margin: auto!important;}
-@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Question-mainColumn, .ListShortcut {width: auto !important;}}
-@media only screen and (max-width: ${GM_getValue('menu_widescreenDisplayWidth')-100}px) {.Question-mainColumn, .ListShortcut {width: 98.5% !important;}}
+.Question-mainColumn {width: ${GM_getValue('menu_widescreenDisplayWidth')}px; margin: auto!important;}
+.Question-mainColumn .ListShortcut {width: 100% !important; margin: 0 !important;}
+@media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Question-mainColumn {width: auto !important;}}
+@media only screen and (max-width: ${GM_getValue('menu_widescreenDisplayWidth')-100}px) {.Question-mainColumn {width: 98.5% !important;}}
 .AuthorInfo {max-width: 100% !important;}
 `,
             style_widescreenDisplaySearch = `/* 宽屏显示 - 搜索页 */
-.SearchMain, .App-main>[data-za-detail-view-path-module=TopicItem]>div:first-child {width: inherit !important;}
+.Search-container .SearchMain {width: 100% !important; min-width: 0;}
+.App-main>[data-za-detail-view-path-module=TopicItem]>div:first-child {width: inherit !important;}
 .SearchMain+div,  .App-main>[data-za-detail-view-path-module=TopicItem]>div:not(:first-child) {display: none !important;}
 .Search-container, .App-main>[data-za-detail-view-path-module=TopicItem] {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
 @media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.Search-container, .App-main>[data-za-detail-view-path-module=TopicItem] {width: 97.5% !important;}}
 `,
             style_widescreenDisplayCollection = `/* 宽屏显示 - 收藏页 */
-.CollectionsDetailPage-mainColumn {width: inherit !important;}
+.CollectionsDetailPage-mainColumn {width: 100% !important; min-width: 0; margin-right: 0 !important;}
 .CollectionsDetailPage-mainColumn+div {display: none !important;}
-.CollectionsDetailPage {width: ${GM_getValue('menu_widescreenDisplayWidth')}px;}
+.CollectionsDetailPage {width: ${GM_getValue('menu_widescreenDisplayWidth')}px; box-sizing: border-box; max-width: 100%;}
 @media only screen and (max-width: ${Number(GM_getValue('menu_widescreenDisplayWidth'))+50}px) {.CollectionsDetailPage {width: 98.5% !important;}}
 `,
             style_widescreenDisplayPost = `/* 宽屏显示 - 文章页 */
@@ -270,6 +272,13 @@ html[data-theme=light] .AppHeader-notifications:not([aria-label=通知])>div:fir
 /* 首页卡片留白，工具条保留网站原生边距，避免背景溢出 */
 html[data-theme=dark] .Card.TopstoryItem.TopstoryItem-isRecommend, html[data-theme=dark] .Card.TopstoryItem.TopstoryItem-isFollow {padding-inline: 16px; margin-block: 12px; border-radius: 8px;}
 html[data-theme=dark] #TopstoryContent > .ListShortcut:first-child {background: transparent !important;}
+/* 问题、搜索、收藏页按各自列表结构添加留白 */
+html[data-theme=dark] .QuestionAnswers-answers .List-item {padding: 16px; margin-block: 12px; border-radius: 8px; background: #2D333B;}
+html[data-theme=dark] .QuestionAnswers-answers .AnswersNavWrapper, html[data-theme=dark] .CollectionsDetailPage .CollectionsDetailPage-list {background: transparent !important; box-shadow: none;}
+html[data-theme=dark] .QuestionAnswers-answers .List-header {padding-inline: 16px; background: #2D333B; border-radius: 8px;}
+html[data-theme=dark] .SearchMain .SearchResult-Card, html[data-theme=dark] .CollectionDetailPageItem {padding-inline: 16px; margin-block: 12px; border-radius: 8px;}
+html[data-theme=dark] .CollectionDetailPageItem {background: #2D333B;}
+html[data-theme=dark] .CollectionDetailPageItem .ContentItem-actions:not(.is-fixed) {margin-inline: 0;}
 /* 右上角 通知/私信 红点颜色 */
 html[data-theme=dark] .AppHeader-notifications:not([aria-label=通知])>div:first-of-type, html[data-theme=dark] .AppHeader-messages:not([aria-label=私信])>div:first-of-type {color: #ffffff !important;border: 2px solid #2d333b !important;}
 /* 文字颜色 */
