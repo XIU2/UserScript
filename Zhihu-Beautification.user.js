@@ -397,7 +397,7 @@ html[data-theme=dark] div#zh-hovercard a {color: #353535 !important;}
             style_darkMode_2 = `/* 暗黑模式（方案 2） */
 html {filter: invert(90%) !important; text-shadow: 0 0 0 !important;}
 html[data-theme=light] body.ZVideo-body {background-color: #fff;}
-img, .ZVideoItem-video, .ZVideo-video, .VideoAnswerPlayer-video {filter: invert(1) !important;}
+img, video, .ZVideoItem-video, .ZVideo-video, .VideoAnswerPlayer-video, iframe {filter: invert(1) !important;}
 .css-5ym188, body>div>div>span+div>div[style='opacity: 1;'] {background-color: rgba(255, 255, 255, 0.65) !important;}
 .GifPlayer img, .GifPlayer.isPlaying video {filter: invert(1) !important;}
 .GifPlayer.isPlaying img.ztext-gif.GifPlayer-gif2mp4Image, img[alt="[公式]"] {filter: none !important;}
@@ -405,7 +405,7 @@ img, .ZVideoItem-video, .ZVideo-video, .VideoAnswerPlayer-video {filter: invert(
             style_darkMode_2_firefox = `/* 暗黑模式（方案 2） */
 html {filter: invert(90%) !important; background-image: url(); text-shadow: 0 0 0 !important;}
 html[data-theme=light] body.ZVideo-body {background-color: #fff;}
-img, .ZVideoItem-video, .ZVideo-video, .VideoAnswerPlayer-video {filter: invert(1) !important;}
+img, video, .ZVideoItem-video, .ZVideo-video, .VideoAnswerPlayer-video, iframe {filter: invert(1) !important;}
 .GifPlayer img, .GifPlayer.isPlaying video {filter: invert(1) !important;}
 .GifPlayer.isPlaying img.ztext-gif.GifPlayer-gif2mp4Image {filter: none !important;}
 `,
