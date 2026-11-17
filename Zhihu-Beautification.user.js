@@ -267,8 +267,9 @@ html[data-theme=light] .AppHeader-notifications:not([aria-label=通知])>div:fir
 .ztext .content_image, .ztext .origin_image, .GifPlayer img {max-height: 500px !important;width: auto !important;}
 `,
             style_darkMode_1 = `/* 暗黑模式（方案 1） */
-/* 首页工具条宽度 */
-html[data-theme=dark] .Card.TopstoryItem.TopstoryItem-isRecommend .ContentItem-actions, .Card.TopstoryItem.TopstoryItem-isFollow .ContentItem-actions {margin: 0 -16px -10px;}
+/* 首页卡片留白，工具条保留网站原生边距，避免背景溢出 */
+html[data-theme=dark] .Card.TopstoryItem.TopstoryItem-isRecommend, html[data-theme=dark] .Card.TopstoryItem.TopstoryItem-isFollow {padding-inline: 16px; margin-block: 12px; border-radius: 8px;}
+html[data-theme=dark] #TopstoryContent > .ListShortcut:first-child {background: transparent !important;}
 /* 右上角 通知/私信 红点颜色 */
 html[data-theme=dark] .AppHeader-notifications:not([aria-label=通知])>div:first-of-type, html[data-theme=dark] .AppHeader-messages:not([aria-label=私信])>div:first-of-type {color: #ffffff !important;border: 2px solid #2d333b !important;}
 /* 文字颜色 */
